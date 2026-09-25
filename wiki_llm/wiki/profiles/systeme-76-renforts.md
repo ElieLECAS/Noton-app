@@ -30,7 +30,7 @@ sources:
     last_modified: 2025-06-19
 source_pages:
   - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
-    pages: 5-13, 19-35
+    pages: 5-13, 19-35, 38, 40-53, 118-126
   - resource: raw/poster-systeme-76-advanced-principaux-2022.pdf
     pages: 1
   - resource: raw/poster-systeme-76-advanced-complementaires-2022.pdf
@@ -208,37 +208,65 @@ Voir [Meneaux PERFORM76](/profiles/perform76-meneaux.md) et
 
 # Renforts des profilés complémentaires
 
-Relevés sur les planches du registre 2.1.3 (p. 1 à 16, versions mars 2021 et septembre 2023).
+Chaque planche du registre 2.1.3 « Plan des Profilés » du manuel de mise en œuvre dessine, dans
+son tableau « Accessoires », le ou les renforts admis dans le profilé complémentaire, avec leurs
+cotes, l'épaisseur de la tôle et les deux inerties IG (poids) et IW (vent) en cm⁴, indices écrits.
+Une ligne par profilé et par renfort, telle que la planche la porte ; la largeur est la cote
+horizontale du dessin du renfort, la hauteur sa cote verticale.
 
-| Profilé | Famille | Renfort | Épaisseur d'acier (mm) | IW (cm⁴) | IG (cm⁴) |
-| --- | --- | --- | --- | --- | --- |
-| 76700 | élargisseur 15 mm | V312.Z | 1,5 | 1,5 | 0,3 |
-| 76701 | élargisseur 30 mm | V312.Z | 1,5 | 1,5 | 0,3 |
-| 76702 | élargisseur 60 mm | V312.Z | 1,5 | 1,5 | 0,3 |
-| 76703 | élargisseur 120 mm | V114 | 1,5 | 1,4 | 1,9 |
-| 76704 | réhausse 45 mm | V114 | 1,5 | 1,4 | 1,9 |
-| 76705 | réhausse 150 mm | V317 | 2,0 | 2,3 | 4,8 |
-| 76706 | réhausse 45 mm | V114 | 1,5 | 1,4 | 1,9 |
-| 76708 | réhausse 50 mm | V075 | 1,5 | 1,0 | 4,1 |
-| 76709 | réhausse 100 mm | V299 | 1,5 | 0,6 | 1,8 |
-| 76715 | réhausse 50 mm, complément du 76708 | V407 | 1,5 | 0,7 | 1,0 |
-| 76722 | réhausse 35 mm | V167 | 1,5 | 1,07 | 1,61 |
-| 76777 | réhausse 55 mm | V114 | 1,5 | 1,4 | 1,9 |
-| 76605 | profilé de liaison en H | V330 | 2,5 | 5,5 | 0,8 |
-| 76608 | profilé de liaison en H | V288 | 2,0 | 20,4 | 0,7 |
-| 76206 | profilé complémentaire | V323.Z | 1,5 | 9,2 | 13,0 |
-| 76206 | profilé complémentaire | V322 | 2,5 | 16,8 | 22,0 |
-| 76800 | profilé de guidage de tablier | V262 | 2,0 | 7,6 | 7,6 |
+| Profilé | Titre de la planche | Renfort | Désignation | Largeur (mm) | Hauteur (mm) | Épaisseur d'acier (mm) | IG (cm⁴) | IW (cm⁴) | Page PDF |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 76299 | 76299 Compensateur | V323.Z | Renfort 1,5 mm | 45 | 55 | 1,5 | 13,0 | 9,2 | 38 |
+| 76299 | 76299 Compensateur | V322 | Renfort 2,5 mm | 44 | 55 | 2,5 | 22,0 | 16,8 | 38 |
+| 76701 | Elargisseur 30 mm | V312.Z | Renfort 1,5 mm | 33 | 13 | 1,5 | 0,3 | 1,5 | 40 |
+| 76702 | Elargisseur 60 mm | V314.Z | Renfort 2,0 mm, soudé | 35 | 45 | 2 | 8,4 | 5,7 | 40 |
+| 76703 | Elargisseur 120 mm | V314.Z | Renfort 2,0 mm, soudé | 35 | 45 | 2 | 8,4 | 5,7 | 41 |
+| 76704 | Réhausse 45 mm | V114 | Renfort 1,5 mm | 25 | 30 | 1,5 | 1,9 | 1,4 | 41 |
+| 76706 | Réhausse 45 mm | V114 | Renfort 1,5 mm | 25 | 30 | 1,5 | 1,9 | 1,4 | 41 |
+| 76705 | Réhausse 150 mm | V317 | Renfort 2,0 mm | 40 | 25 | 2 | 4,8 | 2,3 | 42 |
+| 76708 | Réhausse 50 mm | V407 | Renfort1,5 mm | 20 | 25 | 1,5 | 1,0 | 0,7 | 42 |
+| 76709 | Réhausse 100 mm | V075 | Renfort1,5 mm | 45 | 18 | 1,5 | 4,1 | 1,0 | 42 |
+| 76709 | Réhausse 100 mm | V299 | Renfort1,5 mm | 33 | 17 | 1,5 | 1,8 | 0,6 | 42 |
+| 76715 | Réhausse 50 mm, complément pour 76708 | V407 | Renfort 1,5 mm | 20 | 25 | 1,5 | 1,0 | 0,7 | 43 |
+| 76722 | Réhausse 35 mm | V167 | Renfort 1,5 mm | 30 | 20 | 1,5 | 1,61 | 1,07 | 43 |
+| 76777 | Réhausse 55 mm | V114 | Renfort 1,5 mm | 25 | 30 | 1,5 | 1,9 | 1,4 | 43 |
+| 76605 | Profilé de liaison-H | V330 | Renfort 2,5 mm | - | - | 2,5 | 0,8 | 5,5 | 50 |
+| 76605 | Profilé de liaison-H | V331 | Renfort 2,5 mm | - | - | 2,5 | 1,0 | 10,0 | 50 |
+| 76608 | Profilé de liaison-H | V288 | Renfort 2,0 mm | - | - | 2 | 0,7 | 20,4 | 51 |
+| A250 | Profilé de liaison | V264 | Renfort | - | - | - | - | 17,9 | 52 |
+| 8340 | Poteau d'angle variable | V265 | Renfort 2,0 mm, soudé | - | - | 2 | 8,7 | 8,7 | 52 |
+| 8355 | Poteau d'angle 90° | V263 | Renfort 2,0 mm, soudé | - | - | 2 | 14,4 | 14,4 | 53 |
+| 8356 | Poteau d'angle 135° | V262 | Renfort 2,0 mm | - | - | 2 | 7,6 | 7,6 | 53 |
+| 76802 | Profilé de jonction CVR | V332 | - | - | - | - | 0,1 | 5,7 | 53 |
 
-(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, registre 2.1.3, p. 1 à 16)
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 38 à 53, registre 2.1.3, p. 1 à 15)
 
-Le **V288 du profilé de liaison 76608 est le renfort le plus raide au vent de tout le système** :
-20,4 cm⁴, pour une IG quasi nulle de 0,7. C'est un profil de liaison, pas un porteur de vitrage.
+Les renforts des profilés de liaison, des poteaux et du 76802 sont dessinés sans cote au manuel :
+leurs sections sont celles du tableau *Renforts dessinés sur le poster des profilés
+complémentaires* plus bas. Le profilé de guidage de tablier **76800** n'a pas de tableau
+d'accessoires, donc pas de renfort ; une lecture antérieure lui prêtait le V262, qui est celui du
+poteau 8356. L'**A250**, profilé aluminium, porte sous sa coupe « A250 Alu IW = 79 cm⁴ » et
+« Valeur de remplacement acier IW = 26 cm⁴ » [1 p. 52].
 
-**Le renfort V317 apparaît avec des inerties permutées selon la planche** : IW 4,8 / IG 2,3 sur le
-battement 76472, IW 2,3 / IG 4,8 sur la réhausse 76705. C'est cohérent avec un montage tourné de
-90°, l'axe fort passant du vent au poids, sans que le document l'écrive. Entrée **VER-24** du
-registre [Informations à vérifier](/anomalies/informations-a-verifier.md).
+L'élargisseur **76700** n'a pas de tableau d'accessoires : aucun renfort. Les quatre renforts que
+les planches du poster ne dessinent pas :
+
+| Renfort | Coupe |
+| --- | ---: |
+| V407 | ![Renfort V407](/assets/profiles/systeme76/renforts/renfort-v407.png) |
+| V299 | ![Renfort V299](/assets/profiles/systeme76/renforts/renfort-v299.png) |
+| V167 | ![Renfort V167](/assets/profiles/systeme76/renforts/renfort-v167.png) |
+| V288 | ![Renfort V288](/assets/profiles/systeme76/renforts/renfort-v288.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 42, 43 et 51)
+
+Le **V075** porte au manuel **IG 4,1 et IW 1,0**, indices écrits ; sur le poster des profilés
+complémentaires, ses deux inerties sont écrites « I = » sans indice (entrée **INC-20**). Le
+**V317** est dessiné couché, 40 × 25 mm, comme sur le poster des profilés principaux, mais avec
+les inerties du poster des profilés complémentaires, IG 4,8 et IW 2,3 — entrée **VER-24** du
+registre [Informations à vérifier](/anomalies/informations-a-verifier.md). Le **V264** porte au
+manuel une seule inertie, IW 17,9 cm⁴, contre deux valeurs sans indice de 0,5 et 1,8 cm⁴ sur le
+poster (entrée **INC-20**) ; le **V263** 14,4 cm⁴ contre 14,5 (entrée **CTR-23**).
 
 Voir [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md).
 
@@ -483,13 +511,14 @@ planche. Les cotes des profilés sont dans
 
 Les lignes des élargisseurs aux poteaux viennent de la planche des profilés complémentaires ; les
 76700, 76708, 76709 et 76713 y sont dessinés sans renfort. Pour les élargisseurs, la planche et le
-cahier PERFORM76 donnent V312.Z au 76701 et V314.Z aux 76702 et 76703, là où le tableau des
-profilés complémentaires plus haut donne V312.Z aux 76700 à 76702 et V114 au 76703 — entrée
+cahier PERFORM76 donnent V312.Z au 76701 et V314.Z aux 76702 et 76703, comme les planches du
+manuel relues en image (tableau *Renforts des profilés complémentaires* plus haut) — entrée
 **CTR-22**. Les renforts V115, V288, V299, V407 et V167 ne sont dessinés sur aucune des deux
 planches.
 
 Cette liste ne concorde pas avec le tableau des renforts à inertie unique pour cinq profilés :
-76206 (V260, V333, V335 ici, V323.Z et V322 dans les tableaux des profilés complémentaires),
+76206 (V260, V333, V335 ici ; les V323.Z et V322 que les tableaux des profilés complémentaires
+lui prêtaient sont ceux du 76299, planche relue en image [1 p. 38]),
 76102 (V325 ici, V326 dans le tableau du DTA), 76101 (V308 et V310 ici, V329 dans le tableau du
 DTA), 76303 (pas de V324 ici), 76172 (V325 et V353 ici). Pour les dormants, les ouvrants, les
 battements et les cadres, elle concorde avec les planches du manuel de mise en œuvre, qui
@@ -502,29 +531,211 @@ doute.
 
 # Vissage des renforts
 
-La fixation des renforts acier dans les chambres des profilés PVC s'effectue au moyen de **vis auto-perforeuses à tête fraisée** (norme DIN 7504 P) [1 registre 2.4.1 p. 1 à 9].
+Le renfort acier glissé dans la chambre d'un profilé PVC y est fixé par des **vis
+auto-perforeuses à tête fraisée** : la vis perce elle-même le PVC et l'acier, et sa tête conique
+s'encastre dans la paroi. Pour chaque profilé du système 76 Advanced à joint central, la planche
+de mise en œuvre dessine la coupe du profilé avec son renfort en place, la vis à sa position, la
+cote qui situe l'axe de la vis, la dimension de la vis et les renforts qui se vissent de la même
+façon [1 PDF p. 118-126, registre 2.4.1, p. 1 à 9].
 
-### Dimensions des vis selon renfort
+Toutes les vis sont des 3,9 × 16 mm, sauf sur la traverse d'ouvrant 76300 (renfort V312.Z), où
+la vis est une **3,9 × 13 mm** [1 PDF p. 125, registre 2.4.1, p. 8].
 
-| Renfort | Type et dimension de vis | Usage profilé |
-| --- | --- | --- |
-| **V312.Z** | **3,9 × 13 mm** auto-perforeuse à tête fraisée | Croisillons 76300, élargisseurs 76700-76702 |
-| **Tous les autres renforts** (V306.Z, V307.Z, V308, V309.Z, V310, V314.Z, V326.Z, V266.Z, V316, V317, V318.Z, V319, V322, V323.Z, V324, V325, etc.) | **3,9 × 16 mm** auto-perforeuse à tête fraisée | Dormants, ouvrants, meneaux, battements et profilés complémentaires |
+L'entraxe maximal entre vis (300 mm en blanc, 250 mm en couleur), la distance maximale du
+vissage à l'onglet et le nombre minimal de trois vis par renfort sont des règles générales de
+toutes les fenêtres profine : elles sont portées par
+[Fabrication des profilés PVC, directives profine](/procedures/fabrication-profiles-pvc.md), et
+la planche du système 76 n'en donne pas d'autre.
 
-### Règles et entraxes de fixation en atelier
+## Position de la vis, profilé par profilé
 
-* **Pas de vissage maximal (entraxe entre vis)** :
-  * **Profilés blancs** : entraxe maximal de **300 mm**.
-  * **Profilés couleur ou plaxés** (1 ou 2 faces) : entraxe maximal ramené à **250 mm** en raison des contraintes thermiques et des gradients d'échauffement accrus.
-* **Distance aux extrémités coupées** :
-  * La première vis à chaque extrémité doit impérativement être positionnée entre **20 mm et 50 mm** de l'extrémité coupée de la barre d'acier ou du fond de feuillure soudé.
-  * *Règle critique* : interdiction de visser à moins de 20 mm du bord (risque d'éclatement de la chambre PVC et interférence mécanique avec le miroir de soudage ou les ébavureuses d'angle).
-* **Nombre minimal de vis** :
-  * Tout tronçon de renfort doit comporter **au minimum 3 vis** de fixation, y compris sur les profilés courts ou impostes.
-* **Axe et guidage de perçage** :
-  * Le positionnement s'effectue dans la gorge de centrage coextrudée en fond de rainure de ferrure ou en fond de feuillure du profilé PVC, assurant la prise directe de la vis auto-foreuse dans l'épaisseur d'acier sans avant-trou.
-* **Profilés de couleur et AluClip** :
-  * Sur tout profilé filmé, laqué ou capoté aluminium, le vissage du renfort s'accompagne obligatoirement de la **ventilation des préchambres extérieures** (évacuation des calories emmagasinées) — voir [Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md).
+Chaque tableau donne, pour une famille de profilés, une ligne par dessin de la planche. La
+**cote** est la distance, en mm, entre l'axe de la vis et le bord du profilé repéré sur le
+dessin (bord droit ou bord gauche de la coupe, telle qu'elle est imprimée) ; la **paroi vissée**
+est la paroi de la chambre, en haut ou en bas du dessin, que traverse la vis ; la colonne des
+renforts reprend les légendes imprimées à côté de la coupe, dans l'ordre de la planche. Un
+profilé dessiné deux ou trois fois correspond à deux ou trois façons de loger le renfort :
+ouverture du renfort en U tournée vers le haut ou vers le bas du dessin, chambre inférieure ou
+supérieure. Échelle des planches : 1:2.
+
+**Dormants.** Le dormant est le cadre fixe scellé dans la maçonnerie.
+
+| Profilé | Cote de la vis (mm) | Bord de référence de la cote | Paroi vissée | Position du renfort sur le dessin | Renforts légendés | Vis (mm) | Page PDF |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 76171 | 25 | droit | bas | U ouvert vers le haut | V306.Z, V307.Z, V308, V309.Z, V310 | 3,9 × 16 | 118 |
+| 76171 | 46 | droit | bas | U ouvert vers le bas | V306.Z, V307.Z, V308 | 3,9 × 16 | 118 |
+| 76172 | 25 | droit | bas | tube fermé | V314.Z, V353, V325 | 3,9 × 16 | 118 |
+| 76173 | 25 | droit | bas, chambre inférieure | U ouvert vers le haut | V306.Z, V307.Z, V308, V309.Z, V310 | 3,9 × 16 | 119 |
+| 76173 | 46 | droit | bas, chambre inférieure | U ouvert vers le bas | V306.Z, V307.Z, V308 | 3,9 × 16 | 119 |
+| 76173 | 25 | droit | haut, chambre supérieure | U ouvert vers le bas | V306.Z, V307.Z, V308, V309.Z, V310 | 3,9 × 16 | 119 |
+| 76180 | 30 | droit | bas | U ouvert vers le haut | V306.Z, V307.Z, V308, V309.Z, V310 | 3,9 × 16 | 120 |
+| 76180 | 45 | droit | bas | U ouvert vers le bas | V306.Z, V307.Z, V308 | 3,9 × 16 | 120 |
+| 76177 | 46 | droit | bas | renfort coudé | V291.Z | 3,9 × 16 | 120 |
+| 76178 | 46 | droit | bas | renfort coudé | V291.Z | 3,9 × 16 | 121 |
+| 76185 | 46 | droit | bas | renfort coudé | V266.Z | 3,9 × 16 | 121 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 118-121)
+
+Le dormant rénovation 76185 est légendé **V266.Z** sur la planche de vissage, alors que les
+planches des profilés et le tableau des renforts plus haut lui donnent le V291.Z — entrée
+**INC-55** du registre [Incohérences internes](/anomalies/incoherences-internes.md). Les deux
+valeurs restent affichées, aucune n'est retenue.
+
+**Ouvrants.** L'ouvrant est le cadre mobile qui porte le vitrage.
+
+| Profilé | Cote de la vis (mm) | Bord de référence de la cote | Paroi vissée | Position du renfort sur le dessin | Renforts légendés | Vis (mm) | Page PDF |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| sans référence (1er dessin) | 32 | gauche | haut | renfort en L | aucun | 3,9 × 16 | 122 |
+| sans référence (2e dessin) | 39 | gauche | haut | renfort en L | aucun | 3,9 × 16 | 122 |
+| 76271 | 32 | gauche | haut | renfort en L | V306.Z, V307.Z, V308 | 3,9 × 16 | 123 |
+| 76274 | 39 | gauche | haut | renfort en L | V266.Z | 3,9 × 16 | 123 |
+| 76276 | 25 | droit | haut | trois U ouverts vers le bas | V266.Z | 3,9 × 16 | 123 |
+| 76272 | 25 | droit | haut | tube fermé | V314.Z, V353, V337/V339 D/G | 3,9 × 16 | 124 |
+| 76279 | 25 | droit | haut | tube fermé | V314.Z, V353, V337/V339 D/G | 3,9 × 16 | 124 |
+| 76283 | 28 | droit | haut | tube fermé | V314.Z, V353, V337/V339 D/G | 3,9 × 16 | 124 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 122-124)
+
+La page 122 (registre 2.4.1, p. 5) dessine deux ouvrants sans aucune référence de profilé ni de
+renfort ; leurs coupes et leurs cotes (32 et 39 mm) sont celles des deux premiers dessins de la
+page 123. Sur la page 123, les légendes et les dessins ne concordent pas : le 76271 porte les
+légendes V306.Z, V307.Z et V308 sous un seul renfort dessiné en L, et le 76276 porte la légende
+V266.Z sous trois renforts dessinés en U — entrée **INC-56**. Les renforts par profilé restent
+ceux du tableau *Renforts à inertie unique* plus haut (76271 : V306.Z, V307.Z, V308 ; 76276 :
+V266.Z) ; la planche de vissage ne suffit pas à les confirmer.
+
+**Battements, traverses d'ouvrant et meneaux.** Le battement est le profilé rapporté sur
+l'ouvrant d'une fenêtre à deux vantaux, qui ferme le jeu entre les deux vantaux ; la traverse
+d'ouvrant et le meneau sont les profilés intermédiaires qui recoupent un ouvrant ou un dormant.
+
+| Profilé | Cote de la vis (mm) | Bord de référence de la cote | Paroi vissée | Position du renfort sur le dessin | Renforts légendés | Vis (mm) | Page PDF |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 76471 | 22 | gauche | haut | renfort en C | V316 | 3,9 × 16 | 125 |
+| 76472 | 22 | gauche | haut | tube fermé | V317 | 3,9 × 16 | 125 |
+| 76300 | 25 | droit | bas | tube fermé plat | V312.Z | 3,9 × 13 | 125 |
+| 76303 | 25 | droit | bas | tube fermé | V323.Z, V322 | 3,9 × 16 | 126 |
+| 76372 | 25 | droit | bas | tube fermé | V318.Z, V319 | 3,9 × 16 | 126 |
+| 76373 | 25 | droit | bas | tube fermé | V323.Z, V322 | 3,9 × 16 | 126 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 125-126)
+
+Le battement 76473, qui ne reçoit pas de renfort, n'est pas dessiné sur la planche de vissage. Le
+renfort V324 du meneau 76373 n'y figure pas non plus : la planche ne dessine que les V323.Z et
+V322 pour ce meneau.
+
+## Schémas de vissage
+
+Chaque schéma montre la coupe du profilé, le renfort acier hachuré dans sa chambre, la vis
+dessinée à sa place avec sa tête fraisée côté paroi, la cote qui situe l'axe de la vis, et, à
+droite, le dessin de chaque renfort qui se visse de la même façon avec sa légende. La référence du
+profilé et la dimension de la vis sont écrites sous la coupe.
+
+### Dormants
+
+Vissage du dormant 76171, renfort en U ouvert vers le haut, vis à 25 mm du bord droit :
+
+![Vissage du renfort dans le dormant 76171, vis à 25 mm](/assets/procedures/moe-76-advanced/vissage-renfort-76171-25.png)
+
+Vissage du dormant 76171, renfort en U ouvert vers le bas, vis à 46 mm du bord droit :
+
+![Vissage du renfort dans le dormant 76171, vis à 46 mm](/assets/procedures/moe-76-advanced/vissage-renfort-76171-46.png)
+
+Vissage du dormant 76172, renfort tubulaire, vis à 25 mm :
+
+![Vissage du renfort dans le dormant 76172, vis à 25 mm](/assets/procedures/moe-76-advanced/vissage-renfort-76172-25.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 118)
+
+Vissage du dormant 76173 dans sa chambre inférieure, renfort en U ouvert vers le haut, vis à
+25 mm :
+
+![Vissage du renfort dans le dormant 76173, chambre inférieure, vis à 25 mm](/assets/procedures/moe-76-advanced/vissage-renfort-76173-25-bas.png)
+
+Vissage du dormant 76173 dans sa chambre inférieure, renfort en U ouvert vers le bas, vis à
+46 mm :
+
+![Vissage du renfort dans le dormant 76173, vis à 46 mm](/assets/procedures/moe-76-advanced/vissage-renfort-76173-46.png)
+
+Vissage du dormant 76173 dans sa chambre supérieure, vis dans la paroi du haut à 25 mm :
+
+![Vissage du renfort dans le dormant 76173, chambre supérieure, vis à 25 mm](/assets/procedures/moe-76-advanced/vissage-renfort-76173-25-haut.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 119)
+
+Vissage du dormant 76180, renfort en U ouvert vers le haut, vis à 30 mm ; puis renfort en U
+ouvert vers le bas, vis à 45 mm :
+
+![Vissage du renfort dans le dormant 76180, vis à 30 mm](/assets/procedures/moe-76-advanced/vissage-renfort-76180-30.png)
+
+![Vissage du renfort dans le dormant 76180, vis à 45 mm](/assets/procedures/moe-76-advanced/vissage-renfort-76180-45.png)
+
+Vissage des dormants rénovation 76177, 76178 et 76185, renfort coudé, vis à 46 mm :
+
+![Vissage du renfort V291.Z dans le dormant 76177](/assets/procedures/moe-76-advanced/vissage-renfort-76177-46.png)
+
+![Vissage du renfort V291.Z dans le dormant 76178](/assets/procedures/moe-76-advanced/vissage-renfort-76178-46.png)
+
+![Vissage du renfort légendé V266.Z dans le dormant 76185](/assets/procedures/moe-76-advanced/vissage-renfort-76185-46.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 120-121)
+
+### Ouvrants
+
+Les deux ouvrants sans référence de la page 122, vis à 32 et 39 mm du bord gauche :
+
+![Vissage d'un renfort en L, ouvrant sans référence, vis à 32 mm](/assets/procedures/moe-76-advanced/vissage-renfort-sans-reference-32.png)
+
+![Vissage d'un renfort en L, ouvrant sans référence, vis à 39 mm](/assets/procedures/moe-76-advanced/vissage-renfort-sans-reference-39.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 122)
+
+Vissage des ouvrants 76271 (32 mm), 76274 (39 mm) et 76276 (25 mm) ; légendes en désaccord avec
+les dessins, entrée **INC-56** :
+
+![Vissage du renfort dans l'ouvrant 76271, vis à 32 mm](/assets/procedures/moe-76-advanced/vissage-renfort-76271-32.png)
+
+![Vissage du renfort V266.Z dans l'ouvrant 76274, vis à 39 mm](/assets/procedures/moe-76-advanced/vissage-renfort-76274-39.png)
+
+![Vissage du renfort dans l'ouvrant 76276, vis à 25 mm](/assets/procedures/moe-76-advanced/vissage-renfort-76276-25.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 123)
+
+Vissage des ouvrants de 110 mm 76272, 76279 et 76283, renfort tubulaire, vis dans la paroi du
+haut à 25, 25 et 28 mm :
+
+![Vissage du renfort dans l'ouvrant 76272](/assets/procedures/moe-76-advanced/vissage-renfort-76272-25.png)
+
+![Vissage du renfort dans l'ouvrant 76279](/assets/procedures/moe-76-advanced/vissage-renfort-76279-25.png)
+
+![Vissage du renfort dans l'ouvrant 76283](/assets/procedures/moe-76-advanced/vissage-renfort-76283-28.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 124)
+
+### Battements, traverses d'ouvrant et meneaux
+
+Vissage des battements 76471 (V316) et 76472 (V317), vis à 22 mm du bord gauche, et de la
+traverse d'ouvrant 76300 (V312.Z), vis de 3,9 × 13 mm à 25 mm :
+
+![Vissage du renfort V316 dans le battement 76471](/assets/procedures/moe-76-advanced/vissage-renfort-76471-22.png)
+
+![Vissage du renfort V317 dans le battement 76472](/assets/procedures/moe-76-advanced/vissage-renfort-76472-22.png)
+
+![Vissage du renfort V312.Z dans la traverse 76300](/assets/procedures/moe-76-advanced/vissage-renfort-76300-25.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 125)
+
+Vissage de la traverse d'ouvrant 76303 et des meneaux 76372 et 76373, vis à 25 mm :
+
+![Vissage du renfort dans la traverse 76303](/assets/procedures/moe-76-advanced/vissage-renfort-76303-25.png)
+
+![Vissage du renfort dans le meneau 76372](/assets/procedures/moe-76-advanced/vissage-renfort-76372-25.png)
+
+![Vissage du renfort dans le meneau 76373](/assets/procedures/moe-76-advanced/vissage-renfort-76373-25.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 126)
+
+Les planches du registre 2.4.1 portent des dates de révision différentes : janvier 2016 (p. 1, 2,
+5 à 8), juillet 2017 (p. 3), mars 2021 (p. 4 et 9).
 
 # Citations
 

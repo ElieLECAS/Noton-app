@@ -22,7 +22,7 @@ Elle donne les cotes communes à tous les systèmes profine (registres 1.3.1 et 
 drainage et la décompression d'un cadre, et pour le calage d'un vitrage isolant. Ce sont des
 règles génériques : un système ou une gamme précise peut porter ses propres cotes, qui priment
 sur celles-ci — voir par exemple
-[Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md).
+[Drainage, décompression et ventilation du système 76 Advanced](/procedures/drainage-decompression-ventilation-systeme-76.md).
 
 # Drainage et décompression du dormant
 
@@ -98,3 +98,4 @@ indépendante de la taille de l'élément.
 - [Directives générales profine](/sources/profine-directives-generales.md)
 - [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md)
 - [Pose de la PERFORM76](/procedures/pose-perform76.md)
+- [Drainage, décompression et ventilation du système 76 Advanced](/procedures/drainage-decompression-ventilation-systeme-76.md)

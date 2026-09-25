@@ -11,9 +11,21 @@ sources:
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
     last_modified: 2026-01-31
+  - resource: raw/depliant-general-2023-06.pdf
+    id: depliant-general-2023-06
+    title: Dépliant général PROFERM, édition juin 2023
+    last_modified: 2023-06-30
+  - resource: raw/catalogue-portes-entree-2024-03.pdf
+    id: catalogue-portes-entree-2024-03
+    title: Catalogue portes d'entrée PROFERM, édition mars 2024
+    last_modified: 2024-03-31
 source_pages:
+  - resource: raw/depliant-general-2023-06.pdf
+    pages: 1, 3-8
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 1-4, 27-28, 34-36
+  - resource: raw/catalogue-portes-entree-2024-03.pdf
+    pages: 1-3, 159-160
 generated:
   by: process:claude-code
   at: 2026-09-25T12:00:00Z
@@ -120,6 +132,65 @@ Sous « PROFERM respecte l'environnement » [1 p. 35] :
 La dernière page reprend la signature « Fabricant français de menuiseries innovantes », les
 coordonnées, le renvoi aux catalogues en ligne et la mention « Fabrication française » [1 p. 36].
 
+## En juin 2023
+
+Le dépliant général de juin 2023 réunit les mêmes quatre gammes sous les mêmes slogans en
+couverture, avec la signature « Fabricant français de menuiseries innovantes » et le macaron
+« Garantie 15 ans* », « *sur la structure de la fenêtre » [2 p. 1]. Sous « Nos garanties », la
+même phrase qu'en 2026 : « La satisfaction est au cœur de nos préoccupations. C'est pourquoi
+PROFERM s'engage à vous fournir tranquillité et sérénité jusqu'à plusieurs années après la pose de
+vos menuiseries. PROFERM vous offre des garanties exceptionnelles et exclusives sur l'ensemble des
+composants » [2 p. 7] ; la grille est sur [Garanties par composant](/garanties/garanties-par-composant.md).
+
+« Organisme certificateur, le CSTB (Centre Scientifique et Technique du Bâtiment) a classé PROFERM
+parmi les 5 meilleurs fabricants français au test A\*E\*V. » ; le classement est présenté comme
+« Le plus haut niveau de résistance au vent et à l'air » (valeur sur
+[Labels et certifications](/certifications/labels-et-certifications.md)) [2 p. 7].
+
+Chaque page de gamme se termine par « Retrouvez toutes les informations sur la gamme … dans notre
+catalogue général » [2 p. 3-6]. La quatrième de couverture porte la signature, les coordonnées et
+un encadré vierge sous « Un projet ? Posez toutes vos questions à : » [2 p. 8].
+
+## En mars 2024, catalogue portes d'entrée
+
+La couverture du catalogue portes d'entrée porte « Catalogue portes d'entrée », « Fabrication
+française » et la signature « Fabricant français de menuiseries innovantes », sur la photo d'un
+modèle Arpège [3 p. 1]. « Situé au cœur des Hauts-de-France, PROFERM est le fabricant français de
+menuiseries innovantes par excellence & propose des menuiseries PVC, ALU, HYBRIDE & TEXTURAL®. »
+« Toutes nos menuiseries sont fabriquées dans notre atelier de production basé à Douvrin, dans le
+Nord de la France. PROFERM vous garantit une fabrication 100 % française. » [3 p. 2]
+
+Sous « PROFERM en quelques chiffres » [3 p. 3] :
+
+| Chiffre annoncé | Valeur | Unité |
+| --- | --- | --- |
+| Usine, à Douvrin dans le Pas-de-Calais | 1 | usine |
+| Collaborateurs | 220 | personnes |
+| Surface de production | 14 000 | m² |
+| Châssis fabriqués par an | 56 000 | châssis |
+
+(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 3)
+
+Cinq valeurs sont affichées sous « Nos valeurs » : qualité, sécurité, innovation, garantie,
+esthétique [3 p. 3].
+
+Sous « Une entreprise engagée pour l'environnement » : « PROFERM s'engage dans une politique
+environnementale par le choix des matériaux utilisés dans la fabrication de ses menuiseries : le
+PVC Greenline® de chez KÖMMERLING® a la particularité d'être complètement recyclable, d'être en
+partie composé de PVC recyclé et de ne pas comporter de plomb ni de cadmium dans sa composition ;
+l'aluminium bas carbone de TECHNAL® s'inscrit, quant à lui, dans une réelle démarche
+éco-responsable : une fabrication avec les plus faibles émissions de carbone possibles & un
+matériau composé à 75 % d'aluminium recyclé. » « Chez PROFERM, les chutes de matières premières
+produites lors des différentes phases de la production des menuiseries sont recyclées. » La page
+renvoie aux réseaux sociaux et à www.proferm.net [3 p. 3].
+
+En fin de catalogue : « Retrouvez-nous sur PROFERM.NET » et « Professionnels, nos tarifs sont
+disponibles sur : ELCIA PRODEVIS », au-dessus d'une page de notes [3 p. 159]. La quatrième de
+couverture porte la signature « Fabricant français de menuiseries innovantes », l'adresse 355
+Avenue de Londres, ZI Artois Flandres - 62138 Douvrin, info@proferm.net, www.proferm.net,
+03.21.77.42.20, les réseaux sociaux, un cadre « Un projet ? Posez toutes vos questions à : » et
+« Fabrication française » [3 p. 160].
+
 # Ce que la source ne chiffre pas
 
 « Les meilleurs matériaux », « la meilleure menuiserie du marché », « un haut niveau de
@@ -131,6 +202,8 @@ territoire français, 95 % [1 p. 2].
 # Citations
 
 [1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 1 à 4, 27, 28, 34 à 36
+[2] [Dépliant général PROFERM, édition juin 2023](raw/depliant-general-2023-06.pdf), p. 1, 3 à 8
+[3] [Catalogue portes d'entrée PROFERM, édition mars 2024](raw/catalogue-portes-entree-2024-03.pdf), p. 1 à 3, 159 et 160
 
 # Voir aussi
 

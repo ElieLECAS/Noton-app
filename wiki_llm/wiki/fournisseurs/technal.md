@@ -51,15 +51,20 @@ TECHNAL (groupe Hydro Building Systems) fournit l'intégralité des **systèmes 
 
 # Aluminium bas carbone
 
+Aluminium bas carbone des profilés TECHNAL du LUMÉAL, dans les termes de la source ; une ligne par
+caractéristique [2 p. 2].
+
 | Caractéristique | Valeur |
 | --- | --- |
 | Empreinte carbone | 2,3 kg de CO₂ par kg d'aluminium |
-| Aluminium recyclé, minimum | 75 %, déchets post-consommation Hydro CIRCAL |
-| Qualité | Première qualité bâtiment (alliage 6060 T6) |
+| Aluminium recyclé | au minimum 75 %, recyclé en fin de vie (déchets post-consommation) |
+| Qualité | aluminium de première qualité |
 
 (schéma: raw/depliant-lumeal-2026-04.pdf, p. 2)
 
-Les 75 % sont un **minimum**, issus de déchets post-consommation en fin de vie et non de chutes de production [2 p. 2].
+« L'aluminium bas carbone est un aluminium recyclé à faible teneur en carbone » [2 p. 2]. La
+marque Hydro CIRCAL et l'alliage 6060 T6, que ce tableau portait, ne figurent sur aucune page des
+dépliants LUMÉAL de juin 2023 et d'avril 2026 (**VER-53**).
 
 ---
 

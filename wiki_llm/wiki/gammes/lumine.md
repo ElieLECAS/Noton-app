@@ -17,7 +17,13 @@ sources:
     id: brochure-lumine65-2025-02
     title: Brochure LUMINE65, édition février 2025
     last_modified: 2025-02-28
+  - resource: raw/depliant-general-2023-06.pdf
+    id: depliant-general-2023-06
+    title: Dépliant général PROFERM, édition juin 2023
+    last_modified: 2023-06-30
 source_pages:
+  - resource: raw/depliant-general-2023-06.pdf
+    pages: 5
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 4, 14-15, 17-18, 35
   - resource: raw/brochure-lumine65-2025-02.pdf
@@ -46,8 +52,9 @@ Les baies coulissantes font l'objet d'une page dédiée : [Coulissants aluminium
 | LUMINE55 | 55 | apparent droit, apparent design ou minimal | en standard (selon abaques) | - |
 | LUMINE65 | 65 | caché monobloc, caché à tapées rapportées ou apparent | non disponible | 1,51 (fenêtre 1 vantail 1 010 × 1 365 mm) [2 p. 2] |
 | gamme LUMINE, version non précisée | - | - | - | 1,5 [1 p. 15] |
+| gamme LUMINE, juin 2023, avant la division | - | apparent droit, apparent design, minimal caché | - | 1,5 [3 p. 5] |
 
-(schéma: raw/catalogue-general-2026-01.pdf, p. 14 ; raw/brochure-lumine65-2025-02.pdf, p. 2)
+(schéma: raw/catalogue-general-2026-01.pdf, p. 14 ; raw/brochure-lumine65-2025-02.pdf, p. 2 ; raw/depliant-general-2023-06.pdf, p. 5)
 
 ## Finitions des ouvrants
 
@@ -64,6 +71,13 @@ reprend la légende de chaque coupe, avec la loupe qui montre la forme du profil
 | 6 | LUMINE65 | Ouvrant apparent pour porte-fenêtre avec serrure (profil 65 mm ouvrant visible) | ![Profil 65 mm ouvrant visible](/assets/gammes/lumine/ouvrant-visible-65.png) |
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 14)
+
+En juin 2023, avant la division en LUMINE55 et LUMINE65, la gamme LUMINE se choisissait en trois
+finitions, sous les mêmes coupes que les repères 1 à 3 : « 1. Ouvrant apparent droit - Droit »,
+« 2. Ouvrant apparent design - Galbé extérieur », « 3. Ouvrant minimal caché - Chant clippable
+pour un effet de modernité assuré. Galbé intérieur, clair de jour maximal », avec la mention
+« Rupture de pont thermique pour une isolation maximale. Double vitrage à isolation renforcée »
+[3 p. 5].
 
 Un ouvrant caché disparaît derrière le dormant vu de l'extérieur ; un ouvrant apparent reste
 visible. La coupe à 90° (coupe droite) et la coupe à 45° (coupe d'onglet) désignent l'angle
@@ -182,6 +196,7 @@ complète : [Garanties par composant](/garanties/garanties-par-composant.md).
 
 [1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 4, 14, 15, 17, 18 et 35
 [2] [Brochure LUMINE65, édition février 2025](raw/brochure-lumine65-2025-02.pdf), p. 1, 2, 4 et 5
+[3] [Dépliant général PROFERM, édition juin 2023](raw/depliant-general-2023-06.pdf), p. 5
 
 # Voir aussi
 

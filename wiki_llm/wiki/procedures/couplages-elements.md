@@ -68,6 +68,14 @@ Une cale de distance est insérée à chaque point de vissage pour répartir la 
 profilés élargisseurs se clippent sur l'arrière du dormant avec une cale, jamais sans, sous peine
 de déformation par charge ponctuelle.
 
+# Mise en œuvre dans le système 76 Advanced
+
+Pour le système 76 Advanced, chaque solution de couplage — par dos de dormant (76606, G022, 76604),
+par profilé de liaison H (76605, 76608), par contreventement aluminium A250, par renfort V477, par
+poteau d'angle (8355, 8356, 8340 / 8341) et par habillage de contreventement — a ses dimensions
+maximales, ses inerties, ses vis et ses étapes dans
+[Accouplement d'éléments du système 76 Advanced](/procedures/accouplement-elements-systeme-76.md).
+
 # Ce que le document ne dit pas
 
 Le choix entre les trois solutions de profilé — couplage de dos de dormant, couplage avec profilé
@@ -85,3 +93,4 @@ Aucun calcul type n'est donné pour dimensionner un renfort de couplage.
 - [profine](/fournisseurs/profine.md)
 - [Directives générales profine](/sources/profine-directives-generales.md)
 - [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md)
+- [Accouplement d'éléments du système 76 Advanced](/procedures/accouplement-elements-systeme-76.md)

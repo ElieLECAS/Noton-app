@@ -135,19 +135,12 @@ porte les flèches horizontales — entrée **INC-17** du registre
 Le retrait de 19,5 mm et la hauteur de 11 mm sont communs aux cinq dormants : **seule la position
 varie**, de 20 mm sur le 76171 à 57 mm sur le 76185.
 
-# Nombre et implantation des paumelles par hauteur d'ouvrant (registre 2.3.3)
+# Nombre de paumelles par hauteur d'ouvrant
 
-Relevé sur le graphique de distribution du manuel Système 76 Advanced (registre 2.3.3, p. 100) :
-
-| Hauteur fond de feuillure HFF (mm) | Nombre de paumelles / paliers | Position des points de reprise de charge | Accessoire de maintien médian requis |
-| --- | --- | --- | --- |
-| 300 à 800 | 2 paumelles | 1 palier d'angle bas + 1 palier compas haut | — |
-| 801 à 1 400 | 2 paumelles | 1 palier d'angle bas + 1 palier compas haut | 1 verrouilleur médian vertical (G1) |
-| 1 401 à 1 800 | 2 paumelles renforcées | 1 palier d'angle 130 kg + 1 palier compas | 1 verrouilleur vertical (G1 + G2) |
-| 1 801 à 2 200 (porte-fenêtre) | 3 paumelles ou 2 paumelles + 2 verrouilleurs | Palier bas + compas haut + 1 paumelle intermédiaire à mi-hauteur | Verrouilleur vertical arrière continu |
-| 2 201 à 2 400 | 3 paumelles renforcées (150 kg) | Palier bas + compas haut + 1 paumelle intermédiaire à 350 mm sous l'angle haut | Verrouilleur vertical arrière continu + allonge |
-
-(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, registre 2.3.3, p. 100)
+Le système 76 Advanced prévoit **2 paumelles de 50 à 90 cm de hauteur d'ouvrant, 3 de 100 à
+160 cm, 4 de 170 à 210 cm et 5 de 220 à 250 cm** ; le tableau et ses conditions sont dans
+[Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md#nombre-de-paumelles)
+[2 p. 100].
 
 Pour les portes d'entrée de la gamme PERFORM (ouvrants 76272 et 76279), 3 paumelles en applique **Roto Solid B** sont montées de série, portées à 4 paumelles pour vantail de hauteur $> 2\,200\text{ mm}$ ou masse $> 120\text{ kg}$ — voir [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md).
 
@@ -166,7 +159,7 @@ commerciales dans [Poignées et croisillons](/quincaillerie/poignees-et-croisill
 `raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, page du PDF 6
 
 [2] Mise en œuvre Système 76 Advanced, profine, édition décembre 2023 —
-`raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`, registre 2.3.3, p. 100
+`raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`, PDF p. 100 (registre 2.3.3, p. 3)
 
 # Voir aussi
 

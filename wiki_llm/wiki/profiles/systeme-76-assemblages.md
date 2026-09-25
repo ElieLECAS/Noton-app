@@ -27,7 +27,7 @@ source_pages:
   - resource: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf
     pages: 4-6, 19-22
   - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
-    pages: 22-25, 33
+    pages: 22-25, 33, 200
 generated:
   by: process:claude-code
   at: 2026-09-25T15:00:00Z
@@ -150,6 +150,13 @@ Les meneaux d'ouvrant **76301 et 76303** sont inscrits dans le tableau du seuil 
 est dessiné à côté du seuil A075 (voir
 [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md)).
 
+Le registre 2.4.5 du manuel de mise en œuvre ne nomme pas les sets M546 à M549 : sur le seuil
+A075, il assemble les dormants 76171, 76172 et 76173 avec les raccords M150, M173 et M174 et
+leurs pièces de remplissage, et le meneau 76372 avec ses seules vis S055 — entrée **CTR-34** du
+registre [Contradictions entre sources](/anomalies/contradictions-entre-sources.md). Les sets,
+les vis et les étapes de montage de chaque dormant et meneau sur seuil sont dans
+[Mise en œuvre du seuil du système 76 Advanced](/procedures/mise-en-oeuvre-seuil-systeme-76.md).
+
 # Pièces d'assemblage des traverses
 
 Une **traverse** assemblée au milieu d'un cadre forme un **T** (elle aboutit sur un profilé) ou un
@@ -169,8 +176,8 @@ La planche porte deux tableaux pour les traverses d'ouvrant. Le premier, « trav
 ne donne qu'une pièce par traverse, sans forme d'assemblage : J050 pour le 76300, J052 pour le
 76301, J054 pour le 76303. Le second, « Pièce d'assemblage traverse », précise la forme : **J050
 pour le 76300 en T et en X**, **J214 pour le 76300 en T**, J051 et J052 pour le 76301, J053 et J054
-pour le 76303. Le mode opératoire de ces assemblages et les entretoises S048 à S050 sont dans
-[Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md#assemblage-mécanique-du-meneau-système-76).
+pour le 76303. Le mode opératoire de ces assemblages, les gabarits T018, T019 et T020 et les douilles
+S048 à S050 sont dans [Assemblage mécanique du meneau et de la traverse du système 76 Advanced](/procedures/assemblage-meneau-traverse-systeme-76.md).
 
 # Rejets d'eau et profilés A061 à A064
 

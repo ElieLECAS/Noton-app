@@ -25,7 +25,13 @@ sources:
     id: depliant-lumeal-2023-06
     title: Dépliant LUMÉAL, édition juin 2023
     last_modified: 2023-06-30
+  - resource: raw/depliant-general-2023-06.pdf
+    id: depliant-general-2023-06
+    title: Dépliant général PROFERM, édition juin 2023
+    last_modified: 2023-06-30
 source_pages:
+  - resource: raw/depliant-general-2023-06.pdf
+    pages: 5
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 16-18, 35
   - resource: raw/depliant-lumeal-2026-04.pdf
@@ -47,6 +53,18 @@ PROFERM fabrique quatre gammes de coulissants en aluminium, rattachées à l'off
 * **GALANDAGE55** : coulissant à galandage en aluminium (les vantaux s'effacent dans l'épaisseur du mur ou de la cloison), module de 55 mm à rupture de pont thermique de 20 mm ; 1 à 4 vantaux, jusqu'à 3 rails possibles.
 * **LUMÉAL55** : baie coulissante en aluminium à ouvrant caché ; gain de 8 à 14 % de clair de vitrage suivant son type de pose, masse d'aluminium réduite (-35 %) avec seulement 68 mm et 77 mm d'aluminium visible.
 * **LUMINE65** : coulissant avec un profil de 65 mm.
+
+Configurations annoncées du coulissant et du galandage aluminium, par période ; une ligne par
+produit et par période [1 p. 16, 5 p. 5] :
+
+| Produit | Période (document) | Vantaux | Rails |
+| --- | --- | --- | --- |
+| coulissant aluminium (SOLÉAL55 en 2026) | juin 2023 (dépliant général) | 2 à 4 | 2 à 4 |
+| coulissant aluminium (SOLÉAL55 en 2026) | janvier 2026 (catalogue général) | 2 à 8 | 2 à 4 |
+| galandage aluminium (GALANDAGE55 en 2026) | juin 2023 (dépliant général) | 1 à 4 | jusqu'à 3 |
+| galandage aluminium (GALANDAGE55 en 2026) | janvier 2026 (catalogue général) | 1 à 4 | jusqu'à 3 |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 16 ; raw/depliant-general-2023-06.pdf, p. 5)
 
 Ce que la marque annonce de chaque coulissant est sur [Arguments de vente LUMINE](/commercial/lumine.md).
 
@@ -158,7 +176,10 @@ la fenêtre (part de l'énergie solaire transmise), TLw sa transmission lumineus
 | Résistance à l'effraction | classe de résistance niveau 3 | - | selon la norme européenne EN 1627-30 | [4 p. 2] |
 | Aluminium des profilés | au minimum 75 % d'aluminium recyclé en fin de vie ; 2,3 kg de CO2 par kg d'aluminium | - | aluminium bas carbone TECHNAL | [4 p. 2] |
 
-(schéma: raw/depliant-lumeal-2023-06.pdf, p. 2 et 3)
+(schéma: raw/depliant-lumeal-2023-06.pdf, p. 2 et 3 ; raw/depliant-lumeal-2026-04.pdf, p. 2)
+
+Le dépliant LUMÉAL d'avril 2026 porte, ligne pour ligne, les mêmes valeurs et les mêmes conditions
+que celui de juin 2023 [2 p. 1, 2].
 
 « L'aluminium bas carbone est un aluminium recyclé à faible teneur en carbone » ; il s'agit
 « d'un aluminium de première qualité fabriqué avec un minimum de 75 % d'aluminium recyclé en fin
@@ -187,28 +208,28 @@ Configurations du LUMÉAL, une ligne par nombre de vantaux, une colonne par sour
 montre la baie vue de face (flèches : vantaux qui coulissent) et, dessous, la vue en plan des
 vantaux sur leurs rails.
 
-| Configuration | Rails, catalogue général de janvier 2026 | Rails, dépliant LUMÉAL de juin 2023 |
+| Configuration | Rails, catalogue général de janvier 2026 | Rails, dépliants LUMÉAL de juin 2023 et d'avril 2026 |
 | --- | --- | --- |
 | 2 vantaux | 2 | 2 |
 | 3 vantaux | 2 ou 3 | 2 ou 3 |
 | 4 vantaux | 2 | 2 ou 3 (**CTR-29**) |
 | 6 vantaux | 3 | 3 |
 
-(schéma: raw/catalogue-general-2026-01.pdf, p. 16 ; raw/depliant-lumeal-2023-06.pdf, p. 2)
+(schéma: raw/catalogue-general-2026-01.pdf, p. 16 ; raw/depliant-lumeal-2023-06.pdf, p. 2 ; raw/depliant-lumeal-2026-04.pdf, p. 2)
 
-Le 4 vantaux sur 3 rails n'est dessiné que sur le document produit ; il est retenu, sous réserve
+Le 4 vantaux sur 3 rails n'est dessiné que sur le document produit, dans ses deux éditions ; il est retenu, sous réserve
 de validation, le catalogue de conception TECHNAL ne listant que le 4 vantaux sur 2 rails
 (**CTR-29**). Se rapprocher d'un technicien PROFERM afin de valider la faisabilité avant de passer
 commande [1 p. 16].
 
 ![Configurations du LUMÉAL55, catalogue général](/assets/gammes/coulissants-aluminium/lumeal55-configurations.png)
 
-![Ouvertures du LUMÉAL, dépliant de juin 2023](/assets/gammes/coulissants-aluminium/lumeal-2023-ouvertures.png)
+![Ouvertures du LUMÉAL, dépliants de juin 2023 et d'avril 2026](/assets/gammes/coulissants-aluminium/lumeal-2023-ouvertures.png)
 
 ### Vitrage
 
 Le LUMÉAL reçoit un vitrage de 28 mm. « La performance thermique d'un vitrage se mesure grâce à
-son coefficient Ug. Plus ce coefficient est bas, plus le vitrage est isolant. » [4 p. 3] Ug est
+son coefficient Ug. Plus ce coefficient est bas, plus le vitrage est isolant. » [4 p. 3, 2 p. 2] Ug est
 le coefficient de transmission thermique du vitrage seul, en W/m².K.
 
 ![Vitrage 28 mm](/assets/gammes/coulissants-aluminium/lumeal-2023-vitrage-28.png)
@@ -217,7 +238,7 @@ le coefficient de transmission thermique du vitrage seul, en W/m².K.
 
 Les poignées du LUMÉAL sont sur [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md),
 ses coloris sur [Coloris LUMINE](/coloris/coloris-lumine.md), sa grille de garanties sur
-[Garanties par composant](/garanties/garanties-par-composant.md) [4 p. 3].
+[Garanties par composant](/garanties/garanties-par-composant.md) [4 p. 3, 2 p. 2].
 
 ## LUMINE65
 
@@ -278,7 +299,7 @@ trois couleurs extérieures standards, sept à prix préférentiel et la couleur
 # Ce qui n'est pas réalisable
 
 * **Chêne doré en 2 faces uniquement** sur SOLÉAL55, GALANDAGE55 et LUMÉAL55 [1 p. 18] ; le nuancier propre du LUMÉAL ne compte pas de chêne doré (**CTR-10**) [4 p. 3].
-* **Bicoloration sur LUMÉAL55** : interdite par la fiche produit officielle [2 p. 2].
+* **Pas de bicoloration sur le LUMÉAL** : « Pas de bicoloration possible », en renvoi des couleurs extérieures standards et à prix préférentiel [2 p. 2].
 * **SOLÉAL55 en 6 vantaux - 3 rails et 8 vantaux - 4 rails** : tarif et faisabilité sur demande [1 p. 16].
 
 Aucune source ne dit si les coulissants aluminium se font en forme cintrée ou hors d'équerre (**VER-52**).
@@ -289,6 +310,7 @@ Aucune source ne dit si les coulissants aluminium se font en forme cintrée ou h
 [2] [Dépliant LUMÉAL, édition avril 2026](raw/depliant-lumeal-2026-04.pdf), p. 1 et 2
 [3] [Brochure LUMINE65, édition février 2025](raw/brochure-lumine65-2025-02.pdf), p. 3
 [4] [Dépliant LUMÉAL, édition juin 2023](raw/depliant-lumeal-2023-06.pdf), p. 1 à 3
+[5] [Dépliant général PROFERM, édition juin 2023](raw/depliant-general-2023-06.pdf), p. 5
 
 
 # Voir aussi

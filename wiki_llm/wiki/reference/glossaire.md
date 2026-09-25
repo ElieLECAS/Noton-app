@@ -21,6 +21,10 @@ sources:
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
     last_modified: 2026-01-31
+  - resource: raw/catalogue-portes-entree-2024-03.pdf
+    id: catalogue-portes-entree-2024-03
+    title: Catalogue portes d'entrée PROFERM, édition mars 2024
+    last_modified: 2024-03-31
 generated:
   by: process:claude-code
   at: 2026-09-18T22:00:00Z
@@ -58,6 +62,9 @@ mobiles, les ouvrants, qui portent le vitrage.
 | Terme | Sens | Où il s'emploie |
 | --- | --- | --- |
 | Dormant | cadre fixe de la fenêtre, fixé dans la maçonnerie ; il reçoit l'ouvrant | [Dormants PERFORM76](/profiles/perform76-dormants.md) |
+| Store intégré | store vénitien ou plissé monté dans la menuiserie, entre les parcloses, et manœuvré de l'intérieur | [Stores intégrés](/equipements/stores-integres.md) |
+| Clair de parclose | ouverture visible du vitrage entre les parcloses ; c'est la cote qui borne un store intégré | [Stores intégrés](/equipements/stores-integres.md) |
+| Petits bois collés | baguettes collées sur le verre pour dessiner des carreaux ; incompatibles avec un store intégré | [Stores intégrés](/equipements/stores-integres.md) |
 | Ouvrant | cadre mobile qui s'ouvre, aussi appelé vantail ; il porte le vitrage et la quincaillerie | [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md) |
 | Faux ouvrant | partie fixe construite avec les profilés d'un ouvrant, pour que fixe et ouvrant aient la même allure | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
 | Ouvrant droit, ouvrant galbé | ouvrant à face plane ou à face arrondie ; sur la PERFORM76, 76 mm et 83 mm d'épaisseur | [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md) |
@@ -80,6 +87,15 @@ mobiles, les ouvrants, qui portent le vitrage.
 | Galandage | coulissant dont les vantaux s'effacent dans l'épaisseur du mur ou de la cloison | [Coulissants aluminium](/gammes/coulissants-aluminium.md) |
 | Monobloc (porte) | porte d'entrée dont l'ouvrant et le panneau ne font qu'un | [Sélection Hexa](/portes/selection-hexa.md) |
 | Imposte, tierce | partie fixe ajoutée au-dessus (imposte) ou à côté (tierce) d'une porte ou d'une fenêtre | [Collection Authentique](/portes/collection-authentique.md) |
+| Grille de défense | grille en fer forgé posée devant le vitrage d'une porte, en applique sur le vitrage ou intégrée à celui-ci | [Collection Authentique](/portes/collection-authentique.md) |
+| Insert inox | pièce d'acier inoxydable incrustée dans un usinage du panneau de porte ou collée sur celui-ci, sur une face (extérieure) ou deux faces | [Collection Contemporain, modèles déclinés 0, 1 et 2](/portes/collection-contemporain-declinaisons-inox.md) |
+| Rainurage | décor de rainures dans la surface d'un panneau de porte | [Collection Contemporain](/portes/collection-contemporain.md) |
+| Vitrage dépoli acide | verre rendu translucide par attaque à l'acide | [Collection Contemporain](/portes/collection-contemporain.md) |
+| Poignée encastrée | poignée de tirage logée dans la face extérieure de l'ouvrant d'une porte, au lieu d'être posée en applique | [Collection Contemporain](/portes/collection-contemporain.md), [Collection Graphite](/portes/collection-graphite.md) |
+| Dépoli sablé | verre rendu translucide par projection d'un abrasif (corindon) sous pression ; sur les modèles « PS », le fond est sablé et le motif reste transparent | [Collection Lumière](/portes/collection-lumiere.md) |
+| Panneau verrier | panneau de porte entièrement vitré, posé dans l'ouvrant | [Collection Lumière](/portes/collection-lumiere.md) |
+| Warm Edge | intercalaire isolant qui sépare les verres d'un vitrage isolant | [Collection Lumière](/portes/collection-lumiere.md) |
+| Plaxé, plaxage | profilé ou panneau PVC revêtu d'un film décor ; s'oppose au teinté dans la masse et au laqué | [DTA 6/16-2334](/certifications/dta-6-16-2334.md), [Collection Contemporain](/portes/collection-contemporain.md) |
 | Traverse | profil horizontal ; la traverse de soubassement sépare le vitrage du soubassement | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
 | Soubassement | partie basse d'une fenêtre ou d'une porte-fenêtre, sous la traverse | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
 | Parclose | baguette clipsée qui maintient le vitrage dans son logement ; elle se choisit par l'épaisseur du vitrage | [Parcloses PERFORM76](/profiles/perform76-parcloses.md) |
@@ -117,6 +133,17 @@ mobiles, les ouvrants, qui portent le vitrage.
 | Contre-profilage | usinage de l'extrémité d'un meneau, d'une traverse ou d'un montant à la forme du profilé qui le reçoit (dormant, seuil) | [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md) |
 | Entretoise | tube (S048, S049, S050 sur le système 76) logé dans le profilé qui reçoit un meneau, pour que la vis d'assemblage n'écrase pas ses chambres ; il remplace le renfort | [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md) |
 | Alvéovis | logement de vis extrudé dans le nez d'une fourrure d'épaisseur, dans lequel se visse la pièce d'appui | [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) |
+| Paumelle | charnière d'une porte ou d'une fenêtre ; en porte d'entrée, « drapeau » (fixée en applique sur la face de l'ouvrant) ou « tube » (cylindre vertical) | [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md) |
+| Pêne dormant | pêne de serrure manœuvré par la clé seule | [Ouvrants de porte d'entrée](/portes/ouvrants-de-porte.md) |
+| Galet | roulette de verrouillage qui se loge dans une gâche | [Ouvrants de porte d'entrée](/portes/ouvrants-de-porte.md) |
+| Gâche | pièce fixée sur le dormant qui reçoit le pêne, le galet ou le crochet de la serrure | [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md) |
+| Fouillot | pièce de la serrure qui reçoit le carré de la béquille | [Ouvrants de porte d'entrée](/portes/ouvrants-de-porte.md) |
+| Béquille | poignée qui actionne la serrure d'une porte | [Accessoires de porte d'entrée](/quincaillerie/accessoires-portes-entree.md) |
+| Bâton de tirage | poignée fixe, sans mécanisme, que l'on tire pour ouvrir ou fermer la porte | [Accessoires de porte d'entrée](/quincaillerie/accessoires-portes-entree.md) |
+| Heurtoir | anneau ou pièce articulée fixée sur la porte pour y frapper | [Accessoires de porte d'entrée](/quincaillerie/accessoires-portes-entree.md) |
+| Cimaise | moulure en relief rapportée horizontalement sur le panneau de porte | [Collection Classique](/portes/collection-classique.md) |
+| Panneau (porte à panneau) | porte dont le panneau est rapporté dans un cadre ouvrant, avec un effet « escalier » au raccord | [Panneaux et monoblocs](/portes/panneaux-et-monoblocs.md) |
+| Double frappe | deux battues d'étanchéité entre l'ouvrant et le seuil ou le dormant | [Ouvrants de porte d'entrée](/portes/ouvrants-de-porte.md) |
 
 # Cotes de fabrication
 
@@ -158,6 +185,8 @@ Vocabulaire des catalogues et manuels [ROTO](/fournisseurs/roto.md).
 | --- | --- |
 | LFF | largeur de fond de feuillure d'ouvrant |
 | HFF | hauteur de fond de feuillure d'ouvrant |
+| LFf, HFf | largeur et hauteur de fond de feuillure, sur un châssis fixe comme sur un ouvrant, dans la prise de mesures des [stores intégrés](/equipements/stores-integres.md) |
+| EV | encombrement pris par le store replié sur le vitrage, sur les [stores intégrés](/equipements/stores-integres.md) |
 | PV | poids de vantail |
 | FFO | hauteur d'axe de poignée au fond de la feuillure quincaillerie |
 | SDB | sécurité de base, le champ d'application sans classe d'effraction |
@@ -244,6 +273,13 @@ hauteur de chute et le nombre de billes. Voir
 | Contretypé | teinte réalisée sur mesure pour s'approcher d'une texture donnée |
 | Grain d'orge | finition de soudure d'angle, par opposition à la soudure ébavurée |
 | L\* | clarté colorimétrique ; le seuil **L\* inférieur à 82** déclenche le renforcement et la décompression des profilés |
+| Bevel | verre biseauté serti dans un cordon de plomb, sur un vitrage décoratif |
+| Low-e, faible émissivité | couche du vitrage qui renvoie le rayonnement de chaleur ; associée à un gaz argon dans le vitrage isolant |
+| Dépoli acide | verre rendu translucide par attaque à l'acide ; vitrage par défaut des portes d'entrée |
+| PVD | Physical Vapor Deposition, dépôt de métal sous vide qui colore une pièce (heurtoirs, boutons) |
+| Fer cémenté | fer durci en surface, finition de heurtoirs et de boutons |
+| AEROLAME | âme de panneau de porte aluminium, renforcée de composites alvéolaires, contre l'effet bilame |
+| Effet bilame | déformation d'un panneau dont les deux faces se dilatent différemment |
 
 # Labels de traitement de surface
 
@@ -262,6 +298,7 @@ hauteur de chute et le nombre de billes. Voir
 | DTD | Dossier Technique Détaillé, pièce jointe au DTA qui porte les prescriptions de fabrication |
 | GS | Groupe Spécialisé du CSTB ; le n° 6 traite les menuiseries |
 | CSTB | Centre Scientifique et Technique du Bâtiment |
+| APSAD | Assemblée Plénière des Sociétés d'Assurances Dommages, qui préconise des niveaux de protection (vitrage SP510 de la collection Lumière) |
 | FFCP | Fédération Française de Construction Passive |
 | UFME | Union des Fabricants de Menuiseries Extérieures |
 | SNEP | Syndicat National de l'Extrusion Plastique |

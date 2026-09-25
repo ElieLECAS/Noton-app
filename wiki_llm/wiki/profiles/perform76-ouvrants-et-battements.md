@@ -126,6 +126,8 @@ collés, aux côtés des 6129, 6131 et 6133 ; les battements extérieurs du mêm
 
 PROFERM retient le plus étroit des trois, le **76473 à 46 mm**. Leurs cotes de débit sont dans
 [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md).
+Leur débit, leurs embouts, leur collage et leur vissage sur l'ouvrant sont dans
+[Traitement du battement du système 76 Advanced](/procedures/traitement-du-battement-systeme-76.md).
 
 # Les ouvrants du système que PROFERM ne propose pas
 
@@ -186,6 +188,7 @@ Les meneaux 76301 et 76303 **ne se montent jamais sur un dormant**. Voir
 
 # Voir aussi
 
+- [Traitement du battement du système 76 Advanced](/procedures/traitement-du-battement-systeme-76.md)
 - [Dormants PERFORM76](/profiles/perform76-dormants.md)
 - [Parcloses PERFORM76](/profiles/perform76-parcloses.md)
 - [Meneaux PERFORM76](/profiles/perform76-meneaux.md)

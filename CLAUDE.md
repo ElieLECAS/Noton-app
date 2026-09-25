@@ -34,7 +34,12 @@ d'information technique. Le protocole d'écriture fait foi : `wiki_llm/CLAUDE.md
 - `app/routers/chat.py`, `vocal.py`, `wiki.py`, `conversations.py`, `admin.py`, `auth.py`.
 - `app/templates/chat.html` (chat + étapes de lecture + lecteur + PDF), `vocal.html` (orbe,
   micro, détection de fin de parole côté navigateur, transcription surlignée au fil de la
-  voix), `wiki.html` (graphe), `admin.html`.
+  voix), `wiki.html` (accueil par produit et métier, lecteur), `carte.html` (carte mentale,
+  entrée à part dans la navigation), `admin.html`.
+- `app/services/wiki_carte.py` — l'arbre de la carte mentale (`GET /api/wiki/carte`) : la
+  taxonomie de la frontmatter, niveaux inutiles sautés. Le choix des nœuds se teste ici ; le
+  navigateur ne fait que la mise en page. Plus de vue graphe (illisible, retirée le 25/09/2026) ;
+  `/api/wiki/graph` reste, c'est la liste des pages du wiki, du chat et du vocal.
 - `wiki_llm/CLAUDE.md` — le protocole d'écriture du wiki : c'est LUI qui fait foi pour toute
   ingestion ou correction de page. L'application ne corrige jamais une page : elle remplace le
   wiki EN BLOC par ce qu'on lui dépose.

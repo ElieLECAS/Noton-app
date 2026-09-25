@@ -224,7 +224,12 @@ monte **uniquement avec contre-profilage du montant** (équerre M150 et pièce d
 son extrémité est obturée par le bouchon G067 et il est drainé à 100 mm des montants puis tous les
 600 mm maximum par un orifice de 5 × 25 mm environ ; les seuils A076, A077 et A343 se montent
 sans contre-profilage (équerre M154 et pièce de compensation) ou avec (M150 et J064) [3 p. 5].
-Le montage complet est au § 2.2.3.1.4 de [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md).
+Le montage complet est au § 2.2.3.1.4 de [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md). Les sets, les schémas de perçage, les
+gabarits, les contours de fraisage et les étapes de montage de chaque dormant et meneau sur ces
+seuils, ainsi que les rejets d'eau A062 et A064, sont dans
+[Mise en œuvre du seuil du système 76 Advanced](/procedures/mise-en-oeuvre-seuil-systeme-76.md) ;
+la porte-fenêtre avec fixe latéral sur seuil filant dans
+[Porte-fenêtre avec fixe latéral du système 76 Advanced](/procedures/porte-fenetre-fixe-lateral-systeme-76.md).
 Le A077 (123 mm) et le A343 (135 mm) sont plus larges ;
 aucune source n'attribue chaque seuil à un dormant précis — entrée **VER-39** du registre
 [Informations à vérifier](/anomalies/informations-a-verifier.md).

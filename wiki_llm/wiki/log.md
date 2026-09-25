@@ -2,6 +2,667 @@
 
 ## 2026-09-25
 
+* **Retraitement, tranche 4 (PDF p. 194 à 301)** de la [Mise en œuvre Système 76 Advanced](/sources/profine-mise-en-oeuvre-76-advanced.md)
+  (`raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`), registres 2.4.5 à 2.5.2 : pages rendues
+  en PNG à 200 dpi (zooms à 400 dpi pour les abaques), lues en image par lots, aucune couche texte
+  lue ; pages 1-193 et 302-424 non rouvertes. **Bornes vérifiées sur les pages** : 2.4.5 = 194-233
+  (40 pages imprimées), 2.4.6 = 234-250 (17 pages), 2.5.1 = 251-259, 2.5.2 = 260-301 (42 pages) ;
+  les registres 2.4.5 et 2.4.6 **ne s'entrelacent pas**, contrairement à ce qu'écrivait la fiche
+  source (avant : « 2.4.5 | 194-250 » et « 2.4.6 | 234-248 », recouvrement ; après : 194-233 et
+  234-250). La page 194 ne continue pas le registre 2.4.4.
+* **Create**: [Mise en œuvre du seuil du système 76 Advanced](/procedures/mise-en-oeuvre-seuil-systeme-76.md)
+  (PDF p. 194-233) — sets par dormant et meneau en variantes 1, 2 et 3, vue d'ensemble des pièces,
+  schémas de perçage, gabarits T021 / T064 / T022 / T070, contours de fraisage A076-A077 et A075,
+  pièces de remplissage, montages, rejets d'eau A062 et A064 (débits, joints, embouts, windstops),
+  drainage du A075. 37 schémas dans `assets/procedures/moe-76-advanced/seuil-*.png`, coupe de la
+  pièce de remplissage **M412** ajoutée dans `assets/profiles/systeme76/accessoires/m412.png`
+  (PDF p. 202).
+* **Create**: [Porte-fenêtre avec fixe latéral du système 76 Advanced](/procedures/porte-fenetre-fixe-lateral-systeme-76.md)
+  (PDF p. 234-250) — seuils A076 / A077 et A075, traverse basse fixe 76171, pièce J156, gabarit
+  T019.1, supports M506, compribande. 16 schémas `pf-fixe-lateral-*.png`.
+* **Create**: [Mise en œuvre des réhausses, élargisseurs et pièces d'appui du système 76 Advanced](/procedures/mise-en-oeuvre-profiles-complementaires-systeme-76.md)
+  (PDF p. 251-259) — positionnements, charges admissibles, embouts de finition M302 à M309,
+  ventilation, renforts des réhausses. 9 schémas `complementaires-*.png`.
+* **Create**: [Accouplement d'éléments du système 76 Advanced](/procedures/accouplement-elements-systeme-76.md)
+  (PDF p. 260-301) — couplages 76606, G022, 76604, 76605, 76608, A250, V477, poteaux 8355, 8356,
+  8340 / 8341, habillages de contreventement 93000 / 93001 / 93002. Six abaques « Dimension maxi
+  élément A et B » échantillonnés tous les 10 cm de largeur (±2 cm) : 76606 = G022 = 76604 (un
+  seul tableau, abaques identiques aux graduations), 76605 = 76608 (identiques), 8355, 8356,
+  8340 / 8341. 47 schémas `accouplement-*.png`.
+* **Update**: [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md)
+  — cotes X / Y du poteau variable : avant 11 lignes tous les 10° (90, 100, … 180, plus 135),
+  après 19 lignes tous les 5° de 90° à 180° (PDF p. 298) ; règles de fixation et de ventilation
+  des élargisseurs : avant liste à puces sans citation (« percer impérativement … pour éviter toute
+  surchauffe thermique »), après paragraphe sourcé PDF p. 253-255 avec lien ; locators
+  « reg. 2.5.2 p. 1-29 » et « p. 31-40 » → « PDF p. 262-288 » et « PDF p. 290-299 » ; source du
+  manuel ajoutée au frontmatter.
+* **Update**: [Assemblages du système 76](/profiles/systeme-76-assemblages.md) — renvoi à la mise
+  en œuvre du seuil et **CTR-34** (M546 à M549 absents du manuel sur A075) ; `source_pages` + 200.
+* **Update**: liens ajoutés vers les nouvelles procédures dans
+  [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md),
+  [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md),
+  [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) et
+  [Couplages et contreventements d'éléments](/procedures/couplages-elements.md) (nouvelle section
+  *Mise en œuvre dans le système 76 Advanced*).
+* **Anomalies** : **INC-64** à **INC-72** et **CTR-34** créées ; **CTR-22** complétée (renforts
+  des élargisseurs écrits V312 / V314 sans « .Z » au registre 2.5.1).
+
+* **Retraitement, tranche 3 (PDF p. 118 à 193)** de la [Mise en œuvre Système 76 Advanced](/sources/profine-mise-en-oeuvre-76-advanced.md)
+  (`raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`), registres 2.4.1 à 2.4.4 : pages rendues
+  en PNG à 200 dpi (zoom à 600 dpi sur l'embout M462.R, p. 136), lues en image par lots de 4 à 8,
+  aucune couche texte lue ; pages 1-117 et 194-424 non rouvertes. Bornes des registres vérifiées
+  sur les pages : 2.4.1 = 118-126, 2.4.2 = 127-147, 2.4.3 = 148-166, 2.4.4 = 167-193 (le registre
+  2.4.4 atteint sa p. 27 imprimée en PDF p. 193 ; sa fin éventuelle au-delà est à vérifier par la
+  tranche suivante). Les quatre lignes `à faire` du registre sont remplacées par 17 lignes
+  `transcrit` en numérotation PDF.
+  * **Create** : [Drainage, décompression et ventilation du système 76 Advanced](/procedures/drainage-decompression-ventilation-systeme-76.md)
+    (PDF p. 127-147) ; [Traitement du battement du système 76 Advanced](/procedures/traitement-du-battement-systeme-76.md)
+    (p. 148-166) ; [Assemblage mécanique du meneau et de la traverse du système 76 Advanced](/procedures/assemblage-meneau-traverse-systeme-76.md)
+    (p. 167-193).
+  * **Update** : [Renforts du système 76](/profiles/systeme-76-renforts.md), section *Vissage des
+    renforts* réécrite d'après les planches (p. 118-126). Avant → après : « V312.Z, vis 3,9 × 13,
+    croisillons 76300, élargisseurs 76700-76702 » → vis 3,9 × 13 **sur la traverse d'ouvrant 76300
+    seule** (les élargisseurs ne figurent pas sur la planche) ; entraxes 300 / 250 mm, 20-50 mm des
+    extrémités, 3 vis minimum → retirés de cette page et renvoyés à
+    [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md), qui porte la règle des
+    directives (distance à l'onglet 65 / 25 mm, et non « 20 à 50 mm », valeur absente du
+    registre 2.4.1) ; phrases sans source retirées : « norme DIN 7504 P », « interdiction de visser
+    à moins de 20 mm du bord (risque d'éclatement …) », « gorge de centrage coextrudée … sans
+    avant-trou », « contraintes thermiques et gradients d'échauffement ». Ajout : tableau de la
+    position de vis par profilé (27 dessins) et 25 schémas. `source_pages` + 118-126.
+  * **Update** : [Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md),
+    section « Pourquoi la couleur change la fabrication » (citation ventilation, tableau L\* < 82
+    du DTD, deux points d'usinage du drainage) déplacée vers la nouvelle page de drainage et
+    remplacée par un renvoi « Couleurs et ventilation » ; source DTD retirée du frontmatter et des
+    citations. Relue contre l'image : la citation de ventilation et l'alternative 3 × Ø 6 à plus de
+    50 mm sont exactes (PDF p. 127-128).
+  * **Update** : [Drainage, décompression et vitrage, directives générales profine](/procedures/drainage-et-vitrage-generaux.md)
+    — renvoi vers la page de drainage du système 76 au lieu de la page des abaques.
+  * **Update** : [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md),
+    [Renforts et accessoires par profilé du système 76](/profiles/systeme-76-accessoires-par-profile.md)
+    (déclinaisons .L / .S / .B des sets d'embout, `source_pages` + 148),
+    [Meneaux PERFORM76](/profiles/perform76-meneaux.md),
+    [Assemblages du système 76](/profiles/systeme-76-assemblages.md),
+    [Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md),
+    [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md)
+    — liens vers les trois nouvelles procédures ; aucune valeur recopiée. Dans *Assemblages du
+    système 76*, le renvoi du mode opératoire vers la page des joints (qui ne le porte pas) est
+    remplacé par le renvoi à la procédure d'assemblage.
+  * **Anomalies créées** : INC-55 (76185 légendé V266.Z), INC-56 (légendes des ouvrants 76271 /
+    76276 et ouvrants sans référence p. 122), INC-57 (ventilation du meneau 76303 légendée 76300),
+    INC-58 (vis 3,9 / 4 × 32 des sets d'embout, composition du M462), INC-59 (assemblage du
+    battement 76472 titré 76471), INC-60 (gabarit « 76371 »), INC-61 (vis 35 / 50 mm et vis par
+    dormant de l'assemblage en T), INC-62 (quantités « pour un seul côté » en croix, J009 « pour
+    76372 »), INC-63 (désignations et vis des traverses d'ouvrant, J054 titré 76301) ; VER-57
+    (alternative 3 × Ø 6 à 46 mm), VER-58 (débit à 90° DHT − 2X − 80). Aucune fermée.
+  * **Images** (111, toutes dans `assets/procedures/moe-76-advanced/`, contrôlées sur planche
+    contact) : `vissage-renfort-*` (25, p. 118-126) ; `drainage-*`, `ventilation-*`,
+    `decompression-*` (31, p. 127-147) ; `battement-*`, `embout-battement-*`, `petit-grand-ouvrant-*`
+    (26, p. 149-166) ; `meneau-traverse-*`, `traverse-ouvrant-*` (29, p. 167-193) ; aucune coupe de
+    profilé nouvelle (les profilés de la tranche ont déjà leur coupe dans `assets/profiles/systeme76/`).
+
+* **Retraitement, tranche 2 (PDF p. 38 à 117)** de la [Mise en œuvre Système 76 Advanced](/sources/profine-mise-en-oeuvre-76-advanced.md)
+  (`raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`) : pages rendues en PNG à 200 dpi (zooms
+  à 500 dpi sur les dessins de renforts), lues en image par lots, aucune couche texte lue ; les
+  pages 1-37 et 118-424 n'ont pas été rouvertes.
+  * **Create** : [Nomenclature des profilés complémentaires du système 76](/profiles/systeme-76-accessoires-profiles-complementaires.md)
+    — tableaux « Accessoires » et cadres « utilisable avec » des planches du registre 2.1.3.
+  * **Update** : [Renforts du système 76](/profiles/systeme-76-renforts.md), section *Renforts des
+    profilés complémentaires* réécrite après relecture en image. Avant → après : 76700 V312.Z →
+    **aucun renfort** ; 76702 V312.Z → **V314.Z** (IG 8,4, IW 5,7) ; 76703 V114 → **V314.Z** ;
+    76708 V075 (IW 1,0, IG 4,1) → **V407** (IG 1,0, IW 0,7) ; 76709 V299 seul → **V075 et V299** ;
+    « 76206 V323.Z, V322 » → **76299** (le 76206 n'est que dans le cadre « utilisé avec ») ;
+    colonnes IW/IG remplacées par les cotes du dessin, l'épaisseur et IG/IW dans l'ordre de la
+    planche. Paragraphes retirés : « le V288 … le plus raide au vent de tout le système » (commentaire
+    sans source) et la phrase « cohérent avec un montage tourné de 90° » (explication déjà portée par
+    VER-24). Coupes ajoutées : V407, V299, V167.
+  * **Update** : [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md)
+    — nouvelle section *Cotes portées sur les planches du manuel de mise en œuvre* (compensateur
+    76298, réhausses 76704 à 76777) ; paires d'embouts M302/M303 … M310/M311 : « la planche ne dit
+    pas ce qui les distingue » complété par « droit » / « biais » (manuel p. 40-42).
+  * **Update** : [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md)
+    — valeurs E 242,1 et S 126 du capot A055 (PDF p. 38).
+  * **Anomalies complétées, aucune fermée** : CTR-21 (V323.Z/V322 du 76299, pas du 76206), CTR-22
+    (le manuel relu concorde avec le poster et le cahier ; fermeture à arbitrer), CTR-23 (cotes des
+    réhausses 76704 à 76709), INC-20 (V075 IG 4,1 / IW 1,0 au manuel), VER-24 (V317 couché au manuel).
+  * **Images** (depuis le PDF, registre 2.1.3) : `assets/profiles/systeme76/compensateurs/compensateur-76298.png`
+    (p. 38) ; `accessoires/j145.png` (p. 38), `g019.png`, `g020.png` (p. 40), `g129.png` (p. 41) ;
+    `renforts/renfort-v407.png`, `renfort-v299.png` (p. 42), `renfort-v167.png` (p. 43) ;
+    `rehausses/rehausse-76715.png`, `rehausse-76722.png`, `rehausse-76777.png` (p. 43).
+  * **Lot PDF p. 44-47** : élargisseur ProEnergy Z002 et Z030 ; pièces d'appui (76760 : 113,5 mm hors
+    tout ajouté ; 76766 ajouté ; 76768 coté 42 mm au nez contre 31 au poster → CTR-23) ; embouts
+    9F55, 9F56, M612 (**CTR-33**, M612 contre M780-M782) ; réhausses 76754 (cotes 11,5 et 28 ajoutées)
+    et 76753 (même coupe que le « 76776 » du poster → **CTR-32**) ; tapées (6141 cotée 75,5 sous un
+    titre de 75, et 6137 cotée 156,5 sous un titre de 157 → **INC-45**) ; INC-25 complété (9F55/9F56
+    sans suffixe au manuel). Images : `elargisseurs/elargisseur-proenergy-z002.png`,
+    `accessoires/z030.png` (p. 44) ; `appuis/piece-appui-76766.png`, `embout-9f55.png`,
+    `embout-9f56.png`, `embout-m612.png` (p. 45) ; `accessoires/s092.png`, `g128.png` (p. 46).
+  * **Lot PDF p. 48-53** : dix réhausses de pied de dormant (titre « Réhausse » au manuel, cotes
+    verticales droites et décompositions ajoutées ; 76765 à 35 contre 35,2 → CTR-23) ; battement
+    intérieur **1458** (46 × 12,9, embout 9663) ajouté, planche du 76833 titrée « 78833 » →
+    **INC-46** ; liaisons 76605, 76608 (détail Z), A250 (75,2 × 38,6 ; IW alu 79, remplacement acier
+    26 ; G084 « Joint ppour A252 » → INC-46) ; poteaux 8340, 8341, 8355, 8356 et profilé
+    d'adaptation 76821 (hauteurs 90 / 90,2 et 78 ajoutées) ; profilés de volet 76800 à 76802.
+    Erreurs corrigées : [Renforts du système 76](/profiles/systeme-76-renforts.md) — « 76800
+    profilé de guidage de tablier V262 » → **aucun renfort** (le V262 est celui du poteau 8356) ;
+    [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) —
+    « La vis G085 » → « Joint brosse » au manuel. E et S des capots A249, A054 et A225 ajoutés à
+    [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md). Images :
+    `battements-interieurs/battement-1458.png`, `embout-9663.png` (p. 49) ;
+    `liaisons/capot-a208.png`, `piece-s043.png` à `piece-s046.png`, `accessoires/g122.png` (p. 50) ;
+    `liaisons/piece-s094.png` à `piece-s096.png`, `embout-m493.png`, `detail-z-76608.png`,
+    `renforts/renfort-v288.png` (p. 51) ; `poteaux/profil-z052.png` (p. 53).
+  * **Create** : [Types d'ouverture et plans de combinaison du système 76](/profiles/systeme-76-plans-de-combinaison.md)
+    — registres 2.2.1 (PDF p. 54-56) et 2.2.2 (PDF p. 57-80). Lot p. 54-64 : types d'ouverture
+    (trois figures), dormants de châssis fixe, meneaux, douze combinaisons dormant + ouvrant avec
+    cotes hors tout et décompositions, renforts et IW ; INC-09 complété (plan du 76373 à 124 mm),
+    INC-46 complété (IW du V353 écrit « 4. »). Images dans `assets/procedures/moe-76-advanced/` :
+    `types-ouverture-*.png` (3), `combinaison-reperage-dormant-fixe.png`, `-meneau.png`,
+    `-ouvrant.png`, `combinaison-dormant-761xx.png` (7), `combinaison-meneau-76372.png`,
+    `-76373.png`, `combinaison-<dormant>-<ouvrant>.png` (12).
+  * **Lot PDF p. 65-68** (même page) : combinaisons des dormants rénovation 76177, 76178, 76185 avec
+    les trois ouvrants, colonne des cotes verticales de droite ajoutée au tableau, deux vantaux sur
+    meneau 76372 ; **INC-47** (plan du 76185 aux cotes du 76178). Images :
+    `combinaison-7617x/76185-<ouvrant>.png` (9), `combinaison-reperage-meneau-deux-vantaux.png`,
+    `combinaison-meneau-76372-ouvrants-*.png` (3).
+  * **Lot PDF p. 69-80** (même page) : deux vantaux sur meneau 76373, ouvrant + fixe sur meneaux
+    76372 et 76373, deux vantaux sur battements 76471, 76472, 76473, ouvrant sur seuils A076, A077 /
+    A343, A075 (rejets d'eau A062, A064), porte-fenêtre à ouverture extérieure 76283 (A065, dormant
+    76172, meneaux, battement). Anomalies : **INC-48** (V318.Z 7.1 / 7.0), **INC-49** (plan ouvrant +
+    fixe du 76373 aux cotes du 76372), **INC-50** (V266.Z à 5.7 sur les plans de seuil), **INC-51**
+    (IW de meneau du plan à ouverture extérieure ; renfort V343 cité une seule fois), INC-46 complété
+    (« V323.7* »). Images : coupes et pictogrammes de repérage dans `assets/procedures/moe-76-advanced/`
+    (`combinaison-meneau-*`, `combinaison-battement-*`, `combinaison-seuil-*`,
+    `combinaison-*-ouverture-exterieure.png`, `combinaison-reperage-*.png`).
+  * **Update** : [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md) — les
+    tableaux relus en image (PDF p. 81-88) concordent cellule par cellule ; ajout des huit schémas
+    cotés (`debit-*.png`, 9 images), de la lecture des repères ① à ⑤, des jeux 12+1 et 10+1 mm, des
+    écarts de 4 / 6 + 6 / 6 mm sous les battements, du texte d'indication p. 81, de `source_pages`.
+    Retiré : « C'est la seule cote du tableau qui dépende du sens de pose », « ce sont les trois
+    dormants rénovation, qui ne diffèrent que par la largeur de leur aile », « Tout le reste suit la
+    hauteur du profil » (explications sans source). VER-22 complété (repères ③a / ③b), non fermé.
+  * **Create** : [Tableau de vitrage du système 76](/profiles/systeme-76-tableau-de-vitrage.md) —
+    registre 2.3.2 (PDF p. 89-97) : 26 parcloses d'ouvrant, 16 de dormant et meneau, épaisseurs A et
+    B avec tolérances, joints par tableau, supports M137 / M138, feuillures, usinage du joint central
+    et compensateur 76570. Images : 42 coupes dans `assets/profiles/systeme76/tableau-vitrage/`
+    (`ouvrant-<ref>.png`, `dormant-<ref>.png`), `parcloses/compensateur-76570-manuel.png`, et
+    `procedures/moe-76-advanced/vitrage-*.png` (4), `support-cale-m137.png`, `support-cale-m138.png`.
+  * **Erreur corrigée** : [Parcloses PERFORM76](/profiles/perform76-parcloses.md), section « Matrice
+    des combinaisons vitrage, parcloses, joints et calage (registre 2.3.2) » retirée et remplacée par
+    un lien. Avant : une matrice « parclose ouvrant droite / carrée / dormant / joint associé /
+    support de cale » inventée (joints « G047 (3 mm) », « G048 (4 mm) », « PCE (3 mm) », « G178
+    (2,5 mm) » associés à chaque épaisseur ; 76509 à 48 mm en « ouvrant carrée » ; 76508 à 48 ;
+    2454 à 32 avec la « largeur 26,5 » ; supports « M137 / M138 » selon l'épaisseur ; 1511 à 40 mm ;
+    paragraphe sur les pontets et les cales DTU 39 sans source). Après : aucun de ces appariements
+    n'est sur les planches — le joint dépend de la famille A (4 mm) ou B (2 mm), le support du
+    tableau (M137 ouvrant, M138 dormant) ; les valeurs relues sont sur la nouvelle page. La
+    référence [4] et le locator p. 89-97 sont retirés de la page PERFORM76.
+  * **Anomalies** : **INC-52** (titres des p. 94 et 97), CTR-19, VER-36 et VER-45 complétés, non fermés.
+  * **Update (réécriture)** : [Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md)
+    — registre 2.3.3 (PDF p. 98-117) relu en image (zooms 300-400 dpi) et échantillonné selon « Lire
+    un abaque ». Vides comblés : abaque des dimensions maximales de dormant (sommets par couleur) ;
+    tableau des paumelles (avant : « le détail de cette correspondance n'est pas transcrit ») ;
+    limites par couleur, zones et courbes de verre des six abaques d'ouvrant simple ; limites,
+    zones A-H et courbes caractéristiques 0,8 / 1,2 kN/m² des quatorze abaques à deux vantaux ;
+    AluClip Pro (A072, courbes de verre, deux abaques avec battement) ; J079 « décalées de 2 courbes » ;
+    textes des règles repris dans les mots de la source ; numéros complets des rapports d'essais.
+    Erreurs corrigées : « Sur les abaques à deux vantaux, les bornes retombent à 130 cm de largeur et
+    235 cm de hauteur par vantail, quelle que soit la combinaison » → faux, la limite tracée atteint
+    135 cm et 250 cm selon le renfort (**INC-53**) ; en-têtes du tableau des couleurs standard « Code
+    profine / Référence fournisseur » → « Relief / semblable à la référence fournisseur » ;
+    catégorie Blanc « blanc, blanc crème et ton pierre » → blanc et blanc crème, le ton pierre étant
+    cité pour le renforcement selon abaques et les paumelles ; citations en pages imprimées → PDF.
+    Retiré (commentaire sans source) : « C'est une contrainte de quincaillerie et de poids,
+    indépendante du renfort », « Un profilé de couleur est donc toujours renforcé… les IR-Reflex
+    occupent la position intermédiaire », « Deux anthracites différents coexistent… », « Un mètre
+    d'écart… », « C'est la fixation qui commande, pas la ferrure », « Retenir 70 cm … est le choix
+    sûr » (tranchait INC-10), « Attribuer ce renforcement à la dilatation thermique est une déduction
+    plausible », « non une préférence d'extrudeur ». `status: stable` → `draft` (INC-10, INC-53,
+    INC-54, VER-25 ouverts). Images (28) dans `assets/procedures/moe-76-advanced/` : `abaque-*.png`.
+  * **Erreur corrigée** : [Poignée et pivot PERFORM76](/quincaillerie/perform76-poignee-et-pivot.md),
+    section « Nombre et implantation des paumelles par hauteur d'ouvrant (registre 2.3.3) ». Avant :
+    un tableau en HFF de 300 à 2 400 mm avec paliers, verrouilleurs G1 / G2, paumelles « renforcées
+    (150 kg) », présenté comme relevé p. 100 — rien de cela n'est sur la page. Après : 2 paumelles de
+    50 à 90 cm, 3 de 100 à 160, 4 de 170 à 210, 5 de 220 à 250 cm, en lien vers la page des abaques.
+  * **Anomalies** : **INC-53** (légendes d'axe 235 / 130 cm des abaques à deux vantaux), **INC-54**
+    (titre du premier abaque AluClip Pro) ; INC-10 et VER-25 complétés, non fermés.
+* **Décisions d'organisation validées par l'utilisateur** : page à part pour les modèles
+  Contemporain à numéro ([Modèles à numéro](/portes/collection-contemporain-modeles-a-numero.md)) ;
+  page commerciale commune [PERFORM+ et HYBRIDE+](/commercial/perform-plus-et-hybride-plus.md) ;
+  page [Coloris de la Sélection Hexa](/coloris/coloris-selection-hexa.md) ; pas de page gamme
+  LUMÉAL, ses coloris restent dans [Coloris LUMINE](/coloris/coloris-lumine.md) ; nom retenu
+  [Fabrication du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md).
+* **Retraitement, tranche 4 sur 4 (PDF p. 121 à 160)** du [Catalogue portes d'entrée PROFERM, édition
+  mars 2024](/sources/catalogue-portes-entree.md) (`raw/catalogue-portes-entree-2024-03.pdf`) :
+  pages rendues en PNG à 200 dpi, lues en image par lots de 2 à 6 (matrice p. 143 lue après
+  rotation, légendes et pastilles zoomées), aucune couche texte lue ; les pages 1-120 n'ont pas été
+  rouvertes. **Le registre de couverture ne porte plus aucune ligne `à faire`** : 160 pages en
+  71 lignes, 70 `transcrit`, 1 `sans contenu propre` (p. 141).
+  * **Numérotation** : les pages du cahier technique étaient citées dans le wiki en numérotation
+    imprimée (p. 141 à 156) ; elles sont désormais en numérotation PDF (p. 143 à 158) sur toutes les
+    pages réécrites, sur INC-08 et CTR-16.
+  * **Update** : [Collection Lumière](/portes/collection-lumiere.md) — table provisoire « Modèles des
+    pages 121 et 122 » (non relue) remplacée : SYNOPE rejoint la collection d'œuvres (photo en
+    situation, RAL 9005, ★★★) ; nouvelle section *Œuvres imprimées avec pièce Métal Art* pour
+    SYMBIOSE MA (AMART04PROF, DIAM ø 100), ARPÈGE MA (AMART01PROF, ALYA 120 x 120), MÉTIS MA
+    (AMART50PROF, AME ø 100) ; avant : « SYMBIOSE MA … Impression numérique, filets transparents »
+    sans DIN complet ni pièce, après : légende complète. Nouvelle section *Vitrage haute sécurité
+    SP510* : la phrase APSAD retirée en tranche 3 est rétablie, sourcée p. 121. INC-41 en ligne.
+  * **Update (réécriture)** : [Collection Classique](/portes/collection-classique.md) — ingestion
+    ancienne non fiable remplacée. Avant → après : descriptions inventées (« CÉLIA 6 : rosace basse
+    moulurée », « EMILIA 115 : 4 carreaux », « OCTAVIA 34 BIS : moulures géométriques ») → légende
+    imprimée ; « MESTRA (non réalisable en plaxé) » → **faux**, seul PALMEIRA porte l'astérisque ;
+    OCTAVIA 34 BIS « - » → Di109 (l'encadré vise « les modèles Octavia ») ; gammes non données →
+    pictogrammes par modèle (CÉLIA 6, ATHÉNA 9, CORSA, EVA, OCTAVIA, GRANADA, QUINTA, ARCADIA en
+    PERFORM seule ; SAFIRA en HYBRIDE et TEXTURAL seules) ; citations p. 121-132 (décalées) → p. 123-134.
+    Vingt-sept modèles avec photo, coloris, prix ; table des quatorze couples vitrage diamant-modèle.
+  * **Update (réécriture)** : [Collection Éléments](/portes/collection-elements.md) — avant :
+    descriptions inventées (« OSCAR 1 : arc de cercle bois sur demi-panneau », « WILLIAM 1 : prise en
+    main affleurante d'une grande fluidité », organes de manœuvre « béquille standard » /
+    « bâton de tirage »), aspects bois glosés (« esprit loft », « tonalité scandinave ») ; après :
+    légendes, vues intérieures, coloris, prix et photos des onze modèles, trois échantillons d'insert.
+  * **Update (réécriture)** : [Ouvrants de porte d'entrée](/portes/ouvrants-de-porte.md) — matrice
+    p. 143 relue en image et refaite en HTML à deux niveaux. Avant → après : TEXTURAL plaxage « De
+    série / Option » → moins-value ; laquage teintes préférentielles HYBRIDE en TEXTURAL « Non » → de
+    série ; laquage hors standard PERFORM « Option » → non proposé ; serrure 5 pts fermeture clé
+    SOLEAL « De série » → non proposée, la matrice coche la serrure 6 points à crochet (INC-08) ;
+    3ᵉ paumelle tube SOLEAL « Option » → de série ; E-connect SOLEAL « Option » → non
+    proposé ; béquille Rome/Vienne SOLEAL « Option » → non proposée ; ouverture extérieure 97 HYBRIDE
+    et TEXTURAL « Option » → non proposée, astérisque « extérieur en PVC laqué » sur les 118
+    HYBRIDE et TEXTURAL seuls ; renforcement total SOLEAL « De série » → non coché ; serrure 5 pts
+    aide au relevage TEXTURAL 97 « Option » → de série ; cylindre sécurité 97 « Option » → plus-value.
+    Coupes : hauteur « 88,5 mm » → 89,5 ; « 80 mm sur le SOLEAL » → 55. Commentaires sans source
+    retirés (« le grand perdant », « décident souvent du projet », « À ne pas proposer sur une façade
+    exposée »).
+  * **Update (réécriture)** : [Panneaux et monoblocs](/portes/panneaux-et-monoblocs.md) — avant :
+    « Up mini 1,0 » → « Up jusqu'à 1,0 » ; panneau verrier « réservé aux gammes LUMINE et TEXTURAL »
+    → pictogrammes LUMINE et TEXTURAL, contradiction avec la p. 106 ouverte (**INC-41**) ; conductivité
+    « 0,028 W/m²K » recopiée → valeur imprimée « W/m².k » signalée (**INC-43**) ; « C'est la première
+    fois qu'une source du wiki nomme VOLMA » retiré ; « Ce que chacun résout », « l'Up de 1,0 », « Il
+    n'existe donc pas sur le panneau blanc » reformulés dans les mots de la source ; `source_pages`
+    ajouté (145-148, 152). Ajouts : infographie VERRISSIMA (douze pictogrammes), essai à la bille,
+    compositions des vitrages de sécurité panneau et monobloc par décor. INC-42 en ligne.
+  * **Update** : [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md) — nouvelle section
+    *Vitrages des portes d'entrée* : six vitrages standards, trois vitrages en plus-value Authentique,
+    petits bois V2 à V24.2 avec leurs coloris, impressions P006, P010 (incompatible EVA), P030,
+    plomb et film V0AJ à V0AH, règle du diamant (renvoi à la table de la collection Classique).
+  * **Update** : [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md) — section
+    édition 2024 : encadré « Une sécurité renforcée », serrures (« à pênes sur ALU »), cinq paumelles ;
+    `status` → `draft` (CTR-31, INC-08).
+  * **Update (réécriture)** : [Accessoires de porte d'entrée](/quincaillerie/accessoires-portes-entree.md)
+    — photo de chaque accessoire ; commentaires retirés (« le grand perdant des accessoires », « À
+    signaler au client », « À faire signer plutôt qu'à découvrir en SAV », « à montrer physiquement
+    au client ») ; « Tête de lion PVD : laiton PVD » → « PVD » (la légende ne dit pas laiton) ;
+    INC-44 en ligne.
+  * **Update** : [Serrure motorisée](/quincaillerie/serrure-motorisee.md) (source 2024 ajoutée,
+    E-connect absent du SOLEAL), [Garanties par composant](/garanties/garanties-par-composant.md)
+    (grille des portes d'entrée de mars 2024, décennale du panneau verrier, boutons non garantis),
+    [Labels et certifications](/certifications/labels-et-certifications.md) (note CSTB, logos, EN 356
+    P5 A), [Arguments de vente des portes d'entrée](/commercial/portes-d-entree.md) (encadrés p. 121,
+    Classique, Éléments, cahier technique ; limites non chiffrées), [Arguments de la marque
+    PROFERM](/commercial/proferm.md) (p. 159-160), [Glossaire](/reference/glossaire.md) (paumelle,
+    pêne dormant, galet, gâche, fouillot, béquille, bâton de tirage, heurtoir, cimaise, porte à
+    panneau, double frappe, bevel, Low-e, dépoli acide, PVD, fer cémenté, AEROLAME, effet bilame,
+    APSAD), fiche source (registre 121-160, sommaire du cahier technique, crédits, anomalies).
+  * **Anomalies** : création de **INC-41** (panneau verrier sans HYBRIDE), **INC-42** (monobloc
+    LUMINE), **INC-43** (conductivité en W/m².k), **INC-44** (inox 316i / 316L), **CTR-31** (serrure
+    alu à goujons / à pênes / à crochets), **VER-56** (« Édition juin 2023 » p. 160) ; compléments de
+    **INC-08** (matrice, pages converties en PDF), **INC-37** (RAFAEL 1), **INC-39** (sept modèles
+    Classique et Éléments « présentés en RAL 2100 »), **CTR-15** (Classique et Éléments), **CTR-16**
+    (page PDF 158). Aucune anomalie fermée.
+  * **Images** : 139 découpes, toutes relues en planche de contact —
+    `assets/portes/collection-lumiere/` (4 : synope, symbiose-ma, arpege-ma, metis-ma),
+    `assets/portes/collection-classique/` (31 : 27 modèles, ouverture GISPANA 125, moulure, demi-lune
+    EMILIA, cimaise), `assets/portes/collection-elements/` (15 : 11 modèles, ouverture, 3 inserts),
+    `assets/vitrages/diamant/` (12 : les onze vitrages Di101 à Di612, exemple Di601), `assets/portes/ouvrants/` (3
+    coupes), `assets/portes/panneaux/` (9), `assets/vitrages/securite/` (3),
+    `assets/vitrages/decoratifs/` (22 : chinchilla-portes-2024, petits bois, P006/P010/P030, plomb et
+    film, exemples), `assets/quincaillerie/portes-entree/` (6 : serrures 2024, 5 paumelles),
+    `assets/quincaillerie/accessoires/portes-2024/` (30), `assets/portes/seuils/` (3),
+    `assets/certifications/` (1). Liées sans redécoupe : vitrages standards (clair, dépoli, delta,
+    listral, mimosa, olivier, clé de fleur), cylindre, renforts, moteur Safe E et télécommande.
+  * **Index** : descriptions resynchronisées sur le frontmatter, y compris neuf pages hors tranche
+    dont la ligne d'index différait déjà de leur `description`.
+* **Retraitement, tranche 3 sur 4 (PDF p. 81 à 120)** du [Catalogue portes d'entrée PROFERM, édition
+  mars 2024](/sources/catalogue-portes-entree.md) (`raw/catalogue-portes-entree-2024-03.pdf`) :
+  pages rendues en PNG à 200 dpi, lues en image par lots de 3 à 5 (légendes et pastilles de
+  coloris relues en zoom), aucune couche texte lue ; les pages 1-80 et 121-160 n'ont pas été
+  ouvertes.
+  * **Create** : [Collection Contemporain, modèles à numéro](/portes/collection-contemporain-modeles-a-numero.md).
+    La page Contemporain approchait 440 lignes ; ses modèles sont scindés selon la désignation
+    imprimée par la source (nom et « Réf. » d'un côté, numéro sans « Réf. » de l'autre). Les
+    82 modèles à numéro des p. 46 à 80 (tranche 2) y sont déplacés sans changement de valeur,
+    avec leurs encadrés (rainure p. 47, P030 p. 68, inox collé p. 67, INC-37, X-115-0) ; 46
+    modèles des p. 81 à 94 y sont ajoutés, photo découpée pour chacun. Script
+    `scratchpad/portes/t3/gen3.py` (régénère les deux pages depuis `t3/rows.tsv`).
+  * **Update** : [Collection Contemporain](/portes/collection-contemporain.md) — la table
+    « Modèles des pages 95 à 97 » (ingestion du 19/09, sans photo, sans gammes ni coloris) est
+    remplacée par la section *Modèles à poignée encastrée* relue en image. Avant → après :
+    ANDRÉA « Insert inox 1 face, rainurage et vitrage dépoli acide » (sans poignée) → poignée
+    GS-27, vue intérieure « rainurage ; vitrage dépoli acide », RAL 5021, ★★ ; FÉLIX (sans
+    poignée) → poignée GS-20, RAL 9005, ★ ; ANTONIN, GRÉGOIRE, ELLA, GABIN, LISE : compositions et
+    poignées confirmées (GS-74, GS-24, GS-16, GS-100, GS-100), coloris, prix, gammes et vue
+    intérieure ajoutés ; LISE « Poignée GS-100 » → idem, « Version sans rainurage ». Profondeur de
+    poignée 25 mm et inox 316L ajoutés. Rangée « 557-2 » de la p. 77 renommée « 557-2 (p. 77) »
+    pour la distinguer du 557-2 de la p. 88. `source_pages` 19-29, 46-80, 95-97 → 19-29, 48-70,
+    95-97 ; renvoi « [1 p. 20-40] » du bandeau → « [1 p. 20-97] ».
+  * Images : 56 découpées dans `assets/portes/collection-contemporain/` — 46 modèles à
+    numéro (p. 81-94 ; `557-2-p88.png` pour l'homonyme de la p. 88), 7 modèles à poignée
+    encastrée (`andrea`, `felix`, `antonin`, `ella`, `gregoire`, `gabin`, `lise`, p. 95-97) et
+    trois photos de poignées (`poignee-encastree-detail` p. 95, `poignee-encastree-prise-en-main`
+    et `poignees-encastrees-details` p. 97). Le 374-0 de la p. 86 (même photo que p. 85) n'est pas
+    redécoupé.
+  * **Update** : [Arguments de vente des portes d'entrée](/commercial/portes-d-entree.md) — quatre
+    encadrés des p. 95 et 97 ajoutés ; lien vers la nouvelle page.
+  * Anomalies : **INC-38** créé (374-0 imprimé deux fois, p. 85 et 86) ; **INC-37** complété
+    (« que la galerie ne cite à aucune page » était faux : la galerie cite un 557-2 à la page
+    imprimée 86, PDF 88, d'un autre dessin que celui de la p. 77).
+  * Fiche source : ligne 81-97 scindée en 81-85, 86-90, 91-94, 95-97, `transcrit` ; lignes 46-80
+    repointées vers la nouvelle page pour leurs modèles à numéro.
+  * **Update** : [Collection Graphite](/portes/collection-graphite.md) réécrite depuis les p. 98 à
+    104 rendues (page de l'ingestion du 19/09, `process:gemini-coder`, non relue). Avant → après :
+    `source_pages` 96-102 → 98-104 (les p. 96-97 sont des modèles Contemporain) ; « peints à la
+    main par un peintre d'art », « neutralisant l'effet bilame », « profil interne précontraint »,
+    « supprimer les flux d'air parasites » (affirmations sans source) → retirées, texte de la p. 99
+    repris ; colonne « Spécificité décorative » inventée (« typographie multilingue », « motifs
+    cubiques en cascade »…) → légende imprimée (« Décoration laquée », « Double finition »,
+    ou `-` pour CONCERTO et DIAPASON) ; table à une ligne par modèle et par version, coloris, prix
+    et photo ajoutés ; nuancier des décors déplacé vers
+    [Coloris des portes d'entrée](/coloris/coloris-portes-entree.md) (« Noir RAL 2100 » conservé
+    tel qu'imprimé, **INC-39**). `status: stable` → `draft` (INC-40).
+  * Images : 22 dans `assets/portes/collection-graphite/` (20 modèles p. 100-104, photo d'ouverture
+    Arpège p. 98, teintes de fond p. 99) ; 8 pastilles de décor dans
+    `assets/coloris/portes-entree/graphite-decor-*.png` (p. 99). ARPÈGE 2 recoupé : la vignette
+    du dépliant 2023 (`depliant-general-2023/porte-arpege-2.png`) montre un autre coloris.
+  * **Update** : [Coloris des portes d'entrée](/coloris/coloris-portes-entree.md) — section
+    *Collection Graphite* ajoutée ; `source_pages` 10-13 → 10-13, 99 ; description complétée.
+  * Anomalies : **INC-39** (Noir « RAL 2100 » p. 99 contre « Noir 2100 granité » p. 11-12),
+    **INC-40** (DIAPASON 2 légendé RAL 9005, photo rouge) ; **CTR-15** complété (Graphite relue).
+  * **Update** : [Collection Lumière](/portes/collection-lumiere.md) réécrite depuis les p. 105 à
+    120 rendues (page du 19/09, `process:gemini-coder`, non relue). Avant → après : « œuvres
+    exclusives », « Collections d'artistes intégrées » et « incrustant dans le vitrage des
+    médaillons … meulés à la main » (reformulations) → légendes et encadrés repris ; « ML (Matelux
+    Light) : motif dépoli à l'acide sur fond dépoli, occultant … maximisant l'apport de lumière »
+    → « Vitrage dépoli acide mais non sablé laissant apparaître le motif mais sans transparence »
+    (p. 106) ; « PP : impression numérique céramique haute définition » → « Impression du décor
+    avec une imprimante jet d'encre haut de gamme » ; micro-rayures « inhérentes au processus de
+    gravure d'art artisanale [p. 115] » → « liées aux différents processus de fabrication des
+    pièces et du vitrage isolant » ; ANÉMONE PS MA 1 & 2 « médaillons ASCELLA, ATRIA et DIAM » →
+    MA 1 : 1 inox 60 x 60 mm ASCELLA ; MA 2 : 1 inox 150 x 150 mm ATRIA et 1 inox ø 100 mm DIAM ;
+    PSNUM et AMNUM : AMNUM « monté sur entretoises inox » → citation de l'encadré « Le soucis du
+    détail », placé à côté de l'AMNUM. Le bloc SP510 / EN 356 / APSAD (p. 121, 145, 147, non
+    relues) est retiré de la page : le panneau verrier reste décrit sur
+    [Panneaux et monoblocs](/portes/panneaux-et-monoblocs.md) ; l'affirmation APSAD citée « p. 121 »
+    est à relire par la tranche 4. Table à une ligne par modèle (36 modèles des p. 107-120), avec
+    vitrage verbatim, luminosité, gammes, coloris, prix et photo ; les 4 modèles des p. 121-122
+    restent dans une table « Modèles des pages 121 et 122 » non relue. `source_pages` 103-122, 145
+    → 105-122 ; `status` stable → draft (VER-41).
+  * **Update** : [Panneaux et monoblocs](/portes/panneaux-et-monoblocs.md) — la table « Modèles de
+    la collection Lumière » (39 lignes, ingestion du 17/09) est déplacée vers la page de la
+    collection, relue ; erreurs corrigées au passage : ANÉMONE PS MA 1 « inox poli-miroir ATRIA »
+    → ASCELLA 60 x 60 mm ; ANÉMONE PS MA 2 « DIAM » → ATRIA 150 x 150 mm et DIAM ø 100 mm ;
+    SYMBIOSE PS CA et ARPÈGE PS CA « motif transparent » sans pièce → 1 Cristal Art 120 x 120 mm
+    CLAVA ; PERSPECTIVE PS MA et OSMOSE PS MA « motif transparent » → OSMOSE : 1 inox 150 x 150 mm
+    ATRIA ; ML « dépoli sablé sur dépoli acide » → légende complète. Description mise à jour.
+  * Images : 42 dans `assets/portes/collection-lumiere/` (36 modèles p. 107-120, photo
+    d'ouverture Esprit PS MA p. 105, détails de pièces HAUSSMANNIENNE 2 PS MA p. 114, ESPRIT et
+    PERSPECTIVE PS MA p. 115, numéros universels PSNUM p. 107 et AMNUM p. 120). Les 27 textures
+    intérieures de la p. 118 ne sont pas redécoupées : mêmes pastilles et mêmes parcloses que la
+    p. 13, déjà dans `assets/coloris/textural/`. Portrait d'Amandine Mangenot (p. 114) non découpé.
+    Sur quelques découpes, un bloc voisin (texte d'encadré, étoiles d'un autre modèle) a été
+    masqué en blanc avant découpe.
+  * **Update** : [Arguments de vente des portes d'entrée](/commercial/portes-d-entree.md) —
+    sections Graphite et Lumière (présentation d'Amandine Mangenot, Métal Art, Cristal Art,
+    collection d'œuvres, « Le soucis du détail ») ; « performances phoniques » non chiffrées.
+  * Anomalies : **VER-41** complété (AMALTHE et THÉBÉ relus : deux œuvres, une référence
+    AMOEU07PROF).
+  * Fiche source : lignes 98-104 et 105-122 scindées ; 98 à 120 `transcrit`, 121-122 `à faire`.
+  * **Update** : [Glossaire](/reference/glossaire.md) — quatre termes ajoutés : poignée encastrée,
+    dépoli sablé, panneau verrier, Warm Edge. Scripts de la tranche : `scratchpad/portes/t3/`
+    (`gen3.py` + `rows.tsv` pour les deux pages Contemporain, `gen_lum.py` + `lum.tsv` pour la
+    page Lumière, `crop.py` et `zoom.py` au repère d'affichage de 1000 px de large).
+* **Retraitement, tranche 2 sur 4 (PDF p. 41 à 80)** du [Catalogue portes d'entrée PROFERM, édition
+  mars 2024](/sources/catalogue-portes-entree.md) (`raw/catalogue-portes-entree-2024-03.pdf`) :
+  pages rendues en PNG à 200 dpi (zooms ponctuels sur les légendes), lues en image par lots de 2
+  à 5, aucune couche texte lue ; les pages 1-40 et 81-160 n'ont pas été ouvertes.
+  * Fiche source : la ligne `à faire` 41-97 est scindée en douze lignes 41-45 … 78-80, toutes
+    `transcrit`, et une ligne 81-97 `à faire` ; table des anomalies complétée (INC-36, INC-37,
+    VER-41).
+  * **Update** : [Collection Contemporain, modèles déclinés 0, 1 et 2](/portes/collection-contemporain-declinaisons-inox.md)
+    — familles CÉSAR, ISIDORE, CÉCILE, ANATOLE, AUGUSTIN (p. 41-45 : composition, gammes, coloris,
+    indicateur de prix, photo, schémas 0/1/2) et encadré « Des vitrages au choix » (p. 45) ;
+    `source_pages` 30-40 → 30-45.
+  * **Update** : [Collection Contemporain](/portes/collection-contemporain.md) — p. 46 à 80 relues en
+    image : 133 modèles (51 à référence imprimée, 82 désignés par un numéro) en huit tables scindées
+    selon deux axes de la source (référence imprimée ou non ; insert inox ou non), puis par pages
+    pour rester sous ~30 lignes, avec gammes (pictogrammes : les quatre gammes sur chaque modèle de
+    la tranche), coloris présenté, prix et photo. Avant → après, ancienne table « Modèles des pages
+    48 à 97 » (ingestion du 19/09) : CLARA 3480 « Insert inox 2 faces, rainurage » → « Insert inox
+    2 faces ; rainurage ; vitrage dépoli acide » (p. 53) ; IMIZA 3660, JEANNE 3780, LÉA 3840
+    (p. 55) et LOUISE 3900 (p. 57) : même correction, le vitrage dépoli acide manquait ; les 45
+    autres lignes (BASILE à NINON, YVAN, BORIS) sont confirmées, dont les références et la
+    restriction « BASILE non réalisable en plaxé » (p. 48, astérisque de la référence), et
+    passent dans les nouvelles tables ; la table résiduelle devient « Modèles des pages 95 à 97 »
+    (ANDRÉA à LISE, hors tranche, non relus) ; le paragraphe VER-41 est remplacé par un paragraphe
+    relu (ISAÏS, ISABELLE et 019-0 sous la 3720 ; MORGANE et NINON sous la 4060) ;
+    `source_pages` 19-29, 48-64, 69-70, 95-97 → 19-29, 46-80, 95-97.
+  * **Update** : [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md) — section « Vitrages des
+    portes d'entrée Contemporain » (vitrage dépoli acide de présentation, vitrage clair, impression
+    numérique P030 du 587-0, p. 45, 62, 68, 69) ;
+    [Arguments de vente des portes d'entrée](/commercial/portes-d-entree.md) — six encadrés ajoutés
+    (p. 45, 47, 55, 62, 69, 77) ; [Glossaire](/reference/glossaire.md) — « Plaxé, plaxage ».
+  * **Anomalies** : **INC-36** créée (IMIZA « présenté en RAL3660 », numéro de sa référence ;
+    ISABELLE en « RAL 3700 », p. 55) ; **INC-37** créée (galerie : 575-6 renvoyé à la page du
+    575-0, « 556-2 » pour le 557-2 de la page, p. 72, 76, 77) ; **VER-41** complétée (ISAÏS et
+    ISABELLE relues p. 54-55, 019-0 troisième modèle sous la 3720 p. 60, MORGANE/NINON relues
+    p. 62, 64). Aucune fermée.
+  * **Images** (163, contrôlées sur planches contact) dans `assets/portes/collection-contemporain/` :
+    CÉSAR, ISIDORE, CÉCILE, ANATOLE, AUGUSTIN (versions 0 et 2, photo en situation des versions 1
+    sauf AUGUSTIN 1, schémas 0/1/2 : 29 images, p. 41-45) ; une photo par modèle des p. 46 à 80
+    (133, nommées d'après le modèle : `4532.png`, `basile.png`, `019-0.png`…) ;
+    `587-0-impression-p030.png` (p. 68). Seize photos d'ambiance sans légende de modèle (p. 46, 50,
+    52, 55, 56, 58, 61, 62, 64, 65, 66, 69, 73, 74, 77, 78) laissées non découpées.
+
+* **Retraitement, tranche 1 sur 4 (PDF p. 1 à 40)** du [Catalogue portes d'entrée PROFERM, édition
+  mars 2024](/sources/catalogue-portes-entree.md) (`raw/catalogue-portes-entree-2024-03.pdf`,
+  160 pages) : pages rendues en PNG à 200 dpi, lues en image par lots de 3 à 5, aucune couche
+  texte lue. Les pages 41 à 160 n'ont pas été ouvertes ; elles suivront en trois tranches (41-80,
+  81-120, 121-160).
+  * Fiche source : registre réécrit au format du protocole (cinq états, numérotation PDF,
+    décalage -2 de la page imprimée) ; convention des tranches écrite en tête du registre ; les
+    lignes « Intégré » de l'ingestion du 19/09 hors tranche passent à `à faire`, la page du wiki
+    où leur contenu se trouve déjà restant nommée ; rubrique « Ce qu'il apporte seul » retirée
+    (hors du format de la fiche) ; galerie des modèles (PDF p. 5-9, 351 vignettes) reprise en
+    table par page imprimée. Tranche : 23 lignes `transcrit`, 0 `illisible`, 0 `sans contenu
+    propre`.
+  * **Create** : [Coloris des portes d'entrée](/coloris/coloris-portes-entree.md) (p. 10-13 :
+    finitions PERFORM, HYBRIDE, LUMINE, TEXTURAL des portes, 27 textures exclusives).
+  * **Create** : [Collection Contemporain, modèles déclinés 0, 1 et 2](/portes/collection-contemporain-declinaisons-inox.md)
+    (p. 30-40 : ACHILLE, BEN, CORALIE, CLOÉ, DORINE, PAULA, ÉDOUARD, JACOB, ELIOTT, ROSALIE,
+    BRUCE), page découpée de la collection Contemporain selon l'axe de la source (schéma « 0 sans
+    inox / 1 inox face extérieure / 2 inox 2 faces » propre à ces modèles).
+  * **Update** : [Collection Authentique](/portes/collection-authentique.md) — ajout des panneaux
+    pleins, des 16 grilles de défense, des 11 présentations photographiées (composition, grille,
+    coloris, indicateur de prix), de la restriction des plaxés PERFORM à la collection ; la liste
+    des garanties recopiée du catalogue 2026 est remplacée par un lien vers
+    [Garanties par composant](/garanties/garanties-par-composant.md) (dédoublonnage).
+  * **Update** : [Collection Contemporain](/portes/collection-contemporain.md) — p. 19 à 29 relues
+    en image. Avant → après : « 76 modèles à référence propre » (description) → description sans
+    décompte ; « Tous les modèles ne portent pas de référence propre … variantes visuelles du
+    panneau voisin, non commandables séparément » → retiré (sans source ; 706-0, 355-0, 550-2 et
+    550-6 sont des modèles à part entière, photographiés et légendés) ; « Le classement par gamme
+    … non lisible dans le texte extrait » → colonne « Gammes » relevée sur les pictogrammes de
+    chaque modèle ; « Chaque modèle est un panneau ou un monobloc … [1 p. 21] » → gammes du
+    monobloc (PERFORM, HYBRIDE, TEXTURAL) et du panneau (PERFORM, HYBRIDE, LUMINE, TEXTURAL)
+    [p. 24] ; les 18 lignes ANETH à ODILON de l'ancienne table « série 7000 » sont remplacées par
+    une table relue avec gammes, coloris, prix et photo, où les références (7200 … 7500) sont
+    confirmées sans changement ; modèles ajoutés : CALLIGRAPHIE, HARMONIE, PERSPECTIVE,
+    HAUSSMANNIENNE 2, SYMBIOSE, LUC, 706-0, 355-0, 550-2, 550-6 ; tables des p. 48 à 97 laissées
+    en l'état pour les tranches suivantes.
+  * **Update** : [Arguments de vente des portes d'entrée](/commercial/portes-d-entree.md) (p. 2,
+    10-13, 14-40 : avantages par gamme, slogans et encadrés des collections Authentique et
+    Contemporain) ; [Arguments de la marque PROFERM](/commercial/proferm.md) (p. 1-3 : chiffres
+    de l'usine, valeurs, engagement environnemental de mars 2024) ;
+    [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md) (Antélio, p. 23) ;
+    [Glossaire](/reference/glossaire.md) (grille de défense, insert inox, rainurage, vitrage dépoli
+    acide) ; liens vers la nouvelle page de coloris depuis les nuanciers PERFORM, HYBRIDE, LUMINE
+    et TEXTURAL.
+  * **Anomalies** : **VER-55** créée (LUC sans référence, p. 28) ; **VER-41** complétée (la galerie
+    montre ISABELLE/ISAIS et MORGANE/NINON en vignettes distinctes) ; **CTR-15** complétée (mêmes
+    sept modèles et trois gammes Authentique en 2024 et 2026 ; BEN et JACOB rangés en
+    Contemporain en 2024, X-BEN-0 et X-JACOB-0 en Sélection Hexa en 2026). Aucune fermée.
+  * **Images** (167 découpes, contrôlées sur planches contact) :
+    `assets/coloris/portes-entree/` (37 pastilles et blocs de laquage, p. 10-13),
+    `assets/coloris/textural/teck-de-bruneo.png` (p. 13) ; pastilles des textures exclusives
+    réutilisées depuis `assets/coloris/textural/exclusive-*.png` (mêmes légendes au catalogue
+    2026), sauf Gris écaillé découpé ; `assets/portes/collection-authentique/` (7 panneaux pleins
+    p. 15, 11 photos p. 14, 16-18) et `…/grilles/` (16 grilles, p. 15) ;
+    `assets/portes/collection-contemporain/` (95 images p. 19-40 : photos de modèles, schémas des
+    versions 0/1/2, figure monobloc/panneau, grille intégrée, grille assortie aux fenêtres, détail
+    rainurage ANETH, détail insert inox). Deux photos d'ambiance non légendées (p. 26, 27)
+    découpées puis supprimées : aucune légende ne les rattache à un modèle.
+
+* **Retraitement** du [Nuancier stores PROFERM](/sources/nuancier-stores.md)
+  (`raw/nuancier-stores-2020.pdf`, 11 pages) : pages rendues en PNG à 200 dpi (300 dpi pour les
+  pastilles p. 4, 7, 8 et la fiche technique p. 10-11), lues en image, aucune couche texte lue.
+  Fiche réécrite au format du protocole (« Registre de couverture OKF », « Ce qu'il apporte
+  seul » retirés) : 10 `transcrit` (p. 2 à 11), 1 `sans contenu propre` (p. 1), aucune `à faire`.
+  * **Create** : [Coloris des stores intégrés](/coloris/coloris-stores.md) — 56 lames vénitiennes
+    et 29 tissus plissés, une ligne par code, pastille, classe NF EN 14501 par tissu.
+  * **Images** (95) : `assets/coloris/stores/lames/lame-*.png` (56, p. 4) ;
+    `assets/coloris/stores/plisses/plisse-*.png` (29, p. 7-8) ; `assets/equipements/stores/` (10) :
+    `venitien-textural-gris-ecaille-d7113.png` (p. 2), `plisse-vue-de-face-u1898.png`,
+    `plisse-vue-de-face-u0204.png` (p. 5), `plisse-tissu-rose.png` (p. 6),
+    `eclate-venitien-plisse.png`, `manoeuvre-directe.png`, `orientation-curseur.png`,
+    `curseur-cable-inox.png` (p. 10), `encombrement-ev.png`, `perche-de-manoeuvre.png` (p. 11).
+    Toutes contrôlées sur planche contact.
+  * **Erreurs corrigées** (avant → après) : [Stores intégrés](/equipements/stores-integres.md) —
+    EV vénitien à 248 mm « 25 » → **26** ; « Le plissé se replie systématiquement plus court que le
+    vénitien » (faux à 248 mm, 26 = 26) → retiré ; « nomenclature 17 pièces » (fiche) → 16
+    repères, sans repère 7 (**INC-35**) ; « Tiramisus : Anthracite 5030 et Réglisse 5045 en
+    classe 0 » recopié sans signalement → **INC-33** ; « (hors lames microperforées) » manquant
+    dans la condition de coloris → ajouté ; « au choix dans les coloris de la collection en
+    vigueur [p. 4] » (absent de la p. 4) → citation p. 10-11 ; « Le D7113, gris écaillé » → légende
+    verbatim, D 7113 = lame, gris écaillé = texture TEXTURAL ; « S maxi 2,60 » → 2,6 comme imprimé ;
+    `source_pages` absent → ajouté ; facette `usage` → `[chiffrage, pose]`.
+  * **Retirés** (affirmations sans source ou registre interdit) : « Cette page est le seul endroit
+    du wiki qui traite des stores », « Ni le catalogue général ni aucune brochure ne les
+    mentionne », « erreur classique de métré », « Une petite fenêtre carrée peut donc… », « Sur une
+    grande fenêtre, seul le plissé passe », « Le tissu opaque, plus lourd, tolère… », « cohérent
+    avec leur tissu opaque occultant », « l'opacité se lit dans la collection, pas dans le numéro »,
+    « planche pas exploitable… demander le nuancier physique », section « À documenter » (portée
+    par **VER-18**).
+  * **Dédoublonnage** : garantie 2 ans des stores → [Garanties par composant](/garanties/garanties-par-composant.md)
+    (nouvelle section) ; nuanciers lames et tissus et classes par tissu →
+    [Coloris des stores intégrés](/coloris/coloris-stores.md) ; la page équipement garde une phrase
+    et un lien. [Glossaire](/reference/glossaire.md) : store intégré, clair de parclose, petits
+    bois collés, LFf/HFf, EV.
+  * **Anomalies** : **INC-33** (Réglisse 5045 sous les Tiramisus), **INC-34** (photos plissées
+    légendées avec des codes de lames), **INC-35** (repère 7 absent, « LFf - 22m »,
+    « semi-transparent ») créées ; **INC-07** et **VER-18** complétées (le millésime 2020 ne vient
+    que du nom du fichier), non fermées.
+* **Retraitement** du [Nuancier des vitrages décoratifs PROFERM](/sources/nuancier-vitrages-decoratifs.md)
+  (`raw/nuancier-vitrages-decoratifs.pdf`, 5 pages, non daté) : pages rendues en PNG à 200 dpi,
+  lues en image, aucune couche texte lue. Fiche réécrite au format du protocole (« Registre de
+  couverture OKF », « Ce qu'il apporte seul » retirés) : 4 `transcrit` (p. 2 à 5), 1 `sans contenu
+  propre` (p. 1, page de garde), aucune `à faire`.
+  * **Images** (2) : `assets/vitrages/decoratifs/chinchilla-clair.png` (p. 2) et `imprime-200.png`
+    (p. 4), contrôlées sur planche contact. Liées sans redécoupe, parce que même prise de vue que
+    le catalogue général 2026, p. 26 (comparées côte à côte) : Clé de fleur, Delta mat, Delta
+    clair, Dépoli (« Dépoli acide »), Olivier.
+  * **Erreurs corrigées** (avant → après) : [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md)
+    — nuancier cité en `sources` mais jamais en `source_pages` ni en citation → `source_pages`
+    p. 2-5 et citation [2] ; « Chinchilla : présent (sous la mention « Chinchilla clair ») » → deux
+    lignes, chacune avec sa photo, les deux photos ne montrant pas le même motif (**CTR-30**) ;
+    Imprimé 200 absent du tableau → ligne avec sa photo ; « l'Imprimé 200 est le verre de face
+    intérieure des panneaux de portes classiques, pas un vitrage de fenêtre au choix » (seconde
+    moitié sans source) → « est aussi le verre de face intérieure… », avec lien ; facette `gamme`
+    ajoutée ; `status: stable` → `draft` (CTR-14, CTR-30 ouvertes).
+    [Panneaux et monoblocs](/portes/panneaux-et-monoblocs.md) — « C'est cette page qui explique
+    l'imprimé 200 … ce n'est pas un vitrage décoratif au choix » (récit d'ingestion, déduction non
+    sourcée) → une phrase et un lien. [Fiche source](/sources/nuancier-vitrages-decoratifs.md) —
+    « G200 », « martelé granité », « poupée kokeshi », « masqué à 50 % » (absents du document) →
+    retirés ; `description` réalignée sur `index.md`.
+  * **Anomalies** : **CTR-30** créée (photo du Chinchilla différente entre nuancier et catalogue) ;
+    **VER-54** créée (Listral du catalogue et Imprimé 200 du nuancier d'aspect voisin) ; **CTR-14**
+    et **VER-19** complétées, non fermées.
+* **Retraitement** du [Dépliant général PROFERM, juin 2023](/sources/depliant-general-2023.md)
+  (`raw/depliant-general-2023-06.pdf`, 8 pages) : pages rendues en PNG à 200 dpi (300 dpi pour les
+  découpes), lues en image, aucune couche texte lue. Fiche réécrite au format du protocole
+  (« Registre de couverture OKF », « Ce qu'il apporte seul » retirés) : 8 `transcrit`, aucune
+  `à faire`. L'ancien registre donnait onze pages du wiki comme « Intégré » ; seule
+  [PERFORM](/gammes/perform.md) citait le dépliant (p. 3, sans aucune valeur rattachée).
+  Document général : les valeurs techniques qui diffèrent d'une autre édition sont portées en
+  tableau par période, jamais retenues contre un document produit (**CTR-13**).
+  * **Images** (48) : `assets/portes/depliant-general-2023/porte-*.png` (12 portes, p. 2) ;
+    `assets/coloris/perform/2023-*.png` (8, p. 3) et `assets/gammes/perform/equipements-2023-reperes.png`,
+    `equipements-2023-photos.png` (p. 3) ; `assets/gammes/hybride/2023-general-securite-pivot.png`,
+    `2023-general-finitions-grille.png` (p. 4) ; `assets/coloris/lumine/2023-lumine-*.png` (11,
+    p. 5) ; `assets/coloris/textural/2023-*.png` (12, p. 6) et
+    `assets/gammes/textural/finitions-droit-design-2023.png` (p. 6). Liés sans redécoupe, parce que
+    dessinés comme ailleurs : coupes DROIT/DESIGN PERFORM (= profil 70 mm du catalogue), coupes
+    DROIT/DESIGN HYBRIDE (= brochure 2025), pastilles HYBRIDE 2023 (= dépliant HYBRIDE), trois
+    ouvrants LUMINE (= LUMINE55 du catalogue), pastilles des coulissants, photo des finitions
+    TEXTURAL.
+  * **Erreurs corrigées** (avant → après) : [Dépliant général 2023](/sources/depliant-general-2023.md)
+    — « ACHILLE 0, CORALIE 0 → Collection Contemporain » et « modèles de portes → Portes d'entrée,
+    Collection Authentique » (aucune de ces pages ne porte le dépliant) → registre renvoyant aux
+    pages réellement complétées ; « 12 textures intérieures » confirmé ; « quincaillerie 1 à 9 »
+    → « neuf équipements repérés » ; « 9 couleurs alu » HYBRIDE → 9 couleurs extérieures à prix
+    préférentiel ; « 3 ouvrants (Droit, Design galbé, Minimal caché) » → termes de la source ;
+    « Chêne doré 2F » coulissants → « 2 faces uniquement » ; données juridiques (absentes) → retirées.
+    [PERFORM](/gammes/perform.md) — citation [3] « p. 3 » sans rien de rattaché → section
+    *Équipements présentés en juin 2023*, tableau Uw par période, laquage 2023.
+  * **Complétés** : [Arguments de vente des portes d'entrée](/commercial/portes-d-entree.md) (section
+    *Offre de juin 2023*, 12 modèles) ; [Coloris PERFORM](/coloris/coloris-perform.md) (nuancier
+    2023 et tableau des différences : 7016 veiné 2 faces → 7016 lisse grainé, chêne naturel absent
+    en 2023) ; [Arguments de vente PERFORM](/commercial/perform.md) ; [Coloris HYBRIDE](/coloris/coloris-hybride.md),
+    [HYBRIDE](/gammes/hybride.md), [Arguments de vente HYBRIDE](/commercial/hybride.md) ;
+    [Coloris LUMINE](/coloris/coloris-lumine.md) (section *LUMINE, dépliant général de juin 2023*,
+    11 lignes, tableau des différences avec la LUMINE55 : rouge 3004 satiné → granité, anthracite →
+    gris 7016, anodisés absents en 2023) ; [LUMINE](/gammes/lumine.md) (trois finitions 2023, Uw
+    1,5) ; [Coulissants aluminium](/gammes/coulissants-aluminium.md) (vantaux et rails par
+    période : coulissant 2 à 4 vantaux en 2023, 2 à 8 en 2026) ; [Arguments de vente LUMINE](/commercial/lumine.md) ;
+    [Coloris TEXTURAL](/coloris/coloris-textural.md) (12 textures 2023, le Gris écaillé absent en
+    2026) ; [TEXTURAL](/gammes/textural.md) (jonc 2023, coupes 2023, Uw 1,3 en 2023 → 0,8 en 2026) ;
+    [Arguments de vente TEXTURAL](/commercial/textural.md) ; [Garanties par composant](/garanties/garanties-par-composant.md)
+    (section *Grille générale de juin 2023* et tableau des changements) ;
+    [Labels et certifications](/certifications/labels-et-certifications.md) ;
+    [Arguments de la marque PROFERM](/commercial/proferm.md).
+  * **Anomalies** : **CTR-16** et **VER-49** complétées ; aucune créée, aucune fermée. « Uw jusque
+    1.3/m²K » et « 1.5/m²K » (W absent) cités tels quels.
+
+* **Retraitement** du [Dépliant LUMÉAL, avril 2026](/sources/depliant-lumeal.md)
+  (`raw/depliant-lumeal-2026-04.pdf`, 2 planches doubles) : planches rendues en PNG à 150 et 300 dpi,
+  lues en image, marge légale et pied agrandis, aucune couche texte lue ; comparées bloc par bloc au
+  dépliant de juin 2023 (planche 1 = p. 4 et 1, planche 2 = p. 2 et 3). Fiche réécrite au format du
+  protocole (« Registre de couverture OKF », « Ce qu'il apporte seul », « Non transcrit » retirés) :
+  2 `transcrit`, aucune `à faire`.
+  * **Différences avec juin 2023**, portées avec leur édition : renvoi « *Pas de bicoloration
+    possible » sur les deux groupes de couleurs ; plus de mention « 1 face » sur les sept couleurs à
+    prix préférentiel (tableau par édition dans [Coloris LUMINE](/coloris/coloris-lumine.md)) ; code
+    QR « Toutes nos garanties » et logo Origine France Garantie « AFNOR Cert. 112799 » ; mentions
+    légales complètes, PEFC et Imprim'Vert. Toutes les valeurs techniques, la grille des garanties,
+    les poignées et les ouvertures sont inchangées.
+  * **Images** : aucune nouvelle ; pastilles, schémas et photos identiques à 2023, liés.
+  * **Erreurs corrigées** (avant → après) : [TECHNAL](/fournisseurs/technal.md) — « 75 %, déchets
+    post-consommation Hydro CIRCAL », « Première qualité bâtiment (alliage 6060 T6) » et « et non de
+    chutes de production » (absents du dépliant cité en locator) → termes de la source, **VER-53** ;
+    [Labels et certifications](/certifications/labels-et-certifications.md) — A\*E\*V et EN 1627-30 du
+    LUMÉAL « [2 p. 1] » → p. 2 (la planche 1 ne les porte pas) ; [Coulissants aluminium](/gammes/coulissants-aluminium.md)
+    — « Bicoloration sur LUMÉAL55 : interdite par la fiche produit officielle » → « Pas de
+    bicoloration possible », en renvoi des couleurs ; [Dépliant LUMÉAL 2026](/sources/depliant-lumeal.md)
+    — logo « Qualicoat » (absent) → retiré ; « RC3 » → « classe de résistance niveau 3 … EN 1627-30 »
+    ; « source la plus récente du corpus » → retiré (récit d'ingestion).
+  * **Complétés** : [Coloris LUMINE](/coloris/coloris-lumine.md) (section *Coulissant LUMÉAL, dépliant
+    d'avril 2026*, 10 lignes, et tableau des faces par édition) ; [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md),
+    [Garanties par composant](/garanties/garanties-par-composant.md) (section renommée *Grille du
+    LUMÉAL, juin 2023 et avril 2026*), [Arguments de vente LUMINE](/commercial/lumine.md) (mentions
+    d'avril 2026), [Coulissants aluminium](/gammes/coulissants-aluminium.md) (valeurs identiques
+    sourcées aux deux éditions).
+  * **Anomalies** : **VER-53** créée ; **CTR-08** (locator p. 1 → p. 2), **CTR-10**, **CTR-29**
+    complétées ; aucune fermée.
+
 * **Retraitement** du [Dépliant LUMÉAL, juin 2023](/sources/depliant-lumeal-2023.md)
   (`raw/depliant-lumeal-2023-06.pdf`, 4 pages) : pages rendues en PNG à 200 dpi (300 dpi pour les
   découpes), lues en image, aucune couche texte lue. Fiche réécrite au format du protocole

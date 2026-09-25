@@ -13,7 +13,13 @@ sources:
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
     last_modified: 2026-01-31
+  - resource: raw/depliant-general-2023-06.pdf
+    id: depliant-general-2023-06
+    title: Dépliant général PROFERM, édition juin 2023
+    last_modified: 2023-06-30
 source_pages:
+  - resource: raw/depliant-general-2023-06.pdf
+    pages: 6
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 1, 4, 19-24
 generated:
@@ -109,6 +115,22 @@ large choix de textures & de finitions. Tout comme la menuiserie, la matière TE
 dans une logique de développement durable. » [1 p. 24] Le nuancier est sur
 [Coloris TEXTURAL](/coloris/coloris-textural.md).
 
+## En juin 2023
+
+Au dépliant général de juin 2023, sous le titre « La fenêtre déco », « Mixte PVC/aluminium » :
+« Avec TEXTURAL®, PROFERM donne naissance à une combinaison délicate et raffinée, mettant en
+valeur la noblesse des essences de bois à l'intérieur et l'élégance des couleurs et finitions
+possibles grâce à son extérieur en aluminium. Garantie 15 ans*, la gamme TEXTURAL® révolutionne la
+fenêtre et fait de votre menuiserie un réel élément de décoration. » ; « *sur la structure de la
+fenêtre » [2 p. 6].
+
+Les avantages annoncés : « La fenêtre devient un élément de décoration », « Finitions
+exceptionnelles », « Une création et une conception unique sur le marché », « Haut niveau de
+personnalisation avec textures intérieures et aluminium extérieur », et des performances
+thermiques élevées (valeur sur [TEXTURAL](/gammes/textural.md)) [2 p. 6]. « Personnalisez vos
+menuiseries selon vos envies ! Choisissez votre niveau de finition extérieure sur la gamme
+TEXTURAL® : DROIT ou DESIGN » [2 p. 6].
+
 # Ce que la source ne chiffre pas
 
 « Hautement sécurisée » n'est rattaché à aucune classe de résistance à l'effraction ;
@@ -120,6 +142,7 @@ ni délai [1 p. 22].
 # Citations
 
 [1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 1, 4, 19 à 24
+[2] [Dépliant général PROFERM, édition juin 2023](raw/depliant-general-2023-06.pdf), p. 6
 
 # Voir aussi
 

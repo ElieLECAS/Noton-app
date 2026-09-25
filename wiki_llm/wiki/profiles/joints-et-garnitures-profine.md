@@ -36,7 +36,7 @@ source_pages:
   - resource: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf
     pages: 4, 8-9, 18
   - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
-    pages: 16
+    pages: 16, 312
 generated:
   by: process:claude-code
   at: 2026-09-18T23:00:00Z
@@ -143,6 +143,32 @@ sont rangés sous l'en-tête « Joint TPE » et légendés « (PVC) » sous leur
 **CTR-25**. La porte d'entrée du même système a le même système de joints, sans joint central —
 voir [Porte d'entrée du système 76 Advanced](/portes/systeme-76-advanced-porte-d-entree.md#joints).
 
+## Système d'étanchéité de la variante AluClip
+
+Sur un profilé du système 76 Advanced habillé d'un capot aluminium (variante **AluClip**), le
+joint qui se loge entre le capot et le profilé est un joint EPDM propre à cette variante, dessiné
+en médaillon ; une lettre repère sur les coupes la gorge qui le reçoit : **X** et **Y** aux
+bords des capots, **Z** à la gorge de frappe, qui reçoit un joint soudable. Le vitrage renvoie au tableau de vitrage du
+registre 2.3.2 [5 p. 312].
+
+| Joint | Famille sur la planche | Matière portée | Repère |
+| --- | --- | --- | --- |
+| G177 | EPJoint EPDM (noir, gris clair RAL 7035) | EPDM | X |
+| G178 | EPJoint EPDM (noir, gris clair RAL 7035) | EPDM | X |
+| G161 | EPJoint EPDM (noir, gris clair RAL 7035) | EPDM | Y |
+| PCE | Joints soudables | PCE | Z |
+| G050.T | Joints soudables | PVC | Z |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 312, registre 2.6.2, p. 8, version décembre 2016)
+
+![Système d'étanchéité de la variante AluClip du système 76 Advanced](/assets/procedures/moe-76-advanced/aluclip-systeme-etancheite.png)
+
+À gauche, les médaillons de chaque joint dans sa gorge, le capot hachuré au-dessus ; au centre, en
+haut, la coupe de deux profilés capotés assemblés, en bas celle d'un battement capoté, avec les
+repères X et Y ; à droite, un coin bas sur seuil, repère Z. Un jeu de **1** mm est coté entre le
+capot et le profilé aux repères Y. La fonction de chacun des trois joints EPDM est
+dans le tableau *Emplacement des joints* ci-dessus.
+
 ## Garnitures de joint et leur matière
 
 Quatorze garnitures de joint (les joints d'étanchéité rapportés ou coextrudés sur les profilés)
@@ -207,7 +233,9 @@ d'étanchéité placée dans la contre-feuillure, et le meneau vissé au travers
 (schéma: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 4)
 
 Le profilé qui reçoit le meneau porte **soit un renfort, soit une entretoise**. Dans un
-**assemblage en croix, l'un des deux assemblages emploie obligatoirement la pièce J055**.
+**assemblage en croix, l'un des deux assemblages emploie obligatoirement la pièce J055**. Les
+sets, les gabarits de perçage, les contours de fraisage et le mode opératoire pas à pas, avec les
+douilles S048 à S050, sont dans [Assemblage mécanique du meneau et de la traverse du système 76 Advanced](/procedures/assemblage-meneau-traverse-systeme-76.md).
 
 # Fabrication des seuils mixtes
 
@@ -239,7 +267,7 @@ l'anodisation du label **QUALANOD** selon la norme NF P24-351. Voir
 [4] [DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED](raw/dta-trocal-76-advanced-6-16-2334-v5.pdf)
 
 [5] Mise en œuvre Système 76 Advanced, profine — `raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`,
-registre 2.1.1, p. 16 du PDF
+registre 2.1.1, p. 16 du PDF, et registre 2.6.2, p. 8 imprimée (p. 312 du PDF)
 
 # Voir aussi
 

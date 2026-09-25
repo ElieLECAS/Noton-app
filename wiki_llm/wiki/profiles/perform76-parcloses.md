@@ -21,10 +21,6 @@ sources:
     id: dtd-6-16-2334-v5
     title: DTD n° DBV-25-6/16-2334_V5, système 76 Advanced
     last_modified: 2025-06-19
-  - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
-    id: profine-mise-en-oeuvre-76-advanced
-    title: Mise en œuvre Système 76 Advanced, profine, édition décembre 2023
-    last_modified: 2023-12-14
 source_pages:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
     pages: 4, 8
@@ -32,8 +28,6 @@ source_pages:
     pages: 9, 19
   - resource: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf
     pages: 18
-  - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
-    pages: 89-97
 generated:
   by: process:multimodal-direct
   at: 2026-09-19T21:10:00Z
@@ -190,37 +184,13 @@ Au-delà de **12 mm d'épaisseur de verre** ou de **60 kg de masse de vantail**,
 mécanique de la conception se démontre par voie expérimentale selon la norme NF P 20-302
 [2 p. 9].
 
-# Matrice des combinaisons vitrage, parcloses, joints et calage (registre 2.3.2)
+# Tableau de vitrage du manuel profine
 
-Relevée sur les planches graphiques du manuel Système 76 Advanced (registre 2.3.2, p. 89-97).
-Elle fixe, pour chaque épaisseur de vitrage (16 à 50 mm), la parclose associée, le jeu nominal et les accessoires de calage.
-
-| Épaisseur vitrage (mm) | Parclose ouvrant droite | Parclose ouvrant carrée | Parclose dormant | Joint intérieur associé | Support de cale requis |
-| --- | --- | --- | --- | --- | --- |
-| 16 | 2452 (41,5 mm) | — | — | G047 (3 mm) | Support M137 |
-| 18 | 2451 (39,5 mm) | — | — | G047 (3 mm) | Support M137 |
-| 20 | 2453 (37,5 mm) | — | — | G047 (3 mm) | Support M137 |
-| 24 | 76501 (34 mm) | 76531 (34 mm) | — | G048 (4 mm) | Support M137 |
-| 26 | 76527 (31,5 mm) | 76532 (31,5 mm) | — | G048 (4 mm) | Support M137 |
-| 28 (standard) | 76526 (29,5 mm) | 76533 (29,5 mm) | 2634 (29,5 mm) | Joint post-extrudé PCE (3 mm) | Support M137 / M138 |
-| 30 | 76516 (28 mm) | — | 2636 (27 mm) | G047 (3 mm) | Support M137 / M138 |
-| 32 | 2454 (26,5 mm) | — | 2638 (26,5 mm) | G047 (3 mm) | Support M137 / M138 |
-| 34 | 2433 (23,5 mm) | — | 2640 (23,5 mm) | G048 (4 mm) | Support M138 |
-| 36 | 76503 (22 mm) | 76534 (22 mm) | 76573 (22 mm) | Joint post-extrudé PCE (3 mm) | Support M138 |
-| 38 | 76504 (20 mm) | — | — | G047 (3 mm) | Support M138 |
-| 40 | 76505 (18 mm) | 1511 (18 mm) | 76575 (18 mm) | Joint post-extrudé PCE (3 mm) | Support M138 |
-| 42 | 76506 (16 mm) | — | 76576 (16 mm) | G047 (3 mm) | Support M138 |
-| 44 | 76507 (14 mm) | — | 76577 (14 mm) | Joint post-extrudé PCE (3 mm) | Support M138 |
-| 46 | — | — | 76578 (12 mm) | G047 (3 mm) | Support M138 |
-| 48 | 76508 (12 mm) | 76509 (10,8 mm) | 76579 (10,8 mm) | G048 (4 mm) | Support M138 |
-| 50 (maxi) | 76515 (9,5 mm) | — | — | Joint mince G178 (2,5 mm) | Support M138 |
-
-(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, registre 2.3.2, p. 89-97)
-
-### Prescriptions de calage et pontets de drainage
-
-- **Supports de cale M137 (pour feuillure fine) et M138 (pour feuillure profonde)** : pontets plastiques clipsés en fond de feuillure sous les cales de vitrage pour ménager une lame d'air de drainage continu sous le vitrage isolant et éviter le contact de l'intercalaire avec l'eau de condensation [4 registre 2.3.2 p. 96].
-- **Cales de vitrage (DTU 39)** : cales de supportage (en angle bas côté paumelle et angle haut opposé) et cales d'espacement périphériques en néoprène ou polypropylène dur, largeur égale à l'épaisseur du vitrage + 2 mm.
+Le manuel de mise en œuvre profine donne, pour chaque parclose du système 76 Advanced, l'épaisseur
+de vitrage admise avec un joint de 4 mm et avec un joint de 2 mm, les joints de chaque famille et
+les supports de cale M137 (ouvrant, dormant avec compensateur 76570) et M138 (dormant et meneau) :
+voir [Tableau de vitrage du système 76](/profiles/systeme-76-tableau-de-vitrage.md). Ses
+épaisseurs concordent avec le DTD pour les 76508, 2454, 2433 et 2638 — entrée **CTR-19**.
 
 # Citations
 
@@ -233,12 +203,11 @@ Elle fixe, pour chaque épaisseur de vitrage (16 à 50 mm), la parclose associé
 [3] DTD n° DBV-25-6/16-2334_V5, système 76 Advanced —
 `raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf`, p. 18
 
-[4] Mise en œuvre Système 76 Advanced, profine —
-`raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`, registre 2.3.2, p. 89 à 97
 
 # Voir aussi
 
 - [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md)
+- [Tableau de vitrage du système 76](/profiles/systeme-76-tableau-de-vitrage.md)
 - [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md)
 - [Dormants PERFORM76](/profiles/perform76-dormants.md)
 - [Performances des vitrages](/vitrages/performances-vitrages.md)

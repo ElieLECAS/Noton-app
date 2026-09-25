@@ -1,4 +1,4 @@
-"""Le wiki servi à l'interface : graphe, pages, PDF sources, statistiques, dépôt."""
+"""Le wiki servi à l'interface : graphe, carte mentale, pages, PDF sources, statistiques, dépôt."""
 from __future__ import annotations
 
 import logging
@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field
 
 from app.models.user import UserRead
 from app.routers.auth import get_current_user, require_permission
-from app.services import wiki_depot
+from app.services import wiki_carte, wiki_depot
 from app.services.wiki_service import WikiUnavailable, get_snapshot, wiki_root
 
 logger = logging.getLogger(__name__)
@@ -29,6 +29,12 @@ def _snapshot():
 async def wiki_graph(current_user: UserRead = Depends(get_current_user)):
     """Nœuds (sans corps) et liens : le contrat de l'ancien ``graph.json``."""
     return _snapshot().graph_payload()
+
+
+@router.get("/carte")
+async def wiki_carte_mentale(current_user: UserRead = Depends(get_current_user)):
+    """L'arbre de la carte mentale : la taxonomie de la frontmatter, niveaux inutiles sautés."""
+    return wiki_carte.carte(_snapshot())
 
 
 @router.get("/pages/{path:path}")

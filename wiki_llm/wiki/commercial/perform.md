@@ -13,7 +13,13 @@ sources:
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
     last_modified: 2026-01-31
+  - resource: raw/depliant-general-2023-06.pdf
+    id: depliant-general-2023-06
+    title: Dépliant général PROFERM, édition juin 2023
+    last_modified: 2023-06-30
 source_pages:
+  - resource: raw/depliant-general-2023-06.pdf
+    pages: 3
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 1, 4-8
 generated:
@@ -75,6 +81,24 @@ nuancier est sur [Coloris PERFORM](/coloris/coloris-perform.md).
 « Toutes nos menuiseries de la gamme PERFORM allient performance, fiabilité, ergonomie et design.
 Choisissez votre niveau de finition : DROIT ou DESIGN. » [1 p. 8]
 
+## En juin 2023
+
+Le dépliant général de juin 2023 présente la PERFORM sous le titre « La fenêtre ultra durable »,
+« PVC » : « Robustes, performantes et esthétiques, nos menuiseries en PVC garanties 15 ans*,
+s'adaptent à toutes vos envies ! Ouverture à la française, oscillo-battante, soufflet, châssis
+fixe ou coulissant, choisir la gamme PERFORM, c'est l'assurance d'acquérir une menuiserie
+durable. » ; l'astérisque renvoie à « *sur la structure de la fenêtre » [2 p. 3].
+
+Sous « Robustesse & performance », les cinq mêmes avantages qu'en 2026, la performance thermique
+étant donnée pour la gamme entière (« Uw jusque 1.3/m²K », valeur sur [PERFORM](/gammes/perform.md)) ;
+« Toutes les menuiseries PERFORM sont fabriquées avec des profils en PVC GREENLINE® de chez
+KÖMMERLING®. Un PVC écologique garanti sans plomb, totalement recyclable et respectueux de
+l'environnement. » [2 p. 3]
+
+« Toutes nos menuiseries de la gamme PERFORM allient performance, fiabilité, ergonomie et design.
+Choisissez votre niveau de finition : DROIT ou DESIGN » ; « Retrouvez toutes les informations sur
+la gamme PERFORM dans notre catalogue général » [2 p. 3].
+
 # Restrictions annoncées
 
 Le cintrage (hors triangle et trapèze) n'est possible que pour la PERFORM70, et le laquage n'est
@@ -92,6 +116,7 @@ profils n'est pas chiffrée [1 p. 6].
 # Citations
 
 [1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 1, 4 à 8
+[2] [Dépliant général PROFERM, édition juin 2023](raw/depliant-general-2023-06.pdf), p. 3
 
 # Voir aussi
 

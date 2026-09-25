@@ -1,7 +1,7 @@
 """LIA — l'assistant documentaire de PROFERM, adossé au wiki.
 
-Quatre écrans : le chat (``/``), l'assistant vocal (``/vocal``), le wiki (``/wiki``, graphe +
-lecteur) et l'administration. Le wiki est chargé au démarrage et rechargé dès qu'un fichier
+Cinq écrans : le chat (``/``), l'assistant vocal (``/vocal``), le wiki (``/wiki``), sa carte
+mentale (``/carte``) et l'administration. Le wiki est chargé au démarrage et rechargé dès qu'un fichier
 change (voir wiki_service).
 """
 import asyncio
@@ -139,11 +139,20 @@ async def vocal_page(request: Request, session: Session = Depends(get_session)):
 
 @app.get("/wiki", response_class=HTMLResponse)
 async def wiki_page(request: Request, session: Session = Depends(get_session)):
-    """Le wiki : graphe et lecteur de pages."""
+    """Le wiki : accueil par produit et par métier, lecteur de pages."""
     user = _get_authenticated_user(request, session)
     if not user:
         return RedirectResponse(url="/login", status_code=303)
     return templates.TemplateResponse("wiki.html", {"request": request, "user": user})
+
+
+@app.get("/carte", response_class=HTMLResponse)
+async def carte_page(request: Request, session: Session = Depends(get_session)):
+    """La carte mentale du wiki : un clic sur une page l'ouvre dans le wiki."""
+    user = _get_authenticated_user(request, session)
+    if not user:
+        return RedirectResponse(url="/login", status_code=303)
+    return templates.TemplateResponse("carte.html", {"request": request, "user": user})
 
 
 @app.get("/login", response_class=HTMLResponse)

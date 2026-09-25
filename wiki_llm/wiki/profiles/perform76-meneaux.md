@@ -223,6 +223,7 @@ rouges marquent les lignes alignées sur tout l'ensemble. Cotes en mm :
 
 # Voir aussi
 
+- [Assemblage mécanique du meneau et de la traverse du système 76 Advanced](/procedures/assemblage-meneau-traverse-systeme-76.md)
 - [Dormants PERFORM76](/profiles/perform76-dormants.md)
 - [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md)
 - [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md)

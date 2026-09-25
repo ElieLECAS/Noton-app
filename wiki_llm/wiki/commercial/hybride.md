@@ -21,7 +21,13 @@ sources:
     id: depliant-hybride-2023-06
     title: Dépliant HYBRIDE, édition juin 2023
     last_modified: 2023-06-30
+  - resource: raw/depliant-general-2023-06.pdf
+    id: depliant-general-2023-06
+    title: Dépliant général PROFERM, édition juin 2023
+    last_modified: 2023-06-30
 source_pages:
+  - resource: raw/depliant-general-2023-06.pdf
+    pages: 4
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 1, 4, 9-12
   - resource: raw/brochure-hybride-2025-03.pdf
@@ -138,6 +144,23 @@ structure de la fenêtre » (durée tenue sur
 [Garanties par composant](/garanties/garanties-par-composant.md), **CTR-03**) [3 p. 2]. La page
 des coloris ne porte pas de macaron de garantie [3 p. 3].
 
+## L'HYBRIDE au dépliant général de juin 2023
+
+Sous le titre « La fenêtre écologique », « Mixte PVC/aluminium » : « Unique sur le marché de la
+menuiserie, la gamme HYBRIDE, conçue par PROFERM, allie deux matériaux, le PVC et l'aluminium.
+Cette technologie entièrement et exclusivement développée par PROFERM est composée d'un profil
+épais en aluminium serti sur un profil PVC GREENLINE® de chez KÖMMERLING®. Ces deux matériaux,
+offrent à la gamme HYBRIDE, de très hautes performances en matière d'isolation phonique,
+acoustique et thermique. Pour plus de sérénité, la gamme HYBRIDE est garantie 15 ans*. » ;
+« *sur la structure de la fenêtre » [4 p. 4].
+
+Les avantages annoncés : « Très hautes performances acoustiques et thermiques », « Parfaite
+étanchéité et sécurité renforcée », « Haut niveau de finitions et toutes teintes RAL possibles »,
+« Écologique et recyclable », et des performances thermiques élevées, « Uw jusque 1.3/m²K »
+(**CTR-13**, valeur du document produit retenue sur [HYBRIDE](/gammes/hybride.md)) [4 p. 4].
+« Personnalisez vos menuiseries selon vos envies ! Choisissez votre niveau de finition extérieure
+sur la gamme HYBRIDE : DROIT ou DESIGN » [4 p. 4].
+
 # Ce que la source ne chiffre pas
 
 « Les meilleures performances thermiques & acoustiques du marché », « l'un des meilleurs produits
@@ -155,6 +178,7 @@ quincailleries les plus fiables » ne nomme ni fabricant ni essai [2 p. 2].
 [1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 1, 4, 9 à 12
 [2] [Brochure HYBRIDE, édition mars 2025](raw/brochure-hybride-2025-03.pdf), p. 1 à 4
 [3] [Dépliant HYBRIDE, édition juin 2023](raw/depliant-hybride-2023-06.pdf), p. 1 à 4
+[4] [Dépliant général PROFERM, édition juin 2023](raw/depliant-general-2023-06.pdf), p. 4
 
 # Voir aussi
 

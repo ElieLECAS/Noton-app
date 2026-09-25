@@ -41,7 +41,9 @@ Les prescriptions écrites qui gouvernent ces schémas — entraxes, diamètres 
 décompression des couleurs sombres, capot complet réservé à la rénovation — sont dans
 [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md), sections 2.2.3 à 2.4. Les pièces
 d'assemblage par dormant et par seuil sont dans
-[Assemblages du système 76](/profiles/systeme-76-assemblages.md).
+[Assemblages du système 76](/profiles/systeme-76-assemblages.md). Le manuel de mise en œuvre profine
+détaille trois de ces opérations pas à pas : [Assemblage mécanique du meneau et de la traverse du système 76 Advanced](/procedures/assemblage-meneau-traverse-systeme-76.md), [Traitement du battement du système 76 Advanced](/procedures/traitement-du-battement-systeme-76.md) et
+[Drainage, décompression et ventilation du système 76 Advanced](/procedures/drainage-decompression-ventilation-systeme-76.md).
 
 # Conditions et interdictions
 
@@ -172,6 +174,9 @@ droite, « Avec pièce M150 » : le montant, le bloc M170, la pièce **M150** vi
 avec sa garniture ; en bas à droite, le seuil **A075** et son bouchon d'about **G067**, sous la
 mention « AVEC CONTRE PROFILAGE SUR SEUIL A075 ». Aucune cote n'est portée
 (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 23 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 27).
+
+Le détail, dormant par dormant, des sets, des perçages et du montage sur seuil est dans
+[Mise en œuvre du seuil du système 76 Advanced](/procedures/mise-en-oeuvre-seuil-systeme-76.md).
 
 ## Assemblage du rejet d'eau pour seuil
 
@@ -730,6 +735,9 @@ Légende de la planche : 1. calfeutrement de la fenêtre ; 2. dispositif de dés
 
 # Voir aussi
 
+- [Assemblage mécanique du meneau et de la traverse du système 76 Advanced](/procedures/assemblage-meneau-traverse-systeme-76.md)
+- [Traitement du battement du système 76 Advanced](/procedures/traitement-du-battement-systeme-76.md)
+- [Drainage, décompression et ventilation du système 76 Advanced](/procedures/drainage-decompression-ventilation-systeme-76.md)
 - [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md)
 - [Assemblages du système 76](/profiles/systeme-76-assemblages.md)
 - [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md)

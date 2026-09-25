@@ -15,7 +15,7 @@ sources:
     last_modified: 2023-12-14
 source_pages:
   - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
-    pages: 19-37
+    pages: 19-37, 148
 generated:
   by: process:claude-code
   at: 2026-09-25T21:00:00Z
@@ -368,7 +368,10 @@ Design 50 mm » (76276) ; leur nomenclature comprend le **battement 76473** [1 p
 Le 76473 est titré « Battement extérieur 46 mm » et n'a **pas de renfort** dans sa nomenclature.
 Les sets d'embout sont écrits **M285S/L à M289S/L** ici et M285D/L à M289D/L sur le poster des
 profilés principaux ; les embouts M106 à M111 y sont légendés « partie int. », « partie ext. » et
-« partie ext. AluClip ». L'emploi de ces embouts au traitement du battement est dans
+« partie ext. AluClip ». Au registre du traitement du battement, les sets sont déclarés
+« disponibles en .L (joint gris clair), .S (joint noir) ou .B (joint brun) » [1 p. 148]. La
+composition de chaque set, le débit et le montage des battements sont dans
+[Traitement du battement du système 76 Advanced](/procedures/traitement-du-battement-systeme-76.md) ; leurs cotes de débit dans
 [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md).
 
 # Meneaux et traverses

@@ -21,13 +21,25 @@ sources:
     id: depliant-lumeal-2023-06
     title: Dépliant LUMÉAL, édition juin 2023
     last_modified: 2023-06-30
+  - resource: raw/depliant-lumeal-2026-04.pdf
+    id: depliant-lumeal-2026-04
+    title: Dépliant LUMÉAL, édition avril 2026
+    last_modified: 2026-04-21
+  - resource: raw/depliant-general-2023-06.pdf
+    id: depliant-general-2023-06
+    title: Dépliant général PROFERM, édition juin 2023
+    last_modified: 2023-06-30
 source_pages:
+  - resource: raw/depliant-general-2023-06.pdf
+    pages: 5
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 1, 4, 13-18
   - resource: raw/brochure-lumine65-2025-02.pdf
     pages: 1-3, 5-6
   - resource: raw/depliant-lumeal-2023-06.pdf
     pages: 1-4
+  - resource: raw/depliant-lumeal-2026-04.pdf
+    pages: 1-2
 generated:
   by: process:claude-code
   at: 2026-09-25T12:00:00Z
@@ -133,11 +145,32 @@ arbitrée sur [Garanties par composant](/garanties/garanties-par-composant.md), 
 [2 p. 5]. La brochure est signée « Expert agréé PROFERM - Fabricant français de menuiseries
 innovantes » et porte le logo « Conception & Fabrication Hauts-de-France » [2 p. 1, 6].
 
+## La LUMINE au dépliant général de juin 2023
+
+Sous le titre « L'aluminium en mode sublime », « Aluminium » : « Les menuiseries LUMINE allient
+esthétisme, robustesse et lignes épurées. Personnalisables à souhait, les menuiseries en aluminium
+offrent d'excellentes performances. Avec leurs différents types de finitions, les fenêtres,
+portes-fenêtres, coulissants et portes en aluminium répondent à toutes vos attentes ! Garanties
+15 ans*, les menuiseries LUMINE s'accessoirisent et font de votre habitat, une réelle architecture
+contemporaine. » ; « *sur la structure de la fenêtre » [5 p. 5].
+
+« PROFERM se différencie par son positionnement haut de gamme avec ses menuiseries LUMINE
+fabriquées uniquement avec des profilés en aluminium bas carbone de chez TECHNAL® » [5 p. 5]. Les
+avantages annoncés : « Matériau robuste, isolant et esthétique », « Très bon rempart contre le
+bruit », « Haut niveau de personnalisation », « Aluminium bas carbone », et des performances
+thermiques élevées, « Uw jusque 1.5/m²K » (valeur sur [LUMINE](/gammes/lumine.md)) [5 p. 5].
+
+« Le coulissant en aluminium offre des lignes fines et discrètes : 2 à 4 vantaux / 2 à 4 rails
+possibles. Le coulissant à galandage en aluminium permet d'exploiter au mieux les petites
+surfaces : 1 à 4 vantaux / jusqu'à 3 rails possibles. » [5 p. 5] Les configurations sont sur
+[Coulissants aluminium](/gammes/coulissants-aluminium.md).
+
 ## Le LUMÉAL
 
-Ce que le dépliant LUMÉAL de juin 2023 annonce du coulissant aluminium à ouvrant caché ; les
-valeurs mesurées sont sur [Coulissants aluminium](/gammes/coulissants-aluminium.md). Les pages
-intérieures portent le bandeau « LUMINE ».
+Ce que les dépliants LUMÉAL de juin 2023 et d'avril 2026 annoncent du coulissant aluminium à
+ouvrant caché ; les valeurs mesurées sont sur [Coulissants aluminium](/gammes/coulissants-aluminium.md).
+Les pages intérieures portent le bandeau « LUMINE ». L'édition d'avril 2026 reprend mot pour mot
+les textes ci-dessous [4 p. 1, 2].
 
 La couverture annonce « Masse d'aluminium réduite de 35 % » et « Jusqu'à Uw = 1.2/m².K » [3 p. 1].
 
@@ -173,8 +206,14 @@ fournir tranquillité et sérénité jusqu'à plusieurs années après la pose d
 PROFERM vous offre des garanties exceptionnelles et exclusives sur l'ensemble des composants. » La
 grille est sur [Garanties par composant](/garanties/garanties-par-composant.md) [3 p. 3].
 
+En avril 2026, les couleurs extérieures standards et à prix préférentiel portent en renvoi « Pas
+de bicoloration possible » [4 p. 2].
+
 La quatrième de couverture porte un encadré vierge sous « Un projet ? Posez toutes vos questions
-à : » [3 p. 4].
+à : » [3 p. 4, 4 p. 1]. En avril 2026, elle ajoute : « Document non contractuel. Dans une démarche
+d'amélioration continue de nos produits et services, nous nous réservons le droit de modifier sans
+préavis les informations présentes dans ce document. » et « Ne pas jeter sur la voie publique.
+Pensez au recyclage : document papier à déposer dans le bac de tri. » [4 p. 1]
 
 # Ce que la source ne chiffre pas
 
@@ -197,6 +236,8 @@ donnée [3 p. 2].
 [1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 1, 4, 13 à 18
 [2] [Brochure LUMINE65, édition février 2025](raw/brochure-lumine65-2025-02.pdf), p. 1 à 3, 5 et 6
 [3] [Dépliant LUMÉAL, édition juin 2023](raw/depliant-lumeal-2023-06.pdf), p. 1 à 4
+[4] [Dépliant LUMÉAL, édition avril 2026](raw/depliant-lumeal-2026-04.pdf), p. 1 et 2
+[5] [Dépliant général PROFERM, édition juin 2023](raw/depliant-general-2023-06.pdf), p. 5
 
 # Voir aussi
 

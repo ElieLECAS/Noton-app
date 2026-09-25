@@ -21,13 +21,25 @@ sources:
     id: depliant-lumeal-2023-06
     title: Dépliant LUMÉAL, édition juin 2023
     last_modified: 2023-06-30
+  - resource: raw/depliant-lumeal-2026-04.pdf
+    id: depliant-lumeal-2026-04
+    title: Dépliant LUMÉAL, édition avril 2026
+    last_modified: 2026-04-21
+  - resource: raw/depliant-general-2023-06.pdf
+    id: depliant-general-2023-06
+    title: Dépliant général PROFERM, édition juin 2023
+    last_modified: 2023-06-30
 source_pages:
+  - resource: raw/depliant-general-2023-06.pdf
+    pages: 5
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 18
   - resource: raw/brochure-lumine65-2025-02.pdf
     pages: 5
   - resource: raw/depliant-lumeal-2023-06.pdf
     pages: 3
+  - resource: raw/depliant-lumeal-2026-04.pdf
+    pages: 2
 generated:
   by: process:claude-code
   at: 2026-09-25T12:00:00Z
@@ -118,6 +130,52 @@ section suivante (**CTR-10**).
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 18)
 
+## LUMINE, dépliant général de juin 2023
+
+Nuancier de la gamme LUMINE au dépliant général de juin 2023, avant la division en LUMINE55 et
+LUMINE65, sous « Choix des coloris intérieur et extérieur alu » : blanc 9016 brillant en
+« couleurs intérieures & extérieures », laquage RAL, et « 9 couleurs extérieures standards »
+[5 p. 5]. Une ligne par teinte, dans les termes de la source ; la pastille est un **rendu
+indicatif**, le code et le nom font foi.
+
+| Code de la source | Nom | Famille | Faces | Finition | Restriction | Pastille |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 9016 | Blanc 9016 brillant | couleur intérieure et extérieure | - | brillant | - | ![Blanc 9016 brillant](/assets/coloris/lumine/2023-lumine-blanc-9016-brillant.png) |
+| 3004 | Rouge 3004 satiné | couleur extérieure standard | 1 face | satiné | - | ![Rouge 3004 satiné](/assets/coloris/lumine/2023-lumine-rouge-3004-satine.png) |
+| 2900 | Gris 2900 granité | couleur extérieure standard | 1 face | granité | - | ![Gris 2900 granité](/assets/coloris/lumine/2023-lumine-gris-2900-granite.png) |
+| 7016 | Anthracite 7016 satiné | couleur extérieure standard | 1 et 2 face(s) | satiné | - | ![Anthracite 7016 satiné](/assets/coloris/lumine/2023-lumine-anthracite-7016-satine.png) |
+| 7016 | Anthracite 7016 granité | couleur extérieure standard | 1 et 2 face(s) | granité | - | ![Anthracite 7016 granité](/assets/coloris/lumine/2023-lumine-anthracite-7016-granite.png) |
+| 7035 | Gris 7035 granité | couleur extérieure standard | 1 face | granité | - | ![Gris 7035 granité](/assets/coloris/lumine/2023-lumine-gris-7035-granite.png) |
+| 7039 | Gris 7039 granité | couleur extérieure standard | 1 face | granité | - | ![Gris 7039 granité](/assets/coloris/lumine/2023-lumine-gris-7039-granite.png) |
+| 2100 | Noir 2100 granité | couleur extérieure standard | 1 face | granité | - | ![Noir 2100 granité](/assets/coloris/lumine/2023-lumine-noir-2100-granite.png) |
+| 9005 | Noir 9005 granité | couleur extérieure standard | 1 face | granité | - | ![Noir 9005 granité](/assets/coloris/lumine/2023-lumine-noir-9005-granite.png) |
+| 8019 | Marron 8019 granité | couleur extérieure standard | 1 face | granité | - | ![Marron 8019 granité](/assets/coloris/lumine/2023-lumine-marron-8019-granite.png) |
+| RAL | Laquage toutes teintes | laqué | face intérieure ou 2 faces | satiné ou granité | « et toutes autres teintes personnalisées sur demande » | ![Laquage toutes teintes](/assets/coloris/lumine/2023-lumine-laquage-ral.png) |
+
+(schéma: raw/depliant-general-2023-06.pdf, p. 5)
+
+Les teintes qui diffèrent entre juin 2023 (gamme LUMINE) et janvier 2026 (LUMINE55), une ligne
+par teinte et par période :
+
+| Teinte | Période (document) | Nom et finition | Faces | Groupe |
+| --- | --- | --- | --- | --- |
+| 3004 | juin 2023 (dépliant général, LUMINE) | Rouge 3004 satiné | 1 face | 9 couleurs extérieures standards |
+| 3004 | janvier 2026 (catalogue général, LUMINE55) | Rouge 3004 granité | 1 face extérieure | 7 coloris 1 face extérieure |
+| 7016 | juin 2023 (dépliant général, LUMINE) | Anthracite 7016 satiné, Anthracite 7016 granité | 1 et 2 face(s) | 9 couleurs extérieures standards |
+| 7016 | janvier 2026 (catalogue général, LUMINE55) | Gris 7016 satiné ou granité | 1 ou 2 face(s) | 4 coloris 1 ou 2 face(s) |
+| anodisés | juin 2023 (dépliant général, LUMINE) | absents | - | - |
+| anodisés | janvier 2026 (catalogue général, LUMINE55) | anodisé argent, anodisé laqué argent, anodisé laqué champagne | 2 faces ; 1 ou 2 face(s) | - |
+
+(schéma: raw/depliant-general-2023-06.pdf, p. 5 ; raw/catalogue-general-2026-01.pdf, p. 18)
+
+Sous « Coulissant & galandage », juin 2023 : blanc 9016 brillant, chêne doré « 2 faces
+uniquement », « Laquage toutes teintes RAL possibles », finitions satiné et granité, « et toutes
+autres teintes personnalisées sur demande » [5 p. 5] ; ce sont les teintes et les pastilles de la
+section *Coulissants SOLÉAL55, GALANDAGE55 et LUMÉAL55* ci-dessus. « Le petit + » : « Équipé de
+plusieurs cabines de laquage, PROFERM vous propose un panel de couleurs possibles pour vos
+menuiseries. Une teinte préférée ? PROFERM va plus loin et confectionne pour vous la couleur sur
+mesure de vos envies ! » [5 p. 5]
+
 ## Coulissant LUMÉAL, dépliant de juin 2023
 
 Le coulissant à ouvrant caché LUMÉAL ([Coulissants aluminium](/gammes/coulissants-aluminium.md))
@@ -153,6 +211,38 @@ vous la couleur sur mesure de vos envies ! » [3 p. 3]
 Le nuancier de juin 2023 ne compte ni chêne doré, ni anodisé, et ne dit rien d'une bicoloration
 (une teinte différente sur chaque face) [3 p. 3].
 
+## Coulissant LUMÉAL, dépliant d'avril 2026
+
+Même nuancier en avril 2026, mêmes pastilles, avec deux différences : les deux titres de groupe
+portent un astérisque qui renvoie à « Pas de bicoloration possible » (une teinte différente sur
+chaque face), et les sept couleurs à prix préférentiel ne portent plus de mention de faces
+(« 1 face » en juin 2023) [4 p. 2]. Une ligne par teinte ; la pastille est un **rendu
+indicatif**, le code et le nom font foi à la commande.
+
+| Code de la source | Nom | Famille | Faces | Finition | Restriction | Pastille |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 9016 | Blanc 9016 brillant | couleur extérieure standard | 1 face | brillant | pas de bicoloration possible | ![Blanc 9016 brillant](/assets/coloris/lumine/lumeal-2023-blanc-9016-brillant.png) |
+| 7016 | Anthracite 7016 satiné | couleur extérieure standard | 1 et 2 faces | satiné | pas de bicoloration possible | ![Anthracite 7016 satiné](/assets/coloris/lumine/lumeal-2023-anthracite-7016-satine.png) |
+| 7016 | Anthracite 7016 granité | couleur extérieure standard | 1 et 2 faces | granité | pas de bicoloration possible | ![Anthracite 7016 granité](/assets/coloris/lumine/lumeal-2023-anthracite-7016-granite.png) |
+| 3004 | Rouge 3004 satiné | couleur extérieure à prix préférentiel | - | satiné | pas de bicoloration possible | ![Rouge 3004 satiné](/assets/coloris/lumine/lumeal-2023-rouge-3004-satine.png) |
+| 7035 | Gris 7035 granité | couleur extérieure à prix préférentiel | - | granité | pas de bicoloration possible | ![Gris 7035 granité](/assets/coloris/lumine/lumeal-2023-gris-7035-granite.png) |
+| 2900 | Gris 2900 granité | couleur extérieure à prix préférentiel | - | granité | pas de bicoloration possible | ![Gris 2900 granité](/assets/coloris/lumine/lumeal-2023-gris-2900-granite.png) |
+| 7039 | Gris 7039 granité | couleur extérieure à prix préférentiel | - | granité | pas de bicoloration possible | ![Gris 7039 granité](/assets/coloris/lumine/lumeal-2023-gris-7039-granite.png) |
+| 2100 | Noir 2100 granité | couleur extérieure à prix préférentiel | - | granité | pas de bicoloration possible | ![Noir 2100 granité](/assets/coloris/lumine/lumeal-2023-noir-2100-granite.png) |
+| 9005 | Noir 9005 granité | couleur extérieure à prix préférentiel | - | granité | pas de bicoloration possible | ![Noir 9005 granité](/assets/coloris/lumine/lumeal-2023-noir-9005-granite.png) |
+| 8019 | Marron 8019 granité | couleur extérieure à prix préférentiel | - | granité | pas de bicoloration possible | ![Marron 8019 granité](/assets/coloris/lumine/lumeal-2023-marron-8019-granite.png) |
+
+(schéma: raw/depliant-lumeal-2026-04.pdf, p. 2)
+
+« Le petit + » et la couleur sur mesure sont repris mot pour mot [4 p. 2].
+
+Les faces des couleurs à prix préférentiel, par édition :
+
+| Édition du dépliant LUMÉAL | Faces des 7 couleurs extérieures à prix préférentiel | Bicoloration |
+| --- | --- | --- |
+| juin 2023 | 1 face | - |
+| avril 2026 | - | pas de bicoloration possible |
+
 ## Finitions satiné et granité
 
 Les deux aspects de laquage, satiné et granité, sont montrés sur une même pastille :
@@ -164,9 +254,12 @@ Les deux aspects de laquage, satiné et granité, sont montrés sur une même pa
 [1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 18
 [2] [Brochure LUMINE65, édition février 2025](raw/brochure-lumine65-2025-02.pdf), p. 5
 [3] [Dépliant LUMÉAL, édition juin 2023](raw/depliant-lumeal-2023-06.pdf), p. 3
+[4] [Dépliant LUMÉAL, édition avril 2026](raw/depliant-lumeal-2026-04.pdf), p. 2
+[5] [Dépliant général PROFERM, édition juin 2023](raw/depliant-general-2023-06.pdf), p. 5
 
 # Voir aussi
 
+- [Coloris des portes d'entrée](/coloris/coloris-portes-entree.md)
 - [LUMINE](/gammes/lumine.md)
 - [Coulissants aluminium](/gammes/coulissants-aluminium.md)
 - [Coloris HYBRIDE](/coloris/coloris-hybride.md)

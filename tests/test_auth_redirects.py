@@ -29,7 +29,26 @@ def test_root_ok_authenticated(client, responsable_headers):
 def test_wiki_page_ok_authenticated(client, responsable_headers):
     r = client.get("/wiki", headers=responsable_headers, follow_redirects=False)
     assert r.status_code == 200
-    assert "/api/wiki/graph" in r.text
+    assert "/api/wiki/graph" in r.text  # la liste des pages, pas une vue graphe
+    # Plus de vue graphe ni de raccourci vers la carte : elle a son entrée dans la navigation.
+    for absent in ('id="view-graph"', 'id="view-map"', 'id="btn-graph"', 'id="btn-map"', 'id="btn-locate"', "d3.min.js"):
+        assert absent not in r.text, absent
+
+
+def test_carte_redirects_unauthenticated(client):
+    r = client.get("/carte", follow_redirects=False)
+    assert r.status_code == 303
+    assert "/login" in (r.headers.get("location") or "")
+
+
+def test_carte_page_ok_authenticated(client, responsable_headers):
+    r = client.get("/carte", headers=responsable_headers, follow_redirects=False)
+    assert r.status_code == 200
+    assert "/api/wiki/carte" in r.text
+    # Un lien à part entière dans la barre de navigation, présent sur toutes les pages.
+    assert 'id="nav-carte"' in r.text and 'href="/carte"' in r.text
+    wiki = client.get("/wiki", headers=responsable_headers, follow_redirects=False)
+    assert 'id="nav-carte"' in wiki.text
 
 
 def test_login_redirects_when_already_authenticated(client, responsable_headers):

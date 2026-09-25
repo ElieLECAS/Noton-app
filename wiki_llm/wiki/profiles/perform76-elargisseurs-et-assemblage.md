@@ -13,9 +13,15 @@ sources:
     id: cahier-technique-perform76-cc03
     title: Cahier technique PERFORM76, version 02/09/2026 CC03
     last_modified: 2026-09-02
+  - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
+    id: profine-mise-en-oeuvre-76-advanced
+    title: Mise en œuvre Système 76 Advanced, profine
+    last_modified: 2023-12-14
 source_pages:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
     pages: 22, 23
+  - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
+    pages: 253-255, 262-299
 generated:
   by: process:claude-code
   at: 2026-09-17T20:00:00Z
@@ -47,10 +53,13 @@ en rouge de la planche, où le V314.Z est dessiné dans le 76702 et deux fois da
 [1 p. 22]. Chaque coupe montre l'élargisseur accolé au dormant, avec sa largeur d'élargissement
 en haut et la hauteur de 76 mm à gauche.
 
-**Règles de fixation et ventilation d'atelier** :
-- Les élargisseurs empilés/couplés doivent être vissés entre eux : entraxe max. **400 mm** en blanc, **300 mm** en profilé filmé/couleur.
-- À partir de 60 mm d'élargissement, prévoir une fixation à la maçonnerie par console ou équerre.
-- Sur profilés filmés/couleur, percer impérativement un trou de ventilation de **Ø 5 mm à 100 mm des extrémités** de chaque préchambre extérieure pour éviter toute surchauffe thermique.
+Les élargisseurs « empilés / couplés » se vissent entre eux, à un entraxe de fixation de 400 mm
+au plus en profilé blanc et de 300 mm au plus en profilé filmé ; à partir d'une largeur de plus de
+60 mm, une fixation à la maçonnerie par console ou équerre est prévue. Sur profilé filmé, la
+chambre extérieure est ventilée par un trou Ø 5 mm à 100 mm des extrémités. Ces règles, les
+charges admissibles et les embouts de finition sont dans
+[Mise en œuvre des réhausses, élargisseurs et pièces d'appui du système 76 Advanced](/procedures/mise-en-oeuvre-profiles-complementaires-systeme-76.md)
+[2 PDF p. 253-255, registre 2.5.1].
 
 Les élargisseurs 76701, 76702 et 76703 existent en variante pour capot AluClip sous les
 références **76710, 76711 et 76712**, avec les capots aluminium A120, A121 et A124 — voir
@@ -70,7 +79,7 @@ références **76710, 76711 et 76712**, avec les capots aluminium A120, A121 et 
 | 76821 | adaptateur de poteau d'angle | 55,5 / 12 / 12 / 13,5, hors tout 75,5 | — | — |
 | 76822 | clip cornière | 72, décomposé 21 / 7 / 21 | — | — |
 
-(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, reg. 2.5.2 p. 1-29 ; raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 23 pour les coupes)
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, PDF p. 262-288, registre 2.5.2 ; raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 23 pour les coupes)
 
 # Cotes et renforts des poteaux d'angle
 
@@ -82,23 +91,36 @@ Les trois poteaux d'angle PERFORM76, cotes en mm et spécifications de renforcem
 | Poteau d'angle à 135° | 135° | 8356 | 54 × 88 (onglet 45°, retombée 31) | V262 (2,0 mm) | $I_W = 7,6$ / $I_G = 7,6$ | Isolant I041, clameau S082 |
 | Poteau d'angle variable | 90° à 180° | 8340 + 8341 | 84 × 84 (R42,5) | V265 (2,0 mm tubulaire soudé) | $I_W = 8,7$ / $I_G = 8,7$ | Isolants I042 (8340) et I043 (8341) en blanc uniquement, clameau S081 |
 
-(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, reg. 2.1.3 p. 14-15 et reg. 2.5.2 p. 31-40 ; raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 23 pour les coupes)
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, reg. 2.1.3 p. 14-15 et PDF p. 290-299, registre 2.5.2 ; raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 23 pour les coupes)
 
-Cotes de débit X et Y du poteau d'angle variable 8340 + 8341 selon l'angle, en mm :
+Cotes de débit X et Y du poteau d'angle variable 8340 + 8341 selon l'angle, tous les 5°, en mm.
+X et Y sont les deux cotes de débit (1) portées sur la coupe du poteau variable, X en haut depuis
+le dormant A, Y en bas ; la mise en œuvre du poteau est dans
+[Accouplement d'éléments du système 76 Advanced](/procedures/accouplement-elements-systeme-76.md#poteau-dangle-variable-8340--8341).
 
 | Angle (°) | X (mm) | Y (mm) |
 | --- | --- | --- |
 | 90 | 104,8 | 14,8 |
+| 95 | 100,8 | 18,3 |
 | 100 | 97,0 | 21,5 |
+| 105 | 93,6 | 24,5 |
 | 110 | 90,3 | 27,3 |
+| 115 | 87,2 | 29,9 |
 | 120 | 84,3 | 32,4 |
+| 125 | 81,6 | 34,7 |
 | 130 | 79,0 | 37,0 |
 | 135 | 76,4 | 39,2 |
 | 140 | 74,0 | 41,2 |
+| 145 | 71,7 | 43,3 |
 | 150 | 69,4 | 45,3 |
+| 155 | 67,2 | 47,2 |
 | 160 | 65,0 | 49,1 |
+| 165 | 62,9 | 51,0 |
 | 170 | 60,8 | 52,9 |
+| 175 | 59,0 | 55,0 |
 | 180 | 56,4 | 56,4 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 298)
 
 # Coupes d'assemblage
 
@@ -175,6 +197,8 @@ cahier technique, sans que leur famille d'origine soit précisée.
 
 [1] Cahier technique PERFORM76, version 02/09/2026 CC03 —
 `raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, pages du PDF 22 et 23
+
+[2] [Mise en œuvre Système 76 Advanced, profine](raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf), registres 2.5.1 et 2.5.2
 
 # Voir aussi
 

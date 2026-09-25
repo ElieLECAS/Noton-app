@@ -1,8 +1,8 @@
 ---
 type: Document source
 title: Dépliant général PROFERM, édition juin 2023
-description: Dépliant commercial de 8 pages présentant les quatre gammes en juin 2023, document de référence sur l'état des garanties, des performances thermiques initiales et des modèles de portes.
-tags: [depliant, general, perform, hybride, lumine, textural, garanties]
+description: Dépliant commercial général de 8 pages présentant en juin 2023 les portes d'entrée et les quatre gammes PERFORM, HYBRIDE, LUMINE et TEXTURAL avant leur division — équipements, coloris, finitions, garanties et labels.
+tags: [depliant, general, perform, hybride, lumine, textural, portes, garanties]
 gamme: [PERFORM, HYBRIDE, LUMINE, TEXTURAL]
 status: stable
 sources:
@@ -10,59 +10,65 @@ sources:
     id: depliant-general-2023-06
     title: Dépliant général PROFERM, édition juin 2023
     last_modified: 2023-06-30
+source_pages:
+  - resource: raw/depliant-general-2023-06.pdf
+    pages: 1-8
 generated:
   by: process:claude-code
-  at: 2026-09-17T22:30:00Z
+  at: 2026-09-25T19:00:00Z
 ---
+
 # Identité
 
 | Élément | Valeur |
 | --- | --- |
-| Éditeur | PROFERM MULTITECHNIQUES (SAS Capital 275 000 €, RCS Arras, SIRET 493 347 553 00023) |
-| Usine / Siège | 355 Avenue de Londres, ZI Artois Flandres - 62138 Douvrin |
+| Éditeur | PROFERM MULTITECHNIQUES |
 | Édition | juin 2023 |
-| Pages | 8 |
-| Nature | Commerciale, **document général de gamme** |
+| Pages | 8 pages A4 au PDF |
+| Nature | **commercial**, document général de gamme |
+| Siège et fabrication | 355 Avenue de Londres, ZI Artois Flandres, 62138 Douvrin |
+| Coordonnées | info@proferm.net · www.proferm.net · 03.21.77.42.20 [1 p. 8] |
 
-Le plus ancien document général du corpus, et son étalon d'évolution : en juin 2023, aucune des quatre gammes n'était encore subdivisée (ni 55/65 sur LUMINE, ni 70/76 sur PERFORM/HYBRIDE).
+C'est un document **général** : sur une valeur technique (classement A\*E\*V, Uw, dimension
+limite, garantie d'un composant), un document produit de la même gamme prévaut sur lui ; la
+règle ne vaut pas pour une déclaration d'ensemble de la marque, comme la garantie de la
+structure. En juin 2023, aucune gamme n'y est divisée (ni PERFORM70/76, ni LUMINE55/65, ni
+HYBRIDE70/76). Aucune donnée juridique (SAS, RCS, SIRET) n'y figure.
 
-# Registre de couverture OKF
+La page 8 porte en marge : « Création : PROFERM - Crédits photos : PROFERM - VOLMA - VERISSIMA -
+DEVGLASS - ADOBE STOCK - ASA BUILDERS SUPPLY - PIXABAY - UNSPLASH - LAKAL - TECHNAL », la réserve
+des noms, marques, logos, insignes, illustrations et photos, « Extraction des photos interdite.
+Tous droits réservés. » et « Édition juin 2023 » [1 p. 8].
 
-| Élément source | Page doc | Statut OKF | Fichier cible dans le wiki |
+# Registre de couverture
+
+Numérotation du PDF, les pages ne sont pas numérotées à l'impression. Retraitement du 25/09/2026 :
+chaque page rendue en PNG à 200 dpi (300 dpi pour les découpes et les pastilles), lue en image,
+aucune couche texte lue.
+
+| Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| Couverture, 4 gammes (PERFORM, HYBRIDE, LUMINE, TEXTURAL), garantie structure 15 ans | 1 | Intégré | [Garanties par composant](/garanties/garanties-par-composant.md) |
-| Portes d'entrée : modèle CALLIGRAPHIE (grille intégrée au vitrage), COSTA 8, IRIS, ANEMONE, FLORA, ARPEGE 2, PASIPHAE | 2 | Intégré | [Portes d'entrée](/portes/panneaux-et-monoblocs.md), [Collection Authentique](/portes/collection-authentique.md) |
-| Sélection « TOP 5 OFFRE INCONTOURNABLE » : JACOB 0, BEN 0, ACHILLE 0, CORALIE 0, WILLIAM 1 | 2 | Intégré | [Sélection Hexa](/portes/selection-hexa.md), [Collection Contemporain](/portes/collection-contemporain.md) |
-| Gamme PERFORM : PVC Greenline Kömmerling, finitions DROIT ou DESIGN, Uw jusqu'à 1,3 W/m²K, quincaillerie 1 à 9 | 3 | Intégré | [PERFORM](/gammes/perform.md) |
-| Nuancier PERFORM 2023 : teinté masse (Blanc, Ivoire 607) et 5 plaxés (Chêne irlandais, Chêne doré, Siena, 7016 veiné, Acajou) | 3 | Intégré | [PERFORM](/gammes/perform.md) |
-| Gamme HYBRIDE : mixte alu/PVC 72 mm, Uw jusqu'à 1,3 W/m²K, finitions DROIT ou DESIGN, 9 couleurs alu | 4 | Intégré | [HYBRIDE](/gammes/hybride.md), [CTR-06](/anomalies/contradictions-entre-sources.md), [CTR-13](/anomalies/contradictions-entre-sources.md) |
-| Gamme LUMINE : alu bas carbone Technal, Uw jusqu'à 1,5 W/m²K, 3 ouvrants (Droit, Design galbé, Minimal caché) | 5 | Intégré | [LUMINE](/gammes/lumine.md) |
-| Coulissant & Galandage LUMINE : coulissant 2-4 vtx / 2-4 rails, galandage 1-4 vtx / 1-3 rails, Chêne doré 2F | 5 | Intégré | [Coulissants aluminium](/gammes/coulissants-aluminium.md) |
-| Gamme TEXTURAL : mixte alu/PVC, Uw 1,3 W/m²K, finitions DROIT ou DESIGN, 12 textures intérieures présentées | 6 | Intégré | [TEXTURAL](/gammes/textural.md) |
-| Grille des garanties 2023 (Panneau de porte 7/5 ans, Plaxage 5 ans, Volet 7 ans, Ferrure Roto 10 ans) | 7 | Intégré | [Garanties par composant](/garanties/garanties-par-composant.md), [CTR-04](/anomalies/contradictions-entre-sources.md), [CTR-16](/anomalies/contradictions-entre-sources.md) |
-| Certification CSTB : PROFERM classé parmi les 5 meilleurs fabricants français au test A\*E\*V (A\*4 / E\*9A / V\*A3) | 7 | Intégré | [Labels et certifications](/certifications/labels-et-certifications.md) |
-| Crédits photos et partenaires industriels : VOLMA, VERISSIMA, DEVGLASS, LAKAL, TECHNAL | 8 | Intégré | [Informations à vérifier](/anomalies/informations-a-verifier.md) (VER-16, VER-17) |
-
-# Ce qu'il apporte seul
-
-- L'état initial des performances thermiques : **Uw 1,3 W/m²K** sur PERFORM, HYBRIDE et TEXTURAL, et **Uw 1,5 W/m²K** sur LUMINE.
-- La grille historique des garanties de 2023 :
-  - Panneaux de porte : **7 ans** (standard) et **5 ans** (plaxé), passés respectivement à 10 et 7 ans en 2026 (**CTR-16**).
-  - Plaxage : **5 ans**, passé à 10 ans en 2026.
-  - Volet roulant : **7 ans**, contre 5 ans au catalogue général 2026 (**CTR-04**).
-- La mise en avant commerciale de la sélection **« TOP 5 OFFRE INCONTOURNABLE »** pour les portes contemporaines (JACOB 0, BEN 0, ACHILLE 0, CORALIE 0, WILLIAM 1).
-- Le modèle de porte verrière **CALLIGRAPHIE** à grille intégrée au vitrage.
-- La présence des partenaires industriels **LAKAL** (volets roulants, VER-16) et **DEVGLASS** (vitrage isolant, VER-17) dans les crédits officiels.
+| 1 | couverture : quatre gammes et leurs slogans, signature, macaron « Garantie 15 ans* » ; photo d'ambiance | transcrit | [Arguments de la marque PROFERM](/commercial/proferm.md), [Garanties par composant](/garanties/garanties-par-composant.md) |
+| 2 | « Des entrées harmonieuses » : textes, modèle CALLIGRAPHIE, six modèles de portes (COSTA 8, IRIS, ANEMONE, FLORA, ARPEGE 2, PASIPHAE), « TOP 5 Offre portes d'entrée - Offre incontournable » (JACOB 0, BEN 0, ACHILLE 0, CORALIE 0, WILLIAM 1) | transcrit | [Arguments de vente des portes d'entrée](/commercial/portes-d-entree.md) |
+| 3 | PERFORM : « La fenêtre ultra durable », neuf équipements repérés et photographiés, avantages, GREENLINE KÖMMERLING, nuancier (2 teintés masse, 5 plaxés, laquage), finitions DROIT et DESIGN ; photo d'ambiance | transcrit | [PERFORM](/gammes/perform.md), [Coloris PERFORM](/coloris/coloris-perform.md), [Arguments de vente PERFORM](/commercial/perform.md) |
+| 4 | HYBRIDE : « La fenêtre écologique », avantages, sécurité renforcée, finitions élégantes, nuancier intérieur PVC et extérieur alu (9 couleurs à prix préférentiel), laquage, finitions DROIT et DESIGN ; photo d'ambiance | transcrit | [HYBRIDE](/gammes/hybride.md), [Coloris HYBRIDE](/coloris/coloris-hybride.md), [Arguments de vente HYBRIDE](/commercial/hybride.md) |
+| 5 | LUMINE : « L'aluminium en mode sublime », TECHNAL, « Le petit + », avantages, nuancier (9 couleurs extérieures standards, laquage), coulissant et galandage (teintes, vantaux et rails), trois finitions d'ouvrant ; photo d'ambiance | transcrit | [LUMINE](/gammes/lumine.md), [Coloris LUMINE](/coloris/coloris-lumine.md), [Coulissants aluminium](/gammes/coulissants-aluminium.md), [Arguments de vente LUMINE](/commercial/lumine.md) |
+| 6 | TEXTURAL : « La fenêtre déco », finitions exceptionnelles, 12 textures exclusives intérieur uniquement, avantages, finitions DROIT et DESIGN ; photos d'ambiance | transcrit | [TEXTURAL](/gammes/textural.md), [Coloris TEXTURAL](/coloris/coloris-textural.md), [Arguments de vente TEXTURAL](/commercial/textural.md) |
+| 7 | « Nos garanties » (grille, macaron 15 ans) ; « Nos certifications & labels » (NF, Qualimarine, Acotherm, CEKAL, Qualanod, greenline, CE, TECHNAL) ; CSTB et A\*4 / E\*9A / V\*A3 ; photos d'ambiance | transcrit | [Garanties par composant](/garanties/garanties-par-composant.md), [Labels et certifications](/certifications/labels-et-certifications.md), [Arguments de la marque PROFERM](/commercial/proferm.md) |
+| 8 | quatrième de couverture : signature, coordonnées, réseaux sociaux, encadré « Un projet ? Posez toutes vos questions à : », crédits photos et mentions en marge ; photos d'ambiance | transcrit | cette fiche (identité), [Arguments de la marque PROFERM](/commercial/proferm.md), [Informations à vérifier](/anomalies/informations-a-verifier.md) (**VER-16**, **VER-17**) |
 
 # Anomalies portées par ce document
 
-| Entrée | Objet |
-| --- | --- |
-| **CTR-13** | Uw HYBRIDE affiché à 1,3 W/m²K, contre 1,2 W/m²K au dépliant produit HYBRIDE du même mois. |
-| **CTR-16** | Garantie panneau de porte de 7 ans (5 ans plaxé), portée à 10 ans (7 ans plaxé) au catalogue 2026. |
-| **CTR-04** | Garantie volet roulant de 7 ans, contre 5 ans au catalogue général 2026. |
-| **VER-16** | LAKAL crédité aux photos (fournisseur de volets roulants non nommé dans les autres documents). |
-| **VER-17** | DEVGLASS crédité aux photos (transformateur verrier non nommé dans les autres documents). |
+| Entrée | Page | Objet |
+| --- | --- | --- |
+| **CTR-03** | 1, 3-7 | structure garantie 15 ans, face aux 20 ans des brochures PERFORM+/HYBRIDE+ et LUMINE65 |
+| **CTR-04** | 7 | volet roulant garanti 7 ans, face aux 5 ans du catalogue général 2026 |
+| **CTR-05** | 7 | laquage garanti 7 ans, face à la grille 25/10/7 ans du catalogue général 2026 |
+| **CTR-13** | 4 | Uw HYBRIDE 1,3 W/m²K, face au 1,2 du dépliant HYBRIDE du même mois |
+| **CTR-16** | 7 | panneau de porte garanti 7 ans (5 ans plaxé), face aux 10 ans (7 ans plaxé) de 2026 |
+| **VER-16** | 8 | LAKAL crédité des photos |
+| **VER-17** | 8 | DEVGLASS crédité des photos |
+| **VER-49** | 4 | laquage de l'HYBRIDE « si : ouverture extérieure, menuiserie cintrée », sans « uniquement sur PVC » |
 
 # Citations
 
@@ -70,10 +76,14 @@ Le plus ancien document général du corpus, et son étalon d'évolution : en ju
 
 # Voir aussi
 
-- [Garanties par composant](/garanties/garanties-par-composant.md)
 - [PERFORM](/gammes/perform.md)
 - [HYBRIDE](/gammes/hybride.md)
 - [LUMINE](/gammes/lumine.md)
 - [TEXTURAL](/gammes/textural.md)
-- [Contradictions entre sources](/anomalies/contradictions-entre-sources.md)
-
+- [Coloris PERFORM](/coloris/coloris-perform.md)
+- [Coloris HYBRIDE](/coloris/coloris-hybride.md)
+- [Coloris LUMINE](/coloris/coloris-lumine.md)
+- [Coloris TEXTURAL](/coloris/coloris-textural.md)
+- [Arguments de vente des portes d'entrée](/commercial/portes-d-entree.md)
+- [Garanties par composant](/garanties/garanties-par-composant.md)
+- [Labels et certifications](/certifications/labels-et-certifications.md)

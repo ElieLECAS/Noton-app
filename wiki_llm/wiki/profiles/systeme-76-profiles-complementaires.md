@@ -21,6 +21,10 @@ sources:
     id: dtd-6-16-2334-v5
     title: DTD n° DBV-25-6/16-2334_V5, système 76 Advanced
     last_modified: 2025-06-19
+  - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
+    id: profine-mise-en-oeuvre-76-advanced
+    title: Mise en œuvre Système 76 Advanced, profine
+    last_modified: 2023-12-14
 source_pages:
   - resource: raw/poster-systeme-76-advanced-complementaires-2022.pdf
     pages: 1
@@ -28,6 +32,8 @@ source_pages:
     pages: 6, 9, 17, 19-20
   - resource: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf
     pages: 16, 18-19, 21
+  - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
+    pages: 38, 40-53
 generated:
   by: process:claude-code
   at: 2026-09-25T17:00:00Z
@@ -115,7 +121,10 @@ référence d'embout, telle qu'elle est écrite sur la plaque [3 p. 21].
 
 Chaque largeur a deux références, une paire paire / impaire (M302 et M303, M304 et M305, …), dont
 les légendes sont gravées tête-bêche sur la plaque ; la planche ne dit pas ce qui distingue les deux
-références d'une paire. Le dessin des quatre embouts est sur
+références d'une paire. Le manuel de mise en œuvre désigne la première de chaque paire « Embout
+d'élargisseur droit » et la seconde « Embout d'élargisseur biais » (M302 et M303, M304 et M305,
+M306 et M307, M308 et M309, M310 et M311), toutes découpées dans la plaque M301 « Embout
+d'élargisseur » [4 p. 40-42]. Le dessin des quatre embouts est sur
 [Assemblages du système 76](/profiles/systeme-76-assemblages.md#embouts-délargisseurs). Les
 embouts M304 et M305 sont aussi dessinés à côté du 76706, les M310 et M311 à côté du 76714
 (tableau suivant).
@@ -123,6 +132,9 @@ embouts M304 et M305 sont aussi dessinés à côté du 76706, les M310 et M311 �
 Les capots A120, A121 et A124 sont dessinés sans cote.
 
 # Réhausses et profilés de grande hauteur
+
+Leur positionnement sur le dormant, leurs charges admissibles et leurs embouts de finition sont dans
+[Mise en œuvre des réhausses, élargisseurs et pièces d'appui du système 76 Advanced](/procedures/mise-en-oeuvre-profiles-complementaires-systeme-76.md).
 
 Sept profilés de 45 à 150 mm, que le manuel de mise en œuvre appelle **réhausses** (profilés qui
 surélèvent la menuiserie) — voir [Renforts du système 76](/profiles/systeme-76-renforts.md#renforts-des-profilés-complémentaires).
@@ -163,7 +175,7 @@ horizontales. Les 76751 et 76752 sont des appuis de la PERFORM76 — voir
 | --- | --- | --- | --- | ---: |
 | 76754 | 20 | 21 + 46 | - | ![Profilé 76754](/assets/profiles/systeme76/liaisons-tapees/profil-76754.png) |
 | 76750 | 20 | 12 + 20 | - | ![Profilé 76750](/assets/profiles/systeme76/liaisons-tapees/profil-76750.png) |
-| 76776 | 35 | 21 + 46 | 26,5 et 43 à droite | ![Profilé 76776](/assets/profiles/systeme76/liaisons-tapees/profil-76776.png) |
+| 76776 | 35 | 21 + 46 | 26,5 et 43 à droite ; même coupe référencée 76753 au manuel (**CTR-32**) | ![Profilé 76776](/assets/profiles/systeme76/liaisons-tapees/profil-76776.png) |
 | 76751 | 30 | 12 + 20 | - | ![Profilé 76751](/assets/profiles/systeme76/liaisons-tapees/profil-76751.png) |
 | 76755 | 50 | 20 | - | ![Profilé 76755](/assets/profiles/systeme76/liaisons-tapees/profil-76755.png) |
 | 76752 | 50 | 12 + 20 | - | ![Appui 76752](/assets/profiles/perform76/appuis/appui-76752.png) |
@@ -194,7 +206,7 @@ porte 20 / 56.
 
 (schéma: raw/poster-systeme-76-advanced-complementaires-2022.pdf, p. 1, deuxième colonne)
 
-La vis **G085** et la pièce **M721** sont dessinées à gauche du 76802.
+La pièce **G085** et la pièce **M721** sont dessinées à gauche du 76802 ; le manuel de mise en œuvre désigne la G085 « Joint brosse » [4 p. 53].
 
 | Pièce | Dessin |
 | --- | ---: |
@@ -234,7 +246,8 @@ hachurés dans ses chambres :
 ![Appui 76768 avec les embouts de remplissage M780, M781 et M782](/assets/profiles/systeme76/appuis/embouts-m780-m781-m782.png)
 
 De gauche à droite dans les chambres de l'appui : M780, M781, M782. Les cotes de 196, 136, 31 et
-14 mm sont celles de l'appui.
+14 mm sont celles de l'appui. Le manuel de mise en œuvre donne pour le 76768 un seul « Embout de
+remplissage », **M612**, dessiné en trois morceaux — entrée **CTR-33** [4 p. 45].
 
 (schéma: raw/poster-systeme-76-advanced-complementaires-2022.pdf, p. 1, deuxième colonne)
 
@@ -398,6 +411,9 @@ légende, avec le dormant 76178 dans
 
 Les **profilés de liaison** assemblent deux menuiseries côte à côte (accouplement). Cotes
 relevées sur la planche, en mm.
+La mise en œuvre de chaque accouplement — dimensions maximales par pression de vent, inerties
+totales, vis, perçages et étanchéité — est dans
+[Accouplement d'éléments du système 76 Advanced](/procedures/accouplement-elements-systeme-76.md).
 
 | Profilé | Largeur (mm) | Hauteur (mm) | Autres cotes (mm) | Renfort écrit dans la coupe | Coupe |
 | --- | --- | --- | --- | --- | ---: |
@@ -443,7 +459,9 @@ suivent leur position. Les pièces **M364T** « pièce d'étanchéité pour 7660
 # Poteaux d'angle
 
 Le **poteau d'angle** réunit deux menuiseries posées en angle. Chaque poteau est dessiné avec son
-renfort dans la chambre, son isolant, son clameau et une coupe de montage.
+renfort dans la chambre, son isolant, son clameau et une coupe de montage. Leur fabrication (embout M344, fraisages,
+dimensions maximales) est dans
+[Accouplement d'éléments du système 76 Advanced](/procedures/accouplement-elements-systeme-76.md#poteaux-dangle).
 
 | Poteau | Cotes (mm) | Renfort écrit dans la coupe | Isolant | Clameau et embout | Coupe |
 | --- | --- | --- | --- | --- | ---: |
@@ -701,6 +719,231 @@ Les **S048, S049 et S050** sont les entretoises d'assemblage de meneau — voir
 [Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md#assemblage-mécanique-du-meneau-système-76).
 La vis **S075** est aussi nommée dans la légende de la pièce 93051 (« vis plot S075 »).
 
+# Cotes portées sur les planches du manuel de mise en œuvre
+
+Le manuel de mise en œuvre du système 76 Advanced redessine les profilés complémentaires un par
+planche, sous un titre qui donne leur famille et leur cote nominale (registre 2.1.3 « Plan des
+Profilés », PDF p. 38 à 53). Les renforts, embouts et pièces de chaque planche sont dans
+[Nomenclature des profilés complémentaires du système 76](/profiles/systeme-76-accessoires-profiles-complementaires.md).
+
+## Compensateur 76298
+
+Le **compensateur 76298** est un petit profilé clippé sur la face d'un ouvrant ; la cote
+horizontale est sa largeur, les deux cotes verticales sa hauteur à gauche et à droite.
+
+| Profilé | Titre de la planche | Largeur (mm) | Hauteur à gauche (mm) | Hauteur à droite (mm) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 76298 | 76298 Compensateur | 28 | 18,7 | 12 | ![Compensateur 76298](/assets/profiles/systeme76/compensateurs/compensateur-76298.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 38, registre 2.1.3, p. 1)
+
+Le **76299**, titré « 76299 Compensateur » sur la même planche, y porte les cotes de la traverse
+complémentaire d'ouvrant (76 mm d'épaisseur, 99,4 mm à gauche, 118 mm à droite) — voir
+[Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md#cotes-des-traverses-douvrant).
+
+## Élargisseurs et réhausses
+
+Les quatre élargisseurs **76700, 76701, 76702 et 76703** portent au manuel les mêmes cotes que
+dans le tableau *Élargisseurs* plus haut : 15, 30, 60 et 120 mm d'élargissement pour 76 mm
+d'épaisseur [4 p. 40-41].
+
+Chaque **réhausse** est dessinée en coupe avec une cote verticale à gauche (hauteur hors tout,
+aile comprise), une cote verticale à droite (hauteur du corps) et une cote horizontale en bas
+(épaisseur) ; la 76709 porte en plus deux cotes horizontales en haut.
+
+| Réhausse | Titre de la planche | Cote verticale gauche (mm) | Cote verticale droite (mm) | Cote horizontale basse (mm) | Autres cotes (mm) | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 76704 | Réhausse 45 mm | 53 | 45 | 76 | - | ![Profilé 76704](/assets/profiles/systeme76/rehausses/rehausse-76704.png) |
+| 76706 | Réhausse 45 mm | 53 | 45 | 76 | - | ![Profilé 76706](/assets/profiles/systeme76/rehausses/rehausse-76706.png) |
+| 76705 | Réhausse 150 mm | 158 | 150 | 76 | - | ![Profilé 76705](/assets/profiles/systeme76/rehausses/rehausse-76705.png) |
+| 76708 | Réhausse 50 mm | 58,5 | 50 | 55 | - | ![Profilé 76708](/assets/profiles/systeme76/rehausses/rehausse-76708.png) |
+| 76709 | Réhausse 100 mm | 108,3 | 99,8 | 55 | 88 et 76 en haut | ![Profilé 76709](/assets/profiles/systeme76/rehausses/rehausse-76709.png) |
+| 76715 | Réhausse 50 mm, complément pour 76708 | - | 50 | 55 | - | ![Profilé 76715](/assets/profiles/systeme76/rehausses/rehausse-76715.png) |
+| 76722 | Réhausse 35 mm | - | 35 | 67 | - | ![Profilé 76722](/assets/profiles/systeme76/rehausses/rehausse-76722.png) |
+| 76777 | Réhausse 55 mm | 63,5 | 55 | 76 | - | ![Profilé 76777](/assets/profiles/systeme76/rehausses/rehausse-76777.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 41 à 43, registre 2.1.3, p. 3 à 5)
+
+Les coupes des 76704 à 76709 sont celles du poster, relues contre le manuel ; celles des 76715,
+76722 et 76777, que le poster ne dessine pas, sont celles du manuel. La 76777 est cotée « 63.5 »,
+avec un point. La 76715 est dessinée clippée sous la 76708. Trois réhausses ont au manuel des
+cotes que le poster n'a pas ou qui diffèrent : la **76704 et la 76706** ont une cote gauche de
+53 mm, que le poster ne porte pas ; la **76705** une cote gauche de 158 mm ; la **76708** est
+cotée **58,5 mm** à gauche (58 sur le poster) et la **76709** **108,3 et 99,8 mm** (une seule cote
+de 100 mm sur le poster) — entrée **CTR-23** du registre
+[Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
+
+## Élargisseur ProEnergy Z002
+
+Le **Z002 « Elargisseur ProEnergy »** est un bloc de 75 mm d'épaisseur, dessiné en coupe avec
+deux matières différenciées par leur hachure et en perspective ; sa hauteur, cotée « voir
+tableau », dépend de la variante [4 p. 44].
+
+| Variante Système 76 | Hauteur X (mm) |
+| --- | --- |
+| Z002B | 150 |
+| Z002C | 200 |
+| Z002D | 250 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 44, registre 2.1.3, p. 6)
+
+![Élargisseur ProEnergy Z002](/assets/profiles/systeme76/elargisseurs/elargisseur-proenergy-z002.png)
+
+À gauche, la coupe du Z002 : 75 mm d'épaisseur en haut, la hauteur « voir tableau » à gauche ; à
+droite, le même bloc en perspective. La planche ne nomme pas les matières hachurées.
+
+## Pièces d'appui, profilé de finition et profilé de raccordement
+
+Chaque **pièce d'appui** est dessinée clippée sous le pied du dormant, tracé en trait fin. Cotes
+relevées sur la planche : la longueur hors tout (cote horizontale du haut), la seconde cote
+horizontale, la hauteur au nez (cote verticale de gauche) et la hauteur côté dormant (cote
+verticale de droite).
+
+| Pièce d'appui | Titre de la planche | Longueur hors tout (mm) | Seconde cote horizontale (mm) | Hauteur au nez (mm) | Hauteur côté dormant (mm) | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 76759 | 76759 Pièce d'appui 40 mm | 53 | 40 | 10,5 | - | ![Profilé 76759](/assets/profiles/systeme76/appuis/profil-76759.png) |
+| 76760 | 76760 Pièce d'appui 65 mm | 113,5 | 65 | 18 | - | ![Profilé 76760](/assets/profiles/systeme76/appuis/profil-76760.png) |
+| 76758 | 76758 Pièce d'appui 80 mm | 144, soit 80 + 64 | 80 | 25,5 | 20 | ![Appui 76758](/assets/profiles/perform76/appuis/appui-76758.png) |
+| 76766 | 76766 Pièce d'appui | 62 | 49,5 | 35 | - | ![Pièce d'appui 76766](/assets/profiles/systeme76/appuis/piece-appui-76766.png) |
+| 6136 | 6136 Pièce d'appui de 127 mm | 127 | - | 23,5 | 14 | ![Appui 6136](/assets/profiles/perform76/appuis/appui-6136.png) |
+| 6137 | 6137 Pièce d'appui de 157 mm | 156,5 | - | 23,5 | 14 | ![Appui 6137](/assets/profiles/perform76/appuis/appui-6137.png) |
+| 76768 | 76768 Pièce d'appui de 196 mm | 196 | 136 | 42 | 14 | ![Appui 76768](/assets/profiles/perform76/appuis/appui-76768.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 45, registre 2.1.3, p. 7)
+
+Le **76758** porte la mention « blanc, crème ou avec film ». Le **76766** descend à la verticale
+sur 35 mm sous son nez. Le **76760** est coté 113,5 mm hors tout, cote que le poster ne porte pas.
+Le **6137**, titré « Pièce d'appui de 157 mm », est coté 156,5 mm — entrée **INC-45** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md). Les secondes cotes horizontales de
+70 et 100 mm (ou 67 et 97 mm) des 6136 et 6137 (entrée **CTR-24**) ne sont pas portées au manuel.
+Le **76768** est coté **42 mm** au nez, contre 31 mm sur le poster — entrée **CTR-23**.
+
+| Profilé | Titre de la planche | Largeur (mm) | Épaisseur sous le dormant (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| 76761 | 76761 Profilé de finition | 75 | 3,5 | ![Profilé 76761](/assets/profiles/systeme76/liaisons-tapees/profil-76761.png) |
+| 76822 | 76822 Profilé de raccordement | 72 | 3,5 | ![Profilé 76822](/assets/profiles/perform76/assemblage/clip-corniere-76822.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 45, registre 2.1.3, p. 7)
+
+La cote de 3,5 mm est prise entre la face du dormant et le dessous du profilé. Le poster porte
+pour le 76761 une hauteur de 9,2 mm, que le manuel ne porte pas. Le **76822** est titré « Profilé de
+raccordement » au manuel ; il est désigné clip cornière des poteaux d'angle dans
+[Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md).
+
+## Réhausses 76754 et 76753
+
+Deux réhausses sont dessinées clippées sous le pied du dormant : cote verticale gauche (hauteur de
+la réhausse), cotes horizontales basses (aile de 21 mm et corps de 46 mm), et à droite deux cotes
+verticales prises depuis le dessous du dormant.
+
+| Réhausse | Titre de la planche | Hauteur (mm) | Cotes horizontales (mm) | Cotes verticales à droite (mm) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 76754 | 76754 Réhausse de 20 mm | 20 | 21 + 46 | 11,5 et 28 | ![Profilé 76754](/assets/profiles/systeme76/liaisons-tapees/profil-76754.png) |
+| 76753 | 76753 Réhausse de 35 mm | 35 | 21 + 46 | 26,5 et 43 | ![Appui 76753](/assets/profiles/perform76/appuis/appui-76753.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 46, registre 2.1.3, p. 8)
+
+**La coupe cotée 35 / 21 + 46 / 26,5 et 43 porte la référence 76753 au manuel et au cahier
+PERFORM76, 76776 sur le poster** (tableau *Profilés de pied de dormant* plus haut) — entrée
+**CTR-32** du registre [Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
+
+## Tapées PVC
+
+Les sept tapées sont redessinées une par planche, toutes de 35 mm de haut, sous les titres
+« 6138 Tapée de 15 mm », « 6139 Tapée de 35 mm », « 6140 Tapée de 55 mm », « 6141 Tapée de
+75 mm », « 6142 Tapée de 95 mm », « 76772 Tapée de 115 mm » et « 76769 Tapée de 135 mm ». Leurs
+largeurs cotées sont celles du tableau *Tapées PVC* plus haut, sauf la **6141**, cotée **75,5 mm**
+sous un titre de 75 mm — entrée **INC-45** [4 p. 47]. La largeur de 75,5 mm est celle que
+[Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) donne à la variante
+6141.1.
+
+## Réhausses clippées sous le pied du dormant
+
+Les quatorze profilés que le poster dessine clippés sous le pied du dormant (tableau *Profilés de
+pied de dormant* plus haut) sont titrés **« Réhausse »** au manuel, avec leur hauteur. Le manuel
+porte en plus, à droite, la cote verticale prise depuis le haut du dormant, et la décomposition
+complète de la cote horizontale basse.
+
+| Réhausse | Titre de la planche | Hauteur (mm) | Cotes horizontales basses (mm) | Cote verticale droite (mm) | Autres cotes (mm) | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 76750 | 76750 Réhausse de 20 mm | 20 | 12 + 20 + 44 | 28,5 | - | ![Profilé 76750](/assets/profiles/systeme76/liaisons-tapees/profil-76750.png) |
+| 76751 | 76751 Réhausse de 30 mm | 30 | 12 + 20 + 44 | 38,5 | - | ![Profilé 76751](/assets/profiles/systeme76/liaisons-tapees/profil-76751.png) |
+| 76752 | 76752 Réhausse de 50 mm | 50 | 12 + 20 + 44 | 58,5 | - | ![Appui 76752](/assets/profiles/perform76/appuis/appui-76752.png) |
+| 76762 | 76762 Réhausse de 20 mm | 20 | 8,4 + 15 + 52,6 | 28,5 | - | ![Profilé 76762](/assets/profiles/systeme76/liaisons-tapees/profil-76762.png) |
+| 76763 | 76763 Réhausse de 35 mm | 35 | 8,4 + 15 + 52,6 | 43,5 | - | ![Profilé 76763](/assets/profiles/systeme76/liaisons-tapees/profil-76763.png) |
+| 76764 | 76764 Réhausse de 20 mm | 20 | 20,8 + 15 | 28,5 | - | ![Profilé 76764](/assets/profiles/systeme76/liaisons-tapees/profil-76764.png) |
+| 76765 | 76765 Réhausse de 35 mm | 35 | 20,8 + 15 | 43,5 | - | ![Profilé 76765](/assets/profiles/systeme76/liaisons-tapees/profil-76765.png) |
+| 76756 | 76756 Réhausse de 14 mm | 14 | 8,8 + 46 ; 71,6 hors tout | 22 | ~10 à droite | ![Profilé 76756](/assets/profiles/systeme76/liaisons-tapees/profil-76756.png) |
+| 76757 | 76757 Réhausse de 27,5 mm | 27,5 | 52 + 39 | 35,8 | 15 en haut à gauche | ![Profilé 76757](/assets/profiles/systeme76/liaisons-tapees/profil-76757.png) |
+| 76755 | 76755 Réhausse de 50 mm | 50 | 20 + 55,9 | 58,5 | - | ![Profilé 76755](/assets/profiles/systeme76/liaisons-tapees/profil-76755.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 48, registre 2.1.3, p. 10)
+
+La **76765** est cotée **35 mm** au manuel, 35,2 mm sur le poster — entrée **CTR-23**. Les 76754
+et 76753 sont dans *Réhausses 76754 et 76753* plus haut.
+
+## Profilés de liaison
+
+Les profilés de liaison sont redessinés au manuel avec les cotes du tableau *Profilés de
+liaison* plus haut, à quatre compléments près [4 p. 49-52] :
+
+- le **76604**, « Profilé de liaison », porte 80 mm hors tout, 76 mm entre ses deux ailes et
+  17,5 mm de haut ; la cote de 5 mm du poster n'y est pas ;
+- le **76606**, « Profilé de liaison », porte 4,8 mm de large, 17 mm de haut et une seconde cote
+  verticale de **12 mm** ;
+- le **76605**, « Profilé de liaison-H », porte 93,8, 76, 48 et 44 mm ; le **76608**,
+  « Profilé de liaison-H », 115, 76 et deux fois 48 mm, avec un détail « Z » de ses deux becs ;
+- le **A250**, « Profilé de liaison » aluminium, est coté **75,2 × 38,6 mm** (75 × 38,5 sur le
+  poster — entrée **CTR-23**), avec la mention « A250 Alu IW = 79 cm⁴ — Valeur de remplacement
+  acier IW = 26 cm⁴ ».
+
+![Détail Z du profilé de liaison 76608](/assets/profiles/systeme76/liaisons/detail-z-76608.png)
+
+Le détail Z agrandit le bec du 76608 repéré « Z » en haut et en bas de la coupe ; une partie
+grisée du bec y est cotée 23 mm. La planche ne dit pas ce que représente la partie grisée.
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 51, registre 2.1.3, p. 13)
+
+## Battements intérieurs
+
+Les battements intérieurs sont redessinés au manuel avec les largeurs et épaisseurs du tableau
+*Battements intérieurs* plus haut (1547 : 60 × 12,9 ; 6133 : 54 × 12,9 ; 6131 : 54 × 12,6 ;
+6129 : 58 × 11,9 ; 76833 : 48 × 12,1), plus un sixième que le poster ne dessine pas :
+
+| Battement | Titre de la planche | Largeur (mm) | Épaisseur (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| 1458 | 1458 Battement intérieur | 46 | 12,9 | ![Battement 1458](/assets/profiles/systeme76/battements-interieurs/battement-1458.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 49, registre 2.1.3, p. 11)
+
+La planche du **76833** est titrée « **78833** Battement intérieur », sa coupe légendée 76833 —
+entrée **INC-46** [4 p. 50].
+
+## Poteaux d'angle et profilé d'adaptation 76821
+
+Chaque poteau d'angle est dessiné avec, à sa gauche, le **76821 « Profilé d'adaptation »**
+(13,5 × 67,5 mm, comme au poster). Le manuel porte sur chaque poteau deux cotes verticales, la
+hauteur hors tout et, dans le poteau, une cote de 78 mm.
+
+| Poteau | Titre de la planche | Cote horizontale (mm) | Hauteur hors tout (mm) | Cote verticale intérieure (mm) |
+| --- | --- | --- | --- | --- |
+| 8340 | 8340 Poteau d'angle variable | 106 | 90 | 78 |
+| 8341 | 8341 Poteau d'angle variable | 46 | 90 | 78 |
+| 8355 | 8355 Poteau d'angle 90° | 103,8 | 90,2 | 78 |
+| 8356 | 8356 Poteau d'angle 135° | 53 | 90 | 78 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 52 et 53, registre 2.1.3, p. 14 et 15)
+
+Les coupes sont celles du tableau *Poteaux d'angle* plus haut. Le retour du **8356** est coté
+**53 mm**, comme au poster (entrée **CTR-23**).
+
+## Profilés de volet 76800, 76801 et 76802
+
+Le manuel titre le **76800 « Profilé de guidage tablier »**, le **76801 « Profilé de
+raccordement »** et le **76802 « Profilé de jonction CVR »** ; leurs cotes sont celles du tableau
+*Profilés 76800, 76801 et 76802* plus haut (38,2 × 15,3 ; 46,7 × 14 et ~10 ; 112,7 × 14,4 et
+~10) [4 p. 53].
+
 # Citations
 
 [1] [Poster Système 76 Advanced, profilés complémentaires, 2022](raw/poster-systeme-76-advanced-complementaires-2022.pdf), p. 1
@@ -708,6 +951,8 @@ La vis **S075** est aussi nommée dans la légende de la pièce 93051 (« vis pl
 [2] [DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED](raw/dta-trocal-76-advanced-6-16-2334-v5.pdf)
 
 [3] [DTD n° DBV-25-6/16-2334_V5, système 76 Advanced](raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf)
+
+[4] [Mise en œuvre Système 76 Advanced, profine](raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf), registre 2.1.3, PDF p. 38 à 53
 
 # Voir aussi
 

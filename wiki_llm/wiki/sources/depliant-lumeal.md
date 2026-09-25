@@ -1,8 +1,8 @@
 ---
 type: Document source
 title: Dépliant LUMÉAL, édition avril 2026
-description: Dépliant commercial de 2 planches (4 pages A4) sur la baie coulissante LUMÉAL à ouvrant caché, source la plus récente du corpus, détaillant les performances RC3, l'alu bas carbone et le nuancier sans bicoloration.
-tags: [depliant, lumeal, coulissant, technal, rc3, bas-carbone]
+description: Dépliant commercial en 2 planches doubles sur la baie coulissante aluminium à ouvrant caché LUMÉAL, réédition du dépliant de juin 2023 — mêmes valeurs, « pas de bicoloration possible », labels Origine France Garantie, mentions légales complètes.
+tags: [depliant, lumeal, coulissant, technal, ouvrant-cache, aluminium]
 gamme: LUMINE
 systeme: LUMEAL GA
 fournisseur: TECHNAL
@@ -12,63 +12,65 @@ sources:
     id: depliant-lumeal-2026-04
     title: Dépliant LUMÉAL, édition avril 2026
     last_modified: 2026-04-21
+source_pages:
+  - resource: raw/depliant-lumeal-2026-04.pdf
+    pages: 1-2
 generated:
   by: process:claude-code
-  at: 2026-09-17T21:30:00Z
+  at: 2026-09-25T18:00:00Z
 ---
+
 # Identité
 
 | Élément | Valeur |
 | --- | --- |
-| Éditeur | PROFERM MULTITECHNIQUES (SAS Capital 275 000 €, RCS Arras, SIRET 493 347 553 00023) |
-| Usine / Siège | 355 Avenue de Londres, ZI Artois Flandres - 62138 Douvrin |
+| Éditeur | PROFERM MULTITECHNIQUES |
 | Édition | avril 2026 |
-| Pages | 2 planches doubles recto-verso (4 pages A4) |
-| Nature | Commerciale, **document produit coulissant minimal à ouvrant caché** |
-| Fichier de mise en page | `2025-10_DEPLIANT LUMEAL_PRINT.indd`, impression datée du 21/04/2026 |
+| Pages | 2 planches doubles au PDF (quatre pages A4, deux par planche), avec traits de coupe et gammes de couleurs d'impression |
+| Nature | **commercial**, document produit de la baie coulissante aluminium à ouvrant caché LUMÉAL |
+| Fichier de mise en page | `2025-10_DEPLIANT LUMEAL_PRINT.indd`, pages datées du 21/04/2026 [1 p. 1, 2] |
+| Siège et fabrication | 355 Avenue de Londres, ZI Artois Flandres, 62138 Douvrin |
+| Coordonnées | info@proferm.net · www.proferm.net · 03.21.77.42.20 [1 p. 1] |
+| Données juridiques | SAS Capital 275 000 € · RCS Arras · SIRET 493 347 553 00023 · TVA intracommunautaire FR84 493 347 553 [1 p. 1] |
 
-**Source la plus récente du corpus**, postérieure de trois mois au catalogue général.
+C'est le document **produit** du LUMÉAL, réédition de celui de [juin 2023](/sources/depliant-lumeal-2023.md) :
+planche 1 = pages 4 et 1 de 2023, planche 2 = pages 2 et 3. Les pages intérieures portent le
+bandeau « LUMINE ». Le LUMÉAL n'a pas de page gamme propre : il se rattache à la gamme LUMINE par
+la page [Coulissants aluminium](/gammes/coulissants-aluminium.md).
 
-# Registre de couverture OKF
+La marge de la planche 1 porte : « Création : PROFERM - Crédits photos : PROFERM. Impression :
+DBprint », la réserve des noms, marques, logos, insignes, illustrations et photos, « Extraction
+des photos interdite. Tous droits réservés. Document non contractuel. », la réserve du droit de
+modifier sans préavis les informations présentes dans le document, les données juridiques, « Ne
+pas jeter sur la voie publique. Pensez au recyclage : document papier à déposer dans le bac de
+tri. » et « Édition avril 2026 », avec les logos PEFC (10-32-2225) et Imprim'Vert [1 p. 1].
 
-| Élément source | Page doc | Statut OKF | Fichier cible dans le wiki |
+# Registre de couverture
+
+Numérotation du PDF (2 planches). Retraitement du 25/09/2026 : chaque planche rendue en PNG à
+150 et 300 dpi, lue en image, marge légale et pied de page agrandis, aucune couche texte lue ;
+comparaison bloc par bloc avec le dépliant de juin 2023. Les textes, chiffres, photos, schémas et
+pastilles sont ceux de 2023, aux différences près nommées dans la colonne Contenu ; les images
+découpées sur le dépliant de 2023 servent pour les deux éditions.
+
+| Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| Définition coulissant minimal ouvrant caché LUMÉAL | 1, 2 | Intégré | [Coulissants aluminium](/gammes/coulissants-aluminium.md) |
-| Aluminium bas carbone TECHNAL (min 75% recyclé, 2,3 kg CO2/kg alu) | 2 | Intégré | [Coulissants aluminium](/gammes/coulissants-aluminium.md), [TECHNAL](/fournisseurs/technal.md) |
-| Masse alu réduite de -35%, face vue 68 mm et 77 mm (vs 150 mm traditionnel) | 2 | Intégré | [Coulissants aluminium](/gammes/coulissants-aluminium.md) |
-| Gain de clair de vitrage de +8 % à +14 % selon pose (ouvrant invisible) | 2 | Intégré | [Coulissants aluminium](/gammes/coulissants-aluminium.md) |
-| Performances thermiques : Uw = 1.2 W/m²K, Sw = 0.46, TLw = 0.65 (vitrage 28 mm) | 1, 2 | Intégré | [Coulissants aluminium](/gammes/coulissants-aluminium.md) |
-| AEV : A\*4 / E\*7A / V\*B3 (2 vantaux H 2,5 x L 3 m) | 2 | Intégré | [Coulissants aluminium](/gammes/coulissants-aluminium.md), [CTR-08](/anomalies/contradictions-entre-sources.md) |
-| Étanchéité à l'air : perméabilité 1,39 m³/h/m² (1 vantail + fixe H 2,5 x L 3 m) | 2 | Intégré | [Coulissants aluminium](/gammes/coulissants-aluminium.md) |
-| Sécurité anti-effraction : Classe de résistance 3 (RC3 selon EN 1627-30) | 2 | Intégré | [Coulissants aluminium](/gammes/coulissants-aluminium.md) |
-| Configurations de baies (2 vtx 2 rails, 3 vtx 2-3 rails, 4 vtx 2-3 rails, 6 vtx 3 rails) | 2 | Intégré | [Coulissants aluminium](/gammes/coulissants-aluminium.md) |
-| Cotes max : H 2,70 x L 2,25 m / vtx, baie max 6 m, charge max 300 kg / vtx | 2 | Intégré | [Coulissants aluminium](/gammes/coulissants-aluminium.md) |
-| 4 poignées Technal (Design minimal standard, bouton KOBE, droite TOKYO, inclinée KYOTO) | 2 | Intégré | [Coulissants aluminium](/gammes/coulissants-aluminium.md), [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) |
-| Nuancier sans bicoloration (3 standards + 7 à prix préférentiel + laquage RAL sur mesure) | 2 | Intégré | [Coulissants aluminium](/gammes/coulissants-aluminium.md), [CTR-10](/anomalies/contradictions-entre-sources.md) |
-| Grille des garanties (Structure 15 ans, Laquage 7 ans, Ferrure Technal 10 ans, Autre 2 ans, Vitrage 10 ans, Volet 7 ans) | 2 | Intégré | [Garanties par composant](/garanties/garanties-par-composant.md), [CTR-04](/anomalies/contradictions-entre-sources.md), [CTR-09](/anomalies/contradictions-entre-sources.md) |
-| Certifications : CEKAL, Acotherm, Qualanod, Qualicoat, Qualimarine Certifié, CE, AFNOR Cert. 112799, Origine France Garantie | 2 | Intégré | [Labels et certifications](/certifications/labels-et-certifications.md) |
-
-# Ce qu'il apporte seul
-
-- La certification de **résistance à l'effraction RC3 (EN 1627-30)**, unique parmi les coulissants de l'offre PROFERM.
-- La mesure de perméabilité à l'air de **1,39 m³/h/m²** en configuration 1 vantail + fixe.
-- Le gain de clair de vitrage chiffré de **+8 % à +14 %** selon le type de pose.
-- L'interdiction formelle de la bicoloration sur LUMÉAL : **« Pas de bicoloration possible »**.
-- L'empreinte carbone certifiée de **2,3 kg de CO₂ par kg d'aluminium** (TECHNAL 75% recyclé).
-- La confirmation de la garantie de **10 ans sur la ferrure Technal** et de **7 ans sur volet roulant**.
+| 1 | planche extérieure : à gauche la quatrième de couverture (encadré « Un projet ? Posez toutes vos questions à : », réseaux sociaux, mentions légales complètes, PEFC, Imprim'Vert), à droite la couverture (« Masse d'aluminium réduite de 35 % », « Jusqu'à Uw = 1.2/m².K ») ; photos d'ambiance | transcrit | cette fiche (identité), [Arguments de vente LUMINE](/commercial/lumine.md), [Labels et certifications](/certifications/labels-et-certifications.md), [Coulissants aluminium](/gammes/coulissants-aluminium.md) |
+| 2 | planche intérieure : « LUMÉAL, le coulissant minimal », avantages, aluminium bas carbone TECHNAL, « Un design exclusif », ouvertures et dimensions maximales ; poignées, vitrage 28 mm, coloris avec renvoi « Pas de bicoloration possible » et sans faces pour les couleurs à prix préférentiel, « Le petit + », grille des garanties, code QR « Toutes nos garanties », logos Origine France Garantie, CEKAL, CE, Acotherm, Qualanod, Qualimarine ; photos d'ambiance | transcrit | [Coulissants aluminium](/gammes/coulissants-aluminium.md), [Coloris LUMINE](/coloris/coloris-lumine.md), [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md), [Garanties par composant](/garanties/garanties-par-composant.md), [Labels et certifications](/certifications/labels-et-certifications.md), [TECHNAL](/fournisseurs/technal.md), [Arguments de vente LUMINE](/commercial/lumine.md) |
 
 # Anomalies portées par ce document
 
-| Entrée | Objet |
-| --- | --- |
-| **CTR-08** | Classement AEV A\*4 / E\*7A / V\*B3, contre E\*6A / V\*B2 au catalogue général. |
-| **CTR-09** | Ferrure Technal garantie 10 ans sur le fonctionnement, contre 2 ans (rangée dans « autre ferrure ») au catalogue général. |
-| **CTR-10** | Nuancier spécifique de 10 coloris sans bicoloration possible, excluant le Chêne doré 2 faces affiché au catalogue général. |
-| **CTR-04** | Garantie volet roulant de 7 ans, réaffirmée après le catalogue général (qui annonce 5 ans). |
-
-# Non transcrit
-
-Aucune section de profilé détaillée hors faces vues de 68 et 77 mm.
+| Entrée | Page | Objet |
+| --- | --- | --- |
+| **CTR-03** | 2 | structure garantie 15 ans, face aux 20 ans des brochures PERFORM+/HYBRIDE+ et LUMINE65 |
+| **CTR-04** | 2 | volet roulant garanti 7 ans, face aux 5 ans du catalogue général |
+| **CTR-05** | 2 | laquage garanti 7 ans sans distinction de couleur |
+| **CTR-08** | 2 | classement A\*E\*V A\*4 / E\*7A / V\*B3 sur 2 vantaux H 2,5 × L 3 m |
+| **CTR-09** | 2 | ferrure Technal garantie 10 ans sur le fonctionnement, autre ferrure 2 ans |
+| **CTR-10** | 2 | nuancier propre et « Pas de bicoloration possible », face au nuancier des coulissants du catalogue général |
+| **CTR-29** | 2 | 4 vantaux sur 2 ou 3 rails |
+| **INC-02** | 2 | Uw 1,2, Sw 0,46, TLw 0,65 du LUMÉAL, face au Uw 1,4 « des coulissants » du catalogue général |
+| **VER-53** | 2 | Hydro CIRCAL et alliage 6060 T6 attribués à tort à cette page |
 
 # Citations
 
@@ -76,10 +78,10 @@ Aucune section de profilé détaillée hors faces vues de 68 et 77 mm.
 
 # Voir aussi
 
-- [Coulissants aluminium](/gammes/coulissants-aluminium.md)
-- [LUMINE](/gammes/lumine.md)
-- [TECHNAL](/fournisseurs/technal.md)
-- [Garanties par composant](/garanties/garanties-par-composant.md)
-- [Contradictions entre sources](/anomalies/contradictions-entre-sources.md)
 - [Dépliant LUMÉAL, édition juin 2023](/sources/depliant-lumeal-2023.md)
-
+- [Coulissants aluminium](/gammes/coulissants-aluminium.md)
+- [Coloris LUMINE](/coloris/coloris-lumine.md)
+- [Arguments de vente LUMINE](/commercial/lumine.md)
+- [Garanties par composant](/garanties/garanties-par-composant.md)
+- [Labels et certifications](/certifications/labels-et-certifications.md)
+- [TECHNAL](/fournisseurs/technal.md)

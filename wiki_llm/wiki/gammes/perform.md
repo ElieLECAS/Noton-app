@@ -98,6 +98,34 @@ Les dix photos, dans l'ordre des repères, montrent chaque équipement de près 
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 6)
 
+## Équipements présentés en juin 2023
+
+Le dépliant général de juin 2023 repère neuf équipements de la PERFORM, numérotés de 1 à 9 sur une
+fenêtre à deux vantaux ; le tableau reprend la légende de chaque photo [3 p. 3]. Ce sont les neuf
+premiers repères de 2026, dans le même ordre et avec les mêmes mots ; le repère 10 de 2026 (profil
+PERFORM76 à 3 joints et 6 chambres) n'existe pas en juin 2023, où la gamme n'est pas divisée.
+
+| Repère | Équipement ou procédé, juin 2023 |
+| --- | --- |
+| 1 | Pivot symétrique systématique |
+| 2 | Profils à structure totalement renforcée KÖMMERLING® |
+| 3 | Parclose arrondie ou moulurée |
+| 4 | Pivot pouvant supporter le poids d'une fenêtre jusqu'à 130 kg |
+| 5 | Système sécurité : rouleau champignon anti-dégondage et anti-effraction |
+| 6 | Système anti-fausse manœuvre et levier de vantail |
+| 7 | Soudure finition grain d'orge. Assemblage en coupe d'onglet |
+| 8 | Câle anti-fatigue et jonc de finition en partie basse du dormant |
+| 9 | Compression et sécurité doublée grâce à la crémone du semi-fixe |
+
+![Équipements PERFORM de juin 2023, repères sur la fenêtre](/assets/gammes/perform/equipements-2023-reperes.png)
+
+![Équipements PERFORM de juin 2023, photos 1 à 9](/assets/gammes/perform/equipements-2023-photos.png)
+
+(schéma: raw/depliant-general-2023-06.pdf, p. 3)
+
+Les finitions DROIT et DESIGN sont présentées en juin 2023 avec les mêmes coupes d'angle que celles
+du profil 70 mm ci-dessus [3 p. 3].
+
 ## Menuiseries sur mesure et cintrage
 
 PROFERM est doté d'un atelier de cintrage (mise en forme courbe des profilés) et fabrique des
@@ -140,6 +168,18 @@ domotiques ([Volets roulants](/equipements/volets-roulants.md)) [1 p. 7].
   voir [Labels et certifications](/certifications/labels-et-certifications.md) [1 p. 7].
 - **Isolation thermique** : Uw jusque 1,3 W/m²K en PERFORM70 et jusque 0,8 W/m²K en PERFORM76
   [1 p. 7].
+
+Uw annoncé de la PERFORM, par période ; une ligne par période et par déclinaison :
+
+| Période (document) | Déclinaison | Uw « jusque » (W/m²K) |
+| --- | --- | --- |
+| juin 2023 (dépliant général) | PERFORM, gamme non divisée | 1,3 |
+| janvier 2026 (catalogue général) | PERFORM70 | 1,3 |
+| janvier 2026 (catalogue général) | PERFORM76 | 0,8 |
+
+(schéma: raw/depliant-general-2023-06.pdf, p. 3 ; raw/catalogue-general-2026-01.pdf, p. 7)
+
+La valeur de juin 2023 est imprimée « Uw jusque 1.3/m²K », sans le W de l'unité [3 p. 3].
 - **Résistance à l'effraction RC2** et **construction passive** de la fenêtre PERFORM76 : voir
   [Labels et certifications](/certifications/labels-et-certifications.md) [1 p. 34].
 
@@ -169,7 +209,8 @@ finition et ses restrictions, est sur [Coloris PERFORM](/coloris/coloris-perform
 - **Pas de cintrage en PERFORM76** : le cintrage (hors triangle et trapèze) n'est possible que
   pour la PERFORM70 [1 p. 6].
 - **Laquage** : possible en PERFORM70 si ouverture extérieure ou menuiserie cintrée
-  [1 p. 8].
+  [1 p. 8] ; en juin 2023, « Laquage possible si : ouverture extérieure, menuiserie cintrée »
+  [3 p. 3].
 - **Pas de fausse crémone décorative sur une porte-fenêtre avec serrure** [1 p. 7].
 
 # Coupes de la PERFORM76

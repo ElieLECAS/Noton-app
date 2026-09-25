@@ -21,7 +21,13 @@ sources:
     id: depliant-hybride-2023-06
     title: Dépliant HYBRIDE, édition juin 2023
     last_modified: 2023-06-30
+  - resource: raw/depliant-general-2023-06.pdf
+    id: depliant-general-2023-06
+    title: Dépliant général PROFERM, édition juin 2023
+    last_modified: 2023-06-30
 source_pages:
+  - resource: raw/depliant-general-2023-06.pdf
+    pages: 4
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 10-12
   - resource: raw/brochure-hybride-2025-03.pdf
@@ -144,6 +150,16 @@ Finitions élégantes :
 Sur l'HYBRIDE fabriquée jusqu'en 2025, les quatre mêmes finitions sont légendées de même, sauf le
 pivot : « Pivot symétrique systématique », sans charge indiquée [2 p. 2, 3 p. 2].
 
+Le dépliant général de juin 2023 porte, sous « Personnalisation & sécurité », les six légendes
+« Sécurité renforcée » et les quatre « Finitions élégantes » dans les mots du catalogue de 2026,
+pivot symétrique « jusqu'à 130 kg » compris, chaque bloc illustré d'une seule photo [4 p. 4] :
+
+![Sécurité renforcée HYBRIDE, dépliant général de juin 2023](/assets/gammes/hybride/2023-general-securite-pivot.png)
+
+![Finitions élégantes HYBRIDE, dépliant général de juin 2023](/assets/gammes/hybride/2023-general-finitions-grille.png)
+
+(schéma: raw/depliant-general-2023-06.pdf, p. 4)
+
 ## Finitions DROIT et DESIGN
 
 La finition extérieure de l'HYBRIDE se choisit entre **DROIT** et **DESIGN** [1 p. 12] ; la loupe
@@ -157,7 +173,7 @@ de chaque coupe montre la forme du profil aluminium.
 (schéma: raw/catalogue-general-2026-01.pdf, p. 12)
 
 Les deux mêmes finitions, DROIT et DESIGN, étaient proposées sur l'HYBRIDE de 72 mm, sans
-restriction de disponibilité, en juin 2023 comme en mars 2025 [2 p. 3, 3 p. 3]. Chaque finition y est montrée par une
+restriction de disponibilité, en juin 2023 comme en mars 2025 [2 p. 3, 3 p. 3, 4 p. 4]. Chaque finition y est montrée par une
 loupe sur la forme du profil aluminium (en haut) et une loupe sur la coupe du profilé (en bas) :
 
 ![Finitions DROIT et DESIGN de l'HYBRIDE 72 mm, avec coupes](/assets/gammes/hybride/finitions-droit-design-72.png)
@@ -206,6 +222,7 @@ un laquage PVC sous condition d'ouverture extérieure. Le nuancier complet est s
 [1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 10 à 12
 [2] [Brochure HYBRIDE, édition mars 2025](raw/brochure-hybride-2025-03.pdf), p. 1 à 3
 [3] [Dépliant HYBRIDE, édition juin 2023](raw/depliant-hybride-2023-06.pdf), p. 2 et 3
+[4] [Dépliant général PROFERM, édition juin 2023](raw/depliant-general-2023-06.pdf), p. 4
 
 # Voir aussi
 

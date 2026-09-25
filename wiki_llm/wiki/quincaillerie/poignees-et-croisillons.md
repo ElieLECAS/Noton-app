@@ -31,6 +31,10 @@ sources:
     id: depliant-lumeal-2023-06
     title: Dépliant LUMÉAL, édition juin 2023
     last_modified: 2023-06-30
+  - resource: raw/depliant-lumeal-2026-04.pdf
+    id: depliant-lumeal-2026-04
+    title: Dépliant LUMÉAL, édition avril 2026
+    last_modified: 2026-04-21
 source_pages:
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 7, 11, 14, 15, 17, 23, 31
@@ -44,6 +48,8 @@ source_pages:
     pages: 2
   - resource: raw/depliant-lumeal-2023-06.pdf
     pages: 3
+  - resource: raw/depliant-lumeal-2026-04.pdf
+    pages: 2
 generated:
   by: process:claude-code
   at: 2026-09-25T12:00:00Z
@@ -140,21 +146,21 @@ se manœuvre ; « semi-fixe » : le vantail qui ne s'ouvre qu'après lui.
 | Technal® KOBE | bouton de manœuvre | LUMÉAL | - | - | LUMINE (LUMÉAL55) | - | ![Technal KOBE](/assets/quincaillerie/poignees/technal-kobe.png) |
 | Technal® TOKYO | poignée droite | LUMÉAL | inox | modèle en option | LUMINE (LUMÉAL55) | - | ![Technal TOKYO](/assets/quincaillerie/poignees/technal-tokyo.png) |
 | Technal® KYOTO | poignée inclinée | LUMÉAL | inox | modèle en option | LUMINE (LUMÉAL55) | - | ![Technal KYOTO](/assets/quincaillerie/poignees/technal-kyoto.png) |
-| Poignée design minimal | poignée | LUMÉAL, dépliant de juin 2023 | - | - | LUMINE (LUMÉAL) | « en standard » [5 p. 3] | ![Poignée design minimal, photo de la Technal OSAKA](/assets/quincaillerie/poignees/technal-osaka.png) |
-| Poignée design droit | poignée | LUMÉAL, dépliant de juin 2023 | - | modèle en option [5 p. 3] | LUMINE (LUMÉAL) | - | ![Poignée design droit, photo de la Technal TOKYO](/assets/quincaillerie/poignees/technal-tokyo.png) |
-| Poignée inclinée | poignée | LUMÉAL, dépliant de juin 2023 | - | modèle en option [5 p. 3] | LUMINE (LUMÉAL) | - | ![Poignée inclinée, photo de la Technal KYOTO](/assets/quincaillerie/poignees/technal-kyoto.png) |
-| Bouton de manoeuvre | bouton de manœuvre | LUMÉAL, dépliant de juin 2023 | - | - | LUMINE (LUMÉAL) | - | ![Bouton de manoeuvre, photo du Technal KOBE](/assets/quincaillerie/poignees/technal-kobe.png) |
+| Poignée design minimal | poignée | LUMÉAL, dépliants de juin 2023 et d'avril 2026 | - | - | LUMINE (LUMÉAL) | « en standard » [5 p. 3, 6 p. 2] | ![Poignée design minimal, photo de la Technal OSAKA](/assets/quincaillerie/poignees/technal-osaka.png) |
+| Poignée design droit | poignée | LUMÉAL, dépliants de juin 2023 et d'avril 2026 | - | modèle en option [5 p. 3, 6 p. 2] | LUMINE (LUMÉAL) | - | ![Poignée design droit, photo de la Technal TOKYO](/assets/quincaillerie/poignees/technal-tokyo.png) |
+| Poignée inclinée | poignée | LUMÉAL, dépliants de juin 2023 et d'avril 2026 | - | modèle en option [5 p. 3, 6 p. 2] | LUMINE (LUMÉAL) | - | ![Poignée inclinée, photo de la Technal KYOTO](/assets/quincaillerie/poignees/technal-kyoto.png) |
+| Bouton de manoeuvre | bouton de manœuvre | LUMÉAL, dépliants de juin 2023 et d'avril 2026 | - | - | LUMINE (LUMÉAL) | - | ![Bouton de manoeuvre, photo du Technal KOBE](/assets/quincaillerie/poignees/technal-kobe.png) |
 | Poignée du coulissant INNOSLIDE, modèle non nommé | poignée | coulissant INNOSLIDE | blanc, noir ou F9 [4 p. 3] | - | INNOSLIDE | - | ![Poignée du coulissant INNOSLIDE](/assets/quincaillerie/poignees/poignee-innoslide.png) |
 
-(schéma: raw/catalogue-general-2026-01.pdf, p. 17 ; raw/brochure-lumine65-2025-02.pdf, p. 3 ; raw/depliant-lumeal-2023-06.pdf, p. 3 ; raw/depliant-innoslide-2024-01-a4-web.pdf, p. 3)
+(schéma: raw/catalogue-general-2026-01.pdf, p. 17 ; raw/brochure-lumine65-2025-02.pdf, p. 3 ; raw/depliant-lumeal-2023-06.pdf, p. 3 ; raw/depliant-lumeal-2026-04.pdf, p. 2 ; raw/depliant-innoslide-2024-01-a4-web.pdf, p. 3)
 
 Sur le coulissant LUMINE65, la Sécustik® TOULON (noir, 7016, aspect inox ou blanc), la SYDNEY
 sur ouvrant principal et la MILAN sur semi-fixe (inox, blanc ou noir, en option) ont les finitions
 des lignes ci-dessus [3 p. 3].
 
-Le dépliant LUMÉAL de juin 2023 présente quatre poignées « au design exclusif pour personnaliser
+Les dépliants LUMÉAL de juin 2023 et d'avril 2026 présentent les quatre mêmes poignées « au design exclusif pour personnaliser
 votre baie coulissante » sans nom de modèle ni finition ; la poignée design minimal y est dite
-« Discrète, elle est préconisée par les architectes » [5 p. 3]. Ses quatre photos sont celles des
+« Discrète, elle est préconisée par les architectes » [5 p. 3, 6 p. 2]. Ses quatre photos sont celles des
 Technal® OSAKA, TOKYO, KYOTO et KOBE du groupe LUMÉAL au catalogue général, qui en donne les noms
 et les finitions [1 p. 17] : les images des lignes ci-dessus sont celles du catalogue.
 
@@ -227,6 +233,7 @@ Le soubassement est le panneau plein qui remplace le vitrage en partie basse d'u
 [3] [Brochure LUMINE65, édition février 2025](raw/brochure-lumine65-2025-02.pdf), p. 3-4
 [4] [Dépliant INNOSLIDE, édition janvier 2024, version A4 web](raw/depliant-innoslide-2024-01-a4-web.pdf), p. 3
 [5] [Dépliant LUMÉAL, édition juin 2023](raw/depliant-lumeal-2023-06.pdf), p. 3
+[6] [Dépliant LUMÉAL, édition avril 2026](raw/depliant-lumeal-2026-04.pdf), p. 2
 
 # Voir aussi
 

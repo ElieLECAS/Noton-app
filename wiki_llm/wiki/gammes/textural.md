@@ -13,7 +13,13 @@ sources:
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
     last_modified: 2026-01-31
+  - resource: raw/depliant-general-2023-06.pdf
+    id: depliant-general-2023-06
+    title: Dépliant général PROFERM, édition juin 2023
+    last_modified: 2023-06-30
 source_pages:
+  - resource: raw/depliant-general-2023-06.pdf
+    pages: 6
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 20-24, 35
 generated:
@@ -52,6 +58,12 @@ La gamme TEXTURAL® dispose de finitions exceptionnelles [1 p. 20] :
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 20)
 
+En juin 2023, les mêmes finitions, sous la même photo : « Paumelles invisibles, Battement central
+design, Parcloses arrondies, Jonctions lisses des angles, Jonc de finition de la feuillure du
+dormant coloré ou inox (selon le style choisi) » ; « La gamme TEXTURAL® est hautement
+personnalisable et dispose de finitions exceptionnelles » [2 p. 6]. Le jonc de finition est dit « coloré ou
+inox (selon le style choisi) » en 2023, « en partie basse dans la feuillure du dormant » en 2026.
+
 ## Finitions DROIT et DESIGN
 
 La finition extérieure de la TEXTURAL® se choisit entre **DROIT** et **DESIGN** ; le profil 76 mm
@@ -60,6 +72,13 @@ design est annoncé disponible à compter du 2ème trimestre 2026 (**VER-01**) [
 ![Finitions droit et design TEXTURAL](/assets/gammes/textural/finitions-droit-design.png)
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 20)
+
+En juin 2023, la finition extérieure DROIT ou DESIGN était proposée sans restriction de
+disponibilité, sous ces coupes [2 p. 6] :
+
+![Finitions droit et design TEXTURAL, juin 2023](/assets/gammes/textural/finitions-droit-design-2023.png)
+
+(schéma: raw/depliant-general-2023-06.pdf, p. 6)
 
 ## Les trois styles
 
@@ -102,6 +121,17 @@ domotiques ([Volets roulants](/equipements/volets-roulants.md)) [1 p. 23].
 - **Isolation thermique** : Uw jusque 0,8 W/m²K (Uw : coefficient de transmission thermique de la
   fenêtre complète), déclinaison non précisée [1 p. 23].
 
+Uw annoncé de la TEXTURAL, par période :
+
+| Période (document) | Déclinaison | Uw « jusque » (W/m²K) |
+| --- | --- | --- |
+| juin 2023 (dépliant général) | TEXTURAL, gamme non divisée | 1,3 |
+| janvier 2026 (catalogue général) | non précisée | 0,8 |
+
+(schéma: raw/depliant-general-2023-06.pdf, p. 6 ; raw/catalogue-general-2026-01.pdf, p. 23)
+
+La valeur de juin 2023 est imprimée « Uw jusque 1.3/m²K » [2 p. 6].
+
 # Coloris
 
 Textures intérieures (dont chêne doré et chêne irlandais aussi en extérieur), laquage toutes
@@ -122,6 +152,7 @@ au lieu de 10. Grille complète : [Garanties par composant](/garanties/garanties
 # Citations
 
 [1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 20 à 24 et 35
+[2] [Dépliant général PROFERM, édition juin 2023](raw/depliant-general-2023-06.pdf), p. 6
 
 # Voir aussi
 

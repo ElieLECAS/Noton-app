@@ -13,7 +13,13 @@ sources:
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
     last_modified: 2026-01-31
+  - resource: raw/depliant-general-2023-06.pdf
+    id: depliant-general-2023-06
+    title: Dépliant général PROFERM, édition juin 2023
+    last_modified: 2023-06-30
 source_pages:
+  - resource: raw/depliant-general-2023-06.pdf
+    pages: 6
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 24
 generated:
@@ -102,12 +108,41 @@ couleur ! ») ; RAL 3002 et RAL 9005 sont les deux exemples imprimés, sans tein
 indiquée [1 p. 24]. La garantie des textures exclusives est sur
 [Garanties par composant](/garanties/garanties-par-composant.md).
 
+## Textures exclusives, juin 2023
+
+Au dépliant général de juin 2023, sous « Des textures hautes en couleur ! » et « Textures
+exclusives - intérieur uniquement », douze textures, « Et bien d'autres textures… » ; aucune teinte
+de parclose n'y est indiquée [2 p. 6]. Une ligne par texture, dans l'ordre de la source ; la
+pastille est un **rendu indicatif**.
+
+| Code de la source | Nom | Famille | Faces | Finition | Restriction | Pastille |
+| --- | --- | --- | --- | --- | --- | ---: |
+| - | Carbone noir | texture exclusive | intérieur uniquement | - | - | ![Carbone noir](/assets/coloris/textural/2023-carbone-noir.png) |
+| - | Gris écaillé | texture exclusive | intérieur uniquement | - | - | ![Gris écaillé](/assets/coloris/textural/2023-gris-ecaille.png) |
+| - | Teck foncé | texture exclusive | intérieur uniquement | - | - | ![Teck foncé](/assets/coloris/textural/2023-teck-fonce.png) |
+| - | Noyer | texture exclusive | intérieur uniquement | - | - | ![Noyer](/assets/coloris/textural/2023-noyer.png) |
+| - | Wengé | texture exclusive | intérieur uniquement | - | - | ![Wengé](/assets/coloris/textural/2023-wenge.png) |
+| - | Cuir anthracite | texture exclusive | intérieur uniquement | - | - | ![Cuir anthracite](/assets/coloris/textural/2023-cuir-anthracite.png) |
+| - | Argenté | texture exclusive | intérieur uniquement | - | - | ![Argenté](/assets/coloris/textural/2023-argente.png) |
+| - | Terre de Sienne | texture exclusive | intérieur uniquement | - | - | ![Terre de Sienne](/assets/coloris/textural/2023-terre-de-sienne.png) |
+| - | Chêne | texture exclusive | intérieur uniquement | - | - | ![Chêne](/assets/coloris/textural/2023-chene.png) |
+| - | Hêtre | texture exclusive | intérieur uniquement | - | - | ![Hêtre](/assets/coloris/textural/2023-hetre.png) |
+| RAL 3002 | Glossy RAL 3002 | texture exclusive | intérieur uniquement | - | « Pour la finition glossy, choisissez votre couleur ! » | ![Glossy RAL 3002](/assets/coloris/textural/2023-glossy-ral-3002.png) |
+| RAL 9005 | Glossy RAL 9005 | texture exclusive | intérieur uniquement | - | « Pour la finition glossy, choisissez votre couleur ! » | ![Glossy RAL 9005](/assets/coloris/textural/2023-glossy-ral-9005.png) |
+
+(schéma: raw/depliant-general-2023-06.pdf, p. 6)
+
+Onze des douze textures de juin 2023 figurent parmi les vingt-six de janvier 2026 ; le **Gris
+écaillé** n'y figure pas [1 p. 24, 2 p. 6].
+
 # Citations
 
 [1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 24
+[2] [Dépliant général PROFERM, édition juin 2023](raw/depliant-general-2023-06.pdf), p. 6
 
 # Voir aussi
 
+- [Coloris des portes d'entrée](/coloris/coloris-portes-entree.md)
 - [TEXTURAL](/gammes/textural.md)
 - [Coloris HYBRIDE](/coloris/coloris-hybride.md)
 - [Coloris PERFORM](/coloris/coloris-perform.md)

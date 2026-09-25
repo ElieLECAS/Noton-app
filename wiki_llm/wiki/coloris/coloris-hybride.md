@@ -21,7 +21,13 @@ sources:
     id: depliant-hybride-2023-06
     title: Dépliant HYBRIDE, édition juin 2023
     last_modified: 2023-06-30
+  - resource: raw/depliant-general-2023-06.pdf
+    id: depliant-general-2023-06
+    title: Dépliant général PROFERM, édition juin 2023
+    last_modified: 2023-06-30
 source_pages:
+  - resource: raw/depliant-general-2023-06.pdf
+    pages: 4
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 11-12
   - resource: raw/brochure-hybride-2025-03.pdf
@@ -103,6 +109,13 @@ la mention « 2 faces uniquement » de l'ivoire n'y figure pas [3 p. 3].
 
 (schéma: raw/depliant-hybride-2023-06.pdf, p. 3)
 
+Le dépliant général du même mois porte, sous « Choix des coloris intérieur PVC et extérieur alu »,
+les mêmes teintes : blanc 9016 et ivoire proche 9001 (607 Kömmerling®) teintés dans la masse à
+l'intérieur, l'ivoire y portant « 2 faces uniquement » ; blanc 9016 brillant laqué en « couleur
+extérieure standard » ; et les neuf mêmes « couleurs extérieures à prix préférentiel », laquées,
+dans un autre ordre [4 p. 4]. Les pastilles sont dessinées de même ; les images ci-dessus servent
+pour les deux documents.
+
 Les deux aspects de laquage, satiné et granité, sont montrés côte à côte sur une même pastille :
 
 ![Finitions satiné et granité](/assets/coloris/hybride/finitions-satine-granite.png)
@@ -120,7 +133,10 @@ sur PVC », sur une menuiserie dont l'extérieur est en aluminium, est à confir
 
 Sur l'HYBRIDE fabriquée jusqu'en 2025, la condition est écrite autrement : « Laquage toutes
 teintes possibles 2 faces identiques, uniquement sur menuiserie PVC en cas de cintrage et/ou
-ouverture extérieure » [2 p. 3] ; la même phrase figure en juin 2023 [3 p. 3]. Le cintrage est la mise en forme courbe d'un profilé, pour une
+ouverture extérieure » [2 p. 3] ; la même phrase figure en juin 2023 [3 p. 3]. Le dépliant général
+de juin 2023 écrit, sous « Intérieur et extérieur (2 faces identiques) » : « Laquage toutes teintes
+possibles si : ouverture extérieure, menuiserie cintrée », sans la mention « uniquement sur
+menuiserie PVC » (**VER-49**) [4 p. 4]. Le cintrage est la mise en forme courbe d'un profilé, pour une
 menuiserie cintrée (voir le [glossaire](/reference/glossaire.md)).
 
 ![Laquage uniquement sur menuiserie PVC en cas de cintrage et/ou ouverture extérieure](/assets/coloris/hybride/laquage-pvc-cintrage.png)
@@ -132,9 +148,11 @@ menuiserie cintrée (voir le [glossaire](/reference/glossaire.md)).
 [1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 11 et 12
 [2] [Brochure HYBRIDE, édition mars 2025](raw/brochure-hybride-2025-03.pdf), p. 3
 [3] [Dépliant HYBRIDE, édition juin 2023](raw/depliant-hybride-2023-06.pdf), p. 3
+[4] [Dépliant général PROFERM, édition juin 2023](raw/depliant-general-2023-06.pdf), p. 4
 
 # Voir aussi
 
+- [Coloris des portes d'entrée](/coloris/coloris-portes-entree.md)
 - [HYBRIDE](/gammes/hybride.md)
 - [Coloris PERFORM](/coloris/coloris-perform.md)
 - [Garanties par composant](/garanties/garanties-par-composant.md)
