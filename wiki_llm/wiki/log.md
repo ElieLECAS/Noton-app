@@ -2,6 +2,77 @@
 
 ## 2026-09-25
 
+* **Retraitement, tranche 5 (PDF p. 302 à 424), dernière tranche** de la [Mise en œuvre Système 76 Advanced](/sources/profine-mise-en-oeuvre-76-advanced.md)
+  (`raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`), registres 2.6.1 à 2.6.5 : pages rendues
+  en PNG à 200 dpi, lues en image par lots, aucune couche texte lue ; pages 1-301 non rouvertes.
+* **Update**: [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md) -- section
+  *Châssis cintrés et trapézoïdaux* créée (PDF p. 302-303) : neuf diamètres minimum de cintrage,
+  règle « largeur du profilé × 10 », profilés cintrés sans leurs joints, angle de pointe minimum
+  29,5° ; avant : aucune donnée de cintrage dans le wiki (la fiche source portait seulement
+  « diamètre mini = 10 × largeur » et « angle min 29,5° »). Description et index mis à jour.
+  Figures : `assets/procedures/moe-76-advanced/cintrage-diametre-minimum.png`,
+  `trapeze-angle-de-pointe-minimum.png`.
+* **Update**: [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md) --
+  section *Capots de la variante AluClip, planches du manuel de mise en œuvre* créée (PDF
+  p. 305-311) : 19 lignes capot → profilé avec retour et hauteur, 16 accessoires dessinés avec les
+  profilés capotés ; huit capots cotés autrement que sur le poster → **CTR-35** ; les tableaux du
+  poster ne sont pas modifiés. Figures : `aluclip-insert-g023-dormant.png`,
+  `aluclip-insert-g024-ouvrant.png`, `aluclip-busette-m450-manchon-g008.png`.
+* **Update**: [Joints et garnitures profine](/profiles/joints-et-garnitures-profine.md) -- section
+  *Système d'étanchéité de la variante AluClip* (PDF p. 312) : G177, G178, G161 (EPJoint EPDM),
+  joints soudables PCE et G050.T (PVC), jeu de 1 mm ; figure `aluclip-systeme-etancheite.png`.
+* **Create**: [Plans de combinaison AluClip du système 76](/profiles/systeme-76-aluclip-plans-de-combinaison.md)
+  (PDF p. 313-344, registre 2.6.2 p. 9-40) : châssis fixe, dormant + ouvrant, meneaux 76372 et
+  76373, battements 76471 à 76473, ouvrants sur seuils A076 / A077 / A075, porte-fenêtre ; cotes
+  hors tout capotées, renforts et IW. 69 coupes découpées dans
+  `assets/procedures/moe-76-advanced/aluclip-combinaison-*.png`. Anomalies **INC-73** (hors tout
+  « 13,4 », renforts du 76172 et du 76281), **INC-74** (capot A052 du 76473, IW décalés), **INC-75**
+  (capots A042 / A0442, hauteurs 120 et 83,2 mm, plan « 76171 » coté 76172, IW du 76373).
+* **Update**: [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md) -- section
+  *Cotes de débit des capots aluminium AluClip* créée (PDF p. 345-355) : règles de débit, six
+  tableaux (dormant vertical / traverse, seuils, meneau, ouvrants, 76283, traverse d'ouvrant),
+  capot de battement = longueur du battement ; 12 figures `aluclip-debit-*.png` ; **INC-76**
+  (DEO / DHT du capot vertical d'ouvrant). Description et index mis à jour.
+* **Create**: [Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md)
+  (PDF p. 357-363) : poinçonnage de 12 capots (A385, A386, A042 à A047 en plus des quatre de l'avis
+  technique), étanchéité, montage et collage, inserts G023 / G024, contour de fraisage du meneau,
+  drainage M450 / G008 / T005 ; 13 figures `aluclip-*.png` ; **VER-59** (joint G069), **INC-77**
+  (7,1 / 7,9 mm, renvoi « page 49 »). [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md) :
+  capot A073 du 76172 (p. 356). [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md) :
+  une phrase de renvoi sous *Usinage des capots*, sans copie des cotes.
+* **Update**: [Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md) --
+  drainage, ventilation et décompression profilé par profilé (PDF p. 364-370), 7 figures
+  `aluclip-drainage-*.png` ; **INC-78** (ouvrant « 76270 »).
+* **Update**: [Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md) --
+  battement, seuil, réhausses et élargisseurs capotés, fixation A249 (PDF p. 371-378), tapées et
+  appuis aluminium pas à pas et leurs cotes de débit (p. 379-390), accouplement capoté (p. 391-394) ;
+  28 figures `aluclip-*.png` ; **CTR-36** (épaisseur A502 : 2 / 3 mm), **INC-79** (valeur statique
+  19,10), **INC-80** (« AO76 », « AO75 », « FF0 »). Renvois d'une phrase ajoutés dans
+  [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md),
+  [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) (section *Tapées
+  aluminium sur dormant capoté*) et [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) (CTR-36).
+* **Update**: AluClip Pro (PDF p. 395-408, registre 2.6.3) et AluClip Zero (p. 409-424, registre
+  2.6.5) : caractéristiques et coupes dans [Plans de combinaison AluClip du système 76](/profiles/systeme-76-aluclip-plans-de-combinaison.md)
+  (sections *Plans de combinaison AluClip Pro* et *AluClip Zero*, ouvrant 76282 et capot A195 cotés),
+  mise en œuvre dans [Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md)
+  (A072 coupe à 45° et imbriqué, trains de fraise, cales, poinçonnages ; A195, verrou S012, I008, M490,
+  collage du vitrage dès 40 kg, dormant sans capotage G127), cotes de débit A072, 76282 et A195 dans
+  [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md), épaisseurs de vitrage AluClip
+  Zero (36 à 50 mm) dans [Tableau de vitrage du système 76](/profiles/systeme-76-tableau-de-vitrage.md).
+  43 figures `aluclip-pro-*.png` et `aluclip-zero-*.png` ; **INC-81** (A071, A046, V310 des planches
+  AluClip Pro), **INC-82** (A180, A185, V291.1.Z, V317 à 2,4, vis A3J-HJ2 / H2). Descriptions et
+  index mis à jour.
+* **Update**: anomalies complétées sans être fermées -- **VER-43** (rattachements des capots A043,
+  A073, A039 sur les planches AluClip), **VER-46** (aucune valeur E / S au registre 2.6.2), **INC-18**
+  (A042 coté 43,5 mm avec le 76281 sur la planche AluClip). Créées : **CTR-35**, **CTR-36**, **INC-73**
+  à **INC-82**, **VER-59**.
+* **Update**: [Mise en œuvre Système 76 Advanced](/sources/profine-mise-en-oeuvre-76-advanced.md) --
+  registre de couverture : avant, quatre lignes `à faire` par registre (2.6.1 302-304, 2.6.2 305-394,
+  2.6.3 395-408, 2.6.5 409-424) ; après, quinze lignes par plage PDF, toutes `transcrit` sauf la
+  p. 304 (table des matières du registre 2.6.2, `sans contenu propre`). Bornes vérifiées sur les
+  pages : 2.6.1 = 302-303, 2.6.2 = 304-394. **Retraitement complet : 424 pages, aucune ligne
+  `à faire`.**
+
 * **Retraitement, tranche 4 (PDF p. 194 à 301)** de la [Mise en œuvre Système 76 Advanced](/sources/profine-mise-en-oeuvre-76-advanced.md)
   (`raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`), registres 2.4.5 à 2.5.2 : pages rendues
   en PNG à 200 dpi (zooms à 400 dpi pour les abaques), lues en image par lots, aucune couche texte

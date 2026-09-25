@@ -15,7 +15,7 @@ sources:
     last_modified: 2023-12-14
 source_pages:
   - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
-    pages: 89-97
+    pages: 89-97, 422
 generated:
   by: process:claude-code
   at: 2026-09-26T00:30:00Z
@@ -214,11 +214,39 @@ aucun autre document du wiki.
 - Le critère de choix entre les parcloses de même épaisseur (76512, 76513, 76526 ; 76516, 76524)
 - Le sens des astérisques des parcloses 76517 à 76520 et de la consigne de débit du 76570
 
+# Vitrage de l'AluClip Zero
+
+Sur la variante **AluClip Zero** (ouvrant 76282 et capot affleurant A195 avec adhésif I008, voir
+[Plans de combinaison AluClip du système 76](/profiles/systeme-76-aluclip-plans-de-combinaison.md#caractéristiques-de-la-variante-aluclip-zero)),
+les épaisseurs de vitrage suivantes peuvent être utilisées ; une ligne par parclose, l'épaisseur est
+celle que la planche porte sous la parclose (vitrage de 36 à 50 mm) [1 p. 422].
+
+| Parclose | Épaisseur de vitrage AluClip Zero (mm) |
+| --- | --- |
+| 2451 | 36 |
+| 2453 | 38 |
+| 1436 | 40 |
+| 76501 | 42 |
+| 76527 | 44 |
+| 76526 | 46 |
+| 76516 | 48 |
+| 76524 | 48 |
+| 2454 | 50 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 422, registre 2.6.5, p. 14, version janvier 2019)
+
+Chacune de ces épaisseurs vaut **18 mm de plus** que l'épaisseur A (joint de 4 mm) de la même
+parclose dans le tableau de vitrage pour ouvrant ci-dessus (2451 : 18 → 36 mm). L'entretoise M490 et le collage du vitrage de l'AluClip Zero sont dans
+[Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md#vitrage).
+
+![Options de vitrage AluClip Zero, parcloses et épaisseurs](/assets/procedures/moe-76-advanced/aluclip-zero-options-vitrage-parcloses.png)
+
 # Citations
 
 [1] Mise en œuvre Système 76 Advanced, profine —
 `raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`, registre 2.3.2 « Tableau de vitrage »,
-p. 89 à 97 du PDF (pages imprimées 1 à 9), version mars 2021
+p. 89 à 97 du PDF (pages imprimées 1 à 9), version mars 2021 ; registre 2.6.5 « AluClip Zero,
+Vitrage », p. 422 du PDF (page imprimée 14), version janvier 2019
 
 # Voir aussi
 

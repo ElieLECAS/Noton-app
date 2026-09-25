@@ -1,0 +1,568 @@
+{% extends "base.html" %}
+{% block title %}Faisabilité - {{ app_name }}{% endblock %}
+
+{% block extra_head %}
+<style>
+{% raw %}
+  :root{
+    --bg:#ffffff; --bg-side:#f7f7f5; --bg-sunken:#f1f1ef; --bg-hover:#ececeb;
+    --line:#e9e9e7; --line-strong:#dcdcd9;
+    --tx:#1f2937; --tx-dim:#6b7280; --tx-faint:#9ca3af;
+    --accent:#4f46e5; --accent-soft:#eef2ff;
+    --ok:#15803d; --ok-bg:#ecfdf3; --ok-br:#bbf7d0;
+    --etude:#b45309; --etude-bg:#fffbeb; --etude-br:#fde68a;
+    --hors:#b91c1c; --hors-bg:#fef2f2; --hors-br:#fecaca;
+    --info:#475569; --info-bg:#f8fafc; --info-br:#e2e8f0;
+    --glass:#bfdbfe; --frame:#94a3b8;
+    --shadow:0 1px 2px rgba(15,15,15,.06),0 4px 14px rgba(15,15,15,.08);
+  }
+  :root.dark{
+    --bg:#191919; --bg-side:#202020; --bg-sunken:#252525; --bg-hover:#2d2d2d;
+    --line:#2f2f2f; --line-strong:#3d3d3d;
+    --tx:#e5e7eb; --tx-dim:#9b9b98; --tx-faint:#6f6f6c;
+    --accent:#818cf8; --accent-soft:#1f2440;
+    --ok:#4ade80; --ok-bg:#14271b; --ok-br:#1f4a2e;
+    --etude:#fbbf24; --etude-bg:#2b2310; --etude-br:#5a4715;
+    --hors:#f87171; --hors-bg:#2d1616; --hors-br:#5c2727;
+    --info:#94a3b8; --info-bg:#1e2227; --info-br:#2f3640;
+    --glass:#1e3a5f; --frame:#64748b;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.45);
+  }
+  #fa{flex:1 1 0%;min-height:0;overflow:auto;background:var(--bg);color:var(--tx);
+    font-family:Outfit,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;
+    -webkit-font-smoothing:antialiased}
+  #fa *{box-sizing:border-box}
+  #fa .wrap{max-width:84rem;margin:0 auto;padding:1.6rem 1.8rem 5rem}
+  #fa h1{font-size:1.7rem;font-weight:800;letter-spacing:-.02em;margin:0}
+  #fa .lede{color:var(--tx-dim);margin:.3rem 0 1.2rem;max-width:62rem;line-height:1.5}
+  #fa .grid{display:grid;grid-template-columns:22rem minmax(0,1fr);gap:1.4rem;align-items:start}
+  @media(max-width:1000px){#fa .grid{grid-template-columns:1fr}}
+
+  /* ---- en-tête et aide ---- */
+  #fa .head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}
+  #fa .help-btn{flex:none;width:34px;height:34px;border-radius:50%;border:1px solid var(--line-strong);
+    background:var(--bg);color:var(--tx-dim);font-size:17px;font-weight:700;font-style:italic;
+    font-family:Georgia,"Times New Roman",serif;cursor:pointer;display:grid;place-items:center;margin-top:.2rem}
+  #fa .help-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+  #fa .help-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  #fa-aide{width:min(46rem,calc(100vw - 32px));max-height:calc(100vh - 48px);padding:0;border:1px solid var(--line-strong);
+    border-radius:16px;background:var(--bg);color:var(--tx);box-shadow:0 20px 60px rgba(0,0,0,.3);
+    font-family:Outfit,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.55}
+  #fa-aide::backdrop{background:rgba(15,15,20,.45)}
+  #fa-aide .a-head{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;gap:1rem;
+    padding:1rem 1.3rem .8rem;background:var(--bg);border-bottom:1px solid var(--line)}
+  #fa-aide .a-head h2{margin:0;font-size:1.15rem;font-weight:800}
+  #fa-aide .a-close{border:0;background:none;color:var(--tx-dim);font-size:22px;line-height:1;cursor:pointer;
+    width:32px;height:32px;border-radius:8px}
+  #fa-aide .a-close:hover{background:var(--bg-hover);color:var(--tx)}
+  #fa-aide .a-body{padding:.4rem 1.3rem 1.4rem}
+  #fa-aide h3{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tx-faint);
+    margin:1.2rem 0 .45rem}
+  #fa-aide p{margin:.3rem 0;color:var(--tx-dim)}
+  #fa-aide ol,#fa-aide ul{margin:.3rem 0;padding-left:1.25rem;color:var(--tx-dim)}
+  #fa-aide li{margin:.25rem 0}
+  #fa-aide b{color:var(--tx)}
+  #fa-aide .flow{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem;margin:.4rem 0}
+  #fa-aide .flow span{border:1px solid var(--line-strong);border-radius:8px;padding:3px 9px;font-size:12.5px;
+    font-weight:600;color:var(--tx);background:var(--bg-sunken)}
+  #fa-aide .flow i{color:var(--tx-faint);font-style:normal}
+  #fa-aide .leg{display:grid;grid-template-columns:auto 1fr;gap:.4rem .7rem;align-items:start;margin:.4rem 0}
+  #fa-aide .leg .tag{font-size:11px;font-weight:700;border-radius:99px;padding:1px 8px;border:1px solid;white-space:nowrap}
+  #fa-aide .s-ok{color:var(--ok);background:var(--ok-bg);border-color:var(--ok-br)}
+  #fa-aide .s-etude{color:var(--etude);background:var(--etude-bg);border-color:var(--etude-br)}
+  #fa-aide .s-hors{color:var(--hors);background:var(--hors-bg);border-color:var(--hors-br)}
+  #fa-aide .s-info{color:var(--info);background:var(--info-bg);border-color:var(--info-br)}
+
+  /* ---- formulaire ---- */
+  #fa form{position:sticky;top:0;background:var(--bg-side);border:1px solid var(--line);border-radius:14px;
+    padding:1rem 1.1rem 1.2rem;display:flex;flex-direction:column;gap:.95rem}
+  @media(max-width:1000px){#fa form{position:static}}
+  #fa .f-lab{display:block;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--tx-faint);margin-bottom:.35rem}
+  #fa .seg{display:flex;flex-wrap:wrap;gap:4px}
+  #fa .seg button{border:1px solid var(--line-strong);background:var(--bg);color:var(--tx-dim);border-radius:8px;
+    padding:5px 9px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+  #fa .seg button.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+  #fa .row2{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+  #fa input[type=number],#fa input[type=text],#fa select{width:100%;height:34px;border:1px solid var(--line-strong);
+    border-radius:8px;background:var(--bg);color:var(--tx);font:inherit;padding:0 .6rem}
+  #fa input:focus,#fa select:focus,#fa .seg button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  #fa .unit{position:relative}
+  #fa .unit span{position:absolute;right:.6rem;top:50%;transform:translateY(-50%);color:var(--tx-faint);font-size:12px;pointer-events:none}
+  #fa .hint{font-size:12px;color:var(--tx-faint);margin-top:.3rem}
+  #fa .check{display:flex;align-items:center;gap:.5rem;font-size:13px;color:var(--tx-dim);cursor:pointer}
+  #fa .check input{accent-color:var(--accent)}
+  #fa [hidden]{display:none!important}
+
+  /* ---- verdict ---- */
+  #fa .verdict{display:flex;gap:1rem;align-items:center;padding:1rem 1.2rem;border-radius:14px;border:1px solid;
+    margin-bottom:1rem}
+  #fa .verdict .big{font-size:1.45rem;font-weight:800;letter-spacing:-.01em}
+  #fa .verdict .why{font-size:13.5px;margin-top:.15rem;line-height:1.45}
+  #fa .verdict .ico{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;flex:none;font-size:22px;font-weight:800}
+  #fa .s-ok{color:var(--ok);background:var(--ok-bg);border-color:var(--ok-br)}
+  #fa .s-etude{color:var(--etude);background:var(--etude-bg);border-color:var(--etude-br)}
+  #fa .s-hors{color:var(--hors);background:var(--hors-bg);border-color:var(--hors-br)}
+  #fa .s-info{color:var(--info);background:var(--info-bg);border-color:var(--info-br)}
+  #fa .verdict .ico{background:currentColor}
+  #fa .verdict .ico b{color:var(--bg)}
+  #fa .draft{font-size:12.5px;color:var(--etude);background:var(--etude-bg);border:1px solid var(--etude-br);
+    border-radius:10px;padding:.55rem .8rem;margin-bottom:1rem;line-height:1.45}
+  #fa .draft a{color:inherit;font-weight:600}
+
+  /* ---- panneaux ---- */
+  #fa .panels{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem;margin-bottom:1rem}
+  @media(max-width:1300px){#fa .panels{grid-template-columns:1fr}}
+  #fa .panel{border:1px solid var(--line);border-radius:14px;background:var(--bg);padding:.9rem 1rem}
+  #fa .panel h2{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tx-faint);
+    margin:0 0 .6rem;display:flex;justify-content:space-between;gap:.5rem}
+  #fa .panel h2 span{letter-spacing:0;text-transform:none;font-weight:600}
+  #fa svg{display:block;width:100%;height:auto}
+  #fa svg text{font-family:inherit}
+
+  /* ---- chaîne des contrôles ---- */
+  #fa .chain{list-style:none;margin:0;padding:0;position:relative}
+  #fa .chain:before{content:"";position:absolute;left:15px;top:14px;bottom:14px;width:2px;background:var(--line)}
+  #fa .step{position:relative;display:grid;grid-template-columns:32px minmax(0,1fr);gap:.7rem;padding:.55rem 0}
+  #fa .dot{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;border:1px solid;font-weight:800;
+    font-size:14px;z-index:1}
+  #fa .step h3{margin:.3rem 0 .15rem;font-size:14px;font-weight:700;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+  #fa .tag{font-size:11px;font-weight:700;border-radius:99px;padding:1px 8px;border:1px solid}
+  #fa .step p{margin:0;color:var(--tx-dim);line-height:1.5}
+  #fa .srcs{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.4rem}
+  #fa .src{font-size:11.5px;color:var(--tx-dim);border:1px solid var(--line);border-radius:99px;padding:1px 9px;
+    text-decoration:none;background:var(--bg-sunken)}
+  #fa .src:hover{border-color:var(--accent);color:var(--accent)}
+  #fa .anom{font-size:11.5px;font-weight:700;color:var(--etude);border:1px solid var(--etude-br);background:var(--etude-bg);
+    border-radius:99px;padding:1px 9px;text-decoration:none}
+  #fa .parcs{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.5rem}
+  #fa .parc{display:flex;align-items:center;gap:.5rem;border:1px solid var(--line);border-radius:10px;padding:.35rem .6rem;background:#fff;color:#1f2937}
+  #fa .parc img{height:56px;width:auto}
+  #fa table{border-collapse:collapse;width:100%;font-size:13px;margin-top:.4rem}
+  #fa th,#fa td{text-align:left;padding:.4rem .5rem;border-bottom:1px solid var(--line)}
+  #fa th{font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--tx-faint);font-weight:700}
+  #fa td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+  #fa .empty{color:var(--tx-faint);padding:2rem 0;text-align:center}
+  #fa .err{color:var(--hors)}
+  #fa .legend{display:flex;gap:.9rem;flex-wrap:wrap;font-size:12px;color:var(--tx-dim);margin-top:.4rem}
+  #fa .legend i{display:inline-block;width:12px;height:3px;border-radius:2px;margin-right:.35rem;vertical-align:middle}
+{% endraw %}
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="fa" class="flex-1 min-h-0">
+  <div class="wrap">
+    <div class="head">
+      <h1>Faisabilité PERFORM76</h1>
+      <button type="button" class="help-btn" id="fa-aide-btn" title="Comment ça marche" aria-haspopup="dialog" aria-controls="fa-aide">i</button>
+    </div>
+    <p class="lede">Premier jet du vérificateur (audit du 22/09, § 9.1). Chaque contrôle est calculé sur les
+      tableaux du wiki et cite la page qui le porte ; aucune valeur ne vient d'un modèle. Entre deux graduations,
+      la plus restrictive ; à moins de la précision de lecture d'une limite, « sur étude ».</p>
+
+    <div class="grid">
+      <form id="f" autocomplete="off" onsubmit="return false">
+        <div>
+          <span class="f-lab">Configuration</span>
+          <div class="seg" id="f-conf"></div>
+        </div>
+        <div>
+          <span class="f-lab">Dimension hors tout (DHT)</span>
+          <div class="row2">
+            <label class="unit"><input type="number" id="f-l" value="1200" min="300" step="10" aria-label="Largeur hors tout"><span>L mm</span></label>
+            <label class="unit"><input type="number" id="f-h" value="1400" min="300" step="10" aria-label="Hauteur hors tout"><span>H mm</span></label>
+          </div>
+        </div>
+        <div class="row2">
+          <label><span class="f-lab">Dormant</span><select id="f-dormant"></select></label>
+          <label id="w-ouvrant"><span class="f-lab">Ouvrant</span><select id="f-ouvrant"></select></label>
+        </div>
+        <div class="row2">
+          <label id="w-meneau"><span class="f-lab">Meneau</span><select id="f-meneau"></select></label>
+          <label id="w-battement"><span class="f-lab">Battement</span><select id="f-battement"></select></label>
+          <label id="w-vent"><span class="f-lab">Charge de vent</span><select id="f-vent"></select></label>
+          <label id="w-bas"><span class="f-lab">Partie basse</span>
+            <select id="f-bas"><option value="dormant">Dormant</option><option value="seuil">Seuil alu A076</option></select></label>
+        </div>
+        <div>
+          <span class="f-lab">Couleur</span>
+          <div class="seg" id="f-couleur"></div>
+        </div>
+        <div>
+          <label><span class="f-lab">Vitrage</span><select id="f-vitrage-sel"></select></label>
+          <input type="text" id="f-vitrage" value="4-16-4" aria-label="Composition du vitrage" aria-describedby="f-vit-hint" hidden style="margin-top:.5rem">
+          <div class="hint" id="f-vit-hint" hidden>verre-lame-verre : 4-16-4, 44.2-16-4, 4-12-4-12-4</div>
+        </div>
+        <label class="check" id="w-j079"><input type="checkbox" id="f-j079"> Équerres de feuillure J079 aux 4 angles</label>
+        <div>
+          <label><span class="f-lab">Isolant intérieur</span><select id="f-iso" aria-describedby="f-iso-hint"></select></label>
+          <div class="hint" id="f-iso-hint"></div>
+        </div>
+        <div id="w-ferrure">
+          <span class="f-lab">Ferrure Roto NX</span>
+          <div class="row2">
+            <select id="f-paumelles" aria-label="Côté paumelles"></select>
+            <select id="f-version" aria-label="Version de la ferrure"></select>
+          </div>
+          <select id="f-securite" aria-label="Classe de sécurité" style="margin-top:.5rem"></select>
+          <div class="hint">LFF / HFF Roto prises égales à la DFO profine (hypothèse).</div>
+        </div>
+      </form>
+
+      <section id="out" aria-live="polite"><p class="empty">Chargement…</p></section>
+    </div>
+  </div>
+
+  <dialog id="fa-aide" aria-labelledby="fa-aide-t">
+    <div class="a-head">
+      <h2 id="fa-aide-t">Comment fonctionne le vérificateur</h2>
+      <button type="button" class="a-close" id="fa-aide-close" aria-label="Fermer">×</button>
+    </div>
+    <div class="a-body">
+      <p>Il dit si une menuiserie <b>PERFORM76</b> peut être fabriquée, en croisant les tableaux du wiki
+        comme le ferait un technicien avec le manuel profine et le DTA sous les yeux.
+        <b>Aucune intelligence artificielle n’intervient</b> : tout est calculé, et chaque résultat
+        renvoie vers la page du wiki d’où vient la valeur.</p>
+
+      <h3>S’en servir</h3>
+      <ol>
+        <li>Choisir la <b>configuration</b> : fixe, 1 vantail (OF ou OB), 2 vantaux sur meneau ou à battement.</li>
+        <li>Saisir la <b>dimension hors tout</b> du dormant, largeur et hauteur en millimètres.</li>
+        <li>Choisir le <b>dormant</b>, l’<b>ouvrant</b> et, selon le cas, le <b>meneau</b> ou le <b>battement</b>
+          et la <b>charge de vent</b>. Seules les références proposées par PROFERM sont listées.</li>
+        <li>Indiquer la <b>partie basse</b> (dormant ou seuil alu A076) et la <b>couleur</b>.</li>
+        <li>Choisir le <b>vitrage</b> dans la liste (l’épaisseur totale est indiquée), ou « Autre composition… »
+          pour l’écrire comme on le commande : <b>4-16-4</b>, <b>44.2-16-4</b> (feuilleté), <b>4-12-4-12-4</b>
+          (triple). Cocher les <b>équerres J079</b> si elles sont prévues.</li>
+        <li>Si le mur est doublé à l’intérieur, choisir l’<b>épaisseur d’isolant</b> : la liste ne propose que
+          celles qu’une tapée permet sur le dormant choisi. « Sans doublage » sinon.</li>
+        <li>Choisir la <b>ferrure Roto NX</b> : côté paumelles (P ou Designo II), version selon le poids, et
+          classe de sécurité pour les paumelles P.</li>
+      </ol>
+      <p>Le résultat se met à jour à chaque modification.</p>
+
+      <h3>Ce qu’il calcule, dans l’ordre</h3>
+      <div class="flow"><span>Cotes de débit</span><i>→</i><span>DTA</span><i>→</i><span>Abaque de dormant</span><i>→</i>
+        <span>Abaque d’ouvrant</span><i>→</i><span>Épaisseur de verre</span><i>→</i><span>Renfort</span><i>→</i><span>Parclose</span><i>→</i>
+        <span>Ferrure Roto NX</span><i>→</i><span>Pivot bas</span><i>→</i><span>Isolant et tapée</span></div>
+      <ul>
+        <li><b>Cotes de débit</b> : la dimension hors tout est convertie en dimension extérieure d’ouvrant
+          (DEO), vantail par vantail, avec le calcul écrit comme dans le manuel (DEO = X − (a + b)).</li>
+        <li><b>DTA</b> : la baie ne doit pas dépasser les dimensions maximales de l’Avis Technique pour ce type d’ouvrant.</li>
+        <li><b>Abaque de dormant</b> : le cadre doit rester dans la limite de sa couleur.</li>
+        <li><b>Abaque d’ouvrant</b> : chaque vantail doit rester dans la limite de sa couleur et respecter la
+          règle des 25 % (la largeur ne dépasse pas la hauteur de plus d’un quart). Le graphique montre le vantail placé sur l’abaque.</li>
+        <li><b>Épaisseur de verre</b> : on additionne les verres sans les lames d’air ; à partir de 12 mm, la
+          courbe correspondante (arrondie à la courbe supérieure) limite la hauteur. Les équerres J079 font descendre de deux courbes.</li>
+        <li><b>Renfort</b> : la zone de l’abaque dit quels profilés renforcer ; au-delà de 12 mm de verre, ou en couleur, le renforcement est systématique.</li>
+        <li><b>Parclose</b> : celle dont l’épaisseur de vitrage correspond, avec le dessin de sa coupe.</li>
+        <li><b>Ferrure Roto NX</b> : la feuillure du vantail (largeur LFF, hauteur HFF) doit tenir dans le champ
+          d’application de la ferrure choisie, et le poids du vantail sous son maximum. Quand le manuel et le
+          catalogue Roto divergent (CTR-18), les bornes les plus basses des deux sont retenues.</li>
+        <li><b>Pivot bas</b> : 100 kg par ouvrant sur PERFORM76 (CTR-01).</li>
+        <li><b>Isolant et tapée</b> : la tapée qui donne exactement l’épaisseur d’isolant, lue dans la colonne du
+          dormant choisi, avec sa coupe et les pièces d’appui compatibles. Sur un 76171 au-delà de 155 mm,
+          le dormant bas change.</li>
+      </ul>
+
+      <h3>Lire les résultats</h3>
+      <div class="leg">
+        <span class="tag s-ok">OK</span><span>La contrainte est tenue, avec de la marge.</span>
+        <span class="tag s-etude">Sur étude</span><span>Le wiki ne permet pas de trancher : la valeur est à moins
+          de la précision de lecture d’une limite, une case du tableau est vide, ou la source ne donne pas la donnée.
+          La raison est toujours écrite.</span>
+        <span class="tag s-hors">Hors domaine</span><span>Une limite est dépassée.</span>
+        <span class="tag s-info">Info</span><span>Ce qu’il faut prévoir : renfort, paumelles, poids du vitrage.</span>
+      </div>
+      <p>Le verdict général est le plus défavorable des contrôles. Les pastilles grises ouvrent la page du wiki
+        concernée ; les pastilles orange (<b>VER-21</b>, <b>INC-53</b>…) ouvrent le registre d’anomalies qui porte une réserve sur la donnée.</p>
+
+      <h3>Règles de prudence</h3>
+      <ul>
+        <li><b>Jamais d’interpolation.</b> Les courbes sont relevées tous les 10 cm : entre deux relevés, on retient le plus restrictif.</li>
+        <li><b>La précision de lecture compte.</b> À moins de 3 cm d’une courbe ou de 2 cm d’un coin de limite, le verdict est « sur étude ».</li>
+        <li><b>Une donnée absente reste absente.</b> Rien n’est deviné ni extrapolé.</li>
+      </ul>
+
+      <h3>Hypothèses et limites</h3>
+      <ul>
+        <li><b>LFF / HFF = DFO.</b> La feuillure Roto est prise égale à la dimension de feuillure d’ouvrant
+          profine (DEO − 2 × 20 mm). Aucune source ne l’écrit ; c’est rappelé sur chaque verdict Roto.</li>
+        <li><b>Poids : le verre seul.</b> Le wiki ne donne pas le poids des profilés. Si le verre seul dépasse une
+          limite, c’est un refus certain ; sinon, le vrai poids du vantail reste plus élevé que celui affiché.</li>
+        <li>Côté paumelles P, Roto ne donne ses champs que pour l’<b>oscillo-battant</b> : un ouvrant à la
+          française se contrôle avec Designo II.</li>
+        <li>Les ouvrants <b>76272 / 76279</b> en 1 vantail ou sur meneau, et le battement <b>76473</b> : « sur
+          étude », faute d’abaque exploitable.</li>
+        <li>Une seule gamme pour l’instant : <b>PERFORM76</b>. Les autres suivront quand leurs pages auront le même format.</li>
+      </ul>
+      <p>Toutes les valeurs viennent des pages du wiki citées sous chaque contrôle : quand le wiki évolue, le
+        vérificateur suit.</p>
+    </div>
+  </dialog>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+{% raw %}
+(function(){
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = (x, d) => x == null ? "–" : Number(x).toLocaleString("fr-FR", {maximumFractionDigits: d == null ? 1 : d});
+const STAT = {ok: {l: "OK", i: "✓"}, etude: {l: "Sur étude", i: "?"}, hors: {l: "Hors domaine", i: "✕"}, info: {l: "Info", i: "i"}};
+const REGISTRES = {INC: "/anomalies/incoherences-internes.md", CTR: "/anomalies/contradictions-entre-sources.md",
+                   VER: "/anomalies/informations-a-verifier.md"};
+const wikiHref = p => "/wiki#" + encodeURI(p);
+let OPT = null, conf = "1v_of", couleur = "blanc", timer = null, seq = 0;
+
+async function api(url, body){
+  const r = await fetch(url, {method: body ? "POST" : "GET", credentials: "include",
+    headers: body ? {"Content-Type": "application/json"} : {}, body: body ? JSON.stringify(body) : undefined});
+  if(r.status === 401){ location.href = "/login"; throw new Error("session expirée"); }
+  const data = await r.json().catch(() => ({}));
+  if(!r.ok) throw new Error(data.detail ? (typeof data.detail === "string" ? data.detail : "saisie invalide") : "erreur " + r.status);
+  return data;
+}
+
+function seg(el, entries, cur, onPick){
+  el.innerHTML = Object.entries(entries).map(([k, v]) =>
+    '<button type="button" data-k="' + esc(k) + '" class="' + (k === cur ? "on" : "") + '">' + esc(v) + '</button>').join("");
+  el.onclick = e => {
+    const b = e.target.closest("button[data-k]");
+    if(!b) return;
+    el.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+    onPick(b.dataset.k);
+  };
+}
+const fill = (sel, items, pick) => { $(sel).innerHTML = items.map(x => '<option' + (x === pick ? " selected" : "") + '>' + esc(x) + '</option>').join(""); };
+
+function syncVisibility(){
+  $("w-ouvrant").hidden = conf === "fixe";
+  $("w-meneau").hidden = conf !== "2v_meneau";
+  $("w-battement").hidden = $("w-vent").hidden = conf !== "2v_battement";
+  $("w-bas").hidden = conf === "fixe";
+  $("w-j079").hidden = conf === "fixe";
+  $("w-ferrure").hidden = conf === "fixe";
+  $("f-securite").hidden = $("f-paumelles").value !== "P";
+}
+
+// Les versions dépendent du côté paumelles ; les épaisseurs d'isolant possibles, du dormant.
+function syncFerrure(){
+  if(!OPT) return;
+  const v = OPT.versions[$("f-paumelles").value] || {};
+  const cur = $("f-version").value;
+  $("f-version").innerHTML = Object.entries(v).map(([k, l]) => '<option value="' + esc(k) + '"' + (k === cur ? " selected" : "") + '>' + esc(l) + '</option>').join("");
+  syncVisibility();
+}
+// Seules les épaisseurs que le tableau des tapées donne pour ce dormant : la tapée en découle.
+function syncIsolant(){
+  if(!OPT) return;
+  const e = OPT.isolants[$("f-dormant").value] || [];
+  const cur = $("f-iso").value;
+  $("f-iso").innerHTML = '<option value="">Sans doublage</option>' +
+    e.map(x => '<option value="' + x + '"' + (String(x) === cur ? " selected" : "") + '>' + fmt(x, 0) + ' mm</option>').join("");
+  $("f-iso").disabled = !e.length;
+  $("f-iso-hint").textContent = e.length ? "la tapée est choisie d’après l’épaisseur et le dormant"
+                                         : "pas de tapée documentée pour ce dormant";
+}
+
+// Compositions courantes, pour aller vite ; « Autre » rouvre la saisie libre. L'épaisseur totale
+// du libellé suit la même règle que le serveur (feuilleté 44.2 = 2 × 4 mm + 2 films de 0,38).
+const VITRAGES = [
+  ["Double vitrage", ["4-16-4", "4-18-4", "4-20-4", "6-16-4", "6-20-4"]],
+  ["Double vitrage feuilleté", ["33.2-16-4", "44.2-16-4", "44.2-20-4", "44.2-16-44.2"]],
+  ["Triple vitrage", ["4-12-4-12-4", "4-14-4-14-4", "4-16-4-16-4", "4-18-4-18-4", "44.2-14-4-14-4"]]
+];
+function epaisseur(c){
+  return c.split("-").reduce((t, p, i) => {
+    const f = /^(\d)(\d)\.(\d)$/.exec(p);
+    return t + (i % 2 === 0 && f ? +f[1] + +f[2] + 0.38 * +f[3] : +p);
+  }, 0);
+}
+function buildVitrages(){
+  $("f-vitrage-sel").innerHTML = VITRAGES.map(([g, l]) => '<optgroup label="' + esc(g) + '">' +
+    l.map(c => '<option value="' + esc(c) + '">' + esc(c) + ' · ' + fmt(epaisseur(c), 2) + ' mm</option>').join("") +
+    '</optgroup>').join("") + '<option value="autre">Autre composition…</option>';
+  $("f-vitrage-sel").onchange = () => {
+    const autre = $("f-vitrage-sel").value === "autre";
+    $("f-vitrage").hidden = $("f-vit-hint").hidden = !autre;
+    if(autre) $("f-vitrage").focus();
+  };
+}
+
+function saisie(){
+  return {configuration: conf, largeur_mm: +$("f-l").value, hauteur_mm: +$("f-h").value,
+    dormant: $("f-dormant").value, ouvrant: conf === "fixe" ? null : $("f-ouvrant").value,
+    meneau: conf === "2v_meneau" ? $("f-meneau").value : null,
+    battement: conf === "2v_battement" ? $("f-battement").value : null,
+    bas: $("f-bas").value, couleur, j079: $("f-j079").checked,
+    vitrage: $("f-vitrage-sel").value === "autre" ? $("f-vitrage").value.trim() : $("f-vitrage-sel").value,
+    vent: $("f-vent").value || "0,8",
+    isolant_mm: $("f-iso").value ? +$("f-iso").value : null,
+    paumelles: $("f-paumelles").value || "P", version: $("f-version").value || "130",
+    securite: $("f-securite").value || "base"};
+}
+
+function relance(){ clearTimeout(timer); timer = setTimeout(calcule, 220); }
+
+async function calcule(){
+  const s = saisie();
+  if(!(s.largeur_mm > 0 && s.hauteur_mm > 0)) return;
+  const n = ++seq;
+  try {
+    const r = await api("/api/faisabilite", s);
+    if(n === seq) rendu(r, s);
+  } catch(err){
+    if(n === seq) $("out").innerHTML = '<p class="empty err">' + esc(err.message) + '</p>';
+  }
+}
+
+/* ---- rendu ---- */
+function sources(c){
+  const seen = new Set();
+  return c.sources.filter(s => { const k = s.page + s.section; if(seen.has(k)) return false; seen.add(k); return true; })
+    .map(s => '<a class="src" href="' + wikiHref(s.page) + '" title="' + esc(s.localisation || s.page) + '">' +
+      esc(s.section || s.page.split("/").pop().replace(".md", "")) + '</a>').join("") +
+    c.anomalies.map(a => '<a class="anom" href="' + wikiHref(REGISTRES[a.slice(0, 3)] || "") + '" title="Registre d’anomalies">' + esc(a) + '</a>').join("");
+}
+
+function rendu(r, s){
+  const brouillon = r.brouillons.length
+    ? '<div class="draft">Données en brouillon : ' + r.brouillons.map(p => '<a href="' + wikiHref(p) + '">' + esc(p.split("/").pop().replace(".md", "")) + '</a>').join(", ") +
+      '. Aucune page de ce calcul n’a encore été relue contre son PDF.</div>' : "";
+  const why = r.contrainte ? esc(r.contrainte.titre) + " — " + esc(r.contrainte.detail)
+    : "Tous les contrôles passent. Les contrôles « info » disent ce qu’il faut prévoir.";
+  const chain = '<ol class="chain">' + r.controles.map(c => {
+    const st = STAT[c.statut];
+    const parcs = (c.valeurs.parcloses || c.valeurs.tapees || []).map(p => '<span class="parc">' + (p.image ? '<img src="' + esc(p.image) + '" alt="' + esc(p.ref) + '">' : "") +
+      '<span><b>' + esc(p.ref) + '</b><br>' + fmt(p.epaisseur) + ' mm</span></span>').join("");
+    const etapes = c.valeurs.etapes ? '<table><thead><tr><th>Étape</th><th>Calcul</th><th style="text-align:right">mm</th></tr></thead><tbody>' +
+      c.valeurs.etapes.map(e => '<tr><td>' + esc(e.etape) + '</td><td>' + esc(e.calcul) + '</td><td class="num">' + esc(e.resultat) + '</td></tr>').join("") + '</tbody></table>' : "";
+    return '<li class="step"><span class="dot s-' + c.statut + '">' + st.i + '</span><div>' +
+      '<h3>' + esc(c.titre) + ' <span class="tag s-' + c.statut + '">' + st.l + '</span></h3>' +
+      '<p>' + esc(c.detail) + '</p>' + etapes + (parcs ? '<div class="parcs">' + parcs + '</div>' : "") +
+      '<div class="srcs">' + sources(c) + '</div></div></li>';
+  }).join("") + '</ol>';
+
+  $("out").innerHTML =
+    '<div class="verdict s-' + r.verdict + '"><span class="ico"><b>' + STAT[r.verdict].i + '</b></span><div>' +
+      '<div class="big">' + esc(r.libelle) + '</div><div class="why">' + why + '</div></div></div>' + brouillon +
+    '<div class="panels">' +
+      '<div class="panel"><h2>Élévation <span>vue intérieure, cotes en mm</span></h2>' + elevation(r, s) + '</div>' +
+      '<div class="panel"><h2>Abaque d’ouvrant <span>' + esc(r.graphe ? r.graphe.titre : "") + '</span></h2>' + abaque(r) + '</div>' +
+    '</div>' +
+    '<div class="panel"><h2>Contrôles <span>' + r.controles.length + ' · vitrage ' + fmt(r.vitrage.total_mm, 2) + ' mm, verre ' + fmt(r.vitrage.verre_mm, 2) + ' mm</span></h2>' + chain + '</div>';
+}
+
+/* Élévation : le cadre à l'échelle, les vantaux avec leur DEO, le sens d'ouverture. */
+function elevation(r, s){
+  const W = 420, Hh = 330, pad = 44;
+  const k = Math.min((W - pad * 2) / s.largeur_mm, (Hh - pad * 2) / s.hauteur_mm);
+  const w = s.largeur_mm * k, h = s.hauteur_mm * k, x0 = (W - w) / 2, y0 = (Hh - h) / 2 - 6;
+  const f = 12;
+  let g = '<rect x="' + x0 + '" y="' + y0 + '" width="' + w + '" height="' + h + '" fill="var(--frame)" rx="2"/>';
+  const vantaux = r.debit.vantaux || 0;
+  const deo = r.debit.deo;
+  if(!vantaux){
+    g += '<rect x="' + (x0 + f) + '" y="' + (y0 + f) + '" width="' + (w - 2 * f) + '" height="' + (h - 2 * f) + '" fill="var(--glass)"/>';
+  } else {
+    const gap = s.configuration === "2v_meneau" ? 10 : 3;
+    const vw = vantaux === 2 ? (w - 2 * f - gap) / 2 : w - 2 * f;
+    for(let i = 0; i < vantaux; i++){
+      const vx = x0 + f + i * (vw + gap), vy = y0 + f, vh = h - 2 * f;
+      g += '<rect x="' + vx + '" y="' + vy + '" width="' + vw + '" height="' + vh + '" fill="var(--bg-sunken)" stroke="var(--frame)"/>' +
+           '<rect x="' + (vx + 7) + '" y="' + (vy + 7) + '" width="' + (vw - 14) + '" height="' + (vh - 14) + '" fill="var(--glass)"/>';
+      // sens d'ouverture : triangle pointant vers la paumelle (OF), plus le basculant (OB)
+      const hinge = vantaux === 2 ? (i === 0 ? vx + 7 : vx + vw - 7) : vx + 7;
+      const tip = hinge === vx + 7 ? vx + vw - 7 : vx + 7;
+      g += '<path d="M' + tip + ',' + (vy + 7) + ' L' + hinge + ',' + (vy + vh / 2) + ' L' + tip + ',' + (vy + vh - 7) + '" fill="none" stroke="var(--tx-dim)" stroke-width="1" stroke-dasharray="4 3"/>';
+      if(s.configuration === "1v_ob")
+        g += '<path d="M' + (vx + 7) + ',' + (vy + vh - 7) + ' L' + (vx + vw / 2) + ',' + (vy + 7) + ' L' + (vx + vw - 7) + ',' + (vy + vh - 7) + '" fill="none" stroke="var(--tx-dim)" stroke-width="1" stroke-dasharray="4 3"/>';
+      if(deo) g += '<text x="' + (vx + vw / 2) + '" y="' + (vy + vh / 2) + '" text-anchor="middle" font-size="11.5" fill="var(--tx)" font-weight="700">' +
+        fmt(deo[0], 0) + ' × ' + fmt(deo[1], 0) + '</text><text x="' + (vx + vw / 2) + '" y="' + (vy + vh / 2 + 14) + '" text-anchor="middle" font-size="10" fill="var(--tx-dim)">DEO</text>';
+    }
+  }
+  // cotes hors tout
+  const yb = y0 + h + 18, xl = x0 - 18;
+  g += '<path d="M' + x0 + ',' + yb + ' H' + (x0 + w) + ' M' + x0 + ',' + (yb - 5) + ' v10 M' + (x0 + w) + ',' + (yb - 5) + ' v10" stroke="var(--tx-dim)"/>' +
+       '<text x="' + (x0 + w / 2) + '" y="' + (yb + 15) + '" text-anchor="middle" font-size="12" fill="var(--tx)" font-weight="600">' + fmt(s.largeur_mm, 0) + '</text>' +
+       '<path d="M' + xl + ',' + y0 + ' V' + (y0 + h) + ' M' + (xl - 5) + ',' + y0 + ' h10 M' + (xl - 5) + ',' + (y0 + h) + ' h10" stroke="var(--tx-dim)"/>' +
+       '<text x="' + (xl - 8) + '" y="' + (y0 + h / 2) + '" text-anchor="middle" font-size="12" fill="var(--tx)" font-weight="600" transform="rotate(-90 ' + (xl - 8) + ' ' + (y0 + h / 2) + ')">' + fmt(s.hauteur_mm, 0) + '</text>';
+  return '<svg viewBox="0 0 ' + W + ' ' + Hh + '" role="img" aria-label="Élévation de la menuiserie">' + g + '</svg>';
+}
+
+/* Abaque : limite de couleur, règle des 25 %, zones, courbe de verre, et le vantail placé. */
+function abaque(r){
+  const G = r.graphe;
+  if(!G) return '<p class="empty">Pas d’abaque d’ouvrant pour cette saisie.</p>';
+  const W = 420, H = 330, m = {l: 48, r: 12, t: 12, b: 34};
+  const X0 = 50, X1 = 150, Y0 = 50, Y1 = 250;
+  const sx = x => m.l + (x - X0) / (X1 - X0) * (W - m.l - m.r);
+  const sy = y => H - m.b - (y - Y0) / (Y1 - Y0) * (H - m.t - m.b);
+  const L = G.limite;
+  let g = "";
+  for(let x = 50; x <= 150; x += 10) g += '<line x1="' + sx(x) + '" y1="' + sy(Y0) + '" x2="' + sx(x) + '" y2="' + sy(Y1) + '" stroke="var(--line)"/>' +
+    '<text x="' + sx(x) + '" y="' + (H - m.b + 14) + '" font-size="10" text-anchor="middle" fill="var(--tx-faint)">' + x + '</text>';
+  for(let y = 50; y <= 250; y += 25) g += '<line x1="' + sx(X0) + '" y1="' + sy(y) + '" x2="' + sx(X1) + '" y2="' + sy(y) + '" stroke="var(--line)"/>' +
+    '<text x="' + (m.l - 6) + '" y="' + (sy(y) + 3) + '" font-size="10" text-anchor="end" fill="var(--tx-faint)">' + y + '</text>';
+  g += '<text x="' + (W - m.r) + '" y="' + (H - 4) + '" font-size="10" text-anchor="end" fill="var(--tx-dim)">largeur d’ouvrant (cm)</text>' +
+       '<text x="11" y="' + (m.t + (H - m.t - m.b) / 2) + '" font-size="10" text-anchor="middle" fill="var(--tx-dim)" transform="rotate(-90 11 ' + (m.t + (H - m.t - m.b) / 2) + ')">hauteur d’ouvrant (cm)</text>';
+  const poly = [[X0, L.hauteur_maxi], [L.largeur_a_hauteur_maxi, L.hauteur_maxi], [L.coin_largeur, L.coin_hauteur],
+    [L.largeur_maxi, L.coin_hauteur], [L.largeur_maxi, L.hauteur_mini_a_largeur_maxi], [62.5, 50], [X0, 50]];
+  g += '<polygon points="' + poly.map(p => sx(p[0]) + "," + sy(p[1])).join(" ") + '" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.6"/>';
+  if(G.zones) g += '<path d="M' + sx(G.zones[0]) + ',' + sy(Y0) + ' V' + sy(Y1) + ' M' + sx(X0) + ',' + sy(G.zones[1]) + ' H' + sx(X1) + '" stroke="var(--tx-faint)" stroke-dasharray="3 3"/>' +
+    [["A", 60, 60], ["B", 140, 60], ["C", 60, 240], ["D", 140, 240]].map(z => '<text x="' + sx(z[1]) + '" y="' + sy(z[2]) + '" font-size="11" font-weight="700" fill="var(--tx-faint)" text-anchor="middle">' + z[0] + '</text>').join("");
+  if(G.courbe){
+    const pts = G.courbe.points.filter(p => p[1] != null && p[1] <= Y1);
+    if(pts.length > 1) g += '<polyline points="' + pts.map(p => sx(p[0]) + "," + sy(p[1])).join(" ") + '" fill="none" stroke="var(--etude)" stroke-width="2"/>' +
+      pts.map(p => '<circle cx="' + sx(p[0]) + '" cy="' + sy(p[1]) + '" r="2.4" fill="var(--etude)"/>').join("");
+  }
+  const [px, py] = G.point;
+  // la pastille prend le pire des contrôles lus sur l'abaque : couleur, verre, vent
+  const ordre = ["ok", "etude", "hors"];
+  const pire = r.controles.filter(c => ["ouvrant", "verre", "vent"].includes(c.id) && ordre.includes(c.statut))
+    .reduce((a, c) => ordre.indexOf(c.statut) > ordre.indexOf(a) ? c.statut : a, "ok");
+  const coul = {ok: "var(--ok)", etude: "var(--etude)", hors: "var(--hors)"}[pire];
+  const cx = sx(Math.max(X0, Math.min(X1, px))), cy = sy(Math.max(Y0, Math.min(Y1, py)));
+  g += '<circle cx="' + cx + '" cy="' + cy + '" r="6.5" fill="' + coul + '" stroke="var(--bg)" stroke-width="2"/>' +
+       '<text x="' + (cx + 9) + '" y="' + (cy - 8) + '" font-size="11" font-weight="700" fill="var(--tx)">' + fmt(px) + ' × ' + fmt(py) + '</text>';
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Abaque d’ouvrant avec la position du vantail">' + g + '</svg>' +
+    '<div class="legend"><span><i style="background:var(--accent)"></i>limite de couleur et règle des 25 %</span>' +
+    (G.courbe ? '<span><i style="background:var(--etude)"></i>' + esc(G.courbe.nom) + ' (relevé tous les 10 cm)</span>' : "") +
+    '<span>A–D : zones de renforcement</span></div>';
+}
+
+/* ---- aide ---- */
+const aide = $("fa-aide");
+$("fa-aide-btn").onclick = () => aide.showModal();
+$("fa-aide-close").onclick = () => aide.close();
+aide.addEventListener("click", e => { if(e.target === aide) aide.close(); });
+
+/* ---- démarrage ---- */
+api("/api/faisabilite/options").then(o => {
+  OPT = o;
+  seg($("f-conf"), o.configurations, conf, k => { conf = k; syncVisibility(); relance(); });
+  seg($("f-couleur"), o.couleurs, couleur, k => { couleur = k; relance(); });
+  fill("f-dormant", o.dormants, "76171");
+  fill("f-ouvrant", o.ouvrants, "76281");
+  fill("f-meneau", o.meneaux, o.meneaux[0]);
+  fill("f-battement", o.battements, o.battements[0]);
+  $("f-paumelles").innerHTML = Object.entries(o.paumelles).map(([k, l]) => '<option value="' + esc(k) + '">' + esc(l) + '</option>').join("");
+  $("f-securite").innerHTML = Object.entries(o.securites).map(([k, l]) => '<option value="' + esc(k) + '">' + esc(l) + '</option>').join("");
+  $("f-paumelles").addEventListener("change", syncFerrure);
+  $("f-dormant").addEventListener("change", syncIsolant);
+  syncFerrure();
+  syncIsolant();
+  buildVitrages();
+  $("f-vent").innerHTML = o.vents.map(v => '<option value="' + esc(v) + '">' + esc(v) + ' kN/m²</option>').join("");
+  syncVisibility();
+  $("f").addEventListener("input", relance);
+  $("f").addEventListener("change", relance);
+  calcule();
+}).catch(err => { $("out").innerHTML = '<p class="empty err">Impossible de charger le vérificateur : ' + esc(err.message) + '</p>'; });
+})();
+{% endraw %}
+</script>
+{% endblock %}

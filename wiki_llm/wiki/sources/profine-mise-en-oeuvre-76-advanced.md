@@ -40,14 +40,11 @@ qu'elles n'ont pas été révisées ensemble, ce qui est le cas de l'entrée **I
 
 Numéros du PDF. La pagination imprimée redémarre à 1 dans chaque registre.
 
-**Convention du retraitement (25/09/2026), à suivre par les tranches suivantes** : chaque ligne
+**Convention du retraitement (25/09/2026)** : chaque ligne
 porte une plage de pages **en numérotation PDF**, de nature identique, jamais un registre entier ;
 les états sont `transcrit`, `illisible` (avec le rendu tenté) ou `sans contenu propre` (page
-ouverte, doublon ou page vide) ; une ligne `à faire` reste telle quelle tant que ses pages n'ont
-pas été rendues en image et lues. Les citations des pages du wiki donnent la page PDF et, en
-complément, le registre profine et sa page imprimée (« registre 2.3.1, p. N »). Les anciennes
-lignes par registre qui restent `à faire` viennent d'une ingestion qui résumait les planches :
-leur colonne « Page du wiki » dit où elles avaient été versées, pas ce qui a été relu.
+ouverte, doublon ou page vide). Les citations des pages du wiki donnent la page PDF et, en
+complément, le registre profine et sa page imprimée (« registre 2.3.1, p. N »).
 
 | Registre | Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- | --- |
@@ -123,19 +120,29 @@ leur colonne « Page du wiki » dit où elles avaient été versées, pas ce qui
 | 2.6.2 | 304 | table des matières du registre 2.6.2 (onze rubriques, pages imprimées 1 à 66), sans numéro de page ; ses bornes ne correspondent pas aux pages du registre | sans contenu propre | - |
 | 2.6.2 | 305-311 | AluClip, profilés principaux et accessoires : 19 capots cotés (retour, hauteur) à côté des dormants, ouvrants, meneaux, traverses, battements et élargisseurs, demi-capot A385, inserts G023 et G024, busette M450 et manchon G008, gabarits T018 à T020, embouts M286S/L, M289S/L, M261, rejets d'eau et seuils | transcrit | [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md) |
 | 2.6.2 | 312 | système d'étanchéité AluClip : EPJoint EPDM G177, G178, G161, joints soudables PCE et G050.T | transcrit | [Joints et garnitures profine](/profiles/joints-et-garnitures-profine.md) |
-| 2.6.2 | 313-394 | AluClip : plans de combinaison, cotes de débit, mise en œuvre, drainage, battement, seuil, profilés complémentaires, accouplement | à faire | - |
-| 2.6.3 | 395-408 | AluClip Pro : ouvrant sans renfort acier, capot A072, équerres J079 dès 40 kg | à faire | [Renforts du système 76](/profiles/systeme-76-renforts.md) |
-| 2.6.5 | 409-424 | AluClip Zero : capot A195, vitrage 36 à 50 mm, collage vitrage dès 40 kg | à faire | [Renforts du système 76](/profiles/systeme-76-renforts.md), [Parcloses PERFORM76](/profiles/perform76-parcloses.md) |
+| 2.6.2 | 313-331 | AluClip, plans de combinaison : dormants et meneaux de châssis fixe capotés, dormant + ouvrant (7 dormants × 3 ouvrants, 76172 A073 + 76283 A039), deux vantaux et ouvrant + fixe sur meneau 76372, deux vantaux sur battements 76471, 76472, 76473 ; renforts et IW | transcrit | [Plans de combinaison AluClip du système 76](/profiles/systeme-76-aluclip-plans-de-combinaison.md) |
+| 2.6.2 | 332-344 | AluClip, plans de combinaison avec seuil : ouvrants sur seuils A076, A077 / A343, A075 avec rejets d'eau A062 / A064 ; porte-fenêtre dormant + ouvrant, sur meneaux 76372 et 76373 (A346), sur battements 76472 et 76473 | transcrit | [Plans de combinaison AluClip du système 76](/profiles/systeme-76-aluclip-plans-de-combinaison.md) |
+| 2.6.2 | 345-355 | AluClip, cotes de débit : règles (relevé sur cadre soudé, 0,5 mm par extrémité, onglet mini 850 × 850, coupe droite + fraisage + 2,3 mm), capots de dormant horizontal (DHT + 2,4) et vertical, de traverse, sur seuils A076 / A077 / A343 / A075, de meneau, d'ouvrant, du 76283 (A039), de traverse d'ouvrant, de battement | transcrit | [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md) |
+| 2.6.2 | 356 | AluClip, cotes de débit du capot A073 sur dormant 76172 (64 / 64 / 0,0, horizontal DHT + 2,6) | transcrit | [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md) |
+| 2.6.2 | 357-363 | AluClip, mise en œuvre : poinçonnage (12 capots), étanchéité silicone, ordre de montage et collage, inserts G023 / G024, joint G069, capots de traverse / meneau et d'ouvrant extérieur, contour de fraisage du meneau 76372 / 76373 ; drainage et décompression, busette M450, joint G008, fraise T005 | transcrit | [Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md) |
+| 2.6.2 | 364-370 | AluClip, drainage et décompression par profilé : dormants en façade et avec pièce d'appui (A491 / A385), A073 / 76172, ouvrants, traverse et meneau 76372, traverse d'ouvrant 76300, alternative 3 × Ø 6, décompression du dormant et joint G090 | transcrit | [Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md) |
+| 2.6.2 | 371-378 | AluClip : sets d'embout de battement M501, M286, M289, montage des battements 76473, 76471, 76472 capotés ; montage sur seuils A076 et A075 (usinage du capot, détails W, Y, Z) ; réhausses et élargisseurs capotés (A120, A121, A124, délignage) ; fixation du profilé A249 par vis plot S075 | transcrit | [Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md) |
+| 2.6.2 | 379-390 | AluClip, profilés complémentaires : tapées A469 à A473 et appuis A475, A476, A477, A491 cotés, A502, A503, A385 ; montage des demi-capots (M569, T073), patin G251, tapées (étanchéité de fil, embouts M646, gabarit T134), pièce d'appui, fixation (150 / 300 mm), embouts M643 ; cotes de débit théoriques des tapées et appuis par dormant | transcrit | [Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md) |
+| 2.6.2 | 391-394 | AluClip, accouplement d'éléments : 90° (8355), 135° (8356), angle variable (8340 / 8341), contreventement A250, liaison H 76605 (deux variantes), liaison G022 ; renforts, IW, valeurs statiques, entretoises, usinage des profilés d'accouplement | transcrit | [Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md) |
+| 2.6.3 | 395-403 | AluClip Pro : caractéristiques (ouvrant 76271 sans renfort, capot A072, équerre J079 dès 40 kg, battements renforcés), variantes 45° et imbriquée, coupes de combinaison sur sept dormants, meneaux 76372 et 76373, battements 76471 et 76472, seuils A076, A077 / A343, A075 | transcrit | [Plans de combinaison AluClip du système 76](/profiles/systeme-76-aluclip-plans-de-combinaison.md) |
+| 2.6.3 | 404-408 | AluClip Pro, mise en œuvre : coupe à 45° (cote de débit DEO − 59,6, cale de tronçonnage, dépouille, bande de couleur), variante imbriquée (débit DEO − 59,6 et DEO − 94, poinçonneuse, trains de fraise A et B, table de fraisage et cales cotées, étapes d'usinage, poinçonnages 1 et 2) | transcrit | [Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md), [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md) |
+| 2.6.5 | 409-416 | AluClip Zero : caractéristiques (capot A195 affleurant, vitrage 36 à 50 mm, ouvrant 76282), présentation du produit (A195, I008, M490, 76282, S012, vis), plans de combinaison sur sept dormants, meneau 76372, battements 76471 et 76472, seuils A076, A075 / Z065, A077 / A343 | transcrit | [Plans de combinaison AluClip du système 76](/profiles/systeme-76-aluclip-plans-de-combinaison.md) |
+| 2.6.5 | 417-424 | AluClip Zero, mise en œuvre : ouvrant 76282 (renfort, vis, drainage), cotes de débit de l'ouvrant par dormant et du capot A195, usinage et montage des capots, verrou S012, adhésif I008, entretoise M490, épaisseurs de vitrage par parclose, collage du vitrage dès 40 kg, dormant sans capotage (joint G127) | transcrit | [Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md), [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md), [Tableau de vitrage du système 76](/profiles/systeme-76-tableau-de-vitrage.md) |
 
 Les registres **2.4.5 et 2.4.6 se suivent** : le 2.4.5 va de la page 194 à la page 233 (pages imprimées 1 à 40), le 2.4.6 de la page 234 à la page 250 (pages imprimées 1 à 17), relus en image le 25/09/2026. Le registre **2.6.4
 n'existe pas** dans le fichier, et la section **2.7 Cas de pose**, annoncée par la table des
 matières, **est absente**.
 
-**Retraitement selon le protocole révisé, en cours le 25/09/2026 :** les pages PDF 1 à 301
-(registres 2.1.1 à 2.5.2) ont été relues en image et transcrites ; la page 39 est un doublon de la
-page 38. Les pages 302 à 424 restent `à faire`. Leurs lignes portaient l'état « transcrit » d'une
-ingestion antérieure, faite sous un protocole qui résumait les planches : elles sont à reprendre
-page par page, en numérotation du PDF.
+**Retraitement selon le protocole révisé, complet le 25/09/2026 :** les 424 pages du PDF ont été
+rendues en image, relues et transcrites, sans trou ni recouvrement ; le registre ne porte plus
+aucune ligne `à faire`. Deux pages sont sans contenu propre : la page 39, doublon de la page 38, et
+la page 304, table des matières du registre 2.6.2. Le registre 2.6.1 couvre les pages 302 et 303,
+le 2.6.2 les pages 304 à 394, le 2.6.3 les pages 395 à 408 et le 2.6.5 les pages 409 à 424.
 
 # Anomalies portées par ce document
 
@@ -150,6 +157,9 @@ page par page, en numérotation du PDF.
 | **INC-55** à **INC-63** | vissage des renforts (76185 légendé V266.Z, légendes des ouvrants 76271 / 76276), ventilation en bout légendée 76300 sur la planche du 76303, vis et composition des sets d'embout de battement, assemblage du battement titré 76471, gabarit « 76371 », vis et quantités des assemblages en T et en croix des meneaux et des traverses d'ouvrant |
 | **INC-64** à **INC-72**, **CTR-34** | sets et vis des seuils (M528, M159 / M154, S104, S055, vis du commerce), gabarits T021 / T022 / T064, rejets d'eau (M462 / M178, longueurs de joint), porte-fenêtre avec fixe latéral (M154 en A075, set M456), cotes des réhausses clippées, inerties V167 / V317 des réhausses, accouplement (G022, V331 / V288, V470, K 8355, 640 (K640), T000, V260 / V290) ; sets M546 à M549 du poster absents du manuel sur A075 |
 | **VER-57**, **VER-58** | alternative 3 × Ø 6 à 46 mm sur les 76172 et 76102 ; débit à 90° « DHT − 2X − 80 » de la combinaison petit / grand ouvrant |
+| **CTR-35**, **CTR-36** | cotes de huit capots AluClip contre le poster ; épaisseur de l'habillage A502 (2 / 3 mm) |
+| **INC-73** à **INC-82** | plans AluClip (hors tout « 13,4 », renforts du 76172 et du 76281, capot A052 du 76473, IW décalés, capots A042 / A0442, plan « 76171 » coté 76172), DEO / DHT du capot vertical d'ouvrant, drainage 7,1 / 7,9 mm et renvoi « page 49 », ouvrant « 76270 », valeur statique 19,10, « AO76 » / « AO75 » / « FF0 », planches AluClip Pro (A071, A046, V310, « Reg. 2.6.3 ») et AluClip Zero (A180, A185, V291.1.Z, V317 à 2,4, vis A3J-HJ2 / H2) |
+| **VER-59** | joint de frappe dormant G069 de la mise en œuvre AluClip |
 
 # Provenance du fichier
 

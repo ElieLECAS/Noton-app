@@ -40,6 +40,14 @@ d'information technique. Le protocole d'écriture fait foi : `wiki_llm/CLAUDE.md
   taxonomie de la frontmatter, niveaux inutiles sautés. Le choix des nœuds se teste ici ; le
   navigateur ne fait que la mise en page. Plus de vue graphe (illisible, retirée le 25/09/2026) ;
   `/api/wiki/graph` reste, c'est la liste des pages du wiki, du chat et du vocal.
+- `app/services/faisabilite.py` + `faisabilite.html` (`/faisabilite`, 25/09/2026, premier jet) —
+  le vérificateur PERFORM76 de l'audit § 9.1 : débit → DTA → abaque de dormant → abaque
+  d'ouvrant (couleur, 25 %, courbe de verre, J079, zones) → parclose → ferrure Roto NX →
+  pivot bas → isolant et tapée. Aucun modèle, toutes les
+  valeurs lues dans les tableaux du wiki (un en-tête changé casse `tests/test_faisabilite.py`).
+  Jamais d'interpolation (la plus restrictive des deux graduations) ; à moins de la précision
+  de lecture d'une limite, « sur étude ». Hypothèse affichée : LFF / HFF Roto = DFO profine ;
+  poids = verre seul (le wiki n'a pas le poids des profilés) ; CTR-18 → bornes les plus basses.
 - `wiki_llm/CLAUDE.md` — le protocole d'écriture du wiki : c'est LUI qui fait foi pour toute
   ingestion ou correction de page. L'application ne corrige jamais une page : elle remplace le
   wiki EN BLOC par ce qu'on lui dépose.

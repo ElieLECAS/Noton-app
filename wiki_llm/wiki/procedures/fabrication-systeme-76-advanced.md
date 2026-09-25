@@ -267,6 +267,10 @@ capot de traverse.
 
 (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 28 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 32)
 
+Le manuel de mise en œuvre profine donne les mêmes cotes pour ces quatre capots et cote en plus
+les découpes des A385, A386, des capots d'ouvrant et de traverse d'ouvrant — voir
+[Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md#poinçonnage-des-capots).
+
 ## Drainage avec capot complet, manchon G008
 
 Quand la traverse basse porte un **capot complet**, l'eau de la feuillure doit traverser à la fois

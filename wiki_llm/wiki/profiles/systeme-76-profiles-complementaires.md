@@ -333,6 +333,9 @@ portée sur trois d'entre eux ; la matière est écrite entre parenthèses aprè
 (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 20 ; même planche :
 raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 19)
 
+Le manuel de mise en œuvre cote l'épaisseur du **A502** à 3 mm — entrée **CTR-36** du registre
+[Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
+
 Les ailes horizontales des 1486 et 1487 sont inclinées vers le haut, celle du 9621 aussi, crantée
 sur sa face inférieure ; le 9621 n'est pas coté. **Les habillages monoparois dont la
 caractéristique colorimétrique L\* est inférieure à 82 ou non définie ne peuvent pas être

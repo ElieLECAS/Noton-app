@@ -474,6 +474,14 @@ Une ligne par couple patte et dormant : une même patte dessert les deux dormant
 **Aucune épaisseur intermédiaire n'existe** : les valeurs de ce tableau sont les seules
 documentées.
 
+# Tapées aluminium sur dormant capoté
+
+Un dormant habillé d'un capot aluminium (variante AluClip) reçoit des tapées **aluminium** A469 à
+A473, et non les tapées PVC ci-dessus. Leurs cotes sont dans
+[Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md#pièces-dappui-et-tapées-aluminium),
+leur mise en œuvre et leurs cotes de débit dans
+[Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md#tapées-et-appuis-aluminium-sur-dormant-capoté).
+
 # Ce que la source ne donne pas
 
 - Aucune **planche de tapées pour le dormant 76172**.

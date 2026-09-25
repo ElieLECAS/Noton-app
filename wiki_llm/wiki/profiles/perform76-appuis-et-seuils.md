@@ -146,6 +146,9 @@ tapée (cote verticale de droite).
 raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 17)
 
 Le DT100 est dessiné avec les pièces d'appui aluminium A475 à A491 [2 p. 18] ; son schéma de montage le nomme « bavette DT100 » — voir [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md#montage-de-la-bavette-dt100) [2 p. 42].
+La hauteur de chacune de ces pièces (31,5 et 35 mm pour les tapées, 19,7 mm pour les appuis), leur
+mode opératoire pas à pas et leurs cotes de débit sont dans
+[Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md#tapées-et-appuis-aluminium-sur-dormant-capoté).
 Les tapées et appuis aluminium se vissent sur le dormant capoté avec un entraxe maximum de 400 mm,
 avec les embouts M646 et M643 et la mousse G251 — prescription complète dans
 [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md), section 2.2.3.3.5.
