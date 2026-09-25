@@ -48,6 +48,11 @@ d'information technique. Le protocole d'écriture fait foi : `wiki_llm/CLAUDE.md
   Jamais d'interpolation (la plus restrictive des deux graduations) ; à moins de la précision
   de lecture d'une limite, « sur étude ». Hypothèse affichée : LFF / HFF Roto = DFO profine ;
   poids = verre seul (le wiki n'a pas le poids des profilés) ; CTR-18 → bornes les plus basses.
+- `app/services/debit_atelier.py` (onglet « Débit et nomenclature » de `/faisabilite`, § 9.2) —
+  même saisie, liste de coupe : cotes à déduire de `systeme-76-cotes-de-debit.md` une fois par
+  coupe, renforts d'ouvrant selon la zone de l'abaque, parclose, tapée, appui, paumelles ; puis
+  nomenclature (qté, ml) et accessoires par profilé avec dessins. Barres soudées en cote finie
+  sauf surcote saisie (le 76 n'en documente pas). Impression A4 et CSV côté navigateur.
 - `wiki_llm/CLAUDE.md` — le protocole d'écriture du wiki : c'est LUI qui fait foi pour toute
   ingestion ou correction de page. L'application ne corrige jamais une page : elle remplace le
   wiki EN BLOC par ce qu'on lui dépose.

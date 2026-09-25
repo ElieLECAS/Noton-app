@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Faisabilité - {{ app_name }}{% endblock %}
+{% block title %}Faisabilité et débit - {{ app_name }}{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -72,6 +72,52 @@
   #fa-aide .s-etude{color:var(--etude);background:var(--etude-bg);border-color:var(--etude-br)}
   #fa-aide .s-hors{color:var(--hors);background:var(--hors-bg);border-color:var(--hors-br)}
   #fa-aide .s-info{color:var(--info);background:var(--info-bg);border-color:var(--info-br)}
+
+  /* ---- onglets et fiche de débit ---- */
+  #fa .tabs{display:flex;gap:4px;margin-bottom:1rem;border-bottom:1px solid var(--line)}
+  #fa .tabs button{border:0;background:none;font:inherit;font-size:14px;font-weight:700;color:var(--tx-dim);
+    padding:.55rem .9rem;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;display:flex;gap:.45rem;align-items:center}
+  #fa .tabs button.on{color:var(--accent);border-bottom-color:var(--accent)}
+  #fa .tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  #fa .badge{width:18px;height:18px;border-radius:50%;display:inline-grid;place-items:center;font-size:11px;border:1px solid transparent}
+  #fa .badge:empty{display:none}
+  #fa .fiche-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;margin-bottom:1rem}
+  #fa .fiche-t{margin:0;font-size:1.25rem;font-weight:800}
+  #fa .fiche-sub{margin:.25rem 0 0;color:var(--tx-dim);font-size:13px;display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+  #fa .fiche-actions{display:flex;gap:.4rem;flex:none}
+  #fa .act{border:1px solid var(--line-strong);background:var(--bg);color:var(--tx);border-radius:8px;padding:6px 12px;
+    font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+  #fa .act:hover{border-color:var(--accent);color:var(--accent)}
+  #fa .draft-mini{font-size:12px;color:var(--etude)}
+  #fa .fiche .panel{margin-bottom:1rem}
+  #fa table.debit td{vertical-align:middle}
+  #fa table.debit tr.grp td{background:var(--bg-sunken);font-size:.7rem;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--tx-faint);padding:.35rem .5rem}
+  #fa td.rep{color:var(--tx-faint);font-variant-numeric:tabular-nums;width:2.2rem}
+  #fa td.ref{font-weight:700;overflow-wrap:anywhere;max-width:11rem}
+  #fa .scroll-x{overflow-x:auto}
+  #fa table.debit td:nth-child(2){min-width:10rem}
+  #fa td.num.big{font-size:15px;color:var(--tx)}
+  #fa td.calc{color:var(--tx-dim);font-variant-numeric:tabular-nums;white-space:nowrap}
+  #fa td.calc .coupe{color:var(--tx-faint);font-size:11.5px}
+  #fa td .note{font-size:11.5px;color:var(--etude);margin-top:.1rem}
+  #fa td.thumb{text-align:right;white-space:nowrap}
+  #fa td.thumb img{height:34px;width:auto;background:#fff;border:1px solid var(--line);border-radius:4px;padding:1px 3px;vertical-align:middle;margin-right:.4rem}
+  #fa .src.mini{font-size:10.5px;padding:0 7px}
+  #fa .acc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.5rem}
+  #fa .acc{display:flex;gap:.6rem;align-items:center;border:1px solid var(--line);border-radius:10px;padding:.4rem .55rem}
+  #fa .acc img{height:44px;width:56px;object-fit:contain;background:#fff;border-radius:6px;flex:none}
+  #fa .acc .noimg{width:56px;height:44px;border-radius:6px;background:var(--bg-sunken);flex:none}
+  #fa .acc div{display:flex;flex-direction:column;min-width:0;font-size:12.5px;line-height:1.3}
+  #fa .acc span{color:var(--tx-dim)}
+  #fa .acc em{color:var(--tx-faint);font-style:normal;font-size:11px}
+  @media print{
+    body *{visibility:hidden!important}
+    #fiche,#fiche *{visibility:visible!important}
+    #fiche{position:absolute;left:0;top:0;width:100%;color:#000}
+    #fiche .fiche-actions,#fiche .src.mini{display:none!important}
+    #fiche .panel{break-inside:avoid;border-color:#ccc}
+  }
 
   /* ---- formulaire ---- */
   #fa form{position:sticky;top:0;background:var(--bg-side);border:1px solid var(--line);border-radius:14px;
@@ -154,12 +200,12 @@
 <div id="fa" class="flex-1 min-h-0">
   <div class="wrap">
     <div class="head">
-      <h1>Faisabilité PERFORM76</h1>
+      <h1>Faisabilité et débit PERFORM76</h1>
       <button type="button" class="help-btn" id="fa-aide-btn" title="Comment ça marche" aria-haspopup="dialog" aria-controls="fa-aide">i</button>
     </div>
-    <p class="lede">Premier jet du vérificateur (audit du 22/09, § 9.1). Chaque contrôle est calculé sur les
-      tableaux du wiki et cite la page qui le porte ; aucune valeur ne vient d'un modèle. Entre deux graduations,
-      la plus restrictive ; à moins de la précision de lecture d'une limite, « sur étude ».</p>
+    <p class="lede">Une saisie, deux sorties (audit du 22/09, § 9.1 et 9.2) : le verdict de faisabilité, et la fiche
+      de débit avec sa nomenclature. Tout est calculé sur les tableaux du wiki, chaque valeur cite la page qui la
+      porte ; aucune ne vient d'un modèle.</p>
 
     <div class="grid">
       <form id="f" autocomplete="off" onsubmit="return false">
@@ -208,9 +254,21 @@
           <select id="f-securite" aria-label="Classe de sécurité" style="margin-top:.5rem"></select>
           <div class="hint">LFF / HFF Roto prises égales à la DFO profine (hypothèse).</div>
         </div>
+        <div id="w-surcote" hidden>
+          <label><span class="f-lab">Surcote de soudure (atelier)</span>
+            <span class="unit"><input type="number" id="f-surcote" min="0" max="20" step="0.5" placeholder="non renseignée"><span>mm / onglet</span></span></label>
+          <div class="hint">Le wiki ne la donne pas pour le 76 : sans elle, les barres soudées sortent en cote finie.</div>
+        </div>
       </form>
 
-      <section id="out" aria-live="polite"><p class="empty">Chargement…</p></section>
+      <div id="results">
+        <div class="tabs" role="tablist" aria-label="Résultat">
+          <button type="button" role="tab" data-tab="fa" class="on" aria-selected="true">Faisabilité <span class="badge" id="tab-badge"></span></button>
+          <button type="button" role="tab" data-tab="debit" aria-selected="false">Débit et nomenclature</button>
+        </div>
+        <section id="out" aria-live="polite"><p class="empty">Chargement…</p></section>
+        <section id="out-debit" aria-live="polite" hidden><p class="empty">Chargement…</p></section>
+      </div>
     </div>
   </div>
 
@@ -265,6 +323,25 @@
           dormant choisi, avec sa coupe et les pièces d’appui compatibles. Sur un 76171 au-delà de 155 mm,
           le dormant bas change.</li>
       </ul>
+
+      <h3>L’onglet Débit et nomenclature</h3>
+      <p>La même saisie donne la <b>fiche de débit</b> de l’atelier :</p>
+      <ul>
+        <li><b>Liste de débit</b> : une ligne par pièce, avec son repère, sa référence, sa quantité, sa longueur et
+          le calcul qui la donne (« 949 − 2 × 47 »). Les cotes à déduire sont celles du manuel profine, appliquées une
+          fois par coupe.</li>
+        <li>Elle reprend ce que la faisabilité a décidé : les <b>renforts d’ouvrant</b> selon la zone de l’abaque
+          (traverses, montants ou tout), la <b>parclose</b> du vitrage, la <b>tapée</b> et la <b>pièce d’appui</b>
+          de l’isolant, le nombre de <b>paumelles</b>.</li>
+        <li><b>Nomenclature</b> : les pièces regroupées par référence, avec la quantité et les mètres linéaires.</li>
+        <li><b>Accessoires</b> : ce que le manuel associe à chaque profilé employé (supports de cale, embouts,
+          gabarits…), avec leur dessin.</li>
+        <li><b>Surcote de soudure</b> : le wiki ne la donne pas pour le 76. Sans elle, les barres soudées (dormant,
+          ouvrant) sortent en cote finie ; saisie, elle est ajoutée à chaque onglet.</li>
+        <li><b>Imprimer</b> donne une fiche d’une page ; <b>Exporter CSV</b> ouvre la liste dans un tableur.</li>
+      </ul>
+      <p>Ce que le wiki ne précise pas est dit dans la ligne : plusieurs renforts de dormant possibles
+        (« au choix selon la statique »), longueurs de tapée et d’appui, référence du renfort de meneau.</p>
 
       <h3>Lire les résultats</h3>
       <div class="leg">
@@ -407,16 +484,93 @@ function saisie(){
 
 function relance(){ clearTimeout(timer); timer = setTimeout(calcule, 220); }
 
+// Les deux sorties d'une même saisie : le verdict et la fiche de débit.
+let tab = "fa", DEBIT = null, DEBIT_S = null;
 async function calcule(){
   const s = saisie();
   if(!(s.largeur_mm > 0 && s.hauteur_mm > 0)) return;
   const n = ++seq;
-  try {
-    const r = await api("/api/faisabilite", s);
-    if(n === seq) rendu(r, s);
-  } catch(err){
-    if(n === seq) $("out").innerHTML = '<p class="empty err">' + esc(err.message) + '</p>';
-  }
+  const surcote = $("f-surcote").value ? +$("f-surcote").value : null;
+  const [fa, db] = await Promise.allSettled([api("/api/faisabilite", s),
+                                            api("/api/faisabilite/debit", Object.assign({surcote_soudure_mm: surcote}, s))]);
+  if(n !== seq) return;
+  if(fa.status === "fulfilled"){
+    rendu(fa.value, s);
+    $("tab-badge").className = "badge s-" + fa.value.verdict;
+    $("tab-badge").textContent = STAT[fa.value.verdict].i;
+  } else $("out").innerHTML = '<p class="empty err">' + esc(fa.reason.message) + '</p>';
+  if(db.status === "fulfilled"){ DEBIT = db.value; DEBIT_S = s; renduDebit(db.value, s); }
+  else $("out-debit").innerHTML = '<p class="empty err">' + esc(db.reason.message) + '</p>';
+}
+
+function montre(t){
+  tab = t;
+  document.querySelectorAll("#results .tabs button").forEach(b => {
+    b.classList.toggle("on", b.dataset.tab === t);
+    b.setAttribute("aria-selected", b.dataset.tab === t);
+  });
+  $("out").hidden = t !== "fa";
+  $("out-debit").hidden = t !== "debit";
+  $("w-surcote").hidden = t !== "debit";
+}
+document.querySelector("#results .tabs").addEventListener("click", e => {
+  const b = e.target.closest("button[data-tab]");
+  if(b) montre(b.dataset.tab);
+});
+
+/* ---- la fiche de débit ---- */
+const mm = x => x == null ? "—" : fmt(x, 1);
+function renduDebit(r, s){
+  const familles = [];
+  r.lignes.forEach(l => { if(!familles.includes(l.famille)) familles.push(l.famille); });
+  const lignes = familles.map(f => '<tr class="grp"><td colspan="7">' + esc(f) + '</td></tr>' +
+    r.lignes.filter(l => l.famille === f).map(l =>
+      '<tr><td class="rep">' + l.rep + '</td>' +
+      '<td>' + esc(l.piece) + (l.note ? '<div class="note">' + esc(l.note) + '</div>' : "") + '</td>' +
+      '<td class="ref">' + esc(l.ref) + '</td>' +
+      '<td class="num">' + l.qte + '</td>' +
+      '<td class="num big">' + mm(l.longueur) + '</td>' +
+      '<td class="calc">' + esc(l.calcul) + (l.coupe ? '<div class="coupe">' + esc(l.coupe) + '</div>' : "") + '</td>' +
+      '<td class="thumb">' + (l.image ? '<img src="' + esc(l.image) + '" alt="' + esc(l.ref) + '" loading="lazy">' : "") +
+        '<a class="src mini" href="' + wikiHref(l.source.page) + '" title="' + esc(l.source.section || "") + '">source</a></td></tr>').join("")).join("");
+  const nomen = r.nomenclature.map(n => '<tr><td class="ref">' + esc(n.ref) + '</td><td>' + esc(n.designation) +
+    '</td><td>' + esc(n.famille) + '</td><td class="num">' + n.qte + '</td><td class="num">' + (n.ml ? fmt(n.ml, 2) : "—") + '</td></tr>').join("");
+  const acc = r.accessoires.map(a => '<div class="acc">' + (a.image ? '<img src="' + esc(a.image) + '" alt="' + esc(a.ref) + '" loading="lazy">' : '<span class="noimg"></span>') +
+    '<div><b>' + esc(a.ref) + '</b><span>' + esc(a.designation) + '</span><em>' + esc(a.profil) + '</em></div></div>').join("");
+  const brouillon = r.brouillons.length ? '<span class="draft-mini">données en brouillon : ' +
+    r.brouillons.map(p => esc(p.split("/").pop().replace(".md", ""))).join(", ") + '</span>' : "";
+  $("out-debit").innerHTML =
+    '<div class="fiche" id="fiche">' +
+      '<div class="fiche-head"><div><h2 class="fiche-t">Fiche de débit PERFORM76</h2>' +
+        '<p class="fiche-sub">' + esc(OPT.configurations[s.configuration]) + ' · ' + fmt(s.largeur_mm, 0) + ' × ' + fmt(s.hauteur_mm, 0) +
+        ' mm · dormant ' + esc(s.dormant) + (s.ouvrant && s.configuration !== "fixe" ? ' · ouvrant ' + esc(s.ouvrant) : "") +
+        ' · ' + esc(OPT.couleurs[s.couleur]) + ' · ' + esc(s.vitrage) + '</p>' +
+        '<p class="fiche-sub"><span class="tag s-' + r.verdict + '">' + esc(r.libelle) + '</span> ' + brouillon + '</p></div>' +
+        '<div class="fiche-actions"><button type="button" class="act" id="btn-print">Imprimer</button>' +
+        '<button type="button" class="act" id="btn-csv">Exporter CSV</button></div></div>' +
+      '<div class="panels fiche-panels"><div class="panel"><h2>Élévation <span>cotes en mm</span></h2>' + elevation(r, s) + '</div>' +
+      '<div class="panel"><h2>Nomenclature <span>' + r.nomenclature.length + ' lignes</span></h2>' +
+        '<table class="nomen"><thead><tr><th>Réf.</th><th>Pièce</th><th>Famille</th><th class="num">Qté</th><th class="num">ml</th></tr></thead><tbody>' + nomen + '</tbody></table></div></div>' +
+      '<div class="panel"><div class="scroll-x"><h2>Liste de débit <span>' + r.lignes.length + ' repères' + (r.surcote ? ' · surcote ' + fmt(r.surcote) + ' mm / onglet' : ' · barres soudées en cote finie') + '</span></h2>' +
+        '<table class="debit"><thead><tr><th>Rep.</th><th>Pièce</th><th>Réf.</th><th class="num">Qté</th><th class="num">Longueur (mm)</th><th>Calcul · coupe</th><th></th></tr></thead><tbody>' +
+        lignes + '</tbody></table></div></div>' +
+      (r.notes.length ? '<div class="draft">' + r.notes.map(esc).join("<br>") + '</div>' : "") +
+      (acc ? '<div class="panel"><h2>Accessoires des profilés <span>à prévoir selon le montage, quantités non données par le wiki</span></h2><div class="acc-grid">' + acc + '</div></div>' : "") +
+    '</div>';
+  $("btn-print").onclick = () => window.print();
+  $("btn-csv").onclick = () => exportCsv(r, s);
+}
+
+function exportCsv(r, s){
+  const q = v => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
+  const rows = [["Rep.", "Famille", "Pièce", "Référence", "Quantité", "Longueur (mm)", "Calcul", "Coupe", "Note"]]
+    .concat(r.lignes.map(l => [l.rep, l.famille, l.piece, l.ref, l.qte, l.longueur == null ? "" : String(l.longueur).replace(".", ","), l.calcul, l.coupe, l.note]));
+  const blob = new Blob(["﻿" + rows.map(x => x.map(q).join(";")).join("\r\n")], {type: "text/csv;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "debit-perform76-" + s.configuration + "-" + s.largeur_mm + "x" + s.hauteur_mm + ".csv";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
 
 /* ---- rendu ---- */
