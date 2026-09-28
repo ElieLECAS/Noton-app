@@ -167,7 +167,33 @@ de vitrage EPDM » (p. 95) : avec le compensateur, le dormant et le meneau reço
 parcloses, pour les mêmes épaisseurs, que l'ouvrant** — les 22 lignes du tableau *Parcloses
 d'ouvrant*, de la 76523 (16 mm) à la 76515 (50 mm), sans les quatre parcloses pour vitrage mince.
 
-{table_nocoupe(ouv)}
+Parcloses de dormant et de meneau avec le compensateur 76570, une ligne par parclose ; les deux colonnes d'épaisseur donnent le vitrage admis avec le joint A de 4 mm et avec le joint B de 2 mm. Les coupes sont celles du tableau *Parcloses d'ouvrant*, la parclose étant dessinée de la même façon sur les p. 94 et 95.
+
+| Parclose | Épaisseur de vitrage A, joint A de 4 mm (mm) | Épaisseur de vitrage B, joint B de 2 mm (mm) | Tolérance (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| 76523 | 16 | 18 | +1,0 / −0,5 | ![Parclose 76523](/assets/profiles/systeme76/tableau-vitrage/ouvrant-76523.png) |
+| 2452 | 16 | 18 | +1,0 / −0,5 | ![Parclose 2452](/assets/profiles/systeme76/tableau-vitrage/ouvrant-2452.png) |
+| 2451 | 18 | 20 | +1,0 / −0,5 | ![Parclose 2451](/assets/profiles/systeme76/tableau-vitrage/ouvrant-2451.png) |
+| 2453 | 20 | 22 | +1,0 / −0,5 | ![Parclose 2453](/assets/profiles/systeme76/tableau-vitrage/ouvrant-2453.png) |
+| 1436 | 22 | 24 | +1,0 / −0,5 | ![Parclose 1436](/assets/profiles/systeme76/tableau-vitrage/ouvrant-1436.png) |
+| 76501 | 24 | 26 | +1,0 / −0,5 | ![Parclose 76501](/assets/profiles/systeme76/tableau-vitrage/ouvrant-76501.png) |
+| 76527 | 26 | 28 | +1,0 / −0,5 | ![Parclose 76527](/assets/profiles/systeme76/tableau-vitrage/ouvrant-76527.png) |
+| 76513 | 28 | 30 | +1,0 / −0,5 | ![Parclose 76513](/assets/profiles/systeme76/tableau-vitrage/ouvrant-76513.png) |
+| 76512 | 28 | 30 | +1,0 / −0,5 | ![Parclose 76512](/assets/profiles/systeme76/tableau-vitrage/ouvrant-76512.png) |
+| 76526 | 28 | 30 | +1,0 / −0,5 | ![Parclose 76526](/assets/profiles/systeme76/tableau-vitrage/ouvrant-76526.png) |
+| 76516 | 30 | 32 | +1,0 / −0,5 | ![Parclose 76516](/assets/profiles/systeme76/tableau-vitrage/ouvrant-76516.png) |
+| 76524 | 30 | 32 | +1,0 / −0,5 | ![Parclose 76524](/assets/profiles/systeme76/tableau-vitrage/ouvrant-76524.png) |
+| 2454 | 32 | 34 | +1,0 / −0,5 | ![Parclose 2454](/assets/profiles/systeme76/tableau-vitrage/ouvrant-2454.png) |
+| 2433 | 34 | 36 | +1,0 / −0,5 | ![Parclose 2433](/assets/profiles/systeme76/tableau-vitrage/ouvrant-2433.png) |
+| 76503 | 36 | 38 | +1,0 / −0,5 | ![Parclose 76503](/assets/profiles/systeme76/tableau-vitrage/ouvrant-76503.png) |
+| 76504 | 38 | 40 | +1,0 / −0,5 | ![Parclose 76504](/assets/profiles/systeme76/tableau-vitrage/ouvrant-76504.png) |
+| 76505 | 40 | 42 | +1,0 / −0,5 | ![Parclose 76505](/assets/profiles/systeme76/tableau-vitrage/ouvrant-76505.png) |
+| 76506 | 42 | 44 | +1,0 / −0,5 | ![Parclose 76506](/assets/profiles/systeme76/tableau-vitrage/ouvrant-76506.png) |
+| 76507 | 44 | 46 | +1,0 / −0,5 | ![Parclose 76507](/assets/profiles/systeme76/tableau-vitrage/ouvrant-76507.png) |
+| 76508 | 46 | 48 | +1,0 / −0,5 | ![Parclose 76508](/assets/profiles/systeme76/tableau-vitrage/ouvrant-76508.png) |
+| 76509 | 48 | 50 | ±0,5 | ![Parclose 76509](/assets/profiles/systeme76/tableau-vitrage/ouvrant-76509.png) |
+| 76515 | 50 | 52 | ±0,5 | ![Parclose 76515](/assets/profiles/systeme76/tableau-vitrage/ouvrant-76515.png) |
+
 (schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 94 et 95, registre 2.3.2, p. 6 et 7)
 
 ![Feuillure de dormant avec compensateur 76570](/assets/procedures/moe-76-advanced/vitrage-compensateur-76570-feuillure.png)
@@ -186,7 +212,27 @@ compensateur que la planche ne dessine pas — entrée **INC-52** du registre
 « Tableau de vitrage pour dormant et meneau » (p. 96) et, avec capot alu et joints EPDM G178 /
 G177, p. 97. Sans compensateur, le dormant et le meneau reçoivent leurs propres parcloses.
 
-{table(dor,"dormant")}
+Parcloses de dormant et de meneau sans compensateur, une ligne par parclose, lues sur la p. 96 ; la p. 97 (capot alu, joints EPDM G178 et G177) porte les mêmes parcloses et les mêmes valeurs. Les deux colonnes d'épaisseur donnent le vitrage admis avec le joint A de 4 mm et avec le joint B de 2 mm. Les planches ne donnent pas de parclose de dormant pour un vitrage de moins de 18 mm (joint A) ; toutes les tolérances sont +1,0 / −0,5 mm, y compris celle de la 76579 (48 mm).
+
+| Parclose | Épaisseur de vitrage A, joint A de 4 mm (mm) | Épaisseur de vitrage B, joint B de 2 mm (mm) | Tolérance (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| 2624 | 18 | 20 | +1,0 / −0,5 | ![Parclose 2624](/assets/profiles/systeme76/tableau-vitrage/dormant-2624.png) |
+| 2626 | 20 | 22 | +1,0 / −0,5 | ![Parclose 2626](/assets/profiles/systeme76/tableau-vitrage/dormant-2626.png) |
+| 2628 | 22 | 24 | +1,0 / −0,5 | ![Parclose 2628](/assets/profiles/systeme76/tableau-vitrage/dormant-2628.png) |
+| 2630 | 24 | 26 | +1,0 / −0,5 | ![Parclose 2630](/assets/profiles/systeme76/tableau-vitrage/dormant-2630.png) |
+| 2632 | 26 | 28 | +1,0 / −0,5 | ![Parclose 2632](/assets/profiles/systeme76/tableau-vitrage/dormant-2632.png) |
+| 2634 | 28 | 30 | +1,0 / −0,5 | ![Parclose 2634](/assets/profiles/systeme76/tableau-vitrage/dormant-2634.png) |
+| 2636 | 30 | 32 | +1,0 / −0,5 | ![Parclose 2636](/assets/profiles/systeme76/tableau-vitrage/dormant-2636.png) |
+| 2638 | 32 | 34 | +1,0 / −0,5 | ![Parclose 2638](/assets/profiles/systeme76/tableau-vitrage/dormant-2638.png) |
+| 2640 | 34 | 36 | +1,0 / −0,5 | ![Parclose 2640](/assets/profiles/systeme76/tableau-vitrage/dormant-2640.png) |
+| 76573 | 36 | 38 | +1,0 / −0,5 | ![Parclose 76573](/assets/profiles/systeme76/tableau-vitrage/dormant-76573.png) |
+| 2647 | 38 | 40 | +1,0 / −0,5 | ![Parclose 2647](/assets/profiles/systeme76/tableau-vitrage/dormant-2647.png) |
+| 76575 | 40 | 42 | +1,0 / −0,5 | ![Parclose 76575](/assets/profiles/systeme76/tableau-vitrage/dormant-76575.png) |
+| 76576 | 42 | 44 | +1,0 / −0,5 | ![Parclose 76576](/assets/profiles/systeme76/tableau-vitrage/dormant-76576.png) |
+| 76577 | 44 | 46 | +1,0 / −0,5 | ![Parclose 76577](/assets/profiles/systeme76/tableau-vitrage/dormant-76577.png) |
+| 76578 | 46 | 48 | +1,0 / −0,5 | ![Parclose 76578](/assets/profiles/systeme76/tableau-vitrage/dormant-76578.png) |
+| 76579 | 48 | 50 | +1,0 / −0,5 | ![Parclose 76579](/assets/profiles/systeme76/tableau-vitrage/dormant-76579.png) |
+
 (schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 96, registre 2.3.2, p. 8 ; mêmes valeurs p. 97, registre 2.3.2, p. 9)
 
 ![Feuillure de dormant et support de cale M138](/assets/procedures/moe-76-advanced/vitrage-dormant-feuillure-62-m138.png)

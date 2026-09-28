@@ -215,7 +215,7 @@ vissage.
 
 Chaque bloc montre à gauche un angle de dormant sur seuil en perspective, repéré **9326** (seuil
 9F67) et **9669** (seuil 9F68), et à droite l'embout en perspective, avec son trou oblong de
-vissage.
+vissage. Le manuel de mise en œuvre Système 70 Plateforme désigne le 9326 comme « Support de cale de vitrage » (PDF p. 126) : la lecture de ce repère est à vérifier (**VER-87**).
 
 ## Set d'assemblage mécanique dormant / seuil
 
@@ -330,6 +330,15 @@ d'assemblage, la soudure à plat du meneau 6127 (zone soudée d'inertie X 8,43 c
 soudure sont sur [Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md)
 [1 p. 26-27].
 
+Le manuel de mise en œuvre du système 70 donne, pour les mêmes seuils (et le 9F69), les débits de
+seuil et de montant par dormant, les contours de fraisage, le gabarit de perçage 9918, le
+drainage et le rejet d'eau A465 : voir
+[Mise en œuvre du seuil aluminium du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md),
+[Porte-fenêtre avec fixe latéral du système 70](/procedures/porte-fenetre-fixe-lateral-systeme-70.md)
+et [Porte d'entrée du système 70](/procedures/porte-d-entree-systeme-70.md) ; les accouplements
+d'éléments et poteaux d'angle sont sur
+[Accouplement d'éléments du système 70](/procedures/accouplement-elements-systeme-70.md).
+
 # Citations
 
 [1] [DTD n° DBV-24-6/16-2335_V5, système e.XCLUSIVE, e.MOTION, e.VOLUTION](raw/dtd-6-16-2335-v5-e-volution.pdf)
@@ -343,5 +352,7 @@ soudure sont sur [Fabrication et assemblage du système 70](/procedures/fabricat
 - [Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md)
 - [DTD n° DBV-24-6/16-2335_V5](/certifications/dtd-6-16-2335.md)
 - [Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md)
+- [Mise en œuvre du seuil aluminium du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md)
+- [Accouplement d'éléments du système 70](/procedures/accouplement-elements-systeme-70.md)
 - [profine](/fournisseurs/profine.md)
 - [KÖMMERLING](/fournisseurs/kommerling.md)

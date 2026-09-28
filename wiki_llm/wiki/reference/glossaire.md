@@ -25,6 +25,10 @@ sources:
     id: catalogue-portes-entree-2024-03
     title: Catalogue portes d'entrée PROFERM, édition mars 2024
     last_modified: 2024-03-31
+  - resource: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf
+    id: profine-mise-en-oeuvre-systeme-70
+    title: Mise en œuvre Système 70 Plateforme, profine, version septembre 2023
+    last_modified: 2023-09-30
 source_pages:
   - resource: raw/profine-directives-generales-2023-01.pdf
     pages: 4, 8-16, 47
@@ -346,14 +350,66 @@ de montage, **CTL** pour un catalogue, **SUG** pour une notice d'emploi.
 | NF P24-351 | protection contre la corrosion des menuiseries métalliques |
 | Règles NV 65 | charges de neige et de vent, référentiel antérieur à l'Eurocode NF EN 1991-1-4 |
 
+# Pièces, usinages et montages du système 70
+
+Le vocabulaire du manuel de mise en œuvre Système 70 Plateforme de profine [4]. Chaque terme
+renvoie à la page où il est employé.
+
+| Terme | Sens | Où il s'emploie |
+| --- | --- | --- |
+| Plan de combinaison | coupe cotée d'un assemblage réel — profilés, renfort, joints, vitrage — avec le cartouche des profilés et renforts admis et leur Iw | [Types d'ouverture et plans de combinaison du système 70](/profiles/systeme-70-plans-de-combinaison.md) |
+| Vitrage à sec | pose du vitrage entre des joints souples (EPDM ou PCE), sans mastic | [Tableau de vitrage du système 70](/profiles/systeme-70-tableau-de-vitrage.md) |
+| Cales C1, C2, C3, C4 | cale d'assise, cale périphérique ajustée au jeu, cale de solidarisation collée, cale de sécurité libre (XP P 20-650-1) | [Tableau de vitrage du système 70](/profiles/systeme-70-tableau-de-vitrage.md) |
+| OF PC | ouvrant à la française plein cintre | [Tableau de vitrage du système 70](/profiles/systeme-70-tableau-de-vitrage.md) |
+| Support de cales de vitrage | pièce posée en fond de feuillure qui porte les cales du vitrage (9326 sur le système 70) | [Tableau de vitrage du système 70](/profiles/systeme-70-tableau-de-vitrage.md) |
+| Set d'assemblage mécanique, équerre d'assemblage | deux façons de fixer un meneau ou une traverse sans soudure, chacune avec son propre débit de renfort ; le set se pose en T ou en croix (C) | [Assemblage mécanique du meneau et de la traverse du système 70](/procedures/assemblage-meneau-traverse-systeme-70.md) |
+| Équerre de fond de feuillure | équerre vissée dans les deux profilés à assembler (9714 sur le système 70) | [Assemblage mécanique du meneau et de la traverse du système 70](/procedures/assemblage-meneau-traverse-systeme-70.md) |
+| Alvéovis | rainure du meneau qui reçoit la vis d'assemblage | [Assemblage mécanique du meneau et de la traverse du système 70](/procedures/assemblage-meneau-traverse-systeme-70.md) |
+| Cote X | décalage du perçage d'un assemblage à angle variable, donné par une table selon l'angle | [Assemblage mécanique du meneau et de la traverse du système 70](/procedures/assemblage-meneau-traverse-systeme-70.md) |
+| Préchambre | chambre extérieure d'un profilé ; sur les profilés de couleur, elle est ventilée pour éviter l'accumulation de chaleur | [Drainage, décompression et ventilation du système 70](/procedures/drainage-decompression-ventilation-systeme-70.md) |
+| Battement central réduit, ouvrant réduit | montage à deux vantaux avec un battement rapporté étroit ; l'ouvrant vertical étroit qui le reçoit est dit réduit | [Traitement du battement du système 70](/procedures/traitement-du-battement-systeme-70.md) |
+| Embout d'épointage | embout qui ferme la pointe délignée de l'ouvrant au battement central réduit (9F13, M771) | [Traitement du battement du système 70](/procedures/traitement-du-battement-systeme-70.md) |
+| Vis plot | vis de clippage du battement intérieur (S073) | [Traitement du battement du système 70](/procedures/traitement-du-battement-systeme-70.md) |
+| Renfort pré-usiné | renfort acier livré à longueur et déjà percé (V069 en 2 m, V154 en 2,25 m) | [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md) |
+| Cale de transport | pièce qui maintient l'élément pendant le transport (9A39, 9856) | [Renforts et accessoires par profilé du système 70](/profiles/systeme-70-accessoires-par-profile.md) |
+| Médiant | jonction centrale de deux vantaux ; sets M628, M629 | [Renforts et accessoires par profilé du système 70](/profiles/systeme-70-accessoires-par-profile.md) |
+| Ouvrant de service | vantail qui s'ouvre en premier dans une fenêtre à deux vantaux | [Renforts et accessoires par profilé du système 70](/profiles/systeme-70-accessoires-par-profile.md) |
+| G/D | gauche / droite, pour les embouts et équerres livrés par paire | [Renforts et accessoires par profilé du système 70](/profiles/systeme-70-accessoires-par-profile.md) |
+| Réhausse | profilé PVC assemblé au dormant pour en augmenter la hauteur (0374, 0379, 0302 …) | [Mise en œuvre des profilés complémentaires du système 70](/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md) |
+| Olive de liaison | profilé de liaison qui accouple deux dormants dos à dos (1248) | [Accouplement d'éléments du système 70](/procedures/accouplement-elements-systeme-70.md) |
+| Compensation réno, aile de recouvrement | l'aile de recouvrement est l'aile du dormant de rénovation qui recouvre l'ancien dormant ; la compensation (6143, 6144) rattrape l'écart sous cette aile | [Mise en œuvre des profilés complémentaires du système 70](/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md) |
+| Prolongateur | pièce qui prolonge une pièce d'appui (4319) | [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md) |
+| Sécable | se coupe à longueur suivant des amorces moulées (embouts 9F97, 9F08, 9F10) | [Mise en œuvre des profilés complémentaires du système 70](/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md) |
+| Coulisse, tulipe | guide vertical du tablier de volet roulant ; pièce d'évasement posée en tête de coulisse | [Mise en œuvre des profilés complémentaires du système 70](/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md) |
+| Grugé, gruger | usiné au contour du profilé rencontré, pour qu'il vienne s'y emboîter | [Mise en œuvre du seuil aluminium du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md) |
+| Noyau, goupille | pièce d'ancrage d'un set d'assemblage logée dans la chambre de renfort ; cheville qui la bloque dans le montant | [Mise en œuvre du seuil aluminium du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md) |
+| CHC | vis à tête cylindrique à six pans creux | [Mise en œuvre du seuil aluminium du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md) |
+| Flambage | déformation d'un profilé comprimé | [Porte d'entrée du système 70](/procedures/porte-d-entree-systeme-70.md) |
+| Contreventement, habillage de contreventement | renforcement d'un meneau ou d'un couplage contre le vent ; profilé renforcé rapporté sur le meneau (93000, 93002) | [Accouplement d'éléments du système 70](/procedures/accouplement-elements-systeme-70.md) |
+| Valeur statique | inertie totale d'un couplage, somme des inerties de ses renforts, en cm⁴ | [Accouplement d'éléments du système 70](/procedures/accouplement-elements-systeme-70.md) |
+| Poinçonnage (d'un capot) | découpe en bout de capot aluminium qui laisse passer le capot voisin à la jonction | [Capotage AluClip du système 70](/procedures/capotage-aluclip-systeme-70.md) |
+| Busette | pièce qui habille l'orifice de drainage en façade (M450, 697010) | [Capotage AluClip du système 70](/procedures/capotage-aluclip-systeme-70.md) |
+| Angle de pointe | angle aigu entre deux côtés d'une menuiserie oblique (trapèze, triangle) | [Châssis cintrés et trapézoïdaux du système 70](/procedures/chassis-cintres-trapezoidaux-systeme-70.md) |
+| Plan de charge | part de la surface de la menuiserie dont la pression du vent est reprise par un élément | [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md) |
+| Largeur de charge (a, b) | largeur du plan de charge de part et d'autre de l'élément, en cm ; entrée des tables d'inertie | [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md) |
+| Portée (L) | distance entre appuis d'un meneau ou d'une traverse | [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md) |
+| Flèche (f) | déformation maximale admissible d'un élément sous le vent : L/150, L/200 ou L/300 | [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md) |
+| Fer plat | barre d'acier de section rectangulaire | [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md) |
+| Allège, traverse d'allège | partie basse d'une baie ; sa traverse est calculée pour la sécurité des personnes | [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md) |
+| Meneau filant, traverse courte | élément qui va d'un bout à l'autre du dormant ; élément arrêté sur un autre | [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md) |
+| Mo | maître d'ouvrage | [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md) |
+| AC3, AC4 | classes d'exigence acoustique ; le renforcement systématique y est conseillé | [Abaques dimensionnels de renforcement du système 70](/profiles/systeme-70-abaques-dimensionnels.md) |
+| Renvoi d'angle, sortie de tringle | deux modes de transmission du verrouillage de la ferrure | [Abaques dimensionnels de renforcement du système 70](/profiles/systeme-70-abaques-dimensionnels.md) |
+
 # Sigles non élucidés
 
 | Sigle | Où | Entrée |
 | --- | --- | --- |
 | DV | Catalogue général, p. 17, qualifie un Uw de fenêtre | **VER-35** |
 | CV | Catalogue général, p. 17, qualifie un Uw de coulissant | **VER-35** |
+| CVR, CRV, DL | Mise en œuvre Système 70 Plateforme, PDF p. 8-45 : « Profilé de liaison dormant CVR », « Embout haut G/D sous CRV », « Patin d'étanchéité pour DL/seuil » | **VER-73** |
 
-Aucun document du corpus ne définit ces deux sigles. Voir
+Aucun document du corpus ne définit ces sigles. Voir
 [Informations à vérifier](/anomalies/informations-a-verifier.md).
 
 # Citations
@@ -366,6 +422,9 @@ registres 1.1.1 et 1.1.2, PDF p. 2 à 16
 
 [3] DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED —
 `raw/dta-trocal-76-advanced-6-16-2334-v5.pdf`, p. 4 à 9
+
+[4] [Mise en œuvre Système 70 Plateforme, profine, version septembre 2023](raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf),
+PDF p. 1 à 371
 
 # Voir aussi
 

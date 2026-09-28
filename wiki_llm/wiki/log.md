@@ -2,6 +2,68 @@
 
 ## 2026-09-28
 
+* **Update**: [Tableau de vitrage du système 76](/profiles/systeme-76-tableau-de-vitrage.md) -- deux gabarits de script restés dans la page depuis le 25/09 (`{table_nocoupe(ouv)}`, `{table(dor,"dormant")}`) remplacés par leurs tables, relues en image sur `raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf` (200 dpi) : *Parcloses de dormant et de meneau avec compensateur 76570*, 22 parcloses (p. 94, mêmes valeurs p. 95), coupes reprises du tableau des ouvrants ; *Parcloses de dormant et de meneau sans compensateur*, 16 parcloses de la 2624 (18 mm) à la 76579 (48 mm) (p. 96, mêmes valeurs p. 97), coupes `assets/profiles/systeme76/tableau-vitrage/dormant-*.png` déjà découpées et contrôlées sur planche contact.
+* **Retraitement complet du [manuel Mise en œuvre Système 70 Plateforme](/sources/profine-mise-en-oeuvre-systeme-70.md)** (`raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf`, 371 pages) selon le protocole révisé : rendu PyMuPDF à 200 dpi (recadrages 300 à 400 dpi pour les planches denses), lecture en image seulement, sans couche texte. Sept tranches alignées sur les chapitres, traitées en parallèle par des sous-agents qui avaient chacun leurs propres pages wiki : 1-56, 57-103, 104-127, 128-180, 181-253, 254-311, 312-371. Registre reconstruit page par page : 370 pages `transcrit`, 1 `sans contenu propre` (p. 1, sommaire), aucune `à faire`. Anciennes erreurs de l'ancien registre : la ligne 2.1.3 annonçait des « parcloses séries 2419 » et un « K363 » qui n'y figurent pas ; les p. 181-253 renvoyaient à des pages sans contenu du manuel ; le cintrage p. 312-313 renvoyait aux abaques. Aucune page ne porte `verified` : la relecture inverse reste à faire par une autre session.
+* **Create**: 34 pages, toutes depuis `raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf` :
+  * profilés :
+    * [Renforts et accessoires par profilé du système 70](/profiles/systeme-70-accessoires-par-profile.md) (p. 8-56, 460 cases d'accessoires) ;
+    * [Types d'ouverture et plans de combinaison du système 70](/profiles/systeme-70-plans-de-combinaison.md) (p. 57-103) ;
+    * [Tableau de vitrage du système 70](/profiles/systeme-70-tableau-de-vitrage.md) (p. 120-127) ;
+    * [Abaques V\*A2](/profiles/systeme-70-abaques-va2.md) (p. 129-137) et [Abaques V\*A3](/profiles/systeme-70-abaques-va3.md) (p. 138-146) ;
+    * 15 tables d'inertie requise, `profiles/systeme-70-inerties-va1.md` à `-vc5.md` (p. 166-180, 36 portées × 19 largeurs de charge, lues à 400 dpi et contrôlées par la formule de charge trapézoïdale imprimée p. 162-163 : aucun écart) ;
+    * [Capots et accessoires AluClip du système 70](/profiles/systeme-70-aluclip.md) (p. 314-316, 335-346) ;
+    * [Plans de combinaison AluClip du système 70](/profiles/systeme-70-aluclip-plans-de-combinaison.md) (p. 317-334) ;
+  * procédures :
+    * [Mise en œuvre des renforts](/procedures/mise-en-oeuvre-renforts-systeme-70.md) (p. 181-190) ;
+    * [Drainage, décompression et ventilation](/procedures/drainage-decompression-ventilation-systeme-70.md) (p. 191-212) ;
+    * [Traitement du battement](/procedures/traitement-du-battement-systeme-70.md) (p. 213-232) ;
+    * [Assemblage mécanique du meneau et de la traverse](/procedures/assemblage-meneau-traverse-systeme-70.md) (p. 233-253) ;
+    * [Mise en œuvre du seuil aluminium](/procedures/mise-en-oeuvre-seuil-systeme-70.md) (p. 254-269) ;
+    * [Porte-fenêtre avec fixe latéral](/procedures/porte-fenetre-fixe-lateral-systeme-70.md) (p. 270-274, 280) ;
+    * [Porte d'entrée](/procedures/porte-d-entree-systeme-70.md) (p. 275-279) ;
+    * [Mise en œuvre des profilés complémentaires](/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md) (p. 281-300) ;
+    * [Accouplement d'éléments](/procedures/accouplement-elements-systeme-70.md) (p. 301-311) ;
+    * [Châssis cintrés et trapézoïdaux](/procedures/chassis-cintres-trapezoidaux-systeme-70.md) (p. 312-313) ;
+    * [Capotage AluClip](/procedures/capotage-aluclip-systeme-70.md) (p. 347-371).
+* **Update**: [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md) -- p. 2-39 relues en image.
+  * Caractéristiques de la p. 2 reprises mot pour mot, avec « V\*A3 » → « jusqu'à la classe VA3 » ; ajout de la coupe de principe (p. 2), du système de joints et des dimensions pour centres d'usinage (p. 3).
+  * La table « Largeurs du manuel et du sommaire » est remplacée par les tables sommaire / planche avec coupe.
+  * Renforts : V544 ajouté sur les dormants 6104, 6108 à 6111 et 6158 (avant : « V601 seul ») ; ouvrants 6113, 6116, 6118, 6120, 6122, 6124, 6151, 6153 et 2416 ajoutés ; renforts pré-usinés V069 (2 m) et V154 (2,25 m) ajoutés, et la phrase « le manuel ne les donne pas » corrigée.
+  * Citations « registre 2.1.x p. N » passées en numérotation PDF ; les battements intérieurs, cités « registre 2.3.1 p. 7 à 16 », le sont maintenant p. 50.
+* **Update**: [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md) (page lue par `parcloses.py`, titres et en-têtes conservés) -- nouvelle section du manuel, p. 42-56 : une table par famille, renforts IG / IW, 5 figures. Un gabarit `{SRC}` resté dans la frontmatter et la citation [3] est remplacé par le chemin du PDF.
+* **Update**: [Cotes de débit du système 70](/profiles/systeme-70-cotes-de-debit.md) -- réécrite sur l'image, p. 104-119.
+  * Retraits, valeurs absentes du manuel : « surcote +3 mm par coupe soudée » ; « DHT + 6 » des dormants ; ouvrants « DHT − 86 + 6 » et « (DHT − 92)/2 + 6 » ; section « e.VOLUTION 78 mm − 94 » ; meneau « DHT − 140 » et « set 9718.3 LFF − 2 » ; battements « −46 / −48 / −44 » avec les embouts M850, M851, 9B52, 9B53 ; seuils « LFF + 32 » ; rejet d'eau « 9F46 − 54 » ; renforts « −90 / −70 / −10 ». La source `plans-profiles-e-volution-2008` est retirée : aucune section n'en venait.
+  * Corrections : dormants « DHT + 6 » → cotes à déduire de la DHT (6100 : DEO 27, DFO 47, vitrage 38, renfort 32, meneau 33, renfort de meneau 93 avec set / 38 avec équerre) ; jeu de feuillure « 12 mm » → 12+1 mm ; battement 0140 « hauteur − 48 » → DEO − 72 ; autres battements : extérieur DEO − 70, intérieur DEO − 12.
+* **Update**: [Abaques dimensionnels de renforcement du système 70](/profiles/systeme-70-abaques-dimensionnels.md) -- réécrite depuis les p. 128-146 : règles du registre 2.3.3, clé de lecture et légendes, liste des 18 planches.
+  * Retraits, valeurs absentes de la source : tables LFF / HFF « blanc » et « couleur » (par ex. 600 → 2 300 / 2 450 mm) ; « 70 à 80 °C » ; « réduction de 15 à 20 % » ; renforts V604 / V605 ; perçages 5 × 25 mm ; « poids de vantail 100 / 130 / 150 kg » ; largeurs de baie à deux vantaux 2 400 / 2 100 mm et hauteur 2 250 mm. Les phrases citées du plan e.VOLUTION 2008 restent intactes. `status: draft`.
+* **Update**: [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md) -- réécrite depuis les p. 147-165.
+  * Retraits, valeurs absentes de la source : tables « V\*A2 / V\*A3 Iz pour L = 1 200 à 2 400 » ; table des renforts V600-V618 avec Ix / Iz (par ex. V600 1,45 / 1,95, V610, V615, V618) ; formule « I total = I acier + I PVC/70 » ; « L/150 en rénovation » ; procédure d'atelier en 5 étapes. `status: draft`.
+* **Update**: [Assemblages du système 70](/profiles/systeme-70-assemblages.md) -- renvoi vers les pages seuil, porte-fenêtre, porte d'entrée et accouplement du manuel ; mention VER-87 sur le repère 9326 ; aucune valeur du DTD ni du poster modifiée.
+* **Gras** : sur les 38 pages du système 70 touchées, environ 1 300 passages en gras qui n'étaient ni une exclusion ni un identifiant d'anomalie (repères d'étapes, références, cotes) sont repassés en romain.
+* **Schémas** : environ 1 400 images découpées, toutes contrôlées sur planche contact et placées selon le protocole (colonne Coupe pour une référence, figure pleine largeur pour une méthode).
+  * `assets/profiles/systeme70/` :
+    * coupes `*-moe.png` des profilés (106, p. 8-56) ;
+    * cases d'accessoires `accessoires/moe-*.png` (154) ;
+    * `combinaisons/` (90, p. 60-103) ;
+    * `tableau-vitrage/` (34, p. 126-127) ;
+    * `abaques/` (22, p. 129-146) ;
+    * `aluclip/` (25, p. 314-360).
+  * `assets/procedures/moe-systeme-70/` :
+    * `specifications/` et `profiles-2-1-3/` (p. 2-3, 42-52) ;
+    * `types-ouverture/` (37, p. 57-59) ;
+    * `debit/` (19) et `vitrage/` (12) ;
+    * `statique/` (35, p. 149-165) ;
+    * `renforts/` (25), `drainage/` (73), `battement/` (30), `meneau-traverse/` (23) ;
+    * `seuil/` (38), `porte-fenetre/` (21), `porte-entree/` (9), `profiles-complementaires/` (50), `couplage/` (21) ;
+    * `cintrage/` (4), `aluclip/` (93).
+  * Doublons à trier : `profiles-2-1-3/rehausse-0374-sous-dormant.png` et `rehausse-0379-montages.png` reprennent des dessins de `profiles-complementaires/`.
+* **Anomalies** :
+  * **INC-100** à **INC-110**, **INC-115** à **INC-117**, **INC-125** à **INC-129**, **INC-135** à **INC-145**, **INC-150** à **INC-156**, **INC-165** à **INC-171**, **INC-173** à **INC-178**, **INC-180** à **INC-188** ;
+  * **CTR-59**, **CTR-62** à **CTR-65** ;
+  * **VER-70** à **VER-73**, **VER-80**, **VER-81**, **VER-85** à **VER-87**, **VER-90**, **VER-95**, **VER-96**, **VER-100** à **VER-103**, **VER-105** à **VER-107** ;
+  * compléments datés sur **VER-60**, **VER-61** (prémisse réfutée : le manuel donne le V544, le V069 et le V154), **VER-63**, **CTR-37** et **CTR-38**.
+  * Les identifiants ont été réservés par plage à chaque tranche : les numéros non utilisés restent libres (INC-111 à 114, 118 à 124, 130 à 134, 146 à 149, 157 à 164, 172, 179, 189 ; CTR-45 à 58, 60, 61, 66, 67 ; VER-74 à 79, 82 à 84, 88, 89, 91 à 94, 97 à 99, 104, 108, 109). INC-172 (V287 à 1,25 mm) a été fondue dans INC-103.
+* **Update**: [Glossaire](/reference/glossaire.md) -- nouvelle section *Pièces, usinages et montages du système 70* (43 termes : plan de combinaison, vitrage à sec, cales C1 à C4, alvéovis, préchambre, réhausse, poinçonnage, busette, plan de charge, portée, flèche, etc.) ; sigles CVR, CRV et DL ajoutés aux sigles non élucidés (VER-73).
 * **Registres remis à `à faire`** pour les 39 fiches sources non retraitées selon le protocole révisé (ASKEY, TECHNAL, ROTO, Eneo, SOPROFEN) : leurs états « transcrit » venaient de l'ancienne ingestion. Trois fiches SOPROFEN sans table de registre en reçoivent une. Les chemins `wiki_llm/a_faire/…` et `a_faire/…` des PDF déplacés dans `raw/` sont corrigés sur tout le wiki (299 renvois).
 * **Protocole** (`wiki_llm/CLAUDE.md`) : numérotation du PDF obligatoire dans toutes les citations ; section *Reprocessing a document, and picking the work up in a new session* (registre = file d'attente, remise à `à faire`, tranches, lots, note de passation, identifiants d'anomalie relus, `verified` retiré, tests) ; section *Pages read by the application* ; table des dossiers d'images ; section *Marketing documents*.
 * **Update**: [Drainage et vitrage généraux](/procedures/drainage-et-vitrage-generaux.md) --

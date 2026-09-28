@@ -31,7 +31,7 @@ sources:
     last_modified: 2025-03-31
 source_pages:
   - resource: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf
-    pages: registre 2.1.1 p. 1 ; registre 2.1.2 p. 1, 4, 5-35
+    pages: 2-39, 50
   - resource: raw/profine-plans-profiles-e-volution-2008-08.pdf
     pages: 1
   - resource: raw/dtd-6-16-2335-v5-e-volution.pdf
@@ -42,15 +42,15 @@ source_pages:
     pages: 1
 generated:
   by: process:claude-code
-  at: 2026-09-28T12:00:00Z
+  at: 2026-09-28T16:00:00Z
 ---
 
 # Le système 70 Plateforme
 
-Le **système 70 Plateforme** de [profine](/fournisseurs/profine.md) est un système PVC de 70 mm
-d'épaisseur, à **5 chambres d'isolation**, commercialisé sous trois marques : **e.VOLUTION** chez
-KÖMMERLING, **e.MOTION** chez KBE, **e.XCLUSIVE** chez TROCAL. C'est le système du
-**DTA n° 6/16-2335_V5** — voir [DTD n° DBV-24-6/16-2335_V5](/sources/dtd-6-16-2335.md). Le
+Le système 70 Plateforme de [profine](/fournisseurs/profine.md) est un système PVC de 70 mm
+d'épaisseur, à 5 chambres d'isolation, commercialisé sous trois marques : e.VOLUTION chez
+KÖMMERLING, e.MOTION chez KBE, e.XCLUSIVE chez TROCAL. C'est le système du
+DTA n° 6/16-2335_V5 — voir [DTD n° DBV-24-6/16-2335_V5](/sources/dtd-6-16-2335.md). Le
 poster des profilés principaux le titre « Kömmerling Gamme 70 » [5 p. 1].
 
 **Aucun document PROFERM n'établit que c'est le système des gammes PERFORM70 et HYBRIDE70.**
@@ -59,11 +59,11 @@ aucune valeur de cette page ne doit être reprise comme une caractéristique d'u
 entrée **VER-28** du registre
 [Informations à vérifier](/anomalies/informations-a-verifier.md).
 
-Les **profilés principaux** sont ceux qui forment le cadre de la fenêtre : le **dormant** (le
-cadre fixe, scellé dans le mur), l'**ouvrant** (le cadre mobile qui porte le vitrage), le
-**meneau** et la **traverse** (les profilés qui divisent un cadre) et le **battement** (le profilé
+Les profilés principaux sont ceux qui forment le cadre de la fenêtre : le dormant (le
+cadre fixe, scellé dans le mur), l'ouvrant (le cadre mobile qui porte le vitrage), le
+meneau et la traverse (les profilés qui divisent un cadre) et le battement (le profilé
 où se rejoignent deux ouvrants). Chaque profilé PVC peut recevoir côté extérieur un **capot
-aluminium** clippé, et reçoit dans sa chambre centrale un **renfort acier**, dont l'**inertie**
+aluminium clippé, et reçoit dans sa chambre centrale un renfort acier, dont l'inertie**
 (la raideur de la section, en cm⁴) borne la dimension réalisable. Les termes sont définis dans le
 [glossaire](/reference/glossaire.md). Les profilés complémentaires (élargisseurs, appuis, tapées,
 parclose…) sont dans [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md),
@@ -71,33 +71,124 @@ les pièces d'assemblage et les seuils dans [Assemblages du système 70](/profil
 
 # Caractéristiques du système
 
+Les caractéristiques techniques du système 70 Plateforme, telles que la planche des
+spécifications les annonce, chacune en valeur « jusqu'à » (la meilleure valeur atteinte par le
+système, pas une valeur garantie pour toute fenêtre) [1 p. 2] :
+
 | Caractéristique | Valeur |
 | --- | --- |
-| Épaisseur des profilés (mm) | 70 |
-| Chambres d'isolation | 5 |
-| Profondeur de feuillure de vitrage (mm) | 54 |
-| Épaisseur de vitrage maximale (mm) | 42, triple vitrage |
-| Ouvrant Elégance semi-affleurant (mm) | 78 |
-| Uf du profilé (W/m²K) | jusqu'à 1,0 |
-| Perméabilité à l'air | classe 4 |
-| Étanchéité à l'eau, version A | jusqu'à 9A |
-| Résistance au vent | jusqu'à V\*A3 |
-| Affaiblissement acoustique (dB) | jusqu'à 40 |
-| Joints | EPDM ou PCE, noir, gris ou brun, double joint de frappe PCE |
+| Coefficient de transfert de la chaleur | jusqu'à Uf = 1,0 W/(m²K) |
+| Résistance au vent | jusqu'à la classe VA3 |
+| Étanchéité à l'eau - version A | jusqu'à 9A |
+| Perméabilité à l'air | jusqu'à la classe 4 |
+| Isolation acoustique | jusqu'à 40 dB |
 
-(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, registre 2.1.1, p. 1)
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 2)
 
 Le Uf (coefficient de transmission thermique du profilé seul, en W/m²K) qualifie le profilé, là
 où le Uw qualifie la fenêtre complète et le Ug le vitrage ; les trois ne se comparent pas. Voir
-[Performances des vitrages](/vitrages/performances-vitrages.md). Le système comporte un **seuil
-PMR à rupture de pont thermique** couvrant l'ensemble de la gamme [1 registre 2.1.1 p. 1].
+[Performances des vitrages](/vitrages/performances-vitrages.md). Les classes AEV (air, eau, vent)
+sont expliquées dans [Labels et certifications](/certifications/labels-et-certifications.md).
+
+Les caractéristiques du système, dans les termes de la planche [1 p. 2] :
+
+- Système à 5 chambres d'isolation.
+- Joint EPDM ou PCE noir, gris ou brun.
+- Profilés d'épaisseur 70 mm.
+- Design fluide et épuré avec les ouvrants Elégance semi affleurants de 78 mm.
+- Profondeur de feuillure de vitrage de 54 mm, pouvant recevoir des triples vitrages jusqu'à
+  42 mm.
+- Double joint de frappe PCE à la géométrie optimisée pour un meilleur ébavurage et une parfaite
+  étanchéité dans les angles.
+- Plusieurs esthétiques pour faire la différence.
+- Seuil PMR (personne à mobilité réduite), à rupture de pont thermique, adapté à l'ensemble de la
+  gamme (Système sous DTA).
+
+La feuillure est le logement du vitrage dans l'ouvrant ; sa profondeur de 54 mm est celle
+qui fixe l'épaisseur de vitrage que chaque parclose peut tenir — voir
+[Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md).
+L'EPDM et le PCE sont deux matières de joint, définies dans le
+[glossaire](/reference/glossaire.md).
+
+## Coupe de principe cotée
+
+La planche des spécifications dessine une coupe d'un dormant et d'un ouvrant du système 70 avec
+un vitrage, pour situer les cotes de principe. Le dormant est en bas, l'ouvrant au-dessus, le
+vitrage en haut ; les renforts sont hachurés dans les chambres centrales, les joints en gris
+foncé.
+
+![Coupe de principe cotée du système 70](/assets/procedures/moe-systeme-70/specifications/coupe-systeme-70-cotes.png)
+
+Cotes portées, en mm : en haut, l'ouvrant fait 70 d'épaisseur et le recouvrement de 19,5
+porte l'ensemble à 89,5 ; en bas, le dormant fait 70 et le même débord de 19,5 est
+coté à droite ; à gauche, un jeu de 3,5 entre ouvrant et dormant ; au centre, 12 + 1 en
+vertical et 13 en horizontal dans la feuillure du dormant ; à droite, 8 en vertical et
+3,5 + 1 en horizontal au droit du joint de frappe (schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 2). La planche n'écrit
+pas ce que désigne chaque cote.
+
+## Système de joints
+
+Le système 70 se monte avec deux familles de joints : des joints PCE et TPE, et des
+joints EPDM (noirs ou gris clair RAL 7035), avec des joints EPDM propres au capotage
+aluminium. La planche situe chaque joint par une lettre sur deux coupes de principe au centre :
+X le joint de vitrage, Y et Z les joints de frappe, W le joint de frappe des
+profilés capotés en aluminium ; les deux coupes portent une cote de 1,5 et une de 3,5 mm
+[1 p. 3].
+
+![Système de joints du système 70](/assets/procedures/moe-systeme-70/specifications/systeme-de-joints.png)
+
+Chaque cercle agrandit le joint à la position de sa lettre ; la référence est écrite dessous,
+la matière entre parenthèses. Une ligne par joint, dans l'ordre de la planche :
+
+| Joint | Famille sur la planche | Fonction | Position | Matière écrite |
+| --- | --- | --- | --- | --- |
+| PCE | Joint PCE, universel / joint de vitrage | joint de vitrage | X | - |
+| G342.T | Joint TPE, universel / joint de vitrage | joint de vitrage | X | PVC |
+| PCE | Joint PCE | joint de frappe | Y | - |
+| 9C32.T | Joint TPE | joint de frappe | Y | PVC |
+| PCE | Joint PCE | joint de frappe | Z | - |
+| 9C31.T | Joint TPE | joint de frappe | Z | PVC |
+| 9045 | Joint EPDM (noir, gris clair RAL 7035), universel / joint de vitrage | joint de vitrage | X | EPDM |
+| G084 | Joint EPDM | joint de frappe | Z, Y | EPDM |
+| 9E46 | Joint EPDM pour capotage Alu (noir, gris clair RAL 7035) | joint de vitrage | X | EPDM |
+| 101000 | Joint EPDM pour capotage Alu | joint de frappe | W | EPDM |
+| 9043 | Joint EPDM pour capotage Alu | joint de frappe, « décompression » | W | - |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 3)
+
+La planche écrit « Joint de battement » sous la colonne des joints PCE et TPE, face à deux coupes
+de battement dessinées avec les positions W et Z, sans autre référence. Les joints PCE n'ont pas
+de référence propre sur la planche. Les autres joints des systèmes profine sont dans
+[Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md).
+
+## Dimensions du système pour les centres d'usinage
+
+La planche donne, pour la programmation des centres d'usinage (les machines à commande
+numérique qui percent et fraisent les profilés), les cotes communes aux trois coupes de dormant
+et d'ouvrant dessinées [1 p. 3].
+
+![Dimensions du système 70 pour les centres d'usinage](/assets/procedures/moe-systeme-70/specifications/dimensions-centres-usinage.png)
+
+| Cote | Valeur | Où elle est prise |
+| --- | --- | --- |
+| Aile de recouvrement (mm) | 16 | en haut à gauche, sur les trois coupes |
+| Fond de feuillure (mm) | 54 | en haut, à droite de l'aile, sur les trois coupes |
+| Retour de la gorge (mm) | 11,5 | en haut à droite, sur les trois coupes |
+| Gorge (mm) | 4 et 4 | deux cotes successives à droite, sur les trois coupes |
+| Angle (°) | 15 | inclinaison de la lèvre de l'aile, à gauche, sur les trois coupes |
+| Pied (mm) | 20 en vertical, 16 en horizontal | sur la coupe du milieu seulement |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 3)
+
+La colonne « Cote » nomme la cote par sa position sur le dessin ; la planche ne nomme pas les
+cotes.
 
 # Comment lire les coupes du poster
 
 Le poster des profilés principaux dessine chaque profilé en coupe à l'échelle, extérieur en bas et
-vitrage en haut, le joint de frappe dessiné en pointillé. Chaque coupe porte en haut l'**épaisseur**
-(cote horizontale, 70 ou 78 mm), à gauche une ou deux **cotes verticales** prises sur la face
-gauche du dessin, à droite une **décomposition verticale** dont la part haute de 20 mm est commune
+vitrage en haut, le joint de frappe dessiné en pointillé. Chaque coupe porte en haut l'épaisseur
+(cote horizontale, 70 ou 78 mm), à gauche une ou deux cotes verticales prises sur la face
+gauche du dessin, à droite une décomposition verticale dont la part haute de 20 mm est commune
 aux dormants et aux ouvrants, et, sur les dormants à aile, une cote horizontale de 10 mm portée
 sur l'aile (le rebord qui recouvre le mur ou l'ancien bâti). Les références de renfort admises
 sont écrites dans la chambre de renfort. Le ou les capots aluminium sont dessinés à gauche du
@@ -129,8 +220,8 @@ de haut en bas ; la décomposition droite est la part haute de 20 mm et la part 
 
 Sur les dormants à aile 6102 à 6159, la seconde cote gauche est la hauteur de l'aile sous le corps
 du dormant ; la note d'assemblage du seuil désigne l'aile du 6107 comme « l'aile de 60 mm du
-dormant 6107 » [5 p. 1]. Les dormants 6156 et 6159 ne portent pas la cote de 10 mm ; le **6156** a
-une aile galbée dans laquelle est dessiné le profilé **95 38 00** (7,4 × 11,3 mm), sans légende de
+dormant 6107 » [5 p. 1]. Les dormants 6156 et 6159 ne portent pas la cote de 10 mm ; le 6156 a
+une aile galbée dans laquelle est dessiné le profilé 95 38 00 (7,4 × 11,3 mm), sans légende de
 fonction ; le même profilé, écrit 953800, est légendé « cache rainure » parmi les profilés du
 système 76 — voir [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md).
 
@@ -139,15 +230,15 @@ système 76 — voir [Profilés principaux du système 76](/profiles/systeme-76-
 Le dessin montre le profilé 95 38 00 en coupe, sa largeur de 7,4 mm en haut et sa hauteur de
 11,3 mm à droite (schéma: raw/poster-kommerling-70-principaux-2025-03.pdf, p. 1).
 
-Le **6161** est dessiné en trait gris, avec à son côté deux profilés gris **6163** et **6164** et
-une pièce **S197** logée dans sa feuillure, sans légende de fonction ; la légende **9C02** est
+Le 6161 est dessiné en trait gris, avec à son côté deux profilés gris 6163 et 6164 et
+une pièce S197 logée dans sa feuillure, sans légende de fonction ; la légende 9C02 est
 imprimée au-dessus de ce bloc — voir *Capots des dormants*.
 
 ## Dormants larges 6108 à 6111 et 6158
 
 Les dormants larges ont une aile horizontale qui prolonge le dormant vers l'intérieur. Chaque
-coupe porte, en haut, la **largeur hors tout** et l'épaisseur de 70 mm du corps ; à droite la
-décomposition 20 + 64 mm ; en bas à gauche la **hauteur du pied** de 20 mm ; sur l'aile verticale
+coupe porte, en haut, la largeur hors tout et l'épaisseur de 70 mm du corps ; à droite la
+décomposition 20 + 64 mm ; en bas à gauche la hauteur du pied de 20 mm ; sur l'aile verticale
 la cote horizontale de 10 mm. Les 6108, 6109 et 6110 sont dessinés superposés sur une seule coupe,
 leurs largeurs portées en cotes étagées.
 
@@ -161,9 +252,9 @@ leurs largeurs portées en cotes étagées.
 
 (schéma: raw/poster-kommerling-70-principaux-2025-03.pdf, p. 1, deuxième bande, à droite)
 
-Pièces dessinées avec les dormants larges, sans légende de fonction : **M850**, **M851** et
-**MA014** avec le bloc 6108-6110 ; **MA013**, **MA014**, **M850** et **M851** avec le 6111 ;
-**9F97** et **M325** avec chacun des trois blocs [5 p. 1]. Quatre de ces pièces, MA013, MA014,
+Pièces dessinées avec les dormants larges, sans légende de fonction : M850, M851 et
+MA014 avec le bloc 6108-6110 ; MA013, MA014, M850 et M851 avec le 6111 ;
+9F97 et M325 avec chacun des trois blocs [5 p. 1]. Quatre de ces pièces, MA013, MA014,
 M850 et M851, sont dessinées au DTD sous le titre « Embout pour dormants larges », sans cote — voir
 [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md) [3 p. 25].
 
@@ -171,41 +262,43 @@ Le poster donne aux cinq dormants larges les largeurs du manuel de mise en œuvr
 165 et 210 mm) ; le DTD leur donne 10 mm de moins — entrée **CTR-20** du registre
 [Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
 
-## Largeurs du manuel de mise en œuvre et du sommaire
+## Planches du manuel de mise en œuvre
 
-Le manuel de mise en œuvre donne à chaque dormant une largeur sur sa planche de détail et une
-autre dans le sommaire des profilés. Une ligne par dormant, en mm.
+Chaque profilé principal a, au registre 2.1.2 du manuel de mise en œuvre, une vignette au
+sommaire (sa désignation et le numéro de sa planche) et une planche : une coupe cotée à
+gauche, le tableau de ses accessoires à droite. Une ligne par dormant ; la désignation du
+sommaire et le titre de la planche sont écrits tels qu'ils sont imprimés, les cotes relevées sur
+la coupe de la planche, en mm, de haut en bas et de gauche à droite [1 p. 4-23].
 
-| Dormant | Largeur, planche de détail (mm) | Largeur, sommaire (mm) |
-| --- | --- | --- |
-| 6100 | 55 | 55 |
-| 6101 | 64 | 64 |
-| 6102 | 57 | 91 |
-| 6104 | 64 | 84 |
-| 6105 | 67 | 87 |
-| 6106 | 75 | 95 |
-| 6107 | 87 | 107 |
-| 6108 | 105 | 105 |
-| 6109 | 125 | 125 |
-| 6110 | 145 | 145 |
-| 6111 | 165 | 165 |
-| 6155 | 67 | 87 |
-| 6156 | 97 | 117 |
-| 6158 | 210 | 210 |
-| 6159 | 102 | 122 |
-| 2502 | 85 | 85 |
-| 2501 | - | - |
+| Profilé | Désignation au sommaire | Titre de la planche | Cotes portées sur la coupe (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 6100 | Dormant de 55 mm | 6100 Dormant 55 mm | 70 en haut ; à droite 20 + 35 | 8 | ![6100 Dormant 55 mm](/assets/profiles/systeme70/dormants/dormant-6100-moe.png) |
+| 6101 | Dormant de 64 mm | 6101 Dormant 64 mm | 70 en haut ; à droite 20 + 44 | 9 | ![6101 Dormant 64 mm](/assets/profiles/systeme70/dormants/dormant-6101-moe.png) |
+| 2502 | Dormant de 85 mm | 2502 Dormant 85 mm | 70 en haut ; à droite 20 + 65 | 10 | ![2502 Dormant 85 mm](/assets/profiles/systeme70/dormants/dormant-2502-moe.png) |
+| 6104 | Dormant de 84 mm | 6104 Dormant 64 mm | 70 en haut ; à gauche 64 + 20 ; à droite 20 + 64 ; 10 en horizontale sur l'aile | 11 | ![6104 Dormant 64 mm](/assets/profiles/systeme70/dormants/dormant-6104-moe.png) |
+| 6102 | Dormant de 91 mm | 6102 Dormant 57 mm | 70 en haut ; à gauche 47 + 30 ; à droite 20 + 57 ; 10 en horizontale sur l'aile | 12 | ![6102 Dormant 57 mm](/assets/profiles/systeme70/dormants/dormant-6102-moe.png) |
+| 6105 | Dormant de 87 mm | 6105 Dormant 67 mm | 70 en haut ; à gauche 47 + 40 ; à droite 20 + 67 ; 10 en horizontale sur l'aile | 13 | ![6105 Dormant 67 mm](/assets/profiles/systeme70/dormants/dormant-6105-moe.png) |
+| 6106 | Dormant de 95 mm | 6106 Dormant 75 mm | 70 en haut ; à gauche 55 + 40 ; à droite 20 + 75 ; 10 en horizontale sur l'aile | 14 | ![6106 Dormant 75 mm](/assets/profiles/systeme70/dormants/dormant-6106-moe.png) |
+| 6107 | Dormant de 107 mm | 6107 Dormant 87 mm | 70 en haut ; à gauche 47 + 60 ; à droite 20 + 87 ; 10 en horizontale sur l'aile | 15 | ![6107 Dormant 87 mm](/assets/profiles/systeme70/dormants/dormant-6107-moe.png) |
+| 6155 | Dormant de 87 mm | 6155 Dormant 67 mm | 70 en haut ; à gauche 47 + 40 ; à droite 20 + 67 ; 10 et 12 en horizontale sur l'aile | 16 | ![6155 Dormant 67 mm](/assets/profiles/systeme70/dormants/dormant-6155-moe.png) |
+| 6156 | Dormant de 117 mm | 6156 Dormant 97 mm | 70 en haut ; à gauche 47 + 70 ; à droite 20 + 97 ; 10 et 12 en horizontale sur l'aile | 17 | ![6156 Dormant 97 mm](/assets/profiles/systeme70/dormants/dormant-6156-moe.png) |
+| 6159 | Dormant de 122 mm | 6156 Dormant 102 mm | 70 en haut ; à gauche 47 + 75 ; à droite 20 + 102 | 18 | ![6156 Dormant 102 mm](/assets/profiles/systeme70/dormants/dormant-6159-moe.png) |
+| 6108 | Dormant de 105 mm | 6108 Dormant 105 mm | 105 et 70 en haut ; à gauche 84, et 20 en pied ; à droite 20 + 64 ; 10 en horizontale | 19 | ![6108 Dormant 105 mm](/assets/profiles/systeme70/dormants/dormant-6108-moe.png) |
+| 6109 | Dormant de 125 mm | 6109 Dormant 125 mm | 125 et 70 en haut ; 20 en pied ; à droite 20 + 64 ; 10 en horizontale | 20 | ![6109 Dormant 125 mm](/assets/profiles/systeme70/dormants/dormant-6109-moe.png) |
+| 6110 | Dormant de 145 mm | 6110 Dormant 145 mm | 145 et 70 en haut ; 20 en pied ; à droite 20 + 64 ; 10 en horizontale | 21 | ![6110 Dormant 145 mm](/assets/profiles/systeme70/dormants/dormant-6110-moe.png) |
+| 6111 | Dormant de 165 mm | 6111 Dormant 165 mm | 165 et 70 en haut ; 20 en pied ; à droite 20 + 64 ; 10 en horizontale | 22 | ![6111 Dormant 165 mm](/assets/profiles/systeme70/dormants/dormant-6111-moe.png) |
+| 6158 | Dormant de 210 mm | 6158 Dormant 210 mm | 210 et 70 en haut ; 20 en pied ; à droite 20 + 64 ; 10 en horizontale | 23 | ![6158 Dormant 210 mm](/assets/profiles/systeme70/dormants/dormant-6158-moe.png) |
 
-(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, registre 2.1.2, p. 1 et 5 à 20)
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 4 et 8-23)
 
-Sur le poster, la largeur de planche de ces dormants est la part basse de la décomposition droite
-(57, 64, 67, 75, 87, 97, 102 mm), et la largeur du sommaire est égale à la somme 20 + part basse
-pour sept d'entre eux (84, 87, 95, 107, 87, 117, 122 mm). Le **6102** fait exception : 20 + 57 =
-77 mm sur le poster, 91 mm au sommaire — entrée **INC-12** du registre
-[Incohérences internes](/anomalies/incoherences-internes.md). La planche du dormant 6159 du manuel
-est en outre titrée « 6156 » alors que son cartouche porte 6159.
+Le sommaire et la planche ne donnent pas la même largeur à huit dormants (6102, 6104, 6105, 6106,
+6107, 6155, 6156, 6159) : la planche titre la part basse de la décomposition droite, le sommaire
+la somme 20 + part basse, sauf le 6102 (91 au sommaire, 20 + 57 = 77 sur la coupe) — entrée
+**INC-12** du registre [Incohérences internes](/anomalies/incoherences-internes.md). La planche
+du 6159 est titrée « 6156 Dormant 102 mm » (**INC-12**). Le tableau des accessoires de chaque
+planche est dans [Renforts et accessoires par profilé du système 70](/profiles/systeme-70-accessoires-par-profile.md).
 
-**Le dormant 2501 n'a pas de planche de détail dans le manuel** et n'est pas dessiné sur le
+**Le dormant 2501 n'a pas de planche dans le manuel** et n'est pas dessiné sur le
 poster. Le DTD le dessine avec une épaisseur de 70 mm, une décomposition droite 20 + 50 mm et le
 capot 9C01.1 (alu), sans renfort écrit — voir *Dormants et capots du DTD* ci-dessous [3 p. 14]. Il est classé dans la même famille
 « standard » que le 2502 pour l'assemblage aux traverses et aux seuils — voir
@@ -214,9 +307,9 @@ capot 9C01.1 (alu), sans renfort écrit — voir *Dormants et capots du DTD* ci-
 ## Capots des dormants
 
 Le capot aluminium habille la face extérieure du dormant. Chaque capot est dessiné à gauche du
-dormant de son groupe, avec deux cotes : la **largeur du retour** (cote horizontale en haut) et la
-**hauteur** (cote verticale). Le demi-capot **A474** est dessiné avec son clip **M569** ; le capot
-A107 et le capot 9C40 du battement 0140 sont dessinés avec la pièce **9B18**.
+dormant de son groupe, avec deux cotes : la largeur du retour (cote horizontale en haut) et la
+hauteur (cote verticale). Le demi-capot A474 est dessiné avec son clip M569 ; le capot
+A107 et le capot 9C40 du battement 0140 sont dessinés avec la pièce 9B18.
 
 | Capot | Groupe de dormant sur la planche | Largeur du retour (mm) | Hauteur (mm) | Coupe |
 | --- | --- | --- | --- | ---: |
@@ -245,10 +338,10 @@ A107 et le capot 9C40 du battement 0140 sont dessinés avec la pièce **9B18**.
 
 (schéma: raw/poster-kommerling-70-principaux-2025-03.pdf, p. 1, deux bandes supérieures)
 
-Les deux premiers **A474** sont dessinés seuls entre deux groupes : le premier entre le dormant
+Les deux premiers A474 sont dessinés seuls entre deux groupes : le premier entre le dormant
 6100 et le capot A107 du 6101, le second entre le dormant 2502 et le capot A108 du 6104 ; ils sont
-rattachés ici au groupe à leur droite, comme les autres capots. Le **capot de 21,6 × 88,1 mm**
-dessiné à gauche du 2502 ne porte pas de légende ; la légende **9C02** est imprimée plus bas, au-dessus
+rattachés ici au groupe à leur droite, comme les autres capots. Le capot de 21,6 × 88,1 mm
+dessiné à gauche du 2502 ne porte pas de légende ; la légende 9C02 est imprimée plus bas, au-dessus
 du bloc du 6161, sans trait de rappel — entrée **VER-60** du registre
 [Informations à vérifier](/anomalies/informations-a-verifier.md).
 
@@ -280,13 +373,15 @@ n'est pas portée [3 p. 14-15].
 
 Les coupes de la colonne de droite sont celles du poster (même profilé, même dessin), sauf le
 2501, absent du poster, et le capot 9C02.1, découpés sur le DTD. Sur la p. 14, les capots
-**A474 (alu)** et **A109 (alu)** sont dessinés ensemble au-dessus de la mention « Capots pour
+A474 (alu) et A109 (alu) sont dessinés ensemble au-dessus de la mention « Capots pour
 dormants réhabilitation réf. 6102, 6105, 6107, 6155, 6156, 6159 » ; le dormant 6106, dessiné
-p. 15, n'est pas dans cette liste [3 p. 14]. Le capot **9C02.1** est dessiné à gauche du 2502, là
+p. 15, n'est pas dans cette liste [3 p. 14]. Le capot 9C02.1 est dessiné à gauche du 2502, là
 où le poster dessine un capot de 21,6 × 88,1 mm sans légende (**VER-60**).
 
-Le poster dessine le capot **A107**, et non l'A108, à côté du dormant **6101**, et un A107 à côté du
-**6100**, que le DTD dessine sans capot — entrée **CTR-37** du registre
+Le poster dessine le capot A107, et non l'A108, à côté du dormant 6101, et un A107 à côté du
+6100, que le DTD dessine sans capot ; les planches du manuel portent l'A107 et le demi-capot
+A474 sur les 6100 et 6101, l'A108 sur le 6104, l'A109 sur les 6102, 6105, 6107, 6155, 6156 et
+6159, le 9C02 sur le 2502 et aucun capot sur le 6106 [1 p. 8-18] — entrée **CTR-37** du registre
 [Contradictions entre sources](/anomalies/contradictions-entre-sources.md). Pour les dormants de
 rénovation, le poster dessine chacun des 6102, 6105, 6155, 6106, 6107, 6156 et 6159 avec le capot
 A109 et le demi-capot A474 sur clip M569 (**VER-38**).
@@ -309,54 +404,60 @@ Le poster et le manuel donnent 105, 125, 145, 165 et 210 mm à ces cinq dormants
 
 # Renforts des dormants
 
-Renforts admis par dormant, relevés sur les planches du manuel de mise en œuvre, avec leurs
-inerties. **IG** borne la reprise du poids (donc l'épaisseur de vitrage), **IW** celle des efforts
-de vent — même convention que sur le [système 76](/profiles/systeme-76-renforts.md). Une ligne par
-couple dormant et renfort ; inerties en cm⁴, épaisseur d'acier en mm.
+Renforts admis par dormant, relevés sur la planche de chaque dormant, avec leurs inerties. IG est l'inertie vis-à-vis du poids (elle borne l'épaisseur de
+vitrage), IW l'inertie dans la direction du vent (elle borne la dimension réalisable), même
+convention que sur le [système 76](/profiles/systeme-76-renforts.md). Une ligne par couple
+dormant et renfort ; l'épaisseur d'acier est celle de la désignation ; inerties en cm⁴ ; un
+tiret signifie une valeur non portée [1 p. 8-23].
 
-| Dormant | Renfort | Épaisseur d'acier (mm) | IG (cm⁴) | IW (cm⁴) |
-| --- | --- | --- | --- | --- |
-| 6100 | V543 | 1,25 | 0,1 | 1,5 |
-| 6100 | V600 | 1,5 | 0,5 | 2,1 |
-| 6101 | V544 | 1,25 | 0,5 | 2,4 |
-| 6101 | V601 | 1,5 | 1,5 | 3,2 |
-| 6102 | V543 | 1,25 | 0,1 | 1,5 |
-| 6102 | V600 | 1,5 | 0,5 | 2,1 |
-| 6104 | V601 | 1,5 | 1,5 | 3,2 |
-| 6105 | V543 | 1,25 | 0,1 | 1,5 |
-| 6105 | V600 | 1,5 | 0,5 | 2,1 |
-| 6106 | V543 | 1,25 | 0,1 | 1,5 |
-| 6106 | V600 | 1,5 | 0,5 | 2,1 |
-| 6107 | V543 | 1,25 | 0,1 | 1,5 |
-| 6107 | V600 | 1,5 | 0,5 | 2,1 |
-| 6108 | V601 | 1,5 | 1,5 | 3,2 |
-| 6109 | V601 | 1,5 | 1,5 | 3,2 |
-| 6110 | V601 | 1,5 | 1,5 | 3,2 |
-| 6111 | V601 | 1,5 | 1,5 | 3,2 |
-| 6155 | V543 | 1,25 | 0,1 | 1,5 |
-| 6155 | V600 | 1,5 | 0,5 | 2,1 |
-| 6156 | V543 | 1,25 | 0,1 | 1,5 |
-| 6156 | V600 | 1,5 | 0,5 | 2,1 |
-| 6158 | V601 | 1,5 | 1,5 | 3,2 |
-| 6159 | V543 | 1,25 | 0,1 | 1,5 |
-| 6159 | V600 | 1,5 | 0,5 | 2,1 |
-| 2502 | V030 | 1,5 | 4,0 | 4,5 |
-| 2502 | V031 | 1,5 | 5,6 | 5,3 |
+| Dormant | Renfort | Désignation sur la planche | Épaisseur d'acier (mm) | IG (cm⁴) | IW (cm⁴) | Longueur de livraison (m) |
+| --- | --- | --- | --- | --- | --- | --- |
+| 6100 | V600 | Renfort 1,5 mm | 1,5 | 0,5 | 2,1 | - |
+| 6100 | V543 | Renfort 1,25 mm | 1,25 | 0,1 | 1,5 | - |
+| 6101 | V601 | Renfort 1,5 mm | 1,5 | 1,5 | 3,2 | - |
+| 6101 | V544 | Renfort 1,25 mm | 1,25 | 0,5 | 2,4 | - |
+| 2502 | V030 | Renfort 1,5 mm | 1,5 | 4,0 | 4,5 | - |
+| 2502 | V031 | Renfort 1,5 mm | 1,5 | 5,6 | 5,3 | - |
+| 6104 | V601 | Renfort 1,5 mm | 1,5 | 1,5 | 3,2 | - |
+| 6104 | V544 | Renfort 1,25 mm | 1,25 | 0,5 | 2,4 | - |
+| 6102 | V600 | Renfort 1,5 mm | 1,5 | 0,5 | 2,1 | - |
+| 6102 | V543 | Renfort 1,25 mm | 1,25 | 0,1 | 1,5 | - |
+| 6105 | V600 | Renfort 1,5 mm | 1,5 | 0,5 | 2,1 | - |
+| 6105 | V543 | Renfort 1,25 mm | 1,25 | 0,1 | 1,5 | - |
+| 6106 | V600 | Renfort 1,5 mm | 1,5 | 0,5 | 2,1 | - |
+| 6106 | V543 | Renfort 1,25 mm | 1,25 | 0,1 | 1,5 | - |
+| 6107 | V600 | Renfort 1,5 mm | 1,5 | 0,5 | 2,1 | - |
+| 6107 | V543 | Renfort 1,25 mm | 1,25 | 0,1 | 1,5 | - |
+| 6155 | V600 | Renfort 1,5 mm | 1,5 | 0,5 | 2,1 | - |
+| 6155 | V543 | Renfort 1,25 mm | 1,25 | 0,1 | 1,5 | - |
+| 6156 | V600 | Renfort 1,5 mm | 1,5 | 0,5 | 2,1 | - |
+| 6156 | V543 | Renfort 1,25 mm | 1,25 | 0,1 | 1,5 | - |
+| 6159 | V600 | Renfort 1,5 mm | 1,5 | 0,5 | 2,1 | - |
+| 6159 | V543 | Renfort 1,25 mm | 1,25 | 0,1 | 1,5 | - |
+| 6108 | V601 | Renfort 1,5 mm | 1,5 | 1,5 | 3,2 | - |
+| 6108 | V544 | Renfort 1,25 mm | 1,25 | 0,5 | 2,4 | - |
+| 6109 | V601 | Renfort 1,5 mm | 1,5 | 1,5 | 3,2 | - |
+| 6109 | V544 | Renfort 1,25 mm | 1,25 | 0,5 | 2,4 | - |
+| 6110 | V601 | Renfort 1,5 mm | 1,5 | 1,5 | 3,2 | - |
+| 6110 | V544 | Renfort 1,25 mm | 1,25 | 0,5 | 2,4 | - |
+| 6111 | V601 | Renfort 1,5 mm | 1,5 | 1,5 | 3,2 | - |
+| 6111 | V544 | Renfort 1,25 mm | 1,25 | 0,5 | 2,4 | - |
+| 6158 | V601 | Renfort 1,5 mm | 1,5 | 1,5 | 3,2 | - |
+| 6158 | V544 | Renfort 1,25 mm | 1,25 | 0,5 | 2,4 | - |
 
-(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, registre 2.1.2, p. 5 à 20)
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 8 à 23)
 
-Les renforts de dormant du manuel sont V543 ou V600 sur les dormants 6100, 6102, 6105 à 6107,
-6155, 6156 et 6159 ; V544 ou V601 sur le 6101 ; V601 seul sur les 6104, 6108 à 6111 et 6158 ;
-V030 ou V031 sur le 2502. Le poster écrit **V601 et V544** dans la chambre des 6104, 6108 à 6111
-et 6158, là où le manuel ne donne que le V601 — entrée **VER-61** du registre
-[Informations à vérifier](/anomalies/informations-a-verifier.md). Le classeur de 2008 porte
-« Renfort Iz V600 2,10 » sur le dormant 6100 et « Renfort Iz V601 3,20 » sur le 6101 [2 p. 1].
+Chaque dormant a deux renforts au choix : V600 ou V543 sur les 6100, 6102, 6105, 6106, 6107,
+6155, 6156 et 6159 ; V601 ou V544 sur les 6101, 6104, 6108, 6109, 6110, 6111 et 6158 ; V030 ou
+V031 sur le 2502 [1 p. 8-23]. Le poster écrit les mêmes couples dans la chambre des coupes. Le
+classeur de 2008 porte « Renfort Iz V600 2,10 » sur le dormant 6100 et « Renfort Iz V601 3,20 »
+sur le 6101 [2 p. 1].
 
 # Cotes des ouvrants
 
-Les ouvrants du système 70. L'**ouvrant** porte le vitrage ; il existe en deux hauteurs de face
-dans chaque marque, et en deux formes : l'ouvrant à **recouvrement** (la décomposition droite
-20 + 53 ou 20 + 77, avec une cote gauche de 20 mm en pied) et l'ouvrant **réduit** (décomposition
+Les ouvrants du système 70. L'ouvrant porte le vitrage ; il existe en deux hauteurs de face
+dans chaque marque, et en deux formes : l'ouvrant à recouvrement (la décomposition droite
+20 + 53 ou 20 + 77, avec une cote gauche de 20 mm en pied) et l'ouvrant réduit (décomposition
 droite 20 + 21 + 12 ou 20 + 45 + 12, avec au pied deux cotes horizontales de 50,5 et 19,5 mm).
 Épaisseur 70 mm, 78 mm sur les ouvrants 6121 à 6124. Le capot est dessiné à gauche de l'ouvrant
 qu'il habille ; un tiret signifie qu'aucun capot n'est dessiné.
@@ -383,10 +484,10 @@ qu'il habille ; un tiret signifie qu'aucun capot n'est dessiné.
 
 (schéma: raw/poster-kommerling-70-principaux-2025-03.pdf, p. 1, troisième et quatrième bandes)
 
-Le **6115** est dessiné en trait gris. L'ouvrant **6116** ne porte que V057 et V059 dans sa
+Le 6115 est dessiné en trait gris. L'ouvrant 6116 ne porte que V057 et V059 dans sa
 chambre, là où les 6120, 6124 et 6153 de même forme portent aussi le V069.
 
-La **cale M771** est dessinée trois fois en perspective, sous les ouvrants 6121, 6117 et 6150,
+La cale M771 est dessinée trois fois en perspective, sous les ouvrants 6121, 6117 et 6150,
 avec trois légendes : « Pour 6112, 6115, 6121 et 6123 », « Pour 6112, 6115, 6117 et 6119 » et
 « Pour 6112, 6115, 6150 et 6152 » [5 p. 1].
 
@@ -408,7 +509,7 @@ avec trois légendes : « Pour 6112, 6115, 6121 et 6123 », « Pour 6112, 6115, 
 
 (schéma: raw/poster-kommerling-70-principaux-2025-03.pdf, p. 1, cinquième bande, à gauche)
 
-Le **0303** a deux chambres de renfort superposées, chacune avec sa propre liste de renforts. Le
+Le 0303 a deux chambres de renfort superposées, chacune avec sa propre liste de renforts. Le
 2415 n'a pas de cote verticale à gauche sur le poster.
 
 ## Capots des ouvrants
@@ -457,49 +558,121 @@ coupes sont celles du poster, qui dessine les mêmes profilés [3 p. 16-18].
 (schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 16 à 18)
 
 Les ouvrants KÖMMERLING e.VOLUTION 6121 à 6124 sont cotés 78 mm d'épaisseur, les ouvrants TROCAL
-e.XCLUSIVE, KBE e.MOTION et génériques 70 mm [3 p. 16-18]. Le DTD écrit **6112C** là où le poster et
+e.XCLUSIVE, KBE e.MOTION et génériques 70 mm [3 p. 16-18]. Le DTD écrit 6112C là où le poster et
 la légende du capot A170 écrivent 6112. Le 6151 et le 6152 ne portent pas de part basse à droite
-sur la planche. La cote de 53 mm du **6151** est sa cote verticale gauche, comme celle des 6122 et
+sur la planche. La cote de 53 mm du 6151 est sa cote verticale gauche, comme celle des 6122 et
 6118 de même forme, et non une part basse (**VER-62**).
 
-L'élargisseur d'ouvrant **0303** est dessiné p. 16 avec une épaisseur de 70 mm et une
+L'élargisseur d'ouvrant 0303 est dessiné p. 16 avec une épaisseur de 70 mm et une
 décomposition droite de 20 + 90 mm [3 p. 16] ; le poster le cote 94 à gauche et 20 + 90 à droite
 (tableau *Ouvrants de porte, élargisseur d'ouvrant 0303* ci-dessus).
 
+## Ouvrants du manuel de mise en œuvre
+
+Une ligne par ouvrant, cotes relevées sur la coupe de sa planche, en mm. Le sommaire range les
+ouvrants 6121 à 6124, 6117 à 6120 et 6150 à 6153 sous trois marques : la légende de marque est
+imprimée sous chaque groupe de quatre vignettes [1 p. 5-6, 25-34].
+
+| Profilé | Désignation au sommaire | Titre de la planche | Marque sous laquelle le sommaire le range | Cotes portées sur la coupe (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 6112 | Ouvrant de 73 mm | 6112 Ouvrant 73 mm | - | 70 en haut ; à gauche 53 + 20 ; à droite 20 + 53 | 25 | ![6112 Ouvrant 73 mm](/assets/profiles/systeme70/ouvrants/ouvrant-6112-moe.png) |
+| 6113 | Ouvrant réduit de 53 mm | 6113 Ouvrant 53 mm | - | 70 en haut ; à gauche 53 ; à droite 20 + 21 + 12 ; au pied 50,5 + 19,5 | 25 | ![6113 Ouvrant 53 mm](/assets/profiles/systeme70/ouvrants/ouvrant-6113-moe.png) |
+| 6115 | Ouvrant de 97 mm | 6115 Ouvrant 97mm | - | 70 en haut ; à gauche 77 + 20 ; à droite 20 + 77 | 26 | ![6115 Ouvrant 97mm](/assets/profiles/systeme70/ouvrants/ouvrant-6115-moe.png) |
+| 6116 | Ouvrant réduit de 77 mm | 6116 Ouvrant 77 mm | - | 70 en haut ; à gauche 77 ; à droite 20 + 45 + 12 ; au pied 50,5 + 19,5 | 26 | ![6116 Ouvrant 77 mm](/assets/profiles/systeme70/ouvrants/ouvrant-6116-moe.png) |
+| 6121 | Ouvrant de 73 mm | 6121 Ouvrant 73 mm | e.VOLUTION | 78 en haut ; à gauche 53 + 20 ; à droite 20 + 53 | 27 | ![6121 Ouvrant 73 mm](/assets/profiles/systeme70/ouvrants/ouvrant-6121-moe.png) |
+| 6122 | Ouvrant réduit de 53 mm | 6122 Ouvrant 53 mm | e.VOLUTION | 78 en haut ; à gauche 53 ; à droite 20 + 21 + 12 ; au pied 50,5 + 19,5 | 27 | ![6122 Ouvrant 53 mm](/assets/profiles/systeme70/ouvrants/ouvrant-6122-moe.png) |
+| 6123 | Ouvrant de 97 mm | 6123 Ouvrant 97mm | e.VOLUTION | 78 en haut ; à gauche 77 + 20 ; à droite 20 + 77 | 28 | ![6123 Ouvrant 97mm](/assets/profiles/systeme70/ouvrants/ouvrant-6123-moe.png) |
+| 6124 | Ouvrant réduit de 77 mm | 6124 Ouvrant 77 mm | e.VOLUTION | 78 en haut ; à gauche 77 ; à droite 20 + 45 + 12 ; au pied 50,5 + 19,5 | 28 | ![6124 Ouvrant 77 mm](/assets/profiles/systeme70/ouvrants/ouvrant-6124-moe.png) |
+| 6117 | Ouvrant de 73 mm | 6117 Ouvrant 73 mm | e.MOTION | 70 en haut ; à gauche 53 + 20 ; à droite 20 + 53 | 29 | ![6117 Ouvrant 73 mm](/assets/profiles/systeme70/ouvrants/ouvrant-6117-moe.png) |
+| 6118 | Ouvrant réduit de 53 mm | 6118 Ouvrant 53 mm | e.MOTION | 70 en haut ; à gauche 53 ; à droite 20 + 21 + 12 ; au pied 50,5 + 19,5 | 29 | ![6118 Ouvrant 53 mm](/assets/profiles/systeme70/ouvrants/ouvrant-6118-moe.png) |
+| 6119 | Ouvrant de 97 mm | 6119 Ouvrant 97mm | e.MOTION | 70 en haut ; à gauche 77 + 20 ; à droite 20 + 77 | 30 | ![6119 Ouvrant 97mm](/assets/profiles/systeme70/ouvrants/ouvrant-6119-moe.png) |
+| 6120 | Ouvrant réduit de 77 mm | 6120 Ouvrant 77 mm | e.MOTION | 70 en haut ; à gauche 77 ; à droite 20 + 45 + 12 ; au pied 50,5 + 19,5 | 30 | ![6120 Ouvrant 77 mm](/assets/profiles/systeme70/ouvrants/ouvrant-6120-moe.png) |
+| 6150 | Ouvrant de 73 mm | 6150 Ouvrant 73 mm | e.XCLUSIVE | 70 en haut ; à gauche 53 + 20 ; à droite 20 + 53 | 31 | ![6150 Ouvrant 73 mm](/assets/profiles/systeme70/ouvrants/ouvrant-6150-moe.png) |
+| 6151 | Ouvrant réduit de 53 mm | 6151 Ouvrant 53 mm | e.XCLUSIVE | 70 en haut ; à gauche 53 ; à droite 20 + 21 + 12 ; au pied 50,5 + 19,5 | 31 | ![6151 Ouvrant 53 mm](/assets/profiles/systeme70/ouvrants/ouvrant-6151-moe.png) |
+| 6152 | Ouvrant de 97 mm | 6152 Ouvrant 97mm | e.XCLUSIVE | 70 en haut ; à gauche 77 + 20 ; à droite 20 + 77 | 32 | ![6152 Ouvrant 97mm](/assets/profiles/systeme70/ouvrants/ouvrant-6152-moe.png) |
+| 6153 | Ouvrant réduit de 77 mm | 6153 Ouvrant 77 mm | e.XCLUSIVE | 70 en haut ; à gauche 77 ; à droite 20 + 45 + 12 ; au pied 50,5 + 19,5 | 32 | ![6153 Ouvrant 77 mm](/assets/profiles/systeme70/ouvrants/ouvrant-6153-moe.png) |
+| 2415 | Ouvrant de 118 mm | 2415 Ouvrant 118 mm | - | 70 en haut ; à gauche 118 ; à droite 20 + 78 + 20 | 33 | ![2415 Ouvrant 118 mm](/assets/profiles/systeme70/ouvrants/ouvrant-2415-moe.png) |
+| 2416 | Ouvrant de 118 mm | 2416 Ouvrant 118 mm | - | 70 en haut ; à gauche 98 + 20 ; à droite 20 + 98 | 33 | ![2416 Ouvrant 118 mm](/assets/profiles/systeme70/ouvrants/ouvrant-2416-moe.png) |
+| 2418 | Ouvrant de 96 mm | 2418 Ouvrant 96mm | - | 70 en haut ; à gauche 96 ; à droite 20 + 56 + 20 | 34 | ![2418 Ouvrant 96mm](/assets/profiles/systeme70/ouvrants/ouvrant-2418-moe.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 5-6 et 25 à 34)
+
+L'« ouvrant réduit » (53 et 77 mm) a une décomposition droite en trois parts et deux cotes de
+pied de 50,5 et 19,5 mm ; l'ouvrant à recouvrement (73 et 97 mm) une décomposition en deux parts
+et une cote de 20 mm en pied à gauche. Les ouvrants 6121 à 6124 sont cotés 78 mm d'épaisseur,
+les autres 70 mm [1 p. 25-34].
+
 # Renforts des ouvrants
 
-| Ouvrant | Largeur (mm) | Renfort | Épaisseur d'acier (mm) | IG (cm⁴) | IW (cm⁴) |
-| --- | --- | --- | --- | --- | --- |
-| 6112 | 73 | V258 | 1,25 | 0,4 | 2,2 |
-| 6112 | 73 | V158 | 2,0 | 0,5 | 3,2 |
-| 6117 | 73 | V258 | 1,25 | 0,4 | 2,2 |
-| 6117 | 73 | V158 | 2,0 | 0,5 | 3,2 |
-| 6121 | 73 | V258 | 1,25 | 0,4 | 2,2 |
-| 6121 | 73 | V158 | 2,0 | 0,5 | 3,2 |
-| 6150 | 73 | V258 | 1,25 | 0,4 | 2,2 |
-| 6150 | 73 | V158 | 2,0 | 0,5 | 3,2 |
-| 6115 | 97 | V059 | 2,0 | 4,8 | 4,4 |
-| 6115 | 97 | V057 | 2,0 | 4,8 | 3,8 |
-| 6119 | 97 | V059 | 2,0 | 4,8 | 4,4 |
-| 6119 | 97 | V057 | 2,0 | 4,8 | 3,8 |
-| 6123 | 97 | V059 | 2,0 | 4,8 | 4,4 |
-| 6123 | 97 | V057 | 2,0 | 4,8 | 3,8 |
-| 6152 | 97 | V059 | 2,0 | 4,8 | 4,4 |
-| 6152 | 97 | V057 | 2,0 | 4,8 | 3,8 |
-| 2415 | 118 | V290 | 2,0 | 12,3 | 8,7 |
-| 2415 | 118 | V003 | 2,0 | 19,7 | 12,3 |
-| 2418 | 96 | V030 | 2,0 | 4,0 | 4,5 |
+Renforts admis par ouvrant, relevés sur la planche de chaque ouvrant du manuel, même convention
+que pour les dormants. Le V069 et le V154 sont des renforts pré-usinés (livrés déjà
+percés) de longueur fixe, sans inertie écrite [1 p. 25-34].
 
-(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, registre 2.1.2, p. 22 à 31)
+| Ouvrant | Renfort | Désignation sur la planche | Épaisseur d'acier (mm) | IG (cm⁴) | IW (cm⁴) | Longueur de livraison (m) |
+| --- | --- | --- | --- | --- | --- | --- |
+| 6112 | V158 | Renfort 2 mm | 2 | 0,5 | 3,2 | - |
+| 6112 | V258 | Renfort 1,25 mm | 1,25 | 0,4 | 2,2 | - |
+| 6113 | V158 | Renfort 2 mm | 2 | 0,5 | 3,2 | - |
+| 6113 | V258 | Renfort 1,25 mm | 1,25 | 0,4 | 2,2 | - |
+| 6115 | V057 | Renfort 2 mm | 2 | 4,8 | 3,8 | - |
+| 6115 | V059 | Renfort 2 mm | 2 | 4,8 | 4,4 | - |
+| 6115 | V069 | Renfort pré-usiné | - | - | - | 2 |
+| 6116 | V057 | Renfort 2 mm | 2 | 4,8 | 3,8 | - |
+| 6116 | V059 | Renfort 2 mm | 2 | 4,8 | 4,4 | - |
+| 6116 | V069 | Renfort pré-usiné | - | - | - | 2 |
+| 6121 | V158 | Renfort 2 mm | 2 | 0,5 | 3,2 | - |
+| 6121 | V258 | Renfort 1,25 mm | 1,25 | 0,4 | 2,2 | - |
+| 6122 | V158 | Renfort 2 mm | 2 | 0,5 | 3,2 | - |
+| 6122 | V258 | Renfort 1,25 mm | 1,25 | 0,4 | 2,2 | - |
+| 6123 | V057 | Renfort 2 mm | 2 | 4,8 | 3,8 | - |
+| 6123 | V059 | Renfort 2 mm | 2 | 4,8 | 4,4 | - |
+| 6123 | V069 | Renfort pré-usiné | - | - | - | 2 |
+| 6124 | V057 | Renfort 2 mm | 2 | 4,8 | 3,8 | - |
+| 6124 | V059 | Renfort 2 mm | 2 | 4,8 | 4,4 | - |
+| 6124 | V069 | Renfort pré-usiné | - | - | - | 2 |
+| 6117 | V158 | Renfort 2 mm | 2 | 0,5 | 3,2 | - |
+| 6117 | V258 | Renfort 1,25 mm | 1,25 | 0,4 | 2,2 | - |
+| 6118 | V158 | Renfort 2 mm | 2 | 0,5 | 3,2 | - |
+| 6118 | V258 | Renfort 1,25 mm | 1,25 | 0,4 | 2,2 | - |
+| 6119 | V057 | Renfort 2 mm | 2 | 4,8 | 3,8 | - |
+| 6119 | V059 | Renfort 2 mm | 2 | 4,8 | 4,4 | - |
+| 6119 | V069 | Renfort pré-usiné | - | - | - | 2 |
+| 6120 | V057 | Renfort 2 mm | 2 | 4,8 | 3,8 | - |
+| 6120 | V059 | Renfort 2 mm | 2 | 4,8 | 4,4 | - |
+| 6120 | V069 | Renfort pré-usiné | - | - | - | 2 |
+| 6150 | V158 | Renfort 2 mm | 2 | 0,5 | 3,2 | - |
+| 6150 | V258 | Renfort 1,25 mm | 1,25 | 0,4 | 2,2 | - |
+| 6151 | V158 | Renfort 2 mm | 2 | 0,5 | 3,2 | - |
+| 6151 | V258 | Renfort 1,25 mm | 1,25 | 0,4 | 2,2 | - |
+| 6152 | V057 | Renfort 2 mm | 2 | 4,8 | 3,8 | - |
+| 6152 | V059 | Renfort 2 mm | 2 | 4,8 | 4,4 | - |
+| 6152 | V069 | Renfort pré-usiné | - | - | - | 2 |
+| 6153 | V057 | Renfort 2 mm | 2 | 4,8 | 3,8 | - |
+| 6153 | V059 | Renfort 2 mm | 2 | 4,8 | 4,4 | - |
+| 6153 | V069 | Renfort pré-usiné | - | - | - | 2 |
+| 2415 | V003 | Renfort 2 mm | 2 | 19,7 | 12,3 | - |
+| 2415 | V290 | Renfort 2 mm | 2 | 12,3 | 8,7 | - |
+| 2415 | V154 | Renfort pré-usiné | - | - | - | 2,25 |
+| 2416 | V003 | Renfort 2 mm | 2 | 19,7 | 12,3 | - |
+| 2416 | V290 | Renfort 2 mm | 2 | 12,3 | 8,7 | - |
+| 2416 | V154 | Renfort pré-usiné | - | - | - | 2,25 |
+| 2418 | V030 | Renfort 2 mm | 2 | 4,0 | 4,5 | - |
 
-Le poster écrit en plus le **V069** dans la chambre des ouvrants 6115, 6119, 6123 et 6152, et le
-**V154** dans celle du 2415 et du 2416 ; le manuel ne les donne pas sur ces planches — entrée
-**VER-61**.
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 25 à 34)
+
+Le V030 est désigné « Renfort 2 mm » sur la planche du 2418 et « Renfort 1,5 mm » sur celle
+du 2502 ; son dessin est coté 1,5 — entrée **INC-101** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md).
+
+Le poster écrit le V069 dans la chambre des ouvrants 6115, 6119, 6120, 6123, 6124, 6152 et
+6153, et le V154 dans celle du 2415 et du 2416 ; les planches du manuel les donnent aussi
+(V069 sur les huit ouvrants de 77 et 97 mm, dont le 6116 ; V154 sur les 2415 et 2416) — voir
+l'entrée **VER-61** du registre [Informations à vérifier](/anomalies/informations-a-verifier.md).
 
 # Cotes des battements
 
-Le **battement** est le profilé fixé sur l'un des deux ouvrants d'une fenêtre à deux vantaux, qui
-recouvre la jonction avec l'autre ouvrant. Le poster dessine chaque battement avec son **embout**
+Le battement est le profilé fixé sur l'un des deux ouvrants d'une fenêtre à deux vantaux, qui
+recouvre la jonction avec l'autre ouvrant. Le poster dessine chaque battement avec son embout
 (la pièce qui ferme son extrémité) en perspective. Chaque coupe porte en haut la largeur, à gauche
 une cote verticale, à droite une décomposition de haut en bas.
 
@@ -512,16 +685,16 @@ une cote verticale, à droite une décomposition de haut en bas.
 | 6130 | 34 | 15,5 | 12 + 24 | 9F30 | extérieur | ![Battement 6130](/assets/profiles/systeme70/battements/battement-6130.png) |
 | A176 | 34 | 11,5 | 10,4 + 18,2 | M375 | - | ![Battement A176](/assets/profiles/systeme70/battements/battement-a176.png) |
 
-(schéma: raw/poster-kommerling-70-principaux-2025-03.pdf, p. 1, sixième bande, à gauche ; position : raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, registre 2.1.2, p. 32 et 33)
+(schéma: raw/poster-kommerling-70-principaux-2025-03.pdf, p. 1, sixième bande, à gauche ; position : raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 35)
 
-Le **A176** est dessiné hachuré, comme les profilés aluminium de la planche.
+Le A176 est dessiné hachuré, comme les profilés aluminium de la planche.
 
-L'annexe du DTD dessine les battements extérieurs avec leur seule largeur : **0140** (62 mm),
-**1578** (40 mm), **6130** (34 mm) et **A176 (alu)** (34 mm) sans marque ; **6132** (40 mm) et
-**6162** (46 mm) sous « KÖMMERLING e.VOLUTION » ; **6128** (34 mm) sous « KBE e.MOTION » [3 p. 18].
-Les battements intérieurs sont dessinés p. 19 : **1547** (60 mm), **6129** (58 mm), **6133**
-(54 mm) et **76833** (48 mm, et une cote verticale de 12) sans marque ; **6131** (54 mm) sous
-« KÖMMERLING e.VOLUTION » et sous « TROCAL e.XCLUSIVE » ; **6154** (54 mm) sous « KBE e.MOTION ».
+L'annexe du DTD dessine les battements extérieurs avec leur seule largeur : 0140 (62 mm),
+1578 (40 mm), 6130 (34 mm) et A176 (alu) (34 mm) sans marque ; 6132 (40 mm) et
+6162 (46 mm) sous « KÖMMERLING e.VOLUTION » ; 6128 (34 mm) sous « KBE e.MOTION » [3 p. 18].
+Les battements intérieurs sont dessinés p. 19 : 1547 (60 mm), 6129 (58 mm), 6133
+(54 mm) et 76833 (48 mm, et une cote verticale de 12) sans marque ; 6131 (54 mm) sous
+« KÖMMERLING e.VOLUTION » et sous « TROCAL e.XCLUSIVE » ; 6154 (54 mm) sous « KBE e.MOTION ».
 Le 6154 n'est pas dessiné sur le poster et n'est pas cité au § 2.2.3.2.1 du DTD [3 p. 5, 19].
 
 ![Battement intérieur 6154](/assets/profiles/systeme70/battements/battement-6154.png)
@@ -530,7 +703,7 @@ Le battement intérieur 6154 est dessiné en coupe, sa largeur de 54 mm en haut,
 pointillé sous sa face (schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 19).
 
 Les profilés plats suivants sont dessinés dans la même bande avec leur embout ; le manuel range
-les 1547, 6129, 6131 et 6133 parmi les battements **intérieurs** [1 registre 2.3.1 p. 7 à 16].
+les 1547, 6129, 6131, 6133 et 76833 parmi les battements intérieurs [1 p. 50].
 
 | Profilé | Largeur (mm) | Hauteur (mm) | Embout dessiné | Coupe |
 | --- | --- | --- | --- | ---: |
@@ -544,16 +717,36 @@ les 1547, 6129, 6131 et 6133 parmi les battements **intérieurs** [1 registre 2.
 
 ![Embout 9A82](/assets/profiles/systeme70/battements/embout-9a82.png)
 
-L'embout **9A82** est dessiné à droite du 1547, en tête de la bande des profilés aluminium. Le 1547
+L'embout 9A82 est dessiné à droite du 1547, en tête de la bande des profilés aluminium. Le 1547
 figure aussi dans les chaînes d'assemblage du cahier technique PERFORM76 — voir
 [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md) ; le 76833 et
 son embout M664 figurent parmi les battements intérieurs du
 [système 76](/profiles/systeme-76-profiles-complementaires.md).
 
+## Battements du manuel de mise en œuvre
+
+Les battements extérieurs sont dessinés sur une planche commune (p. 35), le battement 0140 sur
+la sienne (p. 36). Chaque coupe porte en haut la largeur de l'aile et la décomposition du profilé, à gauche
+sa hauteur. Une ligne par battement, cotes en mm [1 p. 6, 35-36].
+
+| Profilé | Désignation au sommaire | Titre de la planche | Cotes portées sur la coupe (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 6130 | Battement de 34 mm | 6130 Battement extérieur 34 mm | en haut 12 + 24 ; à gauche 34 | 35 | ![6130 Battement extérieur 34 mm](/assets/profiles/systeme70/battements/battement-6130-moe.png) |
+| 1578 | Battement de 40 mm | 1578 Battement extérieur 40 mm | en haut 12 + 22,5 ; à gauche 40 | 35 | ![1578 Battement extérieur 40 mm](/assets/profiles/systeme70/battements/battement-1578-moe.png) |
+| 6128 | Battement de 34 mm | 6128 Battement extérieur 34 mm | en haut 8,9 + 20,5 ; à gauche 34 | 35 | ![6128 Battement extérieur 34 mm](/assets/profiles/systeme70/battements/battement-6128-moe.png) |
+| 6132 | Battement de 40 mm | 6132 Battement extérieur 40 mm | en haut 9,5 + 24 ; à gauche 40 | 35 | ![6132 Battement extérieur 40 mm](/assets/profiles/systeme70/battements/battement-6132-moe.png) |
+| 6162 | Battement de 46 mm | 6162 Battement extérieur 46 mm | en haut 9,1 + 24 ; à gauche 46 | 35 | ![6162 Battement extérieur 46 mm](/assets/profiles/systeme70/battements/battement-6162-moe.png) |
+| 0140 | Ouvrant de 62 mm | 0140 Battement extérieur 62 mm | à gauche 62 ; à droite 20 + 34 + 8 | 36 | ![0140 Battement extérieur 62 mm](/assets/profiles/systeme70/battements/battement-0140-moe.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 35 et 36)
+
+Le sommaire désigne le 0140 « Ouvrant de 62 mm », sa planche « Battement extérieur 62 mm » —
+entrée **INC-107** du registre [Incohérences internes](/anomalies/incoherences-internes.md).
+
 ## Battement central 0140
 
-Le battement **0140** est dessiné seul avec son capot **9C40** et la pièce **9414** : largeur de
-62 mm en haut, trois cotes au pied (8 + 34 + 20 mm), renfort **V600** écrit dans la chambre ; le
+Le battement 0140 est dessiné seul avec son capot 9C40 et la pièce 9414 : largeur de
+62 mm en haut, trois cotes au pied (8 + 34 + 20 mm), renfort V600 écrit dans la chambre ; le
 capot 9C40 mesure 66 mm de large pour 17,2 mm de haut, sa largeur intérieure est de 62 mm, et il
 porte la pièce 9B18 [5 p. 1].
 
@@ -567,12 +760,12 @@ pointillé en haut à droite ; la pièce 9414 est dessinée en perspective à dr
 (schéma: raw/poster-kommerling-70-principaux-2025-03.pdf, p. 1, colonne de droite, au centre)
 
 Dans le manuel, **seul le battement 0140 reçoit un renfort** parmi les battements des profilés
-principaux, le V600 (1,5 mm, IG 0,5, IW 2,1 cm⁴) [1 registre 2.1.2 p. 32 et 33].
+principaux, le V600 (Renfort 1,5 mm, IG = 0,5 cm⁴, IW = 2,1 cm⁴), avec le capot 9C40 [1 p. 36].
 
 # Cotes des meneaux et traverses
 
-Le **meneau** (vertical) et la **traverse** (horizontale) divisent un dormant ; la traverse
-**6126** divise un ouvrant. Chaque coupe porte l'épaisseur en haut, la largeur totale à gauche et,
+Le meneau (vertical) et la traverse (horizontale) divisent un dormant ; la traverse
+6126 divise un ouvrant. Chaque coupe porte l'épaisseur en haut, la largeur totale à gauche et,
 à droite, sa décomposition en aile + clair + aile. Le capot est dessiné à gauche.
 
 | Profilé | Épaisseur (mm) | Largeur totale, à gauche (mm) | Décomposition droite (mm) | Renfort écrit dans la chambre | Capot dessiné | Coupe |
@@ -585,9 +778,40 @@ Le **meneau** (vertical) et la **traverse** (horizontale) divisent un dormant ; 
 
 (schéma: raw/poster-kommerling-70-principaux-2025-03.pdf, p. 1, cinquième bande)
 
-Le **2427** n'a qu'une aile de 20 mm à droite. Le manuel donne les mêmes largeurs : 6126 à 68 mm
-(traverse d'ouvrant, pour 6117 à 6119), 6127 et 6157 à 80 mm, 2425 à 90 mm, 2427 à 115 mm
-[1 registre 2.1.2 p. 4, 34 et 35].
+Le 2427 n'a qu'une aile de 20 mm à droite.
+
+## Meneaux et traverses du manuel de mise en œuvre
+
+Une ligne par profilé, cotes relevées sur la coupe de sa planche, en mm [1 p. 7, 37-39].
+
+| Profilé | Désignation au sommaire | Titre de la planche | Cotes portées sur la coupe (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 6126 | Traverse d'ouvrant 68 mm | 6126 Traverse d'ouvrant 68 mm (pour 6117- 6119) | 65 en haut ; à gauche 68 ; à droite 20 + 28 + 20 | 37 | ![6126 Traverse d'ouvrant 68 mm (pour 6117- 6119)](/assets/profiles/systeme70/meneaux/meneau-6126-moe.png) |
+| 6127 | Meneau/Traverse de 80 mm | 6127 Meneau/Traverse 80 mm | 70 en haut ; à gauche 80 ; à droite 20 + 40 + 20 | 37 | ![6127 Meneau/Traverse 80 mm](/assets/profiles/systeme70/meneaux/meneau-6127-moe.png) |
+| 6157 | Meneau/Traverse de 80 mm | 6157 Meneau/Traverse 80 mm | 70 en haut ; à gauche 80 ; à droite 20 + 40 + 20 | 38 | ![6157 Meneau/Traverse 80 mm](/assets/profiles/systeme70/meneaux/meneau-6157-moe.png) |
+| 2425 | Meneau/Traverse de 90 mm | 2425 Meneau/Traverse 90 mm | 70 en haut ; à gauche 90 ; à droite 20 + 50 + 20 | 38 | ![2425 Meneau/Traverse 90 mm](/assets/profiles/systeme70/meneaux/meneau-2425-moe.png) |
+| 2427 | Meneau/Traverse de 115 mm | 2427 Meneau/Traverse 115 mm | 70 en haut ; à gauche 115 ; à droite 20 + 75 | 39 | ![2427 Meneau/Traverse 115 mm](/assets/profiles/systeme70/meneaux/meneau-2427-moe.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 7 et 37 à 39)
+
+La traverse 6126 est titrée « Traverse d'ouvrant 68 mm (pour 6117- 6119) » [1 p. 37].
+
+## Renforts des meneaux et traverses
+
+| Profilé | Renfort | Désignation sur la planche | Épaisseur d'acier (mm) | IG (cm⁴) | IW (cm⁴) | Longueur de livraison (m) |
+| --- | --- | --- | --- | --- | --- | --- |
+| 6126 | V081 | Renfort 1,5 mm | 1,5 | 0,1 | 1,3 | - |
+| 6127 | V603 | Renfort 2 mm | 2 | 1,1 | 3 | - |
+| 6157 | V010 | Renfort 2,5 mm | 2,5 | 1,4 | 7 | - |
+| 2425 | 9132 | Renfort 2 mm | 2 | 3,6 | 9,1 | - |
+| 2427 | V290 | Renfort 2 mm | 2 | 12,3 | 8,7 | - |
+
+L'Iw du V603 est imprimée 3 cm⁴ sur la planche du meneau 6127 et 3,0 cm⁴ dans l'exemple de calcul, mais 3,2 cm⁴ sur la planche des valeurs statiques des meneaux (**INC-144**).
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 37 à 39)
+
+Le 9132 est désigné « Renfort 2 mm » ; son dessin est coté 2,5 mm, comme au poster —
+entrée **INC-102** du registre [Incohérences internes](/anomalies/incoherences-internes.md).
 
 | Capot | Profilé à côté duquel il est dessiné | Largeur du retour (mm) | Hauteur (mm) | Coupe |
 | --- | --- | --- | --- | ---: |
@@ -618,7 +842,7 @@ Les deux capots sont dessinés côte à côte sous la légende commune « pour 6
 ne dessine que l'A175 à côté de ces deux meneaux (schéma: raw/dtd-6-16-2335-v5-e-volution.pdf,
 p. 19). La traverse 6126 est la seule rangée sous « KBE e.MOTION » ; le DTD ne porte pas de cote de
 140 mm sur le 6127 (**VER-37**). L'assemblage mécanique pour angle
-variable **9F39** est dessiné sous le 2425 — voir
+variable 9F39 est dessiné sous le 2425 — voir
 [Assemblages du système 70](/profiles/systeme-70-assemblages.md).
 
 # Autres profilés dessinés sur la planche
@@ -639,14 +863,14 @@ légende de fonction. Les profilés hachurés sont en aluminium sur la planche.
 (schéma: raw/poster-kommerling-70-principaux-2025-03.pdf, p. 1, sixième bande, à droite, et bande inférieure)
 
 Les pièces M628, M626 et M629 sont dessinées en perspective avec deux petites pièces sans légende,
-et le G256 en joint à tige ; le dessin du groupe inclut le profilé A256 en dessous. Le **A271** est
-la parclose extérieure et le **A272** son support de cale sur une partie fixe équipée du seuil
+et le G256 en joint à tige ; le dessin du groupe inclut le profilé A256 en dessous. Le A271 est
+la parclose extérieure et le A272 son support de cale sur une partie fixe équipée du seuil
 9F67 ou Z043 — voir [Assemblages du système 70](/profiles/systeme-70-assemblages.md).
 
 La planche « Profilés complémentaires » du DTD dessine, sans légende de fonction, les profilés
 93051 (16 mm de large, 27,5 de haut), A465 (30,5 de large), A466 (36,1 de large, 11,3 de haut),
 JA701-02, A271, 1248, 6144 et 6143 sans cote, ainsi que les dormants 6106 et 6105 ; le profilé
-**95 38 00** est dessiné logé dans l'aile du dormant 6106 [3 p. 23]. Le § 2.3 du DTD nomme les A465,
+95 38 00 est dessiné logé dans l'aile du dormant 6106 [3 p. 23]. Le § 2.3 du DTD nomme les A465,
 A466 et JA701-02 rejets d'eau, et le § 2.2.3.1.4 le A271 profilé de parclose extérieure et le A272
 support de cale [3 p. 4, 7].
 
@@ -660,7 +884,7 @@ support de cale [3 p. 4, 7].
 # Renforts acier
 
 Les dix-neuf renforts dessinés au bas du poster, en coupe hachurée, avec leurs cotes et leur
-inertie **Iz** (moment d'inertie, en cm⁴) écrite dans la section. Une ligne par renfort ; la
+inertie Iz (moment d'inertie, en cm⁴) écrite dans la section. Une ligne par renfort ; la
 colonne « profilés » nomme les coupes du poster dans la chambre desquelles la référence est écrite.
 
 | Renfort | Largeur (mm) | Hauteur (mm) | Épaisseur d'acier (mm) | Iz (cm⁴) | Écrit dans la chambre des profilés | Coupe |
@@ -687,14 +911,51 @@ colonne « profilés » nomme les coupes du poster dans la chambre desquelles la
 
 (schéma: raw/poster-kommerling-70-principaux-2025-03.pdf, p. 1, bande inférieure)
 
-Précisions de lecture : le **V543** a deux ailes inégales, 14 mm à gauche et 17,4 mm à droite ; le
-**V069** porte en plus une cote intérieure de 30,5 mm et n'a pas d'inertie écrite ; le **V154**
+Précisions de lecture : le V543 a deux ailes inégales, 14 mm à gauche et 17,4 mm à droite ; le
+V069 porte en plus une cote intérieure de 30,5 mm et n'a pas d'inertie écrite ; le V154
 est dessiné sans aucune cote ni inertie, avec des interruptions de paroi, comme le V069 ; le
-**V031** n'a pas d'épaisseur portée ; le **V057** porte un retour de 2 mm en haut à droite [5 p. 1].
+V031 n'a pas d'épaisseur portée ; le V057 porte un retour de 2 mm en haut à droite [5 p. 1].
 
 Les Iz du poster sont égales aux IW du manuel pour les V600, V601, V544, V158, V258, V059, V057,
-V290, V003, V030 et V031 ; le **V543** porte Iz = 1,62 cm⁴ au poster et IW = 1,5 cm⁴ au manuel —
+V290, V003, V030 et V031 ; le V543 porte Iz = 1,62 cm⁴ au poster et IW = 1,5 cm⁴ au manuel —
 entrée **CTR-38** du registre [Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
+
+## Renforts dessinés au manuel de mise en œuvre
+
+Chaque case de renfort des planches de profilé dessine le renfort en coupe hachurée avec sa
+largeur en haut, sa hauteur à gauche et l'épaisseur de tôle cotée à droite. Une ligne par
+renfort, cotes en mm ; la dernière colonne reprend l'épaisseur écrite dans la désignation ; un
+tiret signifie une cote non portée [1 p. 8-42].
+
+| Renfort | Largeur (mm) | Hauteur (mm) | Épaisseur cotée (mm) | Épaisseur désignée (mm) | Dessin |
+| --- | --- | --- | --- | --- | ---: |
+| V600 | 37 | 14 | 1,5 | 1,5 | ![Renfort V600](/assets/profiles/systeme70/accessoires/moe-v600.png) |
+| V543 | 37 | 14 à gauche, 17,4 à droite | 1,25 | 1,25 | ![Renfort V543](/assets/profiles/systeme70/accessoires/moe-v543.png) |
+| V601 | 38 | 23 | 1,5 | 1,5 | ![Renfort V601](/assets/profiles/systeme70/accessoires/moe-v601.png) |
+| V544 | 38 | 23 | 1,25 | 1,25 | ![Renfort V544](/assets/profiles/systeme70/accessoires/moe-v544.png) |
+| V030 | 38 | 40 | 1,5 | 1,5 (2502, 0303) ; 2 (2418) | ![Renfort V030](/assets/profiles/systeme70/accessoires/moe-v030.png) |
+| V031 | 38 | 40 | 1,5 | 1,5 | ![Renfort V031](/assets/profiles/systeme70/accessoires/moe-v031.png) |
+| V158 | 40 | 20 | 2 | 2 | ![Renfort V158](/assets/profiles/systeme70/accessoires/moe-v158.png) |
+| V258 | 40 | 20 | 1,25 | 1,25 | ![Renfort V258](/assets/profiles/systeme70/accessoires/moe-v258.png) |
+| V057 | 37 | 44 | 2 | 2 | ![Renfort V057](/assets/profiles/systeme70/accessoires/moe-v057.png) |
+| V059 | 33 | 44 | 2 | 2 | ![Renfort V059](/assets/profiles/systeme70/accessoires/moe-v059.png) |
+| V069 | 33 | 30,5 | 2 | - (renfort pré-usiné) | ![Renfort V069](/assets/profiles/systeme70/accessoires/moe-v069.png) |
+| V003 | 40 | 60 | 2 | 2 | ![Renfort V003](/assets/profiles/systeme70/accessoires/moe-v003.png) |
+| V290 | 40 | 50 | 2 | 2 | ![Renfort V290](/assets/profiles/systeme70/accessoires/moe-v290.png) |
+| V154 | 40 | - | 2 | - (renfort pré-usiné) | ![Renfort V154](/assets/profiles/systeme70/accessoires/moe-v154.png) |
+| V081 | 35 | 8 | 1,5 | 1,5 | ![Renfort V081](/assets/profiles/systeme70/accessoires/moe-v081.png) |
+| V603 | 36 | 23 | 2 | 2 | ![Renfort V603](/assets/profiles/systeme70/accessoires/moe-v603.png) |
+| V010 | 47,5 | - | 2,5 | 2,5 | ![Renfort V010](/assets/profiles/systeme70/accessoires/moe-v010.png) |
+| 9132 | 48 | 25 | 2,5 | 2 | ![Renfort 9132](/assets/profiles/systeme70/accessoires/moe-9132.png) |
+| V045 | 38 | 27 | 1,25 | 1,25 | ![Renfort V045](/assets/profiles/systeme70/accessoires/moe-v045.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 8 à 42)
+
+Les renforts des profilés complémentaires (V045, V287, V265, 656, V288, V250, V261, V260) sont
+dans [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md).
+Sur l'épaisseur du V030 et du 9132, voir **INC-101** et **INC-102** ; le V045 est coté et désigné
+1,25 mm au manuel, comme au DTD (le poster le cote 1,3) — entrée **CTR-38** du registre
+[Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
 
 ## Renforts du DTD
 
@@ -730,9 +991,9 @@ de moins d'un millimètre, restés illisibles au rendu à 1 200 dpi [3 p. 23].
 
 Le V059.2 porte en plus une cote intérieure de 30,5 mm ; le V543-1 est coté 1,25 sur ses deux
 ailes ; les cotes 48 et 20 du V010 sont imprimées en petits caractères. Les écarts avec le poster
-sont l'objet de l'entrée **CTR-38** : épaisseur du **V003** (2,25 au DTD, 2 au poster) et du
-**V045** (1,25 et 1,3), inertie du **V258** (2,23 et 2,2) et du **V544** (2,35 et 2,4), largeur du
-**V010** (48 et 47,5) et sa hauteur (20 et 19,8). Les V026 et V618 du DTD ne sont pas dessinés sur
+sont l'objet de l'entrée **CTR-38** : épaisseur du V003 (2,25 au DTD, 2 au poster) et du
+V045 (1,25 et 1,3), inertie du V258 (2,23 et 2,2) et du V544 (2,35 et 2,4), largeur du
+V010 (48 et 47,5) et sa hauteur (20 et 19,8). Les V026 et V618 du DTD ne sont pas dessinés sur
 le poster des profilés principaux ; les V069 et V154 du poster n'ont pas d'entrée au DTD [3 p. 23].
 
 # Parcloses, joints et pièces d'appui
@@ -740,26 +1001,25 @@ le poster des profilés principaux ; les V069 et V154 du poster n'ont pas d'entr
 Les parcloses du système 70 et l'épaisseur de remplissage que chacune tient en feuillure de 54 mm,
 les pièces d'appui, tapées et élargisseurs sont dans
 [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md). Le DTD
-range les parcloses **6146, 6147 et 6148** chez KBE e.MOTION [3 p. 21] ; les pièces d'appui 6136,
+range les parcloses 6146, 6147 et 6148 chez KBE e.MOTION [3 p. 21] ; les pièces d'appui 6136,
 6137 et 76768 portent les mêmes embouts sur les DTD des deux systèmes — 9F55.1, 9F56.1,
 M780/M781/M782 [4 p. 4 ; 3 p. 25]. Les joints du système 70 sont dans
 [Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md).
 
 # Ce que la source ne donne pas
 
-- **Les cotes de débit**, registre 2.3.1 du manuel : voir
+- Les cotes de débit, registre 2.3.1 du manuel : voir
   [Cotes de débit du système 70](/profiles/systeme-70-cotes-de-debit.md).
-- **Les abaques dimensionnels**, registre 2.3.3 : voir
+- Les abaques dimensionnels, registre 2.3.3 : voir
   [Abaques dimensionnels du système 70](/profiles/systeme-70-abaques-dimensionnels.md).
-- **Les tables d'inerties par classement au vent**, registre 2.3.4 : voir
+- Les tables d'inerties par classement au vent, registre 2.3.4 : voir
   [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md).
 - Sur le poster : la fonction des pièces 6163, 6164, S197, M850, M851, MA013, MA014, 9F97, M325,
   9414, 9B18, M628, M626, M629, G256, M329 et 93051 ; l'inertie des V069 et V154.
 
 # Citations
 
-[1] Mise en œuvre Système 70 Plateforme, profine, version septembre 2023 —
-`raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf`, registres 2.1.1, 2.1.2 et 2.3.1
+[1] [Mise en œuvre Système 70 Plateforme, profine, version septembre 2023](raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf), p. 2-39 et 50
 
 [2] Système e.VOLUTION, plan des profilés, système F 91, édition août 2008 —
 `raw/profine-plans-profiles-e-volution-2008-08.pdf`, p. 1
@@ -774,6 +1034,7 @@ M780/M781/M782 [4 p. 4 ; 3 p. 25]. Les joints du système 70 sont dans
 
 # Voir aussi
 
+- [Renforts et accessoires par profilé du système 70](/profiles/systeme-70-accessoires-par-profile.md)
 - [Posters Gamme 70 KÖMMERLING](/sources/posters-kommerling-70.md)
 - [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md)
 - [Assemblages du système 70](/profiles/systeme-70-assemblages.md)
