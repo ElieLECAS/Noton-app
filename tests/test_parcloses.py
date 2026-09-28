@@ -67,6 +67,23 @@ def test_perform76_cahier(snap):
     assert _ok(sols) == {"76501"} and sols[0]["image"]
 
 
+def test_systeme70_poster(snap):
+    s70 = "Système 70 (e.XCLUSIVE, e.MOTION, e.VOLUTION)"
+    ctx = "Feuillure de 54 mm, joint post-extrudé"
+    # 28 mm : quatre parcloses du poster, sans critère de choix écrit
+    sols = _ctx(chercher(snap, epaisseur=28), s70, ctx)
+    assert _ok(sols) == {"6148", "76503", "1512", "76534"}
+    el = {s["ref"]: s for s in sols}
+    assert el["6148"]["image"] and "CTR-40" in el["6148"]["anomalies"] and "CTR-40" not in el["76503"]["anomalies"]
+    assert "chambre de 20 mm" in {e["role"]: e for e in el["76534"]["elements"]}["Parclose"]["detail"]
+    # les mêmes références ne tiennent pas la même épaisseur qu'au 76 : 76515 = 42 mm en feuillure de 54
+    assert _ok(_ctx(chercher(snap, epaisseur=42), s70, ctx)) == {"76515"}
+    assert s70 not in {x["systeme"] for x in chercher(snap, epaisseur=28)["non_calculables"]}
+    # le filtre PERFORM70 ne garde que le système 70
+    p70 = chercher(snap, epaisseur=28, gamme="PERFORM70")
+    assert {g["systeme"] for g in p70["groupes"]} == {s70} and "PERFORM70" in p70["gammes"]
+
+
 def test_soleal_fy_matrice(snap):
     # l'exemple de la page : 24 mm → T591005 (droite) ou TFY2412 (arrondie), joint vert TAS0017
     sols = _ctx(chercher(snap, epaisseur=24), "SOLEAL FY 55", "Ouvrant apparent et fixe")

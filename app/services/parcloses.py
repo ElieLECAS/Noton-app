@@ -7,6 +7,10 @@ Le wiki porte ces règles sous des formes différentes, et chacune est lue telle
   changent avec le contexte (ouvrant, capot alu et EPDM, dormant avec compensateur 76570) ;
 - **PERFORM76** (cahier technique PROFERM) et le **poster des complémentaires** du 76 : une
   épaisseur par parclose, sans tolérance écrite ;
+- **système 70** (profine, PVC) : le poster des complémentaires Gamme 70 donne une épaisseur de
+  remplissage par parclose, « pour une feuillure de 54mm avec un joint post-extrudé ou d'épaisseur
+  équivalente » — ni l'emplacement (ouvrant ou dormant), ni le joint par épaisseur, ni le support
+  de cale ;
 - **SOLEAL FY 55** (Technal, alu) : une matrice parclose × joint intérieur, où chaque cellule est
   l'épaisseur obtenue, avec la plage de prise de volume recommandée ;
 - **ASKEY**, **LUMEAL GA**, **SOLEAL GY** : c'est le **profilé d'ouvrant** qui se choisit par
@@ -32,21 +36,25 @@ P_ASKEY_NV = "/profiles/askey-coulissant-65-nv-dormants-et-ouvrants.md"
 P_LUMEAL = "/profiles/lumeal-ga-dormants-et-ouvrants.md"
 P_GY = "/profiles/soleal-gy-dormants-et-rails.md"
 P_ASKEY_OV = "/profiles/askey-frappe-65-ov-dormants-et-ouvrants.md"
-P_S70 = "/profiles/systeme-70-profiles-et-renforts.md"
+P_S70C = "/profiles/systeme-70-profiles-complementaires.md"
 
 # Ce que le wiki ne permet pas de calculer, et pourquoi : affiché, pour qu'une absence ne passe pas
 # pour un « rien ne convient ».
 NON_CALCULABLES = [
     {"systeme": "ASKEY Frappe 65 Ouvrant Visible", "materiau": "Aluminium", "page": P_ASKEY_OV,
      "raison": "les six parcloses clipées sont listées sans l'épaisseur de vitrage qu'elles tiennent"},
-    {"systeme": "Système 70 (KBE e.MOTION)", "materiau": "PVC", "page": P_S70,
-     "raison": "le plan des complémentaires ne cote pas l'épaisseur de vitrage ; les parcloses partagées avec le 76 "
-               "ne sont pas confirmées être les mêmes pièces"},
 ]
+
+# Les parcloses dont la largeur diffère entre le poster Gamme 70 et le DTD 6/16-2335 (CTR-40). La
+# contradiction porte sur la largeur de la parclose, pas sur l'épaisseur de remplissage : elle est
+# signalée, la valeur calculée n'en dépend pas.
+S70_CTR40 = {"2433", "76512", "76513", "76515", "76524", "76526", "76527", "1511", "1512", "6146", "6147", "6148"}
 
 # Le filtre de la page : une gamme telle qu'on la nomme à PROFERM, et les systèmes qui la documentent.
 GAMMES = {
     "PERFORM76": ("Système 76 Advanced", "PERFORM76 — cahier technique PROFERM"),
+    # rattachement demandé par l'utilisateur le 28/09/2026 ; aucun document ne l'écrit (VER-28)
+    "PERFORM70": ("Système 70 (e.XCLUSIVE, e.MOTION, e.VOLUTION)",),
     "SOLEAL FY": ("SOLEAL FY 55", "SOLEAL FY 65"),
     "LUMEAL GA": ("LUMEAL GA",),
     "SOLEAL GY": ("SOLEAL GY 55",),
@@ -195,6 +203,33 @@ def _perform76(snap: WikiSnapshot) -> List[Dict[str, Any]]:
                                           _el("Joint de vitrage", "non précisé par le cahier", "voir le système 76 Advanced")),
                             min=None, max=None, tolerance=None, image=_img(b[-1]), source=src,
                             anomalies=["CTR-19"] if r[0] in ("76508", "2454", "2433", "2638") else []))
+    return out
+
+
+# ---- système 70 ------------------------------------------------------------------------------
+
+def _systeme70(snap: WikiSnapshot) -> List[Dict[str, Any]]:
+    out = []
+    for tb in tables(_corps(snap, P_S70C)):
+        if tb.entete[:1] != ["Parclose"] or len(tb.entete) < 3 or not tb.entete[2].startswith("Épaisseur du remplissage"):
+            continue
+        src = {"page": P_S70C, "section": tb.section, "localisation": tb.localisation}
+        for r, b in zip(tb.lignes, tb.brut):
+            e = _nombre(r[2])
+            if e is None:
+                continue
+            chambre = _nombre(r[3]) if len(r) > 3 else None
+            out.append(_sol(systeme="Système 70 (e.XCLUSIVE, e.MOTION, e.VOLUTION)", fournisseur="profine", materiau="PVC",
+                            gammes=["PERFORM70"], contexte="Feuillure de 54 mm, joint post-extrudé", piece="Parclose", ref=r[0],
+                            elements=_els(_el("Parclose", r[0], f"largeur {r[1]} mm"
+                                              + (f", parclose à chambre de {r[3]} mm de haut" if chambre else "")),
+                                          _el("Joint de vitrage", "post-extrudé ou d'épaisseur équivalente",
+                                              "feuillure de 54 mm")),
+                            cible=e, min=None, max=None, tolerance=None, image=_img(b[-1]), source=src,
+                            note="le poster ne dit pas si la parclose se monte sur l'ouvrant ou le dormant, "
+                                 "ni quel support de cale employer ; le rattachement du système 70 à la PERFORM70 "
+                                 "n'est écrit dans aucun document",
+                            anomalies=(["CTR-40"] if r[0] in S70_CTR40 else []) + ["VER-28"]))
     return out
 
 
@@ -350,7 +385,7 @@ def solutions(snap: WikiSnapshot) -> List[Dict[str, Any]]:
     cle = (id(snap), snap.loaded_at)
     if _CACHE["cle"] != cle:
         sol: List[Dict[str, Any]] = []
-        for f in (_systeme76, _perform76, _soleal_fy, _profils):
+        for f in (_systeme76, _perform76, _systeme70, _soleal_fy, _profils):
             try:
                 sol += f(snap)
             except Exception as exc:  # une page réécrite ne doit pas éteindre les autres systèmes
