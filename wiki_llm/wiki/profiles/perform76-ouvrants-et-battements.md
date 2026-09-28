@@ -20,7 +20,7 @@ sources:
   - resource: raw/dtd-6-16-2335-v5-e-volution.pdf
     id: dtd-6-16-2335-v5
     title: DTD n° DBV-24-6/16-2335_V5, système e.XCLUSIVE, e.MOTION, e.VOLUTION
-    last_modified: 2025-04-15
+    last_modified: 2024-12-19
 source_pages:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
     pages: 4, 14, 15, 18, 20, 21

@@ -2,104 +2,130 @@
 type: Procédure
 title: Redressement d'un montant de porte cintré par le profilé 9708
 description: Préconisation profine pour redresser un montant de porte déformé au moyen du profilé acier précontraint 9708, sans dégonder l'ouvrant.
-tags: [profine, 9708, porte, montant-cintre, renfort, sav, atelier, chantier]
+tags: [profine, 9708, porte, montant-cintre, renfort, profilé-acier, calage]
 fournisseur: KÖMMERLING
 usage: sav
-status: stable
+famille: renforts
+status: draft
 sources:
   - resource: raw/profine-mise-en-oeuvre-9708-montants-cintres-2017-07.pdf
     id: profine-9708-montants-cintres
     title: Mise en œuvre 9708, profine France, juillet 2017
     last_modified: 2017-07-06
+source_pages:
+  - resource: raw/profine-mise-en-oeuvre-9708-montants-cintres-2017-07.pdf
+    pages: 1
 generated:
   by: process:claude-code
-  at: 2026-09-18T10:00:00Z
+  at: 2026-09-28T12:00:00Z
 ---
 
-# À quoi sert cette procédure
+# Ce que fait cette procédure
 
-Le **profilé acier précontraint 9708** de [profine](/fournisseurs/profine.md) sert au
-**rattrapage d'un montant de porte cintré** : un montant d'ouvrant qui s'est déformé et que l'on
-redresse en lui opposant une contrainte, sans remplacer la porte.
+Le **profilé acier 9708 précontraint** est un plat d'acier livré cintré (courbé). Il sert au
+rattrapage de montants de portes cintrés : un montant (le côté vertical de l'ouvrant, la partie
+mobile de la porte) qui s'est courbé est redressé en logeant contre lui ce plat d'acier cintré en
+sens inverse, puis en le vissant. L'intervention se fait sur la porte en place [1 p. 1].
 
-C'est une intervention de **service après-vente**, réalisable en atelier comme sur chantier :
-l'ouvrant **n'est pas dégondé**.
+# Conditions et interdictions
 
-# La condition qui interdit l'intervention
+**Cette mise en œuvre n'est pas compatible avec des traverses intermédiaires horizontales** [1 p. 1].
+Une traverse intermédiaire est un profilé horizontal qui recoupe l'ouvrant entre son haut et son bas.
 
-> « Cette mise en œuvre **n'est pas compatible avec des traverses intermédiaires horizontales** »
-> (mise en œuvre 9708, profine France, juillet 2017).
+L'ensemble de l'intervention s'effectue sans dégonder l'ouvrant, c'est-à-dire sans le sortir de
+ses paumelles [1 p. 1].
 
-C'est la première chose à vérifier. Un ouvrant à traverse intermédiaire ne se redresse pas par ce
-procédé, et la préconisation n'en donne aucun autre.
+# Étapes
 
-# Les six étapes
+Les six étapes sont numérotées comme sur la préconisation, dans ses mots [1 p. 1]. La
+[parclose](/reference/glossaire.md) est la baguette qui maintient le vitrage ; la
+[feuillure](/reference/glossaire.md) est le logement en creux du profilé.
 
-| Étape | Opération |
-| --- | --- |
-| 1 | Intervenir **sans dégonder l'ouvrant** |
-| 2 | Déposer le vitrage ou le panneau |
-| 3 | Retirer les vis de renfort en feuillure du montant cintré, **sauf une**, de préférence la première en haut de l'ouvrant, pour empêcher le renfort de glisser |
-| 4 | Couper le profilé 9708 à dimension, **10 à 15 mm plus court que la longueur de parclose**, et le placer dans la feuillure intérieure du montant. **Le cintre du montant et celui du renfort plat doivent être en opposition**, jamais dans le même sens |
-| 5 | Caler entre le profilé acier et l'intérieur de la rainure à parclose, **à ± 5 mm**, puis visser avec des **vis autoforantes 3,9 × 28** |
-| 6 | Sur un ouvrant vitré, **coller des cales de 1 mm sur le profilé acier** pour assurer sa mise en place |
+1. L'ensemble de l'intervention s'effectue sans dégonder l'ouvrant.
+2. Déposer le vitrage ou le panneau.
+3. Retirer les vis de renfort en feuillure du montant cintré **sauf une**, de préférence la
+   première en haut de l'ouvrant pour éviter le glissement du renfort.
+4. Couper le profilé acier 9708 à dimension, soit **10 à 15 mm plus court que la longueur pare
+   close**, et le positionner dans la feuillure intérieure du montant de porte. Le cintre du
+   montant de porte et celui du renfort plat doivent être **en opposition et non dans le même
+   sens**.
+5. Pour les deux sens de pose du profilé acier, porte cintrée vers l'extérieur ou vers
+   l'intérieur, effectuer un calage de plus ou moins 5 mm entre le profilé acier et l'intérieur de
+   la rainure à pare close :
+   - porte cintrée vers l'extérieur, **cas n° 1** : caler le renfort **en son centre** côté
+     rainure à pare closes ;
+   - porte cintrée vers l'intérieur, **cas n° 2** : caler le renfort **à ses extrémités** côté
+     rainure à pare closes.
 
-# Où caler, selon le sens du cintre
+   Augmenter ou diminuer l'épaisseur de calage à souhait de façon à redresser le montant de porte
+   et apporter **1 mm de contrainte supplémentaire**, à contrôler avec une règle de 2 m. Visser le
+   profilé acier avec des **vis autoforantes 3,9 × 28**.
+6. Dans le cas d'un vitrage, coller des cales d'1 mm sur le profilé acier pour assurer la mise en
+   place de ce dernier.
 
-C'est le point qui décide du résultat : le calage ne se fait pas au même endroit selon le sens de
-la déformation.
+## Calage selon le sens du cintre
 
-| Cas | Sens du cintre | Position du calage, côté rainure à parcloses |
-| --- | --- | --- |
-| n° 1 | porte cintrée vers l'**extérieur** | **au centre** du renfort |
-| n° 2 | porte cintrée vers l'**intérieur** | **aux extrémités** du renfort |
+Les deux schémas numérotés 1 et 2 montrent la coupe du montant de porte une fois le profilé 9708
+posé dans la feuillure intérieure et vissé, pour chacun des deux cas de l'étape 5 : cas n° 1,
+porte cintrée vers l'extérieur ; cas n° 2, porte cintrée vers l'intérieur [1 p. 1].
 
-**Inverser les deux cas aggrave la déformation** au lieu de la corriger.
+![Cas n° 1 : porte cintrée vers l'extérieur](/assets/procedures/9708/calage-cas-1-cintre-vers-exterieur.png)
 
-L'épaisseur de calage s'augmente ou se diminue à volonté pour redresser le montant, en visant
-**1 mm de contrainte supplémentaire**, contrôlé **à la règle de 2 m** (mise en œuvre 9708,
-profine France, juillet 2017).
+![Cas n° 2 : porte cintrée vers l'intérieur](/assets/procedures/9708/calage-cas-2-cintre-vers-interieur.png)
 
-# Cotes et caractéristiques du profilé 9708
+Lecture : le profilé PVC du montant est tracé en vert ; dans sa chambre basse est dessiné un
+rectangle à angles arrondis, en noir, et en haut à gauche un profil en bleu clair. Les éléments
+tracés en rouge -- un plat posé en travers de la feuillure, recoupé en plusieurs segments, et une
+vis à tête fraisée -- sont ceux de l'intervention ; la vis descend à travers le fond de feuillure
+jusque dans le rectangle noir. Un carré barré bleu est dessiné contre la rainure à parclose, à
+droite. Entre le cas 1 et le cas 2, la vis change de place le long du plat. Aucun des deux
+schémas n'est coté et aucune légende des couleurs n'est imprimée : ce que désignent le rectangle
+noir, le profil bleu clair et le carré barré n'est pas écrit sur la planche.
 
-Relevées sur les schémas cotés et la coupe de détail `X 1:1` de la fiche technique :
+(schéma: raw/profine-mise-en-oeuvre-9708-montants-cintres-2017-07.pdf, p. 1)
+
+# Cotes
+
+Le profilé 9708 est dessiné deux fois : en élévation, cintré, avec la flèche X qui désigne la
+coupe, et en coupe transversale X à l'échelle 1:1. Cotes en mm, relevées sur la planche rendue ;
+la planche ne dit pas ce que mesurent les cotes 40 et 25 de l'élévation, qui sont donc reprises
+avec leur emplacement sur le dessin (**VER-27**).
+
+| Référence | Vue | Cote | Valeur (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| Profilé acier 9708 | élévation | longueur, entre les deux extrémités | 2500 | ![Profilé acier 9708](/assets/procedures/9708/profile-acier-9708.png) |
+| Profilé acier 9708 | élévation | cote portée à mi-longueur, en travers du profilé cintré | 40 | |
+| Profilé acier 9708 | élévation | cote portée à l'extrémité basse, en travers du profilé | 25 | |
+| Profilé acier 9708 | coupe X 1:1 | épaisseur du plat | 6 | |
+| Profilé acier 9708 | coupe X 1:1 | cote portée depuis le bord gauche jusqu'à un trait vertical intérieur ; la largeur totale n'est pas cotée | 25 | |
+
+(schéma: raw/profine-mise-en-oeuvre-9708-montants-cintres-2017-07.pdf, p. 1)
+
+Les valeurs de mise en œuvre prescrites par les étapes sont les suivantes [1 p. 1].
 
 | Grandeur | Valeur |
 | --- | --- |
-| Longueur nominale du profilé précontraint | **2 500 mm** |
-| Flèche de précontrainte initiale au centre | **40 mm** |
-| Largeur d'extrémité / appui | **25 mm** |
-| Section transversale (coupe X 1:1) | profilé en U de **largeur 25 mm × hauteur 9 mm** (profondeur de rainure 6 mm) |
-| Longueur de coupe d'atelier | longueur de parclose − 10 à 15 mm |
-| Jeu de calage entre profilé et rainure à parclose | ± 5 mm |
-| Contrainte visée après redressement | 1 mm (contrôlé à la règle de 2 m) |
-| Vis de fixation | autoforante 3,9 × 28 mm |
-| Cales de maintien sur ouvrant vitré | 1 mm (collées directement sur l'acier) |
+| Longueur de coupe du profilé 9708 | longueur de parclose moins 10 à 15 mm |
+| Calage entre le profilé acier et l'intérieur de la rainure à parclose (mm) | plus ou moins 5 |
+| Contrainte supplémentaire à apporter (mm) | 1, contrôlée avec une règle de 2 m |
+| Vis de fixation du profilé acier | autoforantes 3,9 × 28 |
+| Cales collées sur le profilé acier, cas d'un vitrage (mm) | 1 |
 
-**Cette vis est plus longue que celle des renforts de fabrication**, qui est une 3,9 × 16 mm dans
-le système 76 Advanced — voir [Renforts du système 76](/profiles/systeme-76-renforts.md).
+# Ce que le document ne dit pas
 
-# Ce que le document ne précise pas
-
-- **sur quelles gammes il s'emploie prioritairement** : le document profine est universel pour montants de porte PVC sans traverse intermédiaire (système 70 ou 76 Advanced)
-- **la flèche résiduelle maximale admissible du montant avant intervention** : seule la contrainte de 1 mm sous règle de 2 m est fixée comme objectif de redressage
-
-Entrée **VER-27** du registre [Informations à vérifier](/anomalies/informations-a-verifier.md), dont la longueur et la section du profilé sont désormais entièrement résolues.
-
-# Provenance
-
-Note d'une page éditée par **profine France**, Marmoutier, datée du **6 juillet 2017**. Ce n'est
-pas un registre du classeur de fabrication : c'est une fiche isolée, la plus ancienne source
-profine du wiki.
+La préconisation ne nomme aucun système ni aucune gamme de profilés, ne donne ni la matière exacte
+ni la largeur totale du plat 9708, et ne dit pas ce que mesurent les cotes 40 et 25 de
+l'élévation : entrée **VER-27** du registre [Informations à vérifier](/anomalies/informations-a-verifier.md).
 
 # Citations
 
-[1] Mise en œuvre 9708, profine France, juillet 2017 —
-`raw/profine-mise-en-oeuvre-9708-montants-cintres-2017-07.pdf`, p. 1
+[1] [Préconisation de mise en œuvre du profilé acier 9708 précontraint pour le rattrapage de
+montants de portes cintrés, profine France](raw/profine-mise-en-oeuvre-9708-montants-cintres-2017-07.pdf), p. 1
 
 # Voir aussi
 
 - [profine](/fournisseurs/profine.md)
 - [Renforts du système 76](/profiles/systeme-76-renforts.md)
+- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
 - [Ouvrants de porte d'entrée](/portes/ouvrants-de-porte.md)
 - [Informations à vérifier](/anomalies/informations-a-verifier.md)

@@ -1,5 +1,454 @@
 # Update Log
 
+## 2026-09-28
+
+* **Update**: [Drainage et vitrage généraux](/procedures/drainage-et-vitrage-generaux.md) --
+  tranche 2 des directives profine, registre 1.3.2 PDF p. 58-62 relu en image (200 dpi). La table
+  de calage de l'ancienne rédaction, signalée non relue, est remplacée : « Distance minimale d'une
+  cale de distance au coin intérieur 150 mm » → « au moins 150 » (p. 59 ; p. 60 écrit « à 150 mm ») ;
+  ajout de la distance de calage de 40 mm sur un ouvrant (fig. 1, légende imprimée en allemand) ;
+  le paragraphe résumé « la distance de cale de support sur une partie fixe dépend de la longueur de
+  la cale elle-même ; sur un châssis oscillo-battant, elle dépend de la ferrure » → tableau des
+  repères ① à ③ dans les mots de la source (l'exception ③ « dépend de la ferrure » vise la porte
+  coulissante à déport PSK / HST, pas l'oscillo-battant). Ajouts : règles de calage complètes (bords
+  jamais en contact, largeur totale sur les cales, fixation durable, ouvertures libres, cales de
+  distance aux points de fermeture, indispensables en anti-effraction), systèmes à joint central,
+  vitrage fixe, formes spéciales (élastomère), fenêtres à croisillons (ordre 1 à 9), montage des
+  parcloses (courtes d'abord, entailles 3/5 points sous 500 mm, clippage au maillet) et démontage
+  (ciseau, marteau en caoutchouc). 9 schémas découpés sous `assets/procedures/directives-profine/`
+  (`calage-distance-40-ouvrant`, `calage-par-type-d-ouverture`, `calage-legende-cales`,
+  `calage-formes-speciales`, `calage-ordre-fenetre-a-croisillons` ; `parclose-entaille-pied-500`,
+  `parclose-montage-maillet-fig1`, `parclose-demontage-fig2`, `parclose-demontage-fig3`), p. 58-62.
+  `usage` passé à `[atelier, sav]`.
+* **Update**: [Classification A\*E\*V\* par site](/reference/classification-aev-par-site.md) --
+  réécrite sur l'image du registre 1.3.3 (PDF p. 63-76, 200 dpi) ; citations « registre 1.3.3 p. N »
+  passées en numérotation PDF. Ajouts : domaine d'application et note (NF DTU 36.5, 100 m),
+  approche par exigence, dénivellation de pente > 1, exigences de sécurité (W50, 1 200 Pa), de
+  rigidité (P1 = 2/3 P3, ≥ 800 Pa) et de flèche (classes A/B/C, 15 mm sous 800 Pa, 1/300 sous
+  choc XP P 08-302), destination connue (P1 = P3/1,5, P2 = P3/3,0), rappels d'exigence, texte
+  complet de la perméabilité (locaux non chauffés, climatisés A\*3, DOM, portes A\*1) et de
+  l'étanchéité (ouvrages partiellement protégés et protégés, figures 1 et 2, indices A et B,
+  fenêtre de toit E\*8A), et les tableaux 1 à 6 en entier (P3, P1, vent, air, eau fenêtres, eau
+  portes ; métropole et DOM séparés) — auparavant écartés en « Ce que la source ne donne pas ici ».
+  Le tableau 8 a été relu cellule par cellule et recomposé à partir des tableaux 3, 4 et 5 : aucune
+  différence, ni avec la page. Corrections (avant → après) : « H ≤ 9 m » seul → les deux
+  notations de la source (INC-92) ; « valables pour des fenêtres et pour des portes de logement sur
+  coursive hors locaux non chauffés » → le champ exact des tableaux 4, 5 et 6 ; « Une fenêtre de
+  toit ne descend jamais sous E\*8A » → « la classe d'étanchéité à l'eau minimale est E\*8A ».
+  Retirés, sans source : « La classe … ne dépend pas du produit », « La Guyane ne se distingue pas
+  de la métropole la plus clémente », « La Guadeloupe est le département le plus exigeant du
+  corpus », « ces classes sont des minimums réglementaires, pas des cibles », « Les classes y sont
+  nettement plus sévères qu'en métropole ». La table des vitesses vb,0 passe sur la page des
+  régions. `status: draft` (INC-91, INC-92). 2 figures découpées sous
+  `assets/reference/directives-profine/` (`ouvrage-partiellement-protege-pluie-fig1`,
+  `ouvrage-protege-pluie-fig2`, p. 71).
+* **Update**: [Régions climatiques par département](/reference/regions-climatiques-par-departement.md)
+  -- annexe A relue en image (PDF p. 77-84, tableaux à 250 dpi). Tableau A.1 : valeurs identiques ;
+  la table à trois départements par ligne devient trois tables d'une ligne par département
+  (01-31, 32-63, 64-95). Tableau A.2 : une ligne par département et par région, « Tous les autres
+  cantons » compris, au lieu de la colonne « région par défaut ». Corrections : « Vingt et un
+  départements sont partagés » → 23 ; Loire-Atlantique, canton « Rougé » manquant, ajouté ;
+  Somme « Moreuil » → « Moreil » et Côte-d'Or « Fontaine-lès-Dijon » → « Fontaine-les-Dijon »,
+  Doubs « Étupes » → « Etupes », orthographe de la source. Ajouts : avertissement de mise à jour,
+  table vb,0 (22 / 24 / 26 / 28 m/s) et carte figure A.1, photographies A.2 à A.9. 9 images sous
+  `assets/reference/directives-profine/` (`carte-regions-vent-figure-a1`, p. 77 ;
+  `categorie-terrain-figure-a2-…` à `…-a9-…`, p. 81-84).
+* **Anomalies** : **INC-91** (facteur de protection L/H : renvois de figures inversés, seuils 3 et 4
+  contre un tableau 7 qui commence à 0,40, PDF p. 71 et 74) ; **INC-92** (registre 1.3.3 : « en
+  page. » sans numéro, bornes de hauteur < / ≤, renvois 7.1.2.3, 7.1.2.4, 8.2.3, 9.5.3 absents).
+* **Update**: [Classification de la résistance au vent](/reference/classification-resistance-au-vent.md)
+  -- registre 1.3.3 p. 23-24 imprimées (PDF p. 85-86) relu en image ; l'ancien registre plaçait ces
+  deux pages dans la ligne 85-92 « ferrure ». Correction : « La pression P1 de la classe testée est
+  répétée 50 fois » → la note 1) du tableau 1 porte sur **P2**. Ajouts : domaine d'application,
+  note de corrélation, note du fabricant (classification inférieure), note du tableau 3, titre
+  « essai EN 12211 ». Retirés, sans source : le paragraphe « Cette classification est indépendante
+  de la classification A\*E\*V\* des labels commerciaux … l'AEV commercial reprend une classe de vent
+  proche », et « Ce que la source ne donne pas » (« tableaux A.1 et A.2 … génériques au bâtiment …
+  à transcrire si un besoin … se présente »), désormais transcrits.
+* **Create**: [Ferrures des fenêtres et portes profine](/quincaillerie/ferrures-approuvees-profine.md)
+  -- registre 1.3.4, PDF p. 87-88 et 90-93 : danger de mort, responsabilité du fabricant, ITT,
+  TBDK, EN 14351-1, points de verrouillage (même nombre côté paumelle et côté fermeture, 80 cm au
+  plus), contrôle, gabarits, joint de frappe (ne pas entailler, surépaisseur du compas d'OB), et les
+  28 listes de marques approuvées (12 fenêtres, 12 portes, 4 accessoires). Constat : FERCO n'y
+  figure nulle part. 5 planches découpées sous `assets/reference/directives-profine/`
+  (`quincailleries-approuvees-*`, p. 90-92).
+* **Update**: [ROTO](/fournisseurs/roto.md) -- la section « Un premier élément de justification »
+  réécrite sur l'image (PDF p. 90-93) : liste exacte des types pour lesquels ROTO est ou n'est pas
+  approuvé (avant : « la quasi-totalité des configurations … six montages de semi-fixe … ROTO n'y
+  figure pas pour la porte d'entrée à un vantail seule, les seuils, les ferme-portes, les paumelles
+  ni les boîtes aux lettres ») ; la table des petits accessoires passe sur la page Ferrures (une
+  donnée, une page) ; retiré : « elle établit seulement que ROTO est un fournisseur agréé par
+  profine » (le raisonnement reste dans VER-20). Citation [3] en numérotation PDF.
+* **Update**: [FERCO](/quincaillerie/ferco.md) et [Siegenia](/quincaillerie/siegenia.md) --
+  Compatibilités : FERCO absent des 28 listes du registre 1.3.4 ; Siegenia approuvé pour 14 types
+  d'ouvrant ou d'accessoire (tableau par type), non listé pour 5, PSK200 Portal non citée ; les
+  directives profine ajoutées aux `sources` et `source_pages` (PDF p. 90-93).
+* **Move**: `procedures/usage-nettoyage-entretien-menuiseries.md` →
+  [entretien/usage-nettoyage-entretien-menuiseries-profine.md](/entretien/usage-nettoyage-entretien-menuiseries-profine.md)
+  (dossier `entretien/` ouvert, contenu d'usage et d'entretien), liens mis à jour dans `index.md`,
+  la fiche source, `normes/directives-profine-conditions-d-utilisation.md` et
+  `procedures/surfaces-collage-nettoyage-profine.md`. Ajout de la section « Ferrures : maintenance
+  et sécurité » (registre 1.3.4 § 6-7, PDF p. 88-89) et de l'affiche
+  `assets/procedures/directives-profine/affiche-attention-source-de-dangers.png` (p. 89).
+* **Anomalies** : **INC-93** (« voir croquis » sans croquis, PDF p. 88) ; **VER-20** complétée (relecture
+  du registre 1.3.4 : FERCO absent des listes), non fermée.
+* **Update**: [Couplages et contreventements d'éléments](/procedures/couplages-elements.md) --
+  réécrite sur l'image du registre 1.3.5 (PDF p. 94-97) ; valeurs vérifiées et conservées : jeu de
+  dilatation à partir d'une largeur totale > 3,50 m en blanc et > 2,50 m en couleur, joint d'au
+  moins 5 mm ; vissage 150 (250 en couleur) / 150 / 150 / 300 mm, Ø 5 mm. Ajouts : exigences
+  (charges de vent, d'exploitation), les trois solutions de profilé avec position de montage et
+  domaine d'application, restrictions fonctionnelles (collision, ferrure, patte de seuil,
+  coulisses de volet), façade exclue, définition fenêtre / façade, DTU 36.5, check-list du Manuel
+  du montage, moyens de fixation homologués et protégés de la corrosion, couplages continus,
+  joints capillaires et de composants (imperméables à la pluie battante), fabrication en atelier
+  (5 questions). Retirés, sans source : « Le seuil est 1 m plus bas en couleur qu'en blanc : la
+  dilatation thermique d'un profilé sombre est plus forte, à surface égale » et « Un couplage
+  assure la stabilité dimensionnelle aux charges de vent et d'exploitation ; il doit toujours être
+  ancré » fondu dans les mots de la source. 11 schémas sous `assets/procedures/directives-profine/`
+  (`couplage-dos-de-dormant`, `couplage-profile-special`, `contreventement`, p. 94 ;
+  `couplage-jeu-de-dilatation-fig1`, `couplage-joint-de-compensation-5mm-fig2`, p. 95 ;
+  `couplage-distances-de-vissage-fig1`, `couplage-continu-profiles-complementaires-fig2`, p. 96 ;
+  `couplage-profile-h-etancheite-fond-de-gorge`, `couplage-olive-de-liaison`,
+  `assemblage-etancheite-fond-de-gorge`, `assemblage-etancheite-joint-pce`, p. 97).
+* **Update**: [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md) -- registre
+  1.3.6 relu en image (PDF p. 98-99), citations « registre 1.3.6 » passées en numérotation PDF.
+  La liste de contrôle en prose (« Points à vérifier avant livraison, relevés tels quels ») devient
+  la check-list numérotée de 35 points, dont « y a-t-il l'aération ? » et « y a-t-il le joint
+  juste ? », absents de l'ancienne liste. Correction : « se transporte debout … à l'abri des
+  salissures » et « Des contrôles répartis … évitent des reprises inutiles » → texte de la source
+  (« pour assurer la livraison d'une fenêtre de qualité conforme au client »). `status: draft`
+  conservé (INC-89, INC-90).
+* **Update**: [Montage au bâtiment](/procedures/montage-generaux-profine.md) -- réécrite sur l'image des
+  registres 1.3.7 (PDF p. 100-106) et 1.3.8 (PDF p. 107-110). Valeurs vérifiées et conservées :
+  écartement max. 700 mm, joint de construction 10 mm, tolérances ± 5 à ± 20 mm, largeurs de joint
+  silicone (tableau passé en HTML à deux niveaux), mastic = moitié de la largeur, aluminium
+  1,2 mm/m pour 50 °C et 3 m, modules 20 / 30 m³/h, 2 × 22 m³/h, passage direct 12 mm, passage
+  décalé 15 mm mini. Corrections (avant → après) : « Distance d'un point de fixation au coin
+  intérieur 100 à 150 mm » seule → les deux valeurs de la source, 100-150 mm (§ 4.2) et env. 150 /
+  250 mm (planche), **INC-94** ; « L'écart de verticalité admissible est de 1,5 mm/m … un écart
+  supérieur dégrade la valeur Uw déclarée, pas seulement l'aspect » → « L'horizontale peut varier
+  au plus de 1,5 mm/m … Cet écart maximal de la verticale doit aussi être respecté pour ne pas
+  influencer la valeur Uw » ; « maçonnerie brute » → « maçonnerie haute » comme la source (INC-94) ;
+  « Jamais d'aluminium fixé de manière rigide … sa dilatation propre l'exige mobile » → mots de la
+  source. Ajouts : sollicitations des joints, joints de reprise et de mouvement, sources d'erreur
+  (déplacées depuis la page Usage, une donnée une page), exigences particulières, film de
+  protection, stockage et transport sur chantier, points de référence en hauteur, position écrite
+  avec le maître d'ouvrage, moyens de fixation, calage diagonal, étanchéité du joint (mousses,
+  bitume, bandes précomprimées), généralités (linteau, réception, réhausse), protection de
+  l'aluminium, avant-propos et mortaise des entrées d'air (exemple 354 / 160 / 10 / 2 / 12 mm),
+  cinq montages. Retirés : « Ce sont des règles génériques, indépendantes du système de profilés »,
+  « Ce que le document ne dit pas » sur les registres 1.3.6 et 1.3.9 (« consignes grand public,
+  sans prescription »), désormais transcrits ailleurs. `status: draft` (INC-94, INC-95). 9 schémas
+  sous `assets/procedures/directives-profine/` (`points-de-fixation-maconnerie`, p. 102 ;
+  `joint-dormant-maconnerie-largeur-b`, p. 105 ; `entree-air-mortaise-exemple-usinage`, p. 107 ;
+  `entree-air-passage-direct-dormant-ouvrant`, `entree-air-passage-decale-dormant-ouvrant`, p. 108 ;
+  `entree-air-bas-exterieur-facade-interieur`, `entree-air-passage-travers-dormant`, p. 109 ;
+  `entree-air-passage-travers-rehausse`, p. 110).
+* **Update**: [Usage, nettoyage et entretien d'une menuiserie profine](/entretien/usage-nettoyage-entretien-menuiseries-profine.md)
+  -- `type: Procédure` → `type: Entretien`, squelette Entretien (Ce qui est concerné, Consignes,
+  Fréquence), registre 1.3.9 relu en image (PDF p. 111-113). Corrections : « Entretien des
+  ferrures : une à deux fois par an … nécessaire dès que la manœuvre devient moins facile » →
+  consigne de la source, et table de fréquence avec l'écart 1.3.4 / 1.3.9 (**INC-97**) ;
+  « c'est un phénomène d'interférence dû à la planéité et au parallélisme des vitres, sans lien avec
+  la qualité — donc pas un motif de réclamation recevable » → mots de la source ; la condensation
+  extérieure et intérieure réécrite dans les mots de la source (retirés : « le même phénomène que la
+  rosée » reformulé, « au prix du confort et de la facture de chauffage », « la conséquence
+  directe d'une meilleure isolation, pas d'un défaut de pose », « qu'une aération régulière
+  résout »). Ajouts : les trois étapes de la poignée bloquée et son schéma, nettoyage de base de
+  l'aluminium avant réception, produits pour thermolaqué très sale, peau de chamois ou chiffon sec,
+  vitres isolantes (air sec ou gaz, mastic de bord), aération et condensation sur les murs,
+  renvoi au registre 2.3.1, conclusion. La section « Diagnostic d'un défaut d'étanchéité du joint
+  de raccordement » (registre 1.3.7) est retirée d'ici et transcrite sur la page Montage ; retirée
+  aussi, sans source : « Le manuel ne donne aucune procédure de réclamation … pas un mode opératoire
+  SAV ». `status: draft` (INC-93, INC-96, INC-97). 2 images sous
+  `assets/entretien/directives-profine/` (`positions-poignee-basculer-ouvrir-fermer`,
+  `koraclean-extra-et-color`, p. 111).
+* **Update**: [Directives générales profine](/sources/profine-directives-generales.md) -- tranche 2
+  (PDF p. 58 à 113) terminée : les 16 lignes `à faire` deviennent 23 lignes `transcrit` ; la ligne
+  85-92 « ferrure » était fausse (p. 85-86 sont la fin du registre 1.3.3, classification EN 12211),
+  la ligne 76-77 est scindée (p. 76 résistance mécanique, p. 77 annexe A et carte). **Registre 1 à
+  113 complet, aucune ligne `à faire`** ; la convention de tranche est remplacée par la mention du
+  retraitement complet ; description et Voir aussi mis à jour.
+* **Anomalies** : **INC-94** (registre 1.3.7 : distance au coin 100-150 mm contre 150 / 250 mm,
+  « maçonnerie haute », surfaces en m) ; **INC-95** (registre 1.3.8 : « Elles sont établies en
+  fonction du type de ventilation et du type de chauffage : » sans suite, astérisque sans note) ;
+  **INC-96** (registre 1.3.9 : deux intertitres « Condensation sur la vitre intérieure ») ;
+  **INC-97** (graissage des ferrures une fois par an au 1.3.4, une ou deux fois au 1.3.9).
+* **Index** : section `# Entretien` ouverte ; ajout de [Ferrures des fenêtres et portes profine](/quincaillerie/ferrures-approuvees-profine.md) ;
+  descriptions resynchronisées pour les pages touchées.
+* **Retraitement des [Directives générales profine](/sources/profine-directives-generales.md), tranche 1 (PDF p. 1 à 57)**
+  (`raw/profine-directives-generales-2023-01.pdf`) : rendu PyMuPDF à 200 dpi, lecture en image par
+  lots de 4 à 8 pages, aucune couche texte lue. Fiche réécrite au format du protocole (identité,
+  convention de numérotation, registre) : les 11 lignes 1-57 de l'ancien registre deviennent 15
+  lignes en numérotation PDF, avec le registre et les pages imprimées en regard (chaque registre
+  repart à la page 1 imprimée) ; p. 1 `sans contenu propre`, p. 2-57 `transcrit`. Les lignes 58-113
+  restent `à faire` (16 lignes), la ligne 56-62 étant scindée en 56-57 et 58-62. Retirés de la fiche,
+  car résumés sans relecture : la section « Données techniques et paramètres d'atelier » (valeurs de
+  débit, soudage, renfort, couplage, fixation, dont « fraisage de décompression ou perçage Ø 8 mm »
+  et « entailles d'aérateur 12/15 mm »), « Ce qu'il apporte seul », « Tome 1 d'un classeur en deux
+  volumes », et la phrase « Les 113 pages sont couvertes, aucune `à faire` ». Les valeurs des
+  p. 58-113 restent sur leurs pages du wiki, à relire par la tranche 2.
+* **Create**: [Conditions d'utilisation des directives profine](/normes/directives-profine-conditions-d-utilisation.md)
+  (premier `type: Norme`, dossier `normes/` ouvert) -- registre 1.1.1, PDF p. 2-8, auparavant
+  `sans contenu propre` : organisation du manuel, identification des pages, Cascading ITT
+  (EN 14351-1), exigences légales, garantie, transfert, sécurité, CPU en six étapes (conservation
+  10 ans, revue annuelle).
+* **Create**: [Terminologie et légendes profine](/reference/terminologie-et-legendes-profine.md) --
+  registre 1.1.2, PDF p. 9-16 : cote d'élément = cote extérieure d'ouvrant + profilés adjacents,
+  exemple 2 100 → 2 509 mm, tailles minimales 340 × 660 / 660 × 340, planche des repères A à R,
+  six planches de terminologie (joint de frappe, joint central, quatre coulissants), 9 schémas.
+* **Create**: [Livraison et stockage des semi-produits profine](/procedures/livraison-et-stockage-semi-produits-profine.md)
+  -- registre 1.2.1, PDF p. 17-25 : définition des produits en couleur (hors RAL 9016 / 9001),
+  contrôle à réception, déchargement (2,5 t), tableau D.I.1 de condensation (16 lignes HR/ΔT),
+  stockage PVC / acier / aluminium (fig. 1, 5 cas), profilés débités (48 h), films lisses ou
+  grainés, 3 schémas.
+* **Create**: [Surfaces des profilés profine, collage et nettoyage](/procedures/surfaces-collage-nettoyage-profine.md)
+  -- registre 1.2.7, PDF p. 44-48 : colles de référence (déplacées depuis la page Fabrication),
+  collage C004/C005 (30 s, 2-4 min, 4/8/24 h), nettoyant C002, silicones neutres, Köraclean
+  C027/C028/9979/9957, aluminium laqué (pré-anodisation à moins de 75 km des côtes, 5 cm d'extrémité,
+  Qualicoat/GSB, nettoyage 1 à 2 fois par an sous peine de perte de la garantie de laquage).
+* **Update**: [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md) -- sections
+  1.2.2 à 1.2.6 et 1.2.9 réécrites sur l'image (PDF p. 26-43, 49-51), citations passées de
+  « registre x.y.z p. n » en numérotation PDF, 20 schémas découpés. Corrections (avant → après) :
+  « Joint de frappe et joint de vitrage, soudables (coextrudés) : soudés avec le profilé, excédent de
+  longueur 2 % » → l'excédent de 2 % est celui des joints EPDM insérés à la main (p. 42) ; « Temps de
+  refroidissement avant ébavurage : min. 60 s, et au moins 45 s dans tous les cas » dans une table
+  « Soudage à inserts » → table à deux colonnes : standard 30-40 s de fusion et refroidissement
+  ≥ 45 s (≤ 30 min), inserts 40-45 s et ≥ 60 s ; « Le meneau en blanc se renforce à partir de
+  450 mm » seul → deux règles contradictoires de la même source (**INC-89**) ; « Une équerre ou
+  console métallique de plus de 60 mm » → « à partir de 60 mm de largeur de face prescrite selon le
+  Guide d'installation » ; « C120 : colle acrylique… PVC dur et films acryliques rigides » en usage →
+  adhérence, usage non donné, coquille C012/C120 (**INC-90**). Ajouts : zone de fonte 5-6 mm,
+  supports de profilés selon le type de scie (fig. 2, 4 lignes), contrôle de découpe, fraisage du
+  boîtier de crémone, perçage, exception de débit du renfort de dormant (ferrure d'OB, 2 vis),
+  paumelles, effet de bilame, noyaux isolants, diagramme pression-temps, méthodes 1 à 3 du joint de
+  vitrage (limitateur 3,5 mm, coupe 3 × 3 mm), ébavurage des plaxés et des joints soudables,
+  dormant rénovation 953800 (25 × 10 mm) — auparavant renvoyé en « Ce que le document ne dit pas » —,
+  assemblage mécanique, soudage alterné, dormants d'épaisseurs différentes, joints soudables et EPDM
+  en détail, profilés complémentaires (cas de charge, renforts, entraxe, étanchéité, petits bois
+  collés : jeu 0,5 mm, 1,80 m, 10 N/cm², C017). Retirés : « Écart d'angle maximal 0,5° » en ligne de
+  table isolée (conservé en prérequis) et la section « Ce que le document ne dit pas » (fig. 1-2 du
+  renfort « non reprises », soudage à plat « sans valeurs chiffrées », dormant rénovation « non
+  repris »), désormais transcrits. `status` passé à `draft` (INC-89). Sections 1.3.6 (PDF p. 98-99)
+  inchangées, à relire par la tranche 2.
+* **Update**: [Drainage et vitrage généraux](/procedures/drainage-et-vitrage-generaux.md) -- registres
+  1.3.1 et début du 1.3.2 réécrits sur l'image (PDF p. 52-57), 8 schémas découpés. Corrections :
+  ventilation « une fois par angle haut pour un cadre soudé » → « une fois par cadre ou par champ, en
+  haut à gauche et à droite ; optionnel de côté ou en haut » ; ajouts : obligation liée aux
+  certificats de contrôle, caches tempêtes, systèmes vitrés à sec, trois moyens de relier une chambre
+  (recouvrement, dos du dormant, coin avant soudage), DIN 7863-1, PMMA, contrôle de l'épaisseur de
+  vitre, cote libre X, parcloses à joint coextrudé, XP P20-650-1 et DTU 39 P1. La table de calage
+  (100 mm, + 2 mm, 150 mm, 1 300 mm, cales en bois dur) vient des p. 58-62, non relues : signalée
+  comme telle dans la page. `status` passé à `draft` (**VER-64**).
+* **Update**: [Glossaire](/reference/glossaire.md) -- section « Cotes de fabrication » : renvoi à la
+  planche de terminologie, règle de la cote d'élément, repères A-R cités à la PDF p. 10 ; ajout de
+  ITT, Cascading ITT, profine certified, GSB International ; `source_pages` ajouté.
+* **Update**: [Traitement du battement du système 76](/procedures/traitement-du-battement-systeme-76.md)
+  -- le renvoi KöraPop pointe vers la page Surfaces.
+* **Anomalies** : **INC-86** (point 2.3 numéroté deux fois au registre 1.1.1), **INC-87** (renvoi au
+  registre 1.1.4 absent), **INC-88** (profilé de liaison « ⑦ ⑧ », détail Z non dessiné, PDF p. 15-16),
+  **INC-89** (meneau « toujours » renforcé p. 31 contre « à partir de 450 mm » p. 32), **INC-90**
+  (C012 / C120), **VER-64** (cotes 2 et 4 mm de la coupe d'onglet des parcloses, PDF p. 57),
+  **VER-65** (DVS 2207-5 et liste de contrôle annoncées, absentes du PDF).
+* **Schémas** : 40 découpes, `assets/reference/directives-profine/` (9, PDF p. 9-16) et
+  `assets/procedures/directives-profine/` (31, PDF p. 20-57), contrôlées sur planches contact.
+* **Create** : [FERCO](/quincaillerie/ferco.md) et [Siegenia](/quincaillerie/siegenia.md), à la demande de l'utilisateur — clauses de quincaillerie du DTA 6/16-2334, du DTD 6/16-2334 et du DTD 6/16-2335 dans leurs mots, PSK200 Portal jusqu'à 200 kg pour l'oscillo-coulissant du système 70, renvois vers les limites Ferco Unijet d'ASKEY et vers VER-20 ; liens posés depuis les deux pages de certification.
+* **Registres du système 70 remis à `à faire`** : les fiches [Posters Gamme 70](/sources/posters-kommerling-70.md)
+  (registre créé, la fiche n'en avait pas), [DTD 6/16-2335_V5](/sources/dtd-6-16-2335.md) (53 lignes
+  « Intégré »), [Mise en œuvre Système 70 Plateforme](/sources/profine-mise-en-oeuvre-systeme-70.md)
+  (13 lignes, « 371/371 » retiré), [Plans e.VOLUTION 2008](/sources/plans-profiles-e-volution-2008.md)
+  (5 lignes, plus la plage 269-306 absente de l'ancienne carte), [Mise en œuvre 9708](/sources/profine-mise-en-oeuvre-9708-montants-cintres.md)
+  (1 ligne) et [Directives générales profine](/sources/profine-directives-generales.md) (24 lignes).
+  Ces états venaient d'une ingestion antérieure qui résumait par chapitre.
+* **Retraitement des [Posters Gamme 70 KÖMMERLING](/sources/posters-kommerling-70.md)**
+  (`raw/poster-kommerling-70-principaux-2025-03.pdf` puis `raw/poster-kommerling-70-complementaires-2025-03.pdf`,
+  une page A0 chacun) : rendus PyMuPDF par tuiles à 500-600 dpi, zooms à 600 dpi sur les cotes
+  douteuses, aucune couche texte lue. Fiche réécrite au format du protocole (identité + registre
+  par zones) : 11 zones au poster des principaux, 14 au poster des complémentaires, toutes
+  `transcrit` sauf les deux en-têtes `sans contenu propre`. L'ancien résumé « Planche 1 / Planche 2 »
+  et « Ce qu'elles établissent » est supprimé ; la référence d'édition réelle est
+  PROFINE/73/POSTERPLANA0/PRINC/COMP/2024 (inchangée) ; « deux planches A0 » confirmé (3 340 × 2 366 pt).
+* **Update**: [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md) --
+  page réécrite depuis le poster des principaux, sections du manuel et du DTD conservées. Vides
+  comblés : tableaux `# Cotes` avec coupe des 12 dormants (cotes gauches, décomposition 20 + part
+  basse, aile de 10), des 5 dormants larges, de 17 ouvrants, des 3 profilés 2416 / 2415 / 0303, de
+  11 battements et profilés plats d'embout, du 0140, de 5 meneaux et traverses ; 22 capots de
+  dormant, 5 d'ouvrant, 3 de meneau avec retour et hauteur ; cale M771 et ses trois légendes ;
+  19 renforts cotés avec Iz et la liste des profilés où chacun est écrit. Erreurs corrigées (avant →
+  après) : ancien résumé « 6100 70 × 35, feuillure 20 » → coupe 55 (20 + 35) ; « 6101 capot A107,
+  demi-capot A474 » confirmé mais « 6104 A108 » dessiné avec A474 ; « 2502 capot 9C02 » → capot
+  sans légende de 21,6 × 88,1 (**VER-60**) ; « 6127 renfort V603 / 6157 V010 / 2425 9132 » confirmés,
+  « kit 9F76 » → set en T 9F76 ; « V010 45 × 25 » → 47,5 × 19,8 ; « V030 et V031 1,5 mm » → V031 sans
+  épaisseur portée ; « V059 33 × 30,5 » → 33 × 44 (30,5 est une cote du V069) ; « V069 barre
+  pré-usinée 2 m, Ix 4,4 » et « V154 barre pré-usinée 2,25 m, Ix 12,3 » → aucune cote ni inertie
+  portée ; « V057 37 × 44 » confirmé ; « V544 38 × 23, 2,35 » → Iz 2,4 au poster ; « V158 40 × 44 » →
+  40 × 20 ; « V258 40 × 25, 2,23 » → 40 × 20, Iz 2,2 ; « V600 37 × 14 » confirmé ; « V543 37 × 17,4 »
+  confirmé (ailes 14 et 17,4) ; « V045 38 × 38, 1,25 » → 38 × 27, 1,3 ; « V081 35 × 23 » → 35 × 8 ;
+  « 0140 62 mm, profil 9414 » confirmé ; battements intérieurs « 76833 48, 6133 54, 6131 54, 6129 58,
+  1547 60 » confirmés. Retirés, absents des deux posters et sans autre source : l'inventaire
+  « 6103, 2428, A256/A271/A272/A721 capots, pattes 90602 à 90659, profils d'angle 9411 à 9494,
+  V230, V845, 92000 à 92005 » (A256, A271, A272 existent mais ne sont pas des capots), la phrase
+  « Le seuil SF57 dessert 28 profilés », la phrase « Une numérotation ne délimite pas un système »,
+  « la régularité de l'écart de 20 mm suggère deux conventions » (raisonnement sans source,
+  l'argument reste à INC-12), la section doublonnée « Les joints du système 70 sont dans… ». Les
+  mentions « à lire sur la planche rendue » et « cotes illisibles sur la planche A0 » sont retirées :
+  les planches se lisent à 500 dpi. Anomalies : **CTR-37** (A107 contre A108), **CTR-38** (V543,
+  V544, V258, V003, V045), **VER-60**, **VER-61** (renforts écrits au poster, absents du manuel),
+  **VER-62** (hauteur vue du 6151 au DTD) ; INC-12, CTR-20, VER-37 et VER-38 complétées sans être
+  fermées. Images : `assets/profiles/systeme70/dormants/` (38), `ouvrants/` (28), `battements/` (14),
+  `meneaux/` (9), `renforts/` (19), `accessoires/` (7) ; poster p. 1.
+* **Update**: [Assemblages du système 70](/profiles/systeme-70-assemblages.md) -- sections *Seuils
+  aluminium* (9F67, 9F68, 9F69, Z043 cotés ; 9F69 absent jusqu'ici) et *Pièces d'assemblage dessinées
+  sur le poster* créées : 14 embouts de seuil, sets 9F71 / 9F72 / J077 et note de l'insert 9F78,
+  7 sets de meneau et traverse, 4 patins, équerres 9714 ; ancien résumé « embouts 9F57 (6100) » →
+  « 9F57 pour 6100, 6102 », J087 / J088 / M833 / M834 ajoutés ; **CTR-39** (6159 : M833 / M834 au
+  poster, 9F72 au DTD). `source_pages` ajouté. Images : `assets/profiles/systeme70/seuils/` (4),
+  `assemblages/` (7), `meneaux/assemblage-9f39-2425.png`.
+* **Create**: [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md)
+  depuis le poster des complémentaires : 7 élargisseurs, 7 profilés de liaison, 9 liaisons d'angle
+  et couplages, 2 renforts du commerce (Iz 9,95 et 106,0), 5 pièces d'appui PVC et 4 aluminium,
+  7 tapées PVC, 5 tapées aluminium, 12 cornières, 18 profilés plats, 13 profilés A243 T à 92010 TL,
+  30 parcloses **avec l'épaisseur de remplissage en feuillure de 54 mm** (vide comblé : l'ancienne
+  page disait que le plan ne la cotait pas), coulisses et tulipes, 22 accessoires. Erreurs de l'ancien
+  résumé corrigées : « élargisseur 76703 70 × 120 et K363 » → 70703 (**VER-63**) ; « 0207 renfort V045 »
+  confirmé, « 0301 » porte 2 × V045 ; « 70604 + 70605 renfort V265, 78° à 220° » confirmé ; « 8356 V262,
+  8355 V261, 70603 V267, 70602 V268 » → 8355 et 8356 absents du poster, 6356 (renfort 656),
+  70603 V287, 70602 V288, 93000 V261 ; « appuis alu A491… avec embout M643 » confirmé ;
+  « parcloses 91000 à 91005, 91030 à 91043, 92001 à 92005, 92010 TL » → profilés plats et profilés
+  en U sans légende de fonction. Anomalies **CTR-40** (cotes de onze parcloses, poster contre DTD),
+  **VER-63** ; **VER-40** complétée (les A469 à A473 n'ont pas de légende, M643 est l'embout des
+  A491 à A477). Images : `assets/profiles/systeme70/` dossiers `elargisseurs` (7), `liaisons` (14),
+  `renforts` (4 de plus), `cornieres` (7), `appuis` (9), `tapees-pvc` (9), `tapees-alu` (5),
+  `profils-plats` (7), `parcloses` (33), `coulisses` (4), `joints` (2), `accessoires` (17 de plus).
+* **Update**: [Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md)
+  -- section *Joints dessinés sur le poster des profilés complémentaires du système 70* : 9C32 T,
+  9C31 T, G342 T, 9045, 9E46, 101000, 9043 avec fonction, largeur et hauteur ; deux figures.
+* **Update**: [KÖMMERLING](/fournisseurs/kommerling.md) -- « les profilés complémentaires sont
+  partagés entre les deux systèmes … Une numérotation ne délimite donc pas une gamme » (déduction
+  sans source) → la liste des références 76xxx du poster et la feuillure de 54 mm.
+* **Update**: [Parcloses PERFORM76](/profiles/perform76-parcloses.md) -- lien vers l'ancre supprimée
+  « références partagées avec le système 76 » remplacé par la section *Parcloses* de la nouvelle page.
+* Pages non modifiées, les posters n'y apportant rien : [Cotes de débit du système 70](/profiles/systeme-70-cotes-de-debit.md),
+  [Abaques dimensionnels du système 70](/profiles/systeme-70-abaques-dimensionnels.md),
+  [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md),
+  [PERFORM](/gammes/perform.md) (aucun des deux posters ne nomme une gamme PROFERM, VER-28).
+* **Retraitement de la [Mise en œuvre 9708](/sources/profine-mise-en-oeuvre-9708-montants-cintres.md)**
+  (`raw/profine-mise-en-oeuvre-9708-montants-cintres-2017-07.pdf`, 1 page) : rendu 200 dpi, zooms
+  400 dpi sur l'élévation et la coupe X, aucune couche texte lue. Registre : p. 1 `transcrit`.
+  Fiche réécrite (titre exact, adresse et mentions de pied de page ; la date n'est pas imprimée sur
+  la page, « juillet 2017 » vient du nom de fichier).
+* **Update**: [Redressement d'un montant de porte cintré par le profilé 9708](/procedures/redressement-montant-porte-cintre-9708.md)
+  -- étapes reprises dans les mots de la préconisation (« longueur pare close », « renfort plat »,
+  « à souhait ») ; trois schémas découpés dans `assets/procedures/9708/` (cas n° 1, cas n° 2,
+  élévation et coupe X du profilé) ; `source_pages` ajouté, `status: draft` (VER-27). Erreurs
+  corrigées (avant → après) : « section en U de largeur 25 × hauteur 9 mm (profondeur de rainure
+  6 mm) » → plat d'épaisseur 6, cote 25 prise du bord à un trait intérieur, largeur totale non
+  cotée ; « flèche de précontrainte initiale au centre 40 mm » et « largeur d'extrémité / appui
+  25 mm » → cotes 40 et 25 reprises avec leur emplacement, la planche ne dit pas ce qu'elles
+  mesurent. Retirés, sans source sur la planche : « intervention de service après-vente,
+  réalisable en atelier comme sur chantier », « C'est la première chose à vérifier »,
+  « Inverser les deux cas aggrave la déformation », « Cette vis est plus longue que celle des
+  renforts de fabrication (3,9 × 16 du 76) », « document universel pour montants de porte PVC
+  (système 70 ou 76 Advanced) », section « Provenance » (« la plus ancienne source profine du
+  wiki », date du 6 juillet non imprimée).
+* **Update**: [Informations à vérifier](/anomalies/informations-a-verifier.md) -- VER-27 réécrite
+  après relecture : la mention « Partiellement résolu » du 19/09 reposait sur une section « en U
+  25 × 9 » absente de la planche ; entrée laissée à l'arbitrage de l'utilisateur.
+* **Retraitement du [DTD n° DBV-24-6/16-2335_V5](/sources/dtd-6-16-2335.md)**
+  (`raw/dtd-6-16-2335-v5-e-volution.pdf`, 53 pages) : pages rendues PyMuPDF à 200 dpi, planches à
+  300 dpi, tableaux et cotes serrées à 400, 500, 600 et 1 200 dpi ; lecture en image par lots,
+  aucune couche texte lue. Registre : 53 pages en 42 lignes, toutes `transcrit`, 0 `à faire`
+  (pp. 1-2 sur la fiche et la certification). Fiche réécrite : identité (émetteur CSTB Pôle
+  Évaluation fenêtres et coffres, objet exact, V5 du 19/12/2024), pagination imprimée = PDF. Date
+  `last_modified` 2025-04-15 → 2024-12-19 (seule date imprimée, GS6) sur toutes les pages qui citent
+  le DTD. Retirés de la fiche, issus de l'ancienne ingestion et faux ou sans source : « Registre de
+  couverture OKF » à 53 lignes « Intégré » (dont « p. 46 appuis 6134-6137 », « p. 41 hauteur totale
+  109 mm, feuillure 42 mm », « p. 19 KBE 6126 65x28/20 », « p. 20 6134 67/137 ») ; section
+  « Données techniques de référence » (table des 19 renforts, dont V010 45 × 25, V045 38 × 38,
+  V158 40 × 44, V059.2 33 × 30,5, V081 35 × 23 ; dormants larges « 6108 96 mm ») ; « Ce qu'il
+  apporte seul » ; « Nature : réglementaire et contractuelle, opposable en fabrication ».
+* **Create**: [DTD n° DBV-24-6/16-2335_V5, système 70](/certifications/dtd-6-16-2335.md) (type
+  `Certification`, sur le modèle de `dta-6-16-2334`) -- chapitre 2 transcrit clause par clause dans
+  les mots du DTD : 2.1 à 2.2.3 (L* < 82, dormant, meneau 6127 soudé avec 9714, drainage, fourrures,
+  seuil PMR et ses deux modes d'assemblage), cadre ouvrant, battements, traverse intermédiaire,
+  quatre assemblages mécaniques, renforts, capotage, ferrage FERCO / PSK200 Portal, fiches,
+  vitrage, dimensions maximales (7 lignes), 2.3 à 2.9 (conception, mise en œuvre, étanchéité,
+  maintien, fin de vie, fabrication, 21 essais CSTB), tableau 1 (20 + 8 compositions vinyliques).
+* **Create**: [Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md) --
+  planches de méthode p. 26 à 46 et sept plans de pose p. 47 à 53, chacune en figure pleine
+  largeur avec explication et lecture ; usinage de la traverse avant soudure et masses centrales
+  tabulés ; couleurs sombres en table (8 groupes de profilés).
+* **Update**: [Assemblages du système 70](/profiles/systeme-70-assemblages.md) -- tableaux 2, 3, 4
+  relus cellule par cellule (conformes) ; légendes des deux tableaux reprises séparément (le
+  tableau 3 écrit « S = soudure », pas « soudure en V ») ; « SP\* : les équerres ne concernent que
+  les dormants » retiré (déduction) ; « Les ouvrants 6121 à 6124 et 6150 à 6153 ne se montent pas
+  sur la traverse 6126 : le tiret est une exclusion » → « le tableau 3 ne donne aucune méthode » ;
+  « La soudure en V n'est admise que sur la traverse 6127 » → la soudure S figure aussi sur la
+  traverse 6157 ; « Ce sont aussi les deux dormants de coulissant » retiré (sans source) ; seuils du
+  DTD tabulés (9F68 70 × 36, 9F67 70 × 20, Z043 125) ; nomenclature des accessoires p. 24 en table
+  (10 rangées) et trois figures ; sections « Pose du seuil aluminium », « Les 4 modes » et
+  « Soudure à plat » (résumés) remplacées par des renvois vers la certification et la procédure.
+* **Update**: [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md) --
+  section « Dormants et capots du DTD » (12 dormants, capots, dormants larges 95 à 200) remplace
+  l'ancien tableau « capot selon le DTD » (avant → après : « 6100, 6104 → A108 » → 6100 dessiné sans
+  capot, 6104 avec A474 et A108 ; « 6102, 6155, 6156, 6107 : 9C01.1/9C02.1 non attribuée » → mention
+  « capots pour dormants réhabilitation » sous A474 et A109) ; « 2501 : deux segments 20 et 50,
+  sans capot » → décomposition 20 + 50, capot 9C01.1 ; section « Ouvrants du DTD, par marque »
+  remplace le tableau « hauteur vue / feuillure / type » (avant → après : colonnes « hauteur vue »,
+  « feuillure 20 », « semi-affleurant galbé », « chanfreiné », « biseauté », « réduit / grand »
+  absentes de la planche → cotes gauche et droite telles que portées ; 6151 « hauteur vue 53 » →
+  cote gauche 53, part basse non portée) ; battements par marque p. 18-19 et 6154 ; traverses et
+  meneaux p. 19 avec capots A174 et A175 ; profilés complémentaires p. 23 ; table des 19 renforts
+  du DTD recotée (avant → après : V010 « 7,00 » seul → 48 × 20, 2,5 ; 9132 ajouté ; V031 et V045
+  cotes illisibles) ; « MA013 … sont les embouts qui ferment les chambres des dormants larges en
+  about, sans pièce d'appui associée » → titre de la planche seul.
+* **Update**: [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md)
+  -- section « Profilés complémentaires dessinés à l'annexe du DTD » : élargisseurs, pièces
+  d'appui (avant → après : « 6134 : 67 mm, 76768 : 136 » → 137 hors tout et 67 partielle ; 196 hors
+  tout et 136), fourrures 3875 et 3874, fourrures 6138.1 à 76769 (35 de large sur 15 à 135),
+  tapées et appuis alu, habillages (**CTR-41**), embouts d'appui cotés (9 lignes), embouts de
+  dormants larges, 22 parcloses du DTD avec hauteur.
+* **Update**: [Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md)
+  -- références codées des matières de joint ; tableau des garnitures repris tel quel (avant →
+  après : ligne « - joint sur parclose » → « \*\*\*\* » ; « G256 … - » → « / » ; 1A17P avant 1A16P
+  comme la source) ; phrase « EPDM ou PCE … double joint de frappe PCE » retirée de la section DTD
+  (elle vient du manuel, pas du DTD) ; seuils mixtes dans les mots du § 2.8.4 ; planche des 18
+  garnitures de joints avec matière, figure.
+* **Update**: [Contradictions entre sources](/anomalies/contradictions-entre-sources.md) --
+  **CTR-37** : valeur DTD corrigée (6100 sans capot, pas A108), la contradiction ne demeure que pour
+  le 6101 ; **CTR-38** : cinq valeurs DTD confirmées, V010 ajouté, cotes du V045 illisibles ;
+  **CTR-39** : table du DTD confirmée (6159 → 9F72) ; **CTR-40** : douze cotes DTD confirmées ;
+  **CTR-20** : 95 confirmé (et non 96), point de départ de la cote précisé ; **CTR-41** créée
+  (A502 200 × 200 et A503 80 × 120 au DTD 2335, le double du système 76).
+* **Update**: [Incohérences internes](/anomalies/incoherences-internes.md) -- **INC-83**
+  (Perennator FA101 attribué à ILLBRUCK p. 5 et à Tremco p. 8), **INC-84** (soudure à plat réservée
+  au 6127 au § 2.8.5, donnée « SP » sur la traverse 6126 au tableau 3 ; légendes différentes des
+  tableaux 2 et 3), **INC-85** (capot du 6101 : A108 p. 14, A107 p. 42).
+* **Update**: [Informations à vérifier](/anomalies/informations-a-verifier.md) -- **VER-62** : le 53
+  du 6151 est sa cote gauche, la contradiction avec le poster disparaît (non close) ; **VER-63** :
+  K363 et 0207.3 confirmés au DTD ; **VER-37** : aucune cote de 140 mm sur le 6127 au DTD ;
+  **VER-38** : les capots de réhabilitation sont A474 et A109, le 6106 absent de la mention ;
+  **VER-60** : 9C02.1 dessiné à gauche du 2502 ; **VER-20** : FERCO et PSK200 Portal au DTD du 70.
+* **Update**: [profine](/fournisseurs/profine.md) (lien vers la certification),
+  [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md) (date source).
+  `index.md` : deux entrées ajoutées (certification, procédure). `status: draft` sur la
+  certification, la procédure et les assemblages du système 70 (anomalies ouvertes).
+* **Images** : 51 schémas dans `assets/certifications/dtd-6-16-2335/` (p. 22, 24, 26 à 53) ; 16
+  coupes dans `assets/profiles/systeme70/` : `dormants/dormant-2501.png`, `capot-9c02-1-2502.png`
+  (p. 14) ; `battements/battement-6154.png`, `meneaux/capots-a174-a175-dtd.png` (p. 19) ;
+  `tapees-pvc/fourrure-3875.png`, `fourrure-3874.png` (p. 20) ; `cornieres/habillage-9621-dtd.png`,
+  `habillage-a502-dtd.png` (p. 22) ; `accessoires/rejet-ja701-02.png`, `profil-93051-dtd.png`
+  (p. 23), `embout-9f56-1-6137.png`, `embout-9f55-1-6136.png`, `embout-9f53-1-6134.png`,
+  `embout-9f54-1-6135.png`, `embouts-m780-m782-76768.png`, `embouts-dormants-larges-ma013-m851.png`
+  (p. 25). Les profilés déjà découpés sur les posters et dessinés pareil ne sont pas redécoupés : les
+  tableaux du DTD renvoient à la coupe du poster. Contrôle sur planches contact.
+* Pages non modifiées, le DTD n'y apportant rien : [Cotes de débit du système 70](/profiles/systeme-70-cotes-de-debit.md),
+  [Abaques dimensionnels du système 70](/profiles/systeme-70-abaques-dimensionnels.md) (le DTD ne
+  porte aucun abaque, seulement la table 2.2.3.8, sur la certification),
+  [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md).
+  Aucune page `quincaillerie/` FERCO ou Siegenia n'existe ; la clause 2.2.3.6 est sur la
+  certification.
+
 ## 2026-09-25
 
 * **Retraitement, tranche 5 (PDF p. 302 à 424), dernière tranche** de la [Mise en œuvre Système 76 Advanced](/sources/profine-mise-en-oeuvre-76-advanced.md)

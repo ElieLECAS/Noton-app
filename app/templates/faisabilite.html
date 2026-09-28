@@ -310,7 +310,9 @@
         <li><b>DTA</b> : la baie ne doit pas dépasser les dimensions maximales de l’Avis Technique pour ce type d’ouvrant.</li>
         <li><b>Abaque de dormant</b> : le cadre doit rester dans la limite de sa couleur.</li>
         <li><b>Abaque d’ouvrant</b> : chaque vantail doit rester dans la limite de sa couleur et respecter la
-          règle des 25 % (la largeur ne dépasse pas la hauteur de plus d’un quart). Le graphique montre le vantail placé sur l’abaque.</li>
+          règle des 25 % (la largeur ne dépasse pas la hauteur de plus d’un quart). Le graphique montre le vantail placé sur l’abaque,
+          avec en tireté rouge la limite du DTA ramenée au vantail : la zone bleue est ce que le profilé tient, le tireté ce que
+          le DTA admet sans Certificat de Qualification.</li>
         <li><b>Épaisseur de verre</b> : on additionne les verres sans les lames d’air ; à partir de 12 mm, la
           courbe correspondante (arrondie à la courbe supérieure) limite la hauteur. Les équerres J079 font descendre de deux courbes.</li>
         <li><b>Renfort</b> : la zone de l’abaque dit quels profilés renforcer ; au-delà de 12 mm de verre, ou en couleur, le renforcement est systématique.</li>
@@ -673,10 +675,24 @@ function abaque(r){
     if(pts.length > 1) g += '<polyline points="' + pts.map(p => sx(p[0]) + "," + sy(p[1])).join(" ") + '" fill="none" stroke="var(--etude)" stroke-width="2"/>' +
       pts.map(p => '<circle cx="' + sx(p[0]) + '" cy="' + sy(p[1]) + '" r="2.4" fill="var(--etude)"/>').join("");
   }
+  // le DTA ramené au vantail : rectangles depuis l'origine, tracés en escalier par leur union
+  const dta = (G.dta || []).slice().sort((a, b) => a.largeur - b.largeur);
+  if(dta.length){
+    const cl = x => Math.max(X0, Math.min(X1, x)), ch = y => Math.max(Y0, Math.min(Y1, y));
+    let d = 'M' + sx(X0) + ',' + sy(Y0);
+    dta.forEach((q, i) => {
+      const h = Math.max(...dta.slice(i).map(z => z.hauteur));
+      d += ' V' + sy(ch(h)) + ' H' + sx(cl(q.largeur));
+    });
+    d += ' V' + sy(Y0);
+    const der = dta[dta.length - 1];
+    g += '<path d="' + d + '" fill="none" stroke="var(--hors)" stroke-width="1.6" stroke-dasharray="6 4"/>' +
+         '<text x="' + (sx(cl(der.largeur)) - 4) + '" y="' + (sy(ch(der.hauteur)) + 13) + '" font-size="10" font-weight="700" text-anchor="end" fill="var(--hors)">DTA</text>';
+  }
   const [px, py] = G.point;
-  // la pastille prend le pire des contrôles lus sur l'abaque : couleur, verre, vent
+  // la pastille prend le pire des contrôles lus sur l'abaque : couleur, verre, vent, DTA
   const ordre = ["ok", "etude", "hors"];
-  const pire = r.controles.filter(c => ["ouvrant", "verre", "vent"].includes(c.id) && ordre.includes(c.statut))
+  const pire = r.controles.filter(c => ["ouvrant", "verre", "vent", "dta"].includes(c.id) && ordre.includes(c.statut))
     .reduce((a, c) => ordre.indexOf(c.statut) > ordre.indexOf(a) ? c.statut : a, "ok");
   const coul = {ok: "var(--ok)", etude: "var(--etude)", hors: "var(--hors)"}[pire];
   const cx = sx(Math.max(X0, Math.min(X1, px))), cy = sy(Math.max(Y0, Math.min(Y1, py)));
@@ -684,6 +700,7 @@ function abaque(r){
        '<text x="' + (cx + 9) + '" y="' + (cy - 8) + '" font-size="11" font-weight="700" fill="var(--tx)">' + fmt(px) + ' × ' + fmt(py) + '</text>';
   return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Abaque d’ouvrant avec la position du vantail">' + g + '</svg>' +
     '<div class="legend"><span><i style="background:var(--accent)"></i>limite de couleur et règle des 25 %</span>' +
+    (G.dta && G.dta.length ? '<span><i style="background:var(--hors)"></i>DTA ' + esc(G.dta[0].configuration) + ', baie ramenée au vantail</span>' : "") +
     (G.courbe ? '<span><i style="background:var(--etude)"></i>' + esc(G.courbe.nom) + ' (relevé tous les 10 cm)</span>' : "") +
     '<span>A–D : zones de renforcement</span></div>';
 }

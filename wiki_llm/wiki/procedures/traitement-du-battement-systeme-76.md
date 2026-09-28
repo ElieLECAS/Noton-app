@@ -231,7 +231,7 @@ set M462 du tableau des sets ne contient que les embouts intérieurs M462.R et M
 
 L'étape 2 nomme à la fois la « colle pvc » et une « colle MS polymère, par ex.: KöraPop » pour le
 même collage ; la planche ne dit pas laquelle s'applique où. KöraPop est décrite dans
-[Fabrication des profilés PVC, directives profine](/procedures/fabrication-profiles-pvc.md).
+[Surfaces des profilés profine, collage et nettoyage](/procedures/surfaces-collage-nettoyage-profine.md).
 
 ## Battement 76471
 

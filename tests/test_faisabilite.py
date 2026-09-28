@@ -87,6 +87,17 @@ def test_ob_admet_l_un_des_deux_couples(snap):
     assert _ctl(r, "dta")["statut"] == "ok"
 
 
+def test_dta_ramene_au_vantail_sur_l_abaque(snap):
+    # 1 vantail OF, 1200 × 1400 : dans la zone bleue, hors du DTA 2,15 × 1,00 m, soit 92,4 × 207,4 cm de vantail
+    r = verifier(snap, Saisie("1v_of", 1200, 1400, "76171", "76281"))
+    assert _ctl(r, "ouvrant")["statut"] == "ok"
+    assert _ctl(r, "dta")["statut"] == "hors"
+    assert [(q["largeur"], q["hauteur"]) for q in r["graphe"]["dta"]] == [(pytest.approx(92.4), pytest.approx(207.4))]
+    # l'OB porte deux couples : deux rectangles
+    r = verifier(snap, Saisie("1v_ob", 1300, 1400, "76171", "76281"))
+    assert len(r["graphe"]["dta"]) == 2
+
+
 def test_courbe_de_verre_sans_interpolation(snap):
     # DEO 950 mm = 95 cm, entre les graduations 90 (242) et 100 (193) : la plus restrictive, 193
     base = dict(configuration="1v_of", largeur_mm=950 + 76, dormant="76171", ouvrant="76281", vitrage="4-12-4-12-4")

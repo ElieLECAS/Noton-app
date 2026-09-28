@@ -18,6 +18,9 @@ sources:
     id: profine-directives-generales-2023
     title: Directives générales profine, version janvier 2023
     last_modified: 2023-01-31
+source_pages:
+  - resource: raw/profine-directives-generales-2023-01.pdf
+    pages: 90-93
 generated:
   by: process:multimodal-direct
   at: 2026-09-19T20:35:00Z
@@ -75,34 +78,16 @@ Le [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md) du système 76 Advan
 comme quincaillerie du procédé et admet d'autres quincailleries **« sur justifications »**. Le
 [DTD](/sources/dtd-6-16-2334.md) révisé en mars 2025 le répète.
 
-**Un premier élément de justification existe** : les Directives générales profine (registre
-1.3.4, Ferrure) listent ROTO parmi les quincailleries approuvées pour la quasi-totalité des
-configurations de fenêtre — OB1-OF1, soufflet, les six montages de semi-fixe à deux vantaux,
-fenêtre à ouverture extérieure — et pour plusieurs portes : porte à un vantail, porte coulissante
-à déport, porte accordéon, porte d'entrée à deux vantaux [3 registre 1.3.4 p. 4 à 6]. **ROTO n'y
-figure en revanche pas** pour la porte d'entrée à un vantail seule, les seuils, les ferme-portes,
-les paumelles ni les boîtes aux lettres — ces familles restent couvertes par d'autres marques
-(Fuhr, GU, Dorma, GEZE, Simonswerk...).
-
-Cette directive ne cite aucun numéro de DTA et ne dit pas explicitement qu'elle constitue LA
-justification exigée par le DTA du système 76 Advanced ; elle établit seulement que ROTO est un
-fournisseur agréé par profine pour ces configurations. **Le lien formel avec le DTA reste à
-établir** — entrée **VER-20** du registre
-[Informations à vérifier](/anomalies/informations-a-verifier.md), révisée à la lumière de cet
-élément.
-
-La même directive approuve les marques par petit accessoire, indépendamment de la quincaillerie
-principale [3 registre 1.3.4 p. 7] :
-
-| Accessoire | Marques approuvées |
-| --- | --- |
-| Cale de jeu/transport en matière plastique | KÖMMERLING |
-| Ouverture d'imposte | GEZE, GU, Hautau, Schüring |
-| Aérateur à entrebâillement | AUBI, Fuhr, GU, MACO, **ROTO**, Siegenia, Winkhaus |
-| Aérateur réglable insonorisé | GU, Hautau, Siegenia, Frank KG |
-
-**ROTO n'est approuvé que pour l'aérateur à entrebâillement** parmi ces quatre familles, pas pour
-les aérateurs réglables insonorisés ni pour les deux autres.
+Les directives générales profine (registre 1.3.4, Ferrure) approuvent ROTO pour l'OB1, l'OF1, la
+porte 1 vantail avec serrure, le soufflet, les six modes de verrouillage du semi-fixe d'une fenêtre
+à deux vantaux, l'OF ouverture extérieure, la porte coulissante à déport, la porte accordéon, la
+porte d'entrée 2 vantaux et l'aérateur à entrebâillement. **ROTO n'y figure pas** pour la fenêtre
+basculante, le levant-coulissant, la porte d'entrée, le seuil, l'étanchéité automatique, les
+ferme-portes, la boîte aux lettres, les paumelles, l'ouverture d'imposte, l'aérateur réglable
+insonorisé ni la cale de jeu [3 p. 90-93]. La table complète des marques par type d'ouvrant est
+sur [Ferrures des fenêtres et portes profine](/quincaillerie/ferrures-approuvees-profine.md). Le
+lien entre cette liste et la réserve « sur justifications » du DTA est l'entrée **VER-20** du
+registre [Informations à vérifier](/anomalies/informations-a-verifier.md).
 
 # Sécustik
 
@@ -142,8 +127,8 @@ p. 7, 11, 15, 23, 32, 34 et 35
 [2] Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023 —
 `raw/brochure-perform-plus-hybride-plus-2023-05.pdf`, p. 2
 
-[3] Directives générales profine, version janvier 2023 —
-`raw/profine-directives-generales-2023-01.pdf`, registre 1.3.4, p. 4 à 7
+[3] [Directives générales profine, version janvier 2023](raw/profine-directives-generales-2023-01.pdf),
+registre 1.3.4, p. 4 à 7 imprimées (PDF p. 90 à 93)
 
 # Voir aussi
 
@@ -153,6 +138,7 @@ p. 7, 11, 15, 23, 32, 34 et 35
 - [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md)
 - [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md)
 - [Directives générales profine](/sources/profine-directives-generales.md)
+- [Ferrures des fenêtres et portes profine](/quincaillerie/ferrures-approuvees-profine.md)
 - [Informations à vérifier](/anomalies/informations-a-verifier.md)
 - [Labels et certifications](/certifications/labels-et-certifications.md)
 - [Garanties par composant](/garanties/garanties-par-composant.md)

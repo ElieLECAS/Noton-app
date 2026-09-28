@@ -31,7 +31,7 @@ Trois règles de prudence, parce qu'un outil qui calcule donne l'air d'une certi
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any, Dict, List, Optional, Tuple
 
 from app.services.wiki_service import WikiSnapshot
@@ -903,6 +903,13 @@ def verifier(snap: WikiSnapshot, s: Saisie) -> Dict[str, Any]:
                                  valeurs={"zone": zone, "renfort": simple.renfort}))
             if graphe is not None:
                 graphe["zones"] = [zl, zh]
+
+        # le DTA borne la baie : ramené au vantail par les mêmes cotes de débit, pour l'abaque
+        if graphe is not None:
+            graphe["dta"] = []
+            for c, h, l in lignes:
+                deo = calcul_debit(d, replace(s, largeur_mm=l * 1000, hauteur_mm=h * 1000))["deo"]
+                graphe["dta"].append({"configuration": c, "largeur": deo[0] / 10, "hauteur": deo[1] / 10})
 
     # 7. la parclose
     src_p = [_source(PAGE_PARCLOSES, "Comment choisir une parclose")]

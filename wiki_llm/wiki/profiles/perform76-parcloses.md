@@ -124,8 +124,8 @@ diffère de celui des deux séries précédentes.
 
 **Leur famille d'emploi n'est pas donnée par le document** — entrée **VER-36** du registre
 [Informations à vérifier](/anomalies/informations-a-verifier.md). Les références 1511 et 1512
-recoupent celles déjà notées comme partagées avec le
-[système 70](/profiles/systeme-70-profiles-et-renforts.md#références-partagées-avec-le-système-76).
+figurent aussi parmi les parcloses du
+[système 70](/profiles/systeme-70-profiles-complementaires.md#parcloses).
 
 # Cotes de la feuillure
 

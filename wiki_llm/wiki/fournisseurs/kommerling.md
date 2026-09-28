@@ -100,10 +100,11 @@ inerties sont dans
 PROFERM** — entrée **VER-28** du registre
 [Informations à vérifier](/anomalies/informations-a-verifier.md).
 
-Les **profilés complémentaires sont partagés entre les deux systèmes** : le poster des
-complémentaires de la Gamme 70 porte des références en 76xxx, et le DTD du système 2335 nomme les
-battements intérieurs 1547 et 76833, qui figurent dans les chaînes d'assemblage du cahier
-PERFORM76. Une numérotation ne délimite donc pas une gamme.
+Le poster des profilés complémentaires de la Gamme 70 porte des références en 76xxx — parcloses
+765xx, pièce d'appui 76768, tapées 76772 et 76769 — et le poster des profilés principaux le
+battement 76833 ; les mêmes références figurent au système 76 — voir
+[Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md). Au
+système 70, l'épaisseur de remplissage des parcloses est donnée pour une feuillure de 54 mm.
 
 # Documents
 

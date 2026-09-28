@@ -1,49 +1,61 @@
 ---
 type: Profilé
 title: Assemblages du système 70
-description: Les méthodes d'assemblage autorisées entre dormants, ouvrants et traverses du système 70 Plateforme, et les sets d'assemblage entre chaque dormant et chaque seuil aluminium.
+description: Les méthodes d'assemblage autorisées entre dormants, ouvrants et traverses du système 70 Plateforme, les seuils aluminium 9F67, 9F68, 9F69 et Z043, et les embouts, sets d'assemblage mécanique, patins d'étanchéité et équerres de chaque dormant, meneau et traverse.
 tags: [systeme-70, e-volution, profine, assemblage, soudure, traverse, meneau, seuil, dormant, ouvrant]
 systeme: 70
 fournisseur: KÖMMERLING
 usage: atelier
-status: stable
+status: draft
 sources:
   - resource: raw/dtd-6-16-2335-v5-e-volution.pdf
     id: dtd-6-16-2335-v5
     title: DTD n° DBV-24-6/16-2335_V5, système e.XCLUSIVE, e.MOTION, e.VOLUTION
-    last_modified: 2025-04-15
+    last_modified: 2024-12-19
+  - resource: raw/poster-kommerling-70-principaux-2025-03.pdf
+    id: poster-kommerling-70-principaux
+    title: Poster Kömmerling Gamme 70, profilés principaux, mars 2025
+    last_modified: 2025-03-31
+source_pages:
+  - resource: raw/dtd-6-16-2335-v5-e-volution.pdf
+    pages: 3-5, 9, 12-13, 16, 24, 26-27, 30-31
+  - resource: raw/poster-kommerling-70-principaux-2025-03.pdf
+    pages: 1
 generated:
   by: process:claude-code
   at: 2026-09-19T09:00:00Z
 ---
 
-# Trois méthodes d'assemblage, et elles ne sont pas interchangeables
+# Méthodes d'assemblage des traverses et meneaux
 
-Dans le **système 70 Plateforme** de [profine](/fournisseurs/profine.md), l'assemblage d'une
-traverse ou d'un meneau sur un dormant ou sur un ouvrant se fait selon l'une de trois méthodes,
-et **le couple profilé / traverse détermine lesquelles sont admises**.
+Dans le **système 70 Plateforme** de [profine](/fournisseurs/profine.md) (TROCAL e.XCLUSIVE, KBE
+e.MOTION, KÖMMERLING e.VOLUTION), une traverse ou un meneau (le profilé horizontal ou vertical
+qui recoupe un cadre) s'assemble sur un dormant ou sur un ouvrant mécaniquement ou par
+thermosoudure, et **le couple profilé / traverse détermine les méthodes admises** : c'est l'objet
+des tableaux 2 et 3 du DTD [1 p. 3, 12-13]. Chaque tableau porte sa propre légende, reprise
+telle quelle.
 
-| Code | Méthode |
-| --- | --- |
-| M | assemblage mécanique |
-| S | soudure en V |
-| SP | soudure à plat |
-| SP\* | soudure à plat **avec équerres** |
+| Code | Tableau 2, dormants / traverses | Tableau 3, ouvrants / traverses |
+| --- | --- | --- |
+| M | assemblage mécanique | assemblage mécanique |
+| S | soudure en V | soudure |
+| SP\* | soudure à plat avec équerres | - |
+| SP | - | soudure à plat |
 
-Les équerres du code SP\* ne concernent que les dormants. Sur les ouvrants, la soudure à plat se
-fait sans équerre et le code s'écrit SP.
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 12 et 13)
 
 # Assemblage dormant / traverse
 
-Méthodes admises entre chaque dormant du système 70 et chacune des quatre traverses. Une cellule
-énonce toutes les méthodes possibles, séparées par `/`.
+Tableau 2 du DTD : méthodes admises entre chaque dormant du système 70 (une ligne par dormant,
+groupés comme la source en standard, large et rénovation) et chacune des quatre traverses. Une
+cellule énonce toutes les méthodes possibles, séparées par `/`.
 
 | Dormant | Famille | Traverse 6127 | Traverse 2427 | Traverse 2425 | Traverse 6157 |
 | --- | --- | --- | --- | --- | --- |
 | 6100 | standard | M/S/SP\* | M | M | M/S |
 | 6101 | standard | M/S/SP\* | M | M | M/S |
-| 2501 | standard | M/SP\* | M | M | M |
 | 2502 | standard | M/SP\* | M | M | M |
+| 2501 | standard | M/SP\* | M | M | M |
 | 6104 | large | M/S/SP\* | M | M | M/S |
 | 6108 | large | M/S/SP\* | M | M | M/S |
 | 6109 | large | M/S/SP\* | M | M | M/S |
@@ -60,13 +72,14 @@ Méthodes admises entre chaque dormant du système 70 et chacune des quatre trav
 
 (schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 12)
 
-**Les dormants 2501 et 2502 sont les seuls à exclure la soudure en V** sur la traverse 6127, et
-les seuls à n'admettre que le mécanique sur la traverse 6157. Ce sont aussi les deux dormants de
-coulissant — voir [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md).
+Les dormants 2501 et 2502 sont les seuls du tableau 2 sans soudure en V (S) sur la traverse 6127,
+et les seuls à n'avoir que l'assemblage mécanique sur la traverse 6157. La soudure à plat avec
+équerres (SP\*) n'est donnée que pour la traverse 6127 [1 p. 12].
 
 # Assemblage ouvrant / traverse
 
-Méthodes admises entre chaque ouvrant du système 70 et chacune des cinq traverses.
+Tableau 3 du DTD : méthodes admises entre chaque ouvrant du système 70 (une ligne par ouvrant) et
+chacune des cinq traverses.
 
 | Ouvrant | Traverse 6126 | Traverse 6127 | Traverse 2427 | Traverse 2425 | Traverse 6157 |
 | --- | --- | --- | --- | --- | --- |
@@ -90,21 +103,24 @@ Méthodes admises entre chaque ouvrant du système 70 et chacune des cinq traver
 
 (schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 13)
 
-**Les ouvrants 6121 à 6124 et 6150 à 6153 ne se montent pas sur la traverse 6126** : le tableau
-porte un tiret, qui est une exclusion et non une donnée manquante. La soudure en V n'est admise
-que sur la traverse 6127, et seulement pour les ouvrants 6112C, 6113, 6115, 6116 et 2416.
+Le tableau 3 ne donne **aucune méthode d'assemblage des ouvrants 6121 à 6124 et 6150 à 6153 sur
+la traverse 6126** (case marquée d'un tiret). La soudure (S) n'y est donnée que sur les traverses
+6127 et 6157, et seulement pour les ouvrants 6112C, 6113, 6115, 6116 et 2416 [1 p. 13]. Le tableau 3
+donne la soudure à plat (SP) sur la traverse 6126, alors que le § 2.8.5 réserve les soudures à plat
+à l'assemblage du meneau 6127 (**INC-84**).
 
 # Set d'assemblage dormant / seuil
 
-Pièce d'assemblage à employer entre chaque dormant et chacun des trois seuils aluminium. Un `ou`
-dans une cellule signale deux pièces également admises.
+Tableau 4 du DTD : pièce d'assemblage à employer entre chaque dormant et chacun des trois seuils
+aluminium, dont la hauteur est écrite dans l'en-tête. Un `ou` dans une cellule signale deux pièces
+également admises.
 
-| Dormant | Famille | Seuil 9F67, 20 mm | Seuil 9F68, 36 mm | Seuil Z043, 20 mm |
+| Dormant | Famille | Seuil 9F67 (20 mm) | Seuil 9F68 (36 mm) | Seuil Z043 (20 mm) |
 | --- | --- | --- | --- | --- |
 | 6100 | standard | 9F57 ou 9F72 | 9F61 ou 9F72 | 9F72 |
 | 6101 | standard | 9F65 ou 9F71 | 9F66 ou 9F71 | 9F71 |
+| 2502 | standard | 9F65 ou J077 | 9F66 ou J077 | J077+M002 |
 | 2501 | standard | 9F65 | 9F66 | - |
-| 2502 | standard | 9F65 ou J077 | 9F66 ou J077 | J077 + M002 |
 | 6104 | large | 9F65 ou 9F71 | 9F66 ou 9F71 | 9F71 |
 | 6108 | large | 9F65 ou 9F71 | 9F66 ou 9F71 | 9F71 |
 | 6109 | large | 9F65 ou 9F71 | 9F66 ou 9F71 | 9F71 |
@@ -121,57 +137,211 @@ dans une cellule signale deux pièces également admises.
 
 (schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 13)
 
-**Le dormant 2501 ne se monte pas sur le seuil Z043.** Le 2502 y demande la pièce J077 complétée
-de l'embout M002, seul cas de la table où deux pièces sont cumulées.
+Le tableau 4 ne donne **aucun set pour le dormant 2501 sur le seuil Z043** (tiret). Le 2502 y
+demande la pièce J077 complétée de l'embout M002, seul cas de la table où deux pièces sont
+cumulées. Excepté dans le cas d'un oscillo-coulissant, le cadre dormant peut être muni d'un seuil
+aluminium selon le tableau 4 [1 p. 4, 13].
+
+La table du DTD donne au dormant **6159** la seule pièce 9F72 sur les trois seuils (relu en image
+le 28/09/2026) ; le poster des profilés principaux lui donne les embouts **M833** (seuil 9F67) et
+**M834** (seuil 9F68) et ne le nomme pas parmi les dormants du set 9F72 — entrée **CTR-39** du
+registre [Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
+
+# Seuils aluminium
+
+Le **seuil** est le profilé aluminium qui remplace la traverse basse du dormant d'une porte-fenêtre.
+Le poster des profilés principaux dessine quatre seuils en coupe hachurée ; chaque coupe porte la
+largeur en haut et la hauteur à droite, en mm.
+
+| Seuil | Largeur (mm) | Hauteur totale (mm) | Hauteur de la partie arrière (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| 9F67 | 70 | 20 | 16 | ![Seuil 9F67](/assets/profiles/systeme70/seuils/seuil-9f67.png) |
+| 9F68 | 70 | 36 | 16 | ![Seuil 9F68](/assets/profiles/systeme70/seuils/seuil-9f68.png) |
+| 9F69 | 125,5 | - | 16 | ![Seuil 9F69](/assets/profiles/systeme70/seuils/seuil-9f69.png) |
+| Z043 | 125 | - | 16 | ![Seuil Z043](/assets/profiles/systeme70/seuils/seuil-z043.png) |
+
+(schéma: raw/poster-kommerling-70-principaux-2025-03.pdf, p. 1, coin inférieur droit)
+
+Le 9F67 porte en plus une cote de 1,5 mm, à gauche. Les 9F69 et Z043 ne portent pas de hauteur
+totale sur le poster. Le **9F69** n'apparaît dans aucune table d'assemblage du DTD.
+
+L'annexe du DTD dessine trois seuils, sans hachure, avec leur largeur en bas et leur hauteur à
+gauche, en mm [1 p. 16] :
+
+| Seuil | Largeur (mm) | Hauteur (mm) |
+| --- | --- | --- |
+| 9F68 | 70 | 36 |
+| 9F67 | 70 | 20 |
+| Z043 | 125 | - |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 16)
+
+La cote verticale du Z043 est portée à droite du dessin et coupée par le bord de l'image sur la
+page ; seule la hauteur de 20 mm de l'en-tête du tableau 4, « Z043 (20mm) », la donne [1 p. 13, 16].
+
+# Pièces d'assemblage dessinées sur le poster
+
+La colonne de droite du poster des profilés principaux porte les pièces qui assemblent les
+profilés entre eux et sur les seuils, chacune avec la liste des profilés auxquels elle est
+destinée. Une ligne par pièce et par groupe de profilés, dans les termes de la planche [2 p. 1].
+
+## Embouts pour seuil 9F67 et 9F68
+
+L'**embout de seuil** ferme l'extrémité du seuil contre le montant du dormant et reçoit son
+vissage.
+
+| Embout | Seuil | Pour les dormants |
+| --- | --- | --- |
+| 9F57 | 9F67 | 6100, 6102 |
+| 9F58 | 9F67 | 6105, 6155 |
+| 9F59 | 9F67 | 6106 |
+| 9F60 | 9F67 | 6107 |
+| J087 | 9F67 | 6156 |
+| 9F65 | 9F67 | 6101, 6104, 6108, 6109, 6110, 6111, 2501, 2502 |
+| M833 | 9F67 | 6159 |
+| 9F61 | 9F68 | 6100, 6102 |
+| 9F62 | 9F68 | 6105, 6155 |
+| 9F63 | 9F68 | 6106 |
+| 9F64 | 9F68 | 6107 |
+| J088 | 9F68 | 6156 |
+| 9F66 | 9F68 | 6101, 6104, 6108, 6109, 6110, 6111, 2501, 2502 |
+| M834 | 9F68 | 6159 |
+
+(schéma: raw/poster-kommerling-70-principaux-2025-03.pdf, p. 1, colonne de droite)
+
+![Embouts pour seuil 9F67, angle d'assemblage 9326](/assets/profiles/systeme70/assemblages/embouts-seuil-9f67.png)
+
+![Embouts pour seuil 9F68, angle d'assemblage 9669](/assets/profiles/systeme70/assemblages/embouts-seuil-9f68.png)
+
+Chaque bloc montre à gauche un angle de dormant sur seuil en perspective, repéré **9326** (seuil
+9F67) et **9669** (seuil 9F68), et à droite l'embout en perspective, avec son trou oblong de
+vissage.
+
+## Set d'assemblage mécanique dormant / seuil
+
+| Set | Pour les dormants |
+| --- | --- |
+| 9F71 | 6101, 6104, 6108, 6109, 6110, 6111 |
+| 9F72 | 6100, 6102, 6105, 6106, 6107, 6155, 6156 |
+| J077 | 2502 |
+
+« Pour une bonne applique de l'aile de 60 mm du dormant 6107, sur le seuil, utilisez l'insert
+9F78 ! » [2 p. 1]
+
+![Set d'assemblage mécanique dormant / seuil, avec l'insert 9F78](/assets/profiles/systeme70/assemblages/set-dormant-seuil-9f71-9f72-j077.png)
+
+Le dessin éclaté montre, de haut en bas, la pièce d'assemblage avec sa vis, sa rondelle et sa
+goupille, le montant du dormant marqué « Avec le dormant 6107 », la pièce d'ancrage basse, l'insert
+**9F78** et le seuil avec ses deux vis de fixation.
+
+## Sets d'assemblage mécanique des meneaux et traverses
+
+| Set | Type sur la planche | Pour les profilés |
+| --- | --- | --- |
+| 9F73 | set d'assemblage mécanique en T, vissage dans la feuillure | 2425 |
+| 9F76 | set d'assemblage mécanique en T, vissage dans la feuillure | 6127, 6157 |
+| 9F75 | set d'assemblage mécanique en T, vissage dans la feuillure | 6126 |
+| 9316 | set d'assemblage mécanique en T | 2425 |
+| 9B51 | set d'assemblage mécanique en T | 2427 |
+| 9B52 | set d'assemblage mécanique en croix | 2427 |
+| 9F39 | assemblage mécanique pour angle variable | 2425 |
+
+(schéma: raw/poster-kommerling-70-principaux-2025-03.pdf, p. 1, colonne de droite et cinquième bande)
+
+![Set d'assemblage mécanique en T, vissage dans la feuillure](/assets/profiles/systeme70/assemblages/set-t-vissage-feuillure.png)
+
+Le set en T à vissage dans la feuillure est une platine à deux ailes percées, qui se visse en fond
+de feuillure, avec sa goupille et ses bouchons.
+
+![Set d'assemblage mécanique en T 9316 et 9B51](/assets/profiles/systeme70/assemblages/set-t-9316-9b51.png)
+
+![Set d'assemblage mécanique en croix 9B52](/assets/profiles/systeme70/assemblages/set-croix-9b52.png)
+
+Les sets en T et en croix sont des pièces d'ancrage logées dans la chambre de renfort, tenues par
+une goupille et serrées par une vis à tête cylindrique ; le set en croix ajoute une seconde pièce
+d'ancrage traversée par une vis plus longue.
+
+![Assemblage mécanique pour angle variable 9F39](/assets/profiles/systeme70/meneaux/assemblage-9f39-2425.png)
+
+## Patins d'étanchéité et équerres
+
+| Pièce | Désignation sur la planche | Pour les profilés |
+| --- | --- | --- |
+| 9718 | patin d'étanchéité | 6127, 6157 |
+| 9719 | patin d'étanchéité | 2425 |
+| 9B89 | patin d'étanchéité | 2427 |
+| 9B56 | patin d'étanchéité | 6126 |
+| 9714 | équerres G/D | - |
+
+![Patin d'étanchéité et équerres G/D 9714](/assets/profiles/systeme70/assemblages/patins-etancheite-equerres-9714.png)
+
+(schéma: raw/poster-kommerling-70-principaux-2025-03.pdf, p. 1, colonne de droite)
+
+Le **patin d'étanchéité** est la plaque souple posée entre l'about de la traverse et le profilé
+qui la reçoit. Les équerres 9714 sont dessinées par paire, gauche et droite ; le DTD les emploie
+sur une partie fixe à seuil et en complément de la soudure à plat du 6127 (voir plus bas).
 
 Le seuil aluminium est exclu sur un **oscillo-coulissant** [1 p. 4].
 
-# Pose du seuil aluminium
+# Nomenclature des accessoires du DTD
 
-Pour les assemblages **9F57 à 9F66, J087 et J088** :
-- Un cordon de mastic polyuréthane est déposé à l'arrière de la pièce d'assemblage.
-- Le seuil aluminium est vissé sur les patins d'étanchéité des pièces d'assemblage à l'aide de **2 vis $\varnothing 4 \times 50\text{ mm}$** (une troisième vis **$\varnothing 4 \times 30\text{ mm}$** est ajoutée pour le seuil large 9F68 de 36 mm).
-- La pièce d'assemblage est pressée contre le montant à l'aide d'une vis $\varnothing 4 \times 30\text{ mm}$.
-- Le maintien est assuré par deux vis autoforeuses **$\varnothing 4 \times 20\text{ mm}$** vissées au travers de la pièce d'assemblage dans le fond de feuillure du montant (préalablement étanché au mastic élastomère mono-composant).
-- Le cache-vis est ensuite clippé.
+La planche « Accessoires » de l'annexe du DTD dessine en perspective, sans cote sauf pour les
+cales, les pièces d'accessoire du système 70 : embouts, sets d'assemblage, pièces de seuil,
+patins d'étanchéité, cales. Elle ne donne pas leur fonction ; les fonctions ci-dessous sont celles
+que le texte du DTD attribue à la même référence, au paragraphe cité [1 p. 24].
 
-Pour les assemblages **9F71, 9F72 et J077 + M002** :
-- Les montants sont contre-profilés avec le même contour que les traverses pour le seuil 9F68 (ou avec un contour spécial pour les seuils 9F67 et Z043).
-- Les pièces d'assemblage sont introduites directement dans les chambres de renfort des profilés et verrouillées par des goupilles.
-- Une étanchéité complémentaire au mastic élastomère est déposée en feuillure et dans la rainure de parclose du seuil.
-- Le seuil est percé à ses extrémités à l'aide d'un gabarit et fixé par deux vis.
+| Rangée sur la planche | Références telles qu'écrites | Fonction donnée par le texte du DTD |
+| --- | --- | --- |
+| 1 | 9414.1, 9A81, 9F30, 9F31, 9A82, 9F33, 9F35, 9F29, 9F28, M278, M375, M664 | embouts collés des battements (§ 2.2.3.2.1), sans attribution par référence |
+| 2 | M626, M628, M629, et deux pièces sans légende | - |
+| 3 | 9B51 / 9B52, 9C69, 9316.2, 9312, J077, M375, 9714 L+R | J077 : set dormant / seuil (tableau 4) ; 9714 : équerres (§ 2.2.3.1.1, § 2.2.3.1.4) |
+| 4 | 9F71, 9F72, 9F73, 9F76, 9F75 | 9F71, 9F72 : sets dormant / seuil (tableau 4, § 2.2.3.1.4) |
+| 5 | 9718, 9719, 9B56, 9714, 9F13, M771 | 9718 : patin d'étanchéité serré par l'assemblage par alvéovis (§ 2.2.3.3) |
+| 6 | 9F66, 9F65, 9F57, 9F61, 9F58, 9F62, 9F59 | pièces d'assemblage dormant / seuil (tableau 4, § 2.2.3.1.4) |
+| 7 | 9F63, 9F60, 9F64, J087, J088, M299, A272, M002 | 9F60, 9F63, 9F64, J087, J088 : pièces d'assemblage dormant / seuil ; M299 : patin d'étanchéité (§ 2.2.3.3) ; A272 : support de cale ; M002 : complément du J077 sur Z043 (tableau 4) |
+| 8 | M298, M329, 9F97, EMBJ701 | M298 : étanchéité pièce d'appui / tapée (§ 2.2.3.1.3) |
+| 9 | M325, 9D02 (25,5), 9D03 (33), 9D04 (58), 9D05 (88) | - |
+| 10 | M613, M450, G008, G250, embout M643, embout M646, 5685, 5686 | M613 : étanchéité pièce d'appui / tapée ; M450, G008 : busette et manchon de drainage du capot complet ; G250 : mousse des angles bas ; M643, M646 : embouts d'appui et de tapée alu (§ 2.2.3.1.3, § 2.2.3.5) |
 
-Sur une partie fixe équipée du seuil 9F67 ou Z043, deux montages sont admis :
-- Un profilé de dormant monté sur le seuil pour permettre la prise en feuillure du vitrage ; les fonds de feuillure des montants sont alors étanchés au **mastic élastomère mono-composant** en partie basse, et la traverse PVC montée à l'aide d'**équerres 9714**.
-- Ou la parclose extérieure **A271** montée sur le support de cale **A272** (entraxe max 800 mm).
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 24)
 
-(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 4, 30 et 31)
+Les cotes entre parenthèses sont les hauteurs, en mm, portées à droite des cales 9D02 à 9D05.
+La référence **M375** est écrite deux fois sur la planche : sur un embout de la rangée 1 et sur la
+pièce dessinée à côté des équerres 9714 L+R, rangée 3.
 
-# Les 4 modes d'assemblage mécanique meneau / traverse
+![Accessoires du DTD, rangées 1 à 3 : embouts de battement et sets d'assemblage](/assets/certifications/dtd-6-16-2335/accessoires-1-embouts-et-sets.png)
 
-Le DTD définit quatre types d'assemblages mécaniques homologués pour les traverses intermédiaires et meneaux [1 p. 5, 26] :
+![Accessoires du DTD, rangées 4 à 8 : sets, patins, pièces de seuil](/assets/certifications/dtd-6-16-2335/accessoires-2-seuils-et-patins.png)
 
-1. **Par alvéovis dans traverse 6127 / 6157** : perçage à l'aide d'un gabarit de 2 trous étagés ($\varnothing 4,5\text{ mm}$ côté feuillure et $\varnothing 10,5\text{ mm}$ côté opposé). Deux vis $\varnothing 4,3\text{ mm}$ viennent se prendre dans les alvéovis de la traverse. La tête de vis repose obligatoirement sur un renfort d'acier d'au moins $250\text{ mm}$ de long. Un solin de mastic assure l'étanchéité dans et devant la rainure de parclose.
-2. **Par pièces d'ancrage et goupille** : perçage de la traverse à l'aide du gabarit 9918 ($\varnothing 8,5\text{ mm}$). La pièce d'ancrage est logée dans la chambre de renfort et bloquée par une goupille traversante. Une vis CHC M6 traverse le cadre et se visse dans la pièce d'ancrage, tête sur renfort min $250\text{ mm}$. Une bague en caoutchouc et du mastic écrasé assurent l'étanchéité.
-3. **Par équerres métalliques** : perçage traverse avec gabarit $\varnothing 8,5\text{ mm}$ et cadre à $\varnothing 3,2\text{ mm}$. Patin d'étanchéité intermédiaire. Équerres fixées par 4 vis $\varnothing 4,2 \times 16\text{ mm}$ et 4 vis auto-perçantes pénétrant dans un renfort d'au moins $250\text{ mm}$.
-4. **Par pièces d'ancrage et goupille avec fixation en feuillure** : gabarit 9918 ($\varnothing 8,5\text{ mm}$) et goupille traversante. La pièce d'ancrage est munie d'un coussin d'étanchéité intégré et se visse directement en fond de feuillure par vis auto-perçantes dans un renfort d'au moins $250\text{ mm}$.
+![Accessoires du DTD, rangées 9 et 10 : cales, patins, busette, manchon, embouts](/assets/certifications/dtd-6-16-2335/accessoires-3-cales-et-embouts.png)
 
-# Soudure à plat du meneau 6127
+Chaque pièce est dessinée en perspective avec sa référence sous le dessin ; les vis, goupilles
+et bouchons dessinés à côté des sets appartiennent au set voisin.
 
-Sur les dormants (soudure SP\*), la traverse 6127 peut être soudée à plat :
-- **Inertie de la zone soudée** : $I_x = 8,43\text{ cm}^4$, $I_y = 5,39\text{ cm}^4$ [1 p. 27].
-- L'assemblage par soudure est **systématiquement complété par l'ajout des équerres 9714 L+R** dont les plots de centrage ont été meulés / supprimés.
-- Les soudures à plat doivent rendre parfaitement étanches les chambres de renfort des profilés assemblés (contrôle d'étanchéité sous gradient thermique RE CSTB n° DBV-21-06826).
+# Pose du seuil aluminium, assemblages mécaniques et soudure à plat
+
+Le mode opératoire de pose du seuil aluminium (cas des assemblages 9F57 à 9F66, J087 et J088, et
+cas des 9F71, 9F72, J077 + M002, partie fixe sur seuil 9F67 ou Z043) est transcrit au § 2.2.3.1.4,
+et les quatre types d'assemblage mécanique des meneaux et traverses (alvéovis, pièces d'ancrage et
+goupille, équerres, ancrage avec fixation en feuillure) au § 2.2.3.3, de la page
+[DTD n° DBV-24-6/16-2335_V5](/certifications/dtd-6-16-2335.md) [1 p. 4-5]. Les planches
+d'assemblage, la soudure à plat du meneau 6127 (zone soudée d'inertie X 8,43 cm⁴ et Y 5,39 cm⁴,
+équerres 9714 L+R dont les plots de centrage ont été supprimés) et l'usinage de la traverse avant
+soudure sont sur [Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md)
+[1 p. 26-27].
 
 # Citations
 
-[1] DTD n° DBV-24-6/16-2335_V5, système e.XCLUSIVE, e.MOTION, e.VOLUTION —
-`raw/dtd-6-16-2335-v5-e-volution.pdf`, p. 4, 5, 12, 13, 26, 27, 30 et 31
+[1] [DTD n° DBV-24-6/16-2335_V5, système e.XCLUSIVE, e.MOTION, e.VOLUTION](raw/dtd-6-16-2335-v5-e-volution.pdf)
+
+[2] [Poster Kömmerling Gamme 70, profilés principaux, mars 2025](raw/poster-kommerling-70-principaux-2025-03.pdf), p. 1
 
 # Voir aussi
 
 - [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
+- [Posters Gamme 70 KÖMMERLING](/sources/posters-kommerling-70.md)
 - [Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md)
-- [DTD n° DBV-24-6/16-2335_V5](/sources/dtd-6-16-2335.md)
+- [DTD n° DBV-24-6/16-2335_V5](/certifications/dtd-6-16-2335.md)
+- [Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md)
 - [profine](/fournisseurs/profine.md)
 - [KÖMMERLING](/fournisseurs/kommerling.md)

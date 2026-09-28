@@ -97,7 +97,7 @@ intégrant ces menuiseries.
 | Certification | Système | Références | Page |
 | --- | --- | --- | --- |
 | DTA n° 6/16-2334_V5 | 76 Advanced, à joint central | 76xxx | [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md) |
-| DTA n° 6/16-2335_V5 | e.XCLUSIVE, e.MOTION, e.VOLUTION | 6xxx et 2xxx | [DTD n° DBV-24-6/16-2335_V5](/sources/dtd-6-16-2335.md) |
+| DTA n° 6/16-2335_V5 | e.XCLUSIVE, e.MOTION, e.VOLUTION | 6xxx et 2xxx | [DTD n° DBV-24-6/16-2335_V5](/certifications/dtd-6-16-2335.md) |
 
 Les deux sont demandés par **profine France**, à Marmoutier, et déclinés sous les trois marques du
 groupe. Le second correspond à la **Gamme 70** des planches KÖMMERLING — voir

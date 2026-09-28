@@ -25,6 +25,9 @@ sources:
     id: catalogue-portes-entree-2024-03
     title: Catalogue portes d'entrée PROFERM, édition mars 2024
     last_modified: 2024-03-31
+source_pages:
+  - resource: raw/profine-directives-generales-2023-01.pdf
+    pages: 4, 8-16, 47
 generated:
   by: process:claude-code
   at: 2026-09-18T22:00:00Z
@@ -147,23 +150,30 @@ mobiles, les ouvrants, qui portent le vitrage.
 
 # Cotes de fabrication
 
-Vocabulaire fixé par les [directives générales profine](/sources/profine-directives-generales.md)
-et employé dans tous les manuels du groupe.
+DHT, CCD, CCO et CCV sont définis par les planches du registre 1.1.2 des directives générales
+profine, où chacun est porté sur une fenêtre et sur un coulissant — voir
+[Terminologie et légendes profine](/reference/terminologie-et-legendes-profine.md) [1 p. 11-16].
+DEO et DFO sont les cotes des tableaux de cotes de débit des manuels de système.
 
 | Sigle | Sens |
 | --- | --- |
-| DHT | dimension hors tout, c'est-à-dire la dimension extérieure du dormant |
+| DHT | Dimension Hors Tout, la dimension extérieure du dormant |
 | DEO | dimension extérieure d'ouvrant |
 | DFO | dimension de feuillure d'ouvrant |
-| CCD | cote clair de dormant |
-| CCO | cote clair d'ouvrant |
-| CCV | cote clair de vitrage |
+| CCD | Cote clair de dormant |
+| CCO | Cote clair d'ouvrant |
+| CCV | Cote clair de vitrage |
 
 Les quatre premières se déduisent en cascade, chaque tableau de cotes de débit donnant la valeur
 à retrancher pour **une seule coupe**. Voir
 [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md).
 
-Repères de cote des planches profine, du dormant vers le vitrage :
+**Les cotes maximales des registres profine sont des cotes extérieures d'ouvrant** : la cote
+d'élément (cote finale de fenêtre) s'obtient en ajoutant les cotes des profilés adjacents à tous
+les côtés [1 p. 9] — exemple chiffré sur
+[Terminologie et légendes profine](/reference/terminologie-et-legendes-profine.md).
+
+Repères de cote de la planche de terminologie profine [1 p. 10] :
 
 | Repère | Notion | Repère | Notion |
 | --- | --- | --- | --- |
@@ -287,6 +297,7 @@ hauteur de chute et le nombre de billes. Voir
 | --- | --- |
 | QUALICOAT | laquage de l'aluminium ; la classe 2 garantit une tenue supérieure à la classe 1 |
 | QUALANOD | anodisation de l'aluminium |
+| GSB International | label de qualité du thermolaquage par poudre, cité avec Qualicoat pour les profilés aluminium laqués livrés par profine ([Surfaces des profilés profine](/procedures/surfaces-collage-nettoyage-profine.md)) |
 | QUALIMARINE | préparation de surface de l'aluminium laqué en ambiance marine |
 | CEKAL | certification des vitrages isolants |
 
@@ -308,6 +319,9 @@ hauteur de chute et le nombre de billes. Voir
 | FDS | Fiche de Données de Sécurité |
 | DdP | déclaration des performances, exigée pour le marquage CE |
 | CPU | contrôle de production en usine |
+| ITT | essais de type initiaux, réalisés par des organismes notifiés sur les systèmes profine ; voir [Conditions d'utilisation des directives profine](/normes/directives-profine-conditions-d-utilisation.md) |
+| Cascading ITT | essais de type initiaux en cascade (EN 14351-1) : reprise, après autorisation de profine, des résultats des ITT profine par le fabricant de fenêtres |
+| profine certified | marque des composants de fournisseurs homologués par profine |
 
 Les références internes des documents ROTO suivent trois préfixes : **IMO** pour une instruction
 de montage, **CTL** pour un catalogue, **SUG** pour une notice d'emploi.
@@ -344,8 +358,8 @@ Aucun document du corpus ne définit ces deux sigles. Voir
 
 # Citations
 
-[1] Directives générales profine, version janvier 2023 —
-`raw/profine-directives-generales-2023-01.pdf`, registre 1.1.2
+[1] [Directives générales profine, version janvier 2023](raw/profine-directives-generales-2023-01.pdf),
+registres 1.1.1 et 1.1.2, PDF p. 2 à 16
 
 [2] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 —
 `raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 10 à 13
