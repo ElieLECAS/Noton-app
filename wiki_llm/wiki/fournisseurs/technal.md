@@ -14,15 +14,15 @@ sources:
     id: depliant-lumeal-2026-04
     title: Dépliant LUMÉAL, édition avril 2026
     last_modified: 2026-04-21
-  - resource: wiki_llm/a_faire/DTA 6_12-2016_V5 (1).pdf
+  - resource: raw/DTA 6_12-2016_V5 (1).pdf
     id: technal-dta-soleal-fy
     title: DTA CSTB n° 6/12-2016_V5 SOLEAL FY
     last_modified: 2023-05-25
-  - resource: wiki_llm/a_faire/DTA 6_15-2261_V3 SOLEAL GY.pdf
+  - resource: raw/DTA 6_15-2261_V3 SOLEAL GY.pdf
     id: technal-dta-soleal-gy
     title: DTA CSTB n° 6/15-2261_V3 SOLEAL GY
     last_modified: 2024-06-25
-  - resource: wiki_llm/a_faire/DTA Lumeal GA 6-14-2166-v2.pdf
+  - resource: raw/DTA Lumeal GA 6-14-2166-v2.pdf
     id: technal-dta-lumeal-ga
     title: DTA CSTB n° 6/14-2166_V2 LUMEAL Minimal Ga
     last_modified: 2024-05-27

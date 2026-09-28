@@ -9,24 +9,24 @@ fournisseur: TECHNAL
 usage: [atelier, pose]
 status: stable
 sources:
-  - resource: wiki_llm/a_faire/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf
+  - resource: raw/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf
     id: technal-lumeal-ga-fabrication-5074-007
     title: LUMEAL GA — Guide d'atelier et catalogue de fabrication (Réf. 5074.007)
     last_modified: 2021-01-27
-  - resource: wiki_llm/a_faire/LUMEAL-GA-notice-installation-5850-002-072018-FR (3).pdf
+  - resource: raw/LUMEAL-GA-notice-installation-5850-002-072018-FR (3).pdf
     id: technal-lumeal-ga-notice-pose-5850-002
     title: LUMEAL GA — Notice de pose sur chantier (Réf. 5850.002)
     last_modified: 2018-07-01
-  - resource: wiki_llm/a_faire/DTA Lumeal GA 6-14-2166-v2.pdf
+  - resource: raw/DTA Lumeal GA 6-14-2166-v2.pdf
     id: technal-dta-lumeal-ga-6-14-2166-v2
     title: DTA CSTB n° 6/14-2166_V2 LUMEAL Minimal Ga
     last_modified: 2024-05-27
 source_pages:
-  - resource: wiki_llm/a_faire/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf
+  - resource: raw/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf
     pages: 16-127, 150-163, 178-191
-  - resource: wiki_llm/a_faire/LUMEAL-GA-notice-installation-5850-002-072018-FR (3).pdf
+  - resource: raw/LUMEAL-GA-notice-installation-5850-002-072018-FR (3).pdf
     pages: 4-14
-  - resource: wiki_llm/a_faire/DTA Lumeal GA 6-14-2166-v2.pdf
+  - resource: raw/DTA Lumeal GA 6-14-2166-v2.pdf
     pages: 9, 21-36
 generated:
   by: process:multimodal-direct
@@ -120,7 +120,7 @@ Cotes en mm pour pose en applique intérieure avec appui aligné ou décalé [1 
 | **180 mm** | TGA2117 | TFY3745 | TGY3729 | T440074 |
 | **200 mm** | TGA2118 | TFY3746 | TGY3730 | T440074 |
 
-(schéma: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 62)
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 62)
 
 ---
 
@@ -132,9 +132,9 @@ Cotes en mm pour pose en applique intérieure avec appui aligné ou décalé [1 
 
 # Citations
 
-[1] LUMEAL GA — Guide d'atelier et catalogue de fabrication (Réf. 5074.007 - 01/2021) — `wiki_llm/a_faire/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf`
-[2] LUMEAL GA — Notice de pose sur chantier (Réf. 5850.002 - 07/2018) — `wiki_llm/a_faire/LUMEAL-GA-notice-installation-5850-002-072018-FR (3).pdf`
-[3] DTA n° 6/14-2166_V2, procédé LUMEAL Minimal Ga (27/05/2024) — `wiki_llm/a_faire/DTA Lumeal GA 6-14-2166-v2.pdf`
+[1] LUMEAL GA — Guide d'atelier et catalogue de fabrication (Réf. 5074.007 - 01/2021) — `raw/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf`
+[2] LUMEAL GA — Notice de pose sur chantier (Réf. 5850.002 - 07/2018) — `raw/LUMEAL-GA-notice-installation-5850-002-072018-FR (3).pdf`
+[3] DTA n° 6/14-2166_V2, procédé LUMEAL Minimal Ga (27/05/2024) — `raw/DTA Lumeal GA 6-14-2166-v2.pdf`
 
 ---
 

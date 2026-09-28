@@ -8,18 +8,18 @@ fournisseur: ASKEY
 usage: atelier
 status: stable
 sources:
-  - resource: a_faire/askey2.pdf
+  - resource: raw/askey2.pdf
     id: askey-frappe-oc-fabrication
     title: Frappe 65 Ouvrant Caché ASKEY - Fabrication
     last_modified: 2022-12-13
-  - resource: a_faire/askey4.pdf
+  - resource: raw/askey4.pdf
     id: askey-frappe-ov-fabrication
     title: Frappe 65 Ouvrant Visible ASKEY - Fabrication
     last_modified: 2022-12-14
 source_pages:
-  - resource: a_faire/askey2.pdf
+  - resource: raw/askey2.pdf
     pages: 8-28, 31-68, 69-104, 125-172, 173-194, 202-211
-  - resource: a_faire/askey4.pdf
+  - resource: raw/askey4.pdf
     pages: 8-30, 33-74, 75-114, 137-158, 159-200, 201-224, 247-252
 generated:
   by: process:claude-code
@@ -115,7 +115,7 @@ Usinages et tolérances d'atelier pour la Frappe 65 ASKEY [1 p. 10, 16, 40, 126,
 | Canon cylindre européen | Fraisage | Ø20 mm + fente $12{,}5\text{ mm}$ | $\pm 0{,}2\text{ mm}$ |
 | Drainage seuil PMR | Fraisage | Oblong 20 x 6 mm ou Ø8 mm | $\pm 0{,}5\text{ mm}$ |
 
-(schéma: a_faire/askey2.pdf, p. 10, 16, 40, 126, 169 et a_faire/askey4.pdf, p. 10, 18, 46, 138, 181)
+(schéma: raw/askey2.pdf, p. 10, 16, 40, 126, 169 et raw/askey4.pdf, p. 10, 18, 46, 138, 181)
 
 ---
 
@@ -127,8 +127,8 @@ Usinages et tolérances d'atelier pour la Frappe 65 ASKEY [1 p. 10, 16, 40, 126,
 
 # Citations
 
-[1] [Frappe 65 Ouvrant Caché ASKEY - Fabrication](a_faire/askey2.pdf), p. 8-28, 31-68, 69-104, 125-172, 173-194, 202-211
-[2] [Frappe 65 Ouvrant Visible ASKEY - Fabrication](a_faire/askey4.pdf), p. 8-30, 33-74, 75-114, 137-158, 159-200, 201-224, 247-252
+[1] [Frappe 65 Ouvrant Caché ASKEY - Fabrication](raw/askey2.pdf), p. 8-28, 31-68, 69-104, 125-172, 173-194, 202-211
+[2] [Frappe 65 Ouvrant Visible ASKEY - Fabrication](raw/askey4.pdf), p. 8-30, 33-74, 75-114, 137-158, 159-200, 201-224, 247-252
 
 ---
 

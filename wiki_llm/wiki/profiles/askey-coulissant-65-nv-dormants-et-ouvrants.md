@@ -9,12 +9,12 @@ usage: atelier
 famille: dormants-et-ouvrants
 status: stable
 sources:
-  - resource: a_faire/askey1.pdf
+  - resource: raw/askey1.pdf
     id: askey-coulissant-conception
     title: Coulissant 65 NV ASKEY - Conception
     last_modified: 2022-12-13
 source_pages:
-  - resource: a_faire/askey1.pdf
+  - resource: raw/askey1.pdf
     pages: 14-23, 34-54, 70
 generated:
   by: process:claude-code
@@ -47,7 +47,7 @@ Dormants périphériques et traverses coupe droite, cotes en millimètres et ine
 | **W1041280** | Traverse haute CD 65 standard | 67 | 54,5 | 2 | 34,17 | 14,52 | 5,07 |
 | **W1041284** | Montant dormant CD 65 standard | 65 | 34,5 | 2 | 15,28 | 3,33 | 1,75 |
 
-(schéma: a_faire/askey1.pdf, p. 14, 15, 34, 35, 36, 37, 38)
+(schéma: raw/askey1.pdf, p. 14, 15, 34, 35, 36, 37, 38)
 
 ### Profilés de seuils et rails rapportés
 
@@ -61,7 +61,7 @@ Dormants périphériques et traverses coupe droite, cotes en millimètres et ine
 | **W4000158** | Rail de roulement rapporté renforcé | 6 | 15 | Acier inoxydable | - | - |
 | **Y3041328** | Extension rail pour serrure à clé | 29,5 | 12 | Aluminium | - | - |
 
-(schéma: a_faire/askey1.pdf, p. 16, 39, 77)
+(schéma: raw/askey1.pdf, p. 16, 39, 77)
 
 ### Profilés ouvrants module 24 mm
 
@@ -84,7 +84,7 @@ Profilés destinés à recevoir un double vitrage de 24 mm (4/16/4 ou 4/14/6) [1
 | **W3041246** | Montant central grand renfort galbé | 38 | 93,5 | - | 58,45 ($I_{xx'}$) | 8,56 ($I_{yy'}$) | 10,50 |
 | **Y3740019** | Montant central renforcé réduit | 38 | 60,5 | - | 16,36 ($I_{xx'}$) | 6,42 ($I_{yy'}$) | 4,48 |
 
-(schéma: a_faire/askey1.pdf, p. 15, 16, 19, 42, 43, 44, 45, 46)
+(schéma: raw/askey1.pdf, p. 15, 16, 19, 42, 43, 44, 45, 46)
 
 ### Profilés ouvrants module 28/32 mm
 
@@ -111,7 +111,7 @@ Profilés recevant les vitrages de 28 mm et 32 mm [1 p. 19-20, 48-54] :
 | **Y1740041** | Montant central réduit principal | 92,4 | 64 | - | 46,60 | 19,58 | 5,26 |
 | **W1041276** | Prolongateur d'ouvrant 32 mm | 40,2 | 93,2 | - | 9,16 | 28,91 | 6,02 |
 
-(schéma: a_faire/askey1.pdf, p. 17, 18, 19, 20, 48, 49, 50, 51, 52, 53, 54, 70)
+(schéma: raw/askey1.pdf, p. 17, 18, 19, 20, 48, 49, 50, 51, 52, 53, 54, 70)
 
 ---
 
@@ -134,7 +134,7 @@ Profilés recevant les vitrages de 28 mm et 32 mm [1 p. 19-20, 48-54] :
 
 # Citations
 
-[1] [Coulissant 65 NV ASKEY - Conception](a_faire/askey1.pdf), p. 8, 14-23, 34-54, 70, 77
+[1] [Coulissant 65 NV ASKEY - Conception](raw/askey1.pdf), p. 8, 14-23, 34-54, 70, 77
 
 ---
 

@@ -9,12 +9,12 @@ usage: atelier
 famille: dormants-et-ouvrants
 status: stable
 sources:
-  - resource: a_faire/askey3.pdf
+  - resource: raw/askey3.pdf
     id: askey-frappe-oc-conception
     title: Frappe 65 Ouvrant Caché ASKEY - Conception
     last_modified: 2023-02-20
 source_pages:
-  - resource: a_faire/askey3.pdf
+  - resource: raw/askey3.pdf
     pages: 10-24, 26-55, 78
 generated:
   by: process:claude-code
@@ -56,7 +56,7 @@ Cotes en millimètres et inerties calculées selon l'annexe C de la norme EN 140
 | **Y1715152** | Dormant tapée intégrée dbl 100 mm (OC36) | 116,5 | 55 | 44 | 68,37 | 29,77 | 6,39 |
 | **Y1715153** | Dormant tapée intégrée dbl 80 mm (OC36) | 96,5 | 55 | 44 | 43,71 | 24,68 | 5,75 |
 
-(schéma: a_faire/askey3.pdf, p. 12, 13, 14, 15, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35)
+(schéma: raw/askey3.pdf, p. 12, 13, 14, 15, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35)
 
 ### Profilés ouvrants cachés
 
@@ -77,7 +77,7 @@ Cotes en millimètres et inerties calculées selon l'annexe C de la norme EN 140
 | **Y1715126** | Ouvrant principal carré fiches | 32 mm | 73,6 | 53,5 | 34,5 | 9,62 | 9,73 | 3,51 |
 | **Y1715127** | Ouvrant semi-fixe carré fiches | 32 mm | 80,6 | 52,5 | 34,5 | 6,47 | 3,30 | 2,60 |
 
-(schéma: a_faire/askey3.pdf, p. 15, 16, 48, 49, 50, 51)
+(schéma: raw/askey3.pdf, p. 15, 16, 48, 49, 50, 51)
 
 ### Traverses d'ouvrants et montants serrures
 
@@ -93,7 +93,7 @@ Cotes en millimètres et inerties calculées selon l'annexe C de la norme EN 140
 | **Y1715122** | Montant serrure porte-fenêtre | 32 mm | 72 | 55 | 27,37 | 22,60 | 6,04 |
 | **W1010508** | Montant serrure porte-fenêtre | 36 mm | 76 | 55 | 31,16 | 22,60 | 6,04 |
 
-(schéma: a_faire/askey3.pdf, p. 19, 20, 52, 53, 54)
+(schéma: raw/askey3.pdf, p. 19, 20, 52, 53, 54)
 
 ### Seuil PMR et battements
 
@@ -107,7 +107,7 @@ Cotes en millimètres et inerties calculées selon l'annexe C de la norme EN 140
 | **Y3710004** | Capot de battement poignée centrée plat | 60 | 12 | - |
 | **Y3710018** | Capot de battement poignée centrée carré | 60 | 19,5 | - |
 
-(schéma: a_faire/askey3.pdf, p. 55, 78)
+(schéma: raw/askey3.pdf, p. 55, 78)
 
 ---
 
@@ -127,7 +127,7 @@ Cotes en millimètres et inerties calculées selon l'annexe C de la norme EN 140
 
 # Citations
 
-[1] [Frappe 65 Ouvrant Caché ASKEY - Conception](a_faire/askey3.pdf), p. 12-24, 26-55, 78, 122, 125
+[1] [Frappe 65 Ouvrant Caché ASKEY - Conception](raw/askey3.pdf), p. 12-24, 26-55, 78, 122, 125
 
 ---
 

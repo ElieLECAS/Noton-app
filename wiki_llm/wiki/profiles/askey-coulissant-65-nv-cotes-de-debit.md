@@ -9,12 +9,12 @@ usage: atelier
 famille: cotes-de-debit
 status: stable
 sources:
-  - resource: a_faire/askey1.pdf
+  - resource: raw/askey1.pdf
     id: askey-coulissant-conception
     title: Coulissant 65 NV ASKEY - Conception
     last_modified: 2022-12-13
 source_pages:
-  - resource: a_faire/askey1.pdf
+  - resource: raw/askey1.pdf
     pages: 145-171
 generated:
   by: process:claude-code
@@ -50,7 +50,7 @@ Application ouvrant 32 mm, double vitrage 28 mm [1 p. 147] :
 | Lisse de seuil | **W8020007** | Support de seuil avec fond de joint | 1 | $L - 8$ | 90°-90° |
 | Double vitrage | Remplissage | Double vitrage 28 mm | 2 | $H - 162 \times L/2 - 89{,}5$ | Rectangulaire |
 
-(schéma: a_faire/askey1.pdf, p. 147)
+(schéma: raw/askey1.pdf, p. 147)
 
 ### 2. Coulissant 2 vantaux - Seuil PMR rapporté (W3090163)
 
@@ -74,7 +74,7 @@ Application dormant 2 rails coupe droite 65 mm, ouvrant 32 mm, vitrage 28 mm [1 
 | Bouclier montant | **W4030241** | Bouclier montant coupe droite | 2 | $H - 85$ | 90°-90° |
 | Double vitrage | Remplissage | Double vitrage 28 mm | 2 | $H - 197{,}5 \times L/2 - 90$ | Rectangulaire |
 
-(schéma: a_faire/askey1.pdf, p. 149)
+(schéma: raw/askey1.pdf, p. 149)
 
 ### 3. Coulissant 4 vantaux - Percussion centrale (Dormant CD65)
 
@@ -97,7 +97,7 @@ Application dormant CD65 2 rails, ouvrant 32 mm, vitrage 28 mm [1 p. 155] :
 | Bouclier latéral bas | **W4030239** | Bouclier drainé traverse latérale | 2 | $L/4 - 35{,}7$ | 90°-90° |
 | Double vitrage | Remplissage | Double vitrage 28 mm | 4 | $H - 197{,}5 \times L/4 - 78$ | Rectangulaire |
 
-(schéma: a_faire/askey1.pdf, p. 155)
+(schéma: raw/askey1.pdf, p. 155)
 
 ### 4. Coulissant 4 vantaux - Percussion centrale réduite
 
@@ -115,7 +115,7 @@ Application 4 vantaux avec montants centraux ultra-étroits `Y1740040` et `Y1740
 | Bouclier latéral bas | **W4030239** | Bouclier drainé traverse latérale | 2 | $L/4 - 20{,}5$ | 90°-90° |
 | Double vitrage | Remplissage | Double vitrage 28 mm | 4 | $H - 187 \times L/4 - 64$ | Rectangulaire |
 
-(schéma: a_faire/askey1.pdf, p. 169)
+(schéma: raw/askey1.pdf, p. 169)
 
 ### 5. Coulissant 2 vantaux - Module 24 mm avec volet roulant intégré
 
@@ -135,7 +135,7 @@ Application dormant CD doublage 120 mm, ouvrant 24 mm, vitrage 24 mm [1 p. 159] 
 | Tapée VR | **Y3790015** | Tapée pour VR iso 120 mm | 1 | $L - 38$ | 90°-90° |
 | Double vitrage | Remplissage | Double vitrage 24 mm | 2 | $H - 187 \times L/2 - 89$ | Rectangulaire |
 
-(schéma: a_faire/askey1.pdf, p. 159)
+(schéma: raw/askey1.pdf, p. 159)
 
 ---
 
@@ -155,7 +155,7 @@ Application dormant CD doublage 120 mm, ouvrant 24 mm, vitrage 24 mm [1 p. 159] 
 
 # Citations
 
-[1] [Coulissant 65 NV ASKEY - Conception](a_faire/askey1.pdf), p. 10, 70, 145-171
+[1] [Coulissant 65 NV ASKEY - Conception](raw/askey1.pdf), p. 10, 70, 145-171
 
 ---
 

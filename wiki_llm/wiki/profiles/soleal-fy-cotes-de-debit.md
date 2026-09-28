@@ -9,22 +9,22 @@ fournisseur: TECHNAL
 usage: atelier
 status: stable
 sources:
-  - resource: wiki_llm/a_faire/DTA 6_12-2016_V5 (1).pdf
+  - resource: raw/DTA 6_12-2016_V5 (1).pdf
     id: technal-dta-soleal-fy-6-12-2016-v5
     title: DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm
     last_modified: 2023-05-25
-  - resource: wiki_llm/a_faire/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf
+  - resource: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf
     id: technal-soleal-fy-55-conception-6057
     title: SOLEAL FY 55 évolution, Conception Ouvrant Minimal et Apparent, réf. 6057.003
     last_modified: 2020-07-10
-  - resource: wiki_llm/a_faire/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf
+  - resource: raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf
     id: technal-soleal-fy-qc-conception-6319
     title: SOLEAL FY 55 & 65, Évolution Quincaillerie Cachée, Conception, réf. 6319.003
     last_modified: 2021-07-29
 source_pages:
-  - resource: wiki_llm/a_faire/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf
+  - resource: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf
     pages: 40-79, 84-87, 92-103
-  - resource: wiki_llm/a_faire/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf
+  - resource: raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf
     pages: 42-73, 78-86
 ---
 
@@ -73,7 +73,7 @@ Châssis équipés de l'ouvrant tubulaire 65 mm (T215180, T215181 ou TFY1206) et
 | **Parcloses droites** (largeur) | $2 \times (L - 131)$ | $4 \times (\frac{L}{2} - 112)$ | Coupe droite 90°/90° |
 | **Remplissage vitrage** | $(H - 123) \times (L - 143)$ | $(H - 123) \times (\frac{L}{2} - 124)$ | Rectangle |
 
-(schéma: wiki_llm/a_faire/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf, p. 52-57 et 3 p. 46-51)
+(schéma: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf, p. 52-57 et 3 p. 46-51)
 
 ---
 
@@ -111,7 +111,7 @@ Châssis équipés des profilés d'ouvrants masqués TFY1338 / TFY1339 et parclo
 | **Parclose TPE extérieure** (largeur) | $2 \times (L - 73)$ | $4 \times (\frac{L}{2} - 54)$ | Coupe droite 90°/90° |
 | **Remplissage vitrage** | $(H - 101) \times (L - 121)$ | $(H - 101) \times (\frac{L}{2} - 102)$ | Rectangle |
 
-(schéma: wiki_llm/a_faire/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf, p. 54-57 et 70-75)
+(schéma: raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf, p. 54-57 et 70-75)
 
 ---
 
@@ -159,11 +159,11 @@ Pour l'intégration d'un meneau ou d'une traverse d'ouvrant divisant le vantail 
 
 # Citations
 
-[1] DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm — `wiki_llm/a_faire/DTA 6_12-2016_V5 (1).pdf`, p. 7 à 12
+[1] DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm — `raw/DTA 6_12-2016_V5 (1).pdf`, p. 7 à 12
 
-[2] SOLEAL FY 55 évolution, Conception Ouvrant Minimal et Apparent, réf. 6057.003 — `wiki_llm/a_faire/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf`, p. 40 à 103
+[2] SOLEAL FY 55 évolution, Conception Ouvrant Minimal et Apparent, réf. 6057.003 — `raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf`, p. 40 à 103
 
-[3] SOLEAL FY 55 & 65, Évolution Quincaillerie Cachée, Conception, réf. 6319.003 — `wiki_llm/a_faire/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf`, p. 42 à 86
+[3] SOLEAL FY 55 & 65, Évolution Quincaillerie Cachée, Conception, réf. 6319.003 — `raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf`, p. 42 à 86
 
 # Voir aussi
 

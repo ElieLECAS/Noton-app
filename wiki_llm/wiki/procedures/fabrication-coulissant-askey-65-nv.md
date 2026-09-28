@@ -8,12 +8,12 @@ fournisseur: ASKEY
 usage: atelier
 status: stable
 sources:
-  - resource: a_faire/askey5.pdf
+  - resource: raw/askey5.pdf
     id: askey-coulissant-fabrication
     title: Coulissant 65 NV ASKEY - Fabrication
     last_modified: 2022-12-14
 source_pages:
-  - resource: a_faire/askey5.pdf
+  - resource: raw/askey5.pdf
     pages: 5-20, 25-56, 57-64, 65-82, 83-96, 97-118
 generated:
   by: process:claude-code
@@ -113,7 +113,7 @@ Positionnement des usinages et des outillages [1 p. 7, 9, 31, 38] :
 | Trous drainage traverses ouvrant | Perceuse | Ø8 mm à 140 mm des extrémités | $\pm 2\text{ mm}$ |
 | Fixation poignée sur montant | Gabarit | Entraxe 43 mm, carrés 7 mm | $\pm 0{,}2\text{ mm}$ |
 
-(schéma: a_faire/askey5.pdf, p. 7, 9, 15, 17, 31, 38)
+(schéma: raw/askey5.pdf, p. 7, 9, 15, 17, 31, 38)
 
 ---
 
@@ -125,7 +125,7 @@ Positionnement des usinages et des outillages [1 p. 7, 9, 31, 38] :
 
 # Citations
 
-[1] [Coulissant 65 NV ASKEY - Fabrication](a_faire/askey5.pdf), p. 5-20, 25-56, 57-64, 65-82, 83-96, 97-118
+[1] [Coulissant 65 NV ASKEY - Fabrication](raw/askey5.pdf), p. 5-20, 25-56, 57-64, 65-82, 83-96, 97-118
 
 ---
 

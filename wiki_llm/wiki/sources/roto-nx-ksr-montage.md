@@ -35,56 +35,58 @@ numéro imprimé.
 
 # Registre de couverture
 
+**Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
+
 Numérotation imprimée ; décalage de -2 par rapport au PDF.
 
 | Pages imprimées | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| 1-3 | couverture, contact, sommaire | sans contenu propre | - |
+| 1-3 | couverture, contact, sommaire | à faire | - |
 | 4-18 | informations générales, groupes cibles, droits, sécurité | sans contenu propre — socle générique, sans donnée produit | - |
-| 19-20 | caractéristiques générales, recommandations, forces de traction | transcrit | [Roto NX](/quincaillerie/roto-nx.md) |
-| 21-27 | champs d'application côté paumelles P | transcrit | [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
-| 28-30 | champs d'application Designo II, report de charge | transcrit | [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md) |
-| 31 | champs d'application ouvrant à soufflet, côté paumelles Designo | transcrit | [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md) |
-| 32 | désignations de l'élément, systèmes d'axe de ferrage | transcrit | [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
-| 33 | longueurs de palier (compas, angle, pivot) | transcrit | [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md) |
-| 34 | encombrement de la paumelle, tolérance de châssis fixe | transcrit | [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
-| 35 | fixation d'une fenêtre de sécurité | transcrit | [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
-| 36-37 | ouvrant à la française, un vantail | transcrit | [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md) |
-| 38-39 | ouvrant à la française, deux vantaux | transcrit | [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md) |
-| 40-41 | oscillo-battant un vantail, sécurité de base | transcrit | [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
-| 42-43 | oscillo-battant deux vantaux, sécurité de base, crémone de semi-fixe | transcrit | [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
-| 44-45 | oscillo-battant deux vantaux, poignée centrée, fouillot -6 mm | transcrit | [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
-| 46-51 | ouvrant à la française, crémone à sortie de tringle (un et deux vantaux, deux vantaux larges) | transcrit | [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md), [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
-| 52-53 | porte-fenêtre à condamnation au cylindre, serrure H100 à sortie de tringle | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
-| 54-57 | porte-fenêtre à un vantail, serrure H100 à galets ; porte-fenêtre PMR, double mouvement | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
-| 58-61 | ouvrant à soufflet, avec et sans renvoi d'angle | transcrit | [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md) |
-| 62-63 | châssis cintré et trapézoïdal, oscillo-battant | transcrit | [Configurations Roto NX KSR — châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md) |
-| 64-65 | oscillo-battant Confort, sécurité de base | transcrit | [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md) |
-| 66-71 | oscillo-battant et ouvrant à la française NT Designo II (un et deux vantaux) | transcrit | [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md) |
-| 72-73 | soufflet NT Designo II, crémone verrou | transcrit | [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md) |
-| 74-75 | soufflet NT Designo II avec renvoi d'angle ; crémone OB hauteur poignée variable | transcrit | [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md), [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
-| 76-77 | limiteur d'ouverture à positions indexées | transcrit | [Limiteur d'ouverture à positions indexées Roto NX KSR](/quincaillerie/roto-nx-ksr-limiteur-ouverture.md) |
-| 78 | allonges et prolongateurs de crémones | transcrit | [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md) |
-| 79-81 | crémones OB KSR galet V, fouillot 15 mm, EasyMix, renvoi d'angle intégré | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
-| 82 | loqueteau Roto NX | transcrit | [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md) |
-| 83-85 | caches par coloris, pièces laquées, montage renvoi de fouillot | transcrit | [Finitions Roto NX](/quincaillerie/roto-nx-finitions.md) |
-| 86-91 | perçage poignée, dormant, ouvrant ; montage ferrure vantail ; coupe crémone semi-fixe ; bras de compas limiteur soufflet | transcrit | [Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md) |
-| 92-94 | positionnement des gâches (cotes de pose), oscillo-battant à un vantail, sécurité de base et RC1, fouillot 8 et 15 mm | transcrit | [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
-| 95 | positionnement du compas et des gâches, ouverture à soufflet | transcrit | [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md) |
-| 96-97 | positionnement des gâches (cotes de pose), oscillo-battant à deux vantaux sans meneau fixe, sécurité de base et RC1, fouillot 8 et -6 mm | transcrit | [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
-| 98 | positionnement des gâches, ouvrant à la française, crémone à sortie de tringle | transcrit | [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md) |
-| 99 | positionnement des gâches, oscillo-battant Confort, fouillot 15 mm poignée variable | transcrit | [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md) |
-| 100-101 | châssis cintré ou trapézoïdal : positionnement des gâches, montage en 13 étapes, gabarit de perçage du palier de compas | transcrit | [Configurations Roto NX KSR — châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md) |
-| 102-103 | chartes d'applicabilité des gabarits de gâche, oscillo-battant à un et deux vantaux, sécurité de base | transcrit | [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
-| 104 | charte d'applicabilité des gabarits de gâche, ouvrant à la française à deux vantaux, crémone à sortie de tringle | transcrit | [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md) |
-| 105-107 | accrochage et décrochage du vantail à compas simple, fixation de la gâche de sécurité, réglage des galets E/P/V | transcrit | [Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md) |
-| 108-111 | vissage, force de traction exigée par poids d'ouvrant (directive TBDK), accrochage NT Designo II compas 350/500 et 250 | transcrit | [Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md) |
-| 112-113 | montage et réglage du report de charge NT Designo II | transcrit | [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md) |
-| 114 | maintenance, contrôle fonctionnel | transcrit | [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md) |
-| 115 | répartition des points à huiler et à graisser | transcrit | [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md) |
-| 116-117 | maintenance, nettoyage | transcrit | [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md) |
-| 118-121 | transport, stockage, mise au rebut | transcrit | [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md) |
-| 122 | quatrième de couverture, coordonnées Roto Frank Ferrures | sans contenu propre | - |
+| 19-20 | caractéristiques générales, recommandations, forces de traction | à faire | [Roto NX](/quincaillerie/roto-nx.md) |
+| 21-27 | champs d'application côté paumelles P | à faire | [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
+| 28-30 | champs d'application Designo II, report de charge | à faire | [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md) |
+| 31 | champs d'application ouvrant à soufflet, côté paumelles Designo | à faire | [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md) |
+| 32 | désignations de l'élément, systèmes d'axe de ferrage | à faire | [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
+| 33 | longueurs de palier (compas, angle, pivot) | à faire | [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md) |
+| 34 | encombrement de la paumelle, tolérance de châssis fixe | à faire | [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
+| 35 | fixation d'une fenêtre de sécurité | à faire | [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
+| 36-37 | ouvrant à la française, un vantail | à faire | [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md) |
+| 38-39 | ouvrant à la française, deux vantaux | à faire | [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md) |
+| 40-41 | oscillo-battant un vantail, sécurité de base | à faire | [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
+| 42-43 | oscillo-battant deux vantaux, sécurité de base, crémone de semi-fixe | à faire | [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
+| 44-45 | oscillo-battant deux vantaux, poignée centrée, fouillot -6 mm | à faire | [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
+| 46-51 | ouvrant à la française, crémone à sortie de tringle (un et deux vantaux, deux vantaux larges) | à faire | [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md), [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 52-53 | porte-fenêtre à condamnation au cylindre, serrure H100 à sortie de tringle | à faire | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 54-57 | porte-fenêtre à un vantail, serrure H100 à galets ; porte-fenêtre PMR, double mouvement | à faire | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 58-61 | ouvrant à soufflet, avec et sans renvoi d'angle | à faire | [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md) |
+| 62-63 | châssis cintré et trapézoïdal, oscillo-battant | à faire | [Configurations Roto NX KSR — châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md) |
+| 64-65 | oscillo-battant Confort, sécurité de base | à faire | [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md) |
+| 66-71 | oscillo-battant et ouvrant à la française NT Designo II (un et deux vantaux) | à faire | [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md) |
+| 72-73 | soufflet NT Designo II, crémone verrou | à faire | [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md) |
+| 74-75 | soufflet NT Designo II avec renvoi d'angle ; crémone OB hauteur poignée variable | à faire | [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md), [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 76-77 | limiteur d'ouverture à positions indexées | à faire | [Limiteur d'ouverture à positions indexées Roto NX KSR](/quincaillerie/roto-nx-ksr-limiteur-ouverture.md) |
+| 78 | allonges et prolongateurs de crémones | à faire | [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md) |
+| 79-81 | crémones OB KSR galet V, fouillot 15 mm, EasyMix, renvoi d'angle intégré | à faire | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 82 | loqueteau Roto NX | à faire | [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md) |
+| 83-85 | caches par coloris, pièces laquées, montage renvoi de fouillot | à faire | [Finitions Roto NX](/quincaillerie/roto-nx-finitions.md) |
+| 86-91 | perçage poignée, dormant, ouvrant ; montage ferrure vantail ; coupe crémone semi-fixe ; bras de compas limiteur soufflet | à faire | [Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md) |
+| 92-94 | positionnement des gâches (cotes de pose), oscillo-battant à un vantail, sécurité de base et RC1, fouillot 8 et 15 mm | à faire | [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
+| 95 | positionnement du compas et des gâches, ouverture à soufflet | à faire | [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md) |
+| 96-97 | positionnement des gâches (cotes de pose), oscillo-battant à deux vantaux sans meneau fixe, sécurité de base et RC1, fouillot 8 et -6 mm | à faire | [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
+| 98 | positionnement des gâches, ouvrant à la française, crémone à sortie de tringle | à faire | [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md) |
+| 99 | positionnement des gâches, oscillo-battant Confort, fouillot 15 mm poignée variable | à faire | [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md) |
+| 100-101 | châssis cintré ou trapézoïdal : positionnement des gâches, montage en 13 étapes, gabarit de perçage du palier de compas | à faire | [Configurations Roto NX KSR — châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md) |
+| 102-103 | chartes d'applicabilité des gabarits de gâche, oscillo-battant à un et deux vantaux, sécurité de base | à faire | [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
+| 104 | charte d'applicabilité des gabarits de gâche, ouvrant à la française à deux vantaux, crémone à sortie de tringle | à faire | [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md) |
+| 105-107 | accrochage et décrochage du vantail à compas simple, fixation de la gâche de sécurité, réglage des galets E/P/V | à faire | [Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md) |
+| 108-111 | vissage, force de traction exigée par poids d'ouvrant (directive TBDK), accrochage NT Designo II compas 350/500 et 250 | à faire | [Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md) |
+| 112-113 | montage et réglage du report de charge NT Designo II | à faire | [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md) |
+| 114 | maintenance, contrôle fonctionnel | à faire | [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md) |
+| 115 | répartition des points à huiler et à graisser | à faire | [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md) |
+| 116-117 | maintenance, nettoyage | à faire | [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md) |
+| 118-121 | transport, stockage, mise au rebut | à faire | [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md) |
+| 122 | quatrième de couverture, coordonnées Roto Frank Ferrures | à faire | - |
 
 **Le registre ne porte plus aucune ligne `à faire` : les 122 pages imprimées sont couvertes.**
 Toutes les configurations de fenêtre, les familles de crémones, le positionnement des gâches et

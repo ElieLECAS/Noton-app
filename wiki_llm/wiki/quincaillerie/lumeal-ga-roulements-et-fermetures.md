@@ -9,18 +9,18 @@ fournisseur: TECHNAL
 usage: atelier
 status: stable
 sources:
-  - resource: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf
+  - resource: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf
     id: technal-lumeal-ga-conception-5156-007
     title: LUMEAL GA — Catalogue de conception Le Coulissant Minimal (Réf. 5156.007)
     last_modified: 2021-01-21
-  - resource: wiki_llm/a_faire/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf
+  - resource: raw/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf
     id: technal-lumeal-ga-fabrication-5074-007
     title: LUMEAL GA — Guide d'atelier et catalogue de fabrication (Réf. 5074.007)
     last_modified: 2021-01-27
 source_pages:
-  - resource: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf
+  - resource: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf
     pages: 12, 42-50, 55-56, 81-83
-  - resource: wiki_llm/a_faire/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf
+  - resource: raw/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf
     pages: 146-149, 164-177, 192-205
 generated:
   by: process:multimodal-direct
@@ -50,7 +50,7 @@ Les roulettes sont équipées d'un corps isolant conservant la continuité de ru
 | **TGA3608** | Triple | Non réglable | Polyamide haute densité | **300** (150 kg / roulette) | Rail aluminium ou inox (fraisage traverse 80 mm obligatoire) |
 | **TGA3609** | Triple inox | Non réglable | Inox décolleté | **300** (150 kg / roulette) | **Rail inox TGA4001 / TGY4007 uniquement** |
 
-(schéma: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 42 ; catalogue-fabrication, p. 146-149)
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 42 ; catalogue-fabrication, p. 146-149)
 
 **Règles de calage de vitrage au droit des roulettes (cale TGA3817)** :
 - Sur traverse basse T141021 (vitrage 29 à 32 mm) : **cale TGA3817 obligatoire et systématique** sous le joint de vitrage au droit de chaque roulette [1 p. 42].
@@ -69,7 +69,7 @@ Les serrures sont encastrées directement dans la rainure du montant dormant ver
 | **T621003** | 3 points de verrouillage | $H \ge 1\,800\text{ mm}$ | 3 pênes réglables (standard porte-fenêtre) |
 | **T621005** | Serrure extérieure à clé | Hauteur axe poignée $\ge 1\,090\text{ mm}$ | Cylindre européen traversant avec 2 clés |
 
-(schéma: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 46-48)
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 46-48)
 
 ---
 
@@ -85,7 +85,7 @@ Les serrures sont encastrées directement dans la rainure du montant dormant ver
 | **TGY3622** | Arrêt de vantail à clé | Traverse basse | Verrou de blocage en position entrebâillée |
 | **TGY3623** | Cale d'arrêt de vantail | Sous TGY3622 | Support d'adaptation sur traverse basse |
 
-(schéma: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 46-50)
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 46-50)
 
 ---
 
@@ -101,7 +101,7 @@ Les serrures sont encastrées directement dans la rainure du montant dormant ver
 | **TGA6000** | Poignée de tirage droite tubulaire | Montant latéral | Vantail de service uniquement |
 | **T661004** | Cuvette de tirage encastrée | Traverse basse T141015 | Pour vantail semi-fixe sur fenêtre |
 
-(schéma: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 43-45)
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 43-45)
 
 ---
 
@@ -131,8 +131,8 @@ Le système LUMEAL GA bénéficie de la classification anti-effraction **classe 
 
 # Citations
 
-[1] LUMEAL GA — Catalogue de conception Le Coulissant Minimal (Réf. 5156.007 - 01/2021) — `wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf`
-[2] LUMEAL GA — Guide d'atelier et catalogue de fabrication (Réf. 5074.007 - 01/2021) — `wiki_llm/a_faire/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf`
+[1] LUMEAL GA — Catalogue de conception Le Coulissant Minimal (Réf. 5156.007 - 01/2021) — `raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf`
+[2] LUMEAL GA — Guide d'atelier et catalogue de fabrication (Réf. 5074.007 - 01/2021) — `raw/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf`
 
 ---
 

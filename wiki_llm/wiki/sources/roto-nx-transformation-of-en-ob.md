@@ -27,10 +27,12 @@ generated:
 
 # Registre de couverture
 
+**Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
+
 | Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| 1 | étapes 1 à 3 : dépose du compas OF, pose de la têtière et du compas OB | transcrit | [Transformation d'un ouvrant à la française en oscillo-battant](/procedures/transformation-of-en-ob-roto-nx.md) |
-| 2 | étapes 4 et 5 : obturateur de manœuvre, gâche OB droite ou gauche | transcrit | [Transformation d'un ouvrant à la française en oscillo-battant](/procedures/transformation-of-en-ob-roto-nx.md) |
+| 1 | étapes 1 à 3 : dépose du compas OF, pose de la têtière et du compas OB | à faire | [Transformation d'un ouvrant à la française en oscillo-battant](/procedures/transformation-of-en-ob-roto-nx.md) |
+| 2 | étapes 4 et 5 : obturateur de manœuvre, gâche OB droite ou gauche | à faire | [Transformation d'un ouvrant à la française en oscillo-battant](/procedures/transformation-of-en-ob-roto-nx.md) |
 
 # Citations
 

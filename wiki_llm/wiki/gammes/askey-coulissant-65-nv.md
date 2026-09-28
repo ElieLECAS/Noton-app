@@ -8,18 +8,18 @@ fournisseur: ASKEY
 usage: chiffrage
 status: stable
 sources:
-  - resource: a_faire/askey1.pdf
+  - resource: raw/askey1.pdf
     id: askey-coulissant-conception
     title: Coulissant 65 NV ASKEY - Conception
     last_modified: 2022-12-13
-  - resource: a_faire/askey5.pdf
+  - resource: raw/askey5.pdf
     id: askey-coulissant-fabrication
     title: Coulissant 65 NV ASKEY - Fabrication
     last_modified: 2022-12-14
 source_pages:
-  - resource: a_faire/askey1.pdf
+  - resource: raw/askey1.pdf
     pages: 8-12, 26-31, 126
-  - resource: a_faire/askey5.pdf
+  - resource: raw/askey5.pdf
     pages: 58-64, 83-96
 generated:
   by: process:claude-code
@@ -55,7 +55,7 @@ Caractéristiques techniques relevées sur le cahier de conception ASKEY [1 p. 8
 | Étanchéité dormants | Flasques TPE ou mousses adhésives | Clapets anti-refoulement invisibles et injection silicone |
 | Prise de volume vitrage | Joint portefeuille EPDM ou TPE | À solin réduit, tournant dans les angles |
 
-(schéma: a_faire/askey1.pdf, p. 8 et 10)
+(schéma: raw/askey1.pdf, p. 8 et 10)
 
 ---
 
@@ -75,7 +75,7 @@ Essais réalisés selon les normes européennes et certifiés par le FCBA [1 p. 
 | CD 2 vtx / 2 rails (flasque TPE, jt brosse) | 2,40 x 2,25 | 4/20/4 (28 mm) | 403/21/0088/A-2-V1 | **A\*3 E\*6A V\*A3** | Classe 1 |
 | CD 2 vtx / 2 rails (flasque TPE, jt glissant) | 3,30 x 2,70 | 6/20/6 (32 mm) | 403/21/0088/A-3-V1 | **A\*4 E\*5A V\*A3** | Classe 1 |
 
-(schéma: a_faire/askey1.pdf, p. 12)
+(schéma: raw/askey1.pdf, p. 12)
 
 ### Thermique et acoustique
 * **Thermique** : $U_w < 1{,}5\text{ W/m}^2\text{K}$ sur châssis normalisé Acotherm ($2{,}30\times 2{,}18\text{ m}$) avec vitrage $U_g = 1{,}0\text{ W/m}^2\text{K}$ [1 p. 8].
@@ -94,7 +94,7 @@ Essais réalisés selon les normes européennes et certifiés par le FCBA [1 p. 
 | Roulette double réglable renforcée | W6050155 | 8 | Rail inox obligatoire | 110 kg | **220 kg** |
 | Roulette double charge lourde | W6000025 | Acier | Rail inox obligatoire | 125 kg | **250 kg** |
 
-(schéma: a_faire/askey1.pdf, p. 9, 124, 126)
+(schéma: raw/askey1.pdf, p. 9, 124, 126)
 
 * **Dimensions maximales certifiées par vantail** : Largeur jusqu'à 2,70 m et Hauteur jusqu'à 3,30 m [1 p. 8].
 * **Prescription traverse haute** : Au-dessus de **2 250 mm de hauteur de châssis**, rajouter obligatoirement un rail de guidage aluminium (W3041224) ou inox (W4000158) en traverse haute [1 p. 126].
@@ -111,8 +111,8 @@ Essais réalisés selon les normes européennes et certifiés par le FCBA [1 p. 
 
 # Citations
 
-[1] [Coulissant 65 NV ASKEY - Conception](a_faire/askey1.pdf), p. 8-12, 124, 126
-[2] [Coulissant 65 NV ASKEY - Fabrication](a_faire/askey5.pdf), p. 40, 58-64, 83-96
+[1] [Coulissant 65 NV ASKEY - Conception](raw/askey1.pdf), p. 8-12, 124, 126
+[2] [Coulissant 65 NV ASKEY - Fabrication](raw/askey5.pdf), p. 40, 58-64, 83-96
 
 ---
 

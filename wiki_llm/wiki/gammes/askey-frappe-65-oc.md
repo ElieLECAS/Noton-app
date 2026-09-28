@@ -8,18 +8,18 @@ fournisseur: ASKEY
 usage: chiffrage
 status: stable
 sources:
-  - resource: a_faire/askey3.pdf
+  - resource: raw/askey3.pdf
     id: askey-frappe-oc-conception
     title: Frappe 65 Ouvrant Caché ASKEY - Conception
     last_modified: 2023-02-20
-  - resource: a_faire/askey2.pdf
+  - resource: raw/askey2.pdf
     id: askey-frappe-oc-fabrication
     title: Frappe 65 Ouvrant Caché ASKEY - Fabrication
     last_modified: 2022-12-13
 source_pages:
-  - resource: a_faire/askey3.pdf
+  - resource: raw/askey3.pdf
     pages: 3-9, 117-126, 134-138
-  - resource: a_faire/askey2.pdf
+  - resource: raw/askey2.pdf
     pages: 37-48, 69-98, 125-128
 generated:
   by: process:claude-code
@@ -53,7 +53,7 @@ Le système se décline en :
 | Étanchéité centrale | Joint central tubulaire EPDM | Battue de 44 mm avec pièces d'étanchéité d'angle moulées |
 | Seuil PMR | Aluminium 20 mm | Seuil W1010384 à rupture thermique avec joint d'angle |
 
-(schéma: a_faire/askey3.pdf, p. 3, 24, 78, 118-121)
+(schéma: raw/askey3.pdf, p. 3, 24, 78, 118-121)
 
 ---
 
@@ -70,7 +70,7 @@ Le système se décline en :
 | Porte-fenêtre 2 vtx fiches P38 seuil PMR | 1450 x 2156 | 4/20/4 | 404/15/260-2 | **A\*4 E\*9A V\*C2** | FCBA |
 | Fenêtre 2 vtx OC 32 mm | 1430 x 1680 | 6/16/10 | 404/16/249-2 | **A\*4 E\*7A V\*C3** | FCBA |
 
-(schéma: a_faire/askey3.pdf, p. 4)
+(schéma: raw/askey3.pdf, p. 4)
 
 ### Performances acoustiques certifiées
 
@@ -85,7 +85,7 @@ Valeurs d'affaiblissement acoustique mesurées au banc d'essais FCBA (NB0380) [1
 | Fenêtre 2 vantaux 36 mm | 8/20/44.2s | **38 dB** | 404/13/244/7/A |
 | Fenêtre 2 vantaux 36 mm | 44.2s / 16 / 64.2s | **40 dB** | 404/13/244/6/A |
 
-(schéma: a_faire/askey3.pdf, p. 6-7)
+(schéma: raw/askey3.pdf, p. 6-7)
 
 ---
 
@@ -114,8 +114,8 @@ Les limites dimensionnelles dépendent du type de ferrage Ferco Unijet [1 p. 134
 
 # Citations
 
-[1] [Frappe 65 Ouvrant Caché ASKEY - Conception](a_faire/askey3.pdf), p. 3-9, 51, 106, 122, 134-138
-[2] [Frappe 65 Ouvrant Caché ASKEY - Fabrication](a_faire/askey2.pdf), p. 123, 164-165
+[1] [Frappe 65 Ouvrant Caché ASKEY - Conception](raw/askey3.pdf), p. 3-9, 51, 106, 122, 134-138
+[2] [Frappe 65 Ouvrant Caché ASKEY - Fabrication](raw/askey2.pdf), p. 123, 164-165
 
 ---
 

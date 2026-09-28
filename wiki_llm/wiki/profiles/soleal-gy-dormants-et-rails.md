@@ -9,15 +9,15 @@ fournisseur: TECHNAL
 usage: atelier
 status: stable
 sources:
-  - resource: wiki_llm/a_faire/SOLEAL-GY-55-Catalogue-conception-5744-005-092021-Fr (1).pdf
+  - resource: raw/SOLEAL-GY-55-Catalogue-conception-5744-005-092021-Fr (1).pdf
     id: technal-soleal-gy-55-conception-5744-005
     title: SOLEAL GY 55 — Catalogue de conception Le Coulissant Universel (Réf. 5744.005 - 09/2021)
     last_modified: 2021-09-01
-  - resource: wiki_llm/a_faire/DTA 6_15-2261_V3 SOLEAL GY.pdf
+  - resource: raw/DTA 6_15-2261_V3 SOLEAL GY.pdf
     id: technal-dta-soleal-gy-6-15-2261-v3
     title: DTA CSTB n° 6/15-2261_V3 SOLEAL GY
     last_modified: 2024-03-13
-  - resource: wiki_llm/a_faire/SOLEAL-GY55-DTA-AG152261_V1.pdf
+  - resource: raw/SOLEAL-GY55-DTA-AG152261_V1.pdf
     id: technal-dta-soleal-gy-6-15-2261-v1
     title: DTA CSTB n° 6/15-2261_V1 SOLEAL GY
     last_modified: 2019-07-12

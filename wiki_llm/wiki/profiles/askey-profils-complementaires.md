@@ -9,18 +9,18 @@ usage: [atelier, pose]
 famille: complementaires
 status: stable
 sources:
-  - resource: a_faire/askey1.pdf
+  - resource: raw/askey1.pdf
     id: askey-coulissant-conception
     title: Coulissant 65 NV ASKEY - Conception
     last_modified: 2022-12-13
-  - resource: a_faire/askey3.pdf
+  - resource: raw/askey3.pdf
     id: askey-frappe-oc-conception
     title: Frappe 65 Ouvrant Caché ASKEY - Conception
     last_modified: 2023-02-20
 source_pages:
-  - resource: a_faire/askey1.pdf
+  - resource: raw/askey1.pdf
     pages: 61-82
-  - resource: a_faire/askey3.pdf
+  - resource: raw/askey3.pdf
     pages: 57-82
 generated:
   by: process:claude-code
@@ -48,7 +48,7 @@ Bavettes aluminium d'évacuation d'eau et de rejet d'appui, cotes en millimètre
 | **W4000206** | Bavette tubulaire doublage 180/200 mm | 160,1 | 24,5 | 15,5 | W4040668 |
 | **W3090142** | Bavette pliée rénovation 100x100 | 100 | 100 | - | - |
 
-(schéma: a_faire/askey1.pdf, p. 62, 63 et a_faire/askey3.pdf, p. 58, 59, 60)
+(schéma: raw/askey1.pdf, p. 62, 63 et raw/askey3.pdf, p. 58, 59, 60)
 
 ### 2. Tapées d'isolation standard et déportées
 
@@ -68,7 +68,7 @@ Tapées pré-percées pour isolation intérieure sous doublage, hauteur d'ailett
 | **W4000181** | Déportée pré-percée | 140 | 87 (71,5 + 15,5) | 40 |
 | **W4000182** | Déportée pré-percée | 160 | 107 (91,5 + 15,5) | 40 |
 
-(schéma: a_faire/askey1.pdf, p. 66, 67, 68)
+(schéma: raw/askey1.pdf, p. 66, 67, 68)
 
 ### 3. Tapées pour volet roulant et dépose totale
 
@@ -84,7 +84,7 @@ Tapées pré-percées pour isolation intérieure sous doublage, hauteur d'ailett
 | **Y3790018** | Tapée tubulaire dépose totale | - | 84,4 | 22,5 |
 | **Y3790021** | Tapée tubulaire dépose totale | - | 104,4 | 22,5 |
 
-(schéma: a_faire/askey1.pdf, p. 69, 70)
+(schéma: raw/askey1.pdf, p. 69, 70)
 
 ### 4. Couvre-joints intérieurs et rénovation
 
@@ -99,7 +99,7 @@ Tapées pré-percées pour isolation intérieure sous doublage, hauteur d'ailett
 | **W3090136** | Couvre-joint rénovation droit | 19,6 | 70 | 2 |
 | **W3090137** | Couvre-joint rénovation mouluré | 21 | 70 | 2 |
 
-(schéma: a_faire/askey1.pdf, p. 71 et a_faire/askey3.pdf, p. 67, 68)
+(schéma: raw/askey1.pdf, p. 71 et raw/askey3.pdf, p. 67, 68)
 
 ### 5. Profilés de liaison et poteaux d'angles
 
@@ -113,7 +113,7 @@ Tapées pré-percées pour isolation intérieure sous doublage, hauteur d'ailett
 | **W001078L** | Plat tubulaire de renfort | 133 x 19 | 180° | Insert acier/alu dans profil W1010145 |
 | **W3112007** | Profilé de liaison en H | 11,7 x 8,5 | - | Liaison souple PVC |
 
-(schéma: a_faire/askey1.pdf, p. 73, 74, 75 et a_faire/askey3.pdf, p. 70, 71, 72)
+(schéma: raw/askey1.pdf, p. 73, 74, 75 et raw/askey3.pdf, p. 70, 71, 72)
 
 ### 6. Profilés standards ULT (Ustensiles, Lames, Tubes)
 
@@ -141,8 +141,8 @@ Nomenclature des profilés marchands en aluminium brut ou laqué, longueur stand
 
 # Citations
 
-[1] [Coulissant 65 NV ASKEY - Conception](a_faire/askey1.pdf), p. 61-82, 89
-[2] [Frappe 65 Ouvrant Caché ASKEY - Conception](a_faire/askey3.pdf), p. 57-82, 86
+[1] [Coulissant 65 NV ASKEY - Conception](raw/askey1.pdf), p. 61-82, 89
+[2] [Frappe 65 Ouvrant Caché ASKEY - Conception](raw/askey3.pdf), p. 57-82, 86
 
 ---
 

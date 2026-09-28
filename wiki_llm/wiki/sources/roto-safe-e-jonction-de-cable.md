@@ -29,26 +29,28 @@ generated:
 
 # Registre de couverture
 
+**Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
+
 Pas de décalage : la pagination imprimée suit la pagination du PDF.
 
 | Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| 1-2 | couverture, contact éditeur | sans contenu propre | - |
-| 3-4 | sommaire | sans contenu propre | - |
-| 5 | informations supplémentaires, documents afférents (IMO_438, IMO_506, CTL_86, IMO_310) | transcrit | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
-| 6-9 | consignes de sécurité génériques, symboles, groupes cibles, limitation de responsabilité | sans contenu propre | - |
-| 10-11 | aperçu des pièces, références et propriétés | transcrit | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
-| 12 | schéma douille et connecteur, câble LIF9Y11Y | transcrit | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
-| 13-16 | quatre variantes de montage par jeu en feuillure | transcrit | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
-| 17-18 | consignes de travail, cotes des pièces dormant et ouvrant | transcrit | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
-| 19-21 | cotes de perçage et de fraisage, quatre combinaisons | transcrit | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
-| 21-24 | montage, huit étapes | transcrit | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
-| 25-33 | plans de câblage, familles E700 et E610/E611, avec et sans bloc d'alimentation intégré | transcrit | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
-| 34 | dépannage, contrôle de fonctionnement | transcrit | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
-| 35 | démontage | transcrit | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
-| 36 | mise au rebut | transcrit | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
-| 37-40 | déclaration de conformité CE, têtière ronde et carrée | transcrit | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
-| 41 | quatrième de couverture, gammes du groupe Roto, contacts France/Belgique | sans contenu propre | - |
+| 1-2 | couverture, contact éditeur | à faire | - |
+| 3-4 | sommaire | à faire | - |
+| 5 | informations supplémentaires, documents afférents (IMO_438, IMO_506, CTL_86, IMO_310) | à faire | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| 6-9 | consignes de sécurité génériques, symboles, groupes cibles, limitation de responsabilité | à faire | - |
+| 10-11 | aperçu des pièces, références et propriétés | à faire | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| 12 | schéma douille et connecteur, câble LIF9Y11Y | à faire | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| 13-16 | quatre variantes de montage par jeu en feuillure | à faire | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| 17-18 | consignes de travail, cotes des pièces dormant et ouvrant | à faire | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| 19-21 | cotes de perçage et de fraisage, quatre combinaisons | à faire | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| 21-24 | montage, huit étapes | à faire | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| 25-33 | plans de câblage, familles E700 et E610/E611, avec et sans bloc d'alimentation intégré | à faire | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| 34 | dépannage, contrôle de fonctionnement | à faire | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| 35 | démontage | à faire | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| 36 | mise au rebut | à faire | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| 37-40 | déclaration de conformité CE, têtière ronde et carrée | à faire | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| 41 | quatrième de couverture, gammes du groupe Roto, contacts France/Belgique | à faire | - |
 
 # Citations
 

@@ -8,12 +8,12 @@ fournisseur: ASKEY
 usage: chiffrage
 status: stable
 sources:
-  - resource: a_faire/askey4.pdf
+  - resource: raw/askey4.pdf
     id: askey-frappe-ov-fabrication
     title: Frappe 65 Ouvrant Visible ASKEY - Fabrication
     last_modified: 2022-12-14
 source_pages:
-  - resource: a_faire/askey4.pdf
+  - resource: raw/askey4.pdf
     pages: 3-7, 29-30, 141-158, 201-206, 207-222
 generated:
   by: process:claude-code
@@ -44,7 +44,7 @@ Le système se décline en :
 | Seuil PMR filant | Hauteur 20 mm | Profil W1010384 continu avec feuillure rapportée vissée |
 | Assemblage d'angles | Double technologie | Sertissage (équerres filées) ou goupillage/vissage |
 
-(schéma: a_faire/askey4.pdf, p. 10, 29-30, 141, 160)
+(schéma: raw/askey4.pdf, p. 10, 29-30, 141, 160)
 
 ---
 
@@ -72,7 +72,7 @@ Pour les ensembles combinant vantaux battants et parties fixes sur seuil PMR (pr
 
 # Citations
 
-[1] [Frappe 65 Ouvrant Visible ASKEY - Fabrication](a_faire/askey4.pdf), p. 10, 15-16, 29-30, 141-158, 201-206, 222
+[1] [Frappe 65 Ouvrant Visible ASKEY - Fabrication](raw/askey4.pdf), p. 10, 15-16, 29-30, 141-158, 201-206, 222
 
 ---
 

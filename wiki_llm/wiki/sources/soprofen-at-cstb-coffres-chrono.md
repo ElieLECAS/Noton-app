@@ -31,6 +31,13 @@ Le document est l'Avis Technique officiel délivré par la Commission chargée d
 
 # Registre d'analyse page par page
 
+**Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
+
+| Pages PDF | Contenu | État | Page du wiki |
+| --- | --- | --- | --- |
+| toutes | document entier, relevé sous l'ancien protocole dans les sections ci-dessous | à faire | - |
+
+
 ## Pages 1 à 3 (Réf. AT 6/16-2339_V2 p. 1-3)
 * **Identification et versions** :
   * Page 1 : Page de garde, références réglementaires, exclusions (la fermeture relève des normes NF EN 13659, NF EN 12194, NF EN 13527, NF EN 1932, NF EN 13125, NF EN 14201-14203 et de la marque NF-Fermetures).

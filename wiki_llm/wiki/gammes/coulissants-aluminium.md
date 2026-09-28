@@ -90,7 +90,7 @@ Spécifications dimensionnelles, thermiques et vitrages des quatre baies couliss
 
 Le Uw de 1,4 W/m²K « en CV » sur vitrage 6/14/4 est donné pour « les coulissants » sans nom de produit : il n'est rattaché ni au SOLÉAL55 ni au GALANDAGE55 (**INC-02**, **VER-35**) [1 p. 17].
 
-(schéma: raw/catalogue-general-2026-01.pdf, p. 16-17 ; wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 4)
+(schéma: raw/catalogue-general-2026-01.pdf, p. 16-17 ; raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 4)
 
 ## Équipements communs
 

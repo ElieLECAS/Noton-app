@@ -8,18 +8,18 @@ fournisseur: ASKEY
 usage: atelier
 status: stable
 sources:
-  - resource: a_faire/askey1.pdf
+  - resource: raw/askey1.pdf
     id: askey-coulissant-conception
     title: Coulissant 65 NV ASKEY - Conception
     last_modified: 2022-12-13
-  - resource: a_faire/askey5.pdf
+  - resource: raw/askey5.pdf
     id: askey-coulissant-fabrication
     title: Coulissant 65 NV ASKEY - Fabrication
     last_modified: 2022-12-14
 source_pages:
-  - resource: a_faire/askey1.pdf
+  - resource: raw/askey1.pdf
     pages: 81-127
-  - resource: a_faire/askey5.pdf
+  - resource: raw/askey5.pdf
     pages: 38-53, 98-114
 generated:
   by: process:claude-code
@@ -48,7 +48,7 @@ Les chariots sont certifiés en classe 6 (200 000 cycles d'ouverture) selon la n
 | **W6000025** | Roulette double charges lourdes | Acier trempé | - | 125 kg | **250 kg** | Inox W4000158 obligatoire (ouvrant 32) |
 | **W6050149** | Cale d'adaptation roulette 32 | Polyamide | - | - | - | Traverse W1041274 |
 
-(schéma: a_faire/askey1.pdf, p. 110, 111, 124)
+(schéma: raw/askey1.pdf, p. 110, 111, 124)
 
 ### Serrures et crémones de fermeture
 
@@ -64,7 +64,7 @@ Têtière de 16 mm, axe à 43 mm, fouillot carré de 7 mm [1 p. 10, 111, 112] :
 | **W6050085** | Gâche à clamer | - | À clamer | Fournie avec vis de serrage |
 | **W6050083** | Clameau pour fermeture | - | À glisser | Maintien de têtière dans la gorge |
 
-(schéma: a_faire/askey1.pdf, p. 111, 112)
+(schéma: raw/askey1.pdf, p. 111, 112)
 
 ### Organes de manœuvre et poignées
 
@@ -79,7 +79,7 @@ Têtière de 16 mm, axe à 43 mm, fouillot carré de 7 mm [1 p. 10, 111, 112] :
 | **W6050134** | Coquille à carré vantail 32 mm | Encastrée | Croisement total des vantaux de 32 mm |
 | **W6050284** | Verrou à levier extra-plat | Encastré | Ouvrants de 24 et 32 mm |
 
-(schéma: a_faire/askey1.pdf, p. 113, 114, 117, 119)
+(schéma: raw/askey1.pdf, p. 113, 114, 117, 119)
 
 ### Carrés de manœuvre (carré de 7 mm)
 
@@ -95,7 +95,7 @@ Longueur nominale de la tige carrée en fonction de la section de profilé et du
 | **W4070497** | 59 | Vantail 32 mm renforcé carré | Face intérieure seule |
 | **W4070498** | 62 | Vantail 32 mm renforcé carré | Poignées intérieure et extérieure |
 
-(schéma: a_faire/askey1.pdf, p. 116)
+(schéma: raw/askey1.pdf, p. 116)
 
 ---
 
@@ -113,7 +113,7 @@ Dimensions minimales hors-tout d'ouvrant ($Ho$) et hauteur minimale de poignée 
 | 3 points avec cylindre | W6050104 | **1 297** | 755 | $HP - 252 < HTr < HP + 52$ |
 | 1 point à coulisse | W6050111 | - | - | $HP - 106 < HTr < HP + 106$ |
 
-(schéma: a_faire/askey1.pdf, p. 125)
+(schéma: raw/askey1.pdf, p. 125)
 
 Relation hauteur hors-tout châssis et ouvrant :
 $$\text{Hors tout châssis} = Ho + 2 \times \text{hauteur dormant} - 16\text{ mm}$$
@@ -136,8 +136,8 @@ $$\text{Hors tout châssis} = Ho + 2 \times \text{hauteur dormant} - 16\text{ mm
 
 # Citations
 
-[1] [Coulissant 65 NV ASKEY - Conception](a_faire/askey1.pdf), p. 81, 109-127
-[2] [Coulissant 65 NV ASKEY - Fabrication](a_faire/askey5.pdf), p. 38-53, 98-114
+[1] [Coulissant 65 NV ASKEY - Conception](raw/askey1.pdf), p. 81, 109-127
+[2] [Coulissant 65 NV ASKEY - Fabrication](raw/askey5.pdf), p. 38-53, 98-114
 
 ---
 

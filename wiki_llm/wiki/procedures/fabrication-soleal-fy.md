@@ -9,22 +9,22 @@ fournisseur: TECHNAL
 usage: atelier
 status: stable
 sources:
-  - resource: wiki_llm/a_faire/DTA 6_12-2016_V5 (1).pdf
+  - resource: raw/DTA 6_12-2016_V5 (1).pdf
     id: technal-dta-soleal-fy-6-12-2016-v5
     title: DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm
     last_modified: 2023-05-25
-  - resource: wiki_llm/a_faire/SOLEAL-FY-55-évo-Fab_DOC-0001186128-Rev.B_Fr.pdf
+  - resource: raw/SOLEAL-FY-55-évo-Fab_DOC-0001186128-Rev.B_Fr.pdf
     id: technal-soleal-fy-55-fabrication-doc
     title: SOLEAL FY 55 évolution, Fabrication Ouvrant Minimal et Apparent, réf. DOC-0001186128 Rév. B
     last_modified: 2023-02-28
-  - resource: wiki_llm/a_faire/SOLEAL-FY-55-65-evolution-QC-catalogue-fabrication-6320-003-042021-FR.pdf
+  - resource: raw/SOLEAL-FY-55-65-evolution-QC-catalogue-fabrication-6320-003-042021-FR.pdf
     id: technal-soleal-fy-qc-fabrication-6320
     title: SOLEAL FY 55 & 65, Évolution Quincaillerie Cachée, Fabrication, réf. 6320.003
     last_modified: 2021-04-30
 source_pages:
-  - resource: wiki_llm/a_faire/SOLEAL-FY-55-évo-Fab_DOC-0001186128-Rev.B_Fr.pdf
+  - resource: raw/SOLEAL-FY-55-évo-Fab_DOC-0001186128-Rev.B_Fr.pdf
     pages: 4-46, 48-150
-  - resource: wiki_llm/a_faire/DTA 6_12-2016_V5 (1).pdf
+  - resource: raw/DTA 6_12-2016_V5 (1).pdf
     pages: 9-10, 13-14, 29-45
 ---
 
@@ -94,7 +94,7 @@ Sur tout ouvrant à frappe (OF, OB, Soufflet), les quatre angles intérieurs de 
 | **Fenêtre / Porte-fenêtre 2 vantaux** | $1\,001 < L \le 1\,700\text{ mm}$ | **4 drainages** | Aux extrémités + 2 au droit du battement central |
 | **Fenêtre / Porte-fenêtre 2 vantaux** | $L > 1\,700\text{ mm}$ | **6 drainages** | Aux extrémités + 2 au centre + 2 intermédiaires |
 
-(schéma: wiki_llm/a_faire/DTA 6_12-2016_V5 (1).pdf, p. 29-30 et 2 p. 5-7)
+(schéma: raw/DTA 6_12-2016_V5 (1).pdf, p. 29-30 et 2 p. 5-7)
 
 * **Drainage apparent** : lumières oblongues de **$5 \times 30\text{ mm}$** en façade protégées par le déflecteur clipsable **T3160** (trous de fixation Ø 4,1 mm).
 * **Drainage caché** : lumières oblongues de **$1,5 \times 30\text{ mm}$** (ou $5 \times 30\text{ mm}$) usinées en sous-face de traverse basse dormant (aucun déflecteur visible en façade).
@@ -161,11 +161,11 @@ Pour assurer l'accessibilité handicapés et la conformité au DTA CSTB [1 p. 9,
 
 # Citations
 
-[1] DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm — `wiki_llm/a_faire/DTA 6_12-2016_V5 (1).pdf`, p. 9 à 14
+[1] DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm — `raw/DTA 6_12-2016_V5 (1).pdf`, p. 9 à 14
 
-[2] SOLEAL FY 55 évolution, Fabrication Ouvrant Minimal et Apparent, réf. DOC-0001186128 Rév. B — `wiki_llm/a_faire/SOLEAL-FY-55-évo-Fab_DOC-0001186128-Rev.B_Fr.pdf`, p. 4 à 150
+[2] SOLEAL FY 55 évolution, Fabrication Ouvrant Minimal et Apparent, réf. DOC-0001186128 Rév. B — `raw/SOLEAL-FY-55-évo-Fab_DOC-0001186128-Rev.B_Fr.pdf`, p. 4 à 150
 
-[3] SOLEAL FY 55 & 65, Évolution Quincaillerie Cachée, Fabrication, réf. 6320.003 — `wiki_llm/a_faire/SOLEAL-FY-55-65-evolution-QC-catalogue-fabrication-6320-003-042021-FR.pdf`, p. 1 à 68
+[3] SOLEAL FY 55 & 65, Évolution Quincaillerie Cachée, Fabrication, réf. 6320.003 — `raw/SOLEAL-FY-55-65-evolution-QC-catalogue-fabrication-6320-003-042021-FR.pdf`, p. 1 à 68
 
 # Voir aussi
 

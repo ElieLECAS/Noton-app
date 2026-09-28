@@ -30,6 +30,13 @@ Le document est la notice technique d'atelier officielle éditée par [SOPROFEN]
 
 # Registre d'analyse page par page
 
+**Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
+
+| Pages PDF | Contenu | État | Page du wiki |
+| --- | --- | --- | --- |
+| toutes | document entier, relevé sous l'ancien protocole dans les sections ci-dessous | à faire | - |
+
+
 ## Page 1 (Réf. NO-BB-T-CO-01-FR-202406 p. 1)
 * **Objet** : Prescriptions générales, règles de sécurité, normes anticorrosion et phase 1 de fixation des coulisses.
 * **Consignes de sécurité et de manipulation** :

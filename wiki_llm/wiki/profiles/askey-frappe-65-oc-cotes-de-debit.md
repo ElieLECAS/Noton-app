@@ -9,12 +9,12 @@ usage: atelier
 famille: cotes-de-debit
 status: stable
 sources:
-  - resource: a_faire/askey3.pdf
+  - resource: raw/askey3.pdf
     id: askey-frappe-oc-conception
     title: Frappe 65 Ouvrant Caché ASKEY - Conception
     last_modified: 2023-02-20
 source_pages:
-  - resource: a_faire/askey3.pdf
+  - resource: raw/askey3.pdf
     pages: 149-183
 generated:
   by: process:claude-code
@@ -48,7 +48,7 @@ Application dormant coupe d'onglet 45°, ouvrant galbé W1010224, double vitrage
 | Tapée haute | **W4000166** | Tapée doublage 120 mm | 1 | $L - 13$ | 90°-90° |
 | Double vitrage | Remplissage | Double vitrage 28 mm | 1 | $(H - 131) \times (L - 131)$ | Rectangulaire |
 
-(schéma: a_faire/askey3.pdf, p. 151)
+(schéma: raw/askey3.pdf, p. 151)
 
 ### 2. Châssis fixe dormant périphérique - Vitrage 28 mm
 
@@ -64,7 +64,7 @@ Application dormant BTC W1010064, parclose aluminium intérieure droite W3090174
 | Support cale vitrage | **W8020003** | Profil support cales fixe | 1 | $L - 100$ | 90°-90° |
 | Double vitrage | Remplissage | Double vitrage 28 mm | 1 | $(H - 114) \times (L - 114)$ | Rectangulaire |
 
-(schéma: a_faire/askey3.pdf, p. 153)
+(schéma: raw/askey3.pdf, p. 153)
 
 ### 3. Fenêtre 2 vantaux DT HI - Prise de vitrage 28 mm
 
@@ -83,7 +83,7 @@ Application dormant HI W1010390, battement central Y3710012, capot poignée cent
 | Capot poignée cent. | **W3090108** | Capot battement poignée centrée | 1 | $H - 50$ | 90°-90° |
 | Double vitrage | Remplissage | Double vitrage 28 mm | 2 | $(H - 131) \times (L/2 - 95)$ | Rectangulaire |
 
-(schéma: a_faire/askey3.pdf, p. 155)
+(schéma: raw/askey3.pdf, p. 155)
 
 ### 4. Porte-fenêtre 1 vantail seuil PMR - Bandeau serrure (PV 28 mm)
 
@@ -105,7 +105,7 @@ Application dormant monobloc W1010124, seuil PMR W1010384, montant serrure renfo
 | Vitrage haut | Remplissage | Double vitrage 28 mm | 1 | $(X - 69{,}5) \times (L - 163)$ | Rectangulaire |
 | Vitrage bas | Remplissage | Double vitrage 28 mm | 1 | $(Y - 69{,}5) \times (L - 163)$ | Rectangulaire |
 
-(schéma: a_faire/askey3.pdf, p. 157)
+(schéma: raw/askey3.pdf, p. 157)
 
 ### 5. Fenêtre 1 vantail C45 - Vitrage lourd 36 mm (HI+ 75 mm)
 
@@ -121,7 +121,7 @@ Application dormant 75 mm Y1715147, parclose TPE W4030328 [1 p. 173] :
 | Parclose TPE 36 | **W4030328** | Parclose TPE ouvrant 36 mm | 2 | $HCO - 59$ | 45°-45° |
 | Double/triple vitrage | Remplissage | Vitrage 36 mm | 1 | $(H - 131) \times (L - 131)$ | Rectangulaire |
 
-(schéma: a_faire/askey3.pdf, p. 173)
+(schéma: raw/askey3.pdf, p. 173)
 
 ### 6. Ensemble composé 2 vantaux + fixe latéral sur seuil PMR filant
 
@@ -143,7 +143,7 @@ Application dormant DC AR BTC W1010132, meneau intermédiaire W1010061, feuillur
 | Vitrage fixe 28 mm | Remplissage | Vitrage partie fixe | 1 | $(L2 - 103) \times (H - 100{,}5)$ | Rectangulaire |
 | Vitrage ouvrant 28 mm| Remplissage | Vitrage partie ouvrante | 2 | $(LCO/2 - 71) \times (HCO - 83)$ | Rectangulaire |
 
-(schéma: a_faire/askey3.pdf, p. 183)
+(schéma: raw/askey3.pdf, p. 183)
 
 ---
 
@@ -156,7 +156,7 @@ Application dormant DC AR BTC W1010132, meneau intermédiaire W1010061, feuillur
 
 # Citations
 
-[1] [Frappe 65 Ouvrant Caché ASKEY - Conception](a_faire/askey3.pdf), p. 118-121, 149-183
+[1] [Frappe 65 Ouvrant Caché ASKEY - Conception](raw/askey3.pdf), p. 118-121, 149-183
 
 ---
 

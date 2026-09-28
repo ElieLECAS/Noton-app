@@ -9,18 +9,18 @@ fournisseur: TECHNAL
 usage: atelier
 status: stable
 sources:
-  - resource: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf
+  - resource: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf
     id: technal-lumeal-ga-conception-5156-007
     title: LUMEAL GA — Catalogue de conception Le Coulissant Minimal (Réf. 5156.007)
     last_modified: 2021-01-21
-  - resource: wiki_llm/a_faire/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf
+  - resource: raw/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf
     id: technal-lumeal-ga-fabrication-5074-007
     title: LUMEAL GA — Guide d'atelier et catalogue de fabrication (Réf. 5074.007)
     last_modified: 2021-01-27
 source_pages:
-  - resource: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf
+  - resource: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf
     pages: 21-41, 51-53, 58-59
-  - resource: wiki_llm/a_faire/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf
+  - resource: raw/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf
     pages: 4-15
 generated:
   by: process:multimodal-direct
@@ -55,7 +55,7 @@ Profilés pour châssis 2 vantaux 2 rails en coupe droite, cotes en mm relevées
 | **Bouclier thermique montant** | T823001 | 2 | $H - 115$ | Dans gorge de montant dormant |
 | **Volume de vitrage (2 vtx)** | Double vitrage 24-32 | 2 | $(H - 143) \times (L/2 - 66)$ | Hauteur x Largeur vitrage |
 
-(schéma: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 24-27)
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 24-27)
 
 ---
 
@@ -78,7 +78,7 @@ Profilés pour porte-fenêtre 2 vantaux équipée du seuil surbaissé T141014 et
 | **Boucliers acoustique/therm.**| T823000 / T823001 | 2 | $H - 97$ | Recoupes montants dormants |
 | **Volume de vitrage PMR** | Double vitrage 24-32 | 2 | $(H - 125) \times (L/2 - 66)$ | Hauteur x Largeur vitrage |
 
-(schéma: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 38-41)
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 38-41)
 
 ---
 
@@ -99,7 +99,7 @@ Profilés pour porte-fenêtre 2 vantaux équipée du seuil surbaissé T141014 et
 | **Bouclier PVC supérieur** | T431024 | 2 + 1 | $L/4 - 38$ et $L/2 - 112$ | Supérieur |
 | **Volume de vitrage (4 vtx)** | Double vitrage 24-32 | 4 | $(H - 143) \times (L/4 - 47)$ | 4 volumes identiques |
 
-(schéma: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 30-33)
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 30-33)
 
 ---
 
@@ -119,7 +119,7 @@ Profilés pour porte-fenêtre 2 vantaux équipée du seuil surbaissé T141014 et
 | **Bouclier PVC inférieur** | T431025 | 2 | $L - 42$ | Inférieur |
 | **Volume de vitrage (3 vtx)** | Double vitrage 24-32 | 3 | $(H - 143) \times (L/3 - 47)$ | 3 volumes identiques |
 
-(schéma: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 32-35)
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 32-35)
 
 ---
 
@@ -143,7 +143,7 @@ $L_f$ désigne la largeur en feuillure de la partie fixe vitrée.
 | **Vitrage ouvrant mobile** | Double vitrage 24-32 | 1 | $(H - 143) \times (L - L_f - 66)$ | Vantail mobile |
 | **Vitrage partie fixe** | Double vitrage 24-32 | 1 | $(H - 75) \times (L_f - 66)$ | Partie fixe vitrée |
 
-(schéma: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 34-37)
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 34-37)
 
 ---
 
@@ -184,8 +184,8 @@ Formules de déduction de l'unité de passage libre maximale [1 p. 58-59] :
 
 # Citations
 
-[1] LUMEAL GA — Catalogue de conception Le Coulissant Minimal (Réf. 5156.007 - 01/2021) — `wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf`
-[2] LUMEAL GA — Guide d'atelier et catalogue de fabrication (Réf. 5074.007 - 01/2021) — `wiki_llm/a_faire/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf`
+[1] LUMEAL GA — Catalogue de conception Le Coulissant Minimal (Réf. 5156.007 - 01/2021) — `raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf`
+[2] LUMEAL GA — Guide d'atelier et catalogue de fabrication (Réf. 5074.007 - 01/2021) — `raw/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf`
 
 ---
 

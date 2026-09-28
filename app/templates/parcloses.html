@@ -61,28 +61,32 @@
   #pj .mat.pvc{color:var(--pvc)} #pj .mat.alu{color:var(--alu)}
   #pj .sys-h .meta{color:var(--tx-dim);font-size:12.5px}
   #pj .sys-h .n{margin-left:auto;color:var(--tx-faint);font-size:12px}
-  #pj .ctx{padding:.2rem 1rem .6rem}
-  #pj .ctx h3{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--tx-faint);margin:.8rem 0 .4rem}
-  #pj .recette{display:grid;grid-template-columns:9.5rem minmax(0,1fr);gap:.3rem .9rem;align-items:baseline}
-  #pj .el{display:contents}
-  #pj .role{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--tx-faint);padding-top:.15rem}
-  #pj .val{display:flex;flex-wrap:wrap;align-items:baseline;gap:.2rem .5rem}
-  #pj .val b{font-size:14.5px;font-weight:800;color:var(--tx)}
-  #pj .val .det{font-size:12.5px;color:var(--tx-dim)}
-  #pj .val .ou{font-size:12px;color:var(--tx-faint);font-style:italic;margin:0 .15rem}
-  #pj .recette .note{grid-column:1/-1;margin:.1rem 0 0;font-size:12px;color:var(--tx-dim)}
-  #pj .admis{font-size:12.5px;color:var(--tx-dim)} #pj .admis b{color:var(--tx);font-size:14px}
-  #pj .tol{font-size:11.5px;color:var(--tx-faint)}
-  #pj details.proches{margin-top:.3rem}
-  #pj details.proches>summary{cursor:pointer;font-size:12.5px;font-weight:600;color:var(--etude);padding:.4rem 0}
-  #pj .sol{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:1rem;align-items:center;padding:.6rem 0;
-    border-top:1px solid var(--line)}
-  #pj .ctx h3+.sol{border-top:0}
-  #pj .sol.proche{opacity:.78}
+  #pj .tbl{overflow-x:auto}
+  #pj table{border-collapse:collapse;width:100%;font-size:13.5px}
+  #pj th{position:sticky;top:0;background:var(--bg-sunken);text-align:left;font-size:.68rem;font-weight:700;letter-spacing:.07em;
+    text-transform:uppercase;color:var(--tx-dim);padding:.55rem .7rem;border-bottom:1px solid var(--line-strong);white-space:nowrap}
+  #pj td{padding:.5rem .7rem;border-bottom:1px solid var(--line);vertical-align:middle}
+  #pj tbody tr:nth-child(even) td{background:var(--bg-side)}
+  #pj tbody tr:hover td{background:var(--bg-hover)}
+  #pj td b{font-weight:800;color:var(--tx)}
+  #pj td .det{display:block;font-size:12px;color:var(--tx-dim);margin-top:1px}
+  #pj td .vide{color:var(--tx-faint)}
+  #pj .c-ctx{color:var(--tx-dim);font-size:12.5px;min-width:10rem}
+  #pj .c-num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  #pj th.c-num{text-align:right}
+  #pj .c-tol{white-space:nowrap;color:var(--tx-dim);font-size:12.5px}
+  #pj .c-res{white-space:nowrap}
+  #pj .c-res .tag+.tag{margin-left:.3rem}
+  #pj .c-src{white-space:nowrap}
+  #pj .c-src a+a{margin-left:.3rem}
+  #pj .c-img{width:76px}
+  #pj tr.proche td{color:var(--tx-dim)}
+  #pj details.proches{border-top:1px solid var(--line)}
+  #pj details.proches>summary{cursor:pointer;font-size:12.5px;font-weight:600;color:var(--etude);padding:.6rem 1rem}
+  #pj .notes{margin:0;padding:.6rem 1rem .8rem 2rem;color:var(--tx-dim);font-size:12.5px;border-top:1px solid var(--line)}
   #pj .coupe{width:64px;height:44px;border-radius:6px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;overflow:hidden}
   #pj .coupe img{max-width:60px;max-height:40px}
   #pj .coupe.vide{background:var(--bg-sunken)}
-  #pj .etat{display:flex;flex-direction:column;align-items:flex-end;gap:.25rem;text-align:right}
   #pj .tag{font-size:11px;font-weight:700;border-radius:99px;padding:1px 8px;border:1px solid;white-space:nowrap}
   #pj .t-ok{color:var(--ok);background:var(--ok-bg);border-color:var(--ok-br)}
   #pj .t-proche{color:var(--etude);background:var(--etude-bg);border-color:var(--etude-br)}
@@ -94,7 +98,7 @@
     border-radius:99px;padding:0 8px;text-decoration:none}
   #pj h2.sep{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--etude);margin:1.6rem 0 .6rem}
   #pj .aside{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-  @media(max-width:900px){#pj .aside{grid-template-columns:1fr} #pj .sol{grid-template-columns:56px minmax(0,1fr)} #pj .recette{grid-template-columns:7.5rem minmax(0,1fr)} #pj .etat{grid-column:1/-1;align-items:flex-start}}
+  @media(max-width:900px){#pj .aside{grid-template-columns:1fr}}
   #pj .box{border:1px solid var(--line);border-radius:14px;padding:.8rem 1rem}
   #pj .box h2{margin:0 0 .5rem;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tx-faint)}
   #pj .box ul{margin:0;padding-left:1.1rem;color:var(--tx-dim);line-height:1.5}
@@ -268,8 +272,7 @@ function rendu(d){
     return '<article class="sys"><header class="sys-h"><span class="mat ' + (g.materiau === "PVC" ? "pvc" : "alu") + '">' + esc(g.materiau) + '</span>' +
       '<h2>' + esc(g.systeme) + '</h2><span class="meta">' + esc(g.fournisseur) + (g.gammes.length ? ' · ' + esc(g.gammes.join(", ")) : "") + '</span>' +
       '<span class="n">' + (ok ? ok + ' correspondance' + (ok > 1 ? "s" : "") : n + ' proche' + (n > 1 ? "s" : "")) + '</span></header>' +
-      g.contextes.map(c => '<div class="ctx"><h3>' + esc(c.contexte) + '</h3>' + lignes(c.solutions) + '</div>').join("") +
-      '</article>';
+      tableau(g) + '</article>';
   };
   const avec = tries.filter(g => nbOk(g) > 0), proches = tries.filter(g => nbOk(g) === 0);
   const groupes = avec.map(carte).join("") +
@@ -283,47 +286,45 @@ function rendu(d){
     (d.erreurs.length ? '<p class="empty err">Tables illisibles : ' + d.erreurs.map(esc).join(" · ") + '</p>' : "");
 }
 
-// Une ligne = une fiche de montage : chaque élément avec son rôle en toutes lettres (parclose, joint,
-// support de cale…). Les solutions qui ne diffèrent que par la première pièce (deux parcloses de
-// formes différentes, dix profilés d'une même prise de vitrage) partagent une fiche.
-function lignes(sols){
-  const paquets = [];
-  sols.forEach(s => {
-    const reste = s.elements.slice(1).map(e => e.role + "=" + e.valeur + "=" + e.detail).join("|");
-    const cle = [s.statut, s.cible, s.min, s.max, s.recommande, reste, s.source.section, s.image ? s.ref : ""].join("§");
-    const p = paquets.find(p => p.cle === cle);
-    if(p) p.push(s); else { const n = [s]; n.cle = cle; paquets.push(n); }
-  });
-  const ok = paquets.filter(p => p[0].statut === "ok"), proches = paquets.filter(p => p[0].statut !== "ok");
-  return ok.map(fiche).join("") +
+// Un tableau par système : une ligne par solution, une colonne par pièce à monter. Les colonnes de
+// pièces sont celles que les solutions du système emploient, dans l'ordre où elles apparaissent
+// (parclose, joint, support de cale… ou profilé d'ouvrant sur l'alu). Les combinaisons « proches »
+// forment un second tableau, replié quand il existe une vraie correspondance.
+function tableau(g){
+  const sols = g.contextes.flatMap(c => c.solutions.map(s => Object.assign({ctx: c.contexte}, s)));
+  const roles = [];
+  sols.forEach(s => s.elements.forEach(e => { if(!roles.includes(e.role)) roles.push(e.role); }));
+  const avecImage = sols.some(s => s.image);
+  const unCtx = g.contextes.length === 1;
+  const entete = '<thead><tr>' + (avecImage ? '<th class="c-img">Coupe</th>' : "") +
+    (unCtx ? "" : '<th>Emplacement</th>') + roles.map(r => '<th>' + esc(r) + '</th>').join("") +
+    '<th class="c-num">Vitrage admis (mm)</th><th>Tolérance</th><th>Résultat</th><th>Source</th></tr></thead>';
+  const ligne = s => {
+    const el = Object.fromEntries(s.elements.map(e => [e.role, e]));
+    const admis = s.min != null && s.max != null ? fmt(s.min) + ' à ' + fmt(s.max) : (s.cible != null ? fmt(s.cible) : "–");
+    const tol = s.tolerance === "plage" ? "plage écrite" : (s.tolerance ? esc(s.tolerance) + ' mm' : "non écrite");
+    const res = (s.statut === "ok" ? '<span class="tag t-ok">Correspond</span>'
+      : '<span class="tag t-proche">Proche (' + (s.ecart > 0 ? "+" : "") + fmt(s.ecart) + ' mm)</span>') +
+      (s.recommande ? '<span class="tag t-reco">Recommandée</span>' : "");
+    return '<tr class="' + s.statut + '">' +
+      (avecImage ? '<td class="c-img"><div class="coupe' + (s.image ? "" : " vide") + '">' +
+        (s.image ? '<img src="' + esc(s.image) + '" alt="' + esc(s.ref) + '" loading="lazy">' : "") + '</div></td>' : "") +
+      (unCtx ? "" : '<td class="c-ctx">' + esc(s.ctx) + '</td>') +
+      roles.map(r => { const e = el[r]; return '<td>' + (e ? '<b>' + esc(e.valeur) + '</b>' +
+        (e.detail ? '<span class="det">' + esc(e.detail) + '</span>' : "") : '<span class="vide">–</span>') + '</td>'; }).join("") +
+      '<td class="c-num"><b>' + admis + '</b></td><td class="c-tol">' + tol + '</td><td class="c-res">' + res + '</td>' +
+      '<td class="c-src"><a class="src" href="' + wikiHref(s.source.page) + '" title="' + esc(s.source.localisation || "") + '">' +
+        esc(s.source.section) + '</a>' + s.anomalies.map(a => '<a class="anom" href="' + wikiHref(REGISTRES[a.slice(0, 3)] || "") + '">' + esc(a) + '</a>').join("") + '</td>' +
+    '</tr>';
+  };
+  const table = lst => '<div class="tbl"><table>' + entete + '<tbody>' + lst.map(ligne).join("") + '</tbody></table></div>';
+  const ok = sols.filter(s => s.statut === "ok"), proches = sols.filter(s => s.statut !== "ok");
+  const notes = [...new Set(sols.map(s => s.note).filter(Boolean))];
+  return (ok.length ? table(ok) : "") +
     (proches.length ? '<details class="proches"' + (ok.length ? "" : " open") + '><summary>' + proches.length +
       ' combinaison' + (proches.length > 1 ? "s" : "") + ' proche' + (proches.length > 1 ? "s" : "") + ', à vérifier</summary>' +
-      proches.map(fiche).join("") + '</details>' : "");
-}
-
-function fiche(paquet){
-  const s = paquet[0];
-  const [tete, ...reste] = s.elements;
-  // la première pièce : une ou plusieurs références, chacune avec son détail
-  const tetes = paquet.map(x => x.elements[0]).filter(Boolean);
-  const premiere = tete ? '<div class="el"><span class="role">' + esc(tete.role) + '</span><span class="val">' +
-    tetes.map((e, i) => (i ? '<span class="ou">ou</span>' : "") + '<b>' + esc(e.valeur) + '</b>' +
-      (e.detail ? '<span class="det">' + esc(e.detail) + '</span>' : "")).join("") + '</span></div>' : "";
-  const autres = reste.map(e => '<div class="el"><span class="role">' + esc(e.role) + '</span><span class="val"><b>' +
-    esc(e.valeur) + '</b>' + (e.detail ? '<span class="det">' + esc(e.detail) + '</span>' : "") + '</span></div>').join("");
-  const etat = s.statut === "ok" ? '<span class="tag t-ok">Correspond</span>'
-    : '<span class="tag t-proche">Proche (' + (s.ecart > 0 ? "+" : "") + fmt(s.ecart) + ' mm)</span>';
-  const admis = s.min != null && s.max != null ? fmt(s.min) + ' à ' + fmt(s.max) + ' mm'
-    : (s.cible != null ? fmt(s.cible) + ' mm' : "");
-  const tol = s.tolerance && s.tolerance !== "plage" ? 'tolérance ' + esc(s.tolerance) + ' mm' : (s.min == null ? "sans tolérance écrite" : "");
-  return '<div class="sol ' + s.statut + '">' +
-    '<div class="coupe' + (s.image ? "" : " vide") + '">' + (s.image ? '<img src="' + esc(s.image) + '" alt="' + esc(s.ref) + '" loading="lazy">' : "") + '</div>' +
-    '<div class="recette">' + premiere + autres + (s.note ? '<p class="note">' + esc(s.note) + '</p>' : "") + '</div>' +
-    '<div class="etat">' + etat + (s.recommande ? '<span class="tag t-reco">Prise de volume recommandée</span>' : "") +
-      '<span class="admis">vitrage admis <b>' + admis + '</b></span>' + (tol ? '<span class="tol">' + tol + '</span>' : "") +
-      '<span class="liens"><a class="src" href="' + wikiHref(s.source.page) + '" title="' + esc(s.source.localisation || "") + '">' + esc(s.source.section) + '</a>' +
-      s.anomalies.map(a => '<a class="anom" href="' + wikiHref(REGISTRES[a.slice(0, 3)] || "") + '">' + esc(a) + '</a>').join("") + '</span></div>' +
-  '</div>';
+      table(proches) + '</details>' : "") +
+    (notes.length ? '<ul class="notes">' + notes.map(n => '<li>' + esc(n) + '</li>').join("") + '</ul>' : "");
 }
 
 const aide = $("pj-aide");

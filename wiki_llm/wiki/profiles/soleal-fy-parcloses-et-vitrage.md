@@ -9,22 +9,22 @@ fournisseur: TECHNAL
 usage: atelier
 status: stable
 sources:
-  - resource: wiki_llm/a_faire/DTA 6_12-2016_V5 (1).pdf
+  - resource: raw/DTA 6_12-2016_V5 (1).pdf
     id: technal-dta-soleal-fy-6-12-2016-v5
     title: DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm
     last_modified: 2023-05-25
-  - resource: wiki_llm/a_faire/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf
+  - resource: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf
     id: technal-soleal-fy-55-conception-6057
     title: SOLEAL FY 55 évolution, Conception Ouvrant Minimal et Apparent, réf. 6057.003
     last_modified: 2020-07-10
-  - resource: wiki_llm/a_faire/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf
+  - resource: raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf
     id: technal-soleal-fy-qc-conception-6319
     title: SOLEAL FY 55 & 65, Évolution Quincaillerie Cachée, Conception, réf. 6319.003
     last_modified: 2021-07-29
 source_pages:
-  - resource: wiki_llm/a_faire/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf
+  - resource: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf
     pages: 32-37, 188, 203, 212
-  - resource: wiki_llm/a_faire/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf
+  - resource: raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf
     pages: 32-39, 168, 171
 ---
 
@@ -60,7 +60,7 @@ Sur l'ouvrant apparent et la partie fixe SOLEAL FY 55, trois cotes se lisent dan
 </tbody>
 </table>
 
-(schéma: wiki_llm/a_faire/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf, p. 32)
+(schéma: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf, p. 32)
 
 La parclose T591001 ne se monte pas avec les joints jaune et marron. Le grisé de la colonne Bleu n'a pas pu être confirmé sur trois cellules : T591002 à 36 mm, T591008 à 17 mm et T591009 à 15 mm ; elles restent hors de la prise de volume recommandée jusqu'à relecture de la planche.
 
@@ -116,7 +116,7 @@ L'ouvrant masqué ne comporte pas de parclose intérieure en aluminium. Le vitra
 | **40 mm (FY 65)** | TFY1233 | TFY4002 ou TFY4003 | T710034 (jeu 6,5 mm) | TFY3677 |
 | **42 mm (FY 65)** | TFY1233 | TFY4002 ou TFY4003 | T410010 (jeu 4,5 mm) | TFY3677 |
 
-(schéma: wiki_llm/a_faire/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf, p. 36-37)
+(schéma: raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf, p. 36-37)
 
 * **Adaptateur de réduction de feuillure TFY2508** : permet d'adapter un vitrage de 24 ou 26 mm dans un profil ouvrant ou traverse prévu pour 30/32 mm (associé au joint clip TFY5010).
 
@@ -143,11 +143,11 @@ Le calage des vitrages isolants est exécuté conformément aux règles professi
 
 # Citations
 
-[1] DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm — `wiki_llm/a_faire/DTA 6_12-2016_V5 (1).pdf`, p. 8 à 14
+[1] DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm — `raw/DTA 6_12-2016_V5 (1).pdf`, p. 8 à 14
 
-[2] SOLEAL FY 55 évolution, Conception Ouvrant Minimal et Apparent, réf. 6057.003 — `wiki_llm/a_faire/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf`, p. 32 à 37
+[2] SOLEAL FY 55 évolution, Conception Ouvrant Minimal et Apparent, réf. 6057.003 — `raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf`, p. 32 à 37
 
-[3] SOLEAL FY 55 & 65, Évolution Quincaillerie Cachée, Conception, réf. 6319.003 — `wiki_llm/a_faire/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf`, p. 32 à 39
+[3] SOLEAL FY 55 & 65, Évolution Quincaillerie Cachée, Conception, réf. 6319.003 — `raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf`, p. 32 à 39
 
 # Voir aussi
 

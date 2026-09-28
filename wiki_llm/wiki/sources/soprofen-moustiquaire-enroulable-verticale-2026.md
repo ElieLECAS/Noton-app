@@ -33,12 +33,14 @@ generated:
 
 # Registre de couverture
 
+**Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
+
 Numérotation identique entre le fichier PDF et le document imprimé (pages 1 et 2).
 
 | Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| 1 | Titre, avantages (anti-insectes, aération, intégration vis invisible, largeur jusqu'à 3,50 m, ressort de tension, frein optionnel), schémas des 5 modèles (MOHO 48 sans maintien, MOHO 54 et MOHO 54CH avec opercules, CA 68 ZIP et CA 96 ZIP avec coulisses zip), détails techniques (adaptabilité fenêtres coffres 48-54 et portes-fenêtres coffres 68-96, trois guidages brosse/opercules/zip, coffres/coulisses alu extrudé, toile fibre de verre PVC, sécurité crochets verrouillage) | transcrit | [Moustiquaires enroulables verticales](/equipements/moustiquaires-enroulables-verticales.md) |
-| 2 | Limites dimensionnelles complètes (tableau L max × H max des 5 modèles), caractéristiques toile standard (120 g/m², 36 % fibre de verre / 64 % PVC, coloris gris), profilés alu laqué (6 coloris standards MOHO 48, nuancier RAL 4 finitions autres modèles), schémas de mise en œuvre enroulement intérieur, manœuvres manuelles (tirage direct, chaînette, treuil) et motorisées (Somfy Altus 40 RTS, Somfy Sunea io 40, Cherubini filaire, Somfy JOB filaire, Ozroll solaire), mentions de garanties et normes | transcrit | [Moustiquaires enroulables verticales](/equipements/moustiquaires-enroulables-verticales.md) |
+| 1 | Titre, avantages (anti-insectes, aération, intégration vis invisible, largeur jusqu'à 3,50 m, ressort de tension, frein optionnel), schémas des 5 modèles (MOHO 48 sans maintien, MOHO 54 et MOHO 54CH avec opercules, CA 68 ZIP et CA 96 ZIP avec coulisses zip), détails techniques (adaptabilité fenêtres coffres 48-54 et portes-fenêtres coffres 68-96, trois guidages brosse/opercules/zip, coffres/coulisses alu extrudé, toile fibre de verre PVC, sécurité crochets verrouillage) | à faire | [Moustiquaires enroulables verticales](/equipements/moustiquaires-enroulables-verticales.md) |
+| 2 | Limites dimensionnelles complètes (tableau L max × H max des 5 modèles), caractéristiques toile standard (120 g/m², 36 % fibre de verre / 64 % PVC, coloris gris), profilés alu laqué (6 coloris standards MOHO 48, nuancier RAL 4 finitions autres modèles), schémas de mise en œuvre enroulement intérieur, manœuvres manuelles (tirage direct, chaînette, treuil) et motorisées (Somfy Altus 40 RTS, Somfy Sunea io 40, Cherubini filaire, Somfy JOB filaire, Ozroll solaire), mentions de garanties et normes | à faire | [Moustiquaires enroulables verticales](/equipements/moustiquaires-enroulables-verticales.md) |
 
 # Anomalies portées par ce document
 

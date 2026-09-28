@@ -33,12 +33,14 @@ generated:
 
 # Registre de couverture
 
+**Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
+
 Numérotation identique entre le fichier PDF et le document imprimé (pages 1 et 2).
 
 | Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| 1 | Titre, avantages (anti-insectes, aération, grandes dimensions portes et baies, épaisseur réduite 29 mm, plis de 15 mm coloris gris, fils de tension traversant la toile pour tenue au vent, 3 configurations de vantaux, manœuvres chenilles et cordons), schémas des 5 modèles (MOPL 29 1V, MOPL 29 2VO, MOPL 29 2VJ à chenilles ; MOPF 29 REV sans chenilles ; MOPF 29 1R à cordons), focus technique (seuil bas alu en 2 profilés rattrapant jusqu'à 5° de pente d'appui, toile polyester enduite PVC, tension de cordons pour souplesse, pose de face ou entre tableaux) | transcrit | [Moustiquaires plissées](/equipements/moustiquaires-plissees.md) |
-| 2 | Limites dimensionnelles maximales (largeurs max 1800 à 3200 mm, hauteurs max 1700 à 2500 mm), toile standard (plissée 15 mm, fils polyester enduits PVC gris), profilés alu laqué (nuancier RAL, 4 finitions mat/brillant/satin/texturé), accessoires noirs, coupes de mise en œuvre cotées (pose entre tableau et applique de face pour MOPL 29 1V, 2VO, 2VJ et MOPF 29 REV avec encombrements repliés E mini / E maxi), garanties et normes | transcrit | [Moustiquaires plissées](/equipements/moustiquaires-plissees.md) |
+| 1 | Titre, avantages (anti-insectes, aération, grandes dimensions portes et baies, épaisseur réduite 29 mm, plis de 15 mm coloris gris, fils de tension traversant la toile pour tenue au vent, 3 configurations de vantaux, manœuvres chenilles et cordons), schémas des 5 modèles (MOPL 29 1V, MOPL 29 2VO, MOPL 29 2VJ à chenilles ; MOPF 29 REV sans chenilles ; MOPF 29 1R à cordons), focus technique (seuil bas alu en 2 profilés rattrapant jusqu'à 5° de pente d'appui, toile polyester enduite PVC, tension de cordons pour souplesse, pose de face ou entre tableaux) | à faire | [Moustiquaires plissées](/equipements/moustiquaires-plissees.md) |
+| 2 | Limites dimensionnelles maximales (largeurs max 1800 à 3200 mm, hauteurs max 1700 à 2500 mm), toile standard (plissée 15 mm, fils polyester enduits PVC gris), profilés alu laqué (nuancier RAL, 4 finitions mat/brillant/satin/texturé), accessoires noirs, coupes de mise en œuvre cotées (pose entre tableau et applique de face pour MOPL 29 1V, 2VO, 2VJ et MOPF 29 REV avec encombrements repliés E mini / E maxi), garanties et normes | à faire | [Moustiquaires plissées](/equipements/moustiquaires-plissees.md) |
 
 # Citations
 

@@ -8,22 +8,22 @@ fournisseur: ASKEY
 usage: atelier
 status: stable
 sources:
-  - resource: a_faire/askey2.pdf
+  - resource: raw/askey2.pdf
     id: askey-frappe-oc-fabrication
     title: Frappe 65 Ouvrant Caché ASKEY - Fabrication
     last_modified: 2022-12-13
-  - resource: a_faire/askey3.pdf
+  - resource: raw/askey3.pdf
     id: askey-frappe-oc-conception
     title: Frappe 65 Ouvrant Caché ASKEY - Conception
     last_modified: 2023-02-20
-  - resource: a_faire/askey4.pdf
+  - resource: raw/askey4.pdf
     id: askey-frappe-ov-fabrication
     title: Frappe 65 Ouvrant Visible ASKEY - Fabrication
     last_modified: 2022-12-14
 source_pages:
-  - resource: a_faire/askey3.pdf
+  - resource: raw/askey3.pdf
     pages: 81-112, 137-148
-  - resource: a_faire/askey4.pdf
+  - resource: raw/askey4.pdf
     pages: 10, 88-92, 137-140, 207-224
 generated:
   by: process:claude-code
@@ -58,7 +58,7 @@ Dormants périphériques coupe d'onglet 45° ou coupe droite [1 p. 88-91, 140-14
 | **W4050583** | Équerre dormant ITE | Spécifique | Vissage | Dormant ITE W1010504 |
 | **W4950009** | Équerre chambre 28 mm | 28 | Goupillage ou vissage | 2 x W4070000 ou 2 x W4070002 |
 
-(schéma: a_faire/askey3.pdf, p. 88, 89, 90, 140, 141)
+(schéma: raw/askey3.pdf, p. 88, 89, 90, 140, 141)
 
 ### Équerres d'assemblage ouvrants
 
@@ -77,7 +77,7 @@ Dormants périphériques coupe d'onglet 45° ou coupe droite [1 p. 88-91, 140-14
 | **W4950310** | Équerre porte-fenêtre fiches | Ouvrant visible fiches W1010287 | Goupillage ou vissage L100 |
 | **W4050595** | Équerre ouvrant HI+ | Ouvrant visible HI+ W1010531 | Goupillage ou vissage L100 |
 
-(schéma: a_faire/askey3.pdf, p. 87, 88, 89, 91, 138 et a_faire/askey4.pdf, p. 208-223)
+(schéma: raw/askey3.pdf, p. 87, 88, 89, 91, 138 et raw/askey4.pdf, p. 208-223)
 
 ### Raccords d'assemblage pour traverses et meneaux
 
@@ -96,7 +96,7 @@ Dormants périphériques coupe d'onglet 45° ou coupe droite [1 p. 88-91, 140-14
 | **W4960230** | Raccord extérieur drainage caché | 28 | 44 | 1 x W4070002 |
 | **Y4760001** | Raccord traverse OC/DC | 28 | 44 | 1 x W4070002 |
 
-(schéma: a_faire/askey3.pdf, p. 93, 94, 139)
+(schéma: raw/askey3.pdf, p. 93, 94, 139)
 
 ### Goupilles et visserie d'atelier
 
@@ -122,7 +122,7 @@ Limites d'utilisation pour la ferrure de frappe Ferco Unijet [1 p. 134-136] :
 | **Unijet D** | **80 kg** | 400 à 1 600 mm | 500 à 2 200 mm |
 | **Unijet C130** | **105 kg** | 400 à 1 600 mm | 500 à 2 200 mm |
 
-(schéma: a_faire/askey3.pdf, p. 134)
+(schéma: raw/askey3.pdf, p. 134)
 
 Au-delà de 65 kg par vantail, la notice prescrit obligatoirement l'adjonction d'une **gâche releveur** en bas de vantail [1 p. 134].
 
@@ -144,9 +144,9 @@ Au-delà de 65 kg par vantail, la notice prescrit obligatoirement l'adjonction d
 
 # Citations
 
-[1] [Frappe 65 Ouvrant Caché ASKEY - Conception](a_faire/askey3.pdf), p. 81-112, 134-148
-[2] [Frappe 65 Ouvrant Caché ASKEY - Fabrication](a_faire/askey2.pdf), p. 200-201
-[3] [Frappe 65 Ouvrant Visible ASKEY - Fabrication](a_faire/askey4.pdf), p. 149, 206, 208-223
+[1] [Frappe 65 Ouvrant Caché ASKEY - Conception](raw/askey3.pdf), p. 81-112, 134-148
+[2] [Frappe 65 Ouvrant Caché ASKEY - Fabrication](raw/askey2.pdf), p. 200-201
+[3] [Frappe 65 Ouvrant Visible ASKEY - Fabrication](raw/askey4.pdf), p. 149, 206, 208-223
 
 ---
 

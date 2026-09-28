@@ -9,18 +9,18 @@ fournisseur: TECHNAL
 usage: atelier
 status: stable
 sources:
-  - resource: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf
+  - resource: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf
     id: technal-lumeal-ga-conception-5156-007
     title: LUMEAL GA — Catalogue de conception Le Coulissant Minimal (Réf. 5156.007)
     last_modified: 2021-01-21
-  - resource: wiki_llm/a_faire/DTA Lumeal GA 6-14-2166-v2.pdf
+  - resource: raw/DTA Lumeal GA 6-14-2166-v2.pdf
     id: technal-dta-lumeal-ga-6-14-2166-v2
     title: DTA CSTB n° 6/14-2166_V2 LUMEAL Minimal Ga
     last_modified: 2024-05-27
 source_pages:
-  - resource: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf
+  - resource: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf
     pages: 4-7, 15-20, 64-80
-  - resource: wiki_llm/a_faire/DTA Lumeal GA 6-14-2166-v2.pdf
+  - resource: raw/DTA Lumeal GA 6-14-2166-v2.pdf
     pages: 11-14, 20
 generated:
   by: process:multimodal-direct
@@ -58,7 +58,7 @@ Profilés tubulaires multi-chambres en alliage d'aluminium 6060 T6, cotes en mm 
 | **T141014** | Seuil PMR bas 2 rails | 32,7 | 100,0 | Seuil surbaissé recevant la rampe T401028 |
 | **T141013** | Seuil PMR bas monorail | 32,7 | 100,0 | Seuil surbaissé monorail recevant T401028 |
 
-(schéma: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 64-70)
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 64-70)
 
 ---
 
@@ -72,7 +72,7 @@ Profilés multi-chambres pour coulissants à 3 et 6 vantaux sur 3 rails de roule
 | **TGA1100** | Traverse haute 3 rails | 67,8 | 151,2 | Triple gorge de guidage supérieur |
 | **TGA1102** | Montant dormant 3 rails | 77,0 | 157,2 | Montant latéral avec rainure BTC |
 
-(schéma: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 69)
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 69)
 
 ---
 
@@ -99,7 +99,7 @@ Profilés intégrés dissimulés en feuillure de dormant lors de la fermeture du
 | **T821004** | Traverse haute ouvrant PVC | 27,0 | 43,0 | Profilé thermoplastique 24 à 28 mm |
 | **T821005** | Traverse haute ouvrant PVC | 27,0 | 43,0 | Profilé thermoplastique 29 à 32 mm |
 
-(schéma: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 71-75)
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 71-75)
 
 ---
 
@@ -135,7 +135,7 @@ Moments d'inertie $I_x$ en flexion sous vent (axe XX') calculés selon l'annexe 
 | **T141040** (Montant latéral) | — | — | — | — | — | — | 4,14 |
 | **T141033** (Percussion) | — | — | — | — | — | — | 4,62 |
 
-(schéma: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 15-17)
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 15-17)
 
 ---
 
@@ -155,7 +155,7 @@ Le montage du vitrage s'effectue au moyen d'un joint portefeuille continu en EPD
 | **31 mm** | **TGY5012** | Jaune | T141021 / T141041 / T141040 | TGY5012 (jaune) | T710003 (violet, 3 mm) |
 | **32 mm** | **T411009** | Rose | T141021 / T141041 / T141040 | T411009 (rose) | T710002 (marron, 2 mm) |
 
-(schéma: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 18-20)
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 18-20)
 
 ---
 
@@ -168,8 +168,8 @@ Le montage du vitrage s'effectue au moyen d'un joint portefeuille continu en EPD
 
 # Citations
 
-[1] LUMEAL GA — Catalogue de conception Le Coulissant Minimal (Réf. 5156.007 - 01/2021) — `wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf`
-[2] DTA n° 6/14-2166_V2, procédé LUMEAL Minimal Ga (27/05/2024) — `wiki_llm/a_faire/DTA Lumeal GA 6-14-2166-v2.pdf`
+[1] LUMEAL GA — Catalogue de conception Le Coulissant Minimal (Réf. 5156.007 - 01/2021) — `raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf`
+[2] DTA n° 6/14-2166_V2, procédé LUMEAL Minimal Ga (27/05/2024) — `raw/DTA Lumeal GA 6-14-2166-v2.pdf`
 
 ---
 

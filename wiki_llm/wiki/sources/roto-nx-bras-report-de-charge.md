@@ -28,9 +28,11 @@ generated:
 
 # Registre de couverture
 
+**Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
+
 | Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| 1 | montage en cinq étapes, réglage de la tension du ressort au critère du cercle plein | transcrit | [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md) |
+| 1 | montage en cinq étapes, réglage de la tension du ressort au critère du cercle plein | à faire | [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md) |
 
 # Citations
 

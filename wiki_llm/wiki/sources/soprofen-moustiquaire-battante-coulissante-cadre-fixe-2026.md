@@ -33,12 +33,14 @@ generated:
 
 # Registre de couverture
 
+**Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
+
 Numérotation identique entre le fichier PDF et le document imprimé (pages 1 et 2).
 
 | Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| 1 | Titre, avantages et détails techniques des trois familles : porte battante (passage fréquent, sans seuil, barrière animaux/insectes, poussant extérieur, fermeture magnétique, 1 ou 2 vantaux, dormant 3 côtés, paumelles acier laqué blanc/noir, joint brosse traverse basse, pose tableau), coulissante 2 vantaux (ouverture latérale, passage fréquent, seuil extra-plat, poignée intégrée, profilés alu extrudé, brosse noire, équerres alu vissées, bloqueur/ralentisseur PVC noir), cadre fixe (fenêtres d'accès difficile, pose tableau ou applique de face, renfort montant/traverse si surface > 1,5 m², démontable l'hiver, équerres PVC, brosse périphérique) | transcrit | [Moustiquaires battantes, coulissantes et cadres fixes](/equipements/moustiquaires-battantes-coulissantes-fixes.md) |
-| 2 | Limites dimensionnelles maximales (battante 1 vtl 1000 × 2400 mm, battante 2 vtx 1800 × 2400 mm, coulissante 2 vtx 3000 × 2500 mm, cadre fixe 1500 × 1500 mm), caractéristiques toile standard (fibre de verre enduite PVC gris), profilés aluminium laqué nuancier RAL 4 finitions, accessoires noirs, coupes cotées de mise en œuvre (battante vue de dessus 1 et 2 vtx, coulissante vue de dessus, cadre fixe profil 12 × 28 mm, pose libre sans accessoire et équerres inox/PVC entre tableaux), garanties et normes | transcrit | [Moustiquaires battantes, coulissantes et cadres fixes](/equipements/moustiquaires-battantes-coulissantes-fixes.md) |
+| 1 | Titre, avantages et détails techniques des trois familles : porte battante (passage fréquent, sans seuil, barrière animaux/insectes, poussant extérieur, fermeture magnétique, 1 ou 2 vantaux, dormant 3 côtés, paumelles acier laqué blanc/noir, joint brosse traverse basse, pose tableau), coulissante 2 vantaux (ouverture latérale, passage fréquent, seuil extra-plat, poignée intégrée, profilés alu extrudé, brosse noire, équerres alu vissées, bloqueur/ralentisseur PVC noir), cadre fixe (fenêtres d'accès difficile, pose tableau ou applique de face, renfort montant/traverse si surface > 1,5 m², démontable l'hiver, équerres PVC, brosse périphérique) | à faire | [Moustiquaires battantes, coulissantes et cadres fixes](/equipements/moustiquaires-battantes-coulissantes-fixes.md) |
+| 2 | Limites dimensionnelles maximales (battante 1 vtl 1000 × 2400 mm, battante 2 vtx 1800 × 2400 mm, coulissante 2 vtx 3000 × 2500 mm, cadre fixe 1500 × 1500 mm), caractéristiques toile standard (fibre de verre enduite PVC gris), profilés aluminium laqué nuancier RAL 4 finitions, accessoires noirs, coupes cotées de mise en œuvre (battante vue de dessus 1 et 2 vtx, coulissante vue de dessus, cadre fixe profil 12 × 28 mm, pose libre sans accessoire et équerres inox/PVC entre tableaux), garanties et normes | à faire | [Moustiquaires battantes, coulissantes et cadres fixes](/equipements/moustiquaires-battantes-coulissantes-fixes.md) |
 
 # Citations
 

@@ -6,23 +6,23 @@ tags: [fournisseur, aluminium, askey, hydro, coulissant, frappe]
 fournisseur: ASKEY
 status: stable
 sources:
-  - resource: a_faire/askey1.pdf
+  - resource: raw/askey1.pdf
     id: askey-coulissant-65-nv-conception
     title: Coulissant 65 NV ASKEY - Conception
     last_modified: 2022-12-13
-  - resource: a_faire/askey2.pdf
+  - resource: raw/askey2.pdf
     id: askey-frappe-65-oc-fabrication
     title: Frappe 65 Ouvrant Caché ASKEY - Fabrication
     last_modified: 2022-12-13
-  - resource: a_faire/askey3.pdf
+  - resource: raw/askey3.pdf
     id: askey-frappe-65-oc-conception
     title: Frappe 65 Ouvrant Caché ASKEY - Conception
     last_modified: 2023-02-20
-  - resource: a_faire/askey4.pdf
+  - resource: raw/askey4.pdf
     id: askey-frappe-65-ov-fabrication
     title: Frappe 65 Ouvrant Visible ASKEY - Fabrication
     last_modified: 2022-12-14
-  - resource: a_faire/askey5.pdf
+  - resource: raw/askey5.pdf
     id: askey-coulissant-65-nv-fabrication
     title: Coulissant 65 NV ASKEY - Fabrication
     last_modified: 2022-12-14
@@ -50,7 +50,7 @@ ASKEY fournit des **systèmes complets de menuiserie aluminium** : profilés ext
 | **Frappe 65 Ouvrant Visible (OV)** | 65 mm / 75 mm (HI+) | Fenêtre et porte-fenêtre battante avec parcloses intérieures | [Gamme Frappe 65 OV](/gammes/askey-frappe-65-ov.md), [Dormants et ouvrants](/profiles/askey-frappe-65-ov-dormants-et-ouvrants.md), [Quincaillerie et équerres](/quincaillerie/askey-frappe-quincaillerie-et-equerres.md), [Fabrication](/procedures/fabrication-frappe-askey-65.md) |
 | **Profilés complémentaires** | 65 mm / ITE / Monoblocs | Tapées, bavettes, coulisses VR, cornières ULT | [Profilés complémentaires ASKEY](/profiles/askey-profils-complementaires.md) |
 
-(schéma: a_faire/askey1.pdf, p. 8 et a_faire/askey3.pdf, p. 3)
+(schéma: raw/askey1.pdf, p. 8 et raw/askey3.pdf, p. 3)
 
 ---
 
@@ -78,11 +78,11 @@ Les séries ASKEY s'articulent autour d'une quincaillerie dédiée :
 
 # Citations
 
-[1] [Coulissant 65 NV ASKEY - Conception](a_faire/askey1.pdf), p. 8, 112, 124, 174
-[2] [Frappe 65 Ouvrant Caché ASKEY - Fabrication](a_faire/askey2.pdf), p. 8-28, 214
-[3] [Frappe 65 Ouvrant Caché ASKEY - Conception](a_faire/askey3.pdf), p. 3, 48-51, 134-135
-[4] [Frappe 65 Ouvrant Visible ASKEY - Fabrication](a_faire/askey4.pdf), p. 3, 141-158
-[5] [Coulissant 65 NV ASKEY - Fabrication](a_faire/askey5.pdf), p. 5, 6-20
+[1] [Coulissant 65 NV ASKEY - Conception](raw/askey1.pdf), p. 8, 112, 124, 174
+[2] [Frappe 65 Ouvrant Caché ASKEY - Fabrication](raw/askey2.pdf), p. 8-28, 214
+[3] [Frappe 65 Ouvrant Caché ASKEY - Conception](raw/askey3.pdf), p. 3, 48-51, 134-135
+[4] [Frappe 65 Ouvrant Visible ASKEY - Fabrication](raw/askey4.pdf), p. 3, 141-158
+[5] [Coulissant 65 NV ASKEY - Fabrication](raw/askey5.pdf), p. 5, 6-20
 
 ---
 

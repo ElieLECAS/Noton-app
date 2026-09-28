@@ -9,24 +9,24 @@ fournisseur: TECHNAL
 usage: atelier
 status: stable
 sources:
-  - resource: wiki_llm/a_faire/DTA 6_12-2016_V5 (1).pdf
+  - resource: raw/DTA 6_12-2016_V5 (1).pdf
     id: technal-dta-soleal-fy-6-12-2016-v5
     title: DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm
     last_modified: 2023-05-25
-  - resource: wiki_llm/a_faire/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf
+  - resource: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf
     id: technal-soleal-fy-55-conception-6057
     title: SOLEAL FY 55 évolution, Conception Ouvrant Minimal et Apparent, réf. 6057.003
     last_modified: 2020-07-10
-  - resource: wiki_llm/a_faire/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf
+  - resource: raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf
     id: technal-soleal-fy-qc-conception-6319
     title: SOLEAL FY 55 & 65, Évolution Quincaillerie Cachée, Conception, réf. 6319.003
     last_modified: 2021-07-29
 source_pages:
-  - resource: wiki_llm/a_faire/DTA 6_12-2016_V5 (1).pdf
+  - resource: raw/DTA 6_12-2016_V5 (1).pdf
     pages: 7-9, 16-18, 24-28
-  - resource: wiki_llm/a_faire/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf
+  - resource: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf
     pages: 4-11, 24-31, 38, 167-188
-  - resource: wiki_llm/a_faire/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf
+  - resource: raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf
     pages: 4-10, 30-33, 166-169
 ---
 
@@ -44,7 +44,7 @@ La coupure thermique tubulaire est assurée par deux barrettes serties de 20 mm 
 | **Ouvrant Minimal** | **FYm / OM** | 59,9 mm (sur module 55)<br>69,9 mm (sur module 65) | Profilé masqué à rupture thermique par barrette de 20,4 mm. Le vitrage est maintenu côté extérieur par une parclose isolante en TPE coextrudé formant un pan coupé visible (système breveté Technal). | Vue d'aluminium quasi nulle depuis l'extérieur (face vue du dormant seul). |
 | **Ouvrant Minimal Chant Clippable** | **CC** | 59,9 mm / 69,9 mm | Variante de l'ouvrant minimal recevant un profilé aluminium de finition clipsé directement sur la parclose TPE extérieure. | Finition aluminium affleurante masquant le joint TPE. |
 
-(schéma: wiki_llm/a_faire/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf, p. 4 et 6-10)
+(schéma: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf, p. 4 et 6-10)
 
 ---
 
@@ -71,7 +71,7 @@ Les dormants sont basés sur un module tubulaire de 55 mm de profondeur avec bar
 | **T215078** | Dormant d'intégration mur rideau | 15 | Caché | Intégration dans façades MX et MY | 52 |
 | **T215263** | Dormant de dilatation | 15 | Apparent | Joint de dilatation entre châssis (avec TAS0048) | 61 |
 
-(schéma: wiki_llm/a_faire/DTA 6_12-2016_V5 (1).pdf, p. 16-17)
+(schéma: raw/DTA 6_12-2016_V5 (1).pdf, p. 16-17)
 
 ---
 
@@ -111,7 +111,7 @@ Les dormants sont basés sur un module tubulaire de 55 mm de profondeur avec bar
 | **TFY1233** | 65 mm | Minimal 65 mm (QC) | 40 et 42 mm | Nulle (triple vitrage épais) |
 | **TFY1259** | 65 mm | Minimal 65 mm seuil PMR | 24 et 26 mm | Nulle (seuil plat TFY1161) |
 
-(schéma: wiki_llm/a_faire/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf, p. 175-178)
+(schéma: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf, p. 175-178)
 
 ---
 
@@ -132,7 +132,7 @@ Les dormants sont basés sur un module tubulaire de 55 mm de profondeur avec bar
 | **T215261** | Meneau renforcé tubulaire 130 | Meneau vertical pour châssis composés sous fort vent | 146,03 cm⁴ | 50,37 cm⁴ |
 | **T215268** | Poteau tubulaire 130 | Poteau d'accouplement lourd multi-angles | 182,67 cm⁴ | 139,71 cm⁴ |
 
-(schéma: wiki_llm/a_faire/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf, p. 26-30)
+(schéma: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf, p. 26-30)
 
 ---
 
@@ -197,11 +197,11 @@ Relevés sur le catalogue de conception (p. 153-166, 191-202) et le DTA (p. 7-8,
 
 # Citations
 
-[1] DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm — `wiki_llm/a_faire/DTA 6_12-2016_V5 (1).pdf`, p. 1 à 48
+[1] DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm — `raw/DTA 6_12-2016_V5 (1).pdf`, p. 1 à 48
 
-[2] SOLEAL FY 55 évolution, Conception Ouvrant Minimal et Apparent, réf. 6057.003 — `wiki_llm/a_faire/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf`, p. 1 à 224
+[2] SOLEAL FY 55 évolution, Conception Ouvrant Minimal et Apparent, réf. 6057.003 — `raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf`, p. 1 à 224
 
-[3] SOLEAL FY 55 & 65, Évolution Quincaillerie Cachée, Conception, réf. 6319.003 — `wiki_llm/a_faire/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf`, p. 1 à 180
+[3] SOLEAL FY 55 & 65, Évolution Quincaillerie Cachée, Conception, réf. 6319.003 — `raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf`, p. 1 à 180
 
 # Voir aussi
 

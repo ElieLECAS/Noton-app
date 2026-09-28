@@ -29,6 +29,13 @@ Le document est le guide technique officiel d'atelier et d'aide à la commande �
 
 # Registre d'analyse page par page
 
+**Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
+
+| Pages PDF | Contenu | État | Page du wiki |
+| --- | --- | --- | --- |
+| toutes | document entier, relevé sous l'ancien protocole dans les sections ci-dessous | à faire | - |
+
+
 ## Page 1 (Réf. Guide technique p. 110)
 * **Objet** : Identification générale du Bloc LX, repérage de chantier, nuancier des coulisses et lames finales, et choix des coulisses.
 * **Repérage** :

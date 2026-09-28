@@ -28,6 +28,14 @@ Le document est le catalogue technique général de référence et d'aide à la 
 
 ---
 
+# Registre de couverture
+
+**Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
+
+| Pages PDF | Contenu | État | Page du wiki |
+| --- | --- | --- | --- |
+| toutes | document entier, relevé sous l'ancien protocole dans les sections ci-dessous | à faire | - |
+
 # Structure générale du guide et registre d'analyse
 
 ## 1. Présentation générale et Atouts Produits (p. 1 à 5)

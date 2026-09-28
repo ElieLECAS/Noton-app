@@ -27,19 +27,21 @@ generated:
 
 # Registre de couverture
 
+**Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
+
 Pas de décalage : la pagination imprimée suit la pagination du PDF.
 
 | Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| 1 | couverture | sans contenu propre | - |
-| 2 | fraisage du vantail et du dormant (serrure et gâches), retournement du pêne | transcrit | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
-| 3 | passage de câble, pièces 817028 et 820255 | transcrit | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
-| 4-5 | module 4 en 1 : sécurité, dimensions d'usinage, pose | transcrit | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
-| 6 | plan de câblage, affectation des bornes | transcrit | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
-| 7 | réinitialisation, données techniques, élimination des déchets | transcrit | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
-| 8 | association d'une télécommande | transcrit | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
-| 9 | tableau d'assistance en cas de panne | transcrit | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
-| 10 | consignes d'entretien, inspection, nettoyage | transcrit | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| 1 | couverture | à faire | - |
+| 2 | fraisage du vantail et du dormant (serrure et gâches), retournement du pêne | à faire | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| 3 | passage de câble, pièces 817028 et 820255 | à faire | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| 4-5 | module 4 en 1 : sécurité, dimensions d'usinage, pose | à faire | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| 6 | plan de câblage, affectation des bornes | à faire | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| 7 | réinitialisation, données techniques, élimination des déchets | à faire | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| 8 | association d'une télécommande | à faire | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| 9 | tableau d'assistance en cas de panne | à faire | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| 10 | consignes d'entretien, inspection, nettoyage | à faire | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
 
 # Citations
 

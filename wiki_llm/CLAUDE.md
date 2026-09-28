@@ -10,8 +10,9 @@ Proferm Multitechniques is a menuiserie fabricant. This wiki is the structured, 
 knowledge base covering its own production and the suppliers it buys from: catalogues, fiches
 techniques, tarifs, certifications, normes, procédures atelier.
 
-**The wiki replaces the PDFs.** Its target is the whole of `raw/`, page by page: 2 382 pages
-across 32 documents, of which 1 944 carry drawn content and 309 have no usable text layer at all.
+**The wiki replaces the PDFs.** Its target is the whole of `raw/`, page by page: about 5 600 pages
+in 69 PDF files (62 documents, plus 7 SOPROFEN exports unpacked from their `.zip`), most of them
+drawn plates, many with no usable text layer at all.
 A question whose answer sits in a PDF and not in the wiki is a defect of the wiki, not a reason
 to reopen the PDF.
 
@@ -26,9 +27,10 @@ It has two consumers, and they pull in the same direction:
   the header, pages that stand alone -- is there so that a page still means something when it
   arrives alone
 
-The LIA application still concatenates every page into its system prompt. That design is
-superseded and the application is on hold: **nothing in this file is sized against a context
-window any more.**
+The LIA application no longer puts the wiki in its prompt: the model navigates it with tools
+(search, read a page, read an anomaly), and **several tools of the application read wiki tables
+directly** — see *Pages read by the application*. **Nothing in this file is sized against a
+context window.**
 
 Claude does the reading and the writing. The human curates what goes into `raw/`, asks the
 questions, and arbitrates the judgment calls: a contradiction between two suppliers, a new
@@ -81,10 +83,10 @@ Inside `wiki/`, group pages in one subdirectory per `type` -- lowercase, unaccen
 `Document source` pages. `reference/` holds the glossary. A new `type` means a new subdirectory,
 so raise it with the user first.
 
-Six of them are empty today -- `normes/`, `tarifs/`, `machines/`, `entretien/`, `commercial/`,
-`coloris/` -- and not because the corpus holds nothing for them. The protocol that came before
-this one had nowhere to put a DTU prescription, a maintenance instruction or a tarif, so it
-dropped them.
+`tarifs/` and `machines/` are still empty, and not because the corpus holds nothing for them: the
+protocol that came before this one had nowhere to put a tarif or a machine setting, so it dropped
+them. `normes/`, `entretien/`, `commercial/` and `coloris/` were opened by the reprocessing of
+September 2026.
 
 ## OKF conformance
 
@@ -297,7 +299,7 @@ and the annexes carry the nomenclatures. None of that survives a summary. A pres
 carried whole -- its number, its condition, its exception, its unit -- in the wording of the
 document, and a clause that exists as an argued paragraph stays a paragraph.
 
-**Volume is not a reason.** The Roto NX catalogue is 451 pages and carries one transcribed plate.
+**Volume is not a reason.** The Roto NX catalogue is 451 pages.
 The fifteen tables of inertie Iz are 19 columns by 35 rows each. Both are simply long, and long
 is a schedule, not a decision: the register carries them as `à faire` until they are done.
 
@@ -355,13 +357,85 @@ Never cite them, never quote them. The same caution applies to a PDF's extracted
 a multi-column plate it interleaves labels from neighbouring blocks, which is how the meneau
 76373 came to carry the renfort references of the 76372 next to it.
 
+## Reprocessing a document, and picking the work up in a new session
+
+Most of `raw/` was first ingested under an earlier protocol that summarised plates chapter by
+chapter and marked whole chapters « transcrit » or « Intégré » without reading them page by page.
+Every reprocessing so far found errors and inventions in those pages. The rules below make the
+work resumable by any session, with nothing kept in memory.
+
+**Where the state lives -- and nowhere else.**
+
+- **The coverage register of each `sources/` card is the queue.** A document still to be done has
+  rows in state `à faire`. `grep -l "| à faire |" wiki/sources/*.md` lists the documents left;
+  the rows say which pages. « Intégré » is not a state and must never be written
+- **`log.md`** says what was reprocessed, when, and the before → after of every correction
+- **The anomaly registers** carry what is still to arbitrate
+
+**Before reprocessing a document**, if its register still carries states from the earlier
+protocol, set every row to `à faire` and put this sentence under the register heading: « Registre
+remis à `à faire` le <date>. Les états de ce registre venaient d'une ingestion antérieure au
+protocole révisé… ». Then rebuild the register row by row, in PDF numbering, as the batches are
+done.
+
+**How a document is reprocessed** -- the method that produced the reprocessed cards
+(`sources/cahier-technique-perform76.md`, `sources/profine-mise-en-oeuvre-76-advanced.md`, …):
+
+1. **One document at a time.** A document over ~100 pages is cut into **tranches** of 60 to 120
+   pages aligned on the document's own chapters (the manual 76 was done in 38-117, 118-193,
+   194-301, 302-424). One tranche is finished -- written, register updated, logged -- before the
+   next is opened
+2. **Inside a tranche, batches of 4 to 8 pages** (3 to 5 for dense catalogues), rendered, read,
+   written, register updated, then the next batch
+3. **Read the existing wiki pages against the image** for every datum met: complete, correct
+   (before → after in `log.md`), remove every sentence the source does not carry, link rather
+   than copy. Never keep the old text because it « looks right »
+4. **A tranche ends with a hand-over note** in the session's report: where the document stops
+   (chapter, last reference done), the wiki pages in progress, the scripts used, and the next free
+   anomaly identifiers. The next tranche starts from that note
+5. **Anomaly identifiers**: before creating one, read the highest `INC-`, `CTR-`, `VER-` actually
+   present in `wiki/anomalies/*.md` -- never trust a number quoted from memory
+6. **`verified` is removed** from every page whose `# Cotes` table is rewritten: only a separate
+   reverse reading sets it again
+7. **`log.md`**: bullets under today's heading, which is created once, at the top
+8. **After each document, run the application tests** (`docker compose exec web pytest`) -- see
+   *Pages read by the application*
+
+**Tooling notes.** Renders, crops and helper scripts go in the session's scratchpad, never in
+`wiki/` or `raw/`. Write any script longer than a few lines to a `.py` file and run it: long
+inline heredocs break the shell. The SOPROFEN exports are `.zip` archives in `raw/moustiquaires/`;
+their PDFs are unpacked in `raw/moustiquaires/exports/NNN.pdf`. The `.zip` files left in
+`a_faire/` are old index archives, not sources.
+
+## Pages read by the application
+
+Some tools of the LIA application parse wiki tables themselves -- the parclose calculator
+(`app/services/parcloses.py`), the feasibility check (`app/services/faisabilite.py`) and the
+workshop cutting list (`app/services/debit_atelier.py`). They find a table by its **section
+heading and its column headers**. Rewriting one of these pages can break them silently:
+
+`profiles/perform76-parcloses.md`, `perform76-dormants.md`, `perform76-ouvrants-et-battements.md`,
+`perform76-meneaux.md`, `perform76-tapees-et-isolation.md`, `systeme-76-tableau-de-vitrage.md`,
+`systeme-76-profiles-complementaires.md`, `systeme-76-cotes-de-debit.md`,
+`systeme-76-accessoires-par-profile.md`, `systeme-76-abaques-dimensionnels.md`,
+`systeme-70-profiles-complementaires.md`, `soleal-fy-parcloses-et-vitrage.md`,
+`soleal-gy-dormants-et-rails.md`, `lumeal-ga-dormants-et-ouvrants.md`,
+`askey-frappe-65-oc-dormants-et-ouvrants.md`, `askey-frappe-65-ov-dormants-et-ouvrants.md`,
+`askey-coulissant-65-nv-dormants-et-ouvrants.md`, `quincaillerie/perform76-poignee-et-pivot.md`,
+`quincaillerie/roto-nx-champs-application.md`, `certifications/dta-6-16-2334.md`.
+
+On these pages, keep existing section headings and column headers unless the source forces a
+change, and **run the tests after rewriting them**. A failing test after a rewrite is reported to
+the user; the wiki page is not bent back to an older, wrong form to please the code. A value that
+becomes calculable (a table that did not exist) is reported too: the tool can then be extended.
+
 ## Reading a plate
 
 A drawing does not have a text layer, and when it does, that layer lies about which column a
 number belongs to. Both problems are solved the same way: **render the page and look at it.**
 
-**This is the normal path, not the exception.** 1 944 of the 2 382 pages of `raw/` carry drawn
-content and 309 have no usable text layer at all. A page holding a plate is never declared
+**This is the normal path, not the exception.** Most pages of `raw/` carry drawn content, and
+many have no usable text layer at all. A page holding a plate is never declared
 transcribed on the strength of its text layer.
 
 **La lecture est multimodale native, sans script ni outil externe.** L'agent ouvre et visualise
@@ -576,6 +650,12 @@ Numérotation du PDF ; la page imprimée porte un décalage de -2.
    impression. Five states, and there is no sixth: `transcrit`, `en cours`, `à faire`,
    `illisible`, `sans contenu propre`. An `illisible` row says in its `Contenu` column what
    rendering was already attempted.
+
+   **A card may cover several PDFs** -- two editions, or a catalogue and its notice (the four
+   TECHNAL cards `technal-dta-soleal-gy`, `technal-lumeal-ga-fabrication`,
+   `technal-soleal-fy-conception`, `technal-soleal-fy-fabrication`). Each PDF then has its own
+   numbered sub-heading in the register (« ## 1. Réf. 5074.007 … », « ## 2. Réf. 5850.002 … ») and
+   its own `sources` and `source_pages` entry, and the PDFs are still processed one at a time.
 3. **Décalage de pagination** -- stated once, above the register, when the printed numbering
    differs from the PDF's.
 4. `# Citations`, `# Voir aussi`.
@@ -663,7 +743,22 @@ dormants and the four ouvrants of the PERFORM76.
    references into one image, never cut a cote in half
 4. **Save** to `wiki/assets/profiles/<gamme+systeme>/<famille>/<famille-singulier>-<reference>.png`
    -- `assets/profiles/perform76/dormants/dormant-76177.png`. Lowercase, unaccented, the reference
-   written as the source writes it
+   written as the source writes it. The folders in use:
+
+   | What | Folder |
+   | --- | --- |
+   | Profiles of a PROFERM gamme's own documentation | `assets/profiles/perform76/<famille>/` |
+   | Profiles of a supplier system | `assets/profiles/systeme76/<famille>/`, `assets/profiles/systeme70/<famille>/` |
+   | Schémas of a normative document | `assets/certifications/<document>/` (`dta-6-16-2334/`, `dtd-6-16-2335/`) |
+   | Schémas of a manual or procedure | `assets/procedures/<document>/` (`moe-76-advanced/`, `directives-profine/`, `9708/`) |
+   | Coloris swatches | `assets/coloris/<gamme ou équipement>/` |
+   | Door models | `assets/portes/<collection>/` |
+   | Handles, locks, accessories | `assets/quincaillerie/<famille>/` |
+   | Product photos, commercial cuts | `assets/gammes/<gamme>/`, `assets/equipements/<équipement>/`, `assets/vitrages/<famille>/` |
+   | Maps and reference tables | `assets/reference/<document>/` |
+
+   Before cropping, look in `assets/` for the same reference drawn the same way by another
+   document: link to it instead of cropping a duplicate
 5. **Check every crop by eye**: paste them side by side into one contact sheet and look at it.
    A crop showing the neighbouring profile, a truncated label or a missing cote is redone.
    The label inside the image must match the reference of the row it goes into
@@ -714,6 +809,24 @@ one row per reference. A hundred one-line files is not a wiki, it is a heap.
   source does not give it
 - Split a family that exceeds ~30 rows by usage or by gamme, not arbitrarily -- parcloses
   d'ouvrant and parcloses de dormant are two tables, not one of 27 rows
+
+## Marketing documents
+
+Catalogues, brochures, dépliants and nuanciers carry the offer: coloris, handles, doors, options,
+warranties, and what the brand claims. They are reprocessed like any other document -- image
+only, every page, every picture of a product cropped -- with these owner pages:
+
+| Content | Owner page | Form |
+| --- | --- | --- |
+| Coloris of a gamme | `coloris/coloris-<gamme>.md`, one page per gamme (`coloris-perform.md`, `coloris-stores.md`, `coloris-portes-entree.md`) | one row per shade, columns Code de la source · Nom · Famille · Faces · Finition · Restriction · Pastille; the introduction says « la pastille imprimée est un rendu indicatif, le code fait foi »; one section per document or edition, with its locator |
+| Handles, béquilles, crémones, croisillons, small accessories | `quincaillerie/poignees-et-croisillons.md`, one page for all gammes | one row per model (and per group of gammes when finishes differ), columns Modèle · Type · Usage · Finitions de série · Finitions en option · Gammes · Restriction · Image; gamme pages keep one sentence and a link |
+| Locks, hinges, cylinders of entrance doors | `quincaillerie/securite-portes-entree.md`, `quincaillerie/serrure-motorisee.md` | tables, pictures |
+| Door models | one page per collection in `portes/` | one row per model and per version, photo in the last column |
+| What the brand claims | `commercial/<gamme>.md`, `commercial/proferm.md`, `commercial/portes-d-entree.md` | quotes of the source, skeleton `Ce qui est annoncé · Restrictions annoncées · Ce que la source ne chiffre pas` |
+| Measured values (Uw, A\*E\*V, dimensions), warranties, glazing | the gamme, `certifications/labels-et-certifications.md`, `garanties/garanties-par-composant.md`, `vitrages/` | never on a `commercial/` page |
+
+When two editions differ (2023 against 2026), both stay, as a table with a column per edition or
+a section per edition -- a coloris, a finish or a warranty sold in 2023 is still what SAV meets.
 
 ## Anomalies
 
@@ -781,6 +894,12 @@ Traceability does not change: every claim is still backed, and the audit trail i
 frontmatter, the `# Citations` list, the `(schéma: …)` locator under each table, and the
 registers. What changes is **where the reference sits in the sentence**.
 
+- **Page numbers are always the PDF's own numbering** -- the position of the page in the file, 1
+  to N -- in `[1 p. N]`, in `(schéma: …, p. N)`, in `source_pages` and in the coverage register.
+  Never the number printed on the page: the application opens the PDF at the number cited, and a
+  printed number offset by 3 opens a blank page instead of the plate. When the printed numbering
+  differs, the `sources/` card says so once, above its register. The anomaly registers may give
+  both (« p. 3 (PDF 6) »)
 - **Under a table**: `(schéma: raw/catalogue-2026.pdf, p. 42)`, unchanged. The application turns
   it into a link that opens the PDF at that page
 - **In prose**: a bracket at the end of the sentence or of the paragraph -- `[1 p. 10]` --

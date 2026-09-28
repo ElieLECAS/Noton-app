@@ -1,7 +1,7 @@
 # LIA — repères pour Claude Code
 
 Assistant documentaire PROFERM. **Une seule source : le wiki** (`wiki_llm/wiki/`). Il ne tient
-plus dans aucune fenêtre de contexte (198 pages) : le modèle le **navigue par outils** au lieu de
+plus dans aucune fenêtre de contexte (246 pages) : le modèle le **navigue par outils** au lieu de
 le recevoir en entier. Mistral Small, trois outils, rien d'autre.
 
 **22/09/2026 — le CAG est remplacé par la navigation outillée.** Le prompt permanent ne porte que

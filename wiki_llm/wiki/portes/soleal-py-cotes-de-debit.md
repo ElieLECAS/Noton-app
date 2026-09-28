@@ -9,15 +9,15 @@ fournisseur: TECHNAL
 usage: atelier
 status: stable
 sources:
-  - resource: wiki_llm/a_faire/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf
+  - resource: raw/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf
     id: technal-soleal-py-55-conception-4944-006
     title: SOLEAL PY 55 — Catalogue de conception Porte à rupture de pont thermique (Réf. 4944.006)
     last_modified: 2018-09-01
-  - resource: wiki_llm/a_faire/SOLEAL-PY-55-catalogue-fabrication-4899-007-092018-FR.pdf
+  - resource: raw/SOLEAL-PY-55-catalogue-fabrication-4899-007-092018-FR.pdf
     id: technal-soleal-py-55-fabrication-4899-007
     title: SOLEAL PY 55 — Guide d'atelier et catalogue de fabrication (Réf. 4899.007)
     last_modified: 2018-09-01
-  - resource: wiki_llm/a_faire/SEUIL TECHNAL PY1100 DOC.pdf
+  - resource: raw/SEUIL TECHNAL PY1100 DOC.pdf
     id: technal-seuil-py1100-doc
     title: F.I.T N° 15 — Évolution Porte PY et Seuil PMR PY1100
     last_modified: 2012-12-01

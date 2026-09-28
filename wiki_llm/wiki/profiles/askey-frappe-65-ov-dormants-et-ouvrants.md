@@ -9,12 +9,12 @@ usage: atelier
 famille: dormants-et-ouvrants
 status: stable
 sources:
-  - resource: a_faire/askey4.pdf
+  - resource: raw/askey4.pdf
     id: askey-frappe-ov-fabrication
     title: Frappe 65 Ouvrant Visible ASKEY - Fabrication
     last_modified: 2022-12-14
 source_pages:
-  - resource: a_faire/askey4.pdf
+  - resource: raw/askey4.pdf
     pages: 10, 34-37, 56, 70, 141-158, 160-176, 184, 202
 generated:
   by: process:claude-code
@@ -48,7 +48,7 @@ Dormants périphériques coupe d'onglet et coupe droite, cotes en millimètres [
 | **Y1715134** | Dormant CD HI+ standard | 66,5 | 55 | - | Barrettes multichambres |
 | **Y1715163** | Dormant tubulaire pour fixe | 65 | 55 | - | Tubulaire fermé |
 
-(schéma: a_faire/askey4.pdf, p. 34, 35)
+(schéma: raw/askey4.pdf, p. 34, 35)
 
 ### Profilés ouvrants fenêtre (ailette 63 mm)
 
@@ -69,7 +69,7 @@ Ouvrants battants à rupture de pont thermique pour fenêtres [1 p. 160-166] :
 | **Y1715118** | Ouvrant principal fenêtre | HI+ fiches | 65,6 | 63 | 28,9 |
 | **Y1715119** | Ouvrant secondaire fenêtre | HI+ fiches | 65,6 | 63 | 28,9 |
 
-(schéma: a_faire/askey4.pdf, p. 160, 161, 162, 163, 164, 165, 166)
+(schéma: raw/askey4.pdf, p. 160, 161, 162, 163, 164, 165, 166)
 
 ### Profilés ouvrants porte-fenêtre (ailette 90 mm)
 
@@ -88,7 +88,7 @@ Ouvrants tubulaires renforcés pour serrures et grandes portées [1 p. 160, 173-
 | **Y1715115** | Ouvrant principal porte-fenêtre | HI+ à fiche | 65,6 | 90 | 29 |
 | **Y1715116** | Ouvrant secondaire porte-fenêtre | HI+ à fiche | 65,6 | 90 | 31 |
 
-(schéma: a_faire/askey4.pdf, p. 160, 173, 174, 175, 176)
+(schéma: raw/askey4.pdf, p. 160, 173, 174, 175, 176)
 
 ### Parcloses aluminium intérieures clipées
 
@@ -103,7 +103,7 @@ Parcloses pour fenêtres et portes-fenêtres ouvrants visibles [1 p. 202] :
 | **W3010050** | Parclose moulurée porte-fenêtre | Galbée haute | Porte-fenêtre ouvrant visible | Y5760001 |
 | **Y3790009** | Parclose droite courte porte-fenêtre | Droite compacte PF | Porte-fenêtre ouvrant visible | Y5760001 |
 
-(schéma: a_faire/askey4.pdf, p. 202)
+(schéma: raw/askey4.pdf, p. 202)
 
 ### Profilés de seuil PMR filant et feuillures rapportées
 
@@ -114,7 +114,7 @@ Parcloses pour fenêtres et portes-fenêtres ouvrants visibles [1 p. 202] :
 | **Y3720000** | Feuillure rapportée réduite | 45 | 13 | Vissée sous fixe sur monobloc |
 | **W8020007** | Lisse de pose étanche | 53 | 5 | Fond de joint intégré |
 
-(schéma: a_faire/askey4.pdf, p. 141, 146, 154, 158)
+(schéma: raw/askey4.pdf, p. 141, 146, 154, 158)
 
 ---
 
@@ -133,7 +133,7 @@ Parcloses pour fenêtres et portes-fenêtres ouvrants visibles [1 p. 202] :
 
 # Citations
 
-[1] [Frappe 65 Ouvrant Visible ASKEY - Fabrication](a_faire/askey4.pdf), p. 10, 34-37, 141-158, 160-176, 184, 202, 206, 222
+[1] [Frappe 65 Ouvrant Visible ASKEY - Fabrication](raw/askey4.pdf), p. 10, 34-37, 141-158, 160-176, 184, 202, 206, 222
 
 ---
 
