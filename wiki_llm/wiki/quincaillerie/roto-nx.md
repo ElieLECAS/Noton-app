@@ -19,6 +19,8 @@ sources:
 source_pages:
   - resource: raw/brochure-perform-plus-hybride-plus-2023-05.pdf
     pages: 2-3
+  - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
+    pages: 21
 generated:
   by: process:claude-code
   at: 2026-09-17T20:30:00Z
@@ -77,7 +79,8 @@ commande ou sur la menuiserie posée, n'est pas documenté.
 Le traitement de surface **Roto Sil Level 6** « surpasse les exigences de la classe anticorrosion
 5, la classe maximale, pour un traitement d'une dureté exceptionnelle et d'une protection
 durable contre la corrosion » [1 p. 2]. La norme de la classe n'est pas nommée à cet endroit ; le
-manuel de montage la nomme (DIN EN 13126/8, voir plus bas).
+manuel de montage écrit « Finition Roto Sil de haute qualité (argent mat) pour résistance à la
+corrosion maximale (DIN EN 13126 / 8 et exempte de composés de chrome VI) » [3 p. 21].
 
 # Accès au RC2
 
@@ -93,31 +96,43 @@ certifications RC1 et RC2 relève aussi du Label ROTO Performance [2 p. 34].
 La ferrure Roto est garantie 10 ans sur le fonctionnement : voir
 [Garanties par composant](/garanties/garanties-par-composant.md) [1 p. 3, 2 p. 35].
 
-# Caractéristiques établies par le manuel de ferrage
+# Caractéristiques générales des ferrures Roto NX KSR
 
-Caractéristiques de la Roto NX établies par les
-[instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md) de novembre 2022 et le
-catalogue Roto NX pour profils PVC.
+Caractéristiques générales des ferrures Roto NX KSR, dans les termes des
+[instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md) de novembre 2022 [3 p. 21] :
 
-| Sujet | Ce qu'établit le manuel |
-| --- | --- |
-| Abaques de charge | [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) — LFF, HFF et poids de vantail par type d'ouverture et par classe de sécurité |
-| Norme du traitement anticorrosion | **DIN EN 13126/8**, finition Roto Sil argent mat, **exempte de composés de chrome VI** |
-| Périmètre du RC2 | classification **CDR selon DIN EN 1627-1630**, avec un champ d'application propre à chaque classe. Le **Tilt Safe** relève des classes **CDR 2 et CDR 2 N** |
-| Références de ferrage | portées par le [catalogue Roto NX pour profils PVC](/sources/roto-nx-catalogue-pvc.md) de juin 2023, non transcrites : les en-têtes de ses tableaux sont des pictogrammes |
+- charges élevées jusqu'à 150 kg : P reposant côté paumelles pour fenêtres et portes PVC ;
+- confort d'aération étendu sans opération de montage importante supplémentaire grâce à
+  l'aération intégrée en série dans le compas (bras de compas et têtière de compas) ;
+- possibilités de réglage simple pour les réglages en hauteur et latéraux ; réglage additionnel de
+  la compression par :
+  - galet de verrouillage **E** : galet excentrique réglable en pression d'appui ;
+  - galet de verrouillage **P** : galet excentrique de sécurité réglable en pression d'appui ;
+  - galet de verrouillage **V** : galet excentrique de sécurité réglable en pression d'appui et en
+    hauteur ;
+- assemblage « Clip&Fit » mécanique et sans perte de course ;
+- assemblage facile et sans vis de têtière et boîtier de crémone / boîtier de serrure au moyen du
+  système Easy Mix System pour dimensions de fouillot ≥ 25 mm ;
+- possibilités d'adaptation individuelle du système de ferrures Roto NX aux différentes exigences
+  de sécurité : de la sécurité de base jusqu'aux fenêtres de sécurité testées de la classification
+  CDR selon la DIN EN 1627-1630 ;
+- position de basculement avec retard d'effraction Tilt Safe selon la classification CDR 2 / CDR 2 N ;
+- finition Roto Sil de haute qualité (argent mat) pour résistance à la corrosion maximale
+  (DIN EN 13126 / 8 et exempte de composés de chrome VI) ;
+- côté paumelles P attrayant grâce aux versions de surface blanc et titane (thermolaquage) ;
+- certifié selon QM 328 ;
+- 10 ans de garantie sur la fonctionnalité des ferrures.
 
-**Le manuel confirme la charge annoncée : jusqu'à 150 kg**, côté paumelles P reposant, pour
-fenêtres et portes PVC. Il confirme aussi la **garantie 10 ans sur la fonctionnalité** des
-ferrures et ajoute la certification **QM 328**.
+Le *galet de verrouillage* est le galet monté sur la crémone de l'ouvrant qui s'engage dans la
+gâche du dormant ; *excentrique* signifie que sa position se règle en le tournant. Le *fouillot*
+est le carré de la crémone qui reçoit la tige de la poignée (voir le
+[glossaire](/reference/glossaire.md)). Les champs d'application, les classes CDR et les forces de
+traction TBDK sont sur [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) ;
+les consignes générales de montage sur
+[Roto NX KSR — conventions et consignes de sécurité](/procedures/roto-nx-ksr-consignes-generales.md).
 
-Deux caractéristiques d'atelier : l'assemblage **« Clip&Fit »**
-mécanique et sans perte de course, et l'assemblage sans vis de têtière et de boîtier de crémone
-par le système **Easy Mix System**, pour des dimensions de fouillot **≥ 25 mm**.
-
-Le manuel distingue enfin **trois galets de verrouillage** — E réglable en pression d'appui, P de
-sécurité réglable en pression d'appui, V de sécurité réglable en pression d'appui **et en
-hauteur** ; le « galet de sécurité » des PERFORM+ et HYBRIDE+ n'est pas rattaché à l'un
-des trois.
+Le « galet de sécurité » des PERFORM+ et HYBRIDE+ n'est rattaché par la brochure à aucun des trois
+galets E, P et V [1 p. 2, 3 p. 21].
 
 # Ce qui reste à documenter
 
@@ -136,6 +151,8 @@ diffèrent nettement. Entrée **VER-34**.
 [1] [Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023](raw/brochure-perform-plus-hybride-plus-2023-05.pdf), p. 2 et 3
 [2] [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md),
 p. 34 et 35
+[3] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf.
+IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 21
 
 # Trois interventions documentées sur ROTO NX
 

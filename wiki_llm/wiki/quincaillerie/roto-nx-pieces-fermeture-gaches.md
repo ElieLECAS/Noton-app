@@ -12,15 +12,9 @@ sources:
     id: roto-nx-catalogue-ctl-105
     title: Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023
     last_modified: 2023-06-30
-  - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
-    id: roto-nx-ksr-montage-imo-180
-    title: Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2
-    last_modified: 2022-11-30
 source_pages:
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
     pages: 350-369
-  - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
-    pages: 40-45, 92-104
 generated:
   by: process:multimodal-direct
   at: 2026-09-19T20:20:00Z
@@ -71,13 +65,14 @@ Relevées sur le catalogue Roto NX CTL_105 (p. 352-368) pour profils PVC à axe 
 
 (schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 362-366)
 
-# Positionnement des gâches et tolérances d'implantation
+# Positionnement des gâches
 
-Le manuel IMO 180 (p. 92-99) codifie rigoureusement l'emplacement de chaque gâche sur le dormant :
-- **Repères côté crémone (face poignée)** : MV1 (bas), MV2 (médian), MV3 (haut) — positionnés selon la hauteur HFF de l'ouvrant.
-- **Repères côté paumelle (face arrière)** : S (soufflet), G1, G2, G3 (gâches de verrouilleur médian).
-- **Repères traverses haute et basse** : MO (haut côté compas), MU (bas côté pivot), MH (horizontal).
-- **Tolérance de jeu en feuillure** : les gâches sont dimensionnées pour un jeu nominal en feuillure de **12 mm** ($\pm 1\text{ mm}$) et un axe de feuillure de **13 mm** [2 p. 32].
+Les cotes de pose des gâches sur le dormant, par configuration, sont sur les pages de configuration
+Roto NX KSR : [oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md),
+[ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md),
+[ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md),
+[Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md),
+[châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md).
 
 # Sécurité TiltSafe : principe de verrouillage entrouvert
 
@@ -92,7 +87,6 @@ La technologie **Roto NX TiltSafe** assure une résistance à l'effraction certi
 # Citations
 
 [1] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 — `raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 350 à 369
-[2] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 32, 40 à 45, et 92 à 104
 
 # Voir aussi
 

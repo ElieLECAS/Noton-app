@@ -12,15 +12,9 @@ sources:
     id: roto-nx-catalogue-ctl-105
     title: Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023
     last_modified: 2023-06-30
-  - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
-    id: roto-nx-ksr-montage-imo-180
-    title: Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2
-    last_modified: 2022-11-30
 source_pages:
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
     pages: 388-451
-  - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
-    pages: 82-85, 102-104, 108-111
 generated:
   by: process:multimodal-direct
   at: 2026-09-19T20:25:00Z
@@ -33,7 +27,7 @@ tandis que les gabarits d'atelier garantissent la précision du perçage et du v
 
 # Accessoires de vantail et de dormant
 
-Relevés sur le catalogue Roto NX CTL_105 (p. 388-435) et les instructions KSR (p. 82-85) :
+Relevés sur le catalogue Roto NX CTL_105 (p. 388-435) :
 
 ### Anti-fausse manœuvre et réhausseurs
 
@@ -48,20 +42,14 @@ Le dispositif anti-fausse manœuvre interdit la rotation de la poignée lorsque 
 
 (schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 390-398)
 
-### Loqueteaux de balcon et rappels de porte-fenêtre
+### Loqueteau
 
-| Désignation | Composition | Profil / Jeu | N° de matériel |
-| --- | --- | --- | --- |
-| Loqueteau de rappel à bille | Douille sur ouvrant + boîte sur dormant | Jeu de feuillure 12 mm | 623300 |
-| Loqueteau magnétique Roto | Aimant permanent néodyme silencieux | Jeu de feuillure 12 mm | 794680 |
-| Poignée de tirage extérieure coquille PVC | Fixation invisible | Blanc RAL 9016 | 623305 |
-| Poignée de tirage extérieure coquille alu | Fixation invisible | Gris anthracite RAL 7016 | 794682 |
-
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 82)
+Le loqueteau Roto NX du manuel de ferrage (788363, gâches 788378 et 788507, équerre 244517, cales
+794997 et 622589) est sur [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md).
 
 # Gabarits de perçage et outillage d'atelier
 
-Relevés sur le catalogue Roto NX (p. 436-451) et le manuel IMO 180 (p. 102-104, 108-111).
+Relevés sur le catalogue Roto NX (p. 436-451).
 Les gabarits assurent le centrage automatique des trous de tourillons et de vis par rapport à la feuillure :
 
 ### Gabarits de perçage de paliers et pivots
@@ -75,15 +63,16 @@ Les gabarits assurent le centrage automatique des trous de tourillons et de vis 
 
 (schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 438-442)
 
-### Gabarits de pose et d'alignement des gâches
+### Gabarits de pose des gâches
 
-| Type de gabarit | Application | Cotes couvertes | N° de matériel |
-| --- | --- | --- | --- |
-| Règle gabarit de gâches crémone | Positionnement automatique MV1, MV2, MV3 | HFF 280 à 2 400 mm | 794690 |
-| Règle gabarit de gâches compas | Positionnement repères MO et MH | LFF 290 à 1 600 mm | 794692 |
-| Gabarit de gâche basse OB | Positionnement précis de la gâche d'angle basse | Sens Gauche et Droite | 794695 |
-
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 102-104)
+Les gabarits de pose des gâches du manuel de ferrage (OB H 01 à OB H 03, OB V 01 à OB V 03, OB-6 V04,
+OB-6 V05, OF V 06, OF V 07, sans numéro d'article) sont sur
+[Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) et
+[ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md) ; ses gabarits de perçage
+(788436, 788438, 788503, 2002405, 2002406) sur
+[Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md). Le manuel donne
+788438 comme gabarit du pivot d'angle P 6/150 et 788436 comme gabarit dormant du palier de compas et
+du palier d'angle P6, attributions différentes de la table ci-dessus (entrée **VER-114**).
 
 ### Outillage de réglage et contrôle
 
@@ -98,7 +87,6 @@ Les gabarits assurent le centrage automatique des trous de tourillons et de vis 
 # Citations
 
 [1] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 — `raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 388 à 451
-[2] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 82 à 85, 102 à 104, et 108 à 111
 
 # Voir aussi
 

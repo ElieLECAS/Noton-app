@@ -6,7 +6,7 @@ tags: [roto, roto-nx, ksr, oscillo-battant, ob, quincaillerie, champs-applicatio
 systeme: Roto NX
 fournisseur: ROTO
 usage: atelier
-status: stable
+status: draft
 sources:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     id: roto-nx-ksr-montage-imo-180
@@ -14,7 +14,7 @@ sources:
     last_modified: 2022-11-30
 source_pages:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
-    pages: 40-45, 92-97, 102-103
+    pages: 42-47, 94-96, 98-99, 104-105
 generated:
   by: process:claude-code
   at: 2026-09-20T00:00:00Z
@@ -22,211 +22,381 @@ generated:
 
 # Oscillo-battant à un vantail, sécurité de base
 
-Champs d'application [1 p. 40] :
+L'*oscillo-battant* (OB) s'ouvre à la française et bascule en soufflet par la même poignée ; la
+*sécurité de base* est la ferrure sans classe de résistance à l'effraction (voir le
+[glossaire](/reference/glossaire.md)). Le manuel en donne la nomenclature complète : liste des
+pièces par repère et vue éclatée [1 p. 42-43].
 
-| Grandeur | Plage |
-| --- | --- |
-| Largeur en feuillure du vantail | 290 à 1600 mm |
-| Hauteur en feuillure du vantail | 300 à 2800 mm |
-| Poids du vantail | 130 ou 150 kg maximum |
+**Champs d'application** : largeur en feuillure du vantail 290 à 1 600 mm ; hauteur en feuillure
+du vantail 300 à 2 800 mm ; poids du vantail max. 130 ou 150 kg [1 p. 42].
 
-La crémone se choisit dans [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md), famille
-fouillot 8 mm hauteur de poignée fixe. Les paliers, pivots et tige d'axe communs sont sur
-[Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md). **Sur un vantail
-dont la hauteur en feuillure est inférieure à 500 mm, l'ouverture à soufflet doit être limitée à
-80 mm** [1 p. 41].
+**Veillez à limiter l'ouverture à soufflet des vantaux dont HFF < 500 mm à 80 mm !** [1 p. 43]
 
-## Têtière de compas
+![Vue éclatée de la ferrure Roto NX KSR, oscillo-battant à un vantail, sécurité de base](/assets/quincaillerie/roto-nx-ksr/oscillo-battant/vue-eclatee-ob-un-vantail-securite-de-base.png)
 
-Une combinaison par largeur en feuillure, avec un numéro d'article propre au galet E ou au
-galet V :
+La vue éclatée montre le vantail (gris clair) dans son dormant (rose saumon), côté paumelles à
+droite. Côté poignée, à gauche : la crémone (1, ou 1a dessinée à côté), les renvois d'angle (4) et
+le mini renvoi d'angle (6), le releveur (16) et sa gâche (17), les gâches (19). En haut : la têtière
+de compas (7), le deuxième compas (8) et une cale accessoire (20), le compas (9), le palier de compas
+(10) et la tige d'axe (11). Côté paumelles, à droite : le renvoi d'angle côté compas (12), le
+verrouilleur médian vertical (13), les pivots d'angle (14, 14a) et le palier d'angle (15). En bas :
+le verrouilleur médian horizontal (13), la gâche de basculement de sécurité (18) et une gâche (19).
+La poignée est au catalogue CTL_1 [1 p. 43].
 
-| Largeur en feuillure (mm) | Compas / longueur (mm) | Galet E | Galet V |
+## Crémones
+
+Les crémones 1a (crémone OB, hauteur poignée fixe, fouillot 8 mm, avec renvoi d'angle OB intégré),
+1 (crémone OB KSR, hauteur poignée fixe, fouillot 8 mm) et 1 (version courte HP fixe) portent les
+**mêmes plages, longueurs, hauteurs de poignée, galets et numéros d'article** que l'ouvrant à la
+française à un vantail, avec les mêmes notes ¹⁾ à ⁴⁾ — voir
+[Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md)
+[1 p. 42]. La liste ajoute une cinquième note : **\* ouverture à soufflet maximale : 80 mm**, portée
+sur la têtière 787345 et le compas de 150 mm.
+
+## Têtière de compas, compas et verrouilleurs
+
+La *têtière de compas* est la pièce fixée en haut du vantail qui porte le compas ; le *compas* est
+la pièce articulée du haut du vantail qui le guide en soufflet. Leur choix dépend de la largeur en feuillure du
+vantail. Pour la têtière, les trois premières plages portent un seul numéro d'article, les trois
+dernières un numéro par type de galet (E ou V) ; la longueur est imprimée « 500/ 890 1 », « 500/1090
+1 », « 500/1290 1 » [1 p. 42].
+
+| Largeur en feuillure (mm) | Compas / longueur (mm) | Numéro d'article | Numéro d'article, galet E | Numéro d'article, galet V |
+| --- | --- | --- | --- | --- |
+| 290 – 410 | 150 / 300 | 787345 \* | - | - |
+| 411 – 600 | 250 / 490 | 787346 | - | - |
+| 601 – 800 | 350 / 690 | 787347 | - | - |
+| 801 – 1000 | 500 / 890 1 | - | 788617 | 787360 |
+| 1001 – 1200 | 500 / 1090 1 | - | 787349 | 787361 |
+| 1201 – 1600 | 500 / 1290 1 | - | 787351 | 787362 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 42)
+
+**Deuxième compas (repère 8), à partir de LFF 1 400 mm : 255237** [1 p. 42].
+
+Compas P, système 12/20-13 (repère 9) [1 p. 42] :
+
+| Largeur en feuillure (mm) | Longueur (mm) | Numéro d'article, gauche | Numéro d'article, droite |
 | --- | --- | --- | --- |
-| 290 – 410 | 150 / 300 | 787345 | - |
-| 411 – 600 | 250 / 490 | 787346 | 787346 |
-| 601 – 800 | 350 / 690 | 787347 | 787347 |
-| 801 – 1000 | 500 / 890 | 788617 | 787360 |
-| 1001 – 1200 | 500 / 1090 | 787349 | 787361 |
-| 1201 – 1600 | 500 / 1290 | 787351 | 787362 |
-
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 40)
-
-**Un deuxième compas est nécessaire à partir de 1400 mm de largeur en feuillure**, référence
-255237 [1 p. 40].
-
-## Compas P, système 12/20-13
-
-| Largeur en feuillure (mm) | Longueur (mm) | Gauche | Droite |
-| --- | --- | --- | --- |
-| 290 – 410 | 150 | 787233 | 787234 |
+| 290 – 410 | 150 \* | 787233 | 787234 |
 | 411 – 600 | 250 | 787235 | 787236 |
 | 601 – 800 | 350 | 787237 | 787238 |
 | 801 – 1600 | 500 | 787239 | 787240 |
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 40)
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 42)
 
-## Verrouilleur médian, horizontal et vertical
+Verrouilleur médian, horizontal et vertical (repère 13). Une ligne par verrouilleur ; pour les
+grandes largeurs et hauteurs, la liste donne plusieurs lignes
+sous la même plage [1 p. 42].
 
-Combine une largeur et une hauteur en feuillure ; plusieurs longueurs partagent la même
-référence :
+| Largeur en feuillure (mm) | Hauteur en feuillure (mm) | Longueur | Galets | Numéro d'article |
+| --- | --- | --- | --- | --- |
+| 801 – 1200 | 801 – 1200 | 400 | 1 E | 255280 |
+| 1201 – 1400 | 1201 – 1400 | 600 | 1 E | 255281 |
+| 1401 – 1600 | 1401 – 1800 | 600 KU | 1 E | 255282 |
+| 1401 – 1600 | 1401 – 1800 | 400 | 1 E | 255280 |
+| 1401 – 1600 | 1801 – 2000 | 600 KU | 1 E | 255282 |
+| 1401 – 1600 | 1801 – 2000 | 600 | 1 E | 255281 |
+| 1401 – 1600 | 2001 – 2400 | 600 KU | 1 E | 255282 |
+| 1401 – 1600 | 2001 – 2400 | 600 KU | 1 E | 255282 |
+| 1401 – 1600 | 2001 – 2400 | 400 | 1 E | 255280 |
 
-| Largeur en feuillure (mm) | Hauteur en feuillure (mm) | Longueur | Référence |
-| --- | --- | --- | --- |
-| 801 – 1200 | 801 – 1200 | 400 KU, 1 E | 255280 |
-| 1201 – 1400 | 1201 – 1400 | 600 KU, 1 E | 255281 |
-| 1401 – 1600 | 1401 – 1800 | 600 KU, 1 E | 255282 |
-| 1401 – 1600 | 1801 – 2000 | 400 KU, 1 E | 255280 |
-| 1401 – 1600 | 1801 – 2000 | 600 KU, 1 E | 255282 |
-| 1401 – 1600 | 2001 – 2400 | 600, 1 E | 255281 |
-| 1401 – 1600 | 2001 – 2400 | 600 KU, 1 E (deux occurrences) | 255282 |
-| 1401 – 1600 | 2001 – 2400 | 400, 1 E | 255280 |
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 42)
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 40)
+La colonne « largeur en feuillure » n'est remplie que sur les trois premières lignes ; les lignes
+suivantes sont reportées sous la plage 1 401 – 1 600 comme elles sont imprimées.
 
-**Plusieurs références se combinent pour les grandes hauteurs** (au-delà de 1800 mm) : la source
-liste jusqu'à trois longueurs de verrouilleur pour une même plage de largeur et de hauteur, sans
-préciser d'ordre de priorité entre elles au-delà de la position portée sur le schéma.
+## Autres pièces
 
-## Autres options
+| Repère | Pièce | Version | Galets | Numéro d'article |
+| --- | --- | --- | --- | --- |
+| 4 | Renvoi d'angle | - | V | 260272 |
+| 6 | Mini renvoi d'angle | - | P | 260282 |
+| 10 | Palier de compas | P 3/130 (non illustré) | - | 859171 |
+| 10 | Palier de compas | P 6/130 | - | 859172 |
+| 10 | Palier de compas | P 6/150 (non illustré) | - | 859173 |
+| 11 | Tige d'axe 88 mm | - | - | 834705 |
+| 12 | Renvoi d'angle côté compas | - | V | 260284 |
+| 14 | Pivot d'angle P 6/150 | - | - | 263858 |
+| 14a | Pivot d'angle P 6/150 réglable en compression | - | - | 445171 |
+| 15 | Palier d'angle | P 3/130 (non illustré) | - | 787207 |
+| 15 | Palier d'angle | P 6/130 | - | 787208 |
+| 15 | Palier d'angle | P 6/150 (non illustré) | - | 787209 |
+| 16 | Releveur / anti-fausse manœuvre partie ouvrant | - | - | 795927 |
+| 17 | Gâche releveur / anti-fausse manœuvre | - | - | voir fichier gamme |
+| 18 | Gâche de basculement de sécurité | - | - | voir fichier gamme |
+| 19 | Gâche | - | - | voir fichier gamme |
+| 20 | Cale accessoire | - | - | voir fichier gamme |
 
-| Pièce | Référence |
-| --- | --- |
-| Renvoi d'angle côté compas, galet V | 260284 |
-| Gâche de basculement de sécurité | voir fichier gamme |
-| Cale accessoire | voir fichier gamme |
-
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 40-41)
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 42-43)
 
 # Oscillo-battant à deux vantaux, sécurité de base
 
-Mêmes champs d'application, même têtière de compas, même table de compas P et le même
-verrouilleur médian que la configuration à un vantail ci-dessus [1 p. 42] — la source les répète
-à l'identique. Le second vantail (semi-fixe) ajoute sa propre crémone et ses propres pièces de
-verrouillage.
+Fenêtre à deux vantaux **sans meneau fixe** : le vantail principal est oscillo-battant, le vantail
+secondaire (*semi-fixe*) s'ouvre à la française et porte sa propre crémone, dite crémone de
+semi-fixe, manœuvrée par un levier ; les deux vantaux se rejoignent au *battement* (voir le
+[glossaire](/reference/glossaire.md)) [1 p. 44-45].
 
-## Crémone de semi-fixe, hauteur de poignée fixe
+**Champs d'application** : largeur en feuillure du vantail 290 à 1 600 mm ; hauteur en feuillure
+du vantail 300 à 2 800 mm ; poids du vantail max. 130 ou 150 kg [1 p. 44].
 
-Un levier (galet G) au lieu d'un galet E ou V :
+**Veillez à limiter l'ouverture à soufflet des vantaux dont HFF < 500 mm à 80 mm !** [1 p. 45]
 
-| Hauteur en feuillure (mm) | Longueur crémone (mm) | Hauteur levier (mm) | Galets | N° d'article |
+![Vue éclatée de la ferrure Roto NX KSR, oscillo-battant à deux vantaux, sécurité de base](/assets/quincaillerie/roto-nx-ksr/oscillo-battant/vue-eclatee-ob-deux-vantaux-securite-de-base.png)
+
+La vue éclatée montre, à droite, le vantail principal oscillo-battant avec sa crémone (1, 1a), ses
+renvois d'angle (4, 6), sa têtière de compas (7), son deuxième compas (8) et sa cale (30), son compas
+(9) et, à gauche, le vantail semi-fixe avec sa crémone de semi-fixe (18, 18a), l'équerre de compas OF
+(16) et le compas OF (17). Le cadre pointillé, au droit du battement, regroupe les verrous pour
+semi-fixe (22), la gâche sur battement (23), la gâche loqueteau sur battement (32), la butée AFM
+(21) et les gâches sortie de tringle (31) haut et bas. Le cadre bleu repère l'option renvoi de
+fouillot (33). Les paliers de compas (10), tiges d'axe (10a), pivots (13, 13a) et paliers d'angle
+(14) sont dessinés sur les deux vantaux [1 p. 45].
+
+## Vantail principal
+
+Les crémones 1 (crémone OB, hauteur poignée fixe, fouillot 8 mm ⁴⁾ : 734530 et 2009309), 1
+(crémone OB KSR, hauteur poignée fixe, fouillot 8 mm) et 1 (version courte HP fixe), la têtière de
+compas (7), le deuxième compas 255237 (8), le compas P système 12/20-13 (9) et le verrouilleur
+médian horizontal et vertical (12) portent les **mêmes plages et les mêmes numéros d'article** que
+l'oscillo-battant à un vantail ci-dessus ; la première crémone y porte le repère 1 au lieu de 1a
+[1 p. 44]. Les autres pièces [1 p. 44] :
+
+| Repère | Pièce | Version | Galets | Numéro d'article |
 | --- | --- | --- | --- | --- |
-| 431 – 710 | 600 | 233 | - | 810974 |
-| 601 – 900 | 790 | 156 | 1 G | 2009311 |
-| 801 – 1000 | 780 | 335 | 1 G | 835109 |
-| 1001 – 1200 | 980 | 335 | 1 G | 763118 |
-| 1201 – 1400 | 1180 | 335 | 1 G | 763119 |
-| 1401 – 1600 | 1380 | 335 | 2 G | 763120 |
-| 1601 – 1800 | 1580 | 335 | 2 G | 795474 |
-| 1801 – 2000 | 1780 | 640 | 2 G | 795476 |
-| 2001 – 2200 | 1980 | 640 | 2 G | 795478 |
-| 2201 – 2400 | 2180 | 640 | 3 G | 795480 |
+| 4 | Renvoi d'angle | - | 1 V | 260272 |
+| 6 | Mini renvoi d'angle | - | 1 P | 260282 |
+| 10 | Palier de compas | P 3/130 (non illustré) | - | 859171 |
+| 10 | Palier de compas | P 6/130 | - | 859172 |
+| 10 | Palier de compas | P 6/150 (non illustré) | - | 859173 |
+| 10a | Tige d'axe 88 mm | - | - | 834705 |
+| 11 | Renvoi d'angle côté compas | - | V | 260284 |
+| 13 | Pivot d'angle P 6/150 | - | - | 263858 |
+| 13a | Pivot d'angle P 6/150 réglable en compression | - | - | 445171 |
+| 14 | Palier d'angle | P 3/130 (non illustré) | - | 787207 |
+| 14 | Palier d'angle | P 6/130 | - | 787208 |
+| 14 | Palier d'angle | P 6/150 (non illustré) | - | 787209 |
+| 15 | Releveur / anti-fausse manœuvre partie ouvrant | - | - | 795927 |
+| 16 | Équerre de compas OF | - | - | 331488 |
+| 17 | Compas OF P 12/20-13 | gauche | - | 787375 |
+| 17 | Compas OF P 12/20-13 | droit | - | 787376 |
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 43)
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 44)
 
-## Verrouillage et options du semi-fixe
+Notes de la liste [1 p. 44] : ¹⁾ HFF 601-700 avec mini renvoi d'angle ; ²⁾ pas de releveur /
+anti-fausse manœuvre ; ³⁾ HFF 300-400 avec mini renvoi d'angle ; ⁴⁾ avec renvoi d'angle OB intégré ;
+⁵⁾ uniquement HP 563 et 1000 ; ⁶⁾ HFF 431-510 avec mini renvoi d'angle ; \* ouverture à soufflet
+maximum 80 mm. Aucune ligne de la p. 44 ne porte le renvoi ⁵⁾ (entrée **INC-196**).
 
-| Pièce | Détail | Référence |
-| --- | --- | --- |
-| Loqueteau sur crémone semi-fixe | — | 788363 |
-| Gâche loqueteau sur crémone semi-fixe | sans meneau fixe | 788378 |
-| Butée AFM sur battement | — | 623126 |
-| Verrou pour semi-fixe 100 (non illustré) | — | 305638 |
-| Verrou pour semi-fixe 200 | — | 633419 |
-| Verrou pour semi-fixe 390 (non illustré) | — | 618666 |
-| Gâche sur battement | — | 623125 |
-| Cale jeu de 12 mm | — | 350402 |
-| Cale pour deuxième compas | voir fichier gamme | — |
-| Gâche loqueteau sur battement | — | 788507 |
-| Renvoi de fouillot | option pour poignée centrée, voir fichier gamme | — |
+## Crémone de semi-fixe
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 43)
+La crémone de semi-fixe est manœuvrée par un levier ; la *hauteur levier* est la hauteur de ce
+levier. Les galets de cette crémone sont notés **G** sur fond rouge, lettre que le manuel ne
+définit pas [1 p. 45].
 
-Les gâches, verrouilleurs médians invisibles et gâches de sécurité restants se lisent au fichier
-gamme, hors de ce corpus [1 p. 43].
+<table>
+<thead>
+<tr><th>Repère</th><th>Crémone</th><th>Hauteur en feuillure (mm)</th><th>Longueur (mm)</th><th>Hauteur levier (mm)</th><th>Galets</th><th>Numéro d'article</th></tr>
+</thead>
+<tbody>
+<tr><td rowspan="2">18a</td><td rowspan="2">Crémone de semi-fixe hauteur poignée fixe ⁴⁾</td><td>431 – 710 ⁶⁾</td><td>600</td><td>233</td><td>-</td><td>810974</td></tr>
+<tr><td>601 – 900 ¹⁾</td><td>790</td><td>156</td><td>1 G</td><td>2009311</td></tr>
+<tr><td rowspan="8">18</td><td rowspan="8">Crémone de semi-fixe KSR, hauteur poignée fixe</td><td>801 – 1000</td><td>780</td><td>335</td><td>1 G</td><td>835109</td></tr>
+<tr><td>1001 – 1200</td><td>980</td><td>335</td><td>1 G</td><td>763118</td></tr>
+<tr><td>1201 – 1400</td><td>1180</td><td>335</td><td>1 G</td><td>763119</td></tr>
+<tr><td>1401 – 1600</td><td>1380</td><td>335</td><td>2 G</td><td>763120</td></tr>
+<tr><td>1601 – 1800</td><td>1580</td><td>335</td><td>2 G</td><td>795474</td></tr>
+<tr><td>1801 – 2000</td><td>1780</td><td>640</td><td>2 G</td><td>795476</td></tr>
+<tr><td>2001 – 2200</td><td>1980</td><td>640</td><td>2 G</td><td>795478</td></tr>
+<tr><td>2201 – 2400</td><td>2180</td><td>640</td><td>3 G</td><td>795480</td></tr>
+</tbody>
+</table>
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 45)
+
+## Verrouillage du semi-fixe et options
+
+| Repère | Pièce | Version | Numéro d'article |
+| --- | --- | --- | --- |
+| 19 | Loqueteau sur crémone semi-fixe | - | 788363 |
+| 20 | Gâche loqueteau sur crémone semi-fixe | - | 788378 |
+| 21 | Butée AFM sur battement | - | 623126 |
+| 22 | Verrou pour semi-fixe | 100 (non illustré) | 305638 |
+| 22 | Verrou pour semi-fixe | 200 | 633419 |
+| 22 | Verrou pour semi-fixe | 390 (non illustré) | 618666 |
+| 23 | Gâche sur battement | - | 623125 |
+| 24 | Cale jeu de 12 mm | - | 350402 |
+| 25 | Verrouilleur médian invisible ouvrant | - | voir fichier gamme |
+| 26 | Gâche de basculement de sécurité | - | voir fichier gamme |
+| 27 | Gâche | - | voir fichier gamme |
+| 28 | Gâche de sécurité | - | voir fichier gamme |
+| 29 | Verrouilleur médian invisible dormant | - | voir fichier gamme |
+| 30 | Cale pour deuxième compas | - | voir fichier gamme |
+| 31 | Gâche sortie de tringle | - | voir fichier gamme |
+| 32 | Gâche loqueteau sur battement | - | 788507 |
+| 33 | Renvoi de fouillot (option pour poignée centrée) | - | voir fichier gamme |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 45)
+
+*AFM* signifie anti-fausse manœuvre [1 p. 9]. Le « fichier gamme » n'est pas dans le corpus.
 
 # Oscillo-battant à deux vantaux, poignée centrée
 
-Champs d'application, plus étroits que la version à deux vantaux ci-dessus [1 p. 44] :
+Même fenêtre à deux vantaux sans meneau fixe, avec une poignée centrée : les crémones sont en
+**fouillot -6 mm** (axe du fouillot décalé, voir le [glossaire](/reference/glossaire.md)) et un
+adaptateur carré de 7 mm accompagne ce fouillot [1 p. 46-47].
 
-| Grandeur | Plage |
-| --- | --- |
-| Largeur en feuillure du vantail | 290 à 1400 mm |
-| Hauteur en feuillure du vantail | 435 à 2800 mm |
-| Poids du vantail | 130 ou 150 kg maximum |
+**Champs d'application** : largeur en feuillure du vantail 290 à 1 400 mm ; hauteur en feuillure
+du vantail 435 à 2 800 mm ; poids du vantail max. 130 ou 150 kg [1 p. 46].
 
-La crémone est en **fouillot -6 mm**, avec son propre adaptateur carré de 7 mm — voir
-[Crémones Roto NX](/quincaillerie/roto-nx-cremones.md). Compas OF, palier de compas, pivot et
-palier d'angle sont les composants communs habituels. Renvoi d'angle et mini renvoi d'angle
-partagent les références déjà données (260272, 260282).
+**Veillez à limiter l'ouverture à soufflet des vantaux dont HFF < 500 mm à 80 mm !** [1 p. 47]
 
-Options propres à cette configuration :
+![Vue éclatée de la ferrure Roto NX KSR, oscillo-battant à deux vantaux, poignée centrée](/assets/quincaillerie/roto-nx-ksr/oscillo-battant/vue-eclatee-ob-deux-vantaux-poignee-centree.png)
 
-| Pièce | Référence |
-| --- | --- |
-| Butée AFM sur battement | 623126 |
-| Cale jeu de 12 mm | 350402 |
-| Verrou pour semi-fixe 100 (non illustré) | 305638 |
-| Verrou pour semi-fixe 200 | 633419 |
-| Verrou pour semi-fixe 390 (non illustré) | 618666 |
-| Gâche sur battement | 623125 |
+La vue éclatée reprend la disposition de l'oscillo-battant à deux vantaux : vantail principal à
+droite avec sa crémone (1, 1a), l'adaptateur (3) et le renvoi (4) au milieu, vantail semi-fixe à
+gauche avec sa crémone de semi-fixe (17, 17a) ; le cadre pointillé au droit du battement regroupe
+les verrous (22), la gâche sur battement (23), la butée AFM (19) et les gâches sortie de tringle
+(31). Le repère 4 est dessiné sur la vue sans figurer dans la liste (entrée **INC-197**)
+[1 p. 47].
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 44-45)
+Les crémones fouillot -6 mm, vantail principal et semi-fixe, sont sur
+[Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) (section *Crémones OB, fouillot -6 mm,
+hauteur de poignée fixe*). La têtière de compas (8), le deuxième compas 255237 (18), le compas P
+système 12/20-13 (9) et le verrouilleur médian horizontal et vertical (12) portent les **mêmes
+plages et numéros d'article** que l'oscillo-battant à un vantail [1 p. 46].
 
-Les gâches de basculement, verrouilleurs médians invisibles (dormant et ouvrant) et la cale pour
-deuxième compas se lisent au fichier gamme, hors de ce corpus [1 p. 45].
+| Repère | Pièce | Version | Galets | Numéro d'article |
+| --- | --- | --- | --- | --- |
+| 3 | Adaptateur carré de 7 mm : fouillot -6 | - | - | 493348 |
+| 5 | Renvoi d'angle | - | 1 V | 260272 |
+| 7 | Mini renvoi d'angle | - | 1 P | 260282 |
+| 10 | Palier de compas | P 3/130 (non illustré) | - | 859171 |
+| 10 | Palier de compas | P 6/130 | - | 859172 |
+| 10 | Palier de compas | P 6/150 (non illustré) | - | 859173 |
+| 10a | Tige d'axe 88 mm | - | - | 834705 |
+| 11 | Renvoi d'angle côté compas | - | V | 260284 |
+| 13 | Pivot d'angle P 6/150 | - | - | 263858 |
+| 13a | Pivot d'angle P 6/150 réglable en compression | - | - | 445171 |
+| 14 | Palier d'angle | P 3/130 (non illustré) | - | 787207 |
+| 14 | Palier d'angle | P 6/130 | - | 787208 |
+| 14 | Palier d'angle | P 6/150 (non illustré) | - | 787209 |
+| 15 | Équerre compas OF | - | - | 331488 |
+| 16 | Compas OF P 12/20-13 | gauche | - | 787375 |
+| 16 | Compas OF P 12/20-13 | droit | - | 787376 |
+| 19 | Butée AFM sur battement | - | - | 623126 |
+| 20 | Releveur / anti-fausse manœuvre partie ouvrant | - | - | 795927 |
+| 21 | Cale jeu de 12 mm | - | - | 350402 |
+| 22 | Verrou pour semi-fixe | 100 (non illustré) | - | 305638 |
+| 22 | Verrou pour semi-fixe | 200 | - | 633419 |
+| 22 | Verrou pour semi-fixe | 390 (non illustré) | - | 618666 |
+| 23 | Gâche sur battement | - | - | 623125 |
+| 24 | Gâche de basculement | - | - | voir fichier gamme |
+| 25 | Gâche | - | - | voir fichier gamme |
+| 27 | Verrouilleur médian partie dormant | - | - | voir fichier gamme |
+| 28 | Verrouilleur médian partie ouvrant | - | - | voir fichier gamme |
+| 30 | Cale pour deuxième compas | - | - | voir fichier gamme |
+| 31 | Gâche sortie de tringle | - | - | voir fichier gamme |
+| 32 | Option : cale d'épaisseur | - | - | voir le tableau ci-dessous |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 46-47)
+
+Notes de la liste [1 p. 47] : ¹⁾ HFF 601-700 avec mini renvoi d'angle ; ²⁾ pas de releveur /
+anti-fausse manœuvre ; ³⁾ HFF 435-520 avec mini renvoi d'angle ; ⁴⁾ avec renvoi d'angle OB intégré ;
+⁵⁾ HFF 801-900 avec mini renvoi d'angle ; \* ouverture à soufflet maximum 80 mm.
+
+## Cale d'épaisseur, par profilé
+
+L'option 32, *cale d'épaisseur*, se compose de cales 495096 et 498312 empilées ; leur nombre dépend
+du profilé PVC. Dix-sept profilés sont listés [1 p. 47].
+
+| Profilé | Cale 495096 (nombre) | Cale 498312 (nombre) |
+| --- | --- | --- |
+| Aluplast 2000/3000 | 1 | 2 |
+| Aluplast Ideal 4000/5000/6000 | 2 | 1 |
+| Alphacan-Lucobay-Esthéa | 1 | 2 |
+| Deceuninck Zendow | 1 | 2 |
+| Gealan 8000 | - | 3 |
+| KBE 70 AD | 2 | 1 |
+| Kömmerling Eurodur 3S/MPF | 1 | 2 |
+| Kömmerling Eurofutur | 1 | 2 |
+| Rehau 730 | 1 | 1 |
+| Schüco Corona 70 mm | 3 | - |
+| Schüco Corona MD | 3 | - |
+| Schüco CT70 AD/MD | 3 | - |
+| Thyssen AD/MD 13 | 1 | 2 |
+| Trocal Innonova 70 AD/MD | 1 | 2 |
+| Veka Topline AD10200 | 2 | 1 |
+| Wymar-Profex 2000 | 1 | 2 |
+| Plastival PF 5900 | 1 | 2 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 47)
 
 # Positionnement des gâches
 
-Cotes de positionnement des gâches sur le dormant, à un vantail puis à deux vantaux, sécurité de
-base puis RC1 [1 p. 92-97]. Sur le schéma du manuel, le montant côté compas porte les gâches
-**S** (loqueteau), **NSP** (releveur / anti-fausse manœuvre, aussi noté **AFM**), **G1**, **G2**,
-**G3** ; le montant côté crémone porte le verrouilleur médian vertical **MV1**, **MV2**, **MV3** ;
-la traverse haute porte le verrouilleur médian horizontal haut (**MH1**/**MH2** en hauteur de
-poignée fixe, **MO1**/**MO2** en hauteur de poignée variable) et la traverse basse le
-verrouilleur horizontal bas (**MH1**/**MH2** ou **MU1**/**MU2**) ; **GH** est la cote de la
-crémone elle-même, alignée sur la colonne **HP** des tables de choix de crémone — voir
-[Crémones Roto NX](/quincaillerie/roto-nx-cremones.md).
+Les *gâches* sont les pièces vissées sur le dormant où s'engagent les galets de la ferrure. Les
+pages « Dormant — Montage de la ferrure » donnent, pour l'oscillo-battant, les cotes de pose des
+gâches sur le dormant, en mm, par plage de hauteur (HVFF, hauteur du vantail en feuillure) ou de
+largeur (LVFF, largeur du vantail en feuillure) [1 p. 94-96, 98-99].
 
-## Un vantail, sécurité de base — crémone OB fouillot 8 mm, hauteur de poignée fixe
+**Comment lire les plans.** Le dormant est dessiné en saumon, les gâches en petits rectangles.
+Côté crémone (montant de la poignée) sont cotées, depuis le bas de la feuillure, les gâches
+**G1**, **G2**, **G3**, la gâche du releveur / anti-fausse manœuvre (**NSP** sur le plan, **AFM**
+dans les tables) et celle du loqueteau (**S** sur le plan, **L** ou **S** dans les tables) ; **GH**
+est la hauteur de l'axe de la poignée (colonne **HP** ou **GH** des tables). Côté paumelles, les
+gâches du verrouilleur médian vertical sont cotées depuis le haut (**MV1** à **MV3**, première gâche
+à **149**). Sur les traverses : **MH1**, **MH2** (ou **MO1** / **MO2** en haut et **MU1** / **MU2**
+en bas), avec les cotes fixes **76** / **50** en haut, **24** / **86,5** en bas et **12** sous la
+gâche centrale de la traverse basse. Pour la crémone à hauteur de poignée variable, les cotes
+**A** à **E** et **S**, **NSP¹**, **NSP²** se mesurent depuis l'axe de la « poignée au milieu ».
+Dans les tables des verrouilleurs, la dernière colonne donne les verrouilleurs à poser (« 600 E KU
++ 400 E » : un verrouilleur de 600 accouplable à galet E et un de 400 à galet E).
 
-| Hauteur HVFF (mm) | HP (mm) | G1 (mm) | G2 (mm) | G3 (mm) | AFM (mm) | L (mm) |
+La correspondance entre les étiquettes du plan (NSP, S, GH) et celles des tables (AFM, L, HP) n'est
+pas écrite, sauf par les légendes « AFM = releveur / anti fausse manœuvre », « L = loqueteau »,
+« NSP = releveur / anti fausse manœuvre » et « S = loqueteau » (entrée **INC-208**).
+
+## Un vantail, sécurité de base — crémone OB fouillot 8 mm (p. 94)
+
+![Positionnement des gâches, oscillo-battant un vantail, sécurité de base, crémone OB fouillot 8 mm hauteur de poignée fixe](/assets/quincaillerie/roto-nx-ksr/oscillo-battant/gaches-un-vantail-base-f8-hp-fixe.png)
+
+**Crémone OB** (hauteur de poignée fixe) :
+
+| Hauteur HVFF (mm) | HP | G1 | G2 | G3 | AFM | L |
 | --- | --- | --- | --- | --- | --- | --- |
 | 300 – 600 | 120 | - | - | - | - | - |
 | 601 – 900 | 220 | 436 | - | - | 324 | - |
 | 801 – 1000 | 413 | 550 | - | - | 288 | - |
 | 1001 – 1200 | 513 | 700 | - | - | 388 | - |
 | 1201 – 1400 | 563 | 700 | - | - | 388 | - |
-| 1401 – 1600 | 563 | 700 | - | - | 388 | - |
+| 1401 – 1600 | 563 | 700 | - | - | 388 | –+ |
 | 1601 – 1800 | 563 | 700 | 1170 | - | 388 | - |
-| 1601 – 1800 | 763 | 900 | 1370 | - | 588 | - |
+| 1601 – 1800 | 763 | 900 | 1370 | - | 588 | (vide) |
+| 1601 – 1800 | 1000 | 700 | 1370 | - | 1121 | 1244 |
 | 1601 – 1800 | 1000 | 700 | 1370 | - | 1121 | 1244 |
 | 1801 – 2000 | 1000 | 700 | 1370 | - | 1121 | 1244 |
 | 2001 – 2200 | 1000 | 700 | 1370 | 1770 | 1121 | 1244 |
 | 2201 – 2400 | 1000 | 700 | 1370 | 1770 | 1121 | 1244 |
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 92)
+La ligne 1 601 – 1 800 / 1 000 est imprimée deux fois à l'identique, la case L de la ligne
+1 401 – 1 600 porte « –+ » et celle de la ligne 763 est vide (entrée **INC-208**).
 
-**La plage 1601-1800 mm porte trois jeux de cotes HP/G1/G2/AFM/L différents** : le document ne
-précise pas, au-delà du schéma, quel critère choisit entre les trois — à vérifier au cas par cas
-sur le poids ou la configuration retenue.
+![Positionnement des gâches, oscillo-battant un vantail, sécurité de base, crémone OB hauteur de poignée variable](/assets/quincaillerie/roto-nx-ksr/oscillo-battant/gaches-un-vantail-base-hp-variable.png)
 
-Crémone OB à hauteur de poignée variable, même vantail :
+**Crémone OB hauteur de poignée variable** :
 
-| Hauteur HVFF (mm) | A (mm) | B (mm) | C (mm) | D (mm) | E (mm) | AFM (mm) | L (mm) |
+| Hauteur HVFF (mm) | A | B | C | D | E | AFM | L |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 450 – 620 | - | - | - | - | - | - | - |
+| 450 – 620 | - | - | - | - | - | (vide) | - |
 | 621 – 800 | 125 | - | - | - | - | 137 | - |
 | 801 – 1200 | 125 | - | - | - | - | 137 | - |
 | 1201 – 1600 | 125 | 340 | - | - | - | 137 | - |
 | 1601 – 2000 | - | 312 | 358 | - | - | 109 | 232 |
 | 2001 – 2400 | - | 312 | 358 | 758 | 740 | 109 | 232 |
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 92)
+**Verrouilleur médian vertical** (« Verrouilleur médian multi-parties ») :
 
-Verrouilleur médian vertical et horizontal, sécurité de base :
-
-| Hauteur HVFF (mm) | MV1 (mm) | MV2 (mm) | MV3 (mm) | Référence |
+| Hauteur HVFF (mm) | MV1 | MV2 | MV3 | Verrouilleurs |
 | --- | --- | --- | --- | --- |
 | 801 – 1200 | 550 | - | - | 400 E |
 | 1201 – 1400 | 746 | - | - | 600 E |
@@ -234,132 +404,198 @@ Verrouilleur médian vertical et horizontal, sécurité de base :
 | 1801 – 2000 | 746 | 1346 | - | 600 E KU + 600 E |
 | 2001 – 2400 | 746 | 1346 | 1750 | 600 E KU + 600 E KU + 400 E |
 
-| Largeur LVFF (mm) | MH1 (mm) | MH2 (mm) | Référence |
+**Verrouilleur médian horizontal** :
+
+| Largeur LVFF (mm) | MH1 | MH2 | Verrouilleurs |
 | --- | --- | --- | --- |
 | 801 – 1200 | 462 | - | 400 E |
 | 1201 – 1400 | 658 | - | 600 E |
 | 1401 – 1600 | 658 | 1062 | 600 E KU + 400 E |
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 92)
+**Têtière de compas** (cote A du compas selon le galet, et longueur compas / têtière) :
 
-Têtière de compas, valable pour toutes les configurations de cette section :
-
-| Largeur LVFF (mm) | A galet E (mm) | A galet V (mm) | Longueur (mm) |
+| Largeur LVFF (mm) | A galet E | A galet V | Longueur |
 | --- | --- | --- | --- |
 | 801 – 1000 | 600 | 600 | 500 / 890 |
 | 1001 – 1200 | 750 | 600 | 500 / 1090 |
 | 1201 – 1400 | 750 | 600 | 500 / 1290 |
-| 1401 – 1600 (avec deuxième compas) | 750 | 600 | 500 / 1290 |
+| 1401 – 1600 * | 750 | 600 | 500 / 1290 |
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 92)
+\* avec deuxième compas. AFM = releveur / anti fausse manœuvre ; L = loqueteau [1 p. 94].
 
-## Un vantail, sécurité RC1 — sans sécurité d'angle, avec verrouilleur médian galet V
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 94)
 
-RC1 sans sécurité d'angle : les cotes de la crémone OB (hauteur fixe et hauteur de poignée
-variable) et de la têtière de compas sont identiques à la table « sécurité de base » ci-dessus
-[1 p. 93]. Seul change le verrouilleur médian, qui passe au galet V :
+## Un vantail, sécurité RC1 — crémone OB fouillot 8 et 15 mm (p. 95)
 
-| Hauteur HVFF (mm) | MV1 (mm) | MV2 (mm) | MV3 (mm) | Référence |
+« RC1 sans sécurité d'angle, avec verrouilleur médian V » : la *classe RC1* est une classe de
+résistance à l'effraction (voir le [glossaire](/reference/glossaire.md)) [1 p. 95].
+
+![Positionnement des gâches, oscillo-battant un vantail, RC1, crémone OB hauteur de poignée fixe](/assets/quincaillerie/roto-nx-ksr/oscillo-battant/gaches-un-vantail-rc1-hp-fixe.png)
+
+**Crémone OB** : mêmes valeurs que la table sécurité de base de la p. 94, **sans** la ligne
+1 601 – 1 800 / 763 / 900 / 1370 / 588 et sans le doublon de la ligne 1 601 – 1 800 / 1 000 ; la case
+L de 1 401 – 1 600 est « - » [1 p. 95].
+
+![Positionnement des gâches, oscillo-battant un vantail, RC1, crémone OB hauteur de poignée variable](/assets/quincaillerie/roto-nx-ksr/oscillo-battant/gaches-un-vantail-rc1-hp-variable.png)
+
+**Crémone OB hauteur de poignée variable** : mêmes valeurs qu'en sécurité de base, avec les
+appels **137¹** (621 – 1 600) et **109²** (1 601 – 2 400) dans la colonne AFM, sans texte de note
+sur la page (entrée **INC-208**).
+
+**Verrouilleur médian vertical** (« VM multi-parties ») :
+
+| Hauteur HVFF (mm) | MV1 | MV2 | MV3 | Verrouilleurs |
 | --- | --- | --- | --- | --- |
 | 801 – 1200 | 550 | - | - | 400 E |
 | 1201 – 1400 | 746 | - | - | 600 E |
 | 1401 – 1800 | 746 | 1150 | - | 600 E KU + 400 E |
 | 1801 – 2000 | 746 | 1346 | - | 600 E KU + 600 E |
-| 2001 – 2400 | 746 | 1346 | 1750 | 600 E + 600 E KU + 400 E |
+| 2001 – 2400 | 746 | 1346 | 1750 | 600 E + 600 E KU + 600 E |
 
-<table>
-<thead>
-<tr><th>Largeur LVFF (mm)</th><th>MH1 (mm)</th><th>MH2 (mm)</th><th>MV200 P</th><th>MV400 P</th><th>MV600 P</th><th>MV600 P KU</th></tr>
-</thead>
-<tbody>
-<tr><td>320 – 510</td><td>258</td><td>-</td><td>200 P</td><td>-</td><td>-</td><td>-</td></tr>
-<tr><td>511 – 710</td><td>462</td><td>-</td><td>-</td><td>400 P</td><td>-</td><td>-</td></tr>
-<tr><td>711 – 926</td><td>658</td><td>-</td><td>-</td><td>-</td><td>600 P</td><td>-</td></tr>
-<tr><td>927 – 1110</td><td>658</td><td>858</td><td>200 P</td><td>-</td><td>-</td><td>600 P KU</td></tr>
-<tr><td>1111 – 1326</td><td>658</td><td>1062</td><td>-</td><td>400 P</td><td>-</td><td>600 P KU</td></tr>
-<tr><td>1327 – 1400</td><td>658</td><td>1258</td><td>-</td><td>-</td><td>600 P</td><td>600 P KU</td></tr>
-</tbody>
-</table>
+**Verrouilleur médian horizontal** (verrouilleurs à galet P) :
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 93)
+| Largeur LVFF (mm) | MH1 | MH2 | MV200 | MV400 | MV600 | MV600 KU |
+| --- | --- | --- | --- | --- | --- | --- |
+| 320 – 510 | 258 | - | 200 P | - | - | - |
+| 511 – 710 | 462 | - | - | 400 P | (vide) | (vide) |
+| 711 – 926 | 658 | - | - | - | 600 P | - |
+| 927 – 1110 | 658 | 858 | 200 P | - | - | 600 P KU |
+| 1111 – 1326 | 658 | 1062 | - | 400 P | - | 600 P KU |
+| 1327 – 1400 | 658 | 1258 | - | - | 600 P | 600 P KU |
 
-## Un vantail, fouillot 15 mm, sécurité de base
+**Têtière de compas** : mêmes valeurs qu'en sécurité de base (600 / 750 / 750 / 750 en galet E,
+600 en galet V, 500 / 890 à 500 / 1290, * 1 401 – 1 600) [1 p. 95].
 
-Les cotes de la crémone OB (hauteur fixe et hauteur de poignée variable) sont les deux tables
-déjà données ci-dessus pour le fouillot 8 mm — la source les répète à l'identique pour le
-fouillot 15 mm [1 p. 94]. Sur cette variante, le verrouilleur médian vertical devient
-**invisible**, coté en fraction de la hauteur en feuillure, et le verrouilleur horizontal se
-scinde en une table haut (**MO1**/**MO2**) et une table bas (**MU1**/**MU2**) :
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 95)
+
+## Un vantail, sécurité de base — crémone OB fouillot 15 mm (p. 96)
+
+Le pictogramme de la page est celui de l'ouvrant à la française ; le titre de la page est
+« Positionnement des gâches (mm) Crémone OB fouillot 15 mm hauteur de poignée fixe » [1 p. 96].
+
+![Positionnement des gâches, un vantail, sécurité de base, crémone OB fouillot 15 mm hauteur de poignée fixe](/assets/quincaillerie/roto-nx-ksr/oscillo-battant/gaches-un-vantail-base-f15-hp-fixe.png)
+
+**Crémone OB** : mêmes onze lignes et mêmes valeurs qu'en RC1 (p. 95).
+
+![Positionnement des gâches, un vantail, sécurité de base, crémone OB hauteur de poignée variable](/assets/quincaillerie/roto-nx-ksr/oscillo-battant/gaches-un-vantail-base-f15-hp-variable.png)
+
+**Crémone OB hauteur de poignée variable** : mêmes valeurs qu'en RC1 (137¹, 109²), la dernière
+colonne étant intitulée **S** au lieu de L.
+
+**Verrouilleur médian invisible** (cotes en fraction de la HFF) :
 
 | Hauteur HVFF (mm) | MV1 | MV2 | MV3 |
 | --- | --- | --- | --- |
 | 801 – 1400 | 1/2 HFF | - | - |
 | 1401 – 2400 | - | 1/3 HFF | 2/3 HFF |
 
-| Largeur LVFF (mm) | MO1 (mm) | MO2 (mm) | Référence (haut) |
-| --- | --- | --- | --- |
-| 801 – 1200 | 480 | - | 400 E |
-| 1201 – 1400 | 676 | - | 600 E |
-| 1401 – 1600 | 676 | 1080 | 600 E KU + 400 E |
+**Verrouilleur médian horizontal — haut** et **— bas** :
 
-| Largeur LVFF (mm) | MU1 (mm) | MU2 (mm) | Référence (bas) |
-| --- | --- | --- | --- |
-| 801 – 1200 | 462 | - | 400 E |
-| 1201 – 1400 | 658 | - | 600 E |
-| 1401 – 1600 | 658 | 1062 | 600 E KU + 400 E |
-
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 94)
-
-## Deux vantaux, sécurité de base — sans meneau fixe
-
-Configuration symétrique sans meneau fixe, centrée sur le jeu en feuillure. Le verrouilleur
-médian invisible et les verrouilleurs horizontaux haut/bas reprennent les mêmes cotes que la
-variante fouillot 15 mm à un vantail ci-dessus [1 p. 96]. La crémone se choisit selon le fouillot,
-avec sa propre colonne **GH** :
-
-| Hauteur HVFF (mm) | GH (mm) | G1 (mm) | G2 (mm) | G3 (mm) | AFM (mm) | L (mm) | Fouillot |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 300 – 600 | 120 | - | - | - | - | - | 8 |
-| 601 – 900 | 220 | 436 | - | - | 324 | - | 8 |
-| 801 – 1000 | 413 | 550 | - | - | 288 | - | 8 |
-| 1001 – 1200 | 513 | 700 | - | - | 388 | - | 8 |
-| 1201 – 1400 | 563 | 700 | - | - | 388 | - | 8 |
-| 1401 – 1600 | 563 | 700 | - | - | 388 | - | 8 |
-| 1601 – 1800 | 563 | 700 | 1170 | - | 388 | - | 8 |
-| 1601 – 1800 | 1000 | 700 | 1370 | - | 1121 | 1244 | 8 |
-| 1801 – 2000 | 1000 | 700 | 1370 | - | 1121 | 1244 | 8 |
-| 2001 – 2200 | 1000 | 700 | 1370 | 1770 | 1121 | 1244 | 8 |
-| 2201 – 2400 | 1000 | 700 | 1370 | 1770 | 1121 | 1244 | 8 |
-| 300 – 600 | 170 | - | - | - | - | - | -6 |
-| 601 – 900 | 220 | 503 | - | - | 382 | - | -6 |
-| 801 – 1000 | 413 | 608 | - | - | 227 | - | -6 |
-| 1001 – 1200 | 513 | 278 | 798 | - | 675 | - | -6 |
-| 1201 – 1400 | 563 | 328 | 948 | - | 725 | - | -6 |
-| 1401 – 1600 | 563 | 328 | 948 | - | 725 | - | -6 |
-| 1601 – 2400 | 1000 | 645 | 1195 | - | 712 | - | -6 |
+| Largeur LVFF (mm) | MO1 | MO2 | Haut | MU1 | MU2 | Bas |
+| --- | --- | --- | --- | --- | --- | --- |
+| 801 – 1200 | 480 | - | 400 E | 462 | - | 400 E |
+| 1201 – 1400 | 676 | - | 600 E | 658 | - | 600 E |
+| 1401 – 1600 | 676 | 1080 | 600 E KU + 400 E | 658 | 1062 | 600 E KU + 400 E |
 
 (schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 96)
 
-La têtière de compas reprend la table déjà donnée ci-dessus (sécurité de base, un vantail) [1 p.
-96]. **Le repère « centre du jeu en feuillure » sert d'origine commune** aux deux vantaux : les
-cotes MH1/MU1 se relèvent depuis ce point, pas depuis le montant extérieur.
+## Deux vantaux sans meneau fixe, sécurité de base (p. 98)
 
-## Deux vantaux, sécurité RC1 — sans meneau fixe
+Deux pictogrammes : oscillo-battant à deux vantaux et ouvrant à la française à deux vantaux. Les
+cotes des traverses se mesurent depuis le **centre du jeu en feuillure**, entre les deux vantaux ;
+autour de lui, **70** / **70** / **50** en haut, **53** / **18** / **86,5** en bas ; **44** sous la
+dernière gâche du verrouilleur médian invisible (montant gauche) [1 p. 98].
 
-Même schéma de principe qu'en sécurité de base, avec des références de verrouillage propres à
-RC1 [1 p. 97]. La crémone OB reprend les mêmes cotes de **GH**/G1/G2/G3/AFM/L que la version
-sécurité de base ci-dessus, mais nommées **NSP** (au lieu d'AFM) et **S** (au lieu de L) sur cette
-planche — mêmes valeurs numériques, autre étiquette :
+![Positionnement des gâches, deux vantaux sans meneau fixe, sécurité de base](/assets/quincaillerie/roto-nx-ksr/oscillo-battant/gaches-deux-vantaux-base.png)
 
-| Hauteur HVFF (mm) | MV1 (mm) | MV2 (mm) | MV3 (mm) | Référence |
+**Verrouilleur vertical invisible** (montant gauche du plan) :
+
+| Hauteur HFF (mm) | MV1 | MV2 | MV3 |
+| --- | --- | --- | --- |
+| 801 – 1200 | 550 | - | - |
+| 1201 – 1400 | 746 | - | - |
+| 1401 – 1800 | 746 | 1150 | - |
+| 1801 – 2000 | 746 | 1346 | - |
+| 2001 – 2400 | 746 | 1346 | 1750 |
+
+**Verrouilleur horizontal — haut** et **— bas** (« Verrouilleur médian multi-parties ») :
+
+| Largeur LFF (mm) | MO1 | MO2 | Haut | MU1 | MU2 | Bas |
+| --- | --- | --- | --- | --- | --- | --- |
+| 801 – 1200 | 462 | - | 400 E | 462 | - | 400 E |
+| 1201 – 1400 | 652 | - | 600 E | 652 | - | 600 E |
+| 1401 – 1600 | 652 | 1056 | 600 KU E + 400 E | 652 | 1056 | 600 KU E + 400 E |
+
+**Crémone OB F8** et **Crémone OB F-6** (F : fouillot) :
+
+| Fouillot | Hauteur HFF (mm) | GH | G1 | G2 | G3 | AFM | L |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| F8 | 300 – 600 | 120 | - | - | - | - | - |
+| F8 | 601 – 900 | 220 | 436 | - | - | 324 | - |
+| F8 | 801 – 1000 | 413 | 550 | - | - | 288 | - |
+| F8 | 1001 – 1200 | 513 | 700 | - | - | 388 | - |
+| F8 | 1201 – 1400 | 563 | 700 | - | - | 388 | - |
+| F8 | 1401 – 1600 | 563 | 700 | - | - | 388 | - |
+| F8 | 1601 – 1800 | 563 | 700 | 1170 | - | 388 | - |
+| F8 | 1601 – 1800 | 1000 | 700 | 1370 | - | 1121 | 1244 |
+| F8 | 1801 – 2000 | 1000 | 700 | 1370 | - | 1121 | 1244 |
+| F8 | 2001 – 2200 | 1000 | 700 | 1370 | 1770 | 1121 | 1244 |
+| F8 | 2201 – 2400 | 1000 | 700 | 1370 | 1770 | 1121 | 1244 |
+| F-6 | 300 – 600 | 170 | - | - | - | - | - |
+| F-6 | 601 – 900 | 220 | 503 | - | - | 382 | - |
+| F-6 | 801 – 1000 | 413 | 608 | - | - | 227 | - |
+| F-6 | 1001 – 1200 | 513 | 278 | 798 | - | 675 | - |
+| F-6 | 1201 – 1400 | 563 | 328 | 948 | - | 725 | - |
+| F-6 | 1401 – 1600 | 563 | 328 | 948 | - | 725 | - |
+| F-6 | 1601 – 2400 | 1000 | 645 | 1195 | - | 712 | - |
+
+**Têtière de compas** : mêmes valeurs qu'à un vantail (p. 94), * avec deuxième compas.
+
+**Verrouilleur médian vertical** et **horizontal** (tables de droite de la page) :
+
+| Hauteur HFF (mm) | MV1 | MV2 | MV3 | Verrouilleurs |
 | --- | --- | --- | --- | --- |
 | 801 – 1200 | 550 | - | - | 400 E |
 | 1201 – 1400 | 746 | - | - | 600 E |
 | 1401 – 1800 | 746 | 1150 | - | 600 E KU + 400 E |
 | 1801 – 2000 | 746 | 1346 | - | 600 E KU + 600 E |
-| 2001 – 2400 | 746 | 1346 | 1750 | 2 x 600 E KU + 600 E |
+| 2001 – 2400 | 746 | 1346 | 1750 | 600 E + 600 E KU + 600 E |
 
-| Largeur LVFF (mm) | MH1 (mm) | MH2 (mm) | Référence |
+| Largeur LFF (mm) | MH1 | MH2 | Verrouilleurs |
+| --- | --- | --- | --- |
+| 801 – 1200 | 456 | - | 400 E |
+| 1201 – 1400 | 652 | - | 600 E |
+| 1100 – 1600 | 652 | 1056 | 600 E KU + 400 E |
+
+\* avec deuxième compas ; NSP = releveur / anti fausse manœuvre ; S = loqueteau [1 p. 98]. La
+dernière plage du verrouilleur médian horizontal est imprimée « 1100–1600 », chevauchant la
+précédente (entrée **INC-208**).
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 98)
+
+## Deux vantaux sans meneau fixe, sécurité RC1 — crémone OB fouillot 15 mm (p. 99)
+
+Même plan de principe qu'en sécurité de base, cotes des traverses depuis le centre du jeu en
+feuillure (**53** / **70** en haut, **53** / **18** / **86,5** en bas), gâches cotées **A** depuis
+chaque angle haut, **149** et **MV1** à **MV3** sur les deux montants [1 p. 99].
+
+![Positionnement des gâches, deux vantaux sans meneau fixe, RC1, crémone OB fouillot 15 mm](/assets/quincaillerie/roto-nx-ksr/oscillo-battant/gaches-deux-vantaux-rc1.png)
+
+**Crémone OB** : mêmes onze lignes qu'à un vantail RC1 (p. 95), colonnes intitulées **NSP** et
+**S** au lieu d'AFM et L.
+
+**Verrouilleurs**, deux jeux de tables imprimés côte à côte (« Verrouilleur médian verrtical » à
+gauche, « Verrouilleur médian vertical » au centre) :
+
+| Hauteur HVFF (mm) | MV1 | MV2 | MV3 | Verrouilleurs, table de gauche | Verrouilleurs, table du centre |
+| --- | --- | --- | --- | --- | --- |
+| 801 – 1200 | 550 | - | - | 400 E | 400 E |
+| 1201 – 1400 | 746 | - | - | 600 E | 600 E |
+| 1401 – 1800 | 746 | 1150 | - | 600 E KU + 400 E | 600 E KU + 400 E |
+| 1801 – 2000 | 746 | 1346 | - | 600 E KU + 600 E | 600 E KU + 600 E |
+| 2001 – 2400 | 746 | 1346 | 1750 | 2 x 600 E KU + 400 E | 2 x 600 E KU + 600 E |
+
+| Largeur LVFF (mm) | MH1 | MH2 | Verrouilleurs (les deux tables) |
 | --- | --- | --- | --- |
 | 320 – 510 | 252 | - | 200 P |
 | 511 – 710 | 456 | - | 400 P |
@@ -368,44 +604,100 @@ planche — mêmes valeurs numériques, autre étiquette :
 | 1111 – 1326 | 652 | 1056 | 600 E KU + 400 P |
 | 1327 – 1400 | 652 | 1252 | 600 E KU + 600 P |
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 97)
+**Têtière de compas** : mêmes valeurs qu'à un vantail, la ligne 1 401 – 1 600 sans astérisque.
+NSP = releveur / anti fausse manœuvre ; S = loqueteau [1 p. 99]. Les deux tables verticales ne
+donnent pas le même jeu de verrouilleurs sur 2 001 – 2 400 (entrée **INC-208**).
 
-La têtière de compas reprend la même table qu'en sécurité de base [1 p. 97].
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 99)
 
 # Gabarits de montage — utilisation
 
-Le manuel fournit un gabarit physique par repère de position, réservé à l'oscillo-battant [1 p.
-102-103] :
+Un *gabarit* de montage est une règle posée le long du dormant, portant des butées de couleur à
+la position de chaque gâche : on pose la gâche contre la butée au lieu de la mesurer. Les pages
+« Gabarits » du manuel montrent chaque gabarit à sa place autour de la fenêtre, avec ses butées et,
+près de chacune, l'étiquette de la hauteur de poignée (HP) ou du verrouilleur (VM) pour laquelle
+elle sert (voir le [glossaire](/reference/glossaire.md)) [1 p. 104-105].
+
+**Couleurs des butées** [1 p. 104-105] :
+
+| Butée | Couleur | Emploi |
+| --- | --- | --- |
+| Butée verticale | vert | gâches crémones |
+| Butée verticale | rouge | gâches verrouilleurs coté rotation |
+| Butée verticale | marron | gâches AFM |
+| Butée horizontale | jaune | gâches traverse basse |
+| Butée horizontale | bleu | gâches traverse haute |
+
+## Ouvrant un vantail, crémone OB à hauteur de poignée fixe (p. 104)
+
+« Verrouilleur médian multi-parties, sécurité de base » [1 p. 104].
+
+![Gabarits de montage, ouvrant un vantail, crémone OB à hauteur de poignée fixe](/assets/quincaillerie/roto-nx-ksr/oscillo-battant/gabarits-ob-un-vantail.png)
 
 | Gabarit | Utilisation |
 | --- | --- |
-| OB H 01 | renvoi d'angle |
-| OB H 02 | horizontal haut et bas |
-| OB H 03 | horizontal télescopique haut et bas (deux vantaux) |
-| OB V 01 | côté crémone et rotation, HP 220 à 513, fouillot 8 |
-| OB V 02 | côté crémone et rotation, HP 513 à 763, fouillot 8 et 15 |
-| OB V 03 | côté crémone et rotation, HP 563 à 1000, fouillot 8 et 15 |
-| OB-6 V 04 | côté crémone et rotation, HP 413 à 513, fouillot -6 |
-| OB-6 V 05 | côté crémone et rotation, HP 563 à 1000, fouillot -6 |
+| OB H 01 | Renvoi d'angle |
+| OB H 02 | Horizontal haut et bas |
+| OB V 01 | Coté crémone et rotation, Hp 220 à 513 |
+| OB V 02 | Coté crémone et rotation, Hp 513 à 763 |
+| OB V 03 | Coté crémone et rotation, Hp 563 à 1000 |
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 102-103)
+Étiquettes des butées, lues à 600 dpi, de la tête du gabarit (butée noire en bout) vers l'autre
+extrémité [1 p. 104] :
 
-**Le gabarit à un vantail (p. 102) ne connaît que OB V01-V03** ; les gabarits OB-6 V04/V05 et le
-gabarit télescopique OB H03 n'apparaissent qu'à la planche des deux vantaux (p. 103), ce qui fait
-du fouillot -6 mm une variante propre à la configuration sans meneau fixe.
+| Gabarit | Butées, dans l'ordre (couleur : étiquette) |
+| --- | --- |
+| OB V 01 | marron HP 413 ; marron HP 220 ; marron HP 513 ; vert HP 220 ; vert HP 413 ; rouge VM 400 ; vert HP 513 ; rouge VM 600 |
+| OB V 02 | marron / marron HP 513 563 ; vert / vert HP 763 ; vert HP 513 563 ; rouge VM 600 ; marron / marron HP 763 ; rouge VM 600 ; vert HP 513 |
+| OB V 03 | marron / marron HP 513 563 ; vert / vert HP 763 ; vert HP 563 1000 ; rouge VM 600 ; marron / marron HP 763 ; marron HP 1000 ; rouge VM 600+400 ; rouge VM 600+600 ; vert HP 563 763 ; rouge VM 600+600+400 ; vert HP 1000 |
+| OB H 01 | butées bleues, rouges et jaunes, sans étiquette |
+| OB H 02 | butées bleues et jaunes ; étiquettes de plage 1001-1600, 801 - 1000, 801-1200, 1201-1600 ; flèches « Haut » et « Bas » |
+
+Les gabarits OB V 01 à OB V 03 sont dessinés deux fois, à gauche (côté crémone) et à droite (côté
+rotation).
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 104)
+
+## Ouvrant deux vantaux, crémone OB à hauteur de poignée fixe (p. 105)
+
+« Verrouilleur médian multi-parties, sécurité de base » [1 p. 105].
+
+![Gabarits de montage, ouvrant deux vantaux, crémone OB à hauteur de poignée fixe](/assets/quincaillerie/roto-nx-ksr/oscillo-battant/gabarits-ob-deux-vantaux.png)
+
+| Gabarit | Utilisation |
+| --- | --- |
+| OB H 02 | Horizontal haut et bas |
+| OB H 03 | Horizontal télescopique haut et bas |
+| OB V 01 | Coté crémone et rotation, Hp 220 à 513 F 8 |
+| OB V 02 | Coté crémone et rotation, Hp 513 à 763 F8 et F 15 |
+| OB V 03 | Coté crémone et rotation, Hp 563 à 1000 F8 et F 15 |
+| OB-6 V04 | Coté crémone et rotation, Hp 413 à 513 F-6 |
+| OB-6 V05 | Coté crémone et rotation, Hp 563 à 1000 F-6 |
+
+Étiquettes des gabarits propres au fouillot -6, lues à 600 dpi [1 p. 105] :
+
+| Gabarit | Butées, dans l'ordre (couleur : étiquette) |
+| --- | --- |
+| OB-6 V04 | marron HP 413 ; vert HP 513 ; marron / marron HP 220 ; vert HP 220 ; rouge VM 400 ; vert HP 413 ; marron HP 513 ; vert HP 513 |
+| OB-6 V05 | vert HP 563 ; vert HP 763 ; marron HP 763 ; vert HP 1000 ; marron HP 1000 ; marron HP 563 ; rouge VM 600 ; vert HP 563 ; vert HP 763 ; rouge « … + 600 » (en partie masqué par le dormant) ; rouge VM 600 + 400 ; vert HP 1000 ; rouge VM 600 + 600 |
+
+Le **gabarit télescopique OB H 03** est dessiné en haut et en bas, centré sur l'« Axe » du jeu entre
+les vantaux, avec la mention « OB droite » [1 p. 105].
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 105)
 
 # Ce que la source ne donne pas
 
-Le renvoi d'angle côté compas (260284) n'est pas rattaché à une plage de largeur ou de hauteur
-précise dans cette planche — sa position se lit sur le schéma, pas sur un tableau. La plage
-1601-1800 mm de la crémone OB fouillot 8 mm sécurité de base (p. 92 et 96) porte trois jeux de
-cotes sans que le document précise le critère de choix entre eux.
+Le renvoi d'angle côté compas (260284) n'est rattaché à aucune plage de largeur ou de hauteur
+dans la nomenclature. Sur les tables de positionnement des gâches, la plage 1 601 – 1 800 de la
+crémone OB porte plusieurs lignes (hauteurs de poignée 563, 763 et 1 000), sans critère de choix
+écrit.
 
 # Citations
 
 [1] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf.
-IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 40 à 45,
-92 à 97 et 102 à 103
+IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 9, 21, 38,
+42 à 47, 94 à 96, 98, 99 et 104 à 105 (numérotation du PDF)
 
 # Voir aussi
 

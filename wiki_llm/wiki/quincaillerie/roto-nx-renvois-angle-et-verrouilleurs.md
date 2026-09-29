@@ -12,15 +12,9 @@ sources:
     id: roto-nx-catalogue-ctl-105
     title: Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023
     last_modified: 2023-06-30
-  - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
-    id: roto-nx-ksr-montage-imo-180
-    title: Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2
-    last_modified: 2022-11-30
 source_pages:
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
     pages: 266-277, 318-333
-  - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
-    pages: 40-45, 78, 92-97
 generated:
   by: process:multimodal-direct
   at: 2026-09-19T20:10:00Z
@@ -65,7 +59,7 @@ Toutes les pièces reçoivent le traitement de surface anticorrosion **Roto Sil 
 
 # Caractéristiques et cotes des verrouilleurs médians
 
-Relevés sur le catalogue Roto NX (p. 318-333) et les instructions KSR (p. 78).
+Relevés sur le catalogue Roto NX (p. 318-333).
 Les verrouilleurs s'installent côté paumelles (horizontalement en traverse haute ou verticalement en montant arrière)
 pour reprendre les déformations de profil sous pression de vent.
 
@@ -91,22 +85,14 @@ pour reprendre les déformations de profil sous pression de vent.
 
 (schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 326-330)
 
-### Allonges et prolongateurs de verrouilleurs
+### Allonges et prolongateurs
 
-| Désignation | Longueur (mm) | Nombre de galets | N° de matériel |
-| --- | --- | --- | --- |
-| Allonge de tringle courte | 200 | sans galet | 767639 |
-| Allonge de tringle moyenne | 400 | 1 E | 280346 |
-| Allonge de tringle moyenne | 400 | 1 V | 280347 |
-| Allonge de tringle longue | 600 | 1 E | 255282 |
-| Allonge de tringle longue | 600 | 1 V | 255283 |
-
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 78)
+Les allonges et prolongateurs de crémone du manuel de ferrage (767639, 297858, 450821, 337708,
+280346, 337710, 255282, 337711, allonges de semi-fixe, prolongateurs 349187, 312033, 794225, 245688,
+382716, 245687) sont sur [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md).
 
 # Champs d'application et règles de pose
 
-- **Seuil d'implantation du verrouilleur médian horizontal** : obligatoire dès que la largeur en fond de feuillure **LFF dépasse 1 200 mm** (ou 800 mm en classe RC2 / retard à l'effraction) [2 p. 40, 92].
-- **Seuil d'implantation du verrouilleur vertical arrière** : obligatoire dès que la hauteur en fond de feuillure **HFF dépasse 1 200 mm** en sécurité de base et dès 800 mm en RC2 [2 p. 40, 94].
 - **Recoupe** : les tringles de liaison et verrouilleurs possèdent des zones de recoupe crantées permettant l'ajustement au millimètre sur banc de ferrage atelier.
 - **Raccordement Clip&Fit** : jonction brevetée par emboîtement élastique sans vis de raccordement intermédiaire.
 
@@ -117,7 +103,6 @@ pour reprendre les déformations de profil sous pression de vent.
 # Citations
 
 [1] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 — `raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 266 à 277 et 318 à 333
-[2] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 40 à 45, 78 et 92 à 97
 
 # Voir aussi
 

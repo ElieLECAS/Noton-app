@@ -37,7 +37,7 @@ aluminium relève de [TECHNAL](/fournisseurs/technal.md).
 | Fenêtres [PERFORM+](/gammes/perform-plus.md) et [HYBRIDE+](/gammes/hybride-plus.md) | [Roto NX](/quincaillerie/roto-nx.md) | [Crémones](/quincaillerie/roto-nx-cremones.md), [Renvois d'angle et verrouilleurs](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md), [Compas et paliers](/quincaillerie/roto-nx-compas-et-paliers.md), [Pièces de fermeture et gâches](/quincaillerie/roto-nx-pieces-fermeture-gaches.md), [Accessoires et gabarits](/quincaillerie/roto-nx-accessoires-et-gabarits.md) |
 | Coulissant [INNOSLIDE](/gammes/innoslide.md) | [Roto Patio Inowa](/quincaillerie/roto-patio-inowa.md) | [Roto Patio Inowa](/quincaillerie/roto-patio-inowa.md) |
 | Portes d'entrée PVC et HYBRIDE | paumelles Roto Solid B | [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md) |
-| Serrure motorisée de porte d'entrée | [Roto Safe E Eneo](/quincaillerie/serrure-motorisee.md) | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md), [Jonction de câble](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| Serrure motorisée de porte d'entrée | [Roto Safe E Eneo](/quincaillerie/serrure-motorisee.md) | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md), [Jonction de câble](/quincaillerie/roto-safe-e-jonction-de-cable.md), [Montage de la jonction de câble](/procedures/montage-jonction-de-cable-roto-safe-e.md) |
 
 # Cotes des paumelles Roto Solid B
 
@@ -107,7 +107,7 @@ Six documents ROTO sont au wiki, dont deux co-marqués PROFERM.
 | Roto NX KSR, instructions de montage PVC, réf. IMO_180_NX_FR_v2 | manuel de ferrage, 124 pages | novembre 2022 | [Instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md) |
 | Roto Safe E, jonction de câble, réf. SUG_28_FR_v3 | notice constructeur | novembre 2024 | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
 | Transformation OF en OB gamme ROTO NX, réf. PRO-PVC-OFOB-01 rév. A | procédure PROFERM, PVC | 19 mars 2026 | [Transformation OF en OB](/procedures/transformation-of-en-ob-roto-nx.md) |
-| Bras de report de charge ROTO NX, NT Designo II | notice de montage | non datée | [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md) |
+| Bras de report de charge ROTO NX, NT Designo II | notice de montage, 1 page, extrait de l'IMO_180_NX_FR_v2 (page imprimée 112) | novembre 2022 | [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md) |
 | Roto Safe E Eneo CC, notice simplifiée | extrait PROFERM de l'IMO_438 | 2022, version 2 | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
 
 Les notices simplifiées ne remplacent pas les instructions complètes du fabricant, l'**IMO_438**

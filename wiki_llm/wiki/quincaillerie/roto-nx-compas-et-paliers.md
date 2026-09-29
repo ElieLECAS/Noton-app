@@ -20,7 +20,7 @@ source_pages:
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
     pages: 278-317, 334-349, 370-387
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
-    pages: 21-30, 33, 66-71, 105-111
+    pages: 30-32, 35, 68-73, 107-113
 generated:
   by: process:multimodal-direct
   at: 2026-09-19T20:15:00Z
@@ -35,7 +35,7 @@ invisible NT Designo II** (jusqu'à 150 kg avec report de charge).
 
 # Compas oscillo-battants Roto NX (côté P)
 
-Relevés sur le catalogue Roto NX CTL_105 (p. 278-295) et le manuel IMO 180 (p. 33).
+Relevés sur le catalogue Roto NX CTL_105 (p. 278-295).
 Le choix du compas est déterminé par la largeur fond de feuillure d'ouvrant (LFF).
 
 | Taille de compas | Largeur en feuillure LFF (mm) | Longueur compas (mm) | N° de matériel (DIN Gauche) | N° de matériel (DIN Droite) |
@@ -62,7 +62,7 @@ Le choix du compas est déterminé par la largeur fond de feuillure d'ouvrant (L
 
 # Côté paumelles invisible Roto NT Designo II
 
-Relevé sur le catalogue Roto NX (p. 298-312, 344-348) et le manuel IMO 180 (p. 28-30, 66-71).
+Relevé sur le catalogue Roto NX (p. 298-312, 344-348) et le manuel IMO 180 (PDF p. 30-32).
 Toutes les ferrures sont totalement encastrées dans la feuillure et invisibles de l'intérieur comme de l'extérieur.
 
 | Composant Designo II | Spécification | Charge maxi sans report (kg) | Charge avec report (kg) | N° de matériel (Gauche) | N° de matériel (Droite) |
@@ -74,11 +74,18 @@ Toutes les ferrures sont totalement encastrées dans la feuillure et invisibles 
 | Pivot d'angle ouvrant Designo II | Fixation par vis axiales | 100 | 150 | 626594 | 626595 |
 | Bras de report de charge | Vantail $\ge 800 \times 1\,000\text{ mm}$ | — | 150 | voir [Report de charge](/procedures/report-de-charge-roto-nx.md) | voir [Report de charge](/procedures/report-de-charge-roto-nx.md) |
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 28 à 30 et 66 à 71)
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 30 à 32)
+
+Les nomenclatures NT Designo II du manuel de ferrage donnent le pivot d'angle Designo sous le
+numéro **634705** et renvoient au fichier gamme pour le compas Designo et le palier d'angle Designo
+[2 p. 68, 70, 72] — voir
+[Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md) ;
+le numéro du pivot diffère de celui du tableau ci-dessus (entrée **VER-113**).
 
 # Paliers et pivots côté paumelles P (apparents)
 
-Relevés sur le catalogue Roto NX CTL_105 (p. 334-343) et le manuel IMO 180 (p. 33, 105-111).
+Relevés sur le catalogue Roto NX CTL_105 (p. 334-343) et le manuel IMO 180 (PDF p. 107-113). Les
+longueurs de palier du manuel sont dans la section *Longueurs de palier P3 et P6* ci-dessous.
 Les composants sont classés selon le diamètre des tourillons de centrage dans les chambres du profilé PVC.
 
 ### Paliers de compas (dormant haut)
@@ -104,12 +111,36 @@ Les composants sont classés selon le diamètre des tourillons de centrage dans 
 
 (schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 338-342)
 
+# Longueurs de palier P3 et P6
+
+Le manuel de montage donne une longueur par version de palier (P3/130, P6/130, P6/150), repérée
+[1] à [4] sur le dessin de chaque pièce ; chaque repère pointe un ergot dessiné sur la pièce
+[2 p. 35].
+
+![Longueurs de palier Roto NX](/assets/quincaillerie/roto-nx-ksr/paliers/longueurs-de-palier.png)
+
+| Pièce | Version | Repère | Longueur (mm) |
+| --- | --- | --- | --- |
+| Palier de compas | P3/130 | [1] | 4 |
+| Palier de compas | P6/130 | [2] | 9 |
+| Palier de compas | P6/150 | [2] | 9 |
+| Palier d'angle | P3/130 | [1] | 3 |
+| Palier d'angle | P6/130 | [2] | 3 |
+| Palier d'angle | P6/150 | [2] | 3 |
+| Palier d'angle | P6/130 | [3] | 9 |
+| Palier d'angle | P6/150 | [3] | 19 |
+| Pivot d'angle | P6/150 | [4] | 23 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 35)
+
+Le pivot d'angle n'est dessiné qu'en P6, avec la seule valeur P6/150 [2 p. 35].
+
 # Réglages d'atelier et tolérances
 
 - **Réglage latéral au palier d'angle** : $\pm 2\text{ mm}$ (clé Allen de 4 mm).
 - **Réglage en hauteur au palier d'angle** : $+3\text{ mm} / -2\text{ mm}$ (clé Allen de 4 mm).
 - **Réglage en compression au compas** : $\pm 1\text{ mm}$ (clé Allen de 4 mm).
-- **Force d'arrachement requise (directive TBDK)** : la tenue au vissage des paliers de compas et d'angle doit résister à un effort de traction minimal variant de 1 650 N (vantail 60 kg) à 4 200 N (vantail 150 kg) [2 p. 108].
+- **Force d'arrachement requise (directive TBDK)** : la tenue au vissage des paliers de compas et d'angle doit résister à un effort de traction minimal variant de 1 650 N (vantail 60 kg) à 4 200 N (vantail 150 kg) [2 p. 110].
 
 # Ce que la source ne donne pas
 
@@ -118,7 +149,7 @@ Les composants sont classés selon le diamètre des tourillons de centrage dans 
 # Citations
 
 [1] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 — `raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 278 à 317, 334 à 349 et 370 à 387
-[2] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 21 à 30, 33, 66 à 71 et 105 à 111
+[2] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 30 à 32, 35, 68 à 73 et 107 à 113 (numérotation du PDF)
 
 # Voir aussi
 

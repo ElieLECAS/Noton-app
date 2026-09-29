@@ -14,18 +14,18 @@ sources:
     last_modified: 2022-11-30
 source_pages:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
-    pages: 36, 38, 40, 42, 44-46, 48, 50, 52, 54, 56, 78, 82
+    pages: 38, 40, 42, 44, 46-48, 50, 52, 54, 56, 58, 80, 84
 generated:
   by: process:claude-code
   at: 2026-09-19T23:50:00Z
 ---
 
-# Pourquoi cette page existe
+# Ce que sont les composants communs
 
-Les instructions de montage Roto NX KSR répètent, planche après planche, les mêmes petites
-pièces — palier de compas, pivot d'angle, compas OF, tige d'axe — pour chaque configuration de
-fenêtre. Transcrire cette liste sur chacune des planches de configuration aurait dupliqué la même
-donnée dix fois de plus ; elle vit ici une seule fois, et les pages de configuration y renvoient.
+Les nomenclatures de ferrage Roto NX KSR reprennent, d'une configuration de fenêtre à l'autre, les
+mêmes pièces — palier de compas, pivot d'angle, compas OF, tige d'axe, renvois d'angle, allonges,
+loqueteau — avec les mêmes numéros d'article. Elles sont regroupées ici, avec les pages du manuel
+où elles figurent.
 
 # Paliers de compas
 
@@ -35,7 +35,7 @@ donnée dix fois de plus ; elle vit ici une seule fois, et les pages de configur
 | Palier de compas P 6/130 | 859172 |
 | Palier de compas P 6/150 (non illustré) | 859173 |
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 36)
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 38)
 
 # Pivot d'angle et paliers d'angle
 
@@ -48,7 +48,7 @@ donnée dix fois de plus ; elle vit ici une seule fois, et les pages de configur
 | Palier d'angle P 6/150 (non illustré) | 787209 |
 | Tige d'axe 88 mm | 834705 |
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 36)
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 38)
 
 # Compas OF (ouvrant à la française)
 
@@ -58,7 +58,7 @@ donnée dix fois de plus ; elle vit ici une seule fois, et les pages de configur
 | Compas OF, système P 12/20-13, gauche | 787375 |
 | Compas OF, système P 12/20-13, droit | 787376 |
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 36)
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 38)
 
 # Renvois d'angle
 
@@ -69,9 +69,8 @@ donnée dix fois de plus ; elle vit ici une seule fois, et les pages de configur
 | Mini renvoi d'angle | galet P | 260282 |
 | Renvoi d'angle côté compas | galet V | 260284 |
 
-**Le mini renvoi d'angle est la pièce des petites hauteurs** : il s'emploie pour une hauteur en
-feuillure de 601 à 700 mm (au lieu du renvoi d'angle standard), et pour 300 à 400 mm sur la
-version courte HP fixe [1 p. 36].
+Notes des listes de crémones : « HFF 601-700 avec Mini renvoi d'angle » et « HFF 300-400 avec mini
+renvoi d'angle » [1 p. 38].
 
 # Releveur, anti-fausse manœuvre, limitateur de course
 
@@ -80,113 +79,117 @@ version courte HP fixe [1 p. 36].
 | Releveur / anti-fausse manœuvre, partie ouvrant | 795927 |
 | Limitateur de course à 90° | 264603 |
 
-Les gâches correspondantes (releveur, basculement de sécurité, semi-fixe) ne portent pas de
-référence unique : elles dépendent du profilé et se lisent au « fichier gamme » [1 p. 38 et 40],
-hors de ce corpus.
+Les gâches correspondantes (releveur / anti-fausse manœuvre, basculement de sécurité) sont
+données « voir fichier gamme » [1 p. 38 et 42], document hors du corpus.
 
 # Verrouilleur médian horizontal, deux barèmes
 
 Deux découpages de largeur en feuillure coexistent selon la configuration — celui de l'ouvrant à
-la française simple (trois plages) et celui du ferrage symétrique et des crémones à sortie de
-tringle (deux plages) :
+la française à un vantail et celui des nomenclatures à crémone à sortie de tringle et des
+porte-fenêtres [1 p. 38, 50, 52, 54, 56] :
 
 | Barème | Largeur en feuillure (mm) | Longueur | Référence |
 | --- | --- | --- | --- |
-| OF simple | 801 – 1200 | 400 KU, 1 E | 255280 |
-| OF simple | 1201 – 1400 | 600 KU, 1 E | 255281 |
-| OF simple | 1401 – 1600 | 600 KU, 1 E | 255282 |
+| OF un vantail | 801 – 1200 | 400, 1 E | 255280 |
+| OF un vantail | 1201 – 1400 | 600, 1 E | 255281 |
+| OF un vantail | 1401 – 1600 | 600 KU, 1 E | 255282 |
+| OF un vantail | 1401 – 1600 | 400, 1 E | 255280 |
 | Ferrage symétrique / sortie de tringle | 800 – 1200 | 400, 1 E | 255280 |
 | Ferrage symétrique / sortie de tringle | 1201 – 1600 | 600, 1 E | 255281 |
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 36, 48, 50, 52 et 54)
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 38, 50, 52, 54 et 56)
 
 # Renvois d'angle, complément
 
-Deux références supplémentaires apparaissent sur le ferrage symétrique et les crémones à sortie
-de tringle, en plus de celles déjà données plus haut :
+Références de renvoi d'angle des nomenclatures à crémone à sortie de tringle et des
+porte-fenêtres [1 p. 50, 52, 54, 56] :
 
 | Type | Référence |
 | --- | --- |
 | Renvoi d'angle (ferrage symétrique / sortie de tringle) | 383480 |
 | Renvoi d'angle avec galet V (ferrage symétrique / sortie de tringle) | 553749 |
-| Renvoi d'angle avec galet V (variante releveur) | 260288 |
+| Renvoi d'angle avec galet V (porte-fenêtre à un vantail, serrure H100 à galets) | 260288 |
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 48, 50, 52 et 54)
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 50, 52, 54 et 56)
 
 # Cale d'épaisseur, par marque de profilé
 
-Le nombre de cales 495096 et 498312 à empiler dépend du profilé PVC sur lequel la ferrure est
-posée — treize marques couvertes [1 p. 45] :
-
-| Profilé | Cale 495096 | Cale 498312 |
-| --- | --- | --- |
-| Aluplast 2000/3000 | 1 × | 2 × |
-| Aluplast Ideal 4000/5000/6000 | 2 × | 1 × |
-| Alphacan-Lucobay-Esthéa | 1 × | 2 × |
-| Deceuninck Zendow | 1 × | 2 × |
-| Gealan 8000 | - | 3 × |
-| KBE 70 AD | 2 × | 1 × |
-| Kömmerling Eurodur 3S/MPF | 1 × | 2 × |
-| Kömmerling Eurofutur | 1 × | 2 × |
-| Rehau 730 | 1 × | 1 × |
-| Schüco Corona 70 mm | 3 × | - |
-| Schüco Corona MD | 3 × | - |
-| Schüco CT70 AD/MD | 3 × | - |
-| Thyssen AD/MD 13 | 1 × | 2 × |
-| Trocal Innonova 70 AD/MD | 1 × | 2 × |
-| Veka Topline AD10200 | 2 × | 1 × |
-| Wymar-Profex 2000 | 1 × | 2 × |
-| Plastival PF 5900 | 1 × | 2 × |
-
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 45)
-
-**Les deux références Kömmerling (Eurodur 3S/MPF et Eurofutur) prennent la même combinaison de
-cales que Aluplast 2000/3000, Alphacan-Lucobay-Esthéa, Deceuninck Zendow, Thyssen AD/MD 13,
-Trocal Innonova 70 AD/MD et Wymar-Profex 2000** : 1 cale 495096 et 2 cales 498312. C'est la
-combinaison la plus répandue des treize.
+Le nombre de cales d'épaisseur 495096 et 498312 dépend du profilé PVC : le tableau (dix-sept
+profilés) est sur [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md),
+section *Cale d'épaisseur, par profilé* [1 p. 47].
 
 # Allonges et prolongateurs de crémones
 
-Le catalogue de référence de toutes les allonges utilisées dans les tables de crémone de ce
-wiki — voir [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) pour leur emploi [1 p. 78].
+Une *allonge* se monte en bout de crémone pour la prolonger (avec ou sans galet de verrouillage) ;
+l'*allonge de semi-fixe* prolonge la crémone du vantail semi-fixe, en partie haute ou basse ; le
+*prolongateur* prolonge une crémone à sortie de tringle ou une crémone de 110 mm (voir le
+[glossaire](/reference/glossaire.md)). Chaque ligne donne le repère de la pièce sur les dessins, sa
+longueur, ses galets (**E**, **V**) et son numéro d'article [1 p. 80]. Leur emploi dans chaque
+configuration est donné par les nomenclatures, voir
+[Crémones Roto NX](/quincaillerie/roto-nx-cremones.md).
 
-| Pièce | Détail | Référence |
-| --- | --- | --- |
-| Allonge sans galet | 200 mm, avec empreinte pour anti-fausse manœuvre | 767639 |
-| Allonge sans galet | 400 mm | 297858 |
-| Allonge | 200 mm, 1 E | 450821 |
-| Allonge | 200 mm, 1 V | 337708 |
-| Allonge | 400 mm, 1 E | 280346 |
-| Allonge | 400 mm, 1 V | 337710 |
-| Allonge | 600 mm, 1 E | 255282 |
-| Allonge | 600 mm, 1 V | 337711 |
-| Allonge de semi-fixe, partie haute | 200 mm | 450822 |
-| Allonge de semi-fixe, partie haute | 400 mm | 280345 |
-| Allonge de semi-fixe, partie haute | 600 mm | 280331 |
-| Allonge de semi-fixe, partie basse | 200 mm | 280342 |
-| Allonge de semi-fixe, partie basse | 400 mm | 280343 |
-| Allonge de semi-fixe, partie basse | 600 mm | 609059 |
-| Prolongateur sortie de tringle | 14 mm | 349187 |
-| Prolongateur inverseur sortie de tringle | 14 mm | 312033 |
-| Prolongateur de 110 mm, 1 E | — | 794225 |
-| Prolongateur de 110 mm, 1 E, cintre/trapèze | — | 245688 |
-| Prolongateur de 110 mm, 1 V | — | 382716 |
-| Prolongateur de 110 mm, 1 V, cintre/trapèze | — | 245687 |
+| Repère | Pièce | Longueur (mm) | Galets | Précision | N° d'article |
+| --- | --- | --- | --- | --- | --- |
+| 1 | Allonge sans galet | 200 | - | avec empreinte pour anti-fausse manoeuvre | 767639 |
+| 1a | Allonge sans galet | 400 | - | - | 297858 |
+| 2 | Allonge | 200 | 1 E | - | 450821 |
+| 2 | Allonge | 200 | 1 V | - | 337708 |
+| 3 | Allonge | 400 | 1 E | - | 280346 |
+| 3 | Allonge | 400 | 1 V | - | 337710 |
+| 3 | Allonge | 600 | 1 E | - | 255282 |
+| 3 | Allonge | 600 | 1 V | - | 337711 |
+| 4 | Allonge de semi-fixe en partie haute, sur crémone de semi-fixe | 200 | - | - | 450822 |
+| 4 | Allonge de semi-fixe en partie haute, sur crémone de semi-fixe | 400 | - | - | 280345 |
+| 4 | Allonge de semi-fixe en partie haute, sur crémone de semi fixe | 600 | - | - | 280331 |
+| 5 | Allonge de semi-fixe en partie basse, sur crémone de semi-fixe | 200 | - | - | 280342 |
+| 5 | Allonge de semi-fixe en partie basse, sur crémone de semi-fixe | 400 | - | - | 280343 |
+| 5 | Allonge de semi-fixe en partie basse, sur crémone de semi-fixe | 600 | - | - | 609059 |
+| 6 | Prolongateur sortie de tringle de 14 mm | - | - | - | 349187 |
+| 7 | Prolongateur inverseur sortie de tringle de 14 mm | - | - | - | 312033 |
+| 8 | Prolongateur de 110 mm | - | 1 E | - | 794225 |
+| 8 | Prolongateur de 110 mm | - | 1 E | cintre / trapèze | 245688 |
+| 9 | Prolongateur de 110 mm | - | 1 V | - | 382716 |
+| 9 | Prolongateur de 110 mm | - | 1 V | cintre / trapèze | 245687 |
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 78)
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 80)
+
+Le numéro 255282 de l'allonge 600 mm 1 E est aussi celui du « verrouilleur 600 KU 1 E » des
+nomenclatures, et le numéro 245688 du prolongateur de 110 mm cintre / trapèze est celui du
+« raccord de crémone pour châssis arc surbaissé » de la nomenclature des
+[châssis cintrés et trapézoïdaux](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md).
+
+Les allonges (repères 1 à 5, dessinées dans l'ordre 1, 2, 4, 3, 5 ; l'allonge 1a n'est pas
+dessinée) :
+
+![Allonges de crémone Roto NX KSR, repères 1 à 5](/assets/quincaillerie/roto-nx-ksr/composants/allonges-de-cremone.png)
+
+Les prolongateurs (repères 6 à 9 ; en haut 6 et 8, en bas 7 et 9) :
+
+![Prolongateurs de crémone Roto NX KSR, repères 6 à 9](/assets/quincaillerie/roto-nx-ksr/composants/prolongateurs-de-cremone.png)
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 80)
 
 # Loqueteau
 
-| Pièce | Détail | Référence |
-| --- | --- | --- |
-| Loqueteau à visser sur crémone de semi-fixe | — | 788363 |
-| Loqueteau à visser sur rainure de 16 mm | avec cale 794997 | 788363 |
-| Gâche loqueteau sur crémone de semi-fixe | — | 788378 |
-| Gâche en rainure de 16 mm | — | 788507 |
-| Équerre pour loqueteau magnétique | — | 244517 |
-| Cale pour équerre en rainure de 16 mm | — | 622589 |
+Le *loqueteau* retient le vantail fermé sans le verrouiller ; il se visse sur la crémone de
+semi-fixe ou dans une rainure de 16 mm, avec sa gâche (voir le [glossaire](/reference/glossaire.md))
+[1 p. 84].
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 82)
+| Repère | Pièce | N° d'article |
+| --- | --- | --- |
+| 1 | Loqueteau à visser sur crémone de semi-fixe | 788363 |
+| 2 | Loqueteau à visser sur rainure de 16 mm | 788363 + cale 794997 |
+| 3 | Gâche loqueteau sur crémone de semi-fixe | 788378 |
+| 4 | Gâche en rainure de 16 mm | 788507 |
+| 5 | Equerre pour loqueteau magnétique | 244517 |
+| 6 | Cale pour équerre en rainure de 16 mm | 622589 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 84)
+
+Les loqueteaux 1 et 2 portent le même numéro 788363 ; la version sur rainure de 16 mm y ajoute la
+cale 794997.
+
+![Loqueteau Roto NX, gâches, équerre et cale, repères 1 à 6](/assets/quincaillerie/roto-nx-ksr/composants/loqueteau-et-gaches.png)
 
 # Ce que la source ne donne pas
 
@@ -197,8 +200,8 @@ pour le contexte d'utilisation.
 # Citations
 
 [1] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf.
-IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 36, 38,
-40, 42, 44 à 46, 48, 50, 52, 54, 56, 78 et 82
+IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 38, 40,
+42, 44, 46 à 48, 50, 52, 54, 56, 58, 80 et 84 (numérotation du PDF)
 
 # Voir aussi
 

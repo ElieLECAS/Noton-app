@@ -5,6 +5,14 @@ description: Les sigles, coefficients et repères de cote employés dans la docu
 tags: [glossaire, sigle, abreviation, cote, coefficient, vocabulaire]
 status: stable
 sources:
+  - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
+    id: roto-nx-ksr-montage-imo-180
+    title: Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2
+    last_modified: 2022-11-30
+  - resource: raw/roto-safe-e-jonction-de-cable-2024-11.pdf
+    id: roto-safe-e-jonction-de-cable
+    title: Roto Safe E, jonction de câble, réf. SUG_28_FR_v3, novembre 2024
+    last_modified: 2024-11-30
   - resource: raw/profine-directives-generales-2023-01.pdf
     id: profine-directives-generales-2023
     title: Directives générales profine, version janvier 2023
@@ -128,6 +136,18 @@ mobiles, les ouvrants, qui portent le vitrage.
 | Recouvrement | largeur sur laquelle une pièce en recouvre une autre : l'ouvrant sur le dormant, le dormant sur le mur | [Pose de la PERFORM76](/procedures/pose-perform76.md) |
 | Drainage, décompression | usinages qui évacuent l'eau entrée en feuillure et équilibrent la pression d'air | [Pose de la PERFORM76](/procedures/pose-perform76.md) |
 | Pivot bas | ferrure du bas de l'ouvrant autour de laquelle il tourne et qui porte son poids | [Poignée et pivot PERFORM76](/quincaillerie/perform76-poignee-et-pivot.md) |
+| Pivot d'angle, palier d'angle | sur ferrure Roto NX, ferrure de l'angle bas de l'ouvrant côté paumelles (pivot) et ferrure de l'angle bas du dormant sur laquelle se pose le vantail (palier) | [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md) |
+| Report de charge | sur ferrure Roto NX NT Designo II, ensemble d'une pièce vissée sur l'ouvrant, d'une pièce dormant vissée sur le palier d'angle et d'une tringle de soutien du vantail, réglé par la tension d'un ressort | [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md) |
+| Clé Allen, clé six pans | clé mâle coudée à section hexagonale, désignée par sa cote sur plats (4 mm) ; écrite « clé alén » sur la notice du report de charge Roto | [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md) |
+| Compas OF, compas OB | ferrure de l'angle haut de l'ouvrant ; le compas OF équipe un ouvrant à la française, le compas OB un oscillo-battant, dont il retient le vantail basculé en soufflet | [Transformation OF en OB ROTO NX](/procedures/transformation-of-en-ob-roto-nx.md) |
+| Équerre de compas | pièce coudée en L de l'angle haut de l'ouvrant, déposée avec le compas OF lors d'une transformation en OB | [Transformation OF en OB ROTO NX](/procedures/transformation-of-en-ob-roto-nx.md) |
+| Têtière (de compas) | longue ferrure plate vissée le long du haut de l'ouvrant, sur laquelle se monte le compas OB | [Transformation OF en OB ROTO NX](/procedures/transformation-of-en-ob-roto-nx.md) |
+| Coulisseau, plot | sur le compas OB Roto NX, le coulisseau est la pièce du bout du bras de compas qui se pose sur la têtière ; le plot est le téton du petit bras à lumière qui se relie au bras de compas | [Transformation OF en OB ROTO NX](/procedures/transformation-of-en-ob-roto-nx.md) |
+| Platine anti-rabattement | position finale de la platine du compas Roto NX, nommée « anti-rabattement » sur les schémas ; voir VER-109 | [Transformation OF en OB ROTO NX](/procedures/transformation-of-en-ob-roto-nx.md) |
+| Obturateur de manœuvre | petite pièce en plastique logée dans une lumière de la ferrure d'un ouvrant à la française, retirée « afin de libérer la manœuvre OB » | [Transformation OF en OB ROTO NX](/procedures/transformation-of-en-ob-roto-nx.md) |
+| Lumière | fente oblongue percée dans une ferrure ou un bras | [Transformation OF en OB ROTO NX](/procedures/transformation-of-en-ob-roto-nx.md) |
+| Soufflet, ouverture à soufflet | ouverture par basculement du vantail : le haut s'écarte vers l'intérieur, le bas reste tenu ; sur un oscillo-battant, elle s'ajoute à l'ouverture à la française | [Transformation OF en OB ROTO NX](/procedures/transformation-of-en-ob-roto-nx.md) |
+| Gâche OB | gâche vissée en traverse basse du dormant lors d'une transformation OF en OB, en version droite ou gauche ; voir VER-110 | [Transformation OF en OB ROTO NX](/procedures/transformation-of-en-ob-roto-nx.md) |
 | Coupe verticale, coupe horizontale | dessin de la menuiserie comme tranchée de haut en bas, ou de gauche à droite, vu en bout | toutes les planches |
 | Élévation | dessin de la menuiserie vue de face | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
 | Pose en applique, en tableau, en tunnel | le dormant fixé contre une face du mur, dans l'épaisseur de la baie contre un épaulement, ou dans l'épaisseur de la baie sans épaulement | [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md) |
@@ -151,6 +171,33 @@ mobiles, les ouvrants, qui portent le vitrage.
 | Cimaise | moulure en relief rapportée horizontalement sur le panneau de porte | [Collection Classique](/portes/collection-classique.md) |
 | Panneau (porte à panneau) | porte dont le panneau est rapporté dans un cadre ouvrant, avec un effet « escalier » au raccord | [Panneaux et monoblocs](/portes/panneaux-et-monoblocs.md) |
 | Double frappe | deux battues d'étanchéité entre l'ouvrant et le seuil ou le dormant | [Ouvrants de porte d'entrée](/portes/ouvrants-de-porte.md) |
+| Têtière (de serrure) | longue plaque métallique de la serrure de porte, qui affleure sur le chant du vantail et d'où sortent les pênes ; elle se loge dans une rainure fraisée à sa largeur | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| Chant (du vantail) | tranche du vantail, côté serrure, où se fraise le logement de la têtière | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| Pêne | pièce de la serrure qui sort de la têtière pour s'engager dans la gâche | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| Entraxe E (E92) | sur une serrure de porte, distance entre l'axe du fouillot et l'axe du cylindre : E92 = 92 mm | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| Cylindre (de serrure) | barillet dans lequel se tourne la clé | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| Axe de fraisage | ligne verticale, sur le dormant, sur laquelle se centrent les fraisages des gâches ; elle dépend du profil utilisé | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| Passage de câble | paire de pièces, l'une dans le dormant, l'autre dans l'ouvrant, par laquelle les fils électriques passent du dormant à la serrure motorisée | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| Boîte noire (Eneo) | unité intérieure du contrôle d'accès 4 en 1, placée à l'intérieur, qui porte le bouton Reset | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| Contrôle d'accès 4 en 1 (4in1) | boîtier extérieur qui commande l'ouverture d'une serrure motorisée par code PIN, empreinte digitale, smartphone Bluetooth ou support RFID | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| RFID, eKey | RFID : identification par radiofréquence, lecture sans contact d'un badge ou d'un porte-clés ; eKey : clé virtuelle attribuée à un smartphone | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| Contact libre de potentiel (contact sec) | contact de relais qui ouvre ou ferme un circuit sans fournir lui-même de tension | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| Contact reed | interrupteur magnétique, qui se ferme en présence d'un aimant | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| IN1, IN2, GND | sur un plan de câblage, entrées de commande 1 et 2 et masse (0 V) | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| Transformateur, entrée primaire / secondaire | le transformateur Eneo reçoit le secteur (100 à 240 V AC) sur son primaire et rend du 24 V DC sur son secondaire | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| Mode jour, mode nuit (Eneo) | modes de fonctionnement de la serrure Eneo CC, commutés par l'entrée IN2 ; en mode jour, la serrure ne se verrouille pas automatiquement | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| Jonction de câble (Roto Safe E) | passage de câble Roto : une pièce dormant, une pièce d'ouvrant et une connexion enfichable démontable à 6 broches entre les deux | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| Connexion enfichable, douille, connecteur | prise démontable entre dormant et ouvrant ; la douille porte les six contacts femelles côté ouvrant, le connecteur les six broches côté dormant | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| Jeu en feuillure | espace libre entre le dormant et l'ouvrant fermé, dans la feuillure ; il décide de la pièce d'ouvrant de la jonction de câble (12 / 16 mm ou 4 / 12 mm) | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| Coffret de réception | boîtier de la pièce d'ouvrant 820194, encastré dans l'ouvrant, qui porte le circuit imprimé et les borniers | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| Spirale, ressort métallique | gaine en ressort qui protège le câble entre dormant et ouvrant ; il ne faut ni la tordre ni tirer dessus | [Montage de la jonction de câble Roto Safe E](/procedures/montage-jonction-de-cable-roto-safe-e.md) |
+| Bloc d'alimentation intégré | alimentation secteur 230 V → 24 V logée dans la pièce dormant de la jonction de câble (2045681, 2045682) | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| Connecteur JST | petite prise du câble qui relie le lecteur extérieur (empreinte, 4 en 1) à la boîte noire et à la serrure | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| K1a, K1b | les deux bornes du contact libre de potentiel de la serrure E610 / E611 (fils gris et rose) | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| IP67 | indice de protection : totalement protégé contre la poussière (6) et contre l'immersion temporaire (7) | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| DEL, LED | diode électroluminescente, petit voyant lumineux | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| AC, DC | courant alternatif (le secteur) et courant continu (ce que reçoit la serrure) | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+| DIN 107 | norme allemande qui définit la main (droite ou gauche) d'une porte ou d'une fenêtre ; les dessins Roto sont en version à droite | [Montage de la jonction de câble Roto Safe E](/procedures/montage-jonction-de-cable-roto-safe-e.md) |
 
 # Cotes de fabrication
 
@@ -205,6 +252,23 @@ Vocabulaire des catalogues et manuels [ROTO](/fournisseurs/roto.md).
 | FFO | hauteur d'axe de poignée au fond de la feuillure quincaillerie |
 | SDB | sécurité de base, le champ d'application sans classe d'effraction |
 | KSR | basculement vertical, désignation de la famille de ferrure Roto NX KSR |
+| GH | hauteur de poignée, dans les instructions de montage Roto NX KSR |
+| GDS | gâche de sécurité |
+| AFM | anti-fausse manœuvre : dispositif qui empêche de basculer le vantail en soufflet quand il est ouvert à la française |
+| KU | accouplable (verrouilleur médian « 600 KU ») |
+| VM | verrouilleur médian |
+| S | loqueteau |
+| F (F8, F-6, F15) | fouillot ; le nombre est l'axe du fouillot en mm, négatif pour le fouillot -6 |
+| Galet E, P, V, G | galets de verrouillage Roto NX : E excentrique réglable en pression d'appui, P excentrique de sécurité, V excentrique de sécurité réglable aussi en hauteur ; G, sur la crémone de semi-fixe, n'est pas défini par le manuel ; « 2 E » = deux galets E |
+| Crémone à sortie de tringle | crémone d'ouvrant à la française dont les tringles sortent en haut et en bas du boîtier et se prolongent par un prolongateur, voir [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| Crémone de semi-fixe | crémone du vantail secondaire d'une fenêtre à deux vantaux, manœuvrée par un levier |
+| Ferrage symétrique | pièces côté paumelles posées à l'identique sur chacun des deux vantaux (équerre et compas OF, paliers, pivots) |
+| Fichier gamme | document Roto par profilé, hors du corpus, auquel renvoient les gâches et verrouilleurs invisibles des nomenclatures |
+| Compas d'arrêt | compas qui retient un vantail soufflet à son ouverture maximale ; latéral ou en haut |
+| Compas d'entrebâillement et de nettoyage | compas qui limite l'ouverture d'un soufflet et permet de le rabattre pour le nettoyage |
+| Tolérance de châssis fixe | encombrement de la paumelle côté paumelles P, caches compris, voir [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
+| Bloc d'écartement | cale posée entre la maçonnerie et le dormant d'une fenêtre de sécurité, au droit des vissages de gâche de sécurité |
+| Condamnation au cylindre | verrouillage d'une porte-fenêtre par une serrure à cylindre à clé (serrure H100 Roto NX) |
 
 **Les cotes LFF et HFF sont des cotes de feuillure de vantail**, ni des cotes de baie ni des
 cotes extérieures d'ouvrant : les trois séries de limites s'appliquent en même temps et chacune
@@ -310,6 +374,8 @@ hauteur de chute et le nombre de billes. Voir
 | Sigle | Sens |
 | --- | --- |
 | DTA | Document Technique d'Application, avis du CSTB sur un procédé |
+| VHBE, VHBH, FPKF | directives du Groupement Qualité Serrures et Ferrures (Gütegemeinschaft Schlösser und Beschläge) : recommandations aux utilisateurs finaux, maniement des ferrures en traitement ultérieur, compas d'entrebâillement et de nettoyage, voir [Roto NX KSR — conventions et consignes de sécurité](/procedures/roto-nx-ksr-consignes-generales.md) |
+| VFF | Syndicat des fabricants de fenêtres et de façades (Allemagne), auteur des directives TLE.01 et WP.01 à WP.03 |
 | DTD | Dossier Technique Détaillé, pièce jointe au DTA qui porte les prescriptions de fabrication |
 | GS | Groupe Spécialisé du CSTB ; le n° 6 traite les menuiseries |
 | CSTB | Centre Scientifique et Technique du Bâtiment |
