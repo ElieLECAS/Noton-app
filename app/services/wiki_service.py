@@ -34,6 +34,7 @@ import logging
 import os
 import re
 import threading
+import time
 from collections import Counter
 from dataclasses import dataclass, field
 from datetime import date, datetime
@@ -401,7 +402,11 @@ def _signature(root: Path) -> Tuple:
     wiki_dir = root / "wiki"
     count, latest, size = 0, 0, 0
     if wiki_dir.is_dir():
-        for dirpath, _, files in os.walk(wiki_dir):
+        for dirpath, dirs, files in os.walk(wiki_dir):
+            # ``assets/`` (milliers de PNG) n'est pas lu par le snapshot : le parcourir coûte ~2 s
+            # par requête sur un volume Docker.
+            if dirpath == str(wiki_dir):
+                dirs[:] = [d for d in dirs if d != "assets"]
             for name in files:
                 if name.endswith(".md"):
                     st = os.stat(os.path.join(dirpath, name))
@@ -574,22 +579,30 @@ def load_snapshot(root: Optional[Path] = None, signature: Optional[Tuple] = None
 
 _lock = threading.Lock()
 _current: Optional[WikiSnapshot] = None
+_verifie_a = 0.0
+VERIFICATION_TTL = 2.0
 _last_call: Optional[Dict[str, Any]] = None
 
 
 def get_snapshot() -> WikiSnapshot:
     """L'instantané courant, reconstruit si un fichier a changé depuis."""
-    global _current
+    global _current, _verifie_a
     root = wiki_root()
-    signature = _signature(root)
     current = _current
+    # Vérifier les fichiers coûte ~0,6 s sur un volume Docker, et une page enchaîne plusieurs
+    # appels : on ne revérifie qu'une fois par VERIFICATION_TTL.
+    if current is not None and current.root == root and time.monotonic() - _verifie_a < VERIFICATION_TTL:
+        return current
+    signature = _signature(root)
     if current is not None and current.root == root and current.signature == signature:
+        _verifie_a = time.monotonic()
         return current
     with _lock:
         current = _current
         if current is not None and current.root == root and current.signature == signature:
             return current
         _current = load_snapshot(root, signature=signature)
+        _verifie_a = time.monotonic()
         return _current
 
 

@@ -27,6 +27,11 @@ d'une menuiserie dans la baie et son **joint de raccordement** (le joint entre l
 maçonnerie) — et le registre 1.3.8 « Principes d'intégration des entrées d'air autoréglables »,
 communs aux systèmes 70 et 76 [1 p. 100, 107].
 
+Les directives de mise en œuvre du classeur KÖMMERLING e.VOLUTION d'août 2008 (système 70) sont sur
+[Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) ; elles
+diffèrent de celles-ci sur le film de protection, la largeur du joint, la mousse de polyuréthane et
+la distance des fixations (**CTR-100** à **CTR-103**).
+
 # Conditions et interdictions
 
 - Pour le montage, il faut respecter les directives d'assurance qualité RAL ou le DTU 36.5. Les
@@ -312,6 +317,10 @@ Cinq montages, chacun dessiné en coupe sur deux combinaisons de profilés dorma
 ![Passage au travers d'une réhausse](/assets/procedures/directives-profine/entree-air-passage-travers-rehausse.png)
 
 L'en-tête des pages 108 à 110 porte « entrées d'air autoréglables\* » sans note correspondante (**INC-95**).
+Le registre 5.9 du classeur e.VOLUTION de 2008, marqué « * source UFPVC », dessine les mêmes
+principes sur les profilés du système 70, avec un autre cahier de référence et un passage indirect
+coté 13 mm (**CTR-98**) : voir
+[Intégration des entrées d'air autoréglables du système 70, 2008](/procedures/entrees-d-air-systeme-70-evo2008.md).
 
 # Ce que le document ne dit pas
 
@@ -332,5 +341,6 @@ imprimées (PDF p. 107 à 110, version février 2023)
 - [Couplages et contreventements d'éléments](/procedures/couplages-elements.md)
 - [Usage, nettoyage et entretien d'une menuiserie profine](/entretien/usage-nettoyage-entretien-menuiseries-profine.md)
 - [Pose de la PERFORM76](/procedures/pose-perform76.md)
+- [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md)
 - [Directives générales profine](/sources/profine-directives-generales.md)
 - [profine](/fournisseurs/profine.md)

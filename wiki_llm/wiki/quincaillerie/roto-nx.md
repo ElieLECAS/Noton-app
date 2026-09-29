@@ -16,11 +16,17 @@ sources:
     id: roto-nx-ksr-montage-imo-180
     title: Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2
     last_modified: 2022-11-30
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    id: roto-nx-catalogue-ctl-105
+    title: Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023
+    last_modified: 2023-06-30
 source_pages:
   - resource: raw/brochure-perform-plus-hybride-plus-2023-05.pdf
     pages: 2-3
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     pages: 21
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    pages: 17-18, 54
 generated:
   by: process:claude-code
   at: 2026-09-17T20:30:00Z
@@ -134,17 +140,108 @@ les consignes générales de montage sur
 Le « galet de sécurité » des PERFORM+ et HYBRIDE+ n'est rattaché par la brochure à aucun des trois
 galets E, P et V [1 p. 2, 3 p. 21].
 
+# Concept de fermeture : galets E, P et V
+
+« Toutes les gâches du système de ferrures Roto NX présentent des axes de vissage identiques. Ce
+concept permet le prééquipement de l'ouvrant avec des galets de sécurité et un rééquipement
+ultérieur du dormant avec des gâches de sécurité (zinc ou acier). Toutes les versions de
+verrouillage sont combinables avec toutes les gâches. » [4 p. 18]
+
+La *gâche* est la pièce vissée sur le dormant dans laquelle s'engage le galet de verrouillage porté
+par la crémone de l'ouvrant. La ferrure Roto NX propose trois versions de galet de verrouillage,
+« qui se distinguent par leur application et les possibilités de réglage » [4 p. 18] :
+
+| Galet de verrouillage | Description |
+| --- | --- |
+| E | Galet réglable par compression |
+| P | Galet champignon de sécurité réglable par compression |
+| V | Galet champignon de sécurité réglable en hauteur et par compression |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 18)
+
+![Galets de verrouillage Roto NX E, P et V montés sur la crémone](/assets/quincaillerie/roto-nx-catalogue/informations/galets-de-verrouillage-e-p-v.png)
+
+La photo montre, de gauche à droite, trois galets montés dans la têtière d'une crémone ; elle
+n'associe pas de lettre à chaque galet.
+
+# Concept de sécurité anti-effraction
+
+« Dans sa version de base, la ferrure Roto NX est déjà équipée d'une sécurité de base au bord
+inférieur de l'ouvrant. Les assemblages prototypes pour fenêtres de sécurité selon la DIN V ENV
+1627–1630 atteignent un effet maximal pour le retard d'effraction. Cette norme comprend un essai
+complet de tous les éléments constitutifs d'une fenêtre. » [4 p. 17]
+
+# Niveaux de sécurité des compositions de ferrure
+
+Le chapitre « Aperçu des ferrures » du catalogue Roto NX pour profils PVC (compositions de
+ferrure par type d'ouverture, côtés paumelles P et Designo) s'ouvre sur deux avertissements
+[4 p. 54] :
+
+- **Toutes les illustrations de ferrures présentées dans ce chapitre servent uniquement
+  d'exemple.** Les données et consignes de montage concrètes figurent respectivement dans les
+  manuels de montage valides ;
+- **niveaux de sécurité** :
+  - les niveaux de sécurité RC 1 N, RC 2 et RC 2 N se réfèrent au système en entier ;
+  - les compositions de ferrures indiquées dans les aperçus des ferrures constituent des
+    recommandations ;
+  - la ferrure atteint les niveaux de sécurité correspondants lors des contrôles nécessaires des
+    systèmes ;
+  - toutefois, les niveaux de sécurité ne sont atteints que si tous les autres éléments du
+    système (par exemple le système de profilés, l'armature, le vitrage, etc.) sont également
+    dimensionnés en fonction du niveau respectif ;
+  - **sur les systèmes avec axe de ferrure de 9 mm, il convient d'utiliser systématiquement des
+    éléments de fermeture de sécurité en acier.**
+
+L'*axe de ferrure* est la cote qui situe la ferrure dans la feuillure de l'ouvrant (systèmes
+12/18-9 et 12/20-9 pour l'axe de 9 mm), voir
+[Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md). Ces niveaux sont
+écrits « RC » ici, « CDR » sur les tableaux français des diagrammes d'application (entrée
+**INC-13**).
+
+# Structure du traitement de surface Roto Sil
+
+Roto Sil est le traitement de surface de la ferrure modulaire Roto NX : « aspect mat argenté pour
+une finition raffinée ; extrêmement robuste et résistant aux rayures ; l'ensemble du revêtement est
+exempt de chrome (VI) ; inoffensif sur le plan toxique pour l'environnement » [4 p. 18].
+
+« Roto Sil Level 6 est basé sur une technologie de revêtement innovante et présente une structure
+micro-cristalline. En combinaison avec Roto Sil, Roto Sil Level 6 est une norme complémentaire pour
+les composants d'assemblage tels que les rivets, les goujons et les éléments coulissants. Cela
+signifie que l'ensemble du système de ferrures OB va bien au-delà des exigences de la classe de
+protection anticorrosion 5 la plus élevée. » Pour la première fois, « des pièces sensibles telles
+que des rivets ou des glissières sont durablement protégées de la corrosion et de l'usure »
+[4 p. 18].
+
+Le médaillon agrandi d'un élément de raccordement montre sa structure de surface ; la légende
+nomme quatre couches [4 p. 18] :
+
+| Ordre dans la légende | Couche (couleur de la légende) |
+| --- | --- |
+| 1 | Vitrification optique (gris foncé) |
+| 2 | Passivation sans chrome VI (gris clair) |
+| 3 | Revêtement en zinc (cadre rouge) |
+| 4 | Matériau de base en acier (hachures) |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 18)
+
+![Structure de surface d'un élément de raccordement Roto Sil](/assets/quincaillerie/roto-nx-catalogue/informations/roto-sil-structure-de-surface.png)
+
+Le certificat QM 328
+de la Roto NX (classe 5 de résistance à la corrosion selon EN 1670) est sur
+[Certificats Roto NX](/certifications/roto-nx-certificats.md). Les arguments commerciaux du
+catalogue (rentabilité, confort, design) sont sur [Roto NX, ce que ROTO annonce](/commercial/roto-nx.md).
+
 # Ce qui reste à documenter
 
 Les gammes PERFORM+ et HYBRIDE+ que la Roto NX équipe sont de statut commercial incertain,
 entrée **VER-02** du registre
 [Informations à vérifier](/anomalies/informations-a-verifier.md).
 
-Le catalogue de juin 2023 porte les numéros de matériel par composant — crémones, compas, verrouilleurs, pivots. Ses tableaux se lisent avec la légende pictographique des pages 10 à 12,
-mais une seule planche sur plus de deux cents est transcrite à ce jour — voir
-[Crémones Roto NX](/quincaillerie/roto-nx-cremones.md). Manque encore **le côté
-paumelles que PROFERM emploie réellement** — P ou Designo II, dont les champs d'application
-diffèrent nettement. Entrée **VER-34**.
+Les numéros de commande par composant — crémones, compas, verrouilleurs, pivots — sont sur les
+pages de famille Roto NX ; leurs tableaux se lisent avec la
+[légende des tableaux du catalogue](/quincaillerie/roto-nx-legende-catalogue.md). Manque encore
+**le côté paumelles que PROFERM emploie réellement** — P ou Designo II, dont les champs
+d'application diffèrent nettement. Entrée **VER-34**.
 
 # Citations
 
@@ -153,6 +250,9 @@ diffèrent nettement. Entrée **VER-34**.
 p. 34 et 35
 [3] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf.
 IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 21
+
+[4] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 —
+`raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 17, 18 et 54
 
 # Trois interventions documentées sur ROTO NX
 

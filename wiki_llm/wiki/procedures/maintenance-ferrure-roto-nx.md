@@ -1,7 +1,7 @@
 ---
 type: Procédure
 title: Maintenance d'une ferrure Roto NX
-description: Maintenance d'une ferrure Roto NX KSR sur fenêtre PVC — consignes de prudence, intervalles, répartition entre entreprise spécialisée et client final, nettoyage, entretien et points à huiler ou graisser, contrôle fonctionnel (couple max. 10 Nm), remise en état, transport, stockage et mise au rebut.
+description: Maintenance d'une ferrure Roto NX KSR sur fenêtre PVC — consignes de prudence, intervalles, répartition entre entreprise spécialisée et client final, nettoyage, entretien et points à huiler ou graisser, contrôle fonctionnel (couple max. 10 Nm), remise en état, transport, stockage des pièces emballées, mise au rebut et environnement.
 tags: [roto, roto-nx, maintenance, entretien, nettoyage, graissage, sav, transport, mise-au-rebut]
 systeme: Roto NX
 fournisseur: ROTO
@@ -13,9 +13,15 @@ sources:
     id: roto-nx-ksr-montage-imo-180
     title: Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2
     last_modified: 2022-11-30
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    id: roto-nx-catalogue-ctl-105
+    title: Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023
+    last_modified: 2023-06-30
 source_pages:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     pages: 116-122
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    pages: 19-20
 generated:
   by: process:claude-code
   at: 2026-09-18T14:30:00Z
@@ -255,6 +261,32 @@ utilisés que s'ils sont en parfait état. » [1 p. 121]
 Jusqu'au montage, stocker tous les éléments de ferrure au sec et à l'abri, sur une surface plane,
 à l'abri des rayons du soleil [1 p. 121].
 
+Le catalogue Roto NX pour profils PVC (section 1.3 « Conditions de stockage ») détaille les
+conditions de stockage des pièces emballées [2 p. 19] :
+
+**Protection des pièces contre les salissures et la poussière.** Garder l'emballage fermé, toujours
+recouvrir les emballages ouverts ou les marchandises stockées sans protection (par exemple avec une
+couche de carton).
+
+**Protection des pièces contre les détériorations mécaniques.** Transport et manipulation des
+emballages uniquement avec des moyens de transport ou de manutention adaptés (chariots élévateurs,
+engins de levage, tapis à rouleaux, etc.). Ne gerber les palettes et emballages en carton (pendant
+le transport) que conformément à leur hauteur maximale selon l'impression sur l'emballage.
+
+**Protection des pièces contre l'humidité directe et l'eau.** L'emballage doit rester sec, les
+pièces ne doivent pas être mouillées. Cela s'applique au stockage et au transport, ainsi que pour
+les processus de déchargement ou de chargement. Le cas échéant, pendant le transport à l'extérieur
+(par ex. dans la cour de l'entreprise), couvrir par des housses en plastique ou similaire s'il pleut.
+Le stockage est uniquement autorisé dans les locaux adaptés et fermés, non à l'extérieur. Éviter
+impérativement la condensation d'eau pendant toute la durée du transport et du stockage.
+
+**Si les emballages devaient néanmoins être mouillés.** Déballer immédiatement les pièces dans les
+emballages humides, sécher les pièces et contrôler l'absence de détériorations (corrosion). Dans
+tous les cas, remballer les pièces encore utilisables dans des matériels d'emballage neuf lorsqu'elles
+sont de nouveau sèches.
+
+*Gerber* signifie empiler les colis les uns sur les autres.
+
 ## 14 Mise au rebut
 
 **ATTENTION — Pollution éventuelle suite à une élimination non conforme !** Les ferrures sont des
@@ -278,6 +310,29 @@ ordures ménagères ; les remettre aux points de collecte ou centres de recyclag
 les réglementations nationales pour l'élimination des déchets recyclables ; le cas échéant,
 contacter les administrations locales [1 p. 122].
 
+## Environnement
+
+Section 1.4 « Environnement » du catalogue Roto NX pour profils PVC [2 p. 20] :
+
+**Compatibilité environnementale des éléments de ferrures.** « Notre objectif est de limiter
+autant que possible la consommation d'énergie et de carburant dans la fabrication de nos composants
+de ferrure et nous nous efforçons de fabriquer des composants de ferrure présentant une grande durée
+de vie. Cela nous permet de ménager les ressources naturelles, de minimiser la consommation
+d'énergie et d'exploiter les matières premières dans le respect de l'environnement. »
+
+**Pollution générée par les ferrures.** « Le revêtement de nos surfaces traitées résiste à
+l'abrasion. Lors d'une utilisation conforme, les éléments de ferrures ne génèrent aucune
+pollution. »
+
+**Écocompatibilité des emballages.** Emballages jetables recyclables : carton renforcé, rubans en
+acier ou PVC, films PE, cadres de supports en bois, palettes en bois jetables, serre-câbles, cordes
+en élastomères ; emballages réutilisables : caisses Schäfer, caisses en grillage métallique,
+euro-palettes en bois.
+
+**Écocompatibilité de la mise au rebut.** « Nos ferrures sont réalisées en matériaux qui peuvent
+être recyclés lors de leur mise au rebut afin de revaloriser les matériaux dans le respect de
+l'environnement. »
+
 # Ce que le document ne dit pas
 
 La numérotation passe du chapitre 11 (Maintenance) au chapitre 13 (Transport) : aucun chapitre 12
@@ -288,6 +343,9 @@ n'est imprimé (entrée **INC-11**).
 [1] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf.
 IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 116 à 122
 (numérotation du PDF)
+
+[2] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 —
+`raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 19 et 20
 
 # Voir aussi
 

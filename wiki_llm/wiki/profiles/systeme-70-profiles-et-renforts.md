@@ -33,7 +33,7 @@ source_pages:
   - resource: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf
     pages: 2-39, 50
   - resource: raw/profine-plans-profiles-e-volution-2008-08.pdf
-    pages: 1
+    pages: 1-6, 8-23, 47, 100, 102-108
   - resource: raw/dtd-6-16-2335-v5-e-volution.pdf
     pages: 4-5, 7, 14-19, 23
   - resource: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf
@@ -402,6 +402,82 @@ l'extrémité de l'aile jusqu'à la face gauche du pied droit du dormant [3 p. 1
 
 Le poster et le manuel donnent 105, 125, 145, 165 et 210 mm à ces cinq dormants (**CTR-20**).
 
+## Dormants des plans e.VOLUTION de 2008
+
+Le classeur KÖMMERLING « Système e.VOLUTION, plan des profilés » d'août 2008 (système F 91,
+registre 1.1) dessine chaque dormant seul, à l'échelle 1:1, sous sa désignation complète
+(« F91-01- 6100 » : le préfixe est écrit devant la référence, le numéro en gras est la référence).
+À côté de chaque coupe, un petit tableau « Renfort | Iz » donne **un** renfort et son moment
+d'inertie Iz (la raideur de la section d'acier, en cm⁴). Chaque coupe porte en haut l'épaisseur
+(70 mm) ou la largeur hors tout, à gauche une ou deux cotes verticales, à droite la
+décomposition verticale (part haute de 20 mm, part basse). Une ligne par dormant, cotes en mm ;
+un tiret signifie que la cote n'est pas portée sur la coupe [2 p. 1-6, 8].
+
+| Dormant | Désignation complète | Cote horizontale en haut (mm) | Cotes verticales gauches (mm) | Décomposition droite, de haut en bas (mm) | Cote du pied, à gauche (mm) | Renfort du tableau | Iz (cm⁴) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| 6100 | F91-01- 6100 | 70 | 55 | 20 + 35 | - | V600 | 2,10 | 1 | ![Dormant 6100](/assets/profiles/systeme70/dormants/dormant-6100-evo2008.png) |
+| 6101 | F91-01- 6101 | 70 | 64 | 20 + 44 | - | V601 | 3,20 | 1 | ![Dormant 6101](/assets/profiles/systeme70/dormants/dormant-6101-evo2008.png) |
+| 2502 | F95-01- 2502 | 70 | 85 | 20 + 65 | - | V030 | 4,50 | 2 | ![Dormant 2502](/assets/profiles/systeme70/dormants/dormant-2502-evo2008.png) |
+| 6104 | F91-01- 6104 | 70 | 84 hors tout ; 58 depuis le haut ; 31 depuis le bas | 20 + 64 | - | V601 | 3,20 | 2 | ![Dormant 6104](/assets/profiles/systeme70/dormants/dormant-6104-evo2008.png) |
+| 6108 | F91-02- 6108 | 105 hors tout ; 70 pour le corps | 84 | 20 + 64 | 20 | V601 | 3,20 | 3 | ![Dormant 6108](/assets/profiles/systeme70/dormants/dormant-6108-evo2008.png) |
+| 6109 | F91-02- 6109 | 125 hors tout | 84 | 20 + 64 | 20 | V601 | 3,20 | 3 | ![Dormant 6109](/assets/profiles/systeme70/dormants/dormant-6109-evo2008.png) |
+| 6110 | F91-02- 6110 | 145 hors tout ; 70 pour le corps | 84 | 20 + 64 | 20 | V601 | 3,20 | 4 | ![Dormant 6110](/assets/profiles/systeme70/dormants/dormant-6110-evo2008.png) |
+| 6111 | F91-02- 6111 | 165 hors tout | 84 | 20 + 64 | 20 | V601 | 3,20 | 4 | ![Dormant 6111](/assets/profiles/systeme70/dormants/dormant-6111-evo2008.png) |
+| 6102 | F91-01- 6102 | 70 | 77 = 47 + 30 | 20 + 57 | - | V600 | 2,10 | 5 | ![Dormant 6102](/assets/profiles/systeme70/dormants/dormant-6102-evo2008.png) |
+| 6105 | F91-01- 6105 | 70 | 87 = 47 + 40 | 20 + 67 | - | V600 | 2,10 | 5 | ![Dormant 6105](/assets/profiles/systeme70/dormants/dormant-6105-evo2008.png) |
+| 6106 | F91-01- 6106 | 70 | 95 = 55 + 40 | 20 + 75 | - | V600 | 2,10 | 6 | ![Dormant 6106](/assets/profiles/systeme70/dormants/dormant-6106-evo2008.png) |
+| 6107 | F91-01- 6107 | - | 107 = 47 + 60 | 20 + 87 | - | V600 | 2,10 | 6 | ![Dormant 6107](/assets/profiles/systeme70/dormants/dormant-6107-evo2008.png) |
+| 2403 | F95-01- 2403 | 70 | 20 + 50, de haut en bas | 70 (une seule cote) | - | V045 | 2,70 | 8 | ![Dormant 2403](/assets/profiles/systeme70/dormants/dormant-2403-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 1 à 6 et 8)
+
+Comment lire les cotes gauches. Sur les dormants de rénovation 6102, 6105, 6106 et 6107 (titre
+de planche « Dormants rénovation », p. 5-6), la cote gauche hors tout est décomposée en deux : la
+première part (47 ou 55 mm) va du haut du dormant au-dessous de son corps, la seconde (30, 40 ou
+60 mm) est la hauteur de l'aile qui descend sous le corps et vient recouvrir l'ancien bâti. Sur
+le 6104, les cotes de 58 et de 31 mm sont prises l'une depuis le haut, l'autre depuis le bas,
+jusqu'à deux lignes de rappel distinctes, et leur somme n'est pas la cote hors tout de 84 mm ;
+elles sont reprises telles qu'imprimées. Le 6107 n'a pas de cote d'épaisseur en haut sur la
+planche [2 p. 2, 5-6].
+
+Les dormants larges 6108 à 6111 (planches p. 3 et 4) ont une aile horizontale qui prolonge le
+dormant vers l'intérieur, fermée en pied par un retour de 20 mm. Chaque planche écrit sous la
+référence les deux embouts de l'aile [2 p. 3-4] :
+
+| Dormant | Embout haut | Légende de l'embout haut | Embout bas | Légende de l'embout bas |
+| --- | --- | --- | --- | --- |
+| 6108 | 9F97 | Embout haut G/D sous CVR | 9F08 | Embout bas G/D pour 6108 |
+| 6109 | 9F97 | Embout haut G/D sous CVR | 9F08 | Embout bas G/D pour 6109 |
+| 6110 | 9F97 | Embout haut G/D sous CVR | 9F10 | Embout bas G/D pour 6110 |
+| 6111 | 9F97 | Embout haut G/D sous CVR | 9F10 | Embout bas G/D pour 6111 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 3 et 4)
+
+« G/D » se lit gauche / droite (voir le [glossaire](/reference/glossaire.md)) ; le sigle CVR
+n'est développé nulle part dans la documentation profine — entrée **VER-73** du registre
+[Informations à vérifier](/anomalies/informations-a-verifier.md). Les largeurs hors tout de 105, 125, 145 et 165 mm du
+classeur de 2008 sont celles du poster et du manuel ; le DTD en donne 10 de moins (**CTR-20**).
+Le dormant 6158 n'est pas dessiné dans le registre 1.1 du classeur.
+
+Le profilé **95 38 00** est dessiné seul à droite du dormant de rénovation 6106, sans légende de
+fonction, avec sa largeur de 7,4 mm et sa hauteur de 11,3 mm, les mêmes que sur le poster
+(dessin ci-dessus, *Cotes des dormants*) [2 p. 6].
+
+Le dormant **2403** (p. 8) est dessiné en miroir des autres : sa gorge de joint et son aile de
+20 mm sont à droite et en haut, sa décomposition 20 + 50 mm est portée à gauche, sa hauteur de
+70 mm à droite. Le classeur le range sous « Dormants » sans autre légende ; il n'est dessiné ni
+sur le poster, ni au manuel, ni au DTD. Son usage n'est pas écrit sur la planche.
+
+Sur ces planches, chaque dormant n'a qu'un renfort : le renfort de 1,5 mm (V600, V601, V030) là
+où le manuel de mise en œuvre en admet deux au choix (voir *Renforts des dormants* ci-dessous) ;
+les inerties Iz de 2,10, 3,20 et 4,50 cm⁴ sont les IW du manuel pour les mêmes renforts. Le V045
+du 2403 porte Iz = 2,70 cm⁴, comme l'inertie du V045 au poster et au DTD [2 p. 1-8].
+
+La coupe du dormant 2403 avec l'ouvrant 2418 ouvrant vers l'extérieur (registre 2) donne au 2403
+le renfort V026, Iz 3,70 cm⁴, là où sa coupe de porte d'entrée garde le V045 à 2,70
+(**INC-215** ; coupes sur [Types d'ouverture et plans de combinaison du système 70](/profiles/systeme-70-plans-de-combinaison.md))
+[2 p. 100, 106].
+
 # Renforts des dormants
 
 Renforts admis par dormant, relevés sur la planche de chaque dormant, avec leurs inerties. IG est l'inertie vis-à-vis du poids (elle borne l'épaisseur de
@@ -449,9 +525,9 @@ tiret signifie une valeur non portée [1 p. 8-23].
 
 Chaque dormant a deux renforts au choix : V600 ou V543 sur les 6100, 6102, 6105, 6106, 6107,
 6155, 6156 et 6159 ; V601 ou V544 sur les 6101, 6104, 6108, 6109, 6110, 6111 et 6158 ; V030 ou
-V031 sur le 2502 [1 p. 8-23]. Le poster écrit les mêmes couples dans la chambre des coupes. Le
-classeur de 2008 porte « Renfort Iz V600 2,10 » sur le dormant 6100 et « Renfort Iz V601 3,20 »
-sur le 6101 [2 p. 1].
+V031 sur le 2502 [1 p. 8-23]. Le poster écrit les mêmes couples dans la chambre des coupes. Les
+plans de 2008 n'associent qu'un renfort à chaque dormant — voir *Dormants des plans e.VOLUTION de
+2008* ci-dessus.
 
 # Cotes des ouvrants
 
@@ -601,6 +677,131 @@ L'« ouvrant réduit » (53 et 77 mm) a une décomposition droite en trois parts
 pied de 50,5 et 19,5 mm ; l'ouvrant à recouvrement (73 et 97 mm) une décomposition en deux parts
 et une cote de 20 mm en pied à gauche. Les ouvrants 6121 à 6124 sont cotés 78 mm d'épaisseur,
 les autres 70 mm [1 p. 25-34].
+
+## Ouvrants des plans e.VOLUTION de 2008
+
+Le classeur KÖMMERLING de 2008 (registre 1.2) dessine les ouvrants seuls, à l'échelle 1:1, sous
+leur désignation complète, avec le même petit tableau « Renfort | Iz » que les dormants. Les
+planches sont titrées « Ouvrants », « Rehausse d'ouvrant » (0303) et « Ouvrants élégance » (6121
+à 6124). Chaque coupe porte en haut l'épaisseur, à gauche la hauteur de face (décomposée ou non),
+à droite la décomposition verticale et, sur les ouvrants réduits, deux cotes horizontales au pied.
+Une ligne par profilé, cotes en mm ; un tiret signifie que la cote n'est pas portée [2 p. 9-17].
+
+| Ouvrant | Désignation complète | Cote horizontale en haut (mm) | Cotes verticales gauches (mm) | Décomposition droite, de haut en bas (mm) | Cotes horizontales du pied (mm) | Titre de la planche | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| 6112 | F91-06- 6112 | 70 | 73 = 51,5 + 21,5 | 20 + 53 | - | Ouvrants | 9 | ![Ouvrant 6112](/assets/profiles/systeme70/ouvrants/ouvrant-6112-evo2008.png) |
+| 6113 | F91-08- 6113 | 70 | 53 | 20 + 21, et 33 du bas de la part de 20 jusqu'au pied | 50,5 + 19,5 | Ouvrants | 9 | ![Ouvrant 6113](/assets/profiles/systeme70/ouvrants/ouvrant-6113-evo2008.png) |
+| 6115 | F91-06- 6115 | 70 | 97 = 77 + 20 | 20 + 77 | - | Ouvrants | 10 | ![Ouvrant 6115](/assets/profiles/systeme70/ouvrants/ouvrant-6115-evo2008.png) |
+| 6116 | F91-08- 6116 | 70 | 77 | 20 + 45, et 57 du bas de la part de 20 jusqu'au pied | 50,5 + 19,5 | Ouvrants | 10 | ![Ouvrant 6116](/assets/profiles/systeme70/ouvrants/ouvrant-6116-evo2008.png) |
+| 0112 | F95-09- 0112 | 82 hors tout ; 62 | 74 hors tout ; 54 | 54 (une seule cote) | - | Ouvrants | 11 | ![Ouvrant 0112](/assets/profiles/systeme70/ouvrants/ouvrant-0112-evo2008.png) |
+| 0113 | F95-09- 0113 | 82 hors tout ; 62 | 82 hors tout ; 62 | 62 (une seule cote) | - | Ouvrants | 11 | ![Ouvrant 0113](/assets/profiles/systeme70/ouvrants/ouvrant-0113-evo2008.png) |
+| 2416 | F95-13- 2416 | 70 | 118 = 98 + 20 | 20 + 98 | - | Ouvrants | 12 | ![Ouvrant 2416](/assets/profiles/systeme70/ouvrants/ouvrant-2416-evo2008.png) |
+| 0303 | F95-64- 0303 | 70 | 94 | 20 + 90 | - | Rehausse d'ouvrant | 13 | ![Rehausse d'ouvrant 0303](/assets/profiles/systeme70/rehausses/rehausse-0303-evo2008.png) |
+| 2415 | F95-13- 2415 | 70 | 118 | 20 + 98,35 + 20 | - | Ouvrants | 14 | ![Ouvrant 2415](/assets/profiles/systeme70/ouvrants/ouvrant-2415-evo2008.png) |
+| 2418 | F95-06- 2418 | 70 | 96 | 20 + 56 + 20 | - | Ouvrants | 15 | ![Ouvrant 2418](/assets/profiles/systeme70/ouvrants/ouvrant-2418-evo2008.png) |
+| 6121 | F91-09- 6121 | 70 | 73 = 51,5 + 21,5 | 20 + 53 | - | Ouvrants élégance | 16 | ![Ouvrant 6121](/assets/profiles/systeme70/ouvrants/ouvrant-6121-evo2008.png) |
+| 6122 | F91-08- 6122 | 70 | 53 | 20 + 21, et 33 du bas de la part de 20 jusqu'au pied | 50,5 + 19,5 | Ouvrants élégance | 16 | ![Ouvrant 6122](/assets/profiles/systeme70/ouvrants/ouvrant-6122-evo2008.png) |
+| 6123 | F91-09- 6123 | 70 | 97 = 77 + 20 | 20 + 77 | - | Ouvrants élégance | 17 | ![Ouvrant 6123](/assets/profiles/systeme70/ouvrants/ouvrant-6123-evo2008.png) |
+| 6124 | F91-08- 6124 | 70 | 77 | 20 + 45, et 57 du bas de la part de 20 jusqu'au pied | 50,5 + 19,5 | Ouvrants élégance | 17 | ![Ouvrant 6124](/assets/profiles/systeme70/ouvrants/ouvrant-6124-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 9 à 17)
+
+Sur les ouvrants réduits 6113, 6116, 6122 et 6124, la part basse de la décomposition droite est
+portée deux fois : la seconde cote (33 ou 57 mm) inclut la première (21 ou 45 mm) et le talon de
+12 mm que le manuel de mise en œuvre cote séparément (20 + 21 + 12, 20 + 45 + 12). Les ouvrants
+**0112 et 0113** ont une épaisseur de 62 mm pour le corps et 82 mm hors tout, avec une
+face gauche arrondie ; leur gorge de joint de frappe n'est pas dessinée. Ils ne sont
+dessinés ni au poster, ni au manuel, ni au DTD, et la planche ne dit pas à quoi ils servent.
+La rehausse **0303** est dessinée posée sur un profilé coupé, dessiné sans référence [2 p. 9-17].
+
+Les écarts de cotes avec les documents récents sont portés au registre, sans arbitrage :
+
+- les ouvrants élégance 6121 à 6124 sont cotés **70 mm** d'épaisseur en 2008, **78 mm** au
+  manuel, au poster et au DTD ; la hauteur de face gauche du 6112 et du 6121, 73 mm, est
+  décomposée 51,5 + 21,5 en 2008 et 53 + 20 au poster et au manuel — entrée **CTR-70** du
+  registre [Contradictions entre sources](/anomalies/contradictions-entre-sources.md) ;
+- la part centrale de l'ouvrant 2415 est imprimée **98,35** mm alors que la hauteur hors tout est
+  de 118 mm et les deux parts extrêmes de 20 mm ; le poster et le manuel écrivent 78 — entrée
+  **INC-211** du registre [Incohérences internes](/anomalies/incoherences-internes.md).
+
+### Renforts des ouvrants des plans de 2008
+
+Renforts écrits dans le tableau « Renfort | Iz » de chaque planche d'ouvrant. Quand trois
+renforts sont listés, le premier est imprimé en gras. Une ligne par couple ouvrant et renfort ;
+Iz en cm⁴ ; un tiret signifie qu'aucune inertie n'est imprimée [2 p. 9-17].
+
+| Ouvrant | Renfort | Iz (cm⁴) | Imprimé en gras | Page PDF |
+| --- | --- | --- | --- | --- |
+| 6112 | V600 | 2,10 | oui | 9 |
+| 6113 | V600 | 2,10 | oui | 9 |
+| 6115 | V057 | 3,20 | oui | 10 |
+| 6115 | V059 | 4,50 | non | 10 |
+| 6115 | V069 | - | non | 10 |
+| 6116 | V057 | 3,20 | oui | 10 |
+| 6116 | V059 | 4,50 | non | 10 |
+| 6116 | V069 | - | non | 10 |
+| 0112 | V039 | 3,10 | oui | 11 |
+| 0113 | V026 | 3,70 | oui | 11 |
+| 2416 | V003 | 12,30 | oui | 12 |
+| 0303 | V045, chambre haute | 2,70 | oui | 13 |
+| 0303 | V031, chambre basse | 5,30 | oui | 13 |
+| 2415 | V003 | 12,30 | oui | 14 |
+| 2418 | V030 | 4,50 | oui | 15 |
+| 6121 | V058 | 3,20 | oui | 16 |
+| 6122 | V058 | 3,20 | oui | 16 |
+| 6123 | V057 | 3,20 | oui | 17 |
+| 6123 | V059 | 4,50 | non | 17 |
+| 6123 | V069 | - | non | 17 |
+| 6124 | V057 | 3,20 | oui | 17 |
+| 6124 | V059 | 4,50 | non | 17 |
+| 6124 | V069 | - | non | 17 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 9 à 17)
+
+Ces renforts ne sont pas ceux du manuel de mise en œuvre de 2023 : le 6112 et le 6113 y reçoivent
+le V158 ou le V258 (V600 en 2008), le 6121 et le 6122 aussi (V058 en 2008), et le V057 et le V059
+y ont une IW de 3,8 et 4,4 cm⁴ sur les planches de profilé (Iz 3,20 et 4,50 en 2008 ; les plans
+de combinaison AluClip du même manuel écrivent 3,2 pour le V057) ; les 2415 et 2416 y admettent aussi le
+V290 et le V154 — entrée **CTR-69** du registre
+[Contradictions entre sources](/anomalies/contradictions-entre-sources.md). Les coupes combinées du même classeur
+(registre 2, p. 52-79) donnent au 6112 le V058 (3,20) et au V057 l'Iz de 3,80 — entrée **INC-214**
+du registre [Incohérences internes](/anomalies/incoherences-internes.md) ; elles sont sur
+[Types d'ouverture et plans de combinaison du système 70](/profiles/systeme-70-plans-de-combinaison.md). Le V026 du 0113 porte
+l'inertie de 3,7 cm⁴ que le DTD lui donne (voir *Renforts du DTD*) ; les V039 et V058 ne sont
+dessinés sur aucun autre document du système 70.
+
+Sur les coupes de porte d'entrée du registre 2, le V003 des ouvrants 2415 et 2416 porte Iz
+12,80 cm⁴ au lieu des 12,30 de ces planches (**INC-216**) ; les ouvrants 6113 et 6116 y reçoivent le
+V058 (3,20) et le V057 (3,80), comme les 6112 et 6115 (**INC-214**) [2 p. 96-98, 102-108].
+
+### Pièces dessinées avec les ouvrants de 2008
+
+Sur les planches p. 9, 10, 16 et 17, l'embout **9F13** (désignation F91-75- 9F13) est dessiné en
+perspective à droite des ouvrants, devant l'extrémité d'un ouvrant coupé, sans légende de fonction ;
+les planches des ouvrants élégance le dessinent devant un ouvrant élégance. Le manuel de mise en
+œuvre le désigne « Embout ouvrant de gauche » (**INC-110**) [2 p. 9-10, 16-17].
+
+![Embout 9F13 devant un ouvrant](/assets/profiles/systeme70/accessoires/embout-9f13-evo2008.png)
+
+![Embout 9F13 devant un ouvrant élégance](/assets/profiles/systeme70/accessoires/embout-9f13-elegance-evo2008.png)
+
+Sur les planches des ouvrants de porte 2416 (p. 12) et 2415 (p. 14) sont dessinés en plus : le
+profilé acier **V004** (désignation F00-40- V004, le préfixe que la
+[procédure d'assemblage du meneau](/procedures/assemblage-meneau-traverse-systeme-70.md) donne au
+renfort acier V601), en coupe
+hachurée, sans cote ni inertie ; une photographie légendée « F00-94- **9287** Insert soudable » et
+« F00-87- **9679** Outil de serrage » ; et le profilé 9C42, repris dans
+[Assemblages du système 70](/profiles/systeme-70-assemblages.md). La p. 12 dessine aussi le
+profilé 9F46 [2 p. 12, 14].
+
+![Profilé acier V004](/assets/profiles/systeme70/renforts/renfort-v004-evo2008.png)
+
+![Insert soudable 9287 et outil de serrage 9679](/assets/profiles/systeme70/accessoires/insert-9287-outil-9679-evo2008.png)
+
+La photographie montre deux ouvrants coupés d'onglet, face à face, avec l'insert entre leurs
+chambres (schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 12). Le poster et le
+manuel légendent l'outil de serrage **T038** et l'insert 9287 « Insert de soudure » (voir
+[Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md)).
 
 # Renforts des ouvrants
 
@@ -762,6 +963,82 @@ pointillé en haut à droite ; la pièce 9414 est dessinée en perspective à dr
 Dans le manuel, **seul le battement 0140 reçoit un renfort** parmi les battements des profilés
 principaux, le V600 (Renfort 1,5 mm, IG = 0,5 cm⁴, IW = 2,1 cm⁴), avec le capot 9C40 [1 p. 36].
 
+## Battements des plans e.VOLUTION de 2008
+
+Le classeur KÖMMERLING de 2008 (registre 1.3, planches « Battements elégance » et
+« Battements ») dessine chaque battement en coupe, à l'échelle 1:1, avec à côté son embout en
+perspective éclatée : l'embout (le capuchon qui ferme l'extrémité du battement) est dessiné
+au-dessus du battement coupé, sous sa propre désignation. Sous trois battements plats sont
+écrites les vis plots (les vis à tête qui fixent le battement sur l'ouvrant). Cotes en mm ; un
+tiret signifie que la cote n'est pas portée [2 p. 18-21].
+
+| Battement | Désignation complète | Titre de la planche | Cotes horizontales en haut (mm) | Cote verticale gauche (mm) | Cote horizontale du pied (mm) | Décomposition droite, de haut en bas (mm) | Embout dessiné | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| 6132 | F91-25- 6132 | Battements elégance | 9,5 + 24 | 40 | 15,5 | - | F91-75- 9F35 | 18 | ![Battement 6132](/assets/profiles/systeme70/battements/battement-6132-evo2008.png) |
+| 6131 | F91-62- 6131 | Battements elégance | 12,6 | 54 | - | - | F91-75- 9F31 | 18 | ![Battement 6131](/assets/profiles/systeme70/battements/battement-6131-evo2008.png) |
+| 1578 | F40-25- 1578 | Battements | 12 + 22,5 | 40 | 15,5 | - | F00-75- 9A81 | 19 | ![Battement 1578](/assets/profiles/systeme70/battements/battement-1578-evo2008.png) |
+| 1459 | F40-25- 1459 | Battements | 12 + 22,5 | 40 | 15,5 | - | F40-75- 9662 | 19 | ![Battement 1459](/assets/profiles/systeme70/battements/battement-1459-evo2008.png) |
+| 6130 | F91-25- 6130 | Battements | 12 + 24 | 34 | 15,5 | - | F91-75- 9F30 | 19 | ![Battement 6130](/assets/profiles/systeme70/battements/battement-6130-evo2008.png) |
+| 1458 | F40-62- 1458 | Battements | 12,3 | 46 | - | - | F40-75- 9663 | 20 | ![Battement 1458](/assets/profiles/systeme70/battements/battement-1458-evo2008.png) |
+| 1547 | F69-61- 1547 | Battements | 12,9 | 60 | - | - | F69-75- 9A82 | 20 | ![Battement 1547](/assets/profiles/systeme70/battements/battement-1547-evo2008.png) |
+| 6133 | F91-62- 6133 | Battements | 12 | 54 | - | - | F91-75- 9F33 | 20 | ![Battement 6133](/assets/profiles/systeme70/battements/battement-6133-evo2008.png) |
+| 0141 | F90-25- 0141 | Battements | 66 + 21,2 | 44 | - | 20 + 16 + 8 | F90-88- 9415.1 | 21 | ![Battement 0141](/assets/profiles/systeme70/battements/battement-0141-evo2008.png) |
+| 0140 | F90-25- 0140 | Battements | 66 | 62 | - | 20 + 34 + 8 | F90-88- 9414.1 | 21 | ![Battement 0140](/assets/profiles/systeme70/battements/battement-0140-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 18 à 21)
+
+Les 6132, 1578, 1459 et 6130 sont dessinés avec une face bombée, une gorge de joint en haut et
+une lèvre crantée à droite ; les 6131, 1458, 1547 et 6133 sont des profilés plats à face bombée,
+crantés sur leur dos. Le manuel de mise en œuvre range les 6130, 1578 et 6132 parmi les
+battements extérieurs, les 1547, 6131 et 6133 parmi les battements intérieurs. Les 0141 et 0140 ont une
+tête arrondie de 66 mm, une chambre de renfort et une aile ; le 0141 est le plus bas (44 mm) et
+porte une aile prolongée de 21,2 mm à droite. Seuls ces deux-là ont un renfort [2 p. 18-21] :
+
+| Battement | Renfort du tableau | Iz (cm⁴) | Page PDF |
+| --- | --- | --- | --- |
+| 0141 | 9126 | 1,20 | 21 |
+| 0140 | 9111 | 2,60 | 21 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 21)
+
+Sous les battements plats 1458, 1547 et 6133 sont écrites deux vis plots : « 9870 Plot tête
+métal » et « 9419 Plot tête PVC ». Les planches p. 18 et 20 dessinent en plus, en bas ou à
+droite, la pièce 9447 avec la légende « F00-70- 9905 Gabarit de perçage », la vis « F00-83- 9419
+Tête PVC » et le petit profilé en U « F00-56- 9B00 », sans dire à quel battement ils
+s'appliquent [2 p. 18, 20].
+
+![Embout 9F35](/assets/profiles/systeme70/battements/embout-9f35-evo2008.png)
+![Embout 9F31](/assets/profiles/systeme70/battements/embout-9f31-evo2008.png)
+![Embout 9A81](/assets/profiles/systeme70/battements/embout-9a81-evo2008.png)
+![Embout 9662](/assets/profiles/systeme70/battements/embout-9662-evo2008.png)
+![Embout 9F30](/assets/profiles/systeme70/battements/embout-9f30-evo2008.png)
+![Embout 9663](/assets/profiles/systeme70/battements/embout-9663-evo2008.png)
+![Embout 9A82](/assets/profiles/systeme70/battements/embout-9a82-evo2008.png)
+![Embout 9F33](/assets/profiles/systeme70/battements/embout-9f33-evo2008.png)
+![Embout 9415.1](/assets/profiles/systeme70/battements/embout-9415-1-evo2008.png)
+![Embout 9414.1](/assets/profiles/systeme70/battements/embout-9414-1-evo2008.png)
+
+Chaque dessin montre l'embout au-dessus de l'extrémité du battement qu'il ferme, avec sa
+désignation ; l'embout du 0140, 9414.1, porte une plaque rectangulaire en façade (schéma:
+raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 18 à 21).
+
+![Pièce 9447 et gabarit de perçage 9905](/assets/profiles/systeme70/accessoires/accessoire-9447-9905-battements-evo2008.png)
+![Vis 9419 tête PVC](/assets/profiles/systeme70/accessoires/vis-9419-battements-evo2008.png)
+![Profilé 9B00](/assets/profiles/systeme70/accessoires/profil-9b00-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 18)
+
+Les embouts 9F35, 9F31, 9A81, 9F30, 9A82 et 9F33 sont ceux que le poster dessine avec les mêmes
+battements ; le poster donne aussi au 9414 le battement 0140. Les battements 1459, 1458 et 0141,
+les embouts 9662, 9663 et 9415.1 et le renfort 9126 ne sont pas dessinés au poster, au manuel ni
+au DTD du système 70 (le 1458 et le 9663 figurent au système 76, voir
+[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md)). Le
+0140 reçoit le renfort 9111 (Iz 2,60) en 2008 comme sur les plans de combinaison AluClip du
+manuel (voir [Plans de combinaison AluClip du système 70](/profiles/systeme-70-aluclip-plans-de-combinaison.md)),
+mais le V600 sur sa planche du manuel et au poster ; le 1547 est coté 12,9 mm en 2008, 12,7 mm au
+poster — entrée **CTR-71** du registre
+[Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
+
 # Cotes des meneaux et traverses
 
 Le meneau (vertical) et la traverse (horizontale) divisent un dormant ; la traverse
@@ -844,6 +1121,69 @@ p. 19). La traverse 6126 est la seule rangée sous « KBE e.MOTION » ; le DTD n
 140 mm sur le 6127 (**VER-37**). L'assemblage mécanique pour angle
 variable 9F39 est dessiné sous le 2425 — voir
 [Assemblages du système 70](/profiles/systeme-70-assemblages.md).
+
+## Meneaux et traverses des plans e.VOLUTION de 2008
+
+Le classeur KÖMMERLING de 2008 (registre 1.4, planches « Meneaux/traverses ») dessine quatre
+meneaux en coupe, à l'échelle 1:1, chacun avec son tableau « Renfort | Iz » et, en dessous, la
+liste des pièces d'assemblage écrites sous leur référence. Chaque coupe porte en haut l'épaisseur
+de 70 mm, à gauche la largeur totale et à droite la décomposition aile + clair + aile. Cotes en
+mm [2 p. 22-23].
+
+| Profilé | Désignation complète | Épaisseur (mm) | Largeur totale, à gauche (mm) | Décomposition droite (mm) | Renfort du tableau | Iz (cm⁴) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| 6127 | F91-15- 6127 | 70 | 80 | 20 + 40 + 20 | V603 | 3,00 | 22 | ![Meneau 6127](/assets/profiles/systeme70/meneaux/meneau-6127-evo2008.png) |
+| 2425 | F95-15- 2425 | 70 | 90 | 20 + 50 + 20 | 9132 | 9,10 | 22 | ![Meneau 2425](/assets/profiles/systeme70/meneaux/meneau-2425-evo2008.png) |
+| 2427 | F95-15- 2427 | 70 | 115 | 20 + 75 + 20 | 9119 | 8,70 | 23 | ![Meneau 2427](/assets/profiles/systeme70/meneaux/meneau-2427-evo2008.png) |
+| 2469 | F95-15- 2469 | 70 | 68 | 20 + 28 + 20 | V081 | 1,30 | 23 | ![Meneau 2469](/assets/profiles/systeme70/meneaux/meneau-2469-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 22 et 23)
+
+Les pièces écrites sous chaque meneau, dans l'ordre et les termes de la planche ; leur mise en
+œuvre est décrite dans
+[Assemblage mécanique du meneau et de la traverse](/procedures/assemblage-meneau-traverse-systeme-70.md)
+[2 p. 22-23] :
+
+| Meneau | Référence | Désignation sur la planche |
+| --- | --- | --- |
+| 6127 | 9F27 | Patin d'étancheité |
+| 6127 | 9714 | Equerre de feuillure |
+| 6127 | 9714 | Gabarit de perçage |
+| 2425 | 9316 | Assemblage mécanique en T |
+| 2425 | 9317 | Assemblage mécanique en croix |
+| 2425 | 9714 | Equerre de fond de feuillure |
+| 2425 | 9719 | Patin pour équerre fond de feuillure |
+| 2425 | 9918 | Gabarit de perçage |
+| 2425 | 9518 | Chasse goupille |
+| 2427 | 9B54 | Assemblage mécanique en T |
+| 2427 | 9B52 | Assemblage mécanique en croix |
+| 2427 | 9714 | Equerre de fond de feuillure |
+| 2427 | 9B89 | Patin pour équerre fond de feuillure |
+| 2427 | 9918 | Gabarit de perçage |
+| 2427 | 9518 | Chasse goupille |
+| 2469 | 9C69 | Assemblage mécanique en T |
+| 2469 | 9714 | Equerre de fond de feuillure |
+| 2469 | 9B56 | Patin pour équerre fond de feuillure |
+| 2469 | 9918 | Gabarit de perçage |
+| 2469 | 9518 | Chasse goupille |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 22 et 23)
+
+La référence 9714 est écrite deux fois sous le 6127, une fois « Equerre de feuillure », une fois
+« Gabarit de perçage » — entrée **INC-212** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md). Le renfort 9119 du 2427 porte
+l'Iz de 8,70 cm⁴ que le poster donne au V290, et le DTD désigne ce renfort « 9119 ou V290 »
+(voir *Renforts du DTD*). Le 2427 est dessiné en 2008 avec deux ailes de 20 mm ; le poster, le
+manuel et le DTD le dessinent avec une seule (**CTR-71**). Le **2469**, de 68 mm de large, n'est
+dessiné ni au poster, ni au manuel, ni au DTD ; il porte le renfort V081 de la traverse
+d'ouvrant 6126, de même largeur. Le meneau 6157 n'est pas dessiné dans le registre 1.4 de 2008.
+
+Le tableau des sets d'assemblage de la planche « Accessoires » du même classeur (p. 47) donne
+pour ces quatre meneaux des pièces en partie différentes de ces listes — 9718.3 au lieu de 9714
+pour l'équerre de feuillure du 6127, 9B51 au lieu de 9B54 pour l'assemblage en T du 2427 et le
+gabarit 9B44 pour le T et la croix du 2427 — entrée **INC-213** ; ce tableau est sur
+[Assemblages du système 70](/profiles/systeme-70-assemblages.md), *Sets d'assemblage des meneaux
+(p. 47)* [2 p. 47].
 
 # Autres profilés dessinés sur la planche
 
@@ -1021,8 +1361,7 @@ M780/M781/M782 [4 p. 4 ; 3 p. 25]. Les joints du système 70 sont dans
 
 [1] [Mise en œuvre Système 70 Plateforme, profine, version septembre 2023](raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf), p. 2-39 et 50
 
-[2] Système e.VOLUTION, plan des profilés, système F 91, édition août 2008 —
-`raw/profine-plans-profiles-e-volution-2008-08.pdf`, p. 1
+[2] [Système e.VOLUTION, plan des profilés, système F 91, édition août 2008](raw/profine-plans-profiles-e-volution-2008-08.pdf), p. 1-6, 8-23 et 47
 
 [3] DTD n° DBV-24-6/16-2335_V5, système e.XCLUSIVE, e.MOTION, e.VOLUTION —
 `raw/dtd-6-16-2335-v5-e-volution.pdf`, p. 14 à 18, 21, 23 et 25

@@ -13,9 +13,15 @@ sources:
     id: roto-nx-ksr-montage-imo-180
     title: Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2
     last_modified: 2022-11-30
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    id: roto-nx-catalogue-ctl-105
+    title: Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023
+    last_modified: 2023-06-30
 source_pages:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     pages: 64-65, 102-103
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    pages: 41, 71
 generated:
   by: process:claude-code
   at: 2026-09-20T00:30:00Z
@@ -37,6 +43,8 @@ configuration propre à ces formes, en sécurité de base, avec sa liste de piè
 | Largeur en feuillure du vantail (LFF) | 400 à 1300 mm |
 | Hauteur en feuillure du vantail (HFF) | 511 à 1900 mm |
 | Poids du vantail | 80 kg maximum |
+
+Autres valeurs de HFF minimale de la fenêtre cintrée : 500 mm [2 p. 41], 510 mm [2 p. 71] — entrée **CTR-112**, voir [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md).
 
 Dans les listes qui suivent, le nombre de galets de verrouillage d'une pièce est donné par sa
 lettre : **E** (galet excentrique réglable en pression d'appui), **V** (galet excentrique de
@@ -393,8 +401,11 @@ Les gâches (releveur, basculement, standard) se lisent au fichier gamme, hors d
 [1] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf.
 IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 64, 65, 102 et 103 (numérotation du PDF)
 
+[2] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 — `raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 41, 71 (numérotation du PDF)
+
 # Voir aussi
 
+- [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md)
 - [Roto NX](/quincaillerie/roto-nx.md)
 - [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)
 - [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md)

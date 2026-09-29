@@ -12,9 +12,15 @@ sources:
     id: profine-directives-generales-2023
     title: Directives générales profine, version janvier 2023
     last_modified: 2023-01-31
+  - resource: raw/profine-plans-profiles-e-volution-2008-08.pdf
+    id: profine-plans-e-volution-2008
+    title: Système e.VOLUTION, plan des profilés et manuel technique, système F 91, édition août 2008
+    last_modified: 2008-08-31
 source_pages:
   - resource: raw/profine-directives-generales-2023-01.pdf
     pages: 88-89, 111-113
+  - resource: raw/profine-plans-profiles-e-volution-2008-08.pdf
+    pages: 195-196
 generated:
   by: process:claude-code
   at: 2026-09-28T21:00:00Z
@@ -215,12 +221,72 @@ surtout le matin si l'humidité de l'air est élevée. Ce phénomène n'est pas 
 indice d'une très bonne isolation thermique de la vitre et il s'agit donc plutôt d'un critère de
 qualité particulier [1 p. 113].
 
+# Conseils d'entretien du classeur e.VOLUTION de 2008
+
+Le registre 5.1 « Directives générales » du classeur e.VOLUTION d'août 2008 (système 70, système
+F 91) donne ses propres conseils d'entretien, sur deux pages [2 p. 195-196]. Ils décrivent les
+menuiseries fabriquées à cette époque et restent ce qu'on applique à une fenêtre de cette
+génération en SAV.
+
+## Entretien des surfaces des profilés (2008)
+
+« Afin de préserver un état de surface impeccable et durable un nettoyage des profiles devient
+indispensable. Effectivement dans beaucoup de régions la pollution excessive de l'air encrasse la
+surface des profilés avec des dépots tenaces. Par conséquent, aussi bien pour le nettoyage qu'à
+titre préventif, nous conseillons d'utiliser régulièrement les produits ci-dessous. » [2 p. 195]
+
+| Produit | Profilés concernés |
+| --- | --- |
+| Köraclean extra | profilés PVC blancs, gris clair et beige |
+| Köraclean color | profilés PVC structurés et de couleur (« structures et de couleur ») |
+
+![Flacons Köraclean extra et Köraclean color (2008)](/assets/entretien/plans-e-volution-2008/koraclean-extra-et-color-evo2008.png)
+
+Les deux flacons de nettoyant, extra à gauche, color à droite.
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 195)
+
+**En aucun cas n'utilisez des produits agressifs tels que solvants ou autres soi-disant nettoyants
+PVC** ; préférez les produits conseillés. Par le non-respect de cette règle, toute responsabilité
+de KÖMMERLING sera exclue [2 p. 195].
+
+La version de 2023 réserve le KÖRACLEAN extra aux profilés blancs (tableau *Nettoyage* plus
+haut) ; celle de 2008 l'emploie aussi pour les profilés gris clair et beige.
+
+## Entretien des quincailleries (2008)
+
+Les fenêtres et portes-fenêtres sont équipées d'organes de rotation (OF/OB — ouvrant à la
+française, oscillo-battant) très sophistiqués. Afin d'assurer leur longévité, il faut huiler au
+moins une fois par an les parties marquées par une goutte d'huile sur le dessin ci-dessous.
+Nettoyer les parties visibles des quincailleries dans le dormant et l'ouvrant avec un chiffon
+légèrement humide [2 p. 196].
+
+![Points de graissage d'une ferrure OF/OB (2008)](/assets/entretien/plans-e-volution-2008/points-de-graissage-ferrure-of-ob-evo2008.png)
+
+Le dessin montre la ferrure d'un ouvrant déployée autour du cadre : les pièces de la traverse
+haute en haut, la poignée sur le montant gauche, les pièces d'angle et de pivot à droite, et un
+détail agrandi dans un cercle. Chaque goutte noire marque un point à lubrifier (légende
+« Lubrufier »).
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 196)
+
+**Attention :** le remplacement de certaines parties de ces quincailleries (par exemple le pivot
+bas ou le compas haut, simulés sur fond noir), le décrochage d'un ouvrant, ou des nettoyages
+internes de ces organes doivent impérativement être effectués par une société agréée. Ces
+directives sont valables pour tout type d'ouverture ou de quincaillerie qui n'est pas décrit ici
+[2 p. 196].
+
+C'est le croquis que le texte de 2023 annonce sans l'imprimer (**INC-93**).
+
 # Citations
 
 [1] [Directives générales profine, version janvier 2023](raw/profine-directives-generales-2023-01.pdf),
 registre 1.3.4 « Ferrure », p. 2 et 3 imprimées (PDF p. 88 et 89, version février 2023) et
 registre 1.3.9 « Utilisation, nettoyage et entretien », p. 1 à 3 imprimées (PDF p. 111 à 113,
 version janvier 2016)
+
+[2] [Système e.VOLUTION, plan des profilés et manuel technique, système F 91, édition août 2008](raw/profine-plans-profiles-e-volution-2008-08.pdf),
+registre 5.1 « Directives générales, conseils d'entretien », pages imprimées 3 et 4 (PDF p. 195 et 196)
 
 # Voir aussi
 

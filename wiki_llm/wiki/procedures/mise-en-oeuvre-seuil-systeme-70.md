@@ -619,4 +619,5 @@ registre 2.4.5, PDF p. 254 à 269
 - [Porte d'entrée du système 70](/procedures/porte-d-entree-systeme-70.md)
 - [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
 - [Mise en œuvre du seuil du système 76 Advanced](/procedures/mise-en-oeuvre-seuil-systeme-76.md)
+- [Seuil aluminium de porte 9C42 du système 70, classeur e.VOLUTION de 2008](/procedures/seuil-alu-9c42-systeme-70-evo2008.md)
 - [Mise en œuvre Système 70 Plateforme](/sources/profine-mise-en-oeuvre-systeme-70.md)

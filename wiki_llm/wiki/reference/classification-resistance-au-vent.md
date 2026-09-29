@@ -5,15 +5,21 @@ description: Les classes de pression de vent (P1, P2, P3) et de flèche relative
 tags: [norme, en-12211, en-12210, vent, fleche, classification, statique, reference]
 fournisseur: KÖMMERLING
 usage: chiffrage
-status: stable
+status: draft
 sources:
   - resource: raw/profine-directives-generales-2023-01.pdf
     id: profine-directives-generales-2023
     title: Directives générales profine, version janvier 2023
     last_modified: 2023-01-31
+  - resource: raw/profine-plans-profiles-e-volution-2008-08.pdf
+    id: profine-plans-e-volution-2008
+    title: Système e.VOLUTION, plan des profilés et manuel technique, système F 91, édition août 2008
+    last_modified: 2008-08-31
 source_pages:
   - resource: raw/profine-directives-generales-2023-01.pdf
     pages: 85-86
+  - resource: raw/profine-plans-profiles-e-volution-2008-08.pdf
+    pages: 155-156
 generated:
   by: process:claude-code
   at: 2026-09-28T19:00:00Z
@@ -89,7 +95,9 @@ admissible pour la classe de perméabilité à l'air revendiquée, spécifiée d
 
 **Note** : la classification revendiquée peut être déterminée à l'aide de l'essai de résistance au
 vent. Si le fabricant souhaite se prévaloir d'une classification inférieure, il peut le faire
-ainsi [1 p. 86].
+ainsi [1 p. 86]. Le classeur e.VOLUTION de 2008 écrit à la place : « La classification revendiquée
+peut être déterminée à l'aide de l'essai de perméabilité à l'air précédant l'essai de résistance
+au vent » (**CTR-84**) [2 p. 156].
 
 **Sous pression de vent P3** : des défauts tels qu'un gauchissement et/ou cintrage d'un élément de
 quincaillerie ou une fissuration d'éléments du dormant doivent être admis, à condition qu'aucune
@@ -117,14 +125,34 @@ classe de flèche relative normale [1 p. 86].
 de vent — voir tableau 1 — et la lettre correspond à la flèche relative normale — voir tableau 2
 [1 p. 86].
 
+# Même classification dans les plans e.VOLUTION de 2008
+
+Le registre 4.2 « Statique » du classeur e.VOLUTION d'août 2008 reproduit la même classification,
+en indiquant sous son NOTA que le document contractuel ayant servi pour établir ce dossier est la
+norme NF EN 12210 : même domaine d'application, mêmes relations P2 = 0,5 P1 et P3 = 1,5 P1, même
+tableau 1 des pressions de vent (classes 0 à 5 et E xxxx, P2 répétée 50 fois), même tableau 2 des
+flèches relatives (A < 1/150, B < 1/200, C < 1/300), mêmes exigences sous P1, P2 et P3, même
+tableau de classification globale (A1 à C5, AExxxx à CExxxx) [2 p. 155-156]. Le texte diffère
+sur la note de l'exigence sous P1 et P2 (**CTR-84**, ci-dessus). Le tableau de classification
+globale y porte le titre « Tableau 2 – Classification de la flèche relative normale », le même
+que le tableau des flèches, alors que le texte qui le précède l'appelle Tableau 3 (**INC-222**)
+[2 p. 156].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 155-156)
+
 # Citations
 
 [1] [Directives générales profine, version janvier 2023](raw/profine-directives-generales-2023-01.pdf),
 registre 1.3.3, p. 23 et 24 imprimées (PDF p. 85 et 86, version janvier 2016)
+
+[2] [Système e.VOLUTION, plan des profilés et manuel technique, système F 91, édition août 2008](raw/profine-plans-profiles-e-volution-2008-08.pdf),
+registre 4.2 « Statique », pages imprimées 18 et 19 (PDF p. 155 et 156)
 
 # Voir aussi
 
 - [Classification A\*E\*V\* par site](/reference/classification-aev-par-site.md)
 - [Labels et certifications](/certifications/labels-et-certifications.md)
 - [Directives générales profine](/sources/profine-directives-generales.md)
+- [Plans des profilés e.VOLUTION, août 2008](/sources/plans-profiles-e-volution-2008.md)
+- [Choix des fenêtres en fonction de leur exposition, 2008](/reference/choix-des-fenetres-exposition-au-vent-2008.md)
 - [profine](/fournisseurs/profine.md)

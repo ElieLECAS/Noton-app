@@ -218,7 +218,10 @@ extérieurs, DEO − 12 mm pour les battements intérieurs, DEO − 72 mm pour l
 [Cotes de débit du système 70](/profiles/systeme-70-cotes-de-debit.md#débit-des-battements). Le
 battement intérieur y est débité à DEO − 12 mm, contre « DEO - 6 mm » ici, et le 1578 est inclus
 avec les autres battements extérieurs alors qu'il porte ici un débit à DFO – 35 mm — entrée
-**INC-153**. Les deux valeurs restent affichées, aucune n'est retenue.
+**INC-153**. Les deux valeurs restent affichées, aucune n'est retenue. Le classeur e.VOLUTION de 2008
+débite le battement extérieur à DFO – 32 mm et fixe le battement intérieur par collage, clip
+éventuel, sans vis plot (**CTR-96**, **CTR-97**) : voir
+[Traitement du battement du système 70, 2008](/procedures/traitement-du-battement-systeme-70-evo2008.md).
 
 ## Ouvrants 6112 et 6113, battements 6130 et 6133
 
@@ -350,3 +353,4 @@ battement », p. 1 à 20 (PDF p. 213 à 232)
 - [Mise en œuvre des renforts du système 70](/procedures/mise-en-oeuvre-renforts-systeme-70.md)
 - [Traitement du battement du système 76 Advanced](/procedures/traitement-du-battement-systeme-76.md)
 - [Mise en œuvre Système 70 Plateforme](/sources/profine-mise-en-oeuvre-systeme-70.md)
+- [Traitement du battement du système 70, classeur e.VOLUTION de 2008](/procedures/traitement-du-battement-systeme-70-evo2008.md)

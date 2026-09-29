@@ -13,9 +13,15 @@ sources:
     id: roto-nx-ksr-montage-imo-180
     title: Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2
     last_modified: 2022-11-30
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    id: roto-nx-catalogue-ctl-105
+    title: Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023
+    last_modified: 2023-06-30
 source_pages:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     pages: 66-73, 101
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    pages: 48, 67
 generated:
   by: process:claude-code
   at: 2026-09-20T00:50:00Z
@@ -37,6 +43,8 @@ compas P à manœuvre assistée. Le manuel en donne la liste des pièces et la v
 | Hauteur en feuillure du vantail (HFF) | 530 à 1730 mm |
 | Poids du vantail | 50 kg maximum |
 | Force de fermeture | 1650 N |
+
+Autre valeur de HFF maximale : 1 600 mm [2 p. 48, 67] — entrée **CTR-111**, voir [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md).
 
 Dans les listes, le chiffre entouré est le repère de la pièce sur la vue éclatée ; la lettre
 après un nombre de galets donne leur type : **E** (galet excentrique réglable en pression
@@ -677,8 +685,11 @@ hors de ce corpus.
 IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 66 à 73 et
 101 (numérotation du PDF)
 
+[2] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 — `raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 48, 67 (numérotation du PDF)
+
 # Voir aussi
 
+- [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md)
 - [Roto NX](/quincaillerie/roto-nx.md)
 - [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)
 - [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md)

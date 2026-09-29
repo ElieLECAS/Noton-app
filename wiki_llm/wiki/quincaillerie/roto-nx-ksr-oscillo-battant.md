@@ -12,9 +12,15 @@ sources:
     id: roto-nx-ksr-montage-imo-180
     title: Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2
     last_modified: 2022-11-30
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    id: roto-nx-catalogue-ctl-105
+    title: Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023
+    last_modified: 2023-06-30
 source_pages:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     pages: 42-47, 94-96, 98-99, 104-105
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    pages: 57, 81, 123
 generated:
   by: process:claude-code
   at: 2026-09-20T00:00:00Z
@@ -28,7 +34,9 @@ L'*oscillo-battant* (OB) s'ouvre à la française et bascule en soufflet par la 
 pièces par repère et vue éclatée [1 p. 42-43].
 
 **Champs d'application** : largeur en feuillure du vantail 290 à 1 600 mm ; hauteur en feuillure
-du vantail 300 à 2 800 mm ; poids du vantail max. 130 ou 150 kg [1 p. 42].
+du vantail 300 à 2 800 mm ; poids du vantail max. 130 ou 150 kg [1 p. 42]. Autre valeur pour la
+même configuration : hauteur 280 à 2 800 mm, poids max. 150 kg [2 p. 57] — entrée **CTR-110**,
+voir [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md).
 
 **Veillez à limiter l'ouverture à soufflet des vantaux dont HFF < 500 mm à 80 mm !** [1 p. 43]
 
@@ -138,7 +146,9 @@ semi-fixe, manœuvrée par un levier ; les deux vantaux se rejoignent au *battem
 [glossaire](/reference/glossaire.md)) [1 p. 44-45].
 
 **Champs d'application** : largeur en feuillure du vantail 290 à 1 600 mm ; hauteur en feuillure
-du vantail 300 à 2 800 mm ; poids du vantail max. 130 ou 150 kg [1 p. 44].
+du vantail 300 à 2 800 mm ; poids du vantail max. 130 ou 150 kg [1 p. 44]. Autre valeur pour la
+ferrure de battement standard : hauteur 280 à 2 800 mm, poids max. 150 kg [2 p. 81] — entrée
+**CTR-110**, voir [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md).
 
 **Veillez à limiter l'ouverture à soufflet des vantaux dont HFF < 500 mm à 80 mm !** [1 p. 45]
 
@@ -247,7 +257,9 @@ Même fenêtre à deux vantaux sans meneau fixe, avec une poignée centrée : le
 adaptateur carré de 7 mm accompagne ce fouillot [1 p. 46-47].
 
 **Champs d'application** : largeur en feuillure du vantail 290 à 1 400 mm ; hauteur en feuillure
-du vantail 435 à 2 800 mm ; poids du vantail max. 130 ou 150 kg [1 p. 46].
+du vantail 435 à 2 800 mm ; poids du vantail max. 130 ou 150 kg [1 p. 46]. Autre valeur pour la
+ferrure de battement standard à poignée centrée / variable : largeur 290 à 1 600 mm, hauteur 370
+à 2 800 mm, poids max. 150 kg [2 p. 123] — entrée **CTR-113**, voir [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md).
 
 **Veillez à limiter l'ouverture à soufflet des vantaux dont HFF < 500 mm à 80 mm !** [1 p. 47]
 
@@ -699,8 +711,11 @@ crémone OB porte plusieurs lignes (hauteurs de poignée 563, 763 et 1 000), san
 IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 9, 21, 38,
 42 à 47, 94 à 96, 98, 99 et 104 à 105 (numérotation du PDF)
 
+[2] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 — `raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 57, 81, 123 (numérotation du PDF)
+
 # Voir aussi
 
+- [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md)
 - [Roto NX](/quincaillerie/roto-nx.md)
 - [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)
 - [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md)

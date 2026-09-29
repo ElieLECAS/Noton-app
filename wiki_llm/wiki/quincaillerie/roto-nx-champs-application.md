@@ -1,7 +1,7 @@
 ---
 type: Quincaillerie
 title: Champs d'application Roto NX
-description: Les largeurs, hauteurs et poids de vantail admissibles de la ferrure Roto NX selon le type d'ouverture et la classe de sécurité — tableaux, diagrammes d'application relevés courbe par courbe, positions des compas d'arrêt de la ferrure soufflet, forces de traction TBDK — avec la règle qui convertit l'épaisseur de vitrage en poids.
+description: Les largeurs, hauteurs et poids de vantail admissibles de la ferrure Roto NX selon le type d'ouverture et la classe de sécurité — tableaux, diagrammes d'application relevés courbe par courbe (rectangulaire, inclinée, cintrée, soufflet, paumelles à soufflet pour recouvrement d'ouvrant, confort, Designo), positions des compas d'arrêt de la ferrure soufflet, forces de traction TBDK — avec la règle qui convertit l'épaisseur de vitrage en poids.
 tags: [roto, roto-nx, abaque, champ-application, poids-vantail, cdr, rc2, designo, soufflet, cintre, tbdk, chiffrage]
 systeme: Roto NX
 fournisseur: ROTO
@@ -21,7 +21,7 @@ source_pages:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     pages: 9, 21-34, 36-37
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
-    pages: 34-36
+    pages: 14, 34-52
 generated:
   by: process:claude-code
   at: 2026-09-18T14:15:00Z
@@ -132,6 +132,19 @@ diagramme ; « hors champ » signifie que la LFF dépasse la verticale de la cou
 
 (schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 23)
 
+Le catalogue Roto NX pour profils PVC de juin 2023 imprime le même diagramme sous le titre
+« Ferrure OB pivotante / de battant pivotant fenêtre rectangulaire, 130 kg », sans les
+pictogrammes d'ouverture ni la phrase « Limitation du format de vantail » : mêmes trois courbes
+(60, 50 et 40 kg/m²), mêmes deux zones légendées, même droite basse. Relu courbe par courbe à 600
+et 900 dpi, il donne les valeurs du tableau ci-dessus aux écarts de lecture près (±25 mm) :
+verticale des 60 kg/m² à 1 350 mm de LFF, haut à 1 635 mm de HFF ; verticale des 50 kg/m² à
+1 480 mm, haut à 1 780 mm ; courbe des 40 kg/m² au bord droit vers 2 035 mm [2 p. 35]. Ses bornes
+chiffrées sont dans la section *Le catalogue de juin 2023 donne d'autres bornes* ci-dessous.
+
+![Diagramme d'application Roto NX, OB rectangulaire, 130 kg, catalogue 2023](/assets/quincaillerie/roto-nx-catalogue/diagrammes/diagramme-ob-rectangulaire-130-kg.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 35)
+
 ## Version 150 kg
 
 ![Diagramme d'application Roto NX, OB rectangulaire, 150 kg](/assets/quincaillerie/roto-nx-ksr/champs-application/diagramme-ob-rectangulaire-150-kg.png)
@@ -165,9 +178,121 @@ version 130 kg.
 
 (schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 24)
 
+Le catalogue Roto NX pour profils PVC de juin 2023 imprime, pour la version 150 kg, un diagramme
+à **trois courbes seulement : 60, 50 et 40 kg/m²**. La courbe des 80 kg/m² n'y figure pas ; les
+trois courbes imprimées suivent celles des 60, 50 et 40 kg/m² du tableau ci-dessus aux écarts de
+lecture près (relu à 600 dpi, ±25 mm : départ des 60 kg/m² vers 910 mm de LFF, verticale à
+1 350 mm, haut à 1 890 mm de HFF ; verticale des 50 kg/m² à 1 480 mm, haut à 2 055 mm ; courbe
+des 40 kg/m² au bord droit vers 2 070 mm). Sa légende est imprimée en allemand :
+« unzulässiger Anwendungsbereich » (champ d'application non autorisé) et « Zweitschere
+erforderlich » (2ᵉ compas nécessaire) [2 p. 36]. Pour un vitrage de 80 kg/m², le catalogue ne
+donne donc aucune courbe : entrée **CTR-106** ; la langue, entrée **INC-13**.
+
+![Diagramme d'application Roto NX, OB rectangulaire, 150 kg, catalogue 2023](/assets/quincaillerie/roto-nx-catalogue/diagrammes/diagramme-ob-rectangulaire-150-kg.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 36)
+
 La droite basse est tracée aux mêmes points sur les deux diagrammes, aux écarts de lecture près.
 Les verticales des courbes descendent jusqu'à cette droite ; sous elle, le champ est non autorisé
 [1 p. 23-24].
+
+# Diagrammes d'application, ferrure OB, fenêtre inclinée
+
+La ferrure OB (oscillo-battante) de fenêtre inclinée, côté paumelles P, a un diagramme par angle
+d'inclinaison : 25°, 40°, 50° et −15°. Pour les quatre angles, le tableau « Champ
+d'application » renvoie au diagramme pour la LFF et la HFF (« voir diagramme ») et borne le
+poids d'ouvrant à **80 kg maximum**, en sécurité de base ; chaque page rappelle la conversion
+« 1 mm/m² épaisseur de vitre ≙ 2,5 kg » et de respecter la directive TBDK pour les forces de
+traction [2 p. 37-40].
+
+Chaque diagramme porte la LFF en abscisse (de 0 à 1 300 mm, graduée 500 et 1 000, quadrillée tous
+les 100 mm) et la HFF en ordonnée (de 250 ou 350 mm à 2 400 mm, graduée tous les 500 mm). Le
+champ admis est le polygone gris, borné par des segments rouges ; le blanc quadrillé est le
+**champ d'application non autorisé**. Deux repères encadrent le diagramme : **[A] = côté
+crémone** en haut à gauche, **[B] = coté axe** en haut à droite. Un point rouge marque le
+sommet bas du polygone, sur son bord gauche, et deux flèches rouges en partent, l'une vers le
+haut le long du bord gauche, l'autre le long du bord bas. Aucune courbe par poids de vitrage n'est
+tracée. Le catalogue ne dit ni ce que mesure l'angle d'inclinaison, ni ce que signifient sur le
+diagramme les repères [A] et [B], le point et les flèches : entrée **VER-121** [2 p. 37-40].
+
+Les sommets de chaque polygone sont relevés ci-dessous ; « chiffré » signifie que la valeur est
+imprimée sur le diagramme, « lu » qu'elle est lue sur le quadrillage (précision ±25 mm). Les côtés
+du polygone sont des segments droits.
+
+## Angle d'inclinaison 25°
+
+![Diagramme d'application Roto NX, OB fenêtre inclinée 25°](/assets/quincaillerie/roto-nx-catalogue/diagrammes/diagramme-ob-inclinee-25.png)
+
+| Sommet du champ admis | LFF (mm) | HFF (mm) | Origine des valeurs |
+| --- | --- | --- | --- |
+| bas gauche, sur le point rouge | 265 | 470 | LFF chiffrée, HFF lue sur le bord bas |
+| haut gauche | 265 | 2400 | LFF chiffrée, HFF lue (bord haut) |
+| haut droit | 1000 | 2400 | lus |
+| droit, fin du côté oblique | 1300 | 1600 | LFF lue (bord droit), HFF chiffrée |
+| bas droit | 1300 | 960 | LFF lue (bord droit), HFF chiffrée |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 37)
+
+Le bord bas du champ est le segment rouge qui part de (LFF 0, HFF 350, chiffrée) et monte jusqu'au
+bas droit (1 300 × 960). Un second segment rouge, hors du champ, part du bord gauche du
+diagramme à 2 280 mm de HFF (chiffrée) et rejoint le sommet haut gauche (265 × 2 400) [2 p. 37].
+
+## Angle d'inclinaison 40°
+
+![Diagramme d'application Roto NX, OB fenêtre inclinée 40°](/assets/quincaillerie/roto-nx-catalogue/diagrammes/diagramme-ob-inclinee-40.png)
+
+| Sommet du champ admis | LFF (mm) | HFF (mm) | Origine des valeurs |
+| --- | --- | --- | --- |
+| bas gauche, sur le point rouge | 225 | 535 | LFF chiffrée, HFF lue sur le bord bas |
+| haut gauche | 225 | 2400 | LFF chiffrée, HFF lue (bord haut) |
+| haut droit | 1000 | 2400 | lus |
+| droit, fin du côté oblique | 1300 | 1600 | LFF lue (bord droit), HFF chiffrée |
+| bas droit | 1300 | 1440 | LFF lue (bord droit), HFF chiffrée |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 38)
+
+Le bord bas part de (LFF 0, HFF 350, chiffrée) et monte jusqu'au bas droit (1 300 × 1 440). Le
+segment rouge hors du champ part du bord gauche à 2 215 mm de HFF (chiffrée) et rejoint le sommet
+haut gauche (225 × 2 400) [2 p. 38].
+
+## Angle d'inclinaison 50°
+
+![Diagramme d'application Roto NX, OB fenêtre inclinée 50°](/assets/quincaillerie/roto-nx-catalogue/diagrammes/diagramme-ob-inclinee-50.png)
+
+| Sommet du champ admis | LFF (mm) | HFF (mm) | Origine des valeurs |
+| --- | --- | --- | --- |
+| bas gauche, sur le point rouge | 200 | 585 | LFF chiffrée, HFF lue sur le bord bas |
+| haut gauche | 200 | 2400 | LFF chiffrée, HFF lue (bord haut) |
+| haut droit | 1000 | 2400 | lus |
+| pointe droite | 1230 | 1815 | chiffrés |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 39)
+
+Le champ n'atteint pas le bord droit du diagramme (1 300 mm) : le côté oblique descend du haut
+droit jusqu'à la pointe (1 230 × 1 815), d'où le bord bas redescend jusqu'à (LFF 0, HFF 350,
+chiffrée). Le segment rouge hors du champ part du bord gauche à 2 180 mm de HFF (chiffrée) et
+rejoint le sommet haut gauche (200 × 2 400) [2 p. 39].
+
+## Angle d'inclinaison −15°
+
+![Diagramme d'application Roto NX, OB fenêtre inclinée −15°](/assets/quincaillerie/roto-nx-catalogue/diagrammes/diagramme-ob-inclinee-moins-15.png)
+
+| Sommet du champ admis | LFF (mm) | HFF (mm) | Origine des valeurs |
+| --- | --- | --- | --- |
+| bas gauche, sur le point rouge | 280 | 280 | LFF chiffrée, HFF lue sur le bord bas |
+| haut gauche | 280 | 2325 | LFF chiffrée, HFF lue, égale au 2 325 imprimé dans le coin haut gauche |
+| haut, cassure du bord supérieur | 1120 | 2100 | chiffrés |
+| droit, fin du côté oblique | 1300 | 1600 | LFF lue (bord droit), HFF chiffrée |
+| bas droit | 1300 | 250 | LFF lue (bord droit), HFF chiffrée (bord bas) |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 40)
+
+Sur ce diagramme, le bord supérieur du champ descend : il part du coin haut gauche du diagramme
+(LFF 0, HFF 2 400 lue), passe par le sommet haut gauche (280 × 2 325) et la cassure
+(1 120 × 2 100), puis le côté oblique descend jusqu'à 1 600 mm de HFF au bord droit. Le bord bas
+part de (LFF 0, HFF 350, chiffrée), descend jusqu'au point rouge (280 × 280) et atteint le bord
+bas du diagramme, 250 mm de HFF, vers 400 mm de LFF (lu) ; de là, le champ est borné par le bord
+bas jusqu'à 1 300 mm. [2 p. 40]
 
 # Diagramme d'application, ferrure OB, fenêtre cintrée
 
@@ -195,6 +320,22 @@ trois courbes se rejoignent au coin bas du champ (LFF 500, HFF 500).
 | 20 kg/m² | 1300 × 1900 | 1300 × 1600 | 1200 × 950 | 500 × 500 |
 
 (schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 25)
+
+Le catalogue Roto NX pour profils PVC de juin 2023 imprime ce diagramme et son champ
+d'application **en allemand**, sous le titre « Drehkipp-Beschlag Rundbogenfenster » (ferrure
+oscillo-battante de fenêtre cintrée) : FFB (largeur de fond de feuillure) 400 – 1 300 mm, FFH
+(hauteur de fond de feuillure) 500 – 1 900 mm, FG (poids de vantail) max. 80 kg, en
+« Grundsicherheit » (sécurité de base) ; la note « Der Radius (R) des Rundbogenfensters muss der
+Hälfte der FFB entsprechen » est la règle du rayon ci-dessus. Relu à 450 dpi, le diagramme donne
+les mêmes sommets que le tableau (850, 950 et 900 mm pour les 40 kg/m² ; 1 100, 1 100 et 1 000 mm
+pour les 30 kg/m² ; 1 300, 1 300 et 1 200 mm pour les 20 kg/m², aux hauteurs 1 900, 1 600 et
+950 mm) et les mêmes quatre zones, légendées « unzulässiger Anwendungsbereich »,
+« Zweitschere erforderlich » (gris clair), « Zweitschere möglich aber nicht erforderlich » (gris
+foncé) et « Zweitschere nicht möglich » (hachures) [2 p. 41]. La langue : entrée **INC-13**.
+
+![Diagramme d'application Roto NX, OB cintré, catalogue 2023](/assets/quincaillerie/roto-nx-catalogue/diagrammes/diagramme-ob-cintre.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 41)
 
 # Diagramme d'application, ferrure soufflet, fenêtre rectangulaire
 
@@ -236,6 +377,21 @@ correspondance de la seconde ligne n'est pas écrite (entrée **INC-192**) [1 p.
 
 **Compas d'entrebâillement et de nettoyage** : recommandé ; nécessaire en cas d'imposte (selon
 RAL RG 607 / 12). Compas d'entrebâillement et de nettoyage jusqu'à 60 kg maxi [1 p. 26].
+
+Le catalogue Roto NX pour profils PVC de juin 2023 imprime le même diagramme sous le titre
+« Ferrure soufflet fenêtre rectangulaire » (relu à 400 dpi : cotes 621 et 560, plages [A] et [B],
+limite oblique jusqu'à environ 800 mm de HFF au bord droit, mêmes zones), avec la même légende,
+où le compas est appelé **compas soufflet** : « 2 compas soufflet latéralement », « 1 compas
+soufflet en haut ou 2 compas soufflet latéralement », « 2 compas soufflet en haut ou 2 compas
+soufflet latéralement ». Son tableau donne les mêmes bornes (LFF 310 – 2 400 mm, HFF
+290 – 1 200 mm, poids d'ouvrant max. 80 kg, sécurité de base), le même encadré sur le compas
+d'entrebâillement et de nettoyage, et imprime la note du renvoi [1] de la LFF : « LFF 310 –
+449 mm uniquement avec crémone verrou » (**INC-193**) [2 p. 42]. La légende des plages y porte
+aussi deux fois « [A] » (**INC-192**).
+
+![Diagramme d'application Roto NX, soufflet rectangulaire, catalogue 2023](/assets/quincaillerie/roto-nx-catalogue/diagrammes/diagramme-soufflet-rectangulaire.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 42)
 
 ## Positions des compas d'arrêt de la ferrure soufflet
 
@@ -297,6 +453,27 @@ position vaut 60 kg et laquelle 80 kg n'est pas lisible (entrée **INC-191**).
 **L'utilisation de compas d'arrêt latéral en liaison avec le verrouilleur médian VM 200 n'est pas
 possible** [1 p. 27].
 
+Le catalogue Roto NX pour profils PVC de juin 2023 imprime la même planche (relue à 500 dpi :
+mêmes vantaux dessinés, mêmes symboles, mêmes repères [A] à [E] et mêmes teintes), avec une
+légende dont les trois symboles sont ceux de la planche (**INC-191**) [2 p. 43] :
+
+| Symbole de la planche | Position |
+| --- | --- |
+| ● point noir (sur les côtés du vantail) | Position possible compas soufflet jusqu'à 80 kg |
+| ○ cercle (en haut du vantail) | Position alternative compas soufflet jusqu'à 80 kg |
+| △ triangle (en haut du vantail) | Position alternative compas soufflet jusqu'à 60 kg |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 43)
+
+Les notes [A] à [E] y sont les mêmes, le compas étant appelé compas soufflet (« [A] au-delà de
+501 mm, compas soufflet possible en haut uniquement avec crémone verrou »), sauf la note [B] :
+« au-delà de 621 mm, compas soufflet en haut possible avec crémone dans le chant et crémone
+OB », là où le manuel écrit « compas pêne demi-tour » — entrée **CTR-107**. L'encadré INFO est le
+même : « Utilisation de compas soufflet latéral en liaison avec verrouilleur VM 200 non
+possible » [2 p. 43].
+
+![Positions des compas soufflet, catalogue 2023](/assets/quincaillerie/roto-nx-catalogue/diagrammes/soufflet-positions-compas.png)
+
 # Cotes d'ouverture de la ferrure soufflet par hauteur de vantail
 
 Le dessin montre en coupe verticale un vantail soufflet basculé (gris, l'ouvrant) sur son dormant
@@ -324,6 +501,125 @@ Correspondance avec la légende du dessin : [A] position palier de vantail, [B] 
 dormant, [C] ouverture position d'entrebâillement, [D] angle d'ouverture position
 d'entrebâillement, [E] angle d'ouverture position de nettoyage, [F] hauteur de feuillure de vantail
 (HFF) [1 p. 28].
+
+Le catalogue Roto NX pour profils PVC de juin 2023 imprime le même dessin et le même tableau (cinq
+tranches de HFF, mêmes types et mêmes valeurs) ; sur son dessin, les cotes portent leurs lettres
+[A] à [F], et le palier de dormant est coté : **42** mm entre ses deux vis extrêmes, **28,5** mm
+entre l'axe de son trou central et celui de sa vis basse, la cote [B] partant de cet axe central.
+Sa légende écrit « [A] Position palier d'ouvrant » et « [F] Hauteur fond de feuillure d'ouvrant
+(HFF) » [2 p. 44].
+
+![Cotes d'ouverture de la ferrure soufflet, catalogue 2023](/assets/quincaillerie/roto-nx-catalogue/diagrammes/soufflet-cotes-ouverture.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 44)
+
+# Diagramme d'application, paumelle à soufflet pour recouvrement d'ouvrant, ouvrants pivotants
+
+La *paumelle à soufflet pour recouvrement d'ouvrant* est la paumelle de la ferrure soufflet côté
+paumelles P, posée sur le recouvrement de l'ouvrant (la partie de l'ouvrant qui recouvre le
+dormant, voir le [glossaire](/reference/glossaire.md)). Section 2.2.5 du catalogue, intitulée
+« Bandeau de recouvrement d'ouvrant pivotant fenêtre rectangulaire » : **Paumelle à soufflet pour
+recouvrement d'ouvrant oscillo-battant P dans ouvrants pivotants uniquement en association avec
+pivot d'angle / palier d'angle** [2 p. 45].
+
+| Grandeur | Sécurité de base |
+| --- | --- |
+| Largeur de feuillure d'ouvrant (LFO) | 290 – 1 200 mm |
+| Hauteur de feuillure d'ouvrant (HFO) | 280 – 2 400 mm |
+| Poids d'ouvrant (PV) | max. 80 kg |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 45)
+
+![Diagramme d'application, paumelle à soufflet pour recouvrement d'ouvrant, ouvrants pivotants](/assets/quincaillerie/roto-nx-catalogue/diagrammes/diagramme-soufflet-recouvrement-ouvrant-pivotant.png)
+
+Le diagramme porte la largeur en abscisse (290 à 1 200 mm, graduée 500 et 1 000, quadrillée tous
+les 100 mm) et la hauteur en ordonnée (280 à 2 400 mm, graduée 500, 1 000, 1 500 et 2 000,
+quadrillée tous les 100 mm). Trois courbes rouges, 50, 40 et 30 kg/m², bornent à gauche et en
+dessous d'elles les formats admis pour ce poids de vitrage ; une droite noire borne le champ par
+le bas. La seule zone légendée est le **champ d'application non autorisé** (blanc quadrillé), au
+bas à droite sous la droite noire et en haut à droite au-delà de la courbe des 30 kg/m². La
+conversion est écrite « 1 mm/m² d'épaisseur de vitre = 2,5 kg » [2 p. 45].
+
+Relevé à 500 dpi tous les 100 mm de largeur, précision de lecture ±25 mm ; « 2400 » est le bord
+haut du diagramme ; la droite basse est un segment droit, lu à chaque graduation. Les courbes des 50 et 40 kg/m² sont brisées aux points
+(700 × 2 000), (800 × 1 800) et (900 × 1 600) pour la première, (800 × 2 300), (900 × 2 000) et
+(1 000 × 1 800) pour la seconde.
+
+| Largeur LFO (mm) | Hauteur maxi 50 kg/m² (mm) | Hauteur maxi 40 kg/m² (mm) | Hauteur maxi 30 kg/m² (mm) | Hauteur mini, droite basse (mm) |
+| --- | --- | --- | --- | --- |
+| 300 | 2400 | 2400 | 2400 | bord bas |
+| 400 | 2400 | 2400 | 2400 | bord bas |
+| 500 | 2400 | 2400 | 2400 | bord bas |
+| 600 | 2400 | 2400 | 2400 | 280 |
+| 700 | 2000 | 2400 | 2400 | 360 |
+| 800 | 1800 | 2300 | 2400 | 445 |
+| 900 | 1600 | 2000 | 2400 | 525 |
+| 1000 | 1440 | 1800 | 2400 | 610 |
+| 1100 | 1310 | 1650 | 2200 | 690 |
+| 1200 | 1200 | 1500 | 2000 | 770 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 45)
+
+La courbe des 50 kg/m² part du bord haut à 600 mm de largeur, celle des 40 kg/m² vers 770 mm,
+celle des 30 kg/m² à 1 000 mm ; la droite basse part du bord bas (280 mm) à 600 mm de largeur
+[2 p. 45].
+
+# Diagramme d'application, paumelle à soufflet pour recouvrement d'ouvrant basculant
+
+Section 2.2.6 du catalogue : paumelle à soufflet pour recouvrement d'ouvrant basculant (un ouvrant
+qui bascule seulement, sans ouverture à la française), fenêtre rectangulaire, côté paumelles P
+[2 p. 46].
+
+| Grandeur | Sécurité de base |
+| --- | --- |
+| Largeur fond de feuillure d'ouvrant (LFF) | 180 – 1 800 mm [2] |
+| Hauteur fond de feuillure d'ouvrant (HFF) | 290 – 1 200 mm |
+| Poids d'ouvrant (PO) | 60 ou 80 kg max. |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 46)
+
+Le renvoi [2] de la LFF a sa note en pied de page : **LFF 180 – 449 mm uniquement avec crémone
+verrou**. Sous le diagramme, deux plages de largeur : [A] jusqu'à 1 200 mm, portant « ≤ 60 kg »,
+et [B] de 1 200 à 1 800 mm, portant « ≤ 80 kg » ; la légende écrit ici **[A] = 2 paumelles au
+minimum, [B] = 3 paumelles au minimum** [2 p. 46].
+
+![Diagramme d'application, paumelle à soufflet pour recouvrement d'ouvrant basculant](/assets/quincaillerie/roto-nx-catalogue/diagrammes/diagramme-soufflet-recouvrement-ouvrant-basculant.png)
+
+Le diagramme porte la LFF en abscisse (180 à 1 800 mm, graduée 500, 1 000 et 1 500, cote **621**
+portée) et la HFF en ordonnée (290 à 1 200 mm, graduée 500 et 1 000, cote **560** portée),
+quadrillées tous les 100 mm. Il se lit comme celui de la ferrure soufflet : la teinte dit quels
+compas soufflet poser, les hachures quel compas d'entrebâillement et de nettoyage ajouter ; la
+limite oblique part du coin haut à 1 200 mm de LFF (1 200 mm de HFF) et descend jusqu'à 1 000 mm
+de HFF au bord droit (1 800 mm de LFF), relevée à 450 dpi à ±25 mm [2 p. 46].
+
+<table>
+<thead>
+<tr><th>Zone du diagramme</th><th>LFF (mm)</th><th>HFF (mm)</th><th>Teinte : compas soufflet</th><th>Hachures : compas d'entrebâillement et de nettoyage</th></tr>
+</thead>
+<tbody>
+<tr><td>gauche, haut</td><td>jusqu'à 621</td><td>560 à 1200</td><td>2 compas soufflet sur le côté</td><td>supplémentaire</td></tr>
+<tr><td>gauche, bas</td><td>jusqu'à 621</td><td>jusqu'à 560</td><td>2 compas soufflet sur le côté</td><td>-</td></tr>
+<tr><td>milieu, haut</td><td>621 à 1200</td><td>560 à 1200</td><td>1 compas soufflet en haut ou 2 compas soufflet latéralement</td><td>supplémentaire</td></tr>
+<tr><td>milieu, bas</td><td>621 à 1200</td><td>jusqu'à 560</td><td>1 compas soufflet en haut ou 2 compas soufflet latéralement</td><td>additionnel en cas de compas soufflet en haut</td></tr>
+<tr><td>droite, haut</td><td>1200 à 1800</td><td>560 jusqu'à la limite oblique</td><td>2 compas soufflet en haut ou 2 compas soufflet latéralement</td><td>supplémentaire</td></tr>
+<tr><td>droite, bas</td><td>1200 à 1800</td><td>jusqu'à 560</td><td>2 compas soufflet en haut ou 2 compas soufflet latéralement</td><td>additionnel en cas de compas soufflet en haut</td></tr>
+<tr><td>au-dessus de la limite oblique</td><td>1200 à 1800</td><td>de la limite oblique à 1200</td><td>champ d'application non autorisé</td><td>-</td></tr>
+</tbody>
+</table>
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 46)
+
+**Compas d'entrebâillement et de nettoyage** : recommandé ; nécessaire en cas d'imposte (selon
+RAL RG 607 / 12). Compas d'entrebâillement et de nettoyage jusqu'à 60 kg maxi [2 p. 46].
+
+Le dessin des cotes d'ouverture et son tableau (positions des paliers, ouverture et angles par
+tranche de HFF, types 1 et 2) sont imprimés à l'identique de ceux de la ferrure soufflet, section
+*Cotes d'ouverture de la ferrure soufflet par hauteur de vantail* ci-dessus : mêmes cinq tranches,
+mêmes valeurs, mêmes cotes 42 et 28,5 au palier de dormant [2 p. 47].
+
+![Cotes d'ouverture, paumelle à soufflet pour recouvrement d'ouvrant basculant](/assets/quincaillerie/roto-nx-catalogue/diagrammes/soufflet-recouvrement-ouvrant-basculant-cotes-ouverture.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 47)
 
 # Diagramme d'application, fenêtre confort
 
@@ -359,6 +655,18 @@ diagramme, « 530 » son bord bas.
 
 (schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 29)
 
+Le catalogue Roto NX pour profils PVC de juin 2023 (section 2.2.7 « Fenêtre confort ») imprime le
+même diagramme et les mêmes bornes (LFF 520 – 1 400 mm, HFF 530 – 1 600 mm, poids d'ouvrant
+max. 50 kg, sécurité de base). Relu à 600 dpi, il donne les mêmes verticales aux écarts de lecture
+près (905, 1 005 et 1 150 mm de LFF pour les 50, 40 et 30 kg/m², hauts de verticale vers 1 060,
+1 175 et 1 345 mm de HFF ; courbe des 20 kg/m² d'environ 1 390 mm en haut à environ 1 365 mm en
+bas) et la même droite basse, de 800 mm de LFF au bord bas jusqu'à 930 mm de HFF au bord droit
+[2 p. 48].
+
+![Diagramme d'application Roto NX, fenêtre confort, catalogue 2023](/assets/quincaillerie/roto-nx-catalogue/diagrammes/diagramme-fenetre-confort.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 48)
+
 # Cotes des champs d'application, côté paumelles Designo II
 
 Le côté paumelles Designo (Designo II) a ses propres champs d'application, un par diagramme, en
@@ -379,6 +687,36 @@ le poids « max. 80 – 150 kg » [1 p. 30-32].
 
 **Attention : si le poids de vantail est supérieur à 130 kg, réduire l'ouverture du compas à
 80 mm** [1 p. 32].
+
+Le catalogue Roto NX pour profils PVC de juin 2023 (section 2.3 « Côté paumelles Designo
+(BA 13) », diagrammes « Ferrure OB pivotante / de battant pivotant fenêtre rectangulaire ») donne
+les mêmes trois configurations **par classe de sécurité** : sécurité de base, CDR 1 N et
+CDR 2 / CDR 2 N [2 p. 49-51].
+
+| Configuration Designo (BA 13), catalogue 2023 | Classe de sécurité | Largeur fond de feuillure (mm) | Hauteur fond de feuillure (mm) | Poids d'ouvrant (kg) |
+| --- | --- | --- | --- | --- |
+| 80 kg | Sécurité de base | 330 – 1 400 | 280 – 2 600 | max. 80 |
+| 80 kg | CDR 1 N | 450 – 1 400 | 280 – 2 600 | max. 80 |
+| 80 kg | CDR 2 / CDR 2 N | 450 – 1 400 | 490 – 2 400 | max. 80 |
+| 100 kg | Sécurité de base | 600 – 1 400 | 400 – 2 600 | max. 100 |
+| 100 kg | CDR 1 N | 600 – 1 400 | 400 – 2 600 | max. 100 |
+| 100 kg | CDR 2 / CDR 2 N | 600 – 1 400 | 490 – 2 400 | max. 100 |
+| Report de charge 80 à 150 kg | Sécurité de base | 800 – 1 400 | 1 000 – 2 600 | 80 – 150 |
+| Report de charge 80 à 150 kg | CDR 1 N | 800 – 1 400 | 1 000 – 2 600 | 80 – 150 |
+| Report de charge 80 à 150 kg | CDR 2 / CDR 2 N | 800 – 1 400 | 1 000 – 2 400 | 80 – 150 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 49-51)
+
+En sécurité de base, les bornes du catalogue sont celles du manuel, sauf la **hauteur minimale de
+la version 100 kg : 400 mm au catalogue, 280 mm au manuel** — entrée **CTR-108**, non arbitrée : les deux
+valeurs restent valables chacune dans sa source. Sur le diagramme du catalogue, le bord gauche
+est tracé vers 400 mm de HFF. Les classes CDR 1 N et CDR 2 / CDR 2 N du côté Designo
+ne figurent que dans le catalogue. Pour le report de charge, le catalogue écrit : « Poids d'ouvrant
+> 130 kg : régler le limiteur de largeur de basculement du bras de compas sur 80 mm » [2 p. 51].
+
+Les trois diagrammes du catalogue sont ceux du manuel, sans les pictogrammes d'ouverture ; relus à
+450 et 600 dpi, ils donnent les valeurs des tableaux ci-dessous aux écarts de lecture près
+(±25 mm) [2 p. 49-51].
 
 Le montage du report de charge est décrit dans
 [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md).
@@ -412,6 +750,10 @@ lecture ±25 mm, « 2600 » étant le bord haut [1 p. 30].
 
 (schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 30)
 
+![Diagramme d'application Designo II, OF et OB, 80 kg, catalogue 2023](/assets/quincaillerie/roto-nx-catalogue/diagrammes/diagramme-designo-ob-80-kg.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 49)
+
 La courbe des 20 kg/m² part du bord haut vers 1 295 mm de LFF [1 p. 30].
 
 ## Designo II, OF et OB sans report de charge, 100 kg
@@ -430,6 +772,10 @@ HFF environ 2 410). Trois courbes, chacune devenant verticale jusqu'à la droite
 | 30 kg/m² | 1290 | - | 1365 | 2450 | 910 |
 
 (schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 31)
+
+![Diagramme d'application Designo II, OF et OB, 100 kg, catalogue 2023](/assets/quincaillerie/roto-nx-catalogue/diagrammes/diagramme-designo-ob-100-kg.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 50)
 
 Valeurs relevées à ±25 mm.
 
@@ -452,6 +798,10 @@ limite basse [1 p. 32] :
 
 (schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 32)
 
+![Diagramme d'application Designo II avec report de charge, catalogue 2023](/assets/quincaillerie/roto-nx-catalogue/diagrammes/diagramme-designo-ob-report-de-charge.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 51)
+
 Valeurs relevées à ±25 mm. La zone « 2ᵉ compas nécessaire » couvre 1 200 à 1 400 mm de LFF.
 
 # Diagramme d'application, ouvrant à soufflet, côté paumelles Designo
@@ -459,7 +809,9 @@ Valeurs relevées à ±25 mm. La zone « 2ᵉ compas nécessaire » couvre 1 200
 Champ d'application de l'ouvrant à soufflet côté paumelles Designo : LFF 450 à 1 400 mm, HFF 370 à
 1 200 mm, poids de vantail 80 kg maximum ; son diagramme et ses zones de compas sont sur
 [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md)
-[1 p. 33].
+[1 p. 33]. Le catalogue de juin 2023 (section 2.3.2 « Ferrure soufflet fenêtre rectangulaire »,
+côté paumelles Designo (BA 13)) donne les mêmes bornes ; la légende d'une de ses zones diffère de
+celle du manuel (**CTR-109**) [2 p. 52].
 
 # Le catalogue de juin 2023 donne d'autres bornes, et une classe de plus
 
@@ -481,6 +833,12 @@ qui ne sont pas celles du manuel de montage de novembre 2022.
 (schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 35 et 36)
 
 La classe CDR 3 ne figure que dans le catalogue ; le manuel de montage s'arrête à CDR 2 / CDR 2 N.
+
+Les champs d'application configuration par configuration (chapitre 3 du même catalogue, p. 57 à
+135) ne reprennent pas toujours ces bornes : HFF minimale de 600, 520 ou 490 mm en CDR 2 / CDR 2 N
+selon la crémone et le type de ferrure (entrée **INC-280**), bornes CDR 3 à une seule colonne
+490 – 1 400 mm (entrée **INC-281**) — voir [Aperçu des ferrures Roto NX, côté paumelles
+P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md).
 
 **Les deux documents ROTO ne donnent pas les mêmes bornes** sur quatre valeurs — hauteur de
 feuillure minimale, largeur maximale en CDR 1 N, hauteur maximale en CDR 1 N et en CDR 2. Entrée
@@ -518,8 +876,17 @@ fixation doit supporter sans s'arracher.
 Les valeurs indiquées sont données par référence au palier de compas. Elles sont également valables
 pour les paliers d'angle lorsque la fixation est réalisée selon le palier de compas. **Respecter la
 directive TBDK pour les forces de traction en fonction du poids de vantail** ; autres informations
-sur www.beschlagindustrie.de [1 p. 22]. Le catalogue de juin 2023 donne les mêmes dix valeurs
-[2 p. 34]. La TBDK borne aussi les poids d'ouvrant admissibles du système profine, voir
+sur www.beschlagindustrie.de [1 p. 22].
+
+Le catalogue Roto NX pour profils PVC de juin 2023 donne les mêmes dix valeurs (colonnes « Poids
+d'ouvrant » et « Force de traction en Newton (N) »), présentées comme un extrait de la directive
+TBDK de la Gütegemeinschaft Schlösser und Beschläge e. V., avec une obligation formulée
+autrement : **lors de la fixation de pièces de ferrure porteuses essentielles en matière de
+sécurité (côtés paumelles), le fabricant de fenêtres et de portes-fenêtres doit certifier les
+forces spécifiées conformément au tableau au moyen d'essais et les garantir sur son produit**.
+L'encadré « Respecter la directive TBDK pour les forces de traction en fonction du poids de
+vantail ! Autres informations sur www.beschlagindustrie.de » y est répété sous chaque diagramme
+d'application [2 p. 34-47]. La TBDK borne aussi les poids d'ouvrant admissibles du système profine, voir
 [Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md).
 
 # Cotes de dimensionnement des profilés
@@ -548,6 +915,16 @@ largeur de recouvrement - axe de ferrage » [1 p. 34].
 
 Le jeu de joint est écrit « 12 mm - 0,5 mm / + 1,5 mm » dans une cellule commune aux six systèmes
 [1 p. 34].
+
+Le catalogue Roto NX pour profils PVC de juin 2023 (section 1.1.5 « Système – PVC ») donne les
+mêmes six systèmes avec les mêmes cotes : jeu de feuillure [A] 12 mm pour les six, largeur de
+recouvrement [B] 18, 18, 20, 20, 21 et 22 mm, axe de ferrure [C] 9, 13, 9, 13, 13 et 13 mm. Le jeu y
+est écrit « 12 mm », sans tolérance. Sur son dessin, l'ouvrant est en gris, le dormant en rose
+saumon ; [A] et [B] sont cotés sous le dessin, [C] verticalement à sa gauche [2 p. 14].
+
+![Système PVC : jeu de feuillure A, largeur de recouvrement B, axe de ferrure C](/assets/quincaillerie/roto-nx-catalogue/informations/systeme-pvc-jeu-recouvrement-axe.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 14)
 
 Sous le dessin d'ensemble, trois détails agrandis donnent les cotes recommandées pour le
 dimensionnement des profilés [1 p. 34] :
@@ -628,7 +1005,7 @@ IMO_180_NX_FR_v2, novembre 2022 —
 `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 9, 21 à 37 (numérotation du PDF)
 
 [2] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 —
-`raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 34 à 36
+`raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 14 et 34 à 52
 
 # Voir aussi
 

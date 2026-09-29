@@ -531,6 +531,13 @@ les astérisques repèrent les préchambres à ventiler des dormants haut et bas
 
 (schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 211-212)
 
+## Règles de drainage et de décompression du classeur de 2008
+
+Les règles générales du classeur KÖMMERLING e.VOLUTION d'août 2008 (nombre de trous, entraxe de
+600 mm maxi, plage de 20 à 200 mm depuis les angles, décalage de 50 mm entre les trous de feuillure
+et de préchambre, variantes de décompression, ventilation des profilés filmés) sont sur
+[Directives générales de fabrication du système 70, 2008](/procedures/directives-generales-systeme-70-evo2008.md#drainage-et-décompression-registre-52).
+
 # Ce que le document ne dit pas
 
 - La cote de drainage par le bas des dormants autres que 6100, 6101 et 2502, dessinés seulement

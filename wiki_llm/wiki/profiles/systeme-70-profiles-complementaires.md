@@ -21,6 +21,10 @@ sources:
     id: profine-mise-en-oeuvre-systeme-70
     title: Mise en œuvre Système 70 Plateforme, profine, version septembre 2023
     last_modified: 2023-09-30
+  - resource: raw/profine-plans-profiles-e-volution-2008-08.pdf
+    id: profine-plans-e-volution-2008
+    title: Système e.VOLUTION, plan des profilés, système F 91, édition août 2008
+    last_modified: 2008-08-31
 source_pages:
   - resource: raw/poster-kommerling-70-complementaires-2025-03.pdf
     pages: 1
@@ -28,6 +32,8 @@ source_pages:
     pages: 20-22, 25
   - resource: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf
     pages: 42-56
+  - resource: raw/profine-plans-profiles-e-volution-2008-08.pdf
+    pages: 7, 24-44
 generated:
   by: process:claude-code
   at: 2026-09-28T16:30:00Z
@@ -1010,6 +1016,661 @@ non portée [3 p. 42-47].
 
 La colonne « Forme » décrit le dessin ; la planche ne la nomme pas.
 
+# Profilés complémentaires des plans e.VOLUTION de 2008
+
+Le classeur KÖMMERLING « Système e.VOLUTION, plan des profilés » d'août 2008 (système F 91)
+dessine les profilés complémentaires et leurs accessoires à l'échelle 1:1 ou 1:2 (l'échelle est
+imprimée dans le cartouche de chaque planche), chacun sous sa
+désignation complète : un préfixe (« F00-96- », « F91-75- ») suivi de la référence en gras.
+Les cotes sont en mm et ne sont pas nommées sur les planches : elles sont reprises ici par leur
+position sur le dessin. Une légende imprimée sous une référence est reprise telle quelle ; un
+tiret signifie qu'aucune cote ou légende n'est imprimée [4 p. 7].
+
+## Accessoires des dormants de rénovation (2008)
+
+La planche « Accessoires Dormants rénovation » (registre 1.1) réunit les profilés et les pièces
+qui habillent ou complètent un dormant de rénovation, c'est-à-dire un dormant posé sur l'ancien
+bâti conservé, dont l'aile vient recouvrir la menuiserie déposée. Deux coupes de dormant de
+rénovation sans référence sont dessinées en trait fin, à gauche et en bas à droite, pour situer
+les pièces ; trois pièces sont dessinées en perspective en haut [4 p. 7].
+
+![Planche des accessoires des dormants de rénovation, 2008](/assets/profiles/systeme70/accessoires/planche-accessoires-dormants-renovation-evo2008.png)
+
+La planche entière : en haut, les pièces 9F45 et 9F49 en perspective et, à droite, une
+perspective sans légende de deux profilés coupés d'onglet ; au centre, le clip 9F44 et les
+profilés 6145 et 6149 ; en bas, les profilés 0209, 6144, 0490 et 6143 ; dans la colonne de
+droite, les vis 9419, 9870 et 9B04 et la pièce 9447 avec son gabarit 9905 (schéma:
+raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 7).
+
+| Référence | Désignation complète | Légende sur la planche | Cotes portées (mm) | Dessin |
+| --- | --- | --- | --- | ---: |
+| 6145 | F00-96- 6145 | - | 22,1 de large hors tout en haut, dont 12 pour le retour supérieur ; 60 de haut à droite ; 25,6 de haut pour la partie basse, à gauche | ![Profilé 6145](/assets/profiles/systeme70/compensations/compensation-6145-evo2008.png) |
+| 6149 | F00-96- 6149 | - | 21,3 de large hors tout en haut, dont 11,2 pour le retour supérieur ; 60 de haut à droite ; 26,2 de haut pour la partie basse, à gauche | ![Profilé 6149](/assets/profiles/systeme70/compensations/compensation-6149-evo2008.png) |
+| 0209 | F00-62- 0209 | - | 54,4 de large ; 14 de haut | ![Profilé 0209](/assets/profiles/systeme70/compensations/compensation-0209-evo2008.png) |
+| 6144 | F90-96- 6144 | - | 12 de large ; 16 de haut | ![Profilé 6144](/assets/profiles/systeme70/compensations/compensation-6144-evo2008.png) |
+| 0490 | F44-96- 0490 | - | 55 de large ; 26 de haut | ![Profilé 0490 et équerre K490](/assets/profiles/systeme70/compensations/compensation-0490-evo2008.png) |
+| 6143 | F90-96- 6143 | - | 19 de large ; 29 de haut | ![Profilé 6143](/assets/profiles/systeme70/compensations/compensation-6143-evo2008.png) |
+| K490 | F00-84- K490 | Equerre de position pour 0490 | - | ![Profilé 0490 et équerre K490](/assets/profiles/systeme70/compensations/compensation-0490-evo2008.png) |
+| 9F45 | F91-75- 9F45 | - | - | ![Pièce 9F45](/assets/profiles/systeme70/accessoires/accessoire-9f45-evo2008.png) |
+| 9F49 | F91-75- 9F49 | - | - | ![Pièce 9F49](/assets/profiles/systeme70/accessoires/accessoire-9f49-evo2008.png) |
+| 9F44 | F91-75- 9F44 | - | - | ![Clip 9F44](/assets/profiles/systeme70/accessoires/accessoire-9f44-evo2008.png) |
+| 9419 | F00-83- 9419 | Tête PVC | - | ![Vis 9419](/assets/profiles/systeme70/accessoires/vis-9419-evo2008.png) |
+| 9870 | F00-83- 9870 | Tête metallique | - | ![Vis 9870](/assets/profiles/systeme70/accessoires/vis-9870-evo2008.png) |
+| 9447 | F00-75- 9447 | - | - | ![Pièce 9447 et gabarit 9905](/assets/profiles/systeme70/accessoires/accessoire-9447-9905-evo2008.png) |
+| 9905 | F00-70- 9905 | Gabarit de perçage | - | ![Pièce 9447 et gabarit 9905](/assets/profiles/systeme70/accessoires/accessoire-9447-9905-evo2008.png) |
+| 9B04 | F00-83- 9B04 | - | - | ![Vis 9B04](/assets/profiles/systeme70/accessoires/vis-9b04-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 7)
+
+La légende « Equerre de position pour 0490 » de la K490 est imprimée à l'intérieur du dessin du
+0490 ; la légende « Gabarit de perçage » du 9905 est imprimée sous la pièce 9447, qui est la
+seule dessinée. Les deux vis 9419 et 9870 sont dessinées à tête bombée et pointe foreuse, la
+9B04 à tête cruciforme [4 p. 7].
+
+Les 6143, 6144, 0490 et 6149 portent au manuel de mise en œuvre les titres « Compensation réno »
+(6143, 6144) et « Profilé d'habillage rénovation » (0490, 6149) — voir *Habillages du manuel* et
+*Compensations réno du manuel* ci-dessus. Le poster légende les vis plots du 6149 S073 (Tête
+métallique) et S074 (Tête PVC), références différentes des 9870 et 9419 de 2008. Les cotes du
+6149 ne sont pas les mêmes : 21,3 et 11,2 mm en 2008, 22 et 12 mm au poster et au manuel —
+entrée **CTR-68** du registre [Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
+Les profilés 6145 et 0209, la pièce 9F45 et la vis 9B04 ne sont dessinés ni au poster, ni au
+manuel, ni au DTD.
+
+## Parcloses des plans de 2008
+
+Les trois planches « Parcloses » du registre 1.5 (échelle 1:2) dessinent chaque parclose en
+coupe avec deux cotes seulement : sa largeur en haut et sa hauteur à droite. **Elles ne donnent
+pas l'épaisseur de vitrage que chaque parclose tient** ; cette épaisseur, pour la feuillure de
+54 mm, est dans le tableau *Parcloses* ci-dessus (poster de 2025). Les parcloses de la p. 26 sont dessinées avec leur joint de vitrage en gris, sans
+préfixe de désignation. Une ligne par parclose, cotes en mm ; un tiret signifie que la cote n'est
+pas portée [4 p. 24-26].
+
+| Parclose (plans 2008) | Désignation complète | Largeur (mm) | Hauteur (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 2419 | F00-35- 2419 | 11 | 22 | 24 | ![Parclose 2419](/assets/profiles/systeme70/parcloses/parclose-2419-evo2008.png) |
+| 2428 | F00-35- 2428 | 13 | 20 | 24 | ![Parclose 2428](/assets/profiles/systeme70/parcloses/parclose-2428-evo2008.png) |
+| 2429 | F00-35- 2429 | 15 | 20 | 24 | ![Parclose 2429](/assets/profiles/systeme70/parcloses/parclose-2429-evo2008.png) |
+| 2430 | F00-35- 2430 | 17 | 20 | 24 | ![Parclose 2430](/assets/profiles/systeme70/parcloses/parclose-2430-evo2008.png) |
+| 2431 | F00-35- 2431 | 19 | 20 | 24 | ![Parclose 2431](/assets/profiles/systeme70/parcloses/parclose-2431-evo2008.png) |
+| 2432 | F00-35- 2432 | 21 | 20 | 24 | ![Parclose 2432](/assets/profiles/systeme70/parcloses/parclose-2432-evo2008.png) |
+| 2433 | F00-35- 2433 | 23 | 20 | 24 | ![Parclose 2433](/assets/profiles/systeme70/parcloses/parclose-2433-evo2008.png) |
+| 2435 | F00-35- 2435 | 25 | 20 | 24 | ![Parclose 2435](/assets/profiles/systeme70/parcloses/parclose-2435-evo2008.png) |
+| 2434 | F00-35- 2434 | 27 | 20 | 24 | ![Parclose 2434](/assets/profiles/systeme70/parcloses/parclose-2434-evo2008.png) |
+| 2437 | F00-35- 2437 | 29 | 20 | 24 | ![Parclose 2437](/assets/profiles/systeme70/parcloses/parclose-2437-evo2008.png) |
+| 2438 | F00-35- 2438 | 31 | 20 | 24 | ![Parclose 2438](/assets/profiles/systeme70/parcloses/parclose-2438-evo2008.png) |
+| 2436 | F00-35- 2436 | 33 | 20 | 24 | ![Parclose 2436](/assets/profiles/systeme70/parcloses/parclose-2436-evo2008.png) |
+| 1436.1 | F00-35- 1436.1 | 35 | 22 | 24 | ![Parclose 1436.1](/assets/profiles/systeme70/parcloses/parclose-1436-1-evo2008.png) |
+| 1511.1 | F86-38- 1511.1 | 17 | 20 | 25 | ![Parclose 1511.1](/assets/profiles/systeme70/parcloses/parclose-1511-1-evo2008.png) |
+| 1512.1 | F86-38- 1512.1 | 21 | 20 | 25 | ![Parclose 1512.1](/assets/profiles/systeme70/parcloses/parclose-1512-1-evo2008.png) |
+| 1438.1 | F00-38- 1438.1 | 15 | 22 | 25 | ![Parclose 1438.1](/assets/profiles/systeme70/parcloses/parclose-1438-1-evo2008.png) |
+| 1480.1 | F75-38- 1480.1 | 11 | 19 | 25 | ![Parclose 1480.1](/assets/profiles/systeme70/parcloses/parclose-1480-1-evo2008.png) |
+| 1535 | F00-35- 1535 | 17 | 20 | 25 | ![Parclose 1535](/assets/profiles/systeme70/parcloses/parclose-1535-evo2008.png) |
+| 0132 | F00-35- 0132 | 19 | 20 | 25 | ![Parclose 0132](/assets/profiles/systeme70/parcloses/parclose-0132-evo2008.png) |
+| 0135.N | F00-35- 0135.N | 21 | 20 | 25 | ![Parclose 0135.N](/assets/profiles/systeme70/parcloses/parclose-0135-n-evo2008.png) |
+| 0133.1 | F00-35- 0133.1 | 23 | 22 | 25 | ![Parclose 0133.1](/assets/profiles/systeme70/parcloses/parclose-0133-1-evo2008.png) |
+| 0136 | F00-35- 0136 | 25 | 20 | 25 | ![Parclose 0136](/assets/profiles/systeme70/parcloses/parclose-0136-evo2008.png) |
+| 0134 | F00-35- 0134 | 27 | 22 | 25 | ![Parclose 0134](/assets/profiles/systeme70/parcloses/parclose-0134-evo2008.png) |
+| 008.04 | 008.04 | 12 | - | 26 | ![Parclose 008.04](/assets/profiles/systeme70/parcloses/parclose-008-04-evo2008.png) |
+| 012.04 | 012.04 | 16 | - | 26 | ![Parclose 012.04](/assets/profiles/systeme70/parcloses/parclose-012-04-evo2008.png) |
+| 014.04 | 014.04 | 18 | - | 26 | ![Parclose 014.04](/assets/profiles/systeme70/parcloses/parclose-014-04-evo2008.png) |
+| 016.04 | 016.04 | 20 | - | 26 | ![Parclose 016.04](/assets/profiles/systeme70/parcloses/parclose-016-04-evo2008.png) |
+| 029.04 | 029.04 | 33 | - | 26 | ![Parclose 029.04](/assets/profiles/systeme70/parcloses/parclose-029-04-evo2008.png) |
+| 033.04 | 033.04 | 37 | - | 26 | ![Parclose 033.04](/assets/profiles/systeme70/parcloses/parclose-033-04-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 24 à 26)
+
+Les parcloses 2419 à 2438 et 1436.1 ont toutes deux lèvres de joint à gauche et un pied de
+clippage ; la 1436.1 a deux chambres. Les 1511.1, 1512.1, 1438.1 et 1480.1 ont une face
+moulurée, les 0132 à 0136 une face arrondie. Des parcloses du poster de 2025, seules les 2433
+(largeur 23 mm en 2008, 23,5 au poster, 24 au DTD — **CTR-40**) et, sous une référence sans le
+suffixe « .1 », les 1511 et 1512 (17,5 et 21,5 mm au poster) figurent dans ces planches [4 p. 24-26].
+
+### Élargisseur de parclose 728
+
+![Élargisseur 728 posé sur un ouvrant](/assets/profiles/systeme70/elargisseurs/elargisseur-728-evo2008.png)
+
+Au bas de la planche p. 26, le profilé **728** est dessiné clippé à l'extrémité de la feuillure
+d'un ouvrant coupé ; la seule cote portée est « +16 », en mm, prise sur le 728 lui-même
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf,
+p. 26).
+
+## Appuis des plans de 2008
+
+Les deux planches « Appuis » p. 27 et 28 (échelle 1:2) dessinent chaque pièce d'appui en coupe,
+avec son embout écrit sous la référence, et, pour cinq d'entre elles, à droite, un petit schéma
+de la pièce d'appui clippée sous un dormant de 70 mm, qui donne sa saillie devant le dormant.
+Une ligne par pièce d'appui ; cotes en mm, reprises par leur position sur le dessin [4 p. 27-28].
+
+| Pièce d'appui | Désignation complète | Largeur hors tout (mm) | Autres cotes horizontales (mm) | Cotes verticales (mm) | Pente portée | Embout écrit | Saillie devant le dormant de 70 mm, schéma de pose (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| 0339 | F00-72- 0339 | 180 | 50 pour la partie clippée, en haut à droite ; 10 pour le retour du nez, en bas à gauche | à gauche 15 + 31, et 4 pour la lèvre du nez ; à droite 37,5, 53,5 hors tout et 16 | 5° | F00-75- 9843 Embouts | 110 et 122, deux schémas | 27 | ![Pièce d'appui 0339](/assets/profiles/systeme70/appuis/appui-0339-evo2008.png) |
+| 0278 | F90-72- 0278 | 138 | 62 pour la partie clippée | à gauche 20 et 10 ; à droite 20 | 5° | F00-88- 9B78 Embouts | 68 | 27 | ![Pièce d'appui 0278](/assets/profiles/systeme70/appuis/appui-0278-evo2008.png) |
+| 0996 | F00-72- 0996 | 148 | 36,7 en bas à droite ; 10 et 15 au pied du nez | à gauche 40 et 20 ; à droite 14 et 20 | - | F00-88- 9A92 Embouts | 100 | 27 | ![Pièce d'appui 0996](/assets/profiles/systeme70/appuis/appui-0996-evo2008.png) |
+| 6134 | F90-72- 6134 | 137 | - | à gauche 17,5 ; à droite 14 | - | F91-75- 9F53 Embouts de remplissage | 68 | 28 | ![Pièce d'appui 6134](/assets/profiles/systeme70/appuis/appui-6134-evo2008.png) |
+| 6135 | F90-72- 6135 | 167 | - | à gauche 17,5 ; à droite 14 | - | F91-75- 9F54 Embouts de remplissage | - | 28 | ![Pièce d'appui 6135](/assets/profiles/systeme70/appuis/appui-6135-evo2008.png) |
+| 6136 | F90-72- 6136 | 127 | - | à gauche 23,5 ; à droite 20 | - | F91-75- 9F55 Embouts de remplissage | 68 | 28 | ![Pièce d'appui 6136](/assets/profiles/systeme70/appuis/appui-6136-evo2008.png) |
+| 6137 | F90-72- 6137 | 157 | - | à gauche 23,5 ; à droite 20 | - | F91-75- 9F56 Embouts de remplissage | - | 28 | ![Pièce d'appui 6137](/assets/profiles/systeme70/appuis/appui-6137-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 27 et 28)
+
+Les largeurs hors tout des 6134 (137), 6135 (167), 6136 (127) et 6137 (157) sont celles du DTD ;
+le poster cote la saillie (67 ou 97 mm) et non la largeur (voir *Pièces d'appui PVC* ci-dessus).
+Sur les schémas de pose, la saillie des 6134 et 6136 est de 68 mm devant un dormant de 70 mm.
+Les pièces d'appui 0339, 0278 et 0996 et leurs embouts 9843, 9B78 et 9A92 ne sont dessinés ni au
+poster, ni au manuel, ni au DTD [4 p. 27-28].
+
+### Schémas de pose des pièces d'appui de 2008
+
+Chaque schéma montre, à la même échelle que la coupe, la pièce d'appui clippée sous la traverse
+basse d'un dormant, le dormant dessiné en trait fin au-dessus. La cote de gauche est la saillie
+de la pièce d'appui devant la face du dormant, la cote de droite l'épaisseur de 70 mm du dormant.
+
+![Pièce d'appui 0339 sous un dormant, saillies de 110 et 122 mm](/assets/profiles/systeme70/appuis/pose-appui-0339-evo2008.png)
+
+La pièce d'appui 0339 est dessinée deux fois sous le dormant : en haut, saillie de 110 mm ; en
+bas, décalée vers l'extérieur, saillie de 122 mm (schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 27).
+
+![Pièce d'appui 0278 sous un dormant](/assets/profiles/systeme70/appuis/pose-appui-0278-evo2008.png)
+
+Pièce d'appui 0278 : saillie de 68 mm, dormant de 70 mm (schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 27).
+
+![Pièce d'appui 0996 sous un dormant](/assets/profiles/systeme70/appuis/pose-appui-0996-evo2008.png)
+
+Pièce d'appui 0996 : saillie de 100 mm, dormant de 70 mm ; la pièce d'appui passe sous le pied
+du dormant (schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 27).
+
+![Pièce d'appui 6134 sous un dormant](/assets/profiles/systeme70/appuis/pose-appui-6134-evo2008.png)
+
+Pièce d'appui 6134 : saillie de 68 mm, dormant de 70 mm (schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 28).
+
+![Pièce d'appui 6136 sous un dormant](/assets/profiles/systeme70/appuis/pose-appui-6136-evo2008.png)
+
+Pièce d'appui 6136 : saillie de 68 mm, dormant de 70 mm (schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 28).
+
+### Profilés 0691 et 0692
+
+Deux profilés en équerre sont dessinés en bas à droite de la planche p. 28, sans légende de
+fonction : un retour horizontal de 11,5 mm en haut, un talon de 5,4 mm, et une aile verticale de
+20 mm (0691) ou 45 mm (0692) [4 p. 28].
+
+| Profilé | Désignation complète | Retour horizontal en haut (mm) | Talon, en haut à gauche (mm) | Aile verticale (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 0691 | F00-73- 0691 | 11,5 | 5,4 | 20 | 28 | ![Profilé 0691](/assets/profiles/systeme70/cornieres/profil-0691-evo2008.png) |
+| 0692 | F00-73- 0692 | 11,5 | 5,4 | 45 | 28 | ![Profilé 0692](/assets/profiles/systeme70/cornieres/profil-0692-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 28)
+
+Le poster cote le 0692 12 mm de large et 45 de haut (voir *Cornières et profilés d'habillage*
+ci-dessus) — entrée **CTR-72** du registre
+[Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
+
+## Tapées 6138 à 6142 et profilé 0300 des plans de 2008
+
+La troisième planche « Appuis » (p. 29, échelle 1:2) dessine cinq profilés de 35 mm de haut,
+de largeur croissante, chacun avec le patin d'étanchéité 9F32 écrit sous sa référence, et le
+profilé plat 0300. Le poster les dessine comme tapées PVC, le DTD les appelle « Fourrures »
+(voir *Tapées PVC* et *Fourrures d'épaisseur 6138.1 à 76769* ci-dessus) [4 p. 29].
+
+| Profilé | Désignation complète | Largeur, en haut (mm) | Hauteur, à gauche (mm) | Pièce écrite sous la référence | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 6138 | F90-96- 6138 | 15 | 35 | F90-75- 9F32 Patin d'étancheité | 29 | ![Profilé 6138](/assets/profiles/systeme70/tapees-pvc/tapee-6138-evo2008.png) |
+| 6139 | F90-96- 6139 | 35 | 35 | F90-75- 9F32 Patin d'étancheité | 29 | ![Profilé 6139](/assets/profiles/systeme70/tapees-pvc/tapee-6139-evo2008.png) |
+| 6140 | F90-96- 6140 | 55 | 35 | F90-75- 9F32 Patin d'étancheité | 29 | ![Profilé 6140](/assets/profiles/systeme70/tapees-pvc/tapee-6140-evo2008.png) |
+| 6141 | F90-96- 6141 | 75 | 35 | F91-75- 9F32 Patin d'étancheité | 29 | ![Profilé 6141](/assets/profiles/systeme70/tapees-pvc/tapee-6141-evo2008.png) |
+| 6142 | F90-96- 6142 | 95 | 35 | F90-75- 9F32 Patin d'étancheité | 29 | ![Profilé 6142](/assets/profiles/systeme70/tapees-pvc/tapee-6142-evo2008.png) |
+| 0300 | F00-65- 0300 | 150 | 23 | - | 29 | ![Profilé 0300](/assets/profiles/systeme70/accessoires/profil-0300-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 29)
+
+Les largeurs et hauteurs sont celles du poster (15 à 95 mm de large, 35 mm de haut) ; le DTD les
+porte dans l'autre sens. Le patin 9F32 est écrit avec le préfixe F91-75- sous le 6141 et F90-75-
+sous les quatre autres. Le 0300 est coté 150 × 23 mm, comme au poster [4 p. 29].
+
+## Élargisseurs des plans de 2008
+
+La planche « Elargisseurs » (p. 30, échelle 1:2) dessine les élargisseurs de dormant, profilés
+de 70 mm de large qui se clippent sous le dormant pour en augmenter la hauteur, chacun avec la
+hauteur ajoutée à gauche et, pour trois d'entre eux, le tableau « Renfort | Iz » [4 p. 30].
+
+| Élargisseur | Désignation complète | Largeur (mm) | Hauteur ajoutée (mm) | Renfort du tableau | Iz (cm⁴) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| 0204.1 | F00-95- 0204.1 | 70 | 15 | - | - | 30 | ![Élargisseur 0204.1](/assets/profiles/systeme70/elargisseurs/elargisseur-0204-1-evo2008.png) |
+| 0210.2 | F00-95- 0210.2 | 70 | 25 | - | - | 30 | ![Élargisseur 0210.2](/assets/profiles/systeme70/elargisseurs/elargisseur-0210-2-evo2008.png) |
+| 0207.3 | F00-95- 0207.3 | 70 | 50 | V045 | 2,70 | 30 | ![Élargisseur 0207.3](/assets/profiles/systeme70/elargisseurs/elargisseur-0207-3-evo2008.png) |
+| 0301.1 | F90-95- 0301.1 | 70 | 80 | V045, dessiné dans les deux chambres | 2,70 | 30 | ![Élargisseur 0301.1](/assets/profiles/systeme70/elargisseurs/elargisseur-0301-1-evo2008.png) |
+| 0432 | F90-61- 0432 | 70 | 3,5 | - | - | 30 | ![Profilé 0432 sous un dormant](/assets/profiles/systeme70/elargisseurs/elargisseur-0432-evo2008.png) |
+| K363 | K363 | 70 | 120 | K655 | 7,00 | 30 | ![Élargisseur K363](/assets/profiles/systeme70/elargisseurs/elargisseur-k363-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 30)
+
+Le profilé 0432 est dessiné clippé sous un dormant coupé, la cote de 3,5 mm prise sous le
+dormant ; le K363 a trois chambres superposées, le renfort K655 dans la chambre haute. Les 0204,
+0210, 0207 et 0301 du poster et du DTD portent les mêmes hauteurs, sans les suffixes « .1 »,
+« .2 », « .3 » ; le DTD cote aussi un K363 de 120 mm, que le poster et le manuel ne dessinent pas
+(**VER-63**, ci-dessus) [4 p. 30].
+
+![Élargisseur clippé sous un dormant](/assets/profiles/systeme70/elargisseurs/pose-elargisseur-sous-dormant-evo2008.png)
+
+En haut à droite de la planche, un élargisseur sans référence, de la forme du 0210.2, est dessiné
+clippé sous le pied d'un dormant coupé, dessiné en trait fin, ses deux crochets supérieurs
+engagés dans les gorges du dormant
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 30).
+
+## Accouplements des plans de 2008
+
+Les trois planches « Accouplements » (p. 31 à 33, échelle 1:2) dessinent les profilés qui
+assemblent deux châssis côte à côte ou en angle, presque tous dessinés engagés dans un dormant
+coupé, en trait fin, dont la hauteur de 70 mm est cotée. Les renforts acier sont hachurés ;
+« Renfort du commerce » désigne un tube acier du commerce de la section indiquée. Une ligne par
+profilé ; cotes en mm, reprises par leur position sur le dessin [4 p. 31-33].
+
+| Profilé | Désignation complète | Cotes portées (mm) | Angle porté | Renfort | Iz (cm⁴) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| K340 et K341 | F00-71- K340, F00-71- K341 | 70 sur le dormant | - | K640 | 8,70 | 31 | ![Liaison K340 et K341](/assets/profiles/systeme70/liaisons/liaison-k340-k341-evo2008.png) |
+| K355 | K355 | 74,5 de large, 74,5 de haut ; 70 sur le dormant | - | K655 | 7,00 | 31 | ![Liaison K355](/assets/profiles/systeme70/liaisons/liaison-k355-evo2008.png) |
+| 6356 | F90-71- 6356 | 35 et 35 sur les deux pans ; 70 sur le dormant | 135° | 656 | 3,50 | 31 | ![Poteau 6356](/assets/profiles/systeme70/liaisons/liaison-6356-evo2008.png) |
+| K352 | F00-94- K352 | 48 en haut, 46 en bas ; 98 à gauche, 70 et 70 ; 20 au centre | - | K208 | 20,3 | 32 | ![Profilé K352](/assets/profiles/systeme70/liaisons/liaison-k352-evo2008.png) |
+| 154 | 154 | 52 de large, 65 de haut | - | Renfort du commerce (40 x 50 mm) | - | 32 | ![Profilé 154](/assets/profiles/systeme70/liaisons/liaison-154-evo2008.png) |
+| 1184 | F00-94- 1184 | 35 × 35 pour la chambre haute ; 25 et 26 pour la chambre basse ; 10 et 1,75 pour l'âme ; 70 sur le dormant | - | 9109 | 98,7 | 32 | ![Profilé 1184](/assets/profiles/systeme70/liaisons/liaison-1184-evo2008.png) |
+| 9076 | F00-45- 9076 | 28 de large dont 14 au centre ; 18 de haut | - | - | - | 32 | ![Profilé 9076](/assets/profiles/systeme70/liaisons/liaison-9076-evo2008.png) |
+| 1338 | F00-96- 1338 | 23,5 de large, 52,5 de haut | - | - | - | 32 | ![Profilé 1338](/assets/profiles/systeme70/liaisons/liaison-1338-evo2008.png) |
+| 1114 | F00-96- 1114 | 45 en haut, 25 en bas ; 57 de haut | - | - | - | 32 | ![Profilé 1114](/assets/profiles/systeme70/liaisons/liaison-1114-evo2008.png) |
+| 350 | 350 | 70 sur le dormant | - | - | - | 32 | ![Profilé 350 sous un dormant](/assets/profiles/systeme70/liaisons/liaison-350-evo2008.png) |
+| 0481 | F00-94- 0481 | 30,3 et 15,3 en haut ; 10 intérieur ; 32 et 24 à gauche | - | Renfort du commerce (10 x 80 mm) | 42,7 | 33 | ![Profilé 0481](/assets/profiles/systeme70/liaisons/liaison-0481-evo2008.png) |
+| 0205 | F00-94- 0205 | 11 en haut ; 105 de haut, 82 intérieur ; 18,5 et 24 en bas ; 70 sur le dormant | - | Renfort du commerce (10 x 80 mm) | 42,7 | 33 | ![Profilé 0205](/assets/profiles/systeme70/liaisons/liaison-0205-evo2008.png) |
+| 1067 | F00-65- 1067 | 40 de large, 60 de haut | - | Renfort du commerce (30 x 50 mm) | 4,50 | 33 | ![Profilé 1067](/assets/profiles/systeme70/liaisons/liaison-1067-evo2008.png) |
+| 1182 | F00-65- 1182 | 60 de large, 120 de haut | - | Renfort du commerce (50 x 100 mm) | 106,0 | 33 | ![Profilé 1182](/assets/profiles/systeme70/liaisons/liaison-1182-evo2008.png) |
+| 0441 | F00-94- 0441 | 20 de large, 1,5 d'âme ; 13,5 de haut | - | - | - | 33 | ![Profilé 0441 sur un dormant](/assets/profiles/systeme70/liaisons/liaison-0441-evo2008.png) |
+| 1248 | F00-94- 1248 | 12 de large, 4 de haut | - | - | - | 33 | ![Profilé 1248 sur un dormant](/assets/profiles/systeme70/liaisons/liaison-1248-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 31 à 33)
+
+Les deux renforts acier de la p. 32 sont dessinés seuls, avec leur inertie :
+
+| Renfort | Désignation complète | Cotes portées (mm) | Iz (cm⁴) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| V250 | F00-40- V250 | 29 de large, 101 de haut ; 32 pour le tube haut, 50 pour le tube bas, 20 en pied ; 2,5 d'épaisseur | 71,6 | 32 | ![Renfort V250](/assets/profiles/systeme70/renforts/renfort-v250-evo2008.png) |
+| 9120 | F00-40- 9120 | 20 de large, 50 de haut ; 3 d'épaisseur | 10,0 | 32 | ![Renfort 9120](/assets/profiles/systeme70/renforts/renfort-9120-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 32)
+
+Le K340, à pans, est dessiné emboîté sur le K341 rond, qui porte le renfort K640 ; les deux
+références sont écrites sur le même dessin. Le 1184 a deux chambres reliées par une âme mince, chacune engagée dans un dormant ; le
+renfort 9109 est écrit à côté. Le 0441 et le 1248 sont dessinés clippés sur le chant d'un
+dormant, le 350 sous un dormant, comme un élargisseur [4 p. 31-33].
+
+Le V250 porte l'IW de 71,6 cm⁴ du manuel ; le 656 du poteau 6356 porte Iz 3,50 cm⁴, l'IG du
+manuel pour ce renfort (son IW y est de 4,4) ; le 1248 a les cotes du poster. Le profilé 1182
+(60 × 120 mm, renfort du commerce 50 × 100, Iz 106,0) a les cotes et l'inertie du 91134 du
+poster ; le 1067 (40 × 60 mm, renfort du commerce 30 × 50) porte Iz 4,50 cm⁴ là où le 91133
+du poster (60 × 40 mm, même renfort) porte 9,95 — entrée **CTR-73** du registre
+[Contradictions entre sources](/anomalies/contradictions-entre-sources.md) [4 p. 31-33].
+
+### Schémas d'accouplement de la p. 32
+
+Au bas de la p. 32, quatre schémas sans légende montrent deux dormants accouplés de part et
+d'autre d'un profilé de liaison, dessinés en trait fin, les renforts hachurés. La cote de 70 mm
+est l'épaisseur des dormants.
+
+![Accouplement par le renfort V250 et le profilé 9076](/assets/profiles/systeme70/liaisons/accouplement-v250-9076-evo2008.png)
+
+Deux dormants vissés de part et d'autre du renfort V250, le profilé 9076 clippé dans la gorge
+supérieure ; le tube bas du V250 dépasse sous les dormants (schéma:
+raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 32).
+
+![Accouplement par le renfort V250 habillé du 1114](/assets/profiles/systeme70/liaisons/accouplement-v250-1114-evo2008.png)
+
+Même montage, le tube bas du V250 habillé par le profilé 1114 (schéma:
+raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 32).
+
+![Accouplement par le renfort 9120](/assets/profiles/systeme70/liaisons/accouplement-9120-evo2008.png)
+
+Un dormant avec, sous lui, le renfort 9120 dessiné nu (schéma:
+raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 32).
+
+![Accouplement par le renfort 9120 habillé du 1114](/assets/profiles/systeme70/liaisons/accouplement-9120-1114-evo2008.png)
+
+Le même renfort 9120 logé dans le profilé 1114 sous le dormant (schéma:
+raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 32).
+
+Les renforts sont identifiés sur ces quatre schémas par leur forme, identique à celle des coupes
+cotées de la même planche ; les schémas eux-mêmes ne portent aucune référence.
+
+## Profilés divers des plans de 2008
+
+Les planches p. 34 et 35, titrées « Profilés complémentaires » sans sous-titre (échelle 1:2),
+dessinent des profilés de finition et de raccord, plusieurs d'entre eux engagés dans un dormant
+coupé ou contre un panneau hachuré (le panneau n'a pas de référence). Aucune légende de fonction
+n'est imprimée. Cotes en mm [4 p. 34-35].
+
+| Profilé | Désignation complète | Cotes portées (mm) | Dessiné avec | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 0691 | F00-73- 0691 | 11,5 ; 5,4 ; 20 | - | 34 | ![Profilé 0691](/assets/profiles/systeme70/cornieres/profil-0691-evo2008.png) |
+| 0692 | F00-73- 0692 | 11,5 ; 5,4 ; 45 | - | 34 | ![Profilé 0692](/assets/profiles/systeme70/cornieres/profil-0692-evo2008.png) |
+| 0693 | F00-73- 0693 | 18 de large ; 20 de haut, et 5,4 pour le talon | - | 34 | ![Profilé 0693](/assets/profiles/systeme70/cornieres/profil-0693-evo2008.png) |
+| 0381 | F00-61- 0381 | 9 de large ; 26 de haut ; 12 pour le retour | - | 34 | ![Profilé 0381](/assets/profiles/systeme70/cornieres/profil-0381-evo2008.png) |
+| 0380 | F00-61- 0380 | 16 en haut et en bas ; 80 de haut | - | 34 | ![Profilé 0380](/assets/profiles/systeme70/profils-plats/profil-0380-evo2008.png) |
+| 0914 | F00-61- 0914 | 5 | un dormant, dans la gorge haute duquel il est logé | 34 | ![Profilé 0914 dans un dormant](/assets/profiles/systeme70/profils-plats/profil-0914-evo2008.png) |
+| 1207 | F00-61- 1207 | 10,6 en haut ; 26 et 36 de haut ; 5,3 en bas | - | 34 | ![Profilé 1207](/assets/profiles/systeme70/profils-plats/profil-1207-evo2008.png) |
+| 0856 | F00-63- 0856 | 50 et 24 de large ; 25 de haut ; « 19 -20 mm » pour le panneau | un dormant et un panneau | 34 | ![Profilé 0856 sous un dormant](/assets/profiles/systeme70/profils-plats/profil-0856-evo2008.png) |
+| 0827 | F00-63- 0827 | 70 sur le dormant ; 26,2 et 18,8 aux extrémités ; 68,5 de large ; 2 d'épaisseur | un dormant | 34 | ![Profilé 0827 sous un dormant](/assets/profiles/systeme70/profils-plats/profil-0827-evo2008.png) |
+| 0484 | F90-63- 0484 | 70 sur le dormant ; 56,5 de large ; 12,3 de haut ; 11 pour le panneau | un dormant et un panneau | 34 | ![Profilé 0484 sous un dormant](/assets/profiles/systeme70/profils-plats/profil-0484-evo2008.png) |
+| 0373 | F00-63- 0373 | 40 en haut, 20 en bas ; 25 de haut ; 3 pour la lèvre | un panneau | 35 | ![Profilé 0373](/assets/profiles/systeme70/profils-plats/profil-0373-evo2008.png) |
+| 0828 | F00-63- 0828 | 16,5 en haut, 22,5 en bas ; 20 de haut ; « 7.5 » pour le panneau | un panneau | 35 | ![Profilé 0828](/assets/profiles/systeme70/profils-plats/profil-0828-evo2008.png) |
+| 1076 | F00-71- 1076 | 32 × 32 ; 11 et 2 au pied | un panneau | 35 | ![Profilé 1076](/assets/profiles/systeme70/profils-plats/profil-1076-evo2008.png) |
+| 0505 | F00-65- 0505 | 34 de large, 20 de haut | - | 35 | ![Profilé 0505](/assets/profiles/systeme70/profils-plats/profil-0505-evo2008.png) |
+| 0395 | F00-62- 0395 | 36 de large, 3 de haut | - | 35 | ![Profilé 0395](/assets/profiles/systeme70/profils-plats/profil-0395-evo2008.png) |
+| 1395 | F00-62- 1395 | 42 de large, 12 de haut | - | 35 | ![Profilé 1395](/assets/profiles/systeme70/profils-plats/profil-1395-evo2008.png) |
+| 0391 | F00-65- 0391 | Ø 8 | - | 35 | ![Profilé 0391](/assets/profiles/systeme70/profils-plats/profil-0391-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 34 et 35)
+
+Les 0691 et 0692 sont dessinés une seconde fois p. 34, avec les mêmes cotes qu'en p. 28 (dessins
+repris de la p. 28 dans le tableau). La cote du panneau du 0828 est écrite avec un point
+décimal (« 7.5 »). Le 0827 est coté 70 en haut, 69 en bas, 26,2 et 19 aux extrémités et 4,5 de
+haut au poster, 68,5, 18,8 et 2 en 2008 (**CTR-73**) [4 p. 34-35].
+
+![Profilé 1207 clippé sur un dormant](/assets/profiles/systeme70/profils-plats/pose-1207-evo2008.png)
+
+À droite du 1207, un schéma sans légende le montre clippé sur la face d'un dormant coupé et
+appliqué contre un matériau dessiné en pointillé, que la planche ne nomme pas (schéma:
+raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 34).
+
+## Profilés plats des plans de 2008
+
+La planche p. 36 (« Profilés complémentaires », échelle 1:2) dessine des profilés plats, cotés
+par leur largeur et leur épaisseur. Les références suffixées « .T » ou « T » portent sous leur
+face une bande hachurée, sans légende. Le 1152 porte en son milieu un motif de croisillons, sans
+légende [4 p. 36].
+
+| Profilé | Désignation complète | Largeur (mm) | Épaisseur (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| 0401 | F00-61- 0401 | 30 | 2,5 | ![Profilé 0401](/assets/profiles/systeme70/profils-plats/profil-0401-evo2008.png) |
+| 0402 | F00-61- 0402 | 40 | 2,5 | ![Profilé 0402](/assets/profiles/systeme70/profils-plats/profil-0402-evo2008.png) |
+| 0403 | F00-61- 0403 | 50 | 2,5 | ![Profilé 0403](/assets/profiles/systeme70/profils-plats/profil-0403-evo2008.png) |
+| 0400.T | F00-61- 0400.T | 20 | 2,5 | ![Profilé 0400.T](/assets/profiles/systeme70/profils-plats/profil-0400-t-evo2008.png) |
+| 0401.T | F00-61- 0401.T | 30 | 2,5 | ![Profilé 0401.T](/assets/profiles/systeme70/profils-plats/profil-0401-t-evo2008.png) |
+| 0402.T | F00-61- 0402.T | 40 | 2,5 | ![Profilé 0402.T](/assets/profiles/systeme70/profils-plats/profil-0402-t-evo2008.png) |
+| 0403.T | F00-61- 0403.T | 50 | 2,5 | ![Profilé 0403.T](/assets/profiles/systeme70/profils-plats/profil-0403-t-evo2008.png) |
+| 0727T | F00-62- 0727T | 20 | 7 | ![Profilé 0727T](/assets/profiles/systeme70/profils-plats/profil-0727t-evo2008.png) |
+| 0728T | F00-62- 0728T | 30 | 7 | ![Profilé 0728T](/assets/profiles/systeme70/profils-plats/profil-0728t-evo2008.png) |
+| 0729T | F00-62- 0729T | 40 | 7 | ![Profilé 0729T](/assets/profiles/systeme70/profils-plats/profil-0729t-evo2008.png) |
+| 0730T | F00-62- 0730T | 50 | 7 | ![Profilé 0730T](/assets/profiles/systeme70/profils-plats/profil-0730t-evo2008.png) |
+| 0731T | F00-62- 0731T | 60 | 7 | ![Profilé 0731T](/assets/profiles/systeme70/profils-plats/profil-0731t-evo2008.png) |
+| 0405 | F00-61- 0405 | 80 | 3 | ![Profilé 0405](/assets/profiles/systeme70/profils-plats/profil-0405-evo2008.png) |
+| 0406 | F00-61- 0406 | 100 | 3 | ![Profilé 0406](/assets/profiles/systeme70/profils-plats/profil-0406-evo2008.png) |
+| 1152 | F00-71- 1152 | 130 | 3 | ![Profilé 1152](/assets/profiles/systeme70/profils-plats/profil-1152-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 36)
+
+Les 0727T à 0731T ont une ou deux chambres ; le 0406 porte un pli en V au milieu de sa face. Le
+poster dessine des profilés plats de mêmes largeurs sous d'autres références (91000 à 91043 T,
+tableau *Profilés plats* ci-dessus) [4 p. 36].
+
+## Cornières des plans de 2008
+
+La planche « Cornières » (p. 37, échelle 1:2) dessine treize cornières, chacune cotée par ses
+deux ailes et son épaisseur. Une ligne par cornière, cotes en mm [4 p. 37].
+
+| Cornière | Désignation complète | Aile horizontale (mm) | Aile verticale (mm) | Épaisseur (mm) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 0423 | F00-98- 0423 | 8 | 20 | 2 | ![Cornière 0423](/assets/profiles/systeme70/cornieres/corniere-0423-evo2008.png) |
+| 0577 | F00-71- 0577 | 20 | 20 | 2,5 | ![Cornière 0577](/assets/profiles/systeme70/cornieres/corniere-0577-evo2008.png) |
+| 0581 | F00-71- 0581 | 40 | 20 | 2,5 | ![Cornière 0581](/assets/profiles/systeme70/cornieres/corniere-0581-evo2008.png) |
+| 0587 | F00-71- 0587 | 50 | 30 | 2,5 | ![Cornière 0587](/assets/profiles/systeme70/cornieres/corniere-0587-evo2008.png) |
+| 0579 | F00-71- 0579 | 30 | 30 | 2,5 | ![Cornière 0579](/assets/profiles/systeme70/cornieres/corniere-0579-evo2008.png) |
+| 0574 | F00-98- 0574 | 35 | 35 | 2,5 | ![Cornière 0574](/assets/profiles/systeme70/cornieres/corniere-0574-evo2008.png) |
+| 0583 | F00-71- 0583 | 50 | 50 | 2,5 | ![Cornière 0583](/assets/profiles/systeme70/cornieres/corniere-0583-evo2008.png) |
+| 1331 | F00-96- 1331 | 25,5 | 70 | 3,4 | ![Cornière 1331](/assets/profiles/systeme70/cornieres/corniere-1331-evo2008.png) |
+| 0733 | F00-98- 0733 | 50 | 100 | 3 | ![Cornière 0733](/assets/profiles/systeme70/cornieres/corniere-0733-evo2008.png) |
+| 0584 | F00-71- 0584 | 60 | 60 | 2,5 | ![Cornière 0584](/assets/profiles/systeme70/cornieres/corniere-0584-evo2008.png) |
+| 0642 | F00-98- 0642 | 100 | 100 | - | ![Cornière 0642](/assets/profiles/systeme70/cornieres/corniere-0642-evo2008.png) |
+| W703570 | W703570 | 95, dont 25 en pan coupé | 95, dont 25 en pan coupé | 2 | ![Cornière W703570](/assets/profiles/systeme70/cornieres/corniere-w703570-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 37)
+
+La 1331 a une aile verticale au bord biseauté et un angle arrondi ; la 0642 ne porte pas
+d'épaisseur. La W703570 est une cornière à pan coupé : ses deux ailes de 95 mm sont
+reliées par un pan de 25 × 25 mm [4 p. 37].
+
+## Habillages et cornières à rejet de la p. 38
+
+La planche p. 38 dessine deux habillages de 100 mm de haut à retour incliné de 60 mm, chacun avec
+son plot de clippage, puis deux cornières à aile inclinée. Sous les habillages est écrit :
+« **9471** Plot de clippage pour 5072/9621 » et « **9914** Gabarit de perçage pour plot de
+clippage » [4 p. 38].
+
+| Profilé | Désignation complète | Retour incliné, en haut (mm) | Hauteur (mm) | Épaisseur (mm) | Pièce dessinée | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 5072 | F00-69- 5072 | 60 | 100 | 5 | deux plots F00-75- 9471 | ![Habillage 5072](/assets/profiles/systeme70/habillages/habillage-5072-evo2008.png) |
+| 9621 | F00-57- 9621 | 60 | 100 | 1,6 | deux plots F00-75- 9471 | ![Habillage 9621](/assets/profiles/systeme70/habillages/habillage-9621-evo2008.png) |
+| 1487.2 | F00-68- 1487.2 | 70 | 130 | 3 | - | ![Cornière 1487.2](/assets/profiles/systeme70/cornieres/corniere-1487-2-evo2008.png) |
+| 1486.2 | F00-68- 1486.2 | 70 | 90 | 3 | - | ![Cornière 1486.2](/assets/profiles/systeme70/cornieres/corniere-1486-2-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 38)
+
+Le 5072 est dessiné hachuré (plein), le 9621 en tôle mince à face nervurée. Les 1487.2 et
+1486.2 portent les cotes des cornières 1487 et 1486 du poster (70 × 130 et 70 × 90, épaisseur
+3) [4 p. 38].
+
+![Habillage clippé sur un bâti bois existant](/assets/profiles/systeme70/habillages/pose-habillage-9621-evo2008.png)
+
+À droite, une perspective sans légende montre un angle de menuiserie : un dormant PVC posé
+contre un bâti en bois (dessiné avec ses cernes), dont la face est habillée d'un profilé retenu
+par deux plots vissés dans le bois (schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf,
+p. 38). Le profilé et les plots n'y sont pas référencés.
+
+## Profilés d'adaptation 1347, 1389, 0379 et 1074
+
+La planche p. 39 dessine quatre profilés verticaux, chacun coté seul à gauche puis dessiné à
+droite, sans cote, sous trois ou quatre dormants coupés en trait fin, en différentes positions :
+à gauche, au centre, à droite du pied du dormant [4 p. 39].
+
+| Profilé | Désignation complète | Largeur (mm) | Hauteur hors tout (mm) | Autres cotes (mm) | Coupe et positions |
+| --- | --- | --- | --- | --- | ---: |
+| 1347 | F00-73- 1347 | 24 | 27,5 | 20 pour la chambre | ![Profilé 1347 et ses positions sous le dormant](/assets/profiles/systeme70/tapees-pvc/profil-1347-evo2008.png) |
+| 1389 | F00-73- 1389 | 24 | 42,8 | 35,5 pour les chambres | ![Profilé 1389 et ses positions sous le dormant](/assets/profiles/systeme70/tapees-pvc/profil-1389-evo2008.png) |
+| 0379 | F00-73- 0379 | 22 en haut, 12 en bas | 42,8 | 35 pour les chambres | ![Profilé 0379 et ses positions](/assets/profiles/systeme70/tapees-pvc/profil-0379-evo2008.png) |
+| 1074 | F00-73- 1074 | 22 en haut, 12,5 en bas | 57 | 50 pour les chambres | ![Profilé 1074 et ses positions sous le dormant](/assets/profiles/systeme70/tapees-pvc/profil-1074-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 39)
+
+Le 0379 est dessiné une fois de plus seul, debout, à gauche des trois dormants. Le poster et le
+manuel cotent le 0379 « 43 et 35 à gauche ; 12 et 22 au pied » (tableau *Liaisons d'angle,
+poteaux et profilés de couplage* ci-dessus) ; le classeur de 2008 porte 42,8 [4 p. 39].
+
+## Accessoires de volet roulant des plans de 2008
+
+La planche « Accessoires Volet Roulant » (p. 40, échelle 1:2) dessine sept profilés, trois
+d'entre eux clippés sur un dormant coupé dessiné en trait fin ; aucune légende de fonction n'est
+imprimée [4 p. 40].
+
+| Profilé | Désignation complète | Cotes portées (mm) | Iz ou renfort | Coupe |
+| --- | --- | --- | --- | ---: |
+| 5071 | F00-76- 5071 | 100 de large, 10 d'épaisseur, bout arrondi ; dessiné hachuré | - | ![Profilé 5071](/assets/profiles/systeme70/coulisses/profil-5071-evo2008.png) |
+| 1058 | F00-78- 1058 | 19 et 13,5 en haut ; 15 de haut | - | ![Profilés 1058 et 1387 sur un dormant](/assets/profiles/systeme70/coulisses/profil-1058-1387-evo2008.png) |
+| 1387 | F00-63- 1387 | 33 en haut, 18 en bas ; 10,5 de haut | - | ![Profilés 1058 et 1387 sur un dormant](/assets/profiles/systeme70/coulisses/profil-1058-1387-evo2008.png) |
+| 4808 | F02-67- 4808 | 96,06 de large, 2 d'épaisseur ; dessiné hachuré | Iz = 18,3 | ![Profilé 4808 et joint 9036](/assets/profiles/systeme70/coulisses/profil-4808-9036-evo2008.png) |
+| 9036 | F00-45- 9036 | - | - | ![Profilé 4808 et joint 9036](/assets/profiles/systeme70/coulisses/profil-4808-9036-evo2008.png) |
+| 0571 | F00-78- 0571 | 97 de large, 31,5 à droite ; 20,5 et 11 de haut ; 70 sur le dormant | - | ![Profilé 0571 sur un dormant](/assets/profiles/systeme70/coulisses/profil-0571-evo2008.png) |
+| 0569 | F00-78- 0569 | 93 de large, 36,5 à droite ; 23 et 12 de haut | Renfort du commerce 8 x 40 mm | ![Profilé 0569 sur un dormant](/assets/profiles/systeme70/coulisses/profil-0569-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 40)
+
+Le 1058 est un profilé à bourrelet arrondi, clippé à gauche de la face du dormant, le 1387 un
+profilé en T clippé à droite. Le poster dessine le 0571 avec la lèvre 9036, 97 mm de large dont
+32 à droite, 21 et 11 de haut (tableau *Profilés de liaison et profilés plats de jonction*
+ci-dessus) ; le 31,5 et le 20,5 de 2008 sont portés tels quels [4 p. 40].
+
+## Coulisses des plans de 2008
+
+Les coulisses sont les profilés verticaux en U dans lesquels glisse le tablier d'un volet
+roulant. La planche « Coulisses » (p. 41, échelle 1:2) dessine cinq coulisses de 47 mm de haut,
+deux joints de coulisse, les pièces de fixation et deux encadrés : le tableau des tulipes (la pièce
+d'extrémité de la coulisse, dessinée en perspective dans l'encadré) et l'embout de coulisse [4 p. 41].
+
+| Coulisse | Désignation complète | Largeur (mm) | Hauteur (mm) | Cotes intérieures (mm) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 1083.G | F00-79- 1083.G | 43 | 47 | 32 de fond ; 12,5 et 18 à droite ; 4,7 et 7 en haut ; 18 au pied | ![Coulisse 1083.G](/assets/profiles/systeme70/coulisses/coulisse-1083-g-evo2008.png) |
+| 1084 | F00-79- 1084 | 43 | 47 | 32 de fond ; 16 et 18 à droite ; 4,7 et 7 en haut ; 18 au pied | ![Coulisse 1084](/assets/profiles/systeme70/coulisses/coulisse-1084-evo2008.png) |
+| 0473.2 | F00-79- 0473.2 | 40 | 47 | 27 de fond ; 16 et 20,5 à droite ; 19,1 au pied | ![Coulisse 0473.2](/assets/profiles/systeme70/coulisses/coulisse-0473-2-evo2008.png) |
+| 1064.G | F00-79- 1064.G | 42 | 47 | 32 de fond ; 19 et 18 à droite ; 18 au pied | ![Coulisse 1064.G](/assets/profiles/systeme70/coulisses/coulisse-1064-g-evo2008.png) |
+| 1025 | F00-79- 1025 | 63 | 47 | 32 de fond ; 16 et 18 à droite ; 4,7 et 7 en haut ; 30 au pied | ![Coulisse 1025](/assets/profiles/systeme70/coulisses/coulisse-1025-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 41)
+
+Les 1083.G et 1064.G portent dans leur gorge deux joints dessinés en gris. Joints et pièces
+dessinés à côté [4 p. 41] :
+
+| Référence | Désignation complète | Légende sur la planche | Cotes portées (mm) |
+| --- | --- | --- | --- |
+| 9017 | F00-45- 9017 | - | 2,4 de tête ; 5,9 de haut ; 7 de pied |
+| 9014 | F00-46- 9014 | - | 5,7 de haut ; 7 de pied ; dessiné en brosse |
+| 9447 | F00-75- 9447 | F00-70- 9905 Gabarit de perçage | - |
+| 9419 | F00-83- 9419 | Tête PVC | - |
+| 9870 | F00-83- 9870 | Tête metallique | - |
+| 4999 | F00-75- 4999 | Embout pour coulisses F00-79- 1084 | - |
+
+![Joints de coulisse 9017 et 9014](/assets/profiles/systeme70/coulisses/joints-9017-9014-evo2008.png)
+
+La planche « Coulisses » du registre 5.5 du même classeur cote le joint 9014 à 6 mm de haut
+([Montage des profilés complémentaires du système 70, 2008](/procedures/montage-profiles-complementaires-systeme-70-evo2008.md#coulisses-et-tulipes-vr-pages-imprimées-3-et-4), **INC-243**) [4 p. 256].
+
+Le tableau de l'encadré de gauche associe une tulipe à chaque coulisse, une ligne par couple, dans
+l'ordre de la planche :
+
+| Tulipe | Coulisse |
+| --- | --- |
+| F00-75- 9428 | F00-79- 0473 |
+| F00-75- 9536 | F00-79- 1025 |
+| F00-75- 9445 | F00-79- 1083 |
+| F00-75- 9537 | F00-79- 1084 |
+| R00-75- 4644 | F00-79- 1064 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 41)
+
+![Tableau tulipe / coulisse, 2008](/assets/profiles/systeme70/coulisses/tulipes-coulisses-evo2008.png)
+
+![Embout 4999 pour coulisses 1084](/assets/profiles/systeme70/coulisses/embout-4999-evo2008.png)
+
+L'encadré de droite dessine l'embout 4999 en perspective sous l'extrémité d'une coulisse. Le
+tableau de 2008 et celui du poster donnent les mêmes tulipes aux coulisses 0473 (9428), 1025
+(9536) et 1084 (9537) ; le poster n'a pas de 1083 ni de 1064 et associe la 95003 à la M382 et la
+4131 à la 4645 ; il dessine l'embout M339 là où le classeur de 2008 dessine le 4999 pour la même
+coulisse 1084 — entrée **CTR-74** du registre
+[Contradictions entre sources](/anomalies/contradictions-entre-sources.md) [4 p. 41].
+
+## Profilés 0767, 1846 et 4339 de la planche « Rejet d'eau + Remplissage » (2008)
+
+Un [rejet d'eau](/reference/glossaire.md) est un profilé qui écarte l'eau ; un remplissage est
+l'élément plein (panneau) qui occupe un cadre à la place d'un vitrage. La planche titrée
+« Profilés complémentaires — Rejet d'eau + Remplissage » (p. 42, échelle 1:2) dessine deux
+profilés, chacun avec son embout dessiné en perspective à côté de l'extrémité du profilé ; les
+pièces 9447, 9419 et 9B00 ; et un profilé de 301 mm de large, le 4339. La planche n'attribue le
+nom de rejet d'eau ni celui de remplissage à un profilé en particulier. Cotes en mm [4 p. 42].
+
+| Profilé | Désignation complète | Embout | Largeur, en haut (mm) | Hauteur, à gauche (mm) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 0767 | F00-97- 0767 | F00-75- 9439 Embouts | 16 | 34,5 | ![Profilé 0767 et embout 9439](/assets/profiles/systeme70/complementaires/profil-0767-embout-9439-evo2008.png) |
+| 1846 | F00-97- 1846 | F00-88- 9603 Embouts | 16 | 27,5 | ![Profilé 1846 et embout 9603](/assets/profiles/systeme70/complementaires/profil-1846-embout-9603-evo2008.png) |
+| 4339 | K42-20- 4339 | - | 301 | 24 | ![Profilé 4339](/assets/profiles/systeme70/complementaires/profil-4339-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 42)
+
+Le 0767 est un profilé creux à une chambre ; le 1846 a une face supérieure en pente et deux
+crochets en pied. Le 4339 est un profilé plat alvéolé de onze chambres, avec à gauche une rainure
+en C et à droite deux languettes. Le 1846 est dessiné avec les mêmes cotes, 16 × 27,5 mm, comme
+rejet d'eau PVC « 1846 (93051) » du système 76 (voir
+[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md))
+[4 p. 42].
+
+Pièces dessinées sous les profilés, avec leur légende [4 p. 42] :
+
+| Référence | Désignation complète | Légende sur la planche | Coupe |
+| --- | --- | --- | ---: |
+| 9447 | F00-75- 9447 | F00-70- 9905 Gabarit de perçage | ![9447 et gabarit 9905](/assets/profiles/systeme70/accessoires/accessoire-9447-9905-evo2008.png) |
+| 9419 | F00-83- 9419 | Tête PVC | ![Vis 9419](/assets/profiles/systeme70/accessoires/vis-9419-evo2008.png) |
+| 9B00 | F00-56- 9B00 | - | ![Profilé 9B00](/assets/profiles/systeme70/accessoires/profil-9b00-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 42)
+
+Ces trois pièces sont dessinées de la même façon sur les planches des dormants de rénovation et
+des battements (p. 7 et 18 à 21) ; les coupes ci-dessus sont celles de ces planches.
+
+## Petits bois des plans de 2008
+
+Le [petit bois](/reference/glossaire.md) est la baguette qui partage visuellement un vitrage en
+carreaux. La planche « Profilés complémentaires — Petit bois » (p. 43, échelle 1:2) dessine
+dix-sept petits bois en coupe. Chaque coupe porte en haut sa largeur (sa saillie, de la face
+plane au sommet) et à droite sa hauteur (sa largeur vue de face). Les sept premiers portent de
+chaque côté une lèvre souple dessinée en trait fin ; tous sauf le 1130 portent sur leur face plane
+une bande hachurée. La planche ne donne ni leur matière ni leur usage. Cotes en mm [4 p. 43].
+
+| Petit bois | Désignation complète | Largeur, en haut (mm) | Hauteur, à droite (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| 0724.T | F00-90- 0724.T | 11 | 20 | ![Petit bois 0724.T](/assets/profiles/systeme70/petits-bois/petit-bois-0724-t-evo2008.png) |
+| 0986.T | F40-90- 0986.T | 12 | 25 | ![Petit bois 0986.T](/assets/profiles/systeme70/petits-bois/petit-bois-0986-t-evo2008.png) |
+| 0725.T | F00-90- 0725.T | 11 | 30 | ![Petit bois 0725.T](/assets/profiles/systeme70/petits-bois/petit-bois-0725-t-evo2008.png) |
+| 1130 | F01-90- 1130 | 10 | 23 (16 sur la face de gauche) | ![Petit bois 1130 et adhésifs 9463 / 9464](/assets/profiles/systeme70/petits-bois/petit-bois-1130-adhesif-9463-9464-evo2008.png) |
+| 1448.T | F40-90- 1448.T | 12,1 | 40 | ![Petit bois 1448.T](/assets/profiles/systeme70/petits-bois/petit-bois-1448-t-evo2008.png) |
+| 0726.T | F00-90- 0726.T | 11 | 40 | ![Petit bois 0726.T](/assets/profiles/systeme70/petits-bois/petit-bois-0726-t-evo2008.png) |
+| 0734.T | F00-90- 0734.T | 12 | 40 | ![Petit bois 0734.T](/assets/profiles/systeme70/petits-bois/petit-bois-0734-t-evo2008.png) |
+| 9B63 | 9B63 | 8,7 | 27 | ![Petit bois 9B63](/assets/profiles/systeme70/petits-bois/petit-bois-9b63-evo2008.png) |
+| 9B64 | 9B64 | 11,2 | 27 | ![Petit bois 9B64](/assets/profiles/systeme70/petits-bois/petit-bois-9b64-evo2008.png) |
+| 9B65 | 9B65 | 8,7 | 35 | ![Petit bois 9B65](/assets/profiles/systeme70/petits-bois/petit-bois-9b65-evo2008.png) |
+| 9B66 | 9B66 | 11,2 | 35 | ![Petit bois 9B66](/assets/profiles/systeme70/petits-bois/petit-bois-9b66-evo2008.png) |
+| 9B67 | 9B67 | 14 | 50 | ![Petit bois 9B67](/assets/profiles/systeme70/petits-bois/petit-bois-9b67-evo2008.png) |
+| 0063 | 0063 | 10,3 | 26 | ![Petit bois 0063](/assets/profiles/systeme70/petits-bois/petit-bois-0063-evo2008.png) |
+| 0064 | 0064 | 12 | 26 | ![Petit bois 0064](/assets/profiles/systeme70/petits-bois/petit-bois-0064-evo2008.png) |
+| 0065 | 0065 | 10,3 | 35 | ![Petit bois 0065](/assets/profiles/systeme70/petits-bois/petit-bois-0065-evo2008.png) |
+| 0066 | 0066 | 12 | 35 | ![Petit bois 0066](/assets/profiles/systeme70/petits-bois/petit-bois-0066-evo2008.png) |
+| 0067 | 0067 | 12 | 50 | ![Petit bois 0067](/assets/profiles/systeme70/petits-bois/petit-bois-0067-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 43)
+
+À côté du 1130, la planche dessine une bande mince légendée « Adhésif double face F01-88- 9463
+blanc, F01-88- 9464 noir ». Le 0726.T est le seul petit bois à deux chambres. Les 9B63 à 9B67
+portent au milieu de leur face plane une encoche, en V sur les 9B63 et 9B65, arrondie sur les
+9B64, 9B66 et 9B67 ; les 0063 à 0067 ont une face plane sans encoche. Les 9B63 à 9B67 et 0063 à
+0067 sont écrits sans préfixe de désignation [4 p. 43]. Le petit bois collé du manuel de mise en
+œuvre de 2023 est décrit dans
+[Mise en œuvre des profilés complémentaires du système 70](/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md).
+
+La pose, le débit et les combinaisons de ces petits bois collés sur le vitrage (registre 5.6 du
+même classeur) sont sur [Montage des profilés complémentaires du système 70, 2008](/procedures/montage-profiles-complementaires-systeme-70-evo2008.md#petits-bois-rapportés-collés-registre-56) ;
+la liste de ce registre écrit F01-90 le préfixe des 0724.T, 0725.T, 0726.T, 0986.T et 1448.T
+(**INC-244**) [4 p. 262].
+
+## Profilé 5078 des plans de 2008
+
+La planche « Profilés complémentaires » (p. 44, échelle 1:2) dessine le profilé **5078**, un
+profilé plein en L dessiné hachuré, et à côté une coupe où il est légendé avec le profilé 0484.
+La planche ne donne ni sa matière ni sa fonction. Cotes en mm [4 p. 44].
+
+| Profilé | Désignation complète | Hauteur totale, à gauche (mm) | Largeur de l'aile haute (mm) | Épaisseur (mm) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 5078 | F00-69- 5078 | 230 | 85 | 10 | ![Profilé 5078](/assets/profiles/systeme70/complementaires/profil-5078-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 44)
+
+L'aile haute du 5078 se termine par un bec arrondi, avec un redan en sous-face.
+
+### Coupe du 5078 avec le 0484
+
+La coupe ci-dessous montre le 5078 debout, son aile haute retournée par-dessus un mur, et le
+profilé 0484 à son pied, contre un dormant coupé ; elle ne porte ni titre ni texte autre que les
+deux références et une cote.
+
+![Profilé 5078 dessiné avec le profilé 0484 et un dormant](/assets/profiles/systeme70/complementaires/pose-5078-0484-evo2008.png)
+
+À gauche, le dormant, dessiné en trait fin et coupé par des lignes de rupture, avec la cote
+verticale de 70 mm portée à côté du 0484 ; sous lui, un bloc quadrillé posé sur une maçonnerie
+pointillée. À droite du 5078 : une couche dessinée en zigzag (isolant), puis le mur hachuré ; en
+pied, une seconde couche en zigzag horizontale. Le 0484 est décrit au tableau *Profilés divers
+des plans de 2008* ci-dessus [4 p. 44].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 44)
+
 # Ce que la source ne donne pas
 
 Le poster ne donne pas la fonction des élargisseurs, profilés de liaison, cornières, profilés
@@ -1027,9 +1688,12 @@ V287, V288 et 656 ; le manuel de mise en œuvre donne ces inerties, sauf l'IG du
 
 [3] [Mise en œuvre Système 70 Plateforme, profine, version septembre 2023](raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf), p. 42-56
 
+[4] [Système e.VOLUTION, plan des profilés, système F 91, édition août 2008](raw/profine-plans-profiles-e-volution-2008-08.pdf), p. 7 et 24-44
+
 # Voir aussi
 
 - [Posters Gamme 70 KÖMMERLING](/sources/posters-kommerling-70.md)
+- [Plans des profilés e.VOLUTION, 2008](/sources/plans-profiles-e-volution-2008.md)
 - [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
 - [Renforts et accessoires par profilé du système 70](/profiles/systeme-70-accessoires-par-profile.md)
 - [Mise en œuvre Système 70 Plateforme](/sources/profine-mise-en-oeuvre-systeme-70.md)

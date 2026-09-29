@@ -13,9 +13,15 @@ sources:
     id: profine-mise-en-oeuvre-systeme-70
     title: Mise en œuvre Système 70 Plateforme, profine, version septembre 2023
     last_modified: 2023-09-30
+  - resource: raw/profine-plans-profiles-e-volution-2008-08.pdf
+    id: profine-plans-e-volution-2008
+    title: Système e.VOLUTION, plan des profilés et manuel technique, système F 91, édition août 2008
+    last_modified: 2008-08-31
 source_pages:
   - resource: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf
     pages: 171
+  - resource: raw/profine-plans-profiles-e-volution-2008-08.pdf
+    pages: 176
 generated:
   by: process:claude-code
   at: 2026-09-28T18:00:00Z
@@ -91,11 +97,24 @@ la méthode de la section 2.3.4 nomme cette valeur Iw (inertie au vent).
 Valeurs relevées ligne par ligne sur la page rendue à 400 dpi ; elles concordent toutes, au
 dixième près, avec la formule de la charge trapézoïdale de la section 2.3.4.
 
+# Même table dans les plans e.VOLUTION de 2008
+
+Le registre 4.2 « Statique » du classeur e.VOLUTION d'août 2008 (système F 91) imprime la même
+table, « Table des moments d'inerties Iz en cm4 », classement V\*B1, 400 Pa, flèche 1/200,
+portées 100 à 650 cm, largeurs de charge 20 à 200 cm et flèche calculée : relue case par case à
+400 dpi contre la table ci-dessus, elle porte les mêmes valeurs, les mêmes cases vides et les
+mêmes flèches calculées. Son en-tête de page écrit « Tableau des moments d'inerties Iz » [2 p. 176].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 176)
+
 # Citations
 
 [1] Mise en œuvre Système 70 Plateforme, profine, version septembre 2023 —
 `raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf`, registre 2.3.4 « Statique », p. 171 du PDF
 (page imprimée 25)
+
+[2] Système e.VOLUTION, plan des profilés et manuel technique, système F 91, édition août 2008 —
+`raw/profine-plans-profiles-e-volution-2008-08.pdf`, registre 4.2 « Statique », PDF p. 176 (page imprimée 39)
 
 # Voir aussi
 

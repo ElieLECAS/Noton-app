@@ -1,7 +1,7 @@
 ---
 type: Profilé
 title: Abaques dimensionnels de renforcement du système 70
-description: Les règles générales de renforcement des ouvrants du système 70 Plateforme (vitrage de 35 kg/m² au plus, classements A*3 E*7B V*A2 et V*A3, entraxe de verrouillage, paumelles, renfort V258) et la clé de lecture des dix-huit abaques de renforcement d'ouvrant, repères A à G et 1 à 7, relevés case par case sur deux pages par classement au vent.
+description: Les règles générales de renforcement des ouvrants du système 70 Plateforme (vitrage de 35 kg/m² au plus, classements A*3 E*7B V*A2 et V*A3, entraxe de verrouillage, paumelles, renfort V258) et la clé de lecture des dix-huit abaques de renforcement d'ouvrant, repères A à G et 1 à 7, relevés case par case sur deux pages par classement au vent, avec les remarques du classeur e.VOLUTION de 2008 (vitrage de 30 kg/m² au plus, renfort V127).
 tags: [profine, systeme-70, abaque, renforcement, ouvrant, of, ob, deux-vantaux, v158, v258, v057, paumelle, verrouillage, va2, va3]
 systeme: 70
 fournisseur: KÖMMERLING
@@ -21,7 +21,7 @@ source_pages:
   - resource: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf
     pages: 128-146
   - resource: raw/profine-plans-profiles-e-volution-2008-08.pdf
-    pages: 120, 126
+    pages: 120
 generated:
   by: process:claude-code
   at: 2026-09-28T16:00:00Z
@@ -264,15 +264,56 @@ Trois en-têtes ne correspondent pas à la planche qu'ils coiffent :
   quadrillage diffère de celui de la planche V\*A2 des mêmes ouvrants (PDF p. 136) — entrée
   **INC-135**.
 
-# Données du plan des profilés e.VOLUTION 2008
+# Remarques des plans e.VOLUTION de 2008
 
-Ces deux phrases viennent du plan des profilés e.VOLUTION 2008 et n'ont pas été recontrôlées lors
-de la relecture du manuel 2023 :
+Le classeur KÖMMERLING « Système e.VOLUTION » d'août 2008 (système F 91) ouvre son registre 4.1,
+« Diagrammes de renforcement — Généralités », sur une page de remarques ; ses abaques sont appelés
+« diagrammes de renforcement ». Ces règles décrivent les menuiseries fabriquées d'après ce
+classeur. Dans les termes de la page, sous le titre « Remarques importantes concernant les abaques
+de renforcement » [2 p. 120] :
 
-- Renforcement obligatoire de tous les profilés couleur : aucun profilé dormant ou ouvrant de
-  couleur ne peut être débité sans armature acier, y compris pour les petites dimensions [2 p. 120].
-- L'utilisation d'une traverse intermédiaire 6127 soudée ou mécanisée est obligatoire dès que le
-  vantail dépasse 2 200 mm de hauteur en couleur pour stabiliser les montants d'ouvrant [2 p. 126].
+- Les calculs de renforcement des abaques ci-joints sont établis pour un vitrage ne dépassant pas
+  **30 kg/m², soit 12 mm de verre maxi**. Au-delà de ce poids, un renforcement systématique est
+  conseillé.
+- Ces diagrammes ont été établis pour un classement A\*3 - E\*7B V\*A2 et A\*3 - E\*7B V\*A3.
+- La largeur ouvrant ne doit pas dépasser de 25 % la hauteur ouvrant et l'entraxe maxi de
+  verrouillage est de 800 mm.
+- Tout profil d'ouvrant est renforcé lorsque les points de verrouillage entre gâches ou
+  gâches-paumelles sont espacés de plus de 800 mm.
+- NOTA : ces abaques sont valables soit pour un verrouillage par renvoi d'angle, soit par sortie de
+  tringle (pour OF). Dans ce dernier cas, les parties horizontales ouvrants H/B des repères 2, 4
+  et 6 devront être renforcées.
+- Le montant côté paumelles est renforcé lorsque celles-ci sont distantes de plus de 600 mm.
+  Profil renforcé, cette distance ne peut excéder 700 mm.
+- Les paumelles d'extrémité devront se situer à 100 mm des angles.
+- Dans le cas d'exigences acoustiques AC3 et AC4, le renforcement systématique est conseillé, afin
+  d'apporter de la masse à l'ensemble et de rigidifier les ouvrants compte tenu de la masse
+  importante des vitrages.
+
+« Pour mémoire » : la densité du verre est de 2,5, ce qui donne une masse de 2,5 kg/m² par mm
+d'épaisseur pour les vitrages plans ; un vitrage 4 - 16 - 4 porte 8 mm de verre, donc un poids de
+8 × 2,5 = 20 kg/m² [2 p. 120].
+
+NOTA, renfort V127 : « Avec utilisation du renfort V127 en épaisseur 1,25 mm les dimensions
+maximales ouvrant à ne pas dépasser sont » :
+
+| Renfort | Largeur d'ouvrant maxi (mm) | Hauteur d'ouvrant maxi (mm) | DHT correspondante, largeur (mm) | DHT correspondante, hauteur (mm) |
+| --- | --- | --- | --- | --- |
+| V127 (1,25 mm) | 650 | 2 070 | 1 400 | 2 150 |
+| V127 (1,25 mm) | 550 | 2 170 | 1 200 | 2 250 |
+
+Les deux lignes sont deux alternatives (« ou »). La page se termine par « Les tableaux de
+renforcement sont dispossible aux pages suivante » (orthographe de la page) [2 p. 120].
+
+Par rapport au registre 2.3.3 du manuel de 2023 (section *Remarques importantes* ci-dessus) : la
+limite de vitrage est de 30 kg/m² (12 mm de verre) en 2008 et de 35 kg/m² (14 mm) en 2023
+(**CTR-80**) ; les mêmes dimensions maximales sont données pour le renfort V127 en 2008 et pour le
+renfort V258 en 2023 (**CTR-81**). La page de 2008 ne porte ni l'encadré « attention » du V258
+sur les profilés laqués ou filmés, ni la règle de renforcement systématique des traverses et
+meneaux ; toutes les autres remarques sont les mêmes [2 p. 120].
+
+Les diagrammes de 2008 eux-mêmes, relevés case par case, sont sur
+[Abaques de renforcement du système 70, plans e.VOLUTION de 2008](/profiles/systeme-70-abaques-evo2008.md).
 
 # Ce que la source ne donne pas
 
@@ -291,12 +332,13 @@ de la relecture du manuel 2023 :
 renforcement », p. 128 à 146 du PDF (pages imprimées 1 à 19)
 
 [2] Système e.VOLUTION, plan des profilés et manuel technique, système F 91, édition août 2008 —
-`raw/profine-plans-profiles-e-volution-2008-08.pdf`, p. 120 et 126
+`raw/profine-plans-profiles-e-volution-2008-08.pdf`, registre 4.1 « Diagrammes de renforcement — Généralités », PDF p. 120 (page imprimée 1)
 
 # Voir aussi
 
 - [Abaques de renforcement du système 70, classement V\*A2](/profiles/systeme-70-abaques-va2.md)
 - [Abaques de renforcement du système 70, classement V\*A3](/profiles/systeme-70-abaques-va3.md)
+- [Abaques de renforcement du système 70, plans e.VOLUTION de 2008](/profiles/systeme-70-abaques-evo2008.md)
 - [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
 - [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md)
 - [Mise en œuvre des renforts du système 70](/procedures/mise-en-oeuvre-renforts-systeme-70.md)

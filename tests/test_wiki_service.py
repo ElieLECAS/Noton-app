@@ -189,6 +189,7 @@ def test_facettes_inconnues_au_lint(small_wiki: Path):
 
 
 def test_get_snapshot_reloads_when_a_file_changes(small_wiki: Path, monkeypatch):
+    monkeypatch.setattr("app.services.wiki_service.VERIFICATION_TTL", 0)
     monkeypatch.setattr(settings, "WIKI_DIR", str(small_wiki))
     reset_snapshot()
     first = get_snapshot()
@@ -213,6 +214,7 @@ def test_get_snapshot_reloads_when_a_file_changes(small_wiki: Path, monkeypatch)
 
 
 def test_le_vocabulaire_change_invalide_le_cache(small_wiki: Path, monkeypatch):
+    monkeypatch.setattr("app.services.wiki_service.VERIFICATION_TTL", 0)
     """Un tag nouveau entre dans le vocabulaire, donc dans le prompt : la clé doit bouger."""
     monkeypatch.setattr(settings, "WIKI_DIR", str(small_wiki))
     reset_snapshot()

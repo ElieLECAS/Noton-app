@@ -28,11 +28,11 @@ generated:
 
 # Les en-têtes pictographiques se lisent avec la légende des pages 10 à 12
 
-Le catalogue Roto NX PVC (451 pages) donne, de la page 212 à 451, une référence de commande par
-composant et par cote — crémones, renvois d'angle, compas, verrouilleurs, pivots, pièces de
-fermeture, accessoires. **Ses colonnes sont des pictogrammes, pas du texte**, mais chacun est
-défini une fois pour toutes dans la légende des pages 10 à 12 : la table est donc lisible, à
-condition de rendre la page en image et de reconnaître chaque icône.
+Les tableaux de commande du catalogue Roto NX PVC ont des **pictogrammes en en-tête de
+colonne**, pas du texte. Les quarante-deux pictogrammes du catalogue sont définis dans sa légende,
+reprise avec leurs dessins sur
+[Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md)
+[1 p. 10-12].
 
 Douze pictogrammes reviennent sur la planche des crémones OB KSR, dans cet ordre :
 
@@ -52,11 +52,6 @@ Douze pictogrammes reviennent sur la planche des crémones OB KSR, dans cet ordr
 | 12 | « N° » | N° de matériel | référence de commande |
 
 (schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 10, 11, 12 et 215)
-
-**Cette légende n'a pas besoin d'être relue à chaque planche** : les 240 pages de tableaux de
-2023 réutilisent le même système de douze pictogrammes, dans des colonnes qui peuvent être
-réordonnées ou réduites selon le composant. Une fois l'ordre des icônes vérifié en tête de
-planche, chaque ligne de la table se transcrit sans ambiguïté.
 
 # Crémone OB KSR, hauteur de poignée fixe, axe de fouillot 15 mm
 

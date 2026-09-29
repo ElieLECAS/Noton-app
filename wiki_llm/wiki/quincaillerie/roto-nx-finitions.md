@@ -1,25 +1,79 @@
 ---
 type: Quincaillerie
 title: Finitions Roto NX — caches et quincaillerie laquée
-description: Les références de caches Roto NX par coloris (compas, paliers de compas, pivot et paliers d'angle, kit de 5 pièces, bouchons), les compas, paumelles, paliers et pivots livrés laqués blanc ou titane, et le montage du renvoi de fouillot avec ses cotes de perçage.
+description: Les codes couleur Roto et leur équivalence RAL, les références de caches Roto NX par coloris (compas, paliers de compas, pivot et paliers d'angle, kit de 5 pièces, bouchons), les compas, paumelles, paliers et pivots livrés laqués blanc ou titane, et le montage du renvoi de fouillot avec ses cotes de perçage.
 tags: [roto, roto-nx, cache, coloris, laque, quincaillerie, finition, renvoi-de-fouillot]
 systeme: Roto NX
 fournisseur: ROTO
 usage: [chiffrage, atelier]
 famille: finitions
-status: stable
+status: draft
 sources:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     id: roto-nx-ksr-montage-imo-180
     title: Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2
     last_modified: 2022-11-30
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    id: roto-nx-catalogue-ctl-105
+    title: Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023
+    last_modified: 2023-06-30
 source_pages:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     pages: 73, 85-87
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    pages: 13
 generated:
   by: process:claude-code
   at: 2026-09-20T01:10:00Z
 ---
+
+# Codes couleur Roto
+
+Les pièces apparentes Roto NX (caches, compas, paliers laqués) se commandent par un **code couleur
+Roto** (R01.1, R07.2…). Le catalogue Roto NX pour profils PVC de juin 2023 donne la table de
+correspondance : une ligne par code Roto, la référence standard (RAL) quand il y en a une, et le nom
+de la couleur. Un « – » est une case imprimée « – » : pas de référence standard [2 p. 13].
+
+| Code couleur Roto | Code couleur standard | Couleur |
+| --- | --- | --- |
+| R01.1 | – | Argent naturel |
+| R01.2 | – | Champagne |
+| R01.3 | – | Titane |
+| R01.4 | – | Chrome |
+| R01.5 | – | Argent |
+| R02.2 | RAL 7016 | Gris anthracite |
+| R03.1 | – | Laiton mat |
+| R03.2 | – | Laiton brillant |
+| R03.3 | – | Or |
+| R03.4 | – | Aspect inox |
+| R04.1 | RAL 8019 | Gris-marron |
+| R04.3 | – | Brun-olive |
+| R04.4 | RAL 8022 | Brun-noir |
+| R05.3 | – | Bronze moyen |
+| R05.4 | – | Bronze foncé |
+| R05.5 | – | Bronze |
+| R06.2M | RAL 9005 mat | Noir intense mat |
+| R06.2 | RAL 9005 | Noir intense |
+| R06.4M | – | Noir mat |
+| R07.1 | RAL 9010 | Blanc pur |
+| R07.2 | RAL 9016 | Blanc |
+| R07.3 | RAL 9001 | Blanc-crème |
+| SF | SF | Couleur spéciale |
+| Brut | Brut | Sans revêtement |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 13)
+
+Dix pastilles d'exemple sont imprimées sous la table (R01.1, R01.2, R01.3, R03.1, R04.1, R04.4,
+R05.3, R05.5, R06.2, R07.2). « Des écarts de coloris par rapport à l'illustration sont possibles. »
+La pastille est un rendu indicatif, le code fait foi [2 p. 13].
+
+![Exemples de couleur : R01.1, R01.2, R01.3, R03.1, R04.1, R04.4, R05.3, R05.5, R06.2, R07.2](/assets/quincaillerie/roto-nx-catalogue/informations/exemples-de-couleur.png)
+
+Les noms des tables de caches ci-dessous, relevés sur le manuel de montage KSR, ne sont pas toujours
+ceux du catalogue : R04.3 y est « brun olive (RAL 8008) » quand le catalogue ne donne aucun code
+standard, R04.4 « brun foncé (RAL 8022) » au lieu de « Brun-noir », R01.3 « titane mat F9 » au lieu
+de « Titane », R06.2 « noir » au lieu de « Noir intense » (RAL 9005) ; **CTR-104**. Les codes
+« 7035 » et « 8003 » des tables de caches n'ont pas de ligne dans la table du catalogue.
 
 # Caches selon couleur
 
@@ -232,6 +286,9 @@ les nomenclatures) ; la page ne dit pas à quelle gamme de profilé correspond l
 [1] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf.
 IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 85 à 87
 (numérotation du PDF)
+
+[2] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 —
+`raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 13 (numérotation du PDF)
 
 # Voir aussi
 

@@ -304,7 +304,8 @@ S076, des vis plot S073 (à tête métallique) pour profilé PVC ou des vis plot
 
 Entraxe vis plot ou clip : positionner les vis plot au plus proche des extrémités du châssis, en
 partie haute et basse, en respectant un entraxe maxi de 300 mm ; environ 35 mm des extrémités du
-rejet d'eau, entraxe maxi de 300 mm.
+rejet d'eau, entraxe maxi de 300 mm. Le classeur e.VOLUTION de 2008 espace les clips de 20 cm
+environ ([Montage des profilés complémentaires du système 70, 2008](/procedures/montage-profiles-complementaires-systeme-70-evo2008.md), **CTR-93**).
 
 Étapes de travail pour clip S076 :
 
@@ -364,7 +365,8 @@ Une ligne par coulisse, cotes en mm relevées sur la coupe [1 p. 294].
 
 La tulipe du 1025 est écrite 95336 ici, 9536 au poster des profilés complémentaires
 transcrit sur [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md#coulisses-et-tulipes)
-(entrée **CTR-63**). Sur le 1084, la seule cote verticale de gauche est 29,15 mm.
+(entrée **CTR-63**). Sur le 1084, la seule cote verticale de gauche est 29,15 mm. Le classeur
+e.VOLUTION de 2008 donne la 0473.2 pour des lames de 14 mm ([Montage des profilés complémentaires du système 70, 2008](/procedures/montage-profiles-complementaires-systeme-70-evo2008.md), **CTR-94**).
 
 ![Pièces de fixation S076, S074, S073 et joints G081, G083](/assets/procedures/moe-systeme-70/profiles-complementaires/coulisses-pieces-s076-s074-s073-g081-g083.png)
 
@@ -543,7 +545,8 @@ dormant bas [1 p. 300] :
 ![Protège-seuil 9G13 collé sur la feuillure du dormant, 18,3 × 27,5 mm](/assets/procedures/moe-systeme-70/profiles-complementaires/protege-seuil-9g13.png)
 
 Le 9G13 est coté 18,3 mm de large, 27,5 mm de haut hors tout et 22,6 mm sur la partie
-collée (schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 300).
+collée (schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 300). Le classeur e.VOLUTION de
+2008 le fixe par un cordon de silicone ou par vis inox ([Montage des profilés complémentaires du système 70, 2008](/procedures/montage-profiles-complementaires-systeme-70-evo2008.md), **CTR-95**).
 
 # Ce que le document ne dit pas
 
@@ -557,6 +560,7 @@ registre 2.5.1, PDF p. 281 à 300
 
 # Voir aussi
 
+- [Montage des profilés complémentaires du système 70, 2008](/procedures/montage-profiles-complementaires-systeme-70-evo2008.md)
 - [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md)
 - [Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md)
 - [Mise en œuvre du seuil aluminium du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md)

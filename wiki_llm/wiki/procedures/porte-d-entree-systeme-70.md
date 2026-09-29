@@ -99,6 +99,10 @@ masse (PVC coloré dans la masse, blanc, beige ou gris) ou plaxés** (revêtus d
 
 \* Poids maxi du remplissage : 30 kg/m².
 
+Le classeur e.VOLUTION de 2008 donne 1000 × 2200 mm à la porte 1 vantail en profilés filmés
+(**CTR-99**) ; la porte d'entrée de 2008 est sur [Systèmes spéciaux du système 70,
+2008](/procedures/systemes-speciaux-systeme-70-evo2008.md#porte-dentrée-registre-63).
+
 (schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 276)
 
 ## Coupe A-A de la porte d'entrée

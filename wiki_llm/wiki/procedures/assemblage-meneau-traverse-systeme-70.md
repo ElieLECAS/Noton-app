@@ -151,6 +151,10 @@ débit », à droite, repère la longueur de débit du meneau [1 p. 235].
 Les deux détails agrandis : X, le premier épaulement de 20,2 mm, avec son chanfrein à
 15,5° ; Y, l'angle à 45° du bord gauche, avec un retrait de 0,5 mm.
 
+Le même contour dans le classeur e.VOLUTION de 2008 porte « 16° ±0° » au point X, 15,5 mm
+d'avancée et 50 ± 0,1 mm (**VER-116**) : [Assemblages mécaniques des meneaux et traverses du système
+70, 2008](/procedures/assemblage-mecanique-meneau-traverse-systeme-70-evo2008.md).
+
 ![Détail X du gabarit de fraisage : chanfrein à 15,5°, épaulement de 20,2 mm](/assets/procedures/moe-systeme-70/meneau-traverse/gabarit-fraisage-detail-x.png)
 
 ![Détail Y du gabarit de fraisage : angle à 45°, retrait de 0,5 mm](/assets/procedures/moe-systeme-70/meneau-traverse/gabarit-fraisage-detail-y.png)
@@ -332,6 +336,8 @@ de fraisage meneau 6127 » [1 p. 240].
 5. Mettre en place le patin d'étanchéité (4) correspondant au profilé.
 6. Fixer l'équerre de fond de feuillure (3) au moyen de vis Ø 3,9 × 16 mm dans le meneau (A) et dans
    la feuillure du dormant (B).
+
+Le classeur e.VOLUTION de 2008 donne des vis Ø 4,2 × 16 mm pour cette étape (**CTR-90**).
 
 [1 p. 243]
 

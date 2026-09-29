@@ -32,6 +32,10 @@ sources:
     id: profine-mise-en-oeuvre-76-advanced
     title: Mise en œuvre Système 76 Advanced, profine
     last_modified: 2023-12-14
+  - resource: raw/profine-plans-profiles-e-volution-2008-08.pdf
+    id: profine-plans-e-volution-2008
+    title: Système e.VOLUTION, plan des profilés, système F 91, édition août 2008
+    last_modified: 2008-08-31
 source_pages:
   - resource: raw/dtd-6-16-2335-v5-e-volution.pdf
     pages: 6-7, 9, 22
@@ -45,6 +49,8 @@ source_pages:
     pages: 4, 8-9, 18
   - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
     pages: 16, 312
+  - resource: raw/profine-plans-profiles-e-volution-2008-08.pdf
+    pages: 45
 generated:
   by: process:claude-code
   at: 2026-09-18T23:00:00Z
@@ -300,6 +306,39 @@ Les joints sont dessinés en coupe, leur pied en flèche à gauche (la partie qu
 rainure du profilé), la lèvre à droite ; le pointillé figure la matière souple. Les 9045, 9E46,
 101000 et 9043 ne figurent pas dans le tableau des joints du DTD ci-dessus.
 
+## Joints des plans e.VOLUTION de 2008
+
+La première planche « Accessoires » du classeur KÖMMERLING e.VOLUTION d'août 2008 (registre 1.6,
+p. 45, échelle 1:1) dessine onze joints en coupe, sans aucune cote. Quatre portent leur fonction
+sous la référence ; les autres n'en portent pas. Sur le dessin, le pointillé figure la matière
+souple ; les 9014, 9090, 9091 et 9092 sont des brosses, poils dessinés en traits fins sur un pied
+noir. Une ligne par joint, dans l'ordre de la planche [7 p. 45].
+
+| Joint | Désignation complète | Fonction écrite sur la planche | Coupe |
+| --- | --- | --- | ---: |
+| 9C32.T | F00-45- 9C32.T | joint de frappe dormant | ![Joint 9C32.T](/assets/profiles/systeme70/joints/joint-9c32-t-evo2008.png) |
+| 9014 | F00-46- 9014 | - (brosse) | ![Joint brosse 9014](/assets/profiles/systeme70/joints/joint-9014-evo2008.png) |
+| 9017 | F00-45- 9017 | - | ![Joint 9017](/assets/profiles/systeme70/joints/joint-9017-evo2008.png) |
+| 9029.1 | F00-45- 9029.1 | - | ![Joint 9029.1](/assets/profiles/systeme70/joints/joint-9029-1-evo2008.png) |
+| 9C31.T | F00-45- 9C31.T | joint de frappe ouvrant | ![Joint 9C31.T](/assets/profiles/systeme70/joints/joint-9c31-t-evo2008.png) |
+| 9043 | F40-45- 9043 | joint de décompression | ![Joint 9043](/assets/profiles/systeme70/joints/joint-9043-evo2008.png) |
+| 9B58.T | F00-45- 9B58.T | joint de vitrage | ![Joint 9B58.T](/assets/profiles/systeme70/joints/joint-9b58-t-evo2008.png) |
+| 9076 | F00-45- 9076 | - | ![Joint 9076](/assets/profiles/systeme70/joints/joint-9076-evo2008.png) |
+| 9090 | F00-46- 9090 | - (brosse) | ![Joint brosse 9090](/assets/profiles/systeme70/joints/joint-9090-evo2008.png) |
+| 9091 | F00-46- 9091 | - (brosse) | ![Joint brosse 9091](/assets/profiles/systeme70/joints/joint-9091-evo2008.png) |
+| 9092 | F00-46- 9092 | - (brosse, la plus haute des quatre) | ![Joint brosse 9092](/assets/profiles/systeme70/joints/joint-9092-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 45)
+
+Le [joint de frappe](/reference/glossaire.md) dormant 9C32.T, le joint de frappe ouvrant 9C31.T
+et le joint de décompression 9043 portent la même fonction qu'au poster de 2025 (tableau
+ci-dessus). Le joint de vitrage de 2008 est le 9B58.T, que le DTD désigne « vitrage sur
+ouvrant » ; le poster dessine comme joints de vitrage le G342 T et le 9045. Le 9017 et la brosse
+9014 sont aussi dessinés dans la gorge des coulisses de volet roulant (voir
+[Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md),
+*Coulisses des plans de 2008*). Le 9076 est un joint symétrique à deux pieds en flèche et à lèvre
+en V ; le 9029.1 un joint plat à boucle en bout [7 p. 45].
+
 # Assemblage mécanique du meneau, système 76
 
 Après contre-profilage, la pièce de maintien du kit est vissée en extrémité, la pièce
@@ -358,6 +397,8 @@ l'anodisation du label **QUALANOD** selon la norme NF P24-351. Voir
 registre 2.1.1, p. 16 du PDF, et registre 2.6.2, p. 8 imprimée (p. 312 du PDF)
 
 [6] [Poster Kömmerling Gamme 70, profilés complémentaires, mars 2025](raw/poster-kommerling-70-complementaires-2025-03.pdf), p. 1
+
+[7] [Système e.VOLUTION, plan des profilés, système F 91, édition août 2008](raw/profine-plans-profiles-e-volution-2008-08.pdf), p. 45
 
 # Voir aussi
 

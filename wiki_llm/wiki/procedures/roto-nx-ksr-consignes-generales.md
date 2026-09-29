@@ -1,21 +1,27 @@
 ---
 type: Procédure
 title: Roto NX KSR — conventions, documents applicables et consignes de sécurité du manuel de montage
-description: Ce qui encadre tout ferrage Roto NX KSR sur fenêtre et porte-fenêtre PVC : documents et directives applicables, repères de couleur, symboles, pictogrammes et abréviations des dessins, groupes cibles et leurs obligations d'instruction, responsabilité, protection des surfaces, consignes de sécurité et utilisation conforme.
+description: "Ce qui encadre tout ferrage Roto NX KSR sur fenêtre et porte-fenêtre PVC : documents et directives applicables, repères de couleur, symboles, pictogrammes et abréviations des dessins, groupes cibles et leurs obligations d'instruction, responsabilité, protection des surfaces, consignes de sécurité et utilisation conforme."
 tags: [roto, roto-nx, ksr, ferrure, montage, securite, pictogrammes, abreviations, tbdk, vhbe, vhbh, fpkf, din-107]
 systeme: Roto NX
 fournisseur: ROTO
 usage: [atelier, pose]
 famille: consignes-generales
-status: stable
+status: draft
 sources:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     id: roto-nx-ksr-montage-imo-180
     title: Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2
     last_modified: 2022-11-30
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    id: roto-nx-catalogue-ctl-105
+    title: Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023
+    last_modified: 2023-06-30
 source_pages:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     pages: 1-2, 6-22, 124
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    pages: 21, 34
 generated:
   by: process:claude-code
   at: 2026-09-29T12:00:00Z
@@ -66,6 +72,21 @@ Les directives suivantes s'appliquent avec ces instructions [1 p. 6] :
 - les instructions et informations des fabricants de profilés (par exemple des fabricants de
   fenêtres ou portes-fenêtres) ;
 - les réglementations, directives et lois nationales en vigueur.
+
+Le catalogue Roto NX pour profils PVC (section 1.5 « Groupement Qualité Serrures et Ferrures »)
+renvoie aux mêmes directives pour « tout ce qu'il faut savoir sur l'utilisation et la maintenance
+correctes des ferrures pour fenêtres et portes-fenêtres », et en reproduit les pages de garde,
+en allemand et à une taille qui ne se lit pas [2 p. 21] :
+
+| Directive | Objet, dans les termes du catalogue |
+| --- | --- |
+| VHBH | Ferrures pour fenêtres et portes-fenêtres – Prescriptions et recommandations pour le produit et pour la prise de responsabilité |
+| VHBE | Ferrures pour fenêtres et portes-fenêtres – Prescriptions et recommandations à l'usage des utilisateurs finaux |
+| TBDK | Fixation de pièces de ferrure porteuses de ferrures pour ouvrant à la française et oscillo-battant avec définitions des ferrures pour ouvrant à la française et oscillo-battant ainsi que de leurs positions de montage possibles |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 21)
+
+Les deux objets donnés à la VHBH diffèrent ; **CTR-105**.
 
 En complément, le respect des directives suivantes du VFF (Syndicat des fabricants de fenêtres et
 de façades) est recommandé [1 p. 6] :
@@ -623,21 +644,30 @@ qui suit [1 p. 21] :
 4. **La ferrure complète doit être constituée exclusivement de pièces du Système Roto d'origine.**
    L'utilisation conjointe de pièces d'origine étrangère exclut toute responsabilité.
 
+Le catalogue Roto NX pour profils PVC de juin 2023 imprime ces quatre points à l'identique, en
+tête de son chapitre 2 « Diagrammes d'applications » (2.1 « Recommandations générales ») [2 p. 34].
+
 ## Prescriptions sur la responsabilité des produits
 
 Pour la fixation des pièces de ferrure, il faut utiliser des **vis de montage de fenêtre en acier
 galvanozinguées et passivées**. Il appartient au fabricant de fenêtres de veiller à ce que la
 fixation soit suffisante ; le cas échéant, il faut faire intervenir le fabricant de vis [1 p. 21].
+Le catalogue de juin 2023 écrit « vis de montage de fenêtre en acier galvanisées et passivées »
+[2 p. 34].
 
 Dans le cas de la fixation de pièces de ferrure porteuses affectant la sécurité, telles que palier
 de compas et palier d'angle, les forces de traction doivent être orientées perpendiculairement au
 plan de l'ouvrant selon le tableau des forces de traction de la directive TBDK, reproduit sur
 [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) (section *Cotes de
-force de traction par poids de vantail*) [1 p. 21-22].
+force de traction par poids de vantail*) [1 p. 21-22]. Le catalogue de juin 2023 formule
+l'obligation ainsi : lors de la fixation de pièces de ferrure porteuses essentielles en matière
+de sécurité (côtés paumelles), le fabricant de fenêtres et de portes-fenêtres doit certifier les
+forces spécifiées conformément au tableau (extrait de la directive TBDK) au moyen d'essais et les
+garantir sur son produit [2 p. 34].
 
 **Ne pas utiliser de produits d'étanchéité à réticulation à l'acide**, qui peuvent conduire à la
 corrosion des éléments de ferrure. Les directives de calage pour la technique de vitrage doivent
-être respectées [1 p. 22].
+être respectées [1 p. 22] [2 p. 34].
 
 ## Responsabilité du produit — exclusion de responsabilité
 
@@ -645,20 +675,25 @@ Le fabricant de ferrure ne saurait être tenu responsable des dysfonctionnements
 détériorations des ferrures, ainsi que des fenêtres ou portes-fenêtres en étant équipées, lorsque
 ceux-ci peuvent être rapportés à une insuffisance de signalement, un non-respect des prescriptions
 d'installation et des schémas d'utilisation et que les ferrures sont exposées à un encrassement
-important. La garantie couvre uniquement les composants Roto d'origine [1 p. 22].
+important. La garantie couvre uniquement les composants Roto d'origine [1 p. 22] ; le catalogue
+de juin 2023 écrit « La garantie porte uniquement sur les éléments Roto d'origine » [2 p. 34].
 
 ## Classification des profilés — domaines d'application
 
 Les schémas d'utilisation respectifs doivent être respectés impérativement. Pour la détermination
 des formats de vantail et des poids de vantail maximum admissibles, les indications des fabricants
 de profilés et des propriétaires de systèmes ne doivent pas par ailleurs être dépassées — voir
-[Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) [1 p. 22].
+[Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) [1 p. 22]
+[2 p. 34].
 
 # Citations
 
 [1] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, côté paumelle P et
 Designo II, réf. IMO_180_NX_FR_v2, Roto Frank Ferrures S.A.S., novembre 2022 —
 `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`
+
+[2] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 —
+`raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 21 et 34
 
 # Voir aussi
 

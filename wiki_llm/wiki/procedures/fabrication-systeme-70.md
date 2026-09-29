@@ -106,6 +106,10 @@ avec le Ø fraise et la longueur de débit [1 p. 27].
 
 (schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 27)
 
+Les deux cas de soudure à plat (parements intérieurs soudés ou non), l'aspect qualitatif, l'aspect
+matériel et la restriction à la traverse d'ouvrant (**CTR-89**) du classeur e.VOLUTION de 2008 sont sur
+[Directives générales de fabrication du système 70, 2008](/procedures/directives-generales-systeme-70-evo2008.md#soudure-à-plat-registre-510).
+
 ## Assemblage dormant et élargisseurs
 
 Un élargisseur se visse sous le dormant pour l'agrandir ; un rehausseur est un élargisseur posé

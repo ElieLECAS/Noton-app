@@ -37,9 +37,15 @@ sources:
     id: profine-mise-en-oeuvre-systeme-70
     title: Mise en œuvre Système 70 Plateforme, profine, version septembre 2023
     last_modified: 2023-09-30
+  - resource: raw/profine-plans-profiles-e-volution-2008-08.pdf
+    id: profine-plans-e-volution-2008
+    title: Système e.VOLUTION, plan des profilés et manuel technique, système F 91, édition août 2008
+    last_modified: 2008-08-31
 source_pages:
   - resource: raw/profine-directives-generales-2023-01.pdf
     pages: 4, 8-16, 47
+  - resource: raw/profine-plans-profiles-e-volution-2008-08.pdf
+    pages: 120-121, 138-166, 215-216, 227-228, 243-245, 253, 257, 259-260, 307, 309, 311, 317, 321
 generated:
   by: process:claude-code
   at: 2026-09-18T22:00:00Z
@@ -152,6 +158,21 @@ mobiles, les ouvrants, qui portent le vitrage.
 | Élévation | dessin de la menuiserie vue de face | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
 | Pose en applique, en tableau, en tunnel | le dormant fixé contre une face du mur, dans l'épaisseur de la baie contre un épaulement, ou dans l'épaisseur de la baie sans épaulement | [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md) |
 | Rejingot | ressaut de la maçonnerie sous l'appui, qui arrête l'eau | [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md) |
+| Pose en feuillure, en ébrasement, au nu intérieur | le dormant logé dans la feuillure (ressaut) des tableaux ; dans la feuillure avec des tableaux intérieurs évasés (ébrasement) ; aligné sur le plan de la face intérieure du mur | [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) |
+| Calfeutrement | remplissage et étanchement du joint entre le dormant et le gros œuvre | [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) |
+| Précadre | cadre de montage posé d'abord dans la baie, sur lequel la fenêtre est ensuite fixée | [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) |
+| Réservation (maçonnerie) | ouverture laissée par le maçon pour recevoir la menuiserie, cotée en hauteur et largeur tableau fini | [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) |
+| Face dressée | face du mur rendue plane pour recevoir le dormant en pose en applique | [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) |
+| Lisse filante | profilé posé sur toute la largeur d'un appui reconstitué, qui reçoit le dormant ; « si acier, galvanisation Z 275 » | [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) |
+| Coupe sur montant, coupe sur appui | coupe horizontale au droit d'un côté vertical du dormant ; coupe verticale au droit de sa traverse basse posée sur l'appui | [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) |
+| Joint comprimé | bande serrée entre le dormant et la maçonnerie, dessinée derrière le joint de mastic sur les coupes de principe de 2008 | [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) |
+| SNJF | sigle du label des mastics cité avec les joints élastomère « 1ère catégorie SNJF » ; il n'est pas développé dans le classeur e.VOLUTION | [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) |
+| Menuiserie à frappe | fenêtre dont l'ouvrant vient battre contre le dormant (ouvrant à la française, oscillo-battant) | [Mise en œuvre en rénovation du système 70, 2008](/procedures/mise-en-oeuvre-renovation-systeme-70-evo2008.md) |
+| Fourrure bois (rénovation) | pièce de bois traité logée dans la feuillure de l'ancien dormant conservé, pour créer une surface plane sous la nouvelle menuiserie | [Mise en œuvre en rénovation du système 70, 2008](/procedures/mise-en-oeuvre-renovation-systeme-70-evo2008.md) |
+| Arasement (de la contre-feuillure) | coupe à ras de la partie saillante de l'ancien dormant bois | [Mise en œuvre en rénovation du système 70, 2008](/procedures/mise-en-oeuvre-renovation-systeme-70-evo2008.md) |
+| Tapée de persienne | pièce de bois de l'ancien dormant qui porte les persiennes, conservée ou non en rénovation | [Mise en œuvre en rénovation du système 70, 2008](/procedures/mise-en-oeuvre-renovation-systeme-70-evo2008.md) |
+| Bride en équerre | patte métallique en équerre qui fixe le dormant sur le rejingot | [Mise en œuvre en rénovation du système 70, 2008](/procedures/mise-en-oeuvre-renovation-systeme-70-evo2008.md) |
+| Châssis à l'italienne | nom donné en 2008 à la menuiserie à ouverture extérieure | [Mise en œuvre en rénovation du système 70, 2008](/procedures/mise-en-oeuvre-renovation-systeme-70-evo2008.md) |
 | Monomur | mur en blocs isolants porteurs, posé sans doublage | [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md) |
 | Bavette | tôle d'aluminium sous la traverse basse qui rejette l'eau au-delà du nu du mur | [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md) |
 | Habillage | cornière rapportée qui recouvre le raccord entre menuiserie et mur | [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) |
@@ -254,6 +275,20 @@ Vocabulaire des catalogues et manuels [ROTO](/fournisseurs/roto.md).
 | KSR | basculement vertical, désignation de la famille de ferrure Roto NX KSR |
 | GH | hauteur de poignée, dans les instructions de montage Roto NX KSR |
 | GDS | gâche de sécurité |
+| AF | axe de ferrure, dans le catalogue Roto NX PVC ; voir [Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md) |
+| PO | poids d'ouvrant, dans le catalogue Roto NX PVC (PV dans le manuel KSR) |
+| TiltSafe | position de basculement (soufflet) avec retard d'effraction de la ferrure Roto NX, classification CDR 2 / CDR 2 N, voir [Roto NX](/quincaillerie/roto-nx.md) |
+| Position [n] | numéro encadré d'une pièce sur les vues d'ensemble du chapitre « Aperçu des ferrures » du catalogue Roto NX PVC, commun à toutes les configurations, voir [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md) |
+| O / N | oui / non, dans les tableaux Roto |
+| SEC | sécurité |
+| cf. ill. | écrit « sans illustration » dans la légende du catalogue Roto NX PVC, entrée **INC-279** |
+| Raccordable | se dit d'une pièce Roto qui s'accouple à une autre (prolongateur, verrouilleur) |
+| Zone de recoupe | longueur dont une pièce Roto (crémone, tringle) peut être raccourcie |
+| Ergot, perçage ergot | colonnes des tableaux Roto : l'ergot est dessiné comme un plot carré en saillie, le perçage ergot comme ce plot logé dans un trou dont le diamètre est coté |
+| Système 12/20-13 | désignation Roto d'un système de profilé : jeu de feuillure 12 mm / largeur de recouvrement 20 mm - axe de ferrure 13 mm, voir [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
+| Roto Sil, Roto Sil Level 6 | traitement de surface des ferrures Roto NX (argent mat, sans chrome VI) et son complément pour rivets, goujons et éléments coulissants, voir [Roto NX](/quincaillerie/roto-nx.md) |
+| Code couleur Roto (R01.1 …) | code de commande de la teinte d'une pièce apparente Roto, voir [Finitions Roto NX](/quincaillerie/roto-nx-finitions.md) |
+| QM 328 | programme de certification des ferrures de l'ift Rosenheim, voir [Certificats Roto NX](/certifications/roto-nx-certificats.md) |
 | AFM | anti-fausse manœuvre : dispositif qui empêche de basculer le vantail en soufflet quand il est ouvert à la française |
 | KU | accouplable (verrouilleur médian « 600 KU ») |
 | VM | verrouilleur médian |
@@ -265,6 +300,10 @@ Vocabulaire des catalogues et manuels [ROTO](/fournisseurs/roto.md).
 | Ferrage symétrique | pièces côté paumelles posées à l'identique sur chacun des deux vantaux (équerre et compas OF, paliers, pivots) |
 | Fichier gamme | document Roto par profilé, hors du corpus, auquel renvoient les gâches et verrouilleurs invisibles des nomenclatures |
 | Compas d'arrêt | compas qui retient un vantail soufflet à son ouverture maximale ; latéral ou en haut |
+| Compas soufflet | nom que le catalogue Roto NX PVC de 2023 donne au compas d'arrêt de la ferrure soufflet (« 2 compas soufflet latéralement », « compas soufflet en haut ») |
+| LFO, HFO | largeur et hauteur de feuillure d'ouvrant, dans le catalogue Roto NX PVC (paumelle à soufflet pour recouvrement d'ouvrant, ouvrants pivotants) |
+| FFB, FFH, FG | Flügelfalzbreite, Flügelfalzhöhe, Flügelgewicht : largeur et hauteur de fond de feuillure du vantail et poids du vantail, sur les pages imprimées en allemand du catalogue Roto NX PVC (entrée **INC-13**) |
+| Côté crémone, côté axe | repères [A] et [B] des diagrammes de la fenêtre inclinée du catalogue Roto NX PVC ; leur lecture n'est pas expliquée (entrée **VER-121**), voir [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
 | Compas d'entrebâillement et de nettoyage | compas qui limite l'ouverture d'un soufflet et permet de le rabattre pour le nettoyage |
 | Tolérance de châssis fixe | encombrement de la paumelle côté paumelles P, caches compris, voir [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
 | Bloc d'écartement | cale posée entre la maçonnerie et le dormant d'une fenêtre de sécurité, au droit des vissages de gâche de sécurité |
@@ -292,6 +331,13 @@ la française, y compris dans les libellés de dimensions maximales du type « 2
 | IW | inertie du renfort dans la direction du vent ; borne la dimension réalisable sous une charge de vent donnée | cm⁴ |
 | IG | inertie du renfort vis-à-vis du poids ; borne l'épaisseur de vitrage admissible | cm⁴ |
 | Iz | notation du moment d'inertie employée par les classeurs profine antérieurs, équivalente à IW sur les planches relevées | cm⁴ |
+| Iy | second moment d'inertie imprimé à côté de Iz sous le renfort des diagrammes de renforcement du classeur e.VOLUTION de 2008 (« Iy = 0.47 », « Iz = 3.19 » pour le V058) ; l'axe et l'unité ne sont pas écrits sur la planche | - |
+| Pression de vent (P1, P2, P3) | force exercée par le vent sur chaque mètre carré de la fenêtre ; P1 sert à mesurer la flèche, P2 (= P1/2) est répétée, P3 (= 1,5 P1) est la pression de sécurité ; voir [Classification de la résistance au vent](/reference/classification-resistance-au-vent.md) | Pa |
+| E (module d'élasticité) | rigidité propre d'une matière en flexion : acier 210 000 N/mm², aluminium 70 000 N/mm² ; entre au dénominateur de la formule du moment d'inertie requis | N/mm² |
+| Valeur statique | somme des moments d'inertie des renforts d'un assemblage (deux dormants accouplés, contreventement, élargisseur) ; voir [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md) | cm⁴ |
+| Zone de vent (1 à 5) | découpage de la France par département et par canton selon l'exposition au vent, défini par les règles NV 65 (modificatif n° 2) ; la zone 5 regroupe les DOM ; voir [Choix des fenêtres en fonction de leur exposition, 2008](/reference/choix-des-fenetres-exposition-au-vent-2008.md) | - |
+| Situation a, b, c, d | environnement de la construction pour le choix des classes A\*E\*V\* : a grands centres urbains, b villes petites et moyennes, zones industrielles ou forestières, c rase campagne, d bord de mer ou de lac | - |
+| GO | gros œuvre : la maçonnerie ou la structure du bâtiment qui reçoit la menuiserie | - |
 | TBDK | directive allemande de la Gütegemeinschaft Schlösser und Beschläge, qui fixe les forces de traction à certifier selon le poids de vantail | - |
 | WPK | contrôle de production en usine, au titre duquel le fabricant garantit le poids d'ouvrant | - |
 
@@ -379,6 +425,7 @@ hauteur de chute et le nombre de billes. Voir
 | DTD | Dossier Technique Détaillé, pièce jointe au DTA qui porte les prescriptions de fabrication |
 | GS | Groupe Spécialisé du CSTB ; le n° 6 traite les menuiseries |
 | CSTB | Centre Scientifique et Technique du Bâtiment |
+| NF CSTBat | marque de certification du CSTB des fenêtres ; en 2008, condition pour pratiquer la soudure à plat |
 | APSAD | Assemblée Plénière des Sociétés d'Assurances Dommages, qui préconise des niveaux de protection (vitrage SP510 de la collection Lumière) |
 | FFCP | Fédération Française de Construction Passive |
 | UFME | Union des Fabricants de Menuiseries Extérieures |
@@ -433,8 +480,26 @@ renvoie à la page où il est employé.
 | Alvéovis | rainure du meneau qui reçoit la vis d'assemblage | [Assemblage mécanique du meneau et de la traverse du système 70](/procedures/assemblage-meneau-traverse-systeme-70.md) |
 | Cote X | décalage du perçage d'un assemblage à angle variable, donné par une table selon l'angle | [Assemblage mécanique du meneau et de la traverse du système 70](/procedures/assemblage-meneau-traverse-systeme-70.md) |
 | Préchambre | chambre extérieure d'un profilé ; sur les profilés de couleur, elle est ventilée pour éviter l'accumulation de chaleur | [Drainage, décompression et ventilation du système 70](/procedures/drainage-decompression-ventilation-systeme-70.md) |
+| Soudure à plat | assemblage d'un meneau ou d'une traverse soudé en bout, à plat, sur la face du profilé qui le reçoit, au lieu d'un assemblage mécanique | [Directives générales de fabrication du système 70, 2008](/procedures/directives-generales-systeme-70-evo2008.md) |
+| Miroir (de soudeuse) | plaque chauffante de la soudeuse contre laquelle fondent les bouts de profilés à souder | [Directives générales de fabrication du système 70, 2008](/procedures/directives-generales-systeme-70-evo2008.md) |
+| Ragréage du cordon de soudure | reprise à l'outil du bourrelet de matière sorti de la soudure, pour rendre la surface lisse | [Directives générales de fabrication du système 70, 2008](/procedures/directives-generales-systeme-70-evo2008.md) |
+| Contre-profilage | usinage du bout d'un meneau ou d'une traverse à la forme de la feuillure qui le reçoit, avant soudure ou assemblage | [Directives générales de fabrication du système 70, 2008](/procedures/directives-generales-systeme-70-evo2008.md) |
+| Assemblage en T, assemblage en croix | un meneau aboutit sur un profilé (T) ; deux meneaux se rencontrent de part et d'autre d'un meneau traversant (croix) | [Assemblages mécaniques des meneaux et traverses du système 70, 2008](/procedures/assemblage-mecanique-meneau-traverse-systeme-70-evo2008.md) |
+| Contour de fraisage | découpe faite en bout d'un meneau pour qu'il épouse le profil du profilé qui le reçoit | [Assemblages mécaniques des meneaux et traverses du système 70, 2008](/procedures/assemblage-mecanique-meneau-traverse-systeme-70-evo2008.md) |
+| Ouvrant à déport, ouvrant à fleurant | ouvrant dont la face déborde du dormant (déport) ; ouvrant dont la face affleure celle du dormant (fleurant) | [Tableau de vitrage du système 70](/profiles/systeme-70-tableau-de-vitrage.md) |
+| Profilé filmé | profilé PVC recouvert d'un film décor collé sur une ou deux faces | [Directives générales de fabrication du système 70, 2008](/procedures/directives-generales-systeme-70-evo2008.md) |
+| Cale C3S | en 2008, cale de solidarisation ajoutée aux cales C1 à C3 du DTU 39, facultative, posée avec un jeu de l'ordre du millimètre | [Tableau de vitrage du système 70](/profiles/systeme-70-tableau-de-vitrage.md) |
 | Battement central réduit, ouvrant réduit | montage à deux vantaux avec un battement rapporté étroit ; l'ouvrant vertical étroit qui le reçoit est dit réduit | [Traitement du battement du système 70](/procedures/traitement-du-battement-systeme-70.md) |
 | Embout d'épointage | embout qui ferme la pointe délignée de l'ouvrant au battement central réduit (9F13, M771) | [Traitement du battement du système 70](/procedures/traitement-du-battement-systeme-70.md) |
+| Embout de frappe | nom donné en 2008 à l'embout collé sur la pointe délignée de l'ouvrant au battement central réduit (9F13) | [Traitement du battement du système 70, 2008](/procedures/traitement-du-battement-systeme-70-evo2008.md) |
+| Renvoi de manœuvre, renvoi de fouillot | pièce de quincaillerie qui déporte la commande de la poignée pour la centrer sur le battement central réduit | [Traitement du battement du système 70, 2008](/procedures/traitement-du-battement-systeme-70-evo2008.md) |
+| Fenêtre basculante, basculant | fenêtre dont l'ouvrant tourne autour de deux pivots placés dans ses montants, sur un axe horizontal ; en 2008, le système 70 la construit avec l'ouvrant 2418 et des battements tubulaires 0140 | [Systèmes spéciaux du système 70, 2008](/procedures/systemes-speciaux-systeme-70-evo2008.md) |
+| Coulissant à déport, coulissante à déport | châssis dont l'ouvrant coulisse le long de la partie fixe ; en 2008, ouvrants 6112, 6115, 6121, 6123 et 2416 sur meneau 2425 ou 2427 | [Systèmes spéciaux du système 70, 2008](/procedures/systemes-speciaux-systeme-70-evo2008.md) |
+| Insert de soudure, insert soudable | pièce enfoncée dans le renfort en bout de profilé avant la soudure d'angle des ouvrants de porte 2415 / 2416, pour la résistance au flambage (9287) | [Systèmes spéciaux du système 70, 2008](/procedures/systemes-speciaux-systeme-70-evo2008.md) |
+| Rénovation sur dormant existant | pose d'un dormant PVC contre l'ancien cadre (bois ou acier) laissé en place, recouvert côté extérieur par un profilé d'habillage clippé | [Systèmes spéciaux du système 70, 2008](/procedures/systemes-speciaux-systeme-70-evo2008.md) |
+| Vantail semi-fixe | vantail d'une fenêtre à deux vantaux qui s'ouvre en second ; il porte le battement | [Traitement du battement du système 70, 2008](/procedures/traitement-du-battement-systeme-70-evo2008.md) |
+| Joint brosse | bande de poils qui ferme le jeu entre le rejet d'eau d'une porte et son seuil (9C44) | [Seuil aluminium de porte 9C42 du système 70, 2008](/procedures/seuil-alu-9c42-systeme-70-evo2008.md) |
+| Entrée d'air autoréglable, mortaise, lumière | bouche de ventilation posée sur la menuiserie, dont le débit reste dans une plage fixée quand la pression change ; la mortaise est l'usinage qui la reçoit, fait d'une ou plusieurs lumières (fentes oblongues) | [Intégration des entrées d'air autoréglables du système 70, 2008](/procedures/entrees-d-air-systeme-70-evo2008.md) |
 | Vis plot | vis de clippage du battement intérieur (S073) | [Traitement du battement du système 70](/procedures/traitement-du-battement-systeme-70.md) |
 | Renfort pré-usiné | renfort acier livré à longueur et déjà percé (V069 en 2 m, V154 en 2,25 m) | [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md) |
 | Cale de transport | pièce qui maintient l'élément pendant le transport (9A39, 9856) | [Renforts et accessoires par profilé du système 70](/profiles/systeme-70-accessoires-par-profile.md) |
@@ -443,6 +508,9 @@ renvoie à la page où il est employé.
 | G/D | gauche / droite, pour les embouts et équerres livrés par paire | [Renforts et accessoires par profilé du système 70](/profiles/systeme-70-accessoires-par-profile.md) |
 | Réhausse | profilé PVC assemblé au dormant pour en augmenter la hauteur (0374, 0379, 0302 …) | [Mise en œuvre des profilés complémentaires du système 70](/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md) |
 | Olive de liaison | profilé de liaison qui accouple deux dormants dos à dos (1248) | [Accouplement d'éléments du système 70](/procedures/accouplement-elements-systeme-70.md) |
+| Petit bois | baguette qui partage visuellement un vitrage en carreaux ; le petit bois collé se colle sur la face du vitrage (92005 sur le système 70) | [Mise en œuvre des profilés complémentaires du système 70](/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md) |
+| Joint de frappe | joint contre lequel l'ouvrant vient battre à la fermeture ; sur le système 70, un joint de frappe dormant (9C32.T) et un joint de frappe ouvrant (9C31.T) | [Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md) |
+| Gabarit de perçage | outil posé sur le profilé pour percer les trous d'un assemblage à la bonne place (9918, 9B44, 9905 sur le système 70) | [Assemblages du système 70](/profiles/systeme-70-assemblages.md) |
 | Compensation réno, aile de recouvrement | l'aile de recouvrement est l'aile du dormant de rénovation qui recouvre l'ancien dormant ; la compensation (6143, 6144) rattrape l'écart sous cette aile | [Mise en œuvre des profilés complémentaires du système 70](/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md) |
 | Prolongateur | pièce qui prolonge une pièce d'appui (4319) | [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md) |
 | Sécable | se coupe à longueur suivant des amorces moulées (embouts 9F97, 9F08, 9F10) | [Mise en œuvre des profilés complémentaires du système 70](/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md) |
@@ -466,6 +534,12 @@ renvoie à la page où il est employé.
 | Mo | maître d'ouvrage | [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md) |
 | AC3, AC4 | classes d'exigence acoustique ; le renforcement systématique y est conseillé | [Abaques dimensionnels de renforcement du système 70](/profiles/systeme-70-abaques-dimensionnels.md) |
 | Renvoi d'angle, sortie de tringle | deux modes de transmission du verrouillage de la ferrure | [Abaques dimensionnels de renforcement du système 70](/profiles/systeme-70-abaques-dimensionnels.md) |
+| Diagramme de renforcement | nom donné aux abaques de renforcement d'ouvrant par le classeur e.VOLUTION de 2008 | [Abaques de renforcement du système 70, plans e.VOLUTION de 2008](/profiles/systeme-70-abaques-evo2008.md) |
+| Lames V.R. | lames du tablier d'un volet roulant (V.R.) ; la coulisse se choisit par leur épaisseur nominale (8, 12 ou 14 mm) | [Montage des profilés complémentaires du système 70, 2008](/procedures/montage-profiles-complementaires-systeme-70-evo2008.md) |
+| Clip de coulisse (9447), gabarit de perçage (9905) | pièce enfoncée dans un trou Ø 7,5 du dormant ou de l'ouvrant sur laquelle se clippe la coulisse ou le rejet d'eau ; gabarit qui positionne ces trous | [Montage des profilés complémentaires du système 70, 2008](/procedures/montage-profiles-complementaires-systeme-70-evo2008.md) |
+| Angle variable, adaptateur | profilés K340 et K341 qui réunissent deux dormants sous un angle de 90° à 180° | [Montage des profilés complémentaires du système 70, 2008](/procedures/montage-profiles-complementaires-systeme-70-evo2008.md) |
+| Intercalaire de frappe | cale en bois interposée entre le marteau et le profilé pour répartir le choc lors de la mise en place d'un élément de jonction | [Montage des profilés complémentaires du système 70, 2008](/procedures/montage-profiles-complementaires-systeme-70-evo2008.md) |
+| Petit bois rapporté collé | petit bois collé au double face sur la face du vitrage, d'un côté ou des deux | [Montage des profilés complémentaires du système 70, 2008](/procedures/montage-profiles-complementaires-systeme-70-evo2008.md) |
 
 # Sigles non élucidés
 

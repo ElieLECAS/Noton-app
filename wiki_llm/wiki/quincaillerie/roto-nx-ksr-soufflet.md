@@ -12,9 +12,15 @@ sources:
     id: roto-nx-ksr-montage-imo-180
     title: Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2
     last_modified: 2022-11-30
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    id: roto-nx-catalogue-ctl-105
+    title: Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023
+    last_modified: 2023-06-30
 source_pages:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     pages: 33, 60-63, 74-77, 97
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    pages: 52
 generated:
   by: process:claude-code
   at: 2026-09-20T00:40:00Z
@@ -327,6 +333,29 @@ ses teintes disent combien de compas poser et où. Le tableau donne les zones, r
 La limite de 1 200 mm de LFF n'est pas cotée sur le dessin : elle est relevée sur le quadrillage
 (±25 mm). La limite oblique va de (LFF 1 200, HFF 1 200) à environ (LFF 1 400, HFF 1 140) [1 p. 33].
 
+Le catalogue Roto NX pour profils PVC de juin 2023 imprime le même diagramme (section 2.3.2
+« Ferrure soufflet fenêtre rectangulaire », côté paumelles Designo (BA 13) ; relu à 450 dpi :
+cotes 621 et 550, limite de 1 200 mm, limite oblique jusqu'à environ 1 140 mm de HFF au bord
+droit) et les mêmes bornes : largeur fond de feuillure d'ouvrant 450 – 1 400 mm, hauteur
+370 – 1 200 mm, poids d'ouvrant max. 80 kg, sécurité de base. Sa légende a cinq teintes [2 p. 52] :
+
+| Teinte du catalogue | Légende du catalogue | Zone du diagramme |
+| --- | --- | --- |
+| blanc quadrillé | champ d'application non autorisé | gauche, bas ; coin haut droit |
+| gris le plus clair | 2 compas soufflet sur le côté | gauche, haut |
+| gris clair | 1 compas soufflet en haut | milieu |
+| gris moyen | 2 compas soufflet sur le côté ou en haut | droite, haut |
+| gris foncé | 2 compas soufflet en haut | droite, bas |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 52)
+
+Pour la zone droite haute, le manuel écrit « 2 compas latéraux **et** en partie haute », le
+catalogue « 2 compas soufflet sur le côté **ou** en haut » : entrée **CTR-109**. Le catalogue
+ajoute : **compas d'entrebâillement et de nettoyage recommandé ; nécessaire en cas d'imposte
+(selon RAL RG 607 / 12). Compas d'entrebâillement et de nettoyage jusqu'à 60 kg maxi** [2 p. 52].
+
+![Diagramme d'application, soufflet côté paumelles Designo, catalogue 2023](/assets/quincaillerie/roto-nx-catalogue/diagrammes/diagramme-designo-soufflet.png)
+
 # Positionnement du compas et des gâches
 
 La page « Dormant — Montage de la ferrure, Ouverture à soufflet » donne les cotes de pose, en mm,
@@ -406,6 +435,9 @@ fichier gamme, hors de ce corpus.
 IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 33, 60 à
 63, 74 à 77 et 97 (numérotation du PDF)
 
+[2] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 —
+`raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 52
+
 # Voir aussi
 
 - [Roto NX](/quincaillerie/roto-nx.md)
@@ -413,3 +445,4 @@ IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11
 - [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md)
 - [Instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md)
 - [ROTO](/fournisseurs/roto.md)
+- [Catalogue Roto NX pour profils PVC](/sources/roto-nx-catalogue-pvc.md)
