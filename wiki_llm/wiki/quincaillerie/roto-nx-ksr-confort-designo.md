@@ -21,7 +21,7 @@ source_pages:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     pages: 66-73, 101
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
-    pages: 48, 67
+    pages: 48, 67, 137, 147, 149
 generated:
   by: process:claude-code
   at: 2026-09-20T00:50:00Z
@@ -242,6 +242,8 @@ liste des pièces de l'oscillo-battant NT Designo II avec composants Roto NX et 
 | Poids du vantail standard | 80 kg maximum |
 | Poids du vantail avec report de charge | 150 kg maximum |
 
+Autres valeurs, sécurité de base, sans report de charge : HFF 280 à 2 600 mm, 100 kg maximum ; avec report de charge : LFF 800 à 1 400 mm, HFF 1 000 à 2 600 mm, 150 kg maximum [2 p. 137] — entrée **CTR-114**, voir [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md).
+
 Le *report de charge* est l'ensemble d'une pièce vissée sur l'ouvrant, d'une pièce dormant vissée
 sur le palier d'angle et d'une tringle de soutien du vantail (voir le
 [glossaire](/reference/glossaire.md) et [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md)).
@@ -422,6 +424,8 @@ l'OF NT Designo II avec composants Roto NX et sa vue éclatée [1 p. 70-71].
 | Poids du vantail standard | 80 kg maximum |
 | Poids du vantail avec report de charge | 150 kg maximum |
 
+Autres valeurs, sécurité de base, sans report de charge : HFF 280 à 2 600 mm, 100 kg maximum ; avec report de charge : LFF 800 à 1 400 mm, HFF 1 000 à 2 600 mm, 150 kg maximum [2 p. 147] — entrée **CTR-114**, voir [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md).
+
 ## Crémones (repères 1a et 1)
 
 Les trois listes de crémones de l'OF NT Designo II — « Crémone OB, hauteur poignée fixe fouillot
@@ -510,6 +514,8 @@ l'ouvrant principal et se verrouille par une crémone de semi-fixe manœuvrée p
 | Hauteur en feuillure du vantail (HFF) | 300 à 2400 mm |
 | Poids du vantail standard | 80 kg maximum |
 | Poids du vantail avec report de charge | 150 kg maximum |
+
+Autres valeurs (ferrure de battement standard, sécurité de base) : sans report de charge, HFF 430 à 2 600 mm, 100 kg maximum ; avec report de charge, LFF 800 à 1 400 mm, HFF 1 000 à 2 600 mm, 150 kg maximum [2 p. 149] — entrée **CTR-114**, voir [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md).
 
 ## Crémones et verrouilleur médian du vantail principal (repères 1, 2 et 12)
 
@@ -685,7 +691,7 @@ hors de ce corpus.
 IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 66 à 73 et
 101 (numérotation du PDF)
 
-[2] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 — `raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 48, 67 (numérotation du PDF)
+[2] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 — `raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 48, 67, 137, 147, 149 (numérotation du PDF)
 
 # Voir aussi
 
@@ -698,3 +704,4 @@ IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11
 - [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md)
 - [Instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md)
 - [ROTO](/fournisseurs/roto.md)
+- [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md)

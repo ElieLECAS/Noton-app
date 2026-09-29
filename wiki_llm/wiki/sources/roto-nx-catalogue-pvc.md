@@ -16,7 +16,7 @@ generated:
   at: 2026-09-19T20:30:00Z
 source_pages:
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
-    pages: 1-135
+    pages: 1-247
 ---
 
 # Identité
@@ -102,8 +102,48 @@ La pagination du catalogue est celle du PDF, sans décalage : relevé sur les pi
 | 98-125 | ferrure de battement Plus CDR 2 / CDR 2 N et confort, poignée fixe ; 3.1.2 crémone OB hauteur de poignée centrée / variable : ferrure OB sécurité de base, CDR 1 N, CDR 2 / CDR 2 N, CDR 3, TiltSafe ; TiltFirst ; OF sécurité de base, CDR 1 N, CDR 2 / CDR 2 N ; soufflet ; battement standard sécurité de base (CTR-113) et CDR 1 N | transcrit | [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md) |
 | 126-127 | pages blanches (bandeau et pied de page seuls) | sans contenu propre | - |
 | 128-135 | ferrure de battement standard CDR 2 / CDR 2 N ; ferrure de battement Plus sécurité de base, CDR 1 N (INC-283), CDR 2 / CDR 2 N, poignée centrée / variable | transcrit | [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md) |
-| 136-211 | Nomenclatures illustrées côté paumelles Designo (BA 13), crémone KSR fixe (à partir de la p. 136) et centrée / variable (à partir de la p. 170) | à faire | - |
-| 212-265 | Nomenclatures et cotes des crémones (fixe, variable, EasyMix, H100) | à faire | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 136-149 | 3.2 côté paumelles Designo (BA 13), 3.2.1 crémone OB KSR hauteur de poignée fixe : ferrure OB sécurité de base (CTR-114), CDR 1 N, CDR 2 / CDR 2 N (INC-285), TiltSafe CDR 2 / CDR 2 N ; ferrure TiltFirst ; ferrure OF (CTR-114) ; ferrure de battement standard, sécurité de base (INC-286, CTR-114) — vue d'ensemble, liste des positions, champ d'application sans / avec report de charge | transcrit | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) |
+| 150 | encadré « INFO — Roto Con Orders » seul | sans contenu propre | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) (encadré transcrit une fois) |
+| 151 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 152-153 | ferrure de battement standard, CDR 1 N, poignée fixe (INC-286) | transcrit | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) |
+| 154 | encadré « INFO — Roto Con Orders » seul | sans contenu propre | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) (encadré transcrit une fois) |
+| 155 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 156-157 | ferrure de battement standard, CDR 2 / CDR 2 N, poignée fixe (INC-285) | transcrit | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) |
+| 158 | encadré « INFO — Roto Con Orders » seul | sans contenu propre | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) (encadré transcrit une fois) |
+| 159 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 160-161 | ferrure de battement Plus, sécurité de base, poignée fixe | transcrit | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) |
+| 162 | encadré « INFO — Roto Con Orders » seul | sans contenu propre | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) (encadré transcrit une fois) |
+| 163 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 164-165 | ferrure de battement Plus, CDR 1 N, poignée fixe | transcrit | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) |
+| 166 | encadré « INFO — Roto Con Orders » seul | sans contenu propre | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) (encadré transcrit une fois) |
+| 167 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 168-185 | ferrure de battement Plus CDR 2 / CDR 2 N, poignée fixe ; 3.2.2 crémone OB hauteur de poignée centrée / variable : ferrure OB sécurité de base, CDR 1 N, CDR 2 / CDR 2 N, TiltSafe ; TiltFirst ; OF ; soufflet ; battement standard sécurité de base (INC-285, INC-286) | transcrit | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) |
+| 186 | encadré « INFO — Roto Con Orders » seul | sans contenu propre | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) (encadré transcrit une fois) |
+| 187 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 188-189 | ferrure de battement standard, CDR 1 N, poignée centrée / variable (INC-285, INC-286) | transcrit | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) |
+| 190 | encadré « INFO — Roto Con Orders » seul | sans contenu propre | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) (encadré transcrit une fois) |
+| 191 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 192-193 | ferrure de battement standard, CDR 2 / CDR 2 N, poignée centrée / variable (INC-285, INC-286, INC-287) | transcrit | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) |
+| 194-195 | pages blanches (bandeau et pied de page seuls) | sans contenu propre | - |
+| 196-197 | ferrure de battement Plus, sécurité de base, poignée centrée / variable (INC-285, INC-286) | transcrit | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) |
+| 198 | encadré « INFO — Roto Con Orders » seul | sans contenu propre | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) (encadré transcrit une fois) |
+| 199 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 200-201 | ferrure de battement Plus, CDR 1 N, poignée centrée / variable (INC-285, INC-286) | transcrit | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) |
+| 202 | encadré « INFO — Roto Con Orders » seul | sans contenu propre | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) (encadré transcrit une fois) |
+| 203 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 204-205 | ferrure de battement Plus, CDR 2 / CDR 2 N, poignée centrée / variable (INC-285, INC-286, INC-287) | transcrit | [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) |
+| 206-207 | pages blanches (bandeau et pied de page seuls ; p. 207 sans bandeau de chapitre) | sans contenu propre | - |
+| 208-209 | ouverture du chapitre « Crémone » : pictogramme d'onglet et photographie en double page d'une crémone montée dans un vantail ouvert, sans texte ni légende | sans contenu propre | - |
+| 210 | page blanche (pied de page seul) | sans contenu propre | - |
+| 211 | sommaire du chapitre « Crémone » : crémone OB KSR hauteur de poignée fixe (fouillot 8 mm p. 212, 15 mm p. 214, 25 à 50 mm p. 217) ; crémone OB hauteur de poignée centrée / variable (8 mm p. 222, 15 mm p. 223, 25 à 50 mm p. 225) ; solutions spéciales (crémone adaptée OB p. 231, crémone OB Confort p. 236) ; crémone verrou (8 mm p. 237, 15 mm p. 239, 25 à 50 mm p. 242) ; raccord de crémone (KSR et sortie de tringle p. 245, ouvrant basculant, oscillo-battant latéral, plein cintre p. 246, ouvrant semi-fixe p. 247) ; crémone de semi-fixe (standard p. 248, Plus p. 254, levier séparé p. 259) ; verrou d'arête (rainure de battement, feuillure Euro p. 261) | sans contenu propre | - |
+| 212-216 | 4 Crémone, 4.1 crémone OB KSR hauteur de poignée fixe : 4.1.1 axe de fouillot 8 mm (schéma de perçage et de fraisage, tableaux « hauteur de poignée constante » et « … - sécurité », CTR-115, INC-288), 4.1.2 axe de fouillot 15 mm (schéma, tableaux « constante » et « fixe - sécurité », CTR-67) ; bas de la p. 216 vide | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 217-221 | 4.1.3 fouillots de 25 à 50 mm : schémas de perçage non verrouillable et verrouillable, configuration têtière / boîtiers, têtière de crémone hauteur de poignée fixe (sécurité de base et sécurité), boîtier de crémone, boîtier de serrure cylindre profilé et cylindre rond | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 222-224 | 4.2 crémone OB hauteur de poignée centrée / variable : 4.2.1 fouillot 8 mm (schéma, « poignée milieu/variable », « … - sécurité »), 4.2.2 fouillot 15 mm (schéma, « centrale/variable », « milieu/variable - sécurité ») (CTR-116) | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 225-230 | 4.2.3 fouillots de 25 à 50 mm : schémas non verrouillable et verrouillable (identiques aux p. 217-218), configuration, têtière poignée centrée / variable (sécurité de base et sécurité), têtière d'ouvrant secondaire (nombre de gâches soudées), boîtier de crémone, boîtier de serrure cylindre de profil et cylindre rond | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 231-236 | 4.3 crémone OB solutions spéciales : 4.3.1 crémone adaptée OB (schémas non verrouillable et verrouillable, configuration, têtière 799011, boîtiers de crémone et de serrure), 4.3.2 crémone OB Confort (schéma, fouillot 15 mm par LFF, INC-289) ; bas des p. 234-236 vide | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 237-244 | 4.4 crémone verrou : fouillot 8 mm (schéma, hauteur de poignée constante, centrale / variable), fouillot 15 mm (schéma, constante, centrale / variable, hauteur de poignée en bas), fouillots 25 à 50 mm (schéma non verrouillable, configuration, têtière, boîtier de crémone) (VER-122) | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 245-247 | 4.5 raccord de crémone : KSR, sortie de tringle, ouvrant basculant, oscillo-battant latéral, plein cintre, ouvrant semi-fixe | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 248-265 | 4.6 crémone de semi-fixe (standard, Plus, levier séparé), 4.7 verrou d'arête (d'après le sommaire p. 211 et la p. 248 vue en tête ; non encore transcrit) | à faire | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
 | 266-277 | Nomenclatures et cotes des renvois d'angle standards et TiltSafe | à faire | [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md) |
 | 278-317 | Compas oscillo-battants côté P et compas invisibles Designo II | à faire | [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) |
 | 318-333 | Verrouilleurs médians horizontaux et verticaux, prolongateurs | à faire | [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md) |
@@ -113,57 +153,61 @@ La pagination du catalogue est celle du PDF, sans décalage : relevé sur les pi
 | 388-435 | Accessoires (anti-fausse manœuvre, réhausseurs, loqueteaux, caches) | à faire | [Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md) |
 | 436-451 | Gabarits de perçage, outillage d'atelier et clés de réglage | à faire | [Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md) |
 
-Les contenus des lignes 136 à 451 sont ceux de l'ingestion antérieure, non encore vérifiés en image ; les chapitres de la table des matières (ci-dessus) font foi pour les limites.
+Les contenus des lignes 266 à 451 sont ceux de l'ingestion antérieure, non encore vérifiés en image ; les chapitres de la table des matières (ci-dessus) font foi pour les limites.
 
-**Registre : 1-135 traités (120 pages `transcrit`, 15 `sans contenu propre`) ; 10 plages `à faire`, pages 136 à 451.**
+**Registre : 1-247 traités (206 pages `transcrit`, 41 `sans contenu propre`) ; 9 plages `à faire`, pages 248 à 451.**
 
 # Note de reprise
 
-Tranches 1 (p. 1-33), 2 (p. 34-54) et 3 (p. 55-135, côté paumelles P du chapitre 3), 29/09/2026.
-Reprendre à la **p. 136** (côté paumelles Designo (BA 13), crémone KSR hauteur de poignée fixe).
+Tranches 1 (p. 1-33), 2 (p. 34-54), 3 (p. 55-135), 4 (p. 136-211) et 5 (p. 212-247, chapitre 4
+« Crémone » jusqu'à la fin de 4.5 « Raccord de crémone »), 29/09/2026. Reprendre à la **p. 248**
+(4.6 crémone de semi-fixe, 4.6.1 standard, 4.6.1.1 KSR hauteur de poignée fixe, 4.6.1.1.1
+possibilités de combinaisons : vue [1]-[6] et « Détermination de la crémone », étapes 1 à 3…),
+puis 4.7 verrou d'arête, jusqu'à la p. 265 ; ensuite « Renvois d'angle » p. 266-277.
 
-- **Rendu** : PyMuPDF `get_pixmap` 110 dpi pour la lecture de page (suffisant pour les listes de
-  positions et les champs d'application), 160-250 dpi en `clip=` pour vérifier un repère, 200 dpi
-  pour les découpes publiées ; image seulement, jamais de couche texte ; pagination du PDF =
-  pagination imprimée.
-- **Structure du chapitre 3** : une configuration = deux pages, vue d'ensemble (page paire) puis
-  liste « Position / Désignation → à partir de la page N » et champ d'application LFF / HFF / PO
-  (page impaire), suivie de l'encadré INFO Roto Con Orders (identique partout, transcrit une fois).
-  Aucun numéro d'article dans ces listes. Numéros de position communs à tout le chapitre, différents
-  des repères du manuel KSR. Pages blanches intercalées (55, 82-83, 87, 96-97, 126-127).
-- **Page de destination** : [Aperçu des ferrures Roto NX, côté paumelles
-  P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md) (créée : les listes de positions et leurs
-  numéros ne rentrent dans aucune page KSR, qui porte les repères et articles du manuel ; une section
-  par configuration, image pleine largeur, table des positions, table du champ). Pour le côté
-  Designo (p. 136-211), créer la page sœur `quincaillerie/roto-nx-apercu-ferrures-designo.md` sur le
-  même gabarit, et comparer ses champs d'application à
-  [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md)
-  et à la table « Configuration Designo (BA 13), catalogue 2023 » de
-  [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md).
-- **Scripts** (scratchpad, à recréer) : `render.py dpi pages…` (rendu PNG), `crop.py dpi page x0 y0 x1
-  y1 out` (zoom de contrôle, fractions de page), `cropa.py specs.txt sheet.png` (découpes 200 dpi dans
-  `assets/quincaillerie/roto-nx-catalogue/apercu-ferrures/` + planche contact), `gen.py cfg.txt
-  out.md` (sections de configuration depuis un fichier de données « @ niveau|titre|p. dessin|p.
-  liste|image|alt », « > » texte, « pos|désignation|page », « = colonne|LFF|HFF|PO », « < » après).
-  Nommage des découpes : `cote-p-kfix-…` (poignée fixe), `cote-p-kvar-…` (centrée / variable) ;
-  pour Designo, `designo-kfix-…`, `designo-kvar-…`.
-- **Découpes** : `assets/quincaillerie/roto-nx-catalogue/` (`pictogrammes/`, `informations/`,
-  `autres-produits-roto/`, `diagrammes/`, `apercu-ferrures/` — 36 vues d'ensemble des p. 56-134).
-- **Anomalies de la tranche 3** : **INC-280** (HFF mini CDR 2 : 600 / 520 / 490 mm au chapitre 3
-  contre 510 au chapitre 2), **INC-281** (bornes CDR 3), **INC-282** (position [19] dessinée, [20]
-  listée, p. 84-85), **INC-283** (positions listées non dessinées, battement Plus CDR 1 N, p. 94-95
-  et 132-133), **INC-284** (deux sections 3.1.2), **CTR-110** (HFF mini 280 / 300 mm, OB et OF,
-  catalogue contre manuel), **CTR-111** (HFF maxi confort 1 600 / 1 730 mm), **CTR-112** (HFF mini
-  cintrée 500 / 510 / 511 mm), **CTR-113** (OB deux vantaux poignée centrée). Prochains identifiants à
-  vérifier dans les registres avant usage : INC-285, CTR-114, VER-122.
-- **Autres chapitres** : p. 212-265 → crémones (**CTR-67**) ; p. 266-277 et 318-333 → renvois
-  d'angle et verrouilleurs ; p. 278-317, 334-349, 370-387 → compas et paliers (**VER-113**) ;
-  p. 350-369 → pièces de fermeture (la gâche OB TiltFirst p. 353 et la gâche de ventilation
-  basculante p. 361 définiront peut-être TiltFirst / TiltSafe) ; p. 388-451 → accessoires et
-  gabarits (**VER-114**). Les renvois « à partir de la page N » des listes de positions donnent la
-  page de début de chaque famille.
-- **Tranches proposées** : 4 = p. 136-211 (côté Designo) ; 5 = p. 212-277 ; 6 = p. 278-349 ;
-  7 = p. 350-435 ; 8 = p. 436-451.
+- **Rendu** : PyMuPDF `get_pixmap` 110 dpi pour la lecture de page, 220-250 dpi en `clip=` pour
+  chaque tableau de références (chiffres nets), 280-300 dpi pour les schémas cotés et les
+  pictogrammes d'en-tête douteux ; découpes à 200 dpi. Image seulement, jamais de couche texte ;
+  pagination du PDF = pagination imprimée.
+- **Page en cours** : [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md). Les sections du
+  catalogue (chapitre 4, dans son ordre) sont insérées **avant** la section *Crémones OB KSR,
+  fouillot 8 mm, hauteur de poignée fixe*, qui ouvre les tables des nomenclatures de montage KSR
+  (gardées, avec un renvoi CTR sous chaque table de catalogue). Continuer de même pour 4.6-4.7 ;
+  la crémone de semi-fixe du manuel (fouillot -6, sortie de tringle) est déjà plus bas sur la
+  page : comparer et renvoyer.
+- **Conventions de transcription** posées en tête de page : référence en première colonne ; J / N
+  reportés tels quels (**INC-288**) ; paires « a / b » de galets, goujons et zones de recoupe
+  reportées sans interprétation ; plage et longueur des cellules fusionnées répétées sur chaque
+  ligne ; types d'ouverture nommés d'après les pictogrammes de la p. 12 ; un schéma identique à un
+  schéma déjà découpé (mêmes cotes) est relié, pas redécoupé ; tableau > 30 lignes scindé selon le
+  type de goujon (p. 240).
+- **Scripts** (scratchpad, à recréer) : `render.py dpi pages…` ; `crop.py dpi page x0 y0 x1 y1
+  out` (fractions de page) ; `cropc.py specs.txt` (découpes 200 dpi dans
+  `assets/quincaillerie/roto-nx-catalogue/cremones/`, pixels sombres sur les bords, planche
+  contact empilée `r/sheet.png`) ; `tab.py` / `tabv.py` / `tabp.py` (tables markdown depuis des
+  lignes « réf plage longueur zone hp … », fixe, variable, avec colonne « position du
+  ventilateur »).
+- **Découpes** : 37 dans `assets/quincaillerie/roto-nx-catalogue/cremones/`.
+- **Anomalies de la tranche 5** : **INC-288** (« J » non défini), **INC-289** (OB Confort : note en
+  HFF sur un tableau en LFF), **CTR-115** (fouillot 8 mm : longueurs +110 mm au catalogue, 795274
+  à 2 ou 3 galets ; 794225 = raccord KSR de 110 mm au catalogue), **CTR-116** (259764, 259717 :
+  plages de HFF ; 259765, 259718, 502024, 566500 absents du catalogue ; 840812), **VER-122**
+  (colonne « position du ventilateur » des crémones verrou) ; **CTR-67** complété (galet V p. 216,
+  838324 / 794640 ; 795282 à 3 galets au manuel, « 2 / – » au catalogue), laissé ouvert.
+  Prochains identifiants à vérifier dans les registres avant usage : INC-290, CTR-117, VER-123.
+- **À vérifier au chapitre 4 (reste)** : le sommaire p. 211 place la crémone de semi-fixe Plus à
+  la p. 254 et le levier séparé à la p. 259, alors que les listes de positions renvoient la
+  « Crémone de semi-fixe Plus KSR - hauteur de poignée fixe » à la p. 256 et la « Crémone de
+  semi-fixe Plus - hauteur de poignée milieu/variable » à la p. 259 (p. 161, 197). Au chapitre
+  « Compas » : le bras de compas [38] renvoie à « → 290 » côté Designo (côté P : 285) ; la têtière
+  de compas sécurité de base à 282 côté Designo (281 côté P).
+- **Autres chapitres** : p. 266-277 et 318-333 → renvois d'angle et verrouilleurs ; p. 278-317,
+  334-349, 370-387 → compas et paliers (**VER-113**) ; p. 350-369 → pièces de fermeture (gâche OB
+  TiltFirst p. 353, gâche de ventilation basculante p. 361) ; p. 388-451 → accessoires et gabarits
+  (**VER-114** ; plaque de maintien [80] p. 412, report de charge p. 343, limiteur d'ouverture 198
+  p. 409, rehausse avec blocage de commutation p. 415) ; verrouilleur raccordable p. 318,
+  verrouilleur crémone p. 321, verrouilleur de têtière p. 322 (renvois de la p. 233 et 248).
+- **Tranches proposées** : 5 bis = p. 248-277 ; 6 = p. 278-349 ; 7 = p. 350-435 ; 8 = p. 436-451.
 
 # Citations
 
@@ -172,6 +216,7 @@ Reprendre à la **p. 136** (côté paumelles Designo (BA 13), crémone KSR haute
 # Voir aussi
 
 - [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md)
+- [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md)
 - [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)
 - [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md)
 - [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md)

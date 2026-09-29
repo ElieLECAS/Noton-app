@@ -714,6 +714,14 @@ est tracé vers 400 mm de HFF. Les classes CDR 1 N et CDR 2 / CDR 2 N du côté 
 ne figurent que dans le catalogue. Pour le report de charge, le catalogue écrit : « Poids d'ouvrant
 > 130 kg : régler le limiteur de largeur de basculement du bras de compas sur 80 mm » [2 p. 51].
 
+Les champs d'application configuration par configuration du côté Designo (chapitre 3 du même
+catalogue, p. 137 à 205) sont donnés en deux colonnes, sans et avec report de charge : sans report
+de charge, max. 100 kg d'un bloc, avec des HFF minimales de 280 à 600 mm selon la crémone, le type
+de ferrure et la classe (entrée **INC-285**) ; avec report de charge, LFF 800 – 1 400 mm, HFF
+1 000 – 2 600 mm (1 000 – 2 400 mm en CDR 2 / CDR 2 N), max. 150 kg ; écarts avec le manuel de
+montage : entrée **CTR-114** — voir [Aperçu des ferrures Roto NX, côté paumelles Designo
+(BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) [2 p. 137-205].
+
 Les trois diagrammes du catalogue sont ceux du manuel, sans les pictogrammes d'ouverture ; relus à
 450 et 600 dpi, ils donnent les valeurs des tableaux ci-dessous aux écarts de lecture près
 (±25 mm) [2 p. 49-51].

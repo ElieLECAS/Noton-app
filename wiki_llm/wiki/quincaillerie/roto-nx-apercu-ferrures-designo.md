@@ -19,7 +19,7 @@ sources:
     last_modified: 2022-11-30
 source_pages:
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
-    pages: 136-157
+    pages: 136-205
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     pages: 68, 70, 72
 generated:
@@ -71,8 +71,8 @@ sans « à partir de la page » [1 p. 65, 137].
 Chaque liste est suivie d'un encadré « INFO — Roto Con Orders », identique sur toutes les
 pages et transcrit une fois sur [ROTO](/fournisseurs/roto.md) : configurateur de ferrures en
 ligne, qui donne des listes d'articles personnalisées avec les champs d'application et une vue
-d'ensemble des ferrures, auprès de l'agent technico-commercial [1 p. 137]. Sur les ferrures de
-battement, l'encadré est seul sur la page qui suit la liste, et la page suivante est blanche.
+d'ensemble des ferrures, auprès de l'agent technico-commercial [1 p. 137]. Sur la plupart des
+ferrures de battement, l'encadré est seul sur la page qui suit la liste, et la page suivante est blanche.
 
 Les pages du catalogue auxquelles renvoient les listes ont pour destination les pages de
 famille : crémones p. 212-265 ([Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)) ; renvois
@@ -450,7 +450,7 @@ Section 3.2.1.4.1 : la vue d'ensemble montre les deux vantaux. Sur le vantail de
 
 (schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 148)
 
-La position [80], dessinée au battement sous le loqueteau [32], ne figure pas dans la liste de la p. 149 (côté paumelles P, [80] est la plaque de maintien, p. 412) — entrée **INC-286**.
+La position [80], dessinée au battement sous le loqueteau [32], ne figure pas dans la liste de la p. 149 (côté paumelles P, [80] est la « Plaque de maintien », à partir de la p. 412) — entrée **INC-286** [1 p. 81, 149].
 
 Liste des positions de la configuration « Ferrure de battement standard, sécurité de base » [1 p. 149] :
 
@@ -633,6 +633,994 @@ Champ d'application de la configuration « Ferrure de battement standard, CDR 2 
 
 HFF minimale en CDR 2 / CDR 2 N sans report de charge : 600 mm [1 p. 157], 490 mm aux tableaux du chapitre 2 [1 p. 49-50] — entrée **INC-285**.
 
+L'encadré INFO Roto Con Orders de cette liste est seul sur la p. 158 ; la p. 159 est blanche.
+
+## Ferrure de battement, Plus
+
+Section 3.2.1.5 « Ferrure de battement - Plus », côté paumelles Designo, crémone OB KSR à hauteur de poignée fixe : même fenêtre à deux vantaux que la ferrure de battement standard, avec une crémone de semi-fixe Plus KSR [4] au lieu de la crémone de semi-fixe standard [1 p. 160-161].
+
+### Ferrure de battement Plus, sécurité de base
+
+Section 3.2.1.5.1 : même disposition que la ferrure de battement standard en sécurité de base (vantail de gauche avec équerre de compas OF [42] et compas OF [43], verrouilleur médian invisible [26] / [27], report de charge [50] / [51] sur les deux vantaux), avec la crémone de semi-fixe Plus KSR [4] ; en bas au battement, la réhausse [81] et une gâche de sécurité [24] ; la vue ne porte pas de pièce [80] [1 p. 160].
+
+![Aperçu de la ferrure Roto NX, côté paumelles Designo (BA 13), crémone OB KSR hauteur de poignée fixe, ferrure de battement Plus, sécurité de base](/assets/quincaillerie/roto-nx-catalogue/apercu-ferrures/designo-kfix-battement-plus-securite-de-base.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 160)
+
+Liste des positions de la configuration « Ferrure de battement Plus, sécurité de base » [1 p. 161] :
+
+| Position | Désignation | Pages du catalogue |
+| --- | --- | --- |
+| [1] | Crémone OB KSR - hauteur de poignée fixe | à partir de la p. 212 |
+| [4] | Crémone de semi-fixe Plus KSR - hauteur de poignée fixe | à partir de la p. 256 |
+| [6] | Verrouilleur médian en plusieurs parties - standard | à partir de la p. 318 |
+| [11] | Renvoi d'angle standard | à partir de la p. 266 |
+| [13] | Renvoi d'angle spécial court | à partir de la p. 267 |
+| [14] | Compas de renvoi d'angle | à partir de la p. 270 |
+| [18] | Verrouilleur en plusieurs parties , standard, vertical | à partir de la p. 318 |
+| [19] | Verrouilleur en plusieurs parties - standard, horizontal | à partir de la p. 318 |
+| [23] | Gâche | à partir de la p. 356 |
+| [24] | Gâche sécurité | à partir de la p. 357 |
+| [26] | Verrouilleur médian invisible de pièce dormant | à partir de la p. 422 |
+| [27] | Verrouilleur médian invisible de pièce d'ouvrant | à partir de la p. 422 |
+| [28] | Gâche OB | à partir de la p. 350 |
+| [31] | Loqueteau pièce d'ouvrant | à partir de la p. 388 |
+| [32] | Loqueteau de pièce dormant | à partir de la p. 388 |
+| [33] | Anti-fausse manœuvre pièce d'ouvrant | à partir de la p. 401 |
+| [36] | Têtière de compas sécurité de base | à partir de la p. 282 |
+| [38] | Bras de compas | p. 290 (renvoi imprimé « → 290 ») |
+| [42] | Équerre de compas OF | à partir de la p. 299 |
+| [43] | Compas OF | à partir de la p. 301 |
+| [44] | Pivot d'angle | à partir de la p. 338 |
+| [45] | Palier d'angle | à partir de la p. 340 |
+| [46] | Cache de palier d'angle (en option) | à partir de la p. 341 |
+| [48] | 2ème compas | à partir de la p. 370 |
+| [49] | Support (en fonction du profil) | à partir de la p. 417 |
+| [50] | Report de charge pièce d'ouvrant | à partir de la p. 343 |
+| [51] | Report de charge pièce dormant | à partir de la p. 343 |
+| [54] | Poignée (voir catalogue CTL_1) | - |
+| [61] | Limiteur d'ouverture 198, pièce d'ouvrant | à partir de la p. 409 |
+| [62] | Limiteur d'ouverture 198, pièce dormant | à partir de la p. 409 |
+| [81] | Réhausse | à partir de la p. 415 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 161)
+
+Champ d'application de la configuration « Ferrure de battement Plus, sécurité de base », bande « Sécurité de base », colonnes « sans report de charge » et « avec report de charge » [1 p. 161] :
+
+<table>
+<thead>
+<tr><th rowspan="2">Grandeur</th><th colspan="2">Sécurité de base</th></tr>
+<tr><th>sans report de charge</th><th>avec report de charge</th></tr>
+</thead>
+<tbody>
+<tr><td>Largeur fond de feuillure d'ouvrant (LFF)</td><td>370 – 1 400 mm</td><td>800 – 1 400 mm</td></tr>
+<tr><td>Hauteur fond de feuillure d'ouvrant (HFF)</td><td>430 – 2 600 mm</td><td>1 000 – 2 600 mm</td></tr>
+<tr><td>Poids d'ouvrant (PO)</td><td>max. 100 kg</td><td>max. 150 kg</td></tr>
+</tbody>
+</table>
+
+L'encadré INFO Roto Con Orders de cette liste est seul sur la p. 162 ; la p. 163 est blanche.
+
+### Ferrure de battement Plus, CDR 1 N
+
+Section 3.2.1.5.2 : même disposition que la ferrure de battement standard en CDR 1 N (têtière de compas de fenêtre OF [35] et bras de compas [38] sur le vantail de gauche, verrouilleur médian de têtière [7] et verrouilleur médian [6] au battement, gâches de sécurité [24] et sécurités anti-dégondage [82] sur les deux vantaux, protection de perçage [53]), avec la crémone de semi-fixe Plus KSR [4] ; en haut du vantail de gauche, le verrouilleur horizontal est repéré [19] (et non [17]) ; en bas au battement, la réhausse [81] et une gâche de sécurité [24] ; pas de pièce [80] [1 p. 164].
+
+![Aperçu de la ferrure Roto NX, côté paumelles Designo (BA 13), crémone OB KSR hauteur de poignée fixe, ferrure de battement Plus, CDR 1 N](/assets/quincaillerie/roto-nx-catalogue/apercu-ferrures/designo-kfix-battement-plus-cdr-1-n.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 164)
+
+Liste des positions de la configuration « Ferrure de battement Plus, CDR 1 N » [1 p. 165] :
+
+| Position | Désignation | Pages du catalogue |
+| --- | --- | --- |
+| [1] | Crémone OB KSR - hauteur de poignée fixe | à partir de la p. 212 |
+| [4] | Crémone de semi-fixe Plus KSR - hauteur de poignée fixe | à partir de la p. 256 |
+| [6] | Verrouilleur médian en plusieurs parties - standard | à partir de la p. 318 |
+| [7] | Verrouilleur médian de têtière | à partir de la p. 322 |
+| [11] | Renvoi d'angle standard | à partir de la p. 266 |
+| [13] | Renvoi d'angle spécial court | à partir de la p. 267 |
+| [14] | Compas de renvoi d'angle | à partir de la p. 270 |
+| [18] | Verrouilleur en plusieurs parties , standard, vertical | à partir de la p. 318 |
+| [19] | Verrouilleur en plusieurs parties - standard, horizontal | à partir de la p. 318 |
+| [23] | Gâche | à partir de la p. 356 |
+| [24] | Gâche sécurité | à partir de la p. 357 |
+| [28] | Gâche OB | à partir de la p. 350 |
+| [31] | Loqueteau pièce d'ouvrant | à partir de la p. 388 |
+| [32] | Loqueteau de pièce dormant | à partir de la p. 388 |
+| [33] | Anti-fausse manœuvre pièce d'ouvrant | à partir de la p. 401 |
+| [35] | Têtière de compas de fenêtre OF | à partir de la p. 284 |
+| [36] | Têtière de compas sécurité de base | à partir de la p. 282 |
+| [38] | Bras de compas | p. 290 (renvoi imprimé « → 290 ») |
+| [44] | Pivot d'angle | à partir de la p. 338 |
+| [45] | Palier d'angle | à partir de la p. 340 |
+| [46] | Cache de palier d'angle (en option) | à partir de la p. 341 |
+| [48] | 2ème compas | à partir de la p. 370 |
+| [49] | Support (en fonction du profil) | à partir de la p. 417 |
+| [50] | Report de charge pièce d'ouvrant | à partir de la p. 343 |
+| [51] | Report de charge pièce dormant | à partir de la p. 343 |
+| [53] | Protection de perçage | à partir de la p. 410 |
+| [54] | Poignée (voir catalogue CTL_1) | - |
+| [61] | Limiteur d'ouverture 198, pièce d'ouvrant | à partir de la p. 409 |
+| [62] | Limiteur d'ouverture 198, pièce dormant | à partir de la p. 409 |
+| [81] | Réhausse | à partir de la p. 415 |
+| [82] | Sécurité anti-dégondage | à partir de la p. 411 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 165)
+
+Champ d'application de la configuration « Ferrure de battement Plus, CDR 1 N », bande « CDR 1 N », colonnes « sans report de charge » et « avec report de charge » [1 p. 165] :
+
+<table>
+<thead>
+<tr><th rowspan="2">Grandeur</th><th colspan="2">CDR 1 N</th></tr>
+<tr><th>sans report de charge</th><th>avec report de charge</th></tr>
+</thead>
+<tbody>
+<tr><td>Largeur fond de feuillure d'ouvrant (LFF)</td><td>450 – 1 400 mm</td><td>800 – 1 400 mm</td></tr>
+<tr><td>Hauteur fond de feuillure d'ouvrant (HFF)</td><td>430 – 2 600 mm</td><td>1 000 – 2 600 mm</td></tr>
+<tr><td>Poids d'ouvrant (PO)</td><td>max. 100 kg</td><td>max. 150 kg</td></tr>
+</tbody>
+</table>
+
+L'encadré INFO Roto Con Orders de cette liste est seul sur la p. 166 ; la p. 167 est blanche.
+
+### Ferrure de battement Plus, CDR 2 / CDR 2 N
+
+Section 3.2.1.5.3 : gâches de sécurité [24] et sécurités anti-dégondage [82] sur les deux vantaux, verrouilleurs de sécurité [18] et [19], têtière de compas de fenêtre OF [35] et bras de compas [38] sur le vantail de gauche, têtière de compas de sécurité [36] sur celui de droite, crémone de semi-fixe Plus KSR [4] ; au battement, deux renvois d'angle de la têtière - protection contre les déplacements [16] dessinés en traits clairs (en haut et en bas du vantail de gauche), le renvoi d'angle têtière [10] en bas à gauche, le renvoi d'angle standard CDR 3 [15] en haut (traits clairs) et en bas du vantail de droite ; en bas au battement, réhausse [81] et gâche de sécurité [24] ; ni verrouilleur médian [6] / [7], ni élément de blocage [84] [1 p. 168].
+
+![Aperçu de la ferrure Roto NX, côté paumelles Designo (BA 13), crémone OB KSR hauteur de poignée fixe, ferrure de battement Plus, CDR 2 / CDR 2 N](/assets/quincaillerie/roto-nx-catalogue/apercu-ferrures/designo-kfix-battement-plus-cdr-2-cdr-2-n.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 168)
+
+Liste des positions de la configuration « Ferrure de battement Plus, CDR 2 / CDR 2 N » [1 p. 169] :
+
+| Position | Désignation | Pages du catalogue |
+| --- | --- | --- |
+| [1] | Crémone OB KSR - hauteur de poignée fixe | à partir de la p. 212 |
+| [4] | Crémone de semi-fixe Plus KSR - hauteur de poignée fixe | à partir de la p. 256 |
+| [11] | Renvoi d'angle standard | à partir de la p. 266 |
+| [14] | Compas de renvoi d'angle | à partir de la p. 270 |
+| [15] | Renvoi d'angle standard CDR 3 | à partir de la p. 266 |
+| [16] | Renvoi d'angle de la têtière - protection contre les déplacements | à partir de la p. 268 |
+| [18] | Verrouilleur en plusieurs parties - de sécurité, vertical | à partir de la p. 319 |
+| [19] | Verrouilleur en plusieurs parties - de sécurité, horizontal | à partir de la p. 319 |
+| [24] | Gâche sécurité | à partir de la p. 357 |
+| [28] | Gâche OB | à partir de la p. 350 |
+| [31] | Loqueteau pièce d'ouvrant | à partir de la p. 388 |
+| [32] | Loqueteau de pièce dormant | à partir de la p. 388 |
+| [33] | Anti-fausse manœuvre pièce d'ouvrant | à partir de la p. 401 |
+| [35] | Têtière de compas de fenêtre OF | à partir de la p. 284 |
+| [36] | Têtière de compas de sécurité | à partir de la p. 283 |
+| [38] | Bras de compas | p. 290 (renvoi imprimé « → 290 ») |
+| [44] | Pivot d'angle | à partir de la p. 338 |
+| [45] | Palier d'angle | à partir de la p. 340 |
+| [46] | Cache de palier d'angle (en option) | à partir de la p. 341 |
+| [48] | 2ème compas | à partir de la p. 370 |
+| [49] | Support (en fonction du profil) | à partir de la p. 417 |
+| [50] | Report de charge pièce d'ouvrant | à partir de la p. 343 |
+| [51] | Report de charge pièce dormant | à partir de la p. 343 |
+| [53] | Protection de perçage | à partir de la p. 410 |
+| [54] | Poignée (voir catalogue CTL_1) | - |
+| [61] | Limiteur d'ouverture 198, pièce d'ouvrant | à partir de la p. 409 |
+| [62] | Limiteur d'ouverture 198, pièce dormant | à partir de la p. 409 |
+| [81] | Réhausse | à partir de la p. 415 |
+| [82] | Sécurité anti-dégondage | à partir de la p. 411 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 169)
+
+Champ d'application de la configuration « Ferrure de battement Plus, CDR 2 / CDR 2 N », bande « CDR 2 / CDR 2 N », colonnes « sans report de charge » et « avec report de charge » [1 p. 169] :
+
+<table>
+<thead>
+<tr><th rowspan="2">Grandeur</th><th colspan="2">CDR 2 / CDR 2 N</th></tr>
+<tr><th>sans report de charge</th><th>avec report de charge</th></tr>
+</thead>
+<tbody>
+<tr><td>Largeur fond de feuillure d'ouvrant (LFF)</td><td>450 – 1 400 mm</td><td>800 – 1 400 mm</td></tr>
+<tr><td>Hauteur fond de feuillure d'ouvrant (HFF)</td><td>600 – 2 400 mm</td><td>1 000 – 2 400 mm</td></tr>
+<tr><td>Poids d'ouvrant (PO)</td><td>max. 100 kg</td><td>max. 150 kg</td></tr>
+</tbody>
+</table>
+
+HFF minimale en CDR 2 / CDR 2 N sans report de charge : 600 mm [1 p. 169], 490 mm au chapitre 2 [1 p. 49-50] — entrée **INC-285**. La liste n'écrit pas « en option » pour le renvoi d'angle [16], contrairement aux listes du côté paumelles P.
+
+# Crémone OB, hauteur de poignée centrée / variable
+
+Section 3.2.2 « Crémone OB - hauteur de poignée centrée/variable », côté paumelles Designo (BA 13) : les mêmes configurations avec la crémone OB à hauteur de poignée milieu / variable [2] au lieu de la crémone OB KSR à hauteur de poignée fixe [1] (voir [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)) [1 p. 170].
+
+## Ferrure OB, poignée centrée / variable
+
+### Ferrure OB à poignée centrée / variable, sécurité de base
+
+Section 3.2.2.1.1 : même disposition que la ferrure OB en sécurité de base à hauteur de poignée fixe, avec la crémone OB à hauteur de poignée milieu / variable [2] et un second renvoi d'angle spécial court [13] en bas côté poignée ; deux pièces repérées [80] sont dessinées en traits clairs de part et d'autre de la poignée [54] [1 p. 170].
+
+![Aperçu de la ferrure Roto NX, côté paumelles Designo (BA 13), crémone OB hauteur de poignée centrée / variable, ferrure OB, sécurité de base](/assets/quincaillerie/roto-nx-catalogue/apercu-ferrures/designo-kvar-ob-securite-de-base.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 170)
+
+Les deux pièces [80] ne figurent pas dans la liste de la p. 171 — entrée **INC-286**.
+
+Liste des positions de la configuration « Ferrure OB à poignée centrée / variable, sécurité de base » [1 p. 171] :
+
+| Position | Désignation | Pages du catalogue |
+| --- | --- | --- |
+| [2] | Crémone OB - hauteur de poignée milieu/variable | à partir de la p. 222 |
+| [6] | Verrouilleur médian en plusieurs parties - standard | à partir de la p. 318 |
+| [11] | Renvoi d'angle standard | à partir de la p. 266 |
+| [13] | Renvoi d'angle spécial court | à partir de la p. 267 |
+| [14] | Compas de renvoi d'angle | à partir de la p. 270 |
+| [18] | Verrouilleur en plusieurs parties , standard, vertical | à partir de la p. 318 |
+| [19] | Verrouilleur en plusieurs parties - standard, horizontal | à partir de la p. 318 |
+| [23] | Gâche | à partir de la p. 356 |
+| [28] | Gâche OB | à partir de la p. 350 |
+| [31] | Loqueteau pièce d'ouvrant | à partir de la p. 388 |
+| [32] | Loqueteau de pièce dormant | à partir de la p. 388 |
+| [33] | Anti-fausse manœuvre pièce d'ouvrant | à partir de la p. 401 |
+| [34] | Anti-fausse manœuvre de pièce dormant | à partir de la p. 399 |
+| [36] | Têtière de compas sécurité de base | à partir de la p. 282 |
+| [38] | Bras de compas | p. 290 (renvoi imprimé « → 290 ») |
+| [44] | Pivot d'angle | à partir de la p. 338 |
+| [45] | Palier d'angle | à partir de la p. 340 |
+| [46] | Cache de palier d'angle (en option) | à partir de la p. 341 |
+| [48] | 2ème compas | à partir de la p. 370 |
+| [49] | Support (en fonction du profil) | à partir de la p. 417 |
+| [50] | Report de charge pièce d'ouvrant | à partir de la p. 343 |
+| [51] | Report de charge pièce dormant | à partir de la p. 343 |
+| [54] | Poignée (voir catalogue CTL_1) | - |
+| [61] | Limiteur d'ouverture 198, pièce d'ouvrant | à partir de la p. 409 |
+| [62] | Limiteur d'ouverture 198, pièce dormant | à partir de la p. 409 |
+| [63] | Aération | à partir de la p. 396 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 171)
+
+Champ d'application de la configuration « Ferrure OB à poignée centrée / variable, sécurité de base », bande « Sécurité de base », colonnes « sans report de charge » et « avec report de charge » [1 p. 171] :
+
+<table>
+<thead>
+<tr><th rowspan="2">Grandeur</th><th colspan="2">Sécurité de base</th></tr>
+<tr><th>sans report de charge</th><th>avec report de charge</th></tr>
+</thead>
+<tbody>
+<tr><td>Largeur fond de feuillure d'ouvrant (LFF)</td><td>330 – 1 400 mm</td><td>800 – 1 400 mm</td></tr>
+<tr><td>Hauteur fond de feuillure d'ouvrant (HFF)</td><td>310 – 2 600 mm</td><td>1 000 – 2 600 mm</td></tr>
+<tr><td>Poids d'ouvrant (PO)</td><td>max. 100 kg</td><td>max. 150 kg</td></tr>
+</tbody>
+</table>
+
+HFF minimale sans report de charge : 310 mm [1 p. 171], 280 mm à poignée fixe [1 p. 137] et au chapitre 2 (version 80 kg) [1 p. 49] — entrée **INC-285** ; 300 mm au manuel de montage KSR pour l'OB NT Designo II [2 p. 68] (**CTR-114**).
+
+### Ferrure OB à poignée centrée / variable, CDR 1 N
+
+Section 3.2.2.1.2 : même disposition que la ferrure OB en CDR 1 N à hauteur de poignée fixe (gâches de sécurité [24] en haut côté poignée, en haut côté paumelles et en bas, quatre sécurités anti-dégondage [82], protection de perçage [53], verrouilleurs standard [18] et [19]), avec la crémone OB à hauteur de poignée milieu / variable [2], un second renvoi d'angle spécial court [13] en bas côté poignée et deux pièces [80] en traits clairs de part et d'autre de la poignée [1 p. 172].
+
+![Aperçu de la ferrure Roto NX, côté paumelles Designo (BA 13), crémone OB hauteur de poignée centrée / variable, ferrure OB, CDR 1 N](/assets/quincaillerie/roto-nx-catalogue/apercu-ferrures/designo-kvar-ob-cdr-1-n.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 172)
+
+Les deux pièces [80] ne figurent pas dans la liste de la p. 173 — entrée **INC-286**.
+
+Liste des positions de la configuration « Ferrure OB à poignée centrée / variable, CDR 1 N » [1 p. 173] :
+
+| Position | Désignation | Pages du catalogue |
+| --- | --- | --- |
+| [2] | Crémone OB - hauteur de poignée milieu/variable | à partir de la p. 222 |
+| [6] | Verrouilleur médian en plusieurs parties - standard | à partir de la p. 318 |
+| [11] | Renvoi d'angle standard | à partir de la p. 266 |
+| [13] | Renvoi d'angle spécial court | à partir de la p. 267 |
+| [14] | Compas de renvoi d'angle | à partir de la p. 270 |
+| [18] | Verrouilleur en plusieurs parties , standard, vertical | à partir de la p. 318 |
+| [19] | Verrouilleur en plusieurs parties - standard, horizontal | à partir de la p. 318 |
+| [23] | Gâche | à partir de la p. 356 |
+| [24] | Gâche sécurité | à partir de la p. 357 |
+| [28] | Gâche OB | à partir de la p. 350 |
+| [31] | Loqueteau pièce d'ouvrant | à partir de la p. 388 |
+| [32] | Loqueteau de pièce dormant | à partir de la p. 388 |
+| [33] | Anti-fausse manœuvre pièce d'ouvrant | à partir de la p. 401 |
+| [34] | Anti-fausse manœuvre de pièce dormant | à partir de la p. 399 |
+| [36] | Têtière de compas sécurité de base | à partir de la p. 282 |
+| [38] | Bras de compas | p. 290 (renvoi imprimé « → 290 ») |
+| [44] | Pivot d'angle | à partir de la p. 338 |
+| [45] | Palier d'angle | à partir de la p. 340 |
+| [46] | Cache de palier d'angle (en option) | à partir de la p. 341 |
+| [48] | 2ème compas | à partir de la p. 370 |
+| [49] | Support (en fonction du profil) | à partir de la p. 417 |
+| [50] | Report de charge pièce d'ouvrant | à partir de la p. 343 |
+| [51] | Report de charge pièce dormant | à partir de la p. 343 |
+| [53] | Protection de perçage | à partir de la p. 410 |
+| [54] | Poignée (voir catalogue CTL_1) | - |
+| [61] | Limiteur d'ouverture 198, pièce d'ouvrant | à partir de la p. 409 |
+| [62] | Limiteur d'ouverture 198, pièce dormant | à partir de la p. 409 |
+| [63] | Aération | à partir de la p. 396 |
+| [82] | Sécurité anti-dégondage | à partir de la p. 411 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 173)
+
+Champ d'application de la configuration « Ferrure OB à poignée centrée / variable, CDR 1 N », bande « CDR 1 N », colonnes « sans report de charge » et « avec report de charge » [1 p. 173] :
+
+<table>
+<thead>
+<tr><th rowspan="2">Grandeur</th><th colspan="2">CDR 1 N</th></tr>
+<tr><th>sans report de charge</th><th>avec report de charge</th></tr>
+</thead>
+<tbody>
+<tr><td>Largeur fond de feuillure d'ouvrant (LFF)</td><td>450 – 1 400 mm</td><td>800 – 1 400 mm</td></tr>
+<tr><td>Hauteur fond de feuillure d'ouvrant (HFF)</td><td>310 – 2 600 mm</td><td>1 000 – 2 600 mm</td></tr>
+<tr><td>Poids d'ouvrant (PO)</td><td>max. 100 kg</td><td>max. 150 kg</td></tr>
+</tbody>
+</table>
+
+HFF minimale en CDR 1 N sans report de charge : 310 mm [1 p. 173], 280 mm à poignée fixe [1 p. 139] et au chapitre 2 (version 80 kg) [1 p. 49] — entrée **INC-285**.
+
+### Ferrure OB à poignée centrée / variable, CDR 2 / CDR 2 N
+
+Section 3.2.2.1.3 : gâches de sécurité [24] tout autour (deux côté poignée, deux en haut, deux côté paumelles, une en bas) avec quatre sécurités anti-dégondage [82], verrouilleurs de sécurité [18] et [19], têtière de compas de sécurité [36], protection de perçage [53] ; côté poignée, renvoi d'angle standard [11] en haut et en bas, renvoi d'angle standard CDR 3 [15] en bas seulement ; crémone OB à hauteur de poignée milieu / variable [2] et deux pièces [80] en traits clairs de part et d'autre de la poignée [1 p. 174].
+
+![Aperçu de la ferrure Roto NX, côté paumelles Designo (BA 13), crémone OB hauteur de poignée centrée / variable, ferrure OB, CDR 2 / CDR 2 N](/assets/quincaillerie/roto-nx-catalogue/apercu-ferrures/designo-kvar-ob-cdr-2-cdr-2-n.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 174)
+
+Les deux pièces [80] ne figurent pas dans la liste de la p. 175 — entrée **INC-286**.
+
+Liste des positions de la configuration « Ferrure OB à poignée centrée / variable, CDR 2 / CDR 2 N » [1 p. 175] :
+
+| Position | Désignation | Pages du catalogue |
+| --- | --- | --- |
+| [2] | Crémone OB - hauteur de poignée milieu/variable | à partir de la p. 222 |
+| [11] | Renvoi d'angle standard | à partir de la p. 266 |
+| [14] | Compas de renvoi d'angle | à partir de la p. 270 |
+| [15] | Renvoi d'angle standard CDR 3 | à partir de la p. 266 |
+| [18] | Verrouilleur en plusieurs parties - de sécurité, vertical | à partir de la p. 319 |
+| [19] | Verrouilleur en plusieurs parties - de sécurité, horizontal | à partir de la p. 319 |
+| [24] | Gâche sécurité | à partir de la p. 357 |
+| [28] | Gâche OB | à partir de la p. 350 |
+| [31] | Loqueteau pièce d'ouvrant | à partir de la p. 388 |
+| [32] | Loqueteau de pièce dormant | à partir de la p. 388 |
+| [33] | Anti-fausse manœuvre pièce d'ouvrant | à partir de la p. 401 |
+| [34] | Anti-fausse manœuvre de pièce dormant | à partir de la p. 399 |
+| [36] | Têtière de compas de sécurité | à partir de la p. 283 |
+| [38] | Bras de compas | p. 290 (renvoi imprimé « → 290 ») |
+| [44] | Pivot d'angle | à partir de la p. 338 |
+| [45] | Palier d'angle | à partir de la p. 340 |
+| [46] | Cache de palier d'angle (en option) | à partir de la p. 341 |
+| [48] | 2ème compas | à partir de la p. 370 |
+| [49] | Support (en fonction du profil) | à partir de la p. 417 |
+| [50] | Report de charge pièce d'ouvrant | à partir de la p. 343 |
+| [51] | Report de charge pièce dormant | à partir de la p. 343 |
+| [53] | Protection de perçage | à partir de la p. 410 |
+| [54] | Poignée (voir catalogue CTL_1) | - |
+| [61] | Limiteur d'ouverture 198, pièce d'ouvrant | à partir de la p. 409 |
+| [62] | Limiteur d'ouverture 198, pièce dormant | à partir de la p. 409 |
+| [63] | Aération | à partir de la p. 396 |
+| [82] | Sécurité anti-dégondage | à partir de la p. 411 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 175)
+
+Champ d'application de la configuration « Ferrure OB à poignée centrée / variable, CDR 2 / CDR 2 N », bande « CDR 2 / CDR 2 N », colonnes « sans report de charge » et « avec report de charge » [1 p. 175] :
+
+<table>
+<thead>
+<tr><th rowspan="2">Grandeur</th><th colspan="2">CDR 2 / CDR 2 N</th></tr>
+<tr><th>sans report de charge</th><th>avec report de charge</th></tr>
+</thead>
+<tbody>
+<tr><td>Largeur fond de feuillure d'ouvrant (LFF)</td><td>450 – 1 400 mm</td><td>800 – 1 400 mm</td></tr>
+<tr><td>Hauteur fond de feuillure d'ouvrant (HFF)</td><td>490 – 2 400 mm</td><td>1 000 – 2 400 mm</td></tr>
+<tr><td>Poids d'ouvrant (PO)</td><td>max. 100 kg</td><td>max. 150 kg</td></tr>
+</tbody>
+</table>
+
+HFF minimale 490 mm, comme au chapitre 2 [1 p. 49-50], contre 510 mm à poignée fixe [1 p. 141] — entrée **INC-285**.
+
+### Ferrure OB à poignée centrée / variable, TiltSafe CDR 2 / CDR 2 N
+
+Section 3.2.2.1.4 : même disposition que la ferrure OB TiltSafe CDR 2 / CDR 2 N à hauteur de poignée fixe (trois gâches de sécurité pour ventilation basculante [29] avec leurs supports TiltSafe [83], verrouilleurs de sécurité [19] en haut et en bas et deux [18] côté paumelles, deux gâches OB [28] en bas, renvois d'angle standard CDR 3 [15] aux deux angles côté poignée), avec la crémone OB à hauteur de poignée milieu / variable [2] ; pas de pièce [80] sur cette vue [1 p. 176].
+
+![Aperçu de la ferrure Roto NX, côté paumelles Designo (BA 13), crémone OB hauteur de poignée centrée / variable, ferrure OB, TiltSafe CDR 2 / CDR 2 N](/assets/quincaillerie/roto-nx-catalogue/apercu-ferrures/designo-kvar-ob-tiltsafe-cdr-2-cdr-2-n.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 176)
+
+Liste des positions de la configuration « Ferrure OB à poignée centrée / variable, TiltSafe CDR 2 / CDR 2 N » [1 p. 177] :
+
+| Position | Désignation | Pages du catalogue |
+| --- | --- | --- |
+| [2] | Crémone OB - hauteur de poignée milieu/variable | à partir de la p. 222 |
+| [14] | Compas de renvoi d'angle | à partir de la p. 270 |
+| [15] | Renvoi d'angle standard CDR 3 | à partir de la p. 266 |
+| [18] | Verrouilleur en plusieurs parties - de sécurité, vertical | à partir de la p. 319 |
+| [19] | Verrouilleur en plusieurs parties - de sécurité, horizontal | à partir de la p. 319 |
+| [24] | Gâche sécurité | à partir de la p. 357 |
+| [28] | Gâche OB | à partir de la p. 350 |
+| [29] | Gâche de sécurité pour ventilation basculante | à partir de la p. 361 |
+| [31] | Loqueteau pièce d'ouvrant | à partir de la p. 388 |
+| [32] | Loqueteau de pièce dormant | à partir de la p. 388 |
+| [33] | Anti-fausse manœuvre pièce d'ouvrant | à partir de la p. 401 |
+| [34] | Anti-fausse manœuvre de pièce dormant | à partir de la p. 399 |
+| [36] | Têtière de compas de sécurité | à partir de la p. 283 |
+| [38] | Bras de compas | p. 290 (renvoi imprimé « → 290 ») |
+| [44] | Pivot d'angle | à partir de la p. 338 |
+| [45] | Palier d'angle | à partir de la p. 340 |
+| [46] | Cache de palier d'angle (en option) | à partir de la p. 341 |
+| [50] | Report de charge pièce d'ouvrant | à partir de la p. 343 |
+| [51] | Report de charge pièce dormant | à partir de la p. 343 |
+| [53] | Protection de perçage | à partir de la p. 410 |
+| [54] | Poignée (voir catalogue CTL_1) | - |
+| [61] | Limiteur d'ouverture 198, pièce d'ouvrant | à partir de la p. 409 |
+| [62] | Limiteur d'ouverture 198, pièce dormant | à partir de la p. 409 |
+| [82] | Sécurité anti-dégondage | à partir de la p. 411 |
+| [83] | Supports de sécurité TiltSafe (en option) | à partir de la p. 361 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 177)
+
+Champ d'application de la configuration « Ferrure OB à poignée centrée / variable, TiltSafe CDR 2 / CDR 2 N », bande « CDR 2 / CDR 2 N », colonnes « sans report de charge » et « avec report de charge » [1 p. 177] :
+
+<table>
+<thead>
+<tr><th rowspan="2">Grandeur</th><th colspan="2">CDR 2 / CDR 2 N</th></tr>
+<tr><th>sans report de charge</th><th>avec report de charge</th></tr>
+</thead>
+<tbody>
+<tr><td>Largeur fond de feuillure d'ouvrant (LFF)</td><td>450 – 1 400 mm</td><td>800 – 1 400 mm</td></tr>
+<tr><td>Hauteur fond de feuillure d'ouvrant (HFF)</td><td>490 – 2 400 mm</td><td>1 000 – 2 400 mm</td></tr>
+<tr><td>Poids d'ouvrant (PO)</td><td>max. 100 kg</td><td>max. 150 kg</td></tr>
+</tbody>
+</table>
+
+## Ferrure TiltFirst, poignée centrée / variable
+
+### Ferrure TiltFirst à poignée centrée / variable, sécurité de base
+
+Section 3.2.2.2 « Ferrure TiltFirst », 3.2.2.2.1 « Sécurité de base » : même disposition que la ferrure TiltFirst à hauteur de poignée fixe (gâche OB TiltFirst [28], bras de compas TiltFirst [38], sans aération [63]), avec la crémone OB à hauteur de poignée milieu / variable [2] et deux pièces [80] en traits clairs de part et d'autre de la poignée [1 p. 178].
+
+![Aperçu de la ferrure Roto NX, côté paumelles Designo (BA 13), crémone OB hauteur de poignée centrée / variable, ferrure TiltFirst, sécurité de base](/assets/quincaillerie/roto-nx-catalogue/apercu-ferrures/designo-kvar-tiltfirst-securite-de-base.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 178)
+
+Les deux pièces [80] ne figurent pas dans la liste de la p. 179 — entrée **INC-286**.
+
+Liste des positions de la configuration « Ferrure TiltFirst à poignée centrée / variable, sécurité de base » [1 p. 179] :
+
+| Position | Désignation | Pages du catalogue |
+| --- | --- | --- |
+| [2] | Crémone OB - hauteur de poignée milieu/variable | à partir de la p. 222 |
+| [6] | Verrouilleur médian en plusieurs parties - standard | à partir de la p. 318 |
+| [11] | Renvoi d'angle standard | à partir de la p. 266 |
+| [13] | Renvoi d'angle spécial court | à partir de la p. 267 |
+| [14] | Compas de renvoi d'angle | à partir de la p. 270 |
+| [18] | Verrouilleur en plusieurs parties , standard, vertical | à partir de la p. 318 |
+| [19] | Verrouilleur en plusieurs parties - standard, horizontal | à partir de la p. 318 |
+| [23] | Gâche | à partir de la p. 356 |
+| [28] | Gâche OB TiltFirst | à partir de la p. 353 |
+| [31] | Loqueteau pièce d'ouvrant | à partir de la p. 388 |
+| [32] | Loqueteau de pièce dormant | à partir de la p. 388 |
+| [33] | Anti-fausse manœuvre pièce d'ouvrant | à partir de la p. 401 |
+| [34] | Anti-fausse manœuvre de pièce dormant | à partir de la p. 399 |
+| [36] | Têtière de compas sécurité de base | à partir de la p. 282 |
+| [38] | Bras de compas TiltFirst | à partir de la p. 294 |
+| [44] | Pivot d'angle | à partir de la p. 338 |
+| [45] | Palier d'angle | à partir de la p. 340 |
+| [46] | Cache de palier d'angle (en option) | à partir de la p. 341 |
+| [48] | 2ème compas | à partir de la p. 370 |
+| [49] | Support (en fonction du profil) | à partir de la p. 417 |
+| [50] | Report de charge pièce d'ouvrant | à partir de la p. 343 |
+| [51] | Report de charge pièce dormant | à partir de la p. 343 |
+| [54] | Poignée (voir catalogue CTL_1) | - |
+| [61] | Limiteur d'ouverture 198, pièce d'ouvrant | à partir de la p. 409 |
+| [62] | Limiteur d'ouverture 198, pièce dormant | à partir de la p. 409 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 179)
+
+Champ d'application de la configuration « Ferrure TiltFirst à poignée centrée / variable, sécurité de base », bande « Sécurité de base », colonnes « sans report de charge » et « avec report de charge » [1 p. 179] :
+
+<table>
+<thead>
+<tr><th rowspan="2">Grandeur</th><th colspan="2">Sécurité de base</th></tr>
+<tr><th>sans report de charge</th><th>avec report de charge</th></tr>
+</thead>
+<tbody>
+<tr><td>Largeur fond de feuillure d'ouvrant (LFF)</td><td>330 – 1 400 mm</td><td>800 – 1 400 mm</td></tr>
+<tr><td>Hauteur fond de feuillure d'ouvrant (HFF)</td><td>280 – 2 600 mm</td><td>1 000 – 2 600 mm</td></tr>
+<tr><td>Poids d'ouvrant (PO)</td><td>max. 100 kg</td><td>max. 150 kg</td></tr>
+</tbody>
+</table>
+
+## Ferrure OF, poignée centrée / variable
+
+### Ferrure OF à poignée centrée / variable, sécurité de base
+
+Section 3.2.2.3 « Ferrure OF », 3.2.2.3.1 « Sécurité de base » : même disposition que la ferrure OF à hauteur de poignée fixe (équerre de compas OF [42] et compas OF [43], verrouilleur médian invisible [26] / [27], limiteur de course [52] et gâche de sécurité [24] en bas côté poignée), avec la crémone OB à hauteur de poignée milieu / variable [2], un second renvoi d'angle spécial court [13] en bas côté poignée et deux pièces [80] en traits clairs de part et d'autre de la poignée [1 p. 180].
+
+![Aperçu de la ferrure Roto NX, côté paumelles Designo (BA 13), crémone OB hauteur de poignée centrée / variable, ferrure OF, sécurité de base](/assets/quincaillerie/roto-nx-catalogue/apercu-ferrures/designo-kvar-of-securite-de-base.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 180)
+
+Les deux pièces [80] ne figurent pas dans la liste de la p. 181 — entrée **INC-286**.
+
+Liste des positions de la configuration « Ferrure OF à poignée centrée / variable, sécurité de base » [1 p. 181] :
+
+| Position | Désignation | Pages du catalogue |
+| --- | --- | --- |
+| [2] | Crémone OB - hauteur de poignée milieu/variable | à partir de la p. 222 |
+| [6] | Verrouilleur médian en plusieurs parties - standard | à partir de la p. 318 |
+| [11] | Renvoi d'angle standard | à partir de la p. 266 |
+| [13] | Renvoi d'angle spécial court | à partir de la p. 267 |
+| [19] | Verrouilleur en plusieurs parties - standard, horizontal | à partir de la p. 318 |
+| [23] | Gâche | à partir de la p. 356 |
+| [24] | Gâche sécurité | à partir de la p. 357 |
+| [26] | Verrouilleur médian invisible de pièce dormant | à partir de la p. 422 |
+| [27] | Verrouilleur médian invisible de pièce d'ouvrant | à partir de la p. 422 |
+| [31] | Loqueteau pièce d'ouvrant | à partir de la p. 388 |
+| [32] | Loqueteau de pièce dormant | à partir de la p. 388 |
+| [33] | Anti-fausse manœuvre pièce d'ouvrant | à partir de la p. 401 |
+| [34] | Anti-fausse manœuvre de pièce dormant | à partir de la p. 399 |
+| [42] | Équerre de compas OF | à partir de la p. 299 |
+| [43] | Compas OF | à partir de la p. 301 |
+| [44] | Pivot d'angle | à partir de la p. 338 |
+| [45] | Palier d'angle | à partir de la p. 340 |
+| [46] | Cache de palier d'angle (en option) | à partir de la p. 341 |
+| [50] | Report de charge pièce d'ouvrant | à partir de la p. 343 |
+| [51] | Report de charge pièce dormant | à partir de la p. 343 |
+| [52] | Limiteur de course | à partir de la p. 424 |
+| [54] | Poignée (voir catalogue CTL_1) | - |
+| [61] | Limiteur d'ouverture 198, pièce d'ouvrant | à partir de la p. 409 |
+| [62] | Limiteur d'ouverture 198, pièce dormant | à partir de la p. 409 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 181)
+
+Champ d'application de la configuration « Ferrure OF à poignée centrée / variable, sécurité de base », bande « Sécurité de base », colonnes « sans report de charge » et « avec report de charge » [1 p. 181] :
+
+<table>
+<thead>
+<tr><th rowspan="2">Grandeur</th><th colspan="2">Sécurité de base</th></tr>
+<tr><th>sans report de charge</th><th>avec report de charge</th></tr>
+</thead>
+<tbody>
+<tr><td>Largeur fond de feuillure d'ouvrant (LFF)</td><td>370 – 1 400 mm</td><td>800 – 1 400 mm</td></tr>
+<tr><td>Hauteur fond de feuillure d'ouvrant (HFF)</td><td>310 – 2 600 mm</td><td>1 000 – 2 600 mm</td></tr>
+<tr><td>Poids d'ouvrant (PO)</td><td>max. 100 kg</td><td>max. 150 kg</td></tr>
+</tbody>
+</table>
+
+HFF minimale sans report de charge : 310 mm [1 p. 181], 280 mm à poignée fixe [1 p. 147] — entrée **INC-285** ; 300 mm au manuel de montage KSR pour l'OF NT Designo II [2 p. 70] (**CTR-114**).
+
+## Ferrure soufflet, poignée centrée / variable
+
+La *ferrure soufflet* équipe un vantail qui s'ouvre seulement en basculement (voir le [glossaire](/reference/glossaire.md) et [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md)). Section 3.2.2.4 [1 p. 182].
+
+### Ferrure soufflet à poignée centrée / variable, sécurité de base
+
+Section 3.2.2.4.1 : la crémone OB à hauteur de poignée milieu / variable [2] est posée sur la traverse haute, la poignée [54] au milieu en haut ; en haut, un ensemble compas soufflet montage semi-fixe [59] et son support [49], quatre gâches [23] et un limiteur de course [52] à droite ; renvois d'angle standard [11] aux deux angles hauts ; sur chaque montant, un ensemble compas soufflet [59] avec son support [49], un verrouilleur vertical [18] et une gâche [23] ; en bas, l'équerre de compas OF [42] et le compas OF [43] à chaque angle, et le verrouilleur médian invisible pièce d'ouvrant [27] et pièce dormant [26] au milieu de la traverse basse. La vue ne porte ni report de charge ni limiteur d'ouverture [1 p. 182].
+
+![Aperçu de la ferrure Roto NX, côté paumelles Designo (BA 13), crémone OB hauteur de poignée centrée / variable, ferrure soufflet, sécurité de base](/assets/quincaillerie/roto-nx-catalogue/apercu-ferrures/designo-kvar-soufflet-securite-de-base.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 182)
+
+Liste des positions de la configuration « Ferrure soufflet à poignée centrée / variable, sécurité de base » [1 p. 183] :
+
+| Position | Désignation | Pages du catalogue |
+| --- | --- | --- |
+| [2] | Crémone OB - hauteur de poignée milieu/variable | à partir de la p. 222 |
+| [11] | Renvoi d'angle standard | à partir de la p. 266 |
+| [18] | Verrouilleur en plusieurs parties , standard, vertical | à partir de la p. 318 |
+| [23] | Gâche | à partir de la p. 356 |
+| [26] | Verrouilleur médian invisible de pièce dormant | à partir de la p. 422 |
+| [27] | Verrouilleur médian invisible de pièce d'ouvrant | à partir de la p. 422 |
+| [42] | Équerre de compas OF | à partir de la p. 299 |
+| [43] | Compas OF | à partir de la p. 301 |
+| [49] | Support (en fonction du profil) | à partir de la p. 417 |
+| [52] | Limiteur de course | à partir de la p. 424 |
+| [54] | Poignée (voir catalogue CTL_1) | - |
+| [59] | Ensemble compas soufflet montage semi-fixe | à partir de la p. 373 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 183)
+
+Champ d'application de la configuration « Ferrure soufflet à poignée centrée / variable, sécurité de base », colonne « Sécurité de base » [1 p. 183] :
+
+| Grandeur | Valeur |
+| --- | --- |
+| Largeur fond de feuillure d'ouvrant (LFF) | 450 – 1 400 mm |
+| Hauteur fond de feuillure d'ouvrant (HFF) | 370 – 1 200 mm |
+| Poids d'ouvrant (PO) | max. 80 kg |
+
+Le champ d'application est donné en une seule colonne, sans distinction de report de charge ; ce sont les bornes du diagramme de la ferrure soufflet côté paumelles Designo du chapitre 2 (voir [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md)) [1 p. 52, 183].
+
+## Ferrure de battement standard, poignée centrée / variable
+
+### Ferrure de battement standard à poignée centrée / variable, sécurité de base
+
+Section 3.2.2.5 « Ferrure de battement - Standard », 3.2.2.5.1 « Sécurité de base » : même disposition que la ferrure de battement standard à hauteur de poignée fixe en sécurité de base (équerre de compas OF [42] et compas OF [43] sur le vantail de gauche, verrouilleur médian invisible [26] / [27], report de charge [50] / [51] et limiteur d'ouverture 198 [61] / [62] sur les deux vantaux, réhausse [81] et gâche de sécurité [24] en bas au battement), avec la crémone OB à hauteur de poignée milieu / variable [2], la crémone de semi-fixe standard - poignée milieu / variable [5], et des renvois d'angle spéciaux courts [13] en haut et en bas des deux vantaux côté battement ; deux pièces [80] en traits clairs au battement [1 p. 184].
+
+![Aperçu de la ferrure Roto NX, côté paumelles Designo (BA 13), crémone OB hauteur de poignée centrée / variable, ferrure de battement standard, sécurité de base](/assets/quincaillerie/roto-nx-catalogue/apercu-ferrures/designo-kvar-battement-standard-securite-de-base.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 184)
+
+Les deux pièces [80] ne figurent pas dans la liste de la p. 185 — entrée **INC-286**.
+
+Liste des positions de la configuration « Ferrure de battement standard à poignée centrée / variable, sécurité de base » [1 p. 185] :
+
+| Position | Désignation | Pages du catalogue |
+| --- | --- | --- |
+| [2] | Crémone OB - hauteur de poignée milieu/variable | à partir de la p. 222 |
+| [5] | Crémone de semi-fixe standard - poignée milieu/variable | à partir de la p. 253 |
+| [6] | Verrouilleur médian en plusieurs parties - standard | à partir de la p. 318 |
+| [11] | Renvoi d'angle standard | à partir de la p. 266 |
+| [13] | Renvoi d'angle spécial court | à partir de la p. 267 |
+| [14] | Compas de renvoi d'angle | à partir de la p. 270 |
+| [18] | Verrouilleur en plusieurs parties , standard, vertical | à partir de la p. 318 |
+| [19] | Verrouilleur en plusieurs parties - standard, horizontal | à partir de la p. 318 |
+| [23] | Gâche | à partir de la p. 356 |
+| [24] | Gâche sécurité | à partir de la p. 357 |
+| [26] | Verrouilleur médian invisible de pièce dormant | à partir de la p. 422 |
+| [27] | Verrouilleur médian invisible de pièce d'ouvrant | à partir de la p. 422 |
+| [28] | Gâche OB | à partir de la p. 350 |
+| [31] | Loqueteau pièce d'ouvrant | à partir de la p. 388 |
+| [32] | Loqueteau de pièce dormant | à partir de la p. 388 |
+| [33] | Anti-fausse manœuvre pièce d'ouvrant | à partir de la p. 401 |
+| [36] | Têtière de compas sécurité de base | à partir de la p. 282 |
+| [38] | Bras de compas | p. 290 (renvoi imprimé « → 290 ») |
+| [42] | Équerre de compas OF | à partir de la p. 299 |
+| [43] | Compas OF | à partir de la p. 301 |
+| [44] | Pivot d'angle | à partir de la p. 338 |
+| [45] | Palier d'angle | à partir de la p. 340 |
+| [46] | Cache de palier d'angle (en option) | à partir de la p. 341 |
+| [48] | 2ème compas | à partir de la p. 370 |
+| [49] | Support (en fonction du profil) | à partir de la p. 417 |
+| [50] | Report de charge pièce d'ouvrant | à partir de la p. 343 |
+| [51] | Report de charge pièce dormant | à partir de la p. 343 |
+| [54] | Poignée (voir catalogue CTL_1) | - |
+| [61] | Limiteur d'ouverture 198, pièce d'ouvrant | à partir de la p. 409 |
+| [62] | Limiteur d'ouverture 198, pièce dormant | à partir de la p. 409 |
+| [81] | Réhausse | à partir de la p. 415 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 185)
+
+Champ d'application de la configuration « Ferrure de battement standard à poignée centrée / variable, sécurité de base », bande « Sécurité de base », colonnes « sans report de charge » et « avec report de charge » [1 p. 185] :
+
+<table>
+<thead>
+<tr><th rowspan="2">Grandeur</th><th colspan="2">Sécurité de base</th></tr>
+<tr><th>sans report de charge</th><th>avec report de charge</th></tr>
+</thead>
+<tbody>
+<tr><td>Largeur fond de feuillure d'ouvrant (LFF)</td><td>370 – 1 400 mm</td><td>800 – 1 400 mm</td></tr>
+<tr><td>Hauteur fond de feuillure d'ouvrant (HFF)</td><td>370 – 2 600 mm</td><td>1 000 – 2 600 mm</td></tr>
+<tr><td>Poids d'ouvrant (PO)</td><td>max. 100 kg</td><td>max. 150 kg</td></tr>
+</tbody>
+</table>
+
+HFF minimale sans report de charge : 370 mm [1 p. 185], 430 mm à poignée fixe [1 p. 149] — entrée **INC-285** ; 300 mm au manuel de montage KSR pour l'oscillo-battant à deux vantaux NT Designo II [2 p. 72] (**CTR-114**).
+
+L'encadré INFO Roto Con Orders de cette liste est seul sur la p. 186 ; la p. 187 est blanche.
+
+### Ferrure de battement standard à poignée centrée / variable, CDR 1 N
+
+Section 3.2.2.5.2 : même disposition que la ferrure de battement standard à hauteur de poignée fixe en CDR 1 N (têtière de compas de fenêtre OF [35], bras de compas [38] et verrouilleur [17] en haut du vantail de gauche, verrouilleur médian de têtière [7] et verrouilleur médian [6] au battement, gâches de sécurité [24] et sécurités anti-dégondage [82], protection de perçage [53]), avec la crémone OB à hauteur de poignée milieu / variable [2], la crémone de semi-fixe standard - poignée milieu / variable [5], des renvois d'angle spéciaux courts [13] en haut et en bas des deux vantaux côté battement et deux pièces [80] en traits clairs au battement [1 p. 188].
+
+![Aperçu de la ferrure Roto NX, côté paumelles Designo (BA 13), crémone OB hauteur de poignée centrée / variable, ferrure de battement standard, CDR 1 N](/assets/quincaillerie/roto-nx-catalogue/apercu-ferrures/designo-kvar-battement-standard-cdr-1-n.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 188)
+
+Les deux pièces [80] ne figurent pas dans la liste de la p. 189 — entrée **INC-286**.
+
+Liste des positions de la configuration « Ferrure de battement standard à poignée centrée / variable, CDR 1 N » [1 p. 189] :
+
+| Position | Désignation | Pages du catalogue |
+| --- | --- | --- |
+| [2] | Crémone OB - hauteur de poignée milieu/variable | à partir de la p. 222 |
+| [5] | Crémone de semi-fixe standard - poignée milieu/variable | à partir de la p. 253 |
+| [6] | Verrouilleur médian en plusieurs parties - standard | à partir de la p. 318 |
+| [7] | Verrouilleur médian de têtière | à partir de la p. 322 |
+| [11] | Renvoi d'angle standard | à partir de la p. 266 |
+| [13] | Renvoi d'angle spécial court | à partir de la p. 267 |
+| [14] | Compas de renvoi d'angle | à partir de la p. 270 |
+| [17] | Verrouilleur en plusieurs parties – standard, horizontal - en haut, fenêtre OF | à partir de la p. 318 |
+| [18] | Verrouilleur en plusieurs parties , standard, vertical | à partir de la p. 318 |
+| [19] | Verrouilleur en plusieurs parties - standard, horizontal | à partir de la p. 318 |
+| [23] | Gâche | à partir de la p. 356 |
+| [24] | Gâche sécurité | à partir de la p. 357 |
+| [28] | Gâche OB | à partir de la p. 350 |
+| [31] | Loqueteau pièce d'ouvrant | à partir de la p. 388 |
+| [32] | Loqueteau de pièce dormant | à partir de la p. 388 |
+| [33] | Anti-fausse manœuvre pièce d'ouvrant | à partir de la p. 401 |
+| [35] | Têtière de compas de fenêtre OF | à partir de la p. 284 |
+| [36] | Têtière de compas sécurité de base | à partir de la p. 282 |
+| [38] | Bras de compas | p. 290 (renvoi imprimé « → 290 ») |
+| [44] | Pivot d'angle | à partir de la p. 338 |
+| [45] | Palier d'angle | à partir de la p. 340 |
+| [46] | Cache de palier d'angle (en option) | à partir de la p. 341 |
+| [48] | 2ème compas | à partir de la p. 370 |
+| [49] | Support (en fonction du profil) | à partir de la p. 417 |
+| [50] | Report de charge pièce d'ouvrant | à partir de la p. 343 |
+| [51] | Report de charge pièce dormant | à partir de la p. 343 |
+| [53] | Protection de perçage | à partir de la p. 410 |
+| [54] | Poignée (voir catalogue CTL_1) | - |
+| [61] | Limiteur d'ouverture 198, pièce d'ouvrant | à partir de la p. 409 |
+| [62] | Limiteur d'ouverture 198, pièce dormant | à partir de la p. 409 |
+| [81] | Réhausse | à partir de la p. 415 |
+| [82] | Sécurité anti-dégondage | à partir de la p. 411 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 189)
+
+Champ d'application de la configuration « Ferrure de battement standard à poignée centrée / variable, CDR 1 N », bande « CDR 1 N », colonnes « sans report de charge » et « avec report de charge » [1 p. 189] :
+
+<table>
+<thead>
+<tr><th rowspan="2">Grandeur</th><th colspan="2">CDR 1 N</th></tr>
+<tr><th>sans report de charge</th><th>avec report de charge</th></tr>
+</thead>
+<tbody>
+<tr><td>Largeur fond de feuillure d'ouvrant (LFF)</td><td>450 – 1 400 mm</td><td>800 – 1 400 mm</td></tr>
+<tr><td>Hauteur fond de feuillure d'ouvrant (HFF)</td><td>370 – 2 600 mm</td><td>1 000 – 2 600 mm</td></tr>
+<tr><td>Poids d'ouvrant (PO)</td><td>max. 100 kg</td><td>max. 150 kg</td></tr>
+</tbody>
+</table>
+
+HFF minimale 370 mm, contre 430 mm à poignée fixe [1 p. 153, 189] — entrée **INC-285**.
+
+L'encadré INFO Roto Con Orders de cette liste est seul sur la p. 190 ; la p. 191 est blanche.
+
+### Ferrure de battement standard à poignée centrée / variable, CDR 2 / CDR 2 N
+
+Section 3.2.2.5.3 : gâches de sécurité [24] et sécurités anti-dégondage [82] sur les deux vantaux, têtière de compas de fenêtre OF [35], bras de compas [38] et verrouilleur [17] en haut du vantail de gauche, têtière de compas de sécurité [36] sur celui de droite, protection de perçage [53] ; au battement, crémone de semi-fixe standard - poignée milieu / variable [5], renvois d'angle standard [11] et renvois d'angle spéciaux courts [13] en haut et en bas du vantail de gauche, renvois d'angle standard [11] seuls sur le vantail de droite, deux éléments de blocage pour ouvrant secondaire [84], réhausse [81] et gâche de sécurité [24] en bas, deux pièces [80] en traits clairs ; ni verrouilleur médian [6] / [7], ni renvoi d'angle têtière [10], ni renvoi d'angle standard CDR 3 [15] [1 p. 192].
+
+![Aperçu de la ferrure Roto NX, côté paumelles Designo (BA 13), crémone OB hauteur de poignée centrée / variable, ferrure de battement standard, CDR 2 / CDR 2 N](/assets/quincaillerie/roto-nx-catalogue/apercu-ferrures/designo-kvar-battement-standard-cdr-2-cdr-2-n.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 192)
+
+Sur cette vue, les verrouilleurs verticaux côté paumelles sont repérés [19] et les verrouilleurs horizontaux du bas [18], à l'inverse de la liste (« [18] … vertical », « [19] … horizontal ») — entrée **INC-287** ; les deux pièces [80] ne figurent pas dans la liste de la p. 193 (**INC-286**).
+
+Liste des positions de la configuration « Ferrure de battement standard à poignée centrée / variable, CDR 2 / CDR 2 N » [1 p. 193] :
+
+| Position | Désignation | Pages du catalogue |
+| --- | --- | --- |
+| [2] | Crémone OB - hauteur de poignée milieu/variable | à partir de la p. 222 |
+| [5] | Crémone de semi-fixe standard - poignée milieu/variable | à partir de la p. 253 |
+| [11] | Renvoi d'angle standard | à partir de la p. 266 |
+| [13] | Renvoi d'angle spécial court | à partir de la p. 267 |
+| [14] | Compas de renvoi d'angle | à partir de la p. 270 |
+| [17] | Verrouilleur en plusieurs parties – standard, horizontal - en haut, fenêtre OF | à partir de la p. 318 |
+| [18] | Verrouilleur en plusieurs parties - de sécurité, vertical | à partir de la p. 319 |
+| [19] | Verrouilleur en plusieurs parties - de sécurité, horizontal | à partir de la p. 319 |
+| [24] | Gâche sécurité | à partir de la p. 357 |
+| [28] | Gâche OB | à partir de la p. 350 |
+| [31] | Loqueteau pièce d'ouvrant | à partir de la p. 388 |
+| [32] | Loqueteau de pièce dormant | à partir de la p. 388 |
+| [33] | Anti-fausse manœuvre pièce d'ouvrant | à partir de la p. 401 |
+| [35] | Têtière de compas de fenêtre OF | à partir de la p. 284 |
+| [36] | Têtière de compas de sécurité | à partir de la p. 283 |
+| [38] | Bras de compas | p. 290 (renvoi imprimé « → 290 ») |
+| [44] | Pivot d'angle | à partir de la p. 338 |
+| [45] | Palier d'angle | à partir de la p. 340 |
+| [46] | Cache de palier d'angle (en option) | à partir de la p. 341 |
+| [48] | 2ème compas | à partir de la p. 370 |
+| [49] | Support (en fonction du profil) | à partir de la p. 417 |
+| [50] | Report de charge pièce d'ouvrant | à partir de la p. 343 |
+| [51] | Report de charge pièce dormant | à partir de la p. 343 |
+| [53] | Protection de perçage | à partir de la p. 410 |
+| [54] | Poignée (voir catalogue CTL_1) | - |
+| [61] | Limiteur d'ouverture 198, pièce d'ouvrant | à partir de la p. 409 |
+| [62] | Limiteur d'ouverture 198, pièce dormant | à partir de la p. 409 |
+| [81] | Réhausse | à partir de la p. 415 |
+| [82] | Sécurité anti-dégondage | à partir de la p. 411 |
+| [84] | Élément de blocage pour ouvrant secondaire | à partir de la p. 410 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 193)
+
+Champ d'application de la configuration « Ferrure de battement standard à poignée centrée / variable, CDR 2 / CDR 2 N », bande « CDR 2 / CDR 2 N », colonnes « sans report de charge » et « avec report de charge » [1 p. 193] :
+
+<table>
+<thead>
+<tr><th rowspan="2">Grandeur</th><th colspan="2">CDR 2 / CDR 2 N</th></tr>
+<tr><th>sans report de charge</th><th>avec report de charge</th></tr>
+</thead>
+<tbody>
+<tr><td>Largeur fond de feuillure d'ouvrant (LFF)</td><td>450 – 1 400 mm</td><td>800 – 1 400 mm</td></tr>
+<tr><td>Hauteur fond de feuillure d'ouvrant (HFF)</td><td>510 – 2 400 mm</td><td>1 000 – 2 400 mm</td></tr>
+<tr><td>Poids d'ouvrant (PO)</td><td>max. 100 kg</td><td>max. 150 kg</td></tr>
+</tbody>
+</table>
+
+HFF minimale 510 mm, contre 600 mm à poignée fixe [1 p. 157] et 490 mm au chapitre 2 [1 p. 49-50] — entrée **INC-285**.
+
+Les p. 194 et 195, qui suivent cette configuration, sont blanches.
+
+## Ferrure de battement Plus, poignée centrée / variable
+
+### Ferrure de battement Plus à poignée centrée / variable, sécurité de base
+
+Section 3.2.2.6 « Ferrure de battement - Plus », 3.2.2.6.1 « Sécurité de base » : même disposition que la ferrure de battement standard à poignée centrée / variable en sécurité de base (renvois d'angle spéciaux courts [13] en haut et en bas des deux vantaux côté battement, deux pièces [80] en traits clairs au battement), avec la crémone de semi-fixe Plus - hauteur de poignée milieu / variable [5] [1 p. 196].
+
+![Aperçu de la ferrure Roto NX, côté paumelles Designo (BA 13), crémone OB hauteur de poignée centrée / variable, ferrure de battement Plus, sécurité de base](/assets/quincaillerie/roto-nx-catalogue/apercu-ferrures/designo-kvar-battement-plus-securite-de-base.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 196)
+
+Les deux pièces [80] ne figurent pas dans la liste de la p. 197 — entrée **INC-286**.
+
+Liste des positions de la configuration « Ferrure de battement Plus à poignée centrée / variable, sécurité de base » [1 p. 197] :
+
+| Position | Désignation | Pages du catalogue |
+| --- | --- | --- |
+| [2] | Crémone OB - hauteur de poignée milieu/variable | à partir de la p. 222 |
+| [5] | Crémone de semi-fixe Plus - hauteur de poignée milieu/variable | à partir de la p. 259 |
+| [6] | Verrouilleur médian en plusieurs parties - standard | à partir de la p. 318 |
+| [11] | Renvoi d'angle standard | à partir de la p. 266 |
+| [13] | Renvoi d'angle spécial court | à partir de la p. 267 |
+| [14] | Compas de renvoi d'angle | à partir de la p. 270 |
+| [18] | Verrouilleur en plusieurs parties , standard, vertical | à partir de la p. 318 |
+| [19] | Verrouilleur en plusieurs parties - standard, horizontal | à partir de la p. 318 |
+| [23] | Gâche | à partir de la p. 356 |
+| [24] | Gâche sécurité | à partir de la p. 357 |
+| [26] | Verrouilleur médian invisible de pièce dormant | à partir de la p. 422 |
+| [27] | Verrouilleur médian invisible de pièce d'ouvrant | à partir de la p. 422 |
+| [28] | Gâche OB | à partir de la p. 350 |
+| [31] | Loqueteau pièce d'ouvrant | à partir de la p. 388 |
+| [32] | Loqueteau de pièce dormant | à partir de la p. 388 |
+| [33] | Anti-fausse manœuvre pièce d'ouvrant | à partir de la p. 401 |
+| [36] | Têtière de compas sécurité de base | à partir de la p. 282 |
+| [38] | Bras de compas | p. 290 (renvoi imprimé « → 290 ») |
+| [42] | Équerre de compas OF | à partir de la p. 299 |
+| [43] | Compas OF | à partir de la p. 301 |
+| [44] | Pivot d'angle | à partir de la p. 338 |
+| [45] | Palier d'angle | à partir de la p. 340 |
+| [46] | Cache de palier d'angle (en option) | à partir de la p. 341 |
+| [48] | 2ème compas | à partir de la p. 370 |
+| [49] | Support (en fonction du profil) | à partir de la p. 417 |
+| [50] | Report de charge pièce d'ouvrant | à partir de la p. 343 |
+| [51] | Report de charge pièce dormant | à partir de la p. 343 |
+| [54] | Poignée (voir catalogue CTL_1) | - |
+| [61] | Limiteur d'ouverture 198, pièce d'ouvrant | à partir de la p. 409 |
+| [62] | Limiteur d'ouverture 198, pièce dormant | à partir de la p. 409 |
+| [81] | Réhausse | à partir de la p. 415 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 197)
+
+Champ d'application de la configuration « Ferrure de battement Plus à poignée centrée / variable, sécurité de base », bande « Sécurité de base », colonnes « sans report de charge » et « avec report de charge » [1 p. 197] :
+
+<table>
+<thead>
+<tr><th rowspan="2">Grandeur</th><th colspan="2">Sécurité de base</th></tr>
+<tr><th>sans report de charge</th><th>avec report de charge</th></tr>
+</thead>
+<tbody>
+<tr><td>Largeur fond de feuillure d'ouvrant (LFF)</td><td>370 – 1 400 mm</td><td>800 – 1 400 mm</td></tr>
+<tr><td>Hauteur fond de feuillure d'ouvrant (HFF)</td><td>420 – 2 600 mm</td><td>1 000 – 2 600 mm</td></tr>
+<tr><td>Poids d'ouvrant (PO)</td><td>max. 100 kg</td><td>max. 150 kg</td></tr>
+</tbody>
+</table>
+
+HFF minimale 420 mm, contre 370 mm pour la ferrure de battement standard à poignée centrée / variable [1 p. 185] et 430 mm pour la ferrure de battement Plus à poignée fixe [1 p. 161] — entrée **INC-285**.
+
+L'encadré INFO Roto Con Orders de cette liste est seul sur la p. 198 ; la p. 199 est blanche.
+
+### Ferrure de battement Plus à poignée centrée / variable, CDR 1 N
+
+Section 3.2.2.6.2 : même disposition que la ferrure de battement Plus à hauteur de poignée fixe en CDR 1 N (têtière de compas de fenêtre OF [35], bras de compas [38] et verrouilleur [19] en haut du vantail de gauche, verrouilleur médian de têtière [7] et verrouilleur médian [6] au battement, gâches de sécurité [24] et sécurités anti-dégondage [82], protection de perçage [53], réhausse [81]), avec la crémone OB à hauteur de poignée milieu / variable [2], la crémone de semi-fixe Plus - hauteur de poignée milieu / variable [5], des renvois d'angle spéciaux courts [13] en haut et en bas des deux vantaux côté battement et deux pièces [80] en traits clairs au battement [1 p. 200].
+
+![Aperçu de la ferrure Roto NX, côté paumelles Designo (BA 13), crémone OB hauteur de poignée centrée / variable, ferrure de battement Plus, CDR 1 N](/assets/quincaillerie/roto-nx-catalogue/apercu-ferrures/designo-kvar-battement-plus-cdr-1-n.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 200)
+
+Les deux pièces [80] ne figurent pas dans la liste de la p. 201 — entrée **INC-286**.
+
+Liste des positions de la configuration « Ferrure de battement Plus à poignée centrée / variable, CDR 1 N » [1 p. 201] :
+
+| Position | Désignation | Pages du catalogue |
+| --- | --- | --- |
+| [2] | Crémone OB - hauteur de poignée milieu/variable | à partir de la p. 222 |
+| [5] | Crémone de semi-fixe Plus - hauteur de poignée milieu/variable | à partir de la p. 259 |
+| [6] | Verrouilleur médian en plusieurs parties - standard | à partir de la p. 318 |
+| [7] | Verrouilleur médian de têtière | à partir de la p. 322 |
+| [11] | Renvoi d'angle standard | à partir de la p. 266 |
+| [13] | Renvoi d'angle spécial court | à partir de la p. 267 |
+| [14] | Compas de renvoi d'angle | à partir de la p. 270 |
+| [18] | Verrouilleur en plusieurs parties , standard, vertical | à partir de la p. 318 |
+| [19] | Verrouilleur en plusieurs parties - standard, horizontal | à partir de la p. 318 |
+| [23] | Gâche | à partir de la p. 356 |
+| [24] | Gâche sécurité | à partir de la p. 357 |
+| [28] | Gâche OB | à partir de la p. 350 |
+| [31] | Loqueteau pièce d'ouvrant | à partir de la p. 388 |
+| [32] | Loqueteau de pièce dormant | à partir de la p. 388 |
+| [33] | Anti-fausse manœuvre pièce d'ouvrant | à partir de la p. 401 |
+| [35] | Têtière de compas de fenêtre OF | à partir de la p. 284 |
+| [36] | Têtière de compas sécurité de base | à partir de la p. 282 |
+| [38] | Bras de compas | p. 290 (renvoi imprimé « → 290 ») |
+| [44] | Pivot d'angle | à partir de la p. 338 |
+| [45] | Palier d'angle | à partir de la p. 340 |
+| [46] | Cache de palier d'angle (en option) | à partir de la p. 341 |
+| [48] | 2ème compas | à partir de la p. 370 |
+| [49] | Support (en fonction du profil) | à partir de la p. 417 |
+| [50] | Report de charge pièce d'ouvrant | à partir de la p. 343 |
+| [51] | Report de charge pièce dormant | à partir de la p. 343 |
+| [53] | Protection de perçage | à partir de la p. 410 |
+| [54] | Poignée (voir catalogue CTL_1) | - |
+| [61] | Limiteur d'ouverture 198, pièce d'ouvrant | à partir de la p. 409 |
+| [62] | Limiteur d'ouverture 198, pièce dormant | à partir de la p. 409 |
+| [81] | Réhausse | à partir de la p. 415 |
+| [82] | Sécurité anti-dégondage | à partir de la p. 411 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 201)
+
+Champ d'application de la configuration « Ferrure de battement Plus à poignée centrée / variable, CDR 1 N », bande « CDR 1 N », colonnes « sans report de charge » et « avec report de charge » [1 p. 201] :
+
+<table>
+<thead>
+<tr><th rowspan="2">Grandeur</th><th colspan="2">CDR 1 N</th></tr>
+<tr><th>sans report de charge</th><th>avec report de charge</th></tr>
+</thead>
+<tbody>
+<tr><td>Largeur fond de feuillure d'ouvrant (LFF)</td><td>450 – 1 400 mm</td><td>800 – 1 400 mm</td></tr>
+<tr><td>Hauteur fond de feuillure d'ouvrant (HFF)</td><td>420 – 2 600 mm</td><td>1 000 – 2 600 mm</td></tr>
+<tr><td>Poids d'ouvrant (PO)</td><td>max. 100 kg</td><td>max. 150 kg</td></tr>
+</tbody>
+</table>
+
+HFF minimale 420 mm, contre 430 mm à poignée fixe [1 p. 165] et 370 mm pour la ferrure de battement standard à poignée centrée / variable [1 p. 189] — entrée **INC-285**.
+
+L'encadré INFO Roto Con Orders de cette liste est seul sur la p. 202 ; la p. 203 est blanche.
+
+### Ferrure de battement Plus à poignée centrée / variable, CDR 2 / CDR 2 N
+
+Section 3.2.2.6.3 : gâches de sécurité [24] et sécurités anti-dégondage [82] sur les deux vantaux, têtière de compas de fenêtre OF [35] et bras de compas [38] sur le vantail de gauche, têtière de compas de sécurité [36] sur celui de droite, protection de perçage [53], crémone de semi-fixe Plus - hauteur de poignée milieu / variable [5] ; au battement du vantail de gauche, renvois d'angle standard [11] et spéciaux courts [13] en haut et en bas, deux renvois d'angle de la têtière - protection contre les déplacements [16] en traits clairs, une pièce repérée [9] en bas, réhausse [81] et gâche de sécurité [24] ; au battement du vantail de droite, renvois d'angle standard [11] et renvois d'angle standard CDR 3 [15] (en haut en traits clairs) ; deux gâches OB [28] en bas à droite ; deux pièces [80] en traits clairs [1 p. 204].
+
+![Aperçu de la ferrure Roto NX, côté paumelles Designo (BA 13), crémone OB hauteur de poignée centrée / variable, ferrure de battement Plus, CDR 2 / CDR 2 N](/assets/quincaillerie/roto-nx-catalogue/apercu-ferrures/designo-kvar-battement-plus-cdr-2-cdr-2-n.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 204)
+
+Sur cette vue, les verrouilleurs sont tous repérés [20] et le verrouilleur du haut du vantail de gauche [17], alors que la liste de la p. 205 porte [18] (vertical) et [19] (horizontal) et ne porte ni [17], ni [20], ni [9] — entrée **INC-287** ; les deux pièces [80] ne figurent pas dans la liste (**INC-286**).
+
+Liste des positions de la configuration « Ferrure de battement Plus à poignée centrée / variable, CDR 2 / CDR 2 N » [1 p. 205] :
+
+| Position | Désignation | Pages du catalogue |
+| --- | --- | --- |
+| [2] | Crémone OB - hauteur de poignée milieu/variable | à partir de la p. 222 |
+| [5] | Crémone de semi-fixe Plus - hauteur de poignée milieu/variable | à partir de la p. 259 |
+| [11] | Renvoi d'angle standard | à partir de la p. 266 |
+| [13] | Renvoi d'angle spécial court | à partir de la p. 267 |
+| [14] | Compas de renvoi d'angle | à partir de la p. 270 |
+| [15] | Renvoi d'angle standard CDR 3 | à partir de la p. 266 |
+| [16] | Renvoi d'angle de la têtière - protection contre les déplacements | à partir de la p. 268 |
+| [18] | Verrouilleur en plusieurs parties - de sécurité, vertical | à partir de la p. 319 |
+| [19] | Verrouilleur en plusieurs parties - de sécurité, horizontal | à partir de la p. 319 |
+| [24] | Gâche sécurité | à partir de la p. 357 |
+| [28] | Gâche OB | à partir de la p. 350 |
+| [31] | Loqueteau pièce d'ouvrant | à partir de la p. 388 |
+| [32] | Loqueteau de pièce dormant | à partir de la p. 388 |
+| [33] | Anti-fausse manœuvre pièce d'ouvrant | à partir de la p. 401 |
+| [35] | Têtière de compas de fenêtre OF | à partir de la p. 284 |
+| [36] | Têtière de compas de sécurité | à partir de la p. 283 |
+| [38] | Bras de compas | p. 290 (renvoi imprimé « → 290 ») |
+| [44] | Pivot d'angle | à partir de la p. 338 |
+| [45] | Palier d'angle | à partir de la p. 340 |
+| [46] | Cache de palier d'angle (en option) | à partir de la p. 341 |
+| [48] | 2ème compas | à partir de la p. 370 |
+| [49] | Support (en fonction du profil) | à partir de la p. 417 |
+| [50] | Report de charge pièce d'ouvrant | à partir de la p. 343 |
+| [51] | Report de charge pièce dormant | à partir de la p. 343 |
+| [53] | Protection de perçage | à partir de la p. 410 |
+| [54] | Poignée (voir catalogue CTL_1) | - |
+| [61] | Limiteur d'ouverture 198, pièce d'ouvrant | à partir de la p. 409 |
+| [62] | Limiteur d'ouverture 198, pièce dormant | à partir de la p. 409 |
+| [81] | Réhausse | à partir de la p. 415 |
+| [82] | Sécurité anti-dégondage | à partir de la p. 411 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 205)
+
+Champ d'application de la configuration « Ferrure de battement Plus à poignée centrée / variable, CDR 2 / CDR 2 N », bande « CDR 2 / CDR 2 N », colonnes « sans report de charge » et « avec report de charge » [1 p. 205] :
+
+<table>
+<thead>
+<tr><th rowspan="2">Grandeur</th><th colspan="2">CDR 2 / CDR 2 N</th></tr>
+<tr><th>sans report de charge</th><th>avec report de charge</th></tr>
+</thead>
+<tbody>
+<tr><td>Largeur fond de feuillure d'ouvrant (LFF)</td><td>450 – 1 400 mm</td><td>800 – 1 400 mm</td></tr>
+<tr><td>Hauteur fond de feuillure d'ouvrant (HFF)</td><td>520 – 2 400 mm</td><td>1 000 – 2 400 mm</td></tr>
+<tr><td>Poids d'ouvrant (PO)</td><td>max. 100 kg</td><td>max. 150 kg</td></tr>
+</tbody>
+</table>
+
+HFF minimale 520 mm, contre 600 mm à poignée fixe [1 p. 169] et 490 mm au chapitre 2 [1 p. 49-50] — entrée **INC-285**.
+
+L'encadré INFO Roto Con Orders suit la liste sur la p. 205 ; les p. 206 et 207, dernières du chapitre 3 avant l'ouverture du chapitre 4 « Crémone », sont blanches.
+
 # Ce que la source ne donne pas
 
 Les listes de positions ne donnent aucun numéro d'article : il se lit dans le tableau de la page
@@ -645,7 +1633,7 @@ dessinée au battement (**INC-286**). Le champ « sans report de charge » est d
 
 # Citations
 
-[1] [Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023](raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf), p. 49-51, 54, 65, 136-157
+[1] [Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023](raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf), p. 49-52, 54, 65, 81, 136-205
 
 [2] [Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2, novembre 2022](raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf), p. 68, 70, 72
 

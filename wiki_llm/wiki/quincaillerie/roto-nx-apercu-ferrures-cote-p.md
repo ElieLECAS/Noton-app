@@ -50,8 +50,12 @@ Chaque configuration occupe deux pages du catalogue :
 3. un champ d'application : la largeur fond de feuillure d'ouvrant (*LFF*), la hauteur fond
    de feuillure d'ouvrant (*HFF*) et le poids d'ouvrant (*PO*) admis pour la configuration.
 
-Les numéros de position sont communs à tout le chapitre : [1] est toujours la crémone OB KSR à
-hauteur de poignée fixe, [24] toujours la gâche de sécurité, [54] toujours la poignée. Ils ne
+Les numéros de position se retrouvent d'une configuration à l'autre : [1] est la crémone OB KSR à
+hauteur de poignée fixe, [24] la gâche de sécurité, [54] la poignée. Un même numéro ne désigne
+toutefois pas toujours la même pièce d'un côté paumelles à l'autre : [50] est la compression de
+feuillure côté P et le report de charge pièce d'ouvrant côté Designo (BA 13) (voir [Aperçu des
+ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md))
+[1 p. 65, 137]. Ils ne
 sont pas les repères des nomenclatures du manuel de montage KSR, qui numérote ses pièces
 autrement sur chaque vue éclatée (voir [Configurations Roto NX KSR —
 oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md)). La poignée renvoie au
@@ -1926,13 +1930,14 @@ pas dans le corpus. Les pages d'aperçu ne disent ni ce qu'est la ferrure TiltFi
 
 # Citations
 
-[1] [Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023](raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf), p. 35-36, 41-42, 48, 54-135
+[1] [Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023](raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf), p. 35-36, 41-42, 48, 54-135, 137
 
 [2] [Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2, novembre 2022](raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf), p. 23, 25, 29, 38, 42, 44, 46, 64, 66
 
 # Voir aussi
 
 - [Catalogue Roto NX pour profils PVC, juin 2023](/sources/roto-nx-catalogue-pvc.md)
+- [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md)
 - [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md)
 - [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md)
 - [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md)
