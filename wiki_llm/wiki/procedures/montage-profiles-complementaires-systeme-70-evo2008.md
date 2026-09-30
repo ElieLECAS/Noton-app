@@ -2,7 +2,7 @@
 type: Procédure
 title: Montage des profilés complémentaires du système 70, classeur e.VOLUTION de 2008
 description: "Les registres 5.5 « Montage des profilés complémentaires » et 5.6 « Petit bois rapportés collés » du classeur KÖMMERLING e.VOLUTION d'août 2008 (système 70, système F 91) : clippage des coulisses et rejets d'eau par clip 9447 et gabarit 9905, cote X par dormant et par ouvrant, coulisses et tulipes V.R., angle variable K340 / K341, angle fixe 135° 6356 et poteau K355, seuil alu 9G13, accouplements, puis la pose des petits bois collés sur le vitrage."
-tags: [profine, kommerling, e-volution, systeme-70, coulisse, tulipe, rejet-d-eau, clip, gabarit, angle-variable, poteau-d-angle, accouplement, seuil, 9g13, petits-bois, croisillon, atelier]
+tags: [profine, kommerling, e-volution, systeme-70, coulisse, tulipe, rejet-d-eau, clip, gabarit, angle-variable, poteau-d-angle, accouplement, seuil, petits-bois, croisillon, atelier]
 systeme: 70
 fournisseur: KÖMMERLING
 usage: [atelier, sav]
@@ -42,7 +42,7 @@ Les mêmes opérations dans le manuel de mise en œuvre de 2023 sont sur [Mise e
 complémentaires du système 70](/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md)
 et [Accouplement des éléments du système 70](/procedures/accouplement-elements-systeme-70.md) ;
 les cotes des coulisses dessinées à l'échelle 1:2 au registre 1.5 du même classeur sont sur
-[Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md#coulisses-des-plans-de-2008).
+[Profilés complémentaires du système 70](/profiles/systeme-70-coulisses-et-petits-bois-evo2008.md#coulisses-des-plans-de-2008).
 
 # Conditions et interdictions
 
@@ -277,7 +277,7 @@ entre les deux verres, et un **croisillon** est l'assemblage de petits bois en c
 5.6 « Petit bois rapportés collés » du classeur e.VOLUTION de 2008 est paginé de 1 à 9 : sa page
 imprimée N est la page N + 259 du PDF. Les cotes de section des petits bois, relevées sur la
 planche « Petit bois » du registre 1.5, sont sur [Profilés complémentaires du système
-70](/profiles/systeme-70-profiles-complementaires.md#petits-bois-des-plans-de-2008) ; les
+70](/profiles/systeme-70-coulisses-et-petits-bois-evo2008.md#petits-bois-des-plans-de-2008) ; les
 directives de 2023 sont sur [Mise en œuvre des profilés complémentaires du système
 70](/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md#petits-bois-et-croisillons--directives-de-mise-en-œuvre).
 
@@ -533,7 +533,7 @@ La planche, à l'échelle 1:1, dessine à gauche les petits bois 9B64, 9B63, 9B6
 largeur et sa hauteur, et au centre les couples collés de part et d'autre du vitrage : 1 avec A,
 2 avec B, 3 avec C, 4 avec D, 5 avec E, et « 1-4 » avec « B+D » [1 p. 268]. Les cotes de ces dix
 sections sont identiques à celles de la planche « Petit bois » du registre 1.5 et sont transcrites
-sur [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md#petits-bois-des-plans-de-2008).
+sur [Profilés complémentaires du système 70](/profiles/systeme-70-coulisses-et-petits-bois-evo2008.md#petits-bois-des-plans-de-2008).
 
 | Repère | Petit bois | Couple dessiné au centre |
 | --- | --- | --- |

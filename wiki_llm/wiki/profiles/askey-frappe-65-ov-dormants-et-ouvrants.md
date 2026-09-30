@@ -2,7 +2,7 @@
 type: Profilé
 title: Profilés dormants et ouvrants ASKEY Frappe 65 Ouvrant Visible
 description: Nomenclatures, dimensions, caractéristiques et parcloses des profilés aluminium dormants, ouvrants et seuils de la Frappe 65 OV ASKEY.
-tags: [profilé, aluminium, frappe, ouvrant-visible, askey, dormant, ouvrant, parclose]
+tags: [profile, aluminium, frappe, ouvrant-visible, askey, dormant, ouvrant, parclose]
 gamme: Frappe 65 Ouvrant Visible
 fournisseur: ASKEY
 usage: atelier

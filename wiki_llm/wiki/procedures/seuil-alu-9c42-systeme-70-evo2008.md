@@ -2,7 +2,7 @@
 type: Procédure
 title: Seuil aluminium de porte 9C42 du système 70, classeur e.VOLUTION de 2008
 description: "Le registre 5.8 « Seuils Aluminium de portes » du classeur KÖMMERLING e.VOLUTION d'août 2008 (système 70, système F 91) : plan et description du seuil 9C42, sets d'assemblage dormant et meneau, montage du dormant et du meneau sur le seuil, rejet d'eau 9F46 et joint brosse 9C44, débits du montant, du seuil et du rejet d'eau par dormant (standard, rénovation, neuf 6104, larges 6108 à 6111) et seuil sur élargisseur 0207."
-tags: [profine, kommerling, e-volution, systeme-70, seuil, seuil-alu, 9c42, 9f46, rejet-d-eau, joint-brosse, porte, set-d-assemblage, debit, atelier]
+tags: [profine, kommerling, e-volution, systeme-70, seuil, seuil-alu, rejet-d-eau, joint-brosse, porte, set-d-assemblage, debit, atelier]
 systeme: 70
 fournisseur: KÖMMERLING
 usage: [atelier, sav]

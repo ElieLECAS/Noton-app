@@ -27,7 +27,7 @@ semi-produits en aluminium (capotages) — entre le camion et le poste de débit
 livraison, déchargement, stockage, manutention, et les soins propres aux profilés revêtus d'un
 film lisse ou grainé. C'est le registre 1.2.1 « Livraison et stockage du matériel » des
 directives générales profine, commun aux systèmes 70 et 76 [1 p. 17-25]. La suite de la chaîne
-est sur [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md).
+est sur [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md). Chez PROFERM, le système 76 est celui de la fenêtre PERFORM76 ([PERFORM](/gammes/perform.md)) ; aucun document PROFERM ne rattache le système 70 à une gamme (**VER-28**).
 
 # Conditions et interdictions
 

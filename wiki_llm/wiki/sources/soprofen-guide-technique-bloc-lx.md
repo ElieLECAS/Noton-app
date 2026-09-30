@@ -5,7 +5,7 @@ description: Guide technique officiel et catalogue d'aide à la commande SOPROFE
 resource: raw/moustiquaires/export_doc_133.zip
 origin: SOPROFEN SAS (Mertzwiller)
 last_modified: 2024-01-01
-tags: [source, soprofen, bloc-lx, demi-linteau, volet-roulant, guide-technique, cotes, tablier, motorisation, treuil, renfort]
+tags: [source, soprofen, bloc-lx, demi-linteau, volet-roulant, guide-technique, cote, tablier, motorisation, treuil, renfort]
 systeme: Bloc LX
 fournisseur: SOPROFEN
 status: stable

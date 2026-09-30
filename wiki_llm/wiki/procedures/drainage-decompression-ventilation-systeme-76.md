@@ -30,7 +30,7 @@ generated:
 # Ce que fait cette procédure
 
 Elle situe, profilé par profilé, les usinages qui laissent sortir l'eau et l'air d'une fenêtre du
-**système 76 Advanced à joint central** de [profine](/fournisseurs/profine.md) :
+**système 76 Advanced à joint central** de [profine](/fournisseurs/profine.md) : Chez PROFERM, le système 76 est celui de la fenêtre PERFORM76 ([PERFORM](/gammes/perform.md)).
 
 - le **drainage** est le trou oblong qui évacue vers l'extérieur l'eau entrée dans la feuillure
   (le logement du vitrage ou de l'ouvrant) ;

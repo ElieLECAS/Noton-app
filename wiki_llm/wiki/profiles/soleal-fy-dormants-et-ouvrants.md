@@ -91,7 +91,7 @@ Les dormants sont basés sur un module tubulaire de 55 mm de profondeur avec bar
 | **TFY1217** | 55 mm | Ouvrant grande inertie Classique | 62,5 | Porte-fenêtre avec serrure en ligne Classique |
 | **TFY1218** | 55 mm | Ouvrant grande inertie Tradition | 62,5 | Porte-fenêtre avec serrure en ligne Tradition |
 | **TFY1223** | 55 mm | Ouvrant pour ventilation acoustique | 80,0 | Intégration de grille de ventilation acoustique en traverse |
-| **T215198** | 55 mm | Ouvrant pour châssis à l'italienne | 100,0 | Ouverture extérieure à l'italienne (compas T950002/04) |
+| **T215198** | 55 mm | Ouvrant pour châssis à l'italienne | 100,0 | Ouverture extérieure à l'italienne (compas T950002 et T950004) |
 | **T210082** | 55 mm | Ouvrant pour châssis projection | 98,5 | Ouverture extérieure à projection (compas T950008) |
 | **TFY1206** | 65 mm | Ouvrant apparent 65 mm (QC) | 29,5 | Module 65 mm pour quincaillerie cachée ou visible |
 | **TFY1253** | 65 mm | Ouvrant apparent 65 mm renforcé | 40,5 | Module 65 mm pour très grandes dimensions |

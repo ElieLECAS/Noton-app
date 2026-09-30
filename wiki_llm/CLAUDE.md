@@ -221,7 +221,8 @@ conclusions.
 | Classements A\*E\*V, labels, classes d'effraction | `/certifications/labels-et-certifications.md` |
 | Dimensions maximales de baie, domaine d'emploi, prescriptions du Groupe Spécialisé | `/certifications/dta-6-16-2334.md` |
 | Cotes de débit, renforts, abaques du système 76 | the three `/profiles/systeme-76-*.md` |
-| Profilés et renforts du système 70 | `/profiles/systeme-70-profiles-et-renforts.md` |
+| Caractéristiques et renforts acier du système 70 | `/profiles/systeme-70-profiles-et-renforts.md` |
+| Dormants, ouvrants, battements, meneaux et traverses du système 70 | `/profiles/systeme-70-dormants.md`, `-ouvrants.md`, `-battements.md`, `-meneaux-et-traverses.md` |
 | Cotes et compatibilités d'une famille de profilés | that family's `/profiles/` page |
 | Champs d'application et charges d'une ferrure | that hardware's `/quincaillerie/` page |
 | Sigles et abréviations du métier | `/reference/glossaire.md` |
@@ -598,10 +599,15 @@ Field notes:
 ## Writing to be found
 
 The search of the application (`app/services/wiki_index.py`) ranks pages on their **full text**,
-matching whole words once lowercased and stripped of accents. It does not stem and knows no
-synonym: `parclose` does not find `parcloses`, « crémone » does not find « rallonge 4ème
-point ». The title, the tags and the description weigh five, four and three times the body, and
-a reference typed in the question counts triple. The first three results come back **whole**;
+matching whole words once lowercased and stripped of accents and ligatures (`manœuvre` =
+`manoeuvre`). Three spellings are also read as one: digits grouped by a space (`487 206` =
+`487206`), a name followed by a number (`LUMINE 65` = `LUMINE65`), and the plural in -s or -x
+of a word of more than four letters (`parcloses` finds `parclose`). That is all: it knows no
+other inflection and no synonym -- « vantaux » does not find « vantail », « crémone » does not
+find « rallonge 4ème point ». The title, the tags and the description weigh five, four and three
+times the body; a reference typed in the question counts triple, and the server adds it to every
+search of the turn, while a dimension of the question (« 1 800 mm ») does not count as one. The
+`type` filter does not rank at all. The first three results come back **whole**;
 the following ones come back as a line -- title, tags, description, an extract. A page must
 therefore rank for the words a menuisier types, and cost little when it arrives next to two
 others.
@@ -660,8 +666,9 @@ Six rules make both true. They complete *One datum, one page* and never contradi
      not inventing*). The glossary keeps abbreviations, this rule keeps names
 6. **A reference is written whole and in one piece.** `TGY3703`, never `TGY3702/03`: the search
    reads `tgy3702` and `03`, and the row of the TGY3703 does not exist. Digits are not grouped by
-   a space or a dot -- `487206`, not `487 206`: it is a printing habit, not a spelling, and the
-   two forms are two different words for the search. Letters and dashes stay as the source
+   a space or a dot -- `487206`, not `487 206`: it is a printing habit, not a spelling. The
+   search now reads both as one, but a reader copying the reference, an image file name and the
+   lint do not. Letters and dashes stay as the source
    writes them (`Parclose 76507`, `F00-62- 0729T`). A range (`TGY3700 à TGY3704`) is fine in a
    sentence; every reference of it still has its own row.
 

@@ -2,7 +2,7 @@
 type: Profilé
 title: Capots et accessoires AluClip du système 70
 description: Les capots aluminium AluClip du système 70 Plateforme de profine — A107, A108, A109, 9C02, A170, capot A175 ou A172 des ouvrants 6115 / 6116, 9C36, A175 des meneaux, 9C22, 9C40, battement alu A176 et son embout M375 — avec leurs cotes et leur coupe, la busette 697010 / G008, les joints EPDM 9E46, 101000, 9043 et 9040, et les cotes de débit de chaque capot.
-tags: [systeme-70, e-volution, e-motion, e-xclusive, profine, aluclip, capot-aluminium, battement, joint-epdm, busette, cotes-de-debit, dormant, ouvrant, meneau, seuil]
+tags: [systeme-70, e-volution, e-motion, e-xclusive, profine, aluclip, capot-aluminium, battement, joint-epdm, busette, cote-de-debit, dormant, ouvrant, meneau, seuil]
 systeme: 70
 fournisseur: KÖMMERLING
 usage: atelier
@@ -70,7 +70,7 @@ dessine l'A174 ni le 9B13 séparément (entrée **VER-106** du registre
 (entrée **VER-105**).
 
 Les mêmes capots dessinés sur le poster du système 70, avec leur groupe de dormant ou d'ouvrant,
-sont dans [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md#capots-des-dormants).
+sont dans [Profilés et renforts du système 70](/profiles/systeme-70-dormants.md#capots-des-dormants).
 
 ## Battement aluminium A176 et embout M375
 

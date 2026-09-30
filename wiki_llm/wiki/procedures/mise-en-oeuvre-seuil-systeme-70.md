@@ -2,7 +2,7 @@
 type: Procédure
 title: Mise en œuvre du seuil aluminium du système 70
 description: La mise en œuvre des seuils aluminium à rupture de pont thermique 9F67, 9F68, 9F69 et Z043 du système 70 Plateforme — pièces et accessoires, débit du seuil et du montant par dormant, montage en coupe droite sur embouts (variante 1) ou sur dormant grugé avec sets 9F71 / 9F72 et gabarit 9918 (variante 2), contours de fraisage, drainage, rejet d'eau A465 et élargisseurs sous seuil.
-tags: [systeme-70, e-volution, profine, seuil, seuil-alu, rupture-pont-thermique, 9f67, 9f68, 9f69, z043, 9f71, 9f72, 9918, a465, g256, m002, m325, rejet-d-eau, fraisage, drainage, atelier]
+tags: [systeme-70, e-volution, profine, seuil, seuil-alu, rupture-pont-thermique, rejet-d-eau, fraisage, drainage, atelier]
 systeme: 70
 fournisseur: KÖMMERLING
 usage: atelier

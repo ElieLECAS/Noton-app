@@ -1,0 +1,34 @@
+{
+ "/profiles/systeme-70-profiles-et-renforts.md": [
+  "/profiles/systeme-70-dormants.md",
+  "/profiles/systeme-70-ouvrants.md",
+  "/profiles/systeme-70-battements.md",
+  "/profiles/systeme-70-meneaux-et-traverses.md"
+ ],
+ "/profiles/systeme-70-profiles-complementaires.md": [
+  "/profiles/systeme-70-profiles-complementaires-dtd.md",
+  "/profiles/systeme-70-profiles-complementaires-manuel.md",
+  "/profiles/systeme-70-parcloses-appuis-et-elargisseurs-evo2008.md",
+  "/profiles/systeme-70-accouplements-cornieres-et-habillages-evo2008.md",
+  "/profiles/systeme-70-coulisses-et-petits-bois-evo2008.md"
+ ],
+ "/profiles/systeme-70-plans-de-combinaison.md": [
+  "/profiles/systeme-70-plans-de-combinaison-dormants-et-ouvrants.md",
+  "/profiles/systeme-70-plans-de-combinaison-meneaux.md",
+  "/profiles/systeme-70-plans-de-combinaison-battements-et-portes-fenetres.md",
+  "/profiles/systeme-70-plans-de-combinaison-chassis-fixes-et-meneaux-evo2008.md",
+  "/profiles/systeme-70-plans-de-combinaison-dormants-et-ouvrants-evo2008.md",
+  "/profiles/systeme-70-plans-de-combinaison-battements-evo2008.md",
+  "/profiles/systeme-70-plans-de-combinaison-ouvrant-exterieur-et-porte-d-entree-evo2008.md"
+ ],
+ "/quincaillerie/roto-nx-cremones.md": [
+  "/quincaillerie/roto-nx-cremones-ob-tetieres-et-boitiers.md",
+  "/quincaillerie/roto-nx-cremones-ob-poignee-variable.md",
+  "/quincaillerie/roto-nx-cremones-verrou.md",
+  "/quincaillerie/roto-nx-cremones-raccords-et-verrous-arete.md",
+  "/quincaillerie/roto-nx-cremones-semi-fixe-standard.md",
+  "/quincaillerie/roto-nx-cremones-semi-fixe-plus-et-levier-separe.md",
+  "/quincaillerie/roto-nx-cremones-ob-nomenclatures-ksr.md",
+  "/quincaillerie/roto-nx-cremones-sortie-de-tringle-et-serrures-h100.md"
+ ]
+}

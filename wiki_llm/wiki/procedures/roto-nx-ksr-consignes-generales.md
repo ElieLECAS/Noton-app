@@ -2,7 +2,7 @@
 type: Procédure
 title: Roto NX KSR — conventions, documents applicables et consignes de sécurité du manuel de montage
 description: "Ce qui encadre tout ferrage Roto NX KSR sur fenêtre et porte-fenêtre PVC : documents et directives applicables, repères de couleur, symboles, pictogrammes et abréviations des dessins, groupes cibles et leurs obligations d'instruction, responsabilité, protection des surfaces, consignes de sécurité et utilisation conforme."
-tags: [roto, roto-nx, ksr, ferrure, montage, securite, pictogrammes, abreviations, tbdk, vhbe, vhbh, fpkf, din-107]
+tags: [roto, roto-nx, ksr, ferrure, montage, securite, pictogramme, abreviation, tbdk, vhbe, vhbh, fpkf, din-107]
 systeme: Roto NX
 fournisseur: ROTO
 usage: [atelier, pose]

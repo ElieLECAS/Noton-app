@@ -2,7 +2,7 @@
 type: Procédure
 title: Drainage, décompression et vitrage, directives générales profine
 description: Les cotes de drainage, de décompression et de ventilation communes à tous les systèmes profine, et les règles de calage d'un vitrage isolant par type d'ouverture, avec la conversion poids de vitre / épaisseur, et le montage et le démontage des parcloses.
-tags: [profine, drainage, decompression, ventilation, vitrage, vitrage-a-sec, parclose, debit-parclose, calage, cale-de-support, cale-de-distance, croisillons, montage-parclose, demontage-parclose, atelier]
+tags: [profine, drainage, decompression, ventilation, vitrage, vitrage-a-sec, parclose, debit-parclose, calage, cale-de-support, cale-de-distance, croisillon, montage-parclose, demontage-parclose, atelier]
 systeme: [70, 76]
 fournisseur: KÖMMERLING
 usage: [atelier, sav]

@@ -2,7 +2,7 @@
 type: Profilé
 title: Profilés complémentaires ASKEY
 description: Nomenclatures et cotes des bavettes, tapées, coulisses VR, couvre-joints, profilés ITE, profilés de liaison et profilés standards ULT ASKEY.
-tags: [profilé, aluminium, complementaire, bavette, tapee, couvre-joint, liaison, ult, askey]
+tags: [profile, aluminium, complementaire, bavette, tapee, couvre-joint, liaison, ult, askey]
 gamme: [Coulissant 65 NV, Frappe 65 Ouvrant Caché, Frappe 65 Ouvrant Visible]
 fournisseur: ASKEY
 usage: [atelier, pose]

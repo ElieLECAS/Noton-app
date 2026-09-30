@@ -2,7 +2,7 @@
 type: Quincaillerie
 title: Roulements et fermetures Technal LUMEAL GA
 description: Chariots de roulement simples, doubles et triples jusqu'à 300 kg, ferrures de verrouillage 1 à 3 points, poignées de tirage et équipements de retard à l'effraction classe RC3 du coulissant minimal LUMEAL GA de Technal.
-tags: [technal, lumeal, lumeal-ga, coulissant, roulettes, ferrures, serrures, poignees, rc3]
+tags: [technal, lumeal, lumeal-ga, coulissant, roulettes, ferrure, serrure, poignee, rc3]
 gamme: LUMINE
 systeme: LUMEAL GA
 fournisseur: TECHNAL
@@ -94,8 +94,8 @@ Les serrures sont encastrées directement dans la rainure du montant dormant ver
 | Référence | Désignation | Emplacement | Compatibilité |
 | --- | --- | --- | --- |
 | **TGA3618** | Poignée de tirage inclinée | Intérieur ou extérieur | Vantaux service, semi-fixe et percussion |
-| **TGA3706** | Support pour poignée TGA3618 | Montant latéral T141039/40 | Vantail de service et semi-fixe |
-| **TGA3707** | Support percussion TGA3618 | Montant central T141033/34 | Châssis 4 et 6 vantaux (percussion centrale) |
+| **TGA3706** | Support pour poignée TGA3618 | Montant latéral T141039 et T141040 | Vantail de service et semi-fixe |
+| **TGA3707** | Support percussion TGA3618 | Montant central T141033 et T141034 | Châssis 4 et 6 vantaux (percussion centrale) |
 | **TGA3606** | Poignée de tirage plate inclinée | Intérieure-extérieure | Permet le croisement sans encombrement |
 | **TGA3607** | Poignée de tirage plate percussion | Montant central T141033 | Percussion centrale 4 et 6 vantaux |
 | **TGA6000** | Poignée de tirage droite tubulaire | Montant latéral | Vantail de service uniquement |

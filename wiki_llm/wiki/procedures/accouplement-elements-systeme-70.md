@@ -2,7 +2,7 @@
 type: Procédure
 title: Accouplement d'éléments du système 70
 description: L'accouplement vertical à 180° de deux dormants du système 70 Plateforme par dos de dormant (profilés de liaison 1248 et 70601) ou avec profilés spéciaux (profilé de liaison H 70602 / V288, renfort d'accouplement V250 et habillage 93000), les poteaux d'angle 90° 70603, variable 70604 / 70605 et 135° 6356, et l'habillage de contreventement 93000 / 93002, avec cotes de débit, axes de vissage, inerties IW et vis par dormant.
-tags: [systeme-70, e-volution, profine, accouplement, couplage, profile-de-liaison, poteau-angle, contreventement, habillage, inertie, 1248, 70601, 70602, v250, 70603, 70604, 70605, 6356, 93000, 93002, atelier]
+tags: [systeme-70, e-volution, profine, accouplement, couplage, profile-de-liaison, poteau-angle, contreventement, habillage, inertie, atelier]
 systeme: 70
 fournisseur: KÖMMERLING
 usage: [atelier, pose]

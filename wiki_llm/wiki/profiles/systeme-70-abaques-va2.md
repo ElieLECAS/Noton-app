@@ -2,7 +2,7 @@
 type: Profilé
 title: Abaques de renforcement du système 70, classement V*A2
 description: Les neuf abaques de renforcement d'ouvrant du système 70 Plateforme pour le classement V*A2 (OF et OB 1 vantail, 2 vantaux OF/OB, 2 vantaux OF, ouvrants 6112 à 6153 et battement 0140, renforts V158, V258, V057), repère par case de 100 mm et limites relevées à chaque graduation.
-tags: [profine, systeme-70, abaque, renforcement, ouvrant, va2, of, ob, deux-vantaux, v158, v258, v057]
+tags: [profine, systeme-70, abaque, renforcement, ouvrant, va2, of, ob, deux-vantaux]
 systeme: 70
 fournisseur: KÖMMERLING
 usage: [atelier, chiffrage]

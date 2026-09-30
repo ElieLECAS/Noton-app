@@ -5,8 +5,11 @@ import pytest
 
 from app.services.wiki_index import (
     WikiIndex,
+    cotes_de,
     formate_resultats,
     normalise,
+    references_de,
+    tokenise,
     trier_resultats,
 )
 from app.services.wiki_service import load_snapshot, wiki_root
@@ -31,10 +34,57 @@ def test_index_exclut_les_pages_reservees(index):
 
 
 def test_recherche_par_reference(index):
-    """Une référence ne figure dans aucun tag : elle se trouve par le texte intégral."""
+    """Une référence ne figure dans aucun tag : elle se trouve par le texte intégral.
+
+    76507 est citée par cinq pages ; ce qui compte est que sa page de famille arrive parmi les
+    pages livrées entières, pas qu'elle devance le tableau de vitrage qui la cite six fois.
+    """
     resultats = index.search(mots_cles="76507", limite=5)
     assert resultats, "aucune page pour la référence 76507"
-    assert resultats[0]["chemin"] == "/profiles/perform76-parcloses.md"
+    livrees, _ = trier_resultats(resultats, 3)
+    assert "/profiles/perform76-parcloses.md" in [p["chemin"] for p in livrees]
+
+
+def test_le_type_ne_change_pas_le_classement(index):
+    """Le modèle devine le type : « Profilé » pour une limite que fixe une page de gamme."""
+    requete = "PERFORM76 1 vantail à la française dimension maximale"
+    sans = [p["chemin"] for p in index.search(mots_cles=requete, limite=10)]
+    avec = [p["chemin"] for p in index.search(mots_cles=requete, type="Profilé", limite=10)]
+    assert sans == avec
+    assert "/gammes/perform.md" in sans[:3]
+
+
+def test_seule_une_reference_de_piece_pese_triple(index):
+    assert index._reference("tgy3702") and index._reference("76507")
+    assert not index._reference("1800", cotes={"1800"})  # une cote de la question
+    assert not index._reference("vitrage24")  # collé par la recherche, écrit par aucune page
+    assert not index._reference("lumine55") and not index._reference("perform76")  # des produits
+
+
+def test_la_gamme_ne_masque_pas_la_piece(index):
+    """LUMINE55 compté triple faisait passer la gamme, le nuancier et l'argumentaire devant."""
+    q = "Sur un châssis alu LUMINE55 en ouvrant apparent, j'ai un vitrage de 24 mm : quelle parclose ?"
+    resultats = index.search(mots_cles="LUMINE55 parclose joint vitrage 24", limite=10, cotes=cotes_de(q))
+    livrees, _ = trier_resultats(resultats, 3)
+    assert "/profiles/soleal-fy-parcloses-et-vitrage.md" in [p["chemin"] for p in livrees]
+
+
+def test_une_graphie_pour_deux_ecritures():
+    assert tokenise("manœuvre") == tokenise("manoeuvre")
+    assert "487206" in tokenise("limiteur 487 206")
+    assert "lumine65" in tokenise("LUMINE 65") and "lumine65" in tokenise("LUMINE65")
+    assert tokenise("parcloses") == tokenise("parclose")
+    assert tokenise("2,15 1,00") == ["2", "15", "1", "00"]  # des décimales ne se recollent pas
+
+
+def test_une_cote_de_la_question_n_est_pas_une_reference():
+    q = "Oscillo-battant PERFORM76 un vantail en 1 200 de large sur 1 600 de haut, ça passe ?"
+    assert cotes_de(q) == {"1200", "1600"}
+    assert references_de(q) == ["perform76"]
+    assert cotes_de("SoftOpen sur un INNOSLIDE de 1 800 mm") == {"1800"}
+    assert cotes_de("fenêtre 1300 x 2400") == {"1300", "2400"}
+    assert references_de("parclose pour un vitrage de 44 mm") == []
+    assert references_de("crémone 3 points TGY3702, il me faut la 4 points") == ["tgy3702"]
 
 
 def test_une_facette_remonte_mais_n_exclut_pas(index):

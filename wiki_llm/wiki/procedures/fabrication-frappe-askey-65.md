@@ -2,7 +2,7 @@
 type: Procédure
 title: Procédure de fabrication ASKEY Frappe 65
 description: Méthode d'atelier pour l'usinage, le drainage, l'assemblage des dormants et ouvrants, et la mise en œuvre du seuil PMR de la Frappe 65 ASKEY (OC et OV).
-tags: [procédure, atelier, fabrication, frappe, ouvrant-cache, ouvrant-visible, pmr, usinage, askey]
+tags: [procedure, atelier, fabrication, frappe, ouvrant-cache, ouvrant-visible, pmr, usinage, askey]
 gamme: [Frappe 65 Ouvrant Caché, Frappe 65 Ouvrant Visible]
 fournisseur: ASKEY
 usage: atelier

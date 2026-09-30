@@ -1,7 +1,7 @@
 ---
 type: Document source
 title: Bras de report de charge ROTO NX
-description: Notice Roto d'une page, extraite de l'IMO_180_NX_FR_v2 (page imprimée 112) : montage et réglage du report de charge NT Designo II sur ferrure ROTO NX.
+description: "Notice Roto d'une page, extraite de l'IMO_180_NX_FR_v2 (page imprimée 112) : montage et réglage du report de charge NT Designo II sur ferrure ROTO NX."
 tags: [roto-nx, nt-designo, report-de-charge]
 systeme: Roto NX
 fournisseur: ROTO

@@ -507,7 +507,7 @@ Les dessins « Compas 250 – Ouverture à soufflet standard 140 mm » et « …
 **Position soufflet**, le **Limiteur d'ouverture à soufflet** et l'**Etrier de sécurité** (flèche
 de rotation rouge) [1 p. 113].
 
-**Option** : **Limiteur d'ouverture à 80 mm Designo, 487 206** (pour têtière de compas 250 Designo
+**Option** : **Limiteur d'ouverture à 80 mm Designo, 487206** (pour têtière de compas 250 Designo
 385393) — voir [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md).
 
 **Décrochage du vantail** : faire l'ensemble des opérations en sens inverse [1 p. 113].

@@ -2,7 +2,7 @@
 type: Document source
 title: Posters Système 76 Advanced, 2022
 description: Deux planches profine recensant l'intégralité des profilés principaux et complémentaires du système 76 Advanced, avec leurs capots aluminium, renforts acier associés, accessoires et kits d'assemblage.
-tags: [poster, profine, systeme-76-advanced, profile, reference, renforts, capotage, parcloses]
+tags: [poster, profine, systeme-76-advanced, profile, reference, renfort, capotage, parclose]
 systeme: 76
 fournisseur: KÖMMERLING
 status: stable

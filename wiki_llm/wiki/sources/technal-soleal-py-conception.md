@@ -2,7 +2,7 @@
 type: Document source
 title: Catalogue de conception Technal SOLEAL PY 55
 description: Catalogue technique officiel de conception système Technal pour la gamme de portes battantes et va-et-vient SOLEAL PY 55 (Réf. 4944.006 - 09/2018, 210 pages).
-tags: [technal, soleal, soleal-py, porte, conception, profilés, ferme-porte-integre, seuil-pmr, anti-pince-doigts, 55mm]
+tags: [technal, soleal, soleal-py, porte, conception, profile, ferme-porte-integre, seuil-pmr, anti-pince-doigts, 55mm]
 gamme: LUMINE
 systeme: SOLEAL PY
 fournisseur: TECHNAL
@@ -44,9 +44,9 @@ La pagination du catalogue comprend 210 pages.
 | 60-67 | Applications portes retard à l'effraction : renforts acier, cornières TPY3614, tremplins TPY3815, serrure 3 points TPY3716 | à faire | [Serrures et paumelles SOLEAL PY](/quincaillerie/soleal-py-serrures-et-paumelles.md), [Cotes de débit SOLEAL PY](/portes/soleal-py-cotes-de-debit.md) |
 | 68-81 | Applications porte tube APD (simple et double action) et porte va-et-vient VV avec ferme-porte intégré FPI | à faire | [Dormants et ouvrants SOLEAL PY](/portes/soleal-py-dormants-et-ouvrants.md), [Cotes de débit SOLEAL PY](/portes/soleal-py-cotes-de-debit.md) |
 | 82-90 | Options seuils : sans seuil, seuil plat T525053, seuil filant T7907, seuil bâtiment T525060, seuils PMR TPY1100 / TPY2107 / TPY2103 / TPY2104 | à faire | [Dormants et ouvrants SOLEAL PY](/portes/soleal-py-dormants-et-ouvrants.md), [Seuil PMR PY1100](/procedures/technal-seuil-pmr-py1100.md) |
-| 91-105 | Traverses d'ouvrants T215202-11, drainages, adaptation dans dormant module 65 mm (TPY1103/05) et façades mur-rideau MX | à faire | [Dormants et ouvrants SOLEAL PY](/portes/soleal-py-dormants-et-ouvrants.md) |
+| 91-105 | Traverses d'ouvrants T215202-11, drainages, adaptation dans dormant module 65 mm (TPY1103 et TPY1105) et façades mur-rideau MX | à faire | [Dormants et ouvrants SOLEAL PY](/portes/soleal-py-dormants-et-ouvrants.md) |
 | 106-127 | Quincaillerie : choix des équerres/embouts, serrures 1 à multipoints, compatibilité des serrures, gâches électriques TPY3700-09, ventouse électromagnétique 300 kg | à faire | [Serrures et paumelles SOLEAL PY](/quincaillerie/soleal-py-serrures-et-paumelles.md) |
-| 128-139 | Organes de manœuvre : ferme-porte applique, poignées de tirage T930002/T1085, barres de poussée T1218, poignées tubulaires T2070/71 et TPY6004, décors porte habitat | à faire | [Serrures et paumelles SOLEAL PY](/quincaillerie/soleal-py-serrures-et-paumelles.md) |
+| 128-139 | Organes de manœuvre : ferme-porte applique, poignées de tirage T930002/T1085, barres de poussée T1218, poignées tubulaires T2070 et T2071 et TPY6004, décors porte habitat | à faire | [Serrures et paumelles SOLEAL PY](/quincaillerie/soleal-py-serrures-et-paumelles.md) |
 | 140-161 | Organes de rotation : paumelles en feuillure 2 et 3 lames (abaques), pivot frein de sol centré TBN1370, crapaudines T920025, FPI T920019 et conformité PMR $< 50\text{ N}$ | à faire | [Serrures et paumelles SOLEAL PY](/quincaillerie/soleal-py-serrures-et-paumelles.md) |
 | 162-169 | Unités de passage libre selon DTU, fixation des tapées de doublage 60 à 160 mm, pose en réno bois 47 mm, pose entre tableaux | à faire | [Cotes de débit SOLEAL PY](/portes/soleal-py-cotes-de-debit.md), [Seuil PMR PY1100](/procedures/technal-seuil-pmr-py1100.md) |
 | 170-210 | Nomenclatures exhaustives accessoires, joints, vis, outillages, profilés, abréviations et historique de révision 006 | à faire | [Dormants et ouvrants SOLEAL PY](/portes/soleal-py-dormants-et-ouvrants.md), [Serrures et paumelles SOLEAL PY](/quincaillerie/soleal-py-serrures-et-paumelles.md) |

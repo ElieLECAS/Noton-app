@@ -2,7 +2,7 @@
 type: Quincaillerie
 title: Quincaillerie et accessoires ASKEY Coulissant 65 NV
 description: Nomenclatures, charges limites, caractéristiques et compatibilités des chariots de roulement, serrures multipoints, poignées et accessoires du Coulissant 65 NV ASKEY.
-tags: [quincaillerie, roulettes, serrures, poignees, coulissant, askey, hydro]
+tags: [quincaillerie, roulettes, serrure, poignee, coulissant, askey, hydro]
 gamme: Coulissant 65 NV
 fournisseur: ASKEY
 usage: atelier

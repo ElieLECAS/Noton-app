@@ -1,0 +1,1925 @@
+[
+ {
+  "source": "question",
+  "id": "w20_01",
+  "requete": "pour un coulissant, il y a une crémone 3 point ref TGY3702, je cherche la référence de la crémone 4 points pour coulissant.",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "w20_02",
+  "requete": "Sur un châssis alu LUMINE55 en ouvrant apparent, j'ai un vitrage de 24 mm : quelle parclose et quel joint intérieur ?",
+  "facettes": {},
+  "rang": 8
+ },
+ {
+  "source": "question",
+  "id": "w20_03",
+  "requete": "Patte de pose NT1947 sur un dormant 76180, ça correspond à quelle épaisseur d'isolation ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "w20_04",
+  "requete": "Sur le système 70 profine, avec une feuillure de 54 mm, la parclose 2452 prend quelle épaisseur de vitrage ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "w20_05",
+  "requete": "Quelle est la garantie sur la structure d'une LUMINE 65 ?",
+  "facettes": {},
+  "rang": 4
+ },
+ {
+  "source": "question",
+  "id": "w20_06",
+  "requete": "Pour un coulissant SOLÉAL55 avec des vantaux lourds, quel poids maxi par vantail avec des chariots doubles, et quelles références ?",
+  "facettes": {},
+  "rang": 6
+ },
+ {
+  "source": "question",
+  "id": "w20_07",
+  "requete": "Le carré de manœuvre W4070495, il fait quelle longueur et il va sur quel coulissant ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "w20_08",
+  "requete": "Tablier en lames LA 37 : quelle largeur maxi entre coulisses en zone de vent V*4, pour une hauteur jusqu'à 2,25 m ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "w20_09",
+  "requete": "Quel double vitrage PROFERM propose pour une façade très exposée au bruit, près d'une autoroute, et avec quel affaiblissement acoustique ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "w20_10",
+  "requete": "Montre-moi la coupe de la parclose 76576.",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "w20_11",
+  "requete": "Tu peux m'afficher le dessin du dormant 76177 ?",
+  "facettes": {},
+  "rang": 3
+ },
+ {
+  "source": "question",
+  "id": "w20_12",
+  "requete": "Montre-moi la coupe du dormant 6106 du système 70 et donne ses cotes.",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "w20_13",
+  "requete": "Comment transformer un ouvrant à la française en oscillo-battant avec la ferrure Roto NX ? Donne les étapes.",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "w20_14",
+  "requete": "Je pose un report de charge NT Designo II sur le palier d'angle : dans quel ordre, et qu'est-ce qu'il ne faut pas oublier avant de visser la pièce dormant ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "w20_15",
+  "requete": "Porte d'entrée SOLEAL PY : comment régler la hauteur du vantail sur les paumelles sans dégonder ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "w20_16",
+  "requete": "Une fenêtre PERFORM76 1 vantail à la française de 1 300 mm de large sur 2 400 mm de haut, c'est faisable ?",
+  "facettes": {},
+  "rang": 5
+ },
+ {
+  "source": "question",
+  "id": "w20_17",
+  "requete": "Oscillo-battant PERFORM76 un vantail en 1 200 de large sur 1 600 de haut, ça passe ?",
+  "facettes": {},
+  "rang": 4
+ },
+ {
+  "source": "question",
+  "id": "w20_18",
+  "requete": "Un INNOSLIDE de 1 800 mm de large, j'aurai le SoftOpen ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "w20_19",
+  "requete": "Parle-moi de la parclose 3702 de la gamme PERFORM.",
+  "facettes": {},
+  "rang": 7
+ },
+ {
+  "source": "question",
+  "id": "w20_20",
+  "requete": "Quelle référence de clé pompier dois-je commander avec la fermeture TGY3731 ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_20",
+  "requete": "clé pompier TGY3731",
+  "facettes": {
+   "type": "Quincaillerie"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_20",
+  "requete": "clé pompier",
+  "facettes": {
+   "type": "Quincaillerie"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_20",
+  "requete": "clé pompier clé spéciale TGY3731",
+  "facettes": {
+   "type": "Quincaillerie"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_20",
+  "requete": "clé spéciale pompier SOLEAL GY",
+  "facettes": {
+   "type": "Quincaillerie"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_14",
+  "requete": "report de charge NT Designo II palier d'angle ordre de pose visser dormant",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_14",
+  "requete": "report de charge NT Designo II palier d'angle dormant",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_14",
+  "requete": "NT Designo II report de charge palier d'angle pose dormant",
+  "facettes": {
+   "type": "Procédure"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_02",
+  "requete": "LUMINE55 parclose joint intérieur vitrage 24",
+  "facettes": {
+   "type": "Profilé",
+   "gamme": "LUMINE"
+  },
+  "rang": 6
+ },
+ {
+  "source": "mistral",
+  "id": "w20_02",
+  "requete": "parclose vitrage 24 LUMINE55 ouvrant apparent",
+  "facettes": {
+   "type": "Profilé",
+   "gamme": "LUMINE"
+  },
+  "rang": 3
+ },
+ {
+  "source": "mistral",
+  "id": "w20_08",
+  "requete": "LA 37 tablier lames largeur maxi coulisses vent V*4 hauteur 2,25 m",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "mistral",
+  "id": "w20_08",
+  "requete": "tablier lames LA 37 largeur maxi coulisses vent V*4 hauteur 2,25 m",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "mistral",
+  "id": "w20_08",
+  "requete": "LA 37 largeur max coulisses vent V*4 hauteur 2,25 m",
+  "facettes": {},
+  "rang": 3
+ },
+ {
+  "source": "mistral",
+  "id": "w20_08",
+  "requete": "LA 37 largeur maxi entre coulisses vent V*4 hauteur 2,25 m",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_09",
+  "requete": "double vitrage acoustique autoroute affaiblissement",
+  "facettes": {
+   "type": "Vitrage"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_09",
+  "requete": "vitrage acoustique 40 dB autoroute",
+  "facettes": {
+   "type": "Vitrage"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_09",
+  "requete": "vitrage acoustique autoroute affaiblissement",
+  "facettes": {
+   "type": "Vitrage"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_09",
+  "requete": "vitrage acoustique autoroute perform",
+  "facettes": {
+   "type": "Vitrage"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_15",
+  "requete": "SOLEAL PY vantail hauteur paumelles réglage sans dégonder",
+  "facettes": {
+   "type": "Procédure"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_15",
+  "requete": "SOLEAL PY réglage hauteur paumelles",
+  "facettes": {
+   "type": "Procédure"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_15",
+  "requete": "SOLEAL PY réglage hauteur paumelles sans dégonder outil TWZ0002",
+  "facettes": {
+   "type": "Procédure"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_15",
+  "requete": "SOLEAL PY réglage hauteur vantail paumelles sans dégonder",
+  "facettes": {
+   "type": "Procédure"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_15",
+  "requete": "SOLEAL PY réglage hauteur vantail paumelles sans dégonder",
+  "facettes": {
+   "type": "Procédure",
+   "tags": "soleal-py,paumelles"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_03",
+  "requete": "NT1947 76180 patte de pose isolation épaisseur",
+  "facettes": {
+   "type": "Quincaillerie"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_03",
+  "requete": "patte de pose NT1947 dormant 76180 isolation épaisseur",
+  "facettes": {
+   "type": "Profilé"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_03",
+  "requete": "NT1947 76180 patte de pose isolation épaisseur",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_16",
+  "requete": "PERFORM76 1 vantail à la française dimensions maximales",
+  "facettes": {
+   "type": "Profilé",
+   "gamme": "PERFORM"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_16",
+  "requete": "PERFORM76 ouvrant à la française dimensions maximales hauteur largeur",
+  "facettes": {
+   "type": "Profilé",
+   "gamme": "PERFORM"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_16",
+  "requete": "PERFORM76 1 vantail à la française dimensions maximales",
+  "facettes": {
+   "type": "Profilé",
+   "gamme": "PERFORM76"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_16",
+  "requete": "PERFORM76 dimensions maximales fenêtre 1 vantail à la française",
+  "facettes": {
+   "type": "Profilé",
+   "gamme": "PERFORM76"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_16",
+  "requete": "PERFORM76 dimensions maximales ouvrant à la française",
+  "facettes": {
+   "type": "Profilé",
+   "gamme": "PERFORM76"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_16",
+  "requete": "PERFORM76 1 vantail à la française dimension maximale vantail",
+  "facettes": {
+   "gamme": "PERFORM76"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_10",
+  "requete": "76576 parclose",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_10",
+  "requete": "parclose 76576",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_10",
+  "requete": "parclose 76576",
+  "facettes": {
+   "type": "Profilé",
+   "tags": "parclose"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_04",
+  "requete": "parclose 2452 système 70 profine feuillure 54 mm",
+  "facettes": {
+   "type": "Profilé"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_04",
+  "requete": "parclose 2452 système 70 profine feuillure 54 mm épaisseur vitrage",
+  "facettes": {
+   "type": "Profilé",
+   "systeme": "70"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_04",
+  "requete": "parclose 2452 système 70 profine feuillure 54 mm épaisseur vitrage",
+  "facettes": {
+   "type": "Profilé"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_04",
+  "requete": "parclose 2452 système 70 profine feuillure 54 mm épaisseur vitrage",
+  "facettes": {
+   "type": "Profilé",
+   "tags": "parclose",
+   "systeme": "70"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_11",
+  "requete": "76177",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_11",
+  "requete": "dormant 76177",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_17",
+  "requete": "oscillo-battant PERFORM76 dimension maximale vantail 1200 1600",
+  "facettes": {
+   "type": "Profilé",
+   "gamme": "PERFORM"
+  },
+  "rang": 2
+ },
+ {
+  "source": "mistral",
+  "id": "w20_17",
+  "requete": "oscillo-battant PERFORM76 vantail 1200 1600",
+  "facettes": {
+   "gamme": "PERFORM"
+  },
+  "rang": 2
+ },
+ {
+  "source": "mistral",
+  "id": "w20_05",
+  "requete": "garantie structure LUMINE 65",
+  "facettes": {
+   "type": "Garantie"
+  },
+  "rang": 4
+ },
+ {
+  "source": "mistral",
+  "id": "w20_18",
+  "requete": "INNOSLIDE SoftOpen",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "mistral",
+  "id": "w20_18",
+  "requete": "INNOSLIDE SoftOpen 1800",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "mistral",
+  "id": "w20_18",
+  "requete": "INNOSLIDE SoftOpen 1800",
+  "facettes": {
+   "gamme": "INNOSLIDE"
+  },
+  "rang": 2
+ },
+ {
+  "source": "mistral",
+  "id": "w20_12",
+  "requete": "dormant 6106 système 70",
+  "facettes": {
+   "type": "Profilé"
+  },
+  "rang": 2
+ },
+ {
+  "source": "mistral",
+  "id": "w20_06",
+  "requete": "SOLÉAL55 coulissant vantaux lourds chariots doubles poids maxi référence",
+  "facettes": {
+   "type": "Profilé"
+  },
+  "rang": 7
+ },
+ {
+  "source": "mistral",
+  "id": "w20_06",
+  "requete": "SOLEAL GY 55 chariots doubles poids maxi référence",
+  "facettes": {
+   "type": "Quincaillerie"
+  },
+  "rang": 2
+ },
+ {
+  "source": "mistral",
+  "id": "w20_06",
+  "requete": "chariots doubles SOLEAL GY 55 poids maxi vantail référence",
+  "facettes": {
+   "type": "Quincaillerie"
+  },
+  "rang": 2
+ },
+ {
+  "source": "mistral",
+  "id": "w20_19",
+  "requete": "parclose 3702",
+  "facettes": {
+   "type": "Profilé"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_07",
+  "requete": "W4070495",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_13",
+  "requete": "transformer ouvrant à la française oscillo-battant Roto NX",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_13",
+  "requete": "transformation ouvrant à la française oscillo-battant Roto NX",
+  "facettes": {
+   "type": "Procédure"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_13",
+  "requete": "transformer ouvrant à la française oscillo-battant Roto NX",
+  "facettes": {
+   "type": "Procédure"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_01",
+  "requete": "crémone 4 points coulissant TGY3702",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_01",
+  "requete": "crémone 4 points coulissant TGY3704",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_01",
+  "requete": "TGY3702",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_01",
+  "requete": "crémone 4 points coulissant",
+  "facettes": {
+   "type": "Quincaillerie"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_16",
+  "requete": "PERFORM76 1 vantail à la française dimensions maximales",
+  "facettes": {
+   "gamme": "PERFORM"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_16",
+  "requete": "PERFORM76 dimensions maximales baie",
+  "facettes": {
+   "type": "Gamme",
+   "gamme": "PERFORM"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_17",
+  "requete": "oscillo-battant PERFORM76 1200 1600",
+  "facettes": {
+   "gamme": "PERFORM"
+  },
+  "rang": 2
+ },
+ {
+  "source": "mistral",
+  "id": "w20_17",
+  "requete": "PERFORM76 oscillo-battant dimensions maximales",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_17",
+  "requete": "oscillo-battant PERFORM76 dimension maximale vantail",
+  "facettes": {
+   "type": "Gamme",
+   "gamme": "PERFORM"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_16",
+  "requete": "PERFORM76 1 vantail à la française dimension maximale",
+  "facettes": {
+   "type": "Profilé",
+   "gamme": "PERFORM76"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_16",
+  "requete": "PERFORM76 vantail à la française dimension maximale largeur hauteur",
+  "facettes": {
+   "type": "Profilé",
+   "gamme": "PERFORM76"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_16",
+  "requete": "PERFORM76 1 vantail à la française dimension maximale largeur hauteur",
+  "facettes": {
+   "type": "Profilé",
+   "gamme": "PERFORM76"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_16",
+  "requete": "PERFORM76 ouvrant à la française dimension maximale largeur hauteur",
+  "facettes": {
+   "type": "Profilé",
+   "gamme": "PERFORM76"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_17",
+  "requete": "oscillo-battant PERFORM76 dimensions maximales",
+  "facettes": {
+   "type": "Profilé",
+   "gamme": "PERFORM"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_17",
+  "requete": "oscillo-battant PERFORM76 dimensions maximales vantail",
+  "facettes": {
+   "type": "Profilé",
+   "gamme": "PERFORM"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_17",
+  "requete": "oscillo-battant PERFORM76 dimension maximale vantail LFF HFF Roto NX KSR 1200 1600",
+  "facettes": {
+   "type": "Quincaillerie",
+   "gamme": "PERFORM"
+  },
+  "rang": 2
+ },
+ {
+  "source": "mistral",
+  "id": "w20_17",
+  "requete": "oscillo-battant PERFORM76 vantail 1200 1600 dimension maximale",
+  "facettes": {
+   "type": "Profilé",
+   "gamme": "PERFORM"
+  },
+  "rang": 2
+ },
+ {
+  "source": "mistral",
+  "id": "w20_17",
+  "requete": "oscillo-battant PERFORM76 dimension maximale vantail",
+  "facettes": {
+   "type": "Profilé",
+   "gamme": "PERFORM"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_17",
+  "requete": "ouvrant PERFORM76 dimension maximale 1600 hauteur",
+  "facettes": {
+   "type": "Profilé",
+   "gamme": "PERFORM"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_05",
+  "requete": "garantie structure LUMINE65",
+  "facettes": {
+   "type": "Garantie"
+  },
+  "rang": 2
+ },
+ {
+  "source": "mistral",
+  "id": "w20_05",
+  "requete": "garantie structure LUMINE 65",
+  "facettes": {},
+  "rang": 4
+ },
+ {
+  "source": "mistral",
+  "id": "w20_20",
+  "requete": "clé spéciale pompier TGY3731",
+  "facettes": {
+   "type": "Quincaillerie"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_20",
+  "requete": "clé pompier TGY3731 référence",
+  "facettes": {
+   "type": "Quincaillerie"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_20",
+  "requete": "clé pompier Technal référence",
+  "facettes": {
+   "type": "Quincaillerie"
+  },
+  "rang": 1
+ },
+ {
+  "source": "mistral",
+  "id": "w20_20",
+  "requete": "clé spéciale pompier",
+  "facettes": {
+   "type": "Quincaillerie"
+  },
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "R01",
+  "requete": "Quelle parclose pour un vitrage de 44 mm ?",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "question",
+  "id": "R02",
+  "requete": "Comment transformer un ouvrant OF en OB avec Roto NX ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "R03",
+  "requete": "Quelle est la garantie sur la structure d'une LUMINE 65 ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "R04",
+  "requete": "sur un chassis alu lumine55, j'ai un remplissage de 24mm peux tu me donner la parclose et le joint à utiliser ?",
+  "facettes": {},
+  "rang": 6
+ },
+ {
+  "source": "question",
+  "id": "R05",
+  "requete": "un oeil de boeuf pvc combien de diametre max ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "R06",
+  "requete": "parle moi de poignée Shangai",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "question",
+  "id": "R07",
+  "requete": "parle moi de l'effet bilame",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "R08",
+  "requete": "il y a des poignée uniquement pour galandage ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "R09",
+  "requete": "parle moi de la parclose 3702 de perform",
+  "facettes": {},
+  "rang": 4
+ },
+ {
+  "source": "question",
+  "id": "R10",
+  "requete": "donne moi les differente chicane lumine 55",
+  "facettes": {},
+  "rang": 9
+ },
+ {
+  "source": "question",
+  "id": "R11",
+  "requete": "montre moi la coupe de l'appui A491",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "question",
+  "id": "R12",
+  "requete": "liste moi les dormants compatibles avec l'Appui 6136",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "question",
+  "id": "R13",
+  "requete": "quelle est la référence du Levier pour M335 et sa coupe",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "R14",
+  "requete": "parle moi de la référence 76576 et sa coupe",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "R15",
+  "requete": "Quelle est la largeur du meneau ouvrant réf 76301 ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "R16",
+  "requete": "Quelle est l'épaisseur de l'ouvrant galbé Perform 76 ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "R17",
+  "requete": "Je fabrique un coulissant d'angle Soleal GY 55 (sans poteau maçonné). Le vantail principal mesure 2400 mm de haut pour 1300 mm de large. D'après l'abaque des masses de vitrage, quel est le poids maximum de vitrage autorisé au $m^2$ pour cette configuration spécifique, et le système affiche-t-il le graphique des limites de poids pour validation ?",
+  "facettes": {},
+  "rang": 3
+ },
+ {
+  "source": "question",
+  "id": "R18",
+  "requete": "Sur les grands coulissants à 4 vantaux avec une fermeture en percussion centrale, les chicanes du milieu viennent se taper de face. C'est quoi la petite pièce en plastique qu'il faut absolument coller et visser en haut et en bas sur le montant central avant d'enquiller les ouvrants, pour pas que l'air s'engouffre au milieu ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "R19",
+  "requete": "J'ai une grosse porte d'entrée Soleal PY sur paumelles à pivot (le modèle pour les vantaux lourds jusqu'à 130 kg). Le vantail frotte un peu en bas côté serrure. On m'a dit qu'on pouvait régler ça sur site sans rien dégonder. Comment tu t'y prends avec tes clés ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "R20",
+  "requete": "Quand on installe le bras de report de charge (le modèle Designo II pour les fenêtres lourdes) sur le palier d'angle inférieur, on doit fixer la pièce dormant. C'est quoi le piège au niveau du vissage pour pas bloquer ou foirer l'ancien matos ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "R21",
+  "requete": "On doit poser un palier de compas pour un châssis PVC cintré (en forme d'arche). C'est quoi la cote de positionnement universelle pour installer notre gabarit de perçage sur le dormant par rapport au début de l'arc arrondi ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "R22",
+  "requete": "Je cherche la procédure pour activer la 'fonction domotique intégrée' du limiteur d'ouverture à 80 mm (réf. 487 206) sur une fenêtre Roto NX pour piloter l'ouverture via mon smartphone. Quelles sont les étapes de connexion au Wi-Fi de la platine ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "R23",
+  "requete": "Je prépare le débit et le montage d'une crémone Roto NX KSR pour une fenêtre PVC. Je bloque sur le positionnement du boîtier de crémone par rapport au fond de feuillure. Quelle est la cote millimétrée exacte ou la formule de calcul indiquée pour usiner l'emplacement de ce boîtier sans me louper ?",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "question",
+  "id": "R24",
+  "requete": "donne moi les cotes du dormants 6106",
+  "facettes": {},
+  "rang": 12
+ },
+ {
+  "source": "question",
+  "id": "R25",
+  "requete": "donne moi les seuils compatibles pour le 6101",
+  "facettes": {},
+  "rang": 12
+ },
+ {
+  "source": "question",
+  "id": "R27",
+  "requete": "je cherche une fonction qui ralentit le vantail de mon coulissant PVC",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "question",
+  "id": "R28",
+  "requete": "quels sont les embouts compatibles avec les dormants standard de la gamme 70 de profine",
+  "facettes": {},
+  "rang": 9
+ },
+ {
+  "source": "question",
+  "id": "R29",
+  "requete": "Quelle est la performance acoustique maximale de la gamme LUMINE 55 en dB ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "R30",
+  "requete": "Quelles tapées utiliser pour une Isolation de 180 mm ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "R31",
+  "requete": "donne moi l'epaisseur de vitrage pour une parclose 2452",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "R32",
+  "requete": "« J'étudie la notice simplifiée du système motorisé Proferm Eneo CC. Lors du raccordement électrique, quelles sont les tensions d'alimentation requises, à quoi correspondent les couleurs ou les repères des fils du câble de liaison, et quelles sont les consignes de sécurité pour éviter d'endommager la carte électronique (polarité, protection) ? »",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "question",
+  "id": "R33",
+  "requete": "pour un coulissant, il y a une crémone 3 point ref TGY3702, je cherche la référence de la crémone 4 points pour coulissant.",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "R34",
+  "requete": "peut on faire du carbone noir dans avec Perform ?",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "question",
+  "id": "R35",
+  "requete": "comment choisir ses fenetres par rapport au zones sismiques ?",
+  "facettes": {},
+  "rang": 3
+ },
+ {
+  "source": "question",
+  "id": "R36",
+  "requete": "Quelle retombée de membrane prévoir en applique extérieure sur monomur ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "S01",
+  "requete": "chez la crémone chez technal",
+  "facettes": {},
+  "rang": 3
+ },
+ {
+  "source": "question",
+  "id": "S02",
+  "requete": "et la rallonge TGY3710, elle se monte pareil ?",
+  "facettes": {},
+  "rang": 3
+ },
+ {
+  "source": "question",
+  "id": "S03",
+  "requete": "quelle autre crémone est compatible avec cette rallonge ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "S04",
+  "requete": "en ouvrant minimal ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "S05",
+  "requete": "chez Roto NX une crémone",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "question",
+  "id": "S06",
+  "requete": "et acajou 1 face sur perform ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "S07",
+  "requete": "pour un soleal de 2000 x 2150",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "G01",
+  "requete": "Hauteur mini de châssis pour monter une TGY3701 ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "G02",
+  "requete": "Quelle charge maxi pour la T940023 ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "G03",
+  "requete": "Le carré W4070495, il fait quelle longueur ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "G04",
+  "requete": "La 787347, c'est pour quelle LFF ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "G05",
+  "requete": "Le 0729T fait quelle largeur et quelle épaisseur ?",
+  "facettes": {},
+  "rang": 48
+ },
+ {
+  "source": "question",
+  "id": "G06",
+  "requete": "Patte NT1947 sur un dormant 76171, c'est pour quelle épaisseur d'isolant ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "G07",
+  "requete": "Jusqu'à quel poids de vantail va la PSK200 Portal ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "G08",
+  "requete": "Un 10/14/4, ça fait combien de dB d'affaiblissement ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "G09",
+  "requete": "La PPU01PROF, elle est en DIN gauche ou droite ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "G10",
+  "requete": "Coffre AIP36 : quelle profondeur de maçonnerie ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "N01",
+  "requete": "On peut faire une porte d'entrée alu coupe-feu EI30 ? Sous quel PV ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "N02",
+  "requete": "Quelle classe de résistance à la grêle pour un tablier de volet en lames LA 37 ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "N03",
+  "requete": "Quelle référence de clé pompier commander avec la fermeture TGY3731 ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "question",
+  "id": "N04",
+  "requete": "Combien de temps laisser polymériser le mastic Illbruck SP350 avant de manipuler le vantail ?",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R01",
+  "requete": "parclose vitrage 44 mm épaisseur",
+  "facettes": {},
+  "rang": 4
+ },
+ {
+  "source": "claude-lia",
+  "id": "R02",
+  "requete": "transformation ouvrant à la française OF en oscillo-battant OB ferrure",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R03",
+  "requete": "garantie structure LUMINE 65",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R04",
+  "requete": "parclose joint remplissage 24 mm",
+  "facettes": {},
+  "rang": 5
+ },
+ {
+  "source": "claude-lia",
+  "id": "R05",
+  "requete": "oeil de boeuf rond diamètre maximum PVC châssis circulaire",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R05",
+  "requete": "œil de bœuf formes spéciales rond cintre dimensions maximales",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R05",
+  "requete": "œil de bœuf",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R05",
+  "requete": "châssis cintré plein cintre diamètre rayon dimension maximale fixe",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R06",
+  "requete": "poignée Shangai",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R06",
+  "requete": "SHANGHAI poignée coulissant SOLEAL galandage",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R07",
+  "requete": "effet bilame",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R07",
+  "requete": "bilame TGY1220 TGY2516 centreur TGY3832",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R08",
+  "requete": "poignée galandage",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "claude-lia",
+  "id": "R09",
+  "requete": "parclose 3702",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R09",
+  "requete": "3702",
+  "facettes": {},
+  "rang": null
+ },
+ {
+  "source": "claude-lia",
+  "id": "R09",
+  "requete": "parclose PERFORM70 référence épaisseur de vitrage",
+  "facettes": {},
+  "rang": 12
+ },
+ {
+  "source": "claude-lia",
+  "id": "R10",
+  "requete": "chicane LUMINE55",
+  "facettes": {},
+  "rang": 12
+ },
+ {
+  "source": "claude-lia",
+  "id": "R10",
+  "requete": "chicane montant central coulissant SOLEAL 55",
+  "facettes": {},
+  "rang": 13
+ },
+ {
+  "source": "claude-lia",
+  "id": "R11",
+  "requete": "A491 appui",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "claude-lia",
+  "id": "R12",
+  "requete": "appui 6136 dormants compatibles",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "claude-lia",
+  "id": "R12",
+  "requete": "pièce d'appui 6136 dormant rénovation 6107 6105 6102",
+  "facettes": {},
+  "rang": 8
+ },
+ {
+  "source": "claude-lia",
+  "id": "R13",
+  "requete": "M335 levier",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R14",
+  "requete": "76576",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R15",
+  "requete": "76301 meneau ouvrant largeur",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R16",
+  "requete": "ouvrant galbé épaisseur",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R17",
+  "requete": "abaque masse vitrage coulissant angle sans poteau vantail poids kg/m²",
+  "facettes": {},
+  "rang": 12
+ },
+ {
+  "source": "claude-lia",
+  "id": "R17",
+  "requete": "SOLEAL GY abaque masse vitrage kg/m² angle 90° sans poteau hauteur largeur vantail",
+  "facettes": {},
+  "rang": 7
+ },
+ {
+  "source": "claude-lia",
+  "id": "R18",
+  "requete": "coulissant 4 vantaux percussion centrale pièce d'étanchéité montant central haut bas collée vissée avant gondage chicane",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "claude-lia",
+  "id": "R18",
+  "requete": "bouchon embout percussion centrale 4 vantaux coller visser haut bas étanchéité air",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R18",
+  "requete": "avant gondage montant de percussion embout d'étanchéité haut et bas collé vissé 4 vantaux percussion",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R19",
+  "requete": "porte SOLEAL PY paumelle pivot 130 kg réglage vantail frotte hauteur clé sans dégonder",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R19",
+  "requete": "réglage paumelle sur pivot T940023 clé Allen hauteur latéral compression porte frotte seuil",
+  "facettes": {},
+  "rang": 5
+ },
+ {
+  "source": "claude-lia",
+  "id": "R20",
+  "requete": "report de charge Designo II palier d'angle pièce dormant vissage vis montage",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R21",
+  "requete": "palier compas cintré arc gabarit perçage dormant positionnement",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R21",
+  "requete": "gabarit palier de compas réglable plein-cintre 2002405 2002406",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R22",
+  "requete": "487206 limiteur d'ouverture 80 mm Designo",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R22",
+  "requete": "domotique Wi-Fi smartphone application connexion platine motorisation ouverture fenêtre",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "claude-lia",
+  "id": "R23",
+  "requete": "fraisage boîtier de crémone axe fouillot fond de feuillure cote usinage",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R23",
+  "requete": "hauteur de poignée distance bas du vantail en feuillure axe de la poignée crémone OB KSR",
+  "facettes": {},
+  "rang": 6
+ },
+ {
+  "source": "claude-lia",
+  "id": "R24",
+  "requete": "6106 dormant cotes",
+  "facettes": {},
+  "rang": 12
+ },
+ {
+  "source": "claude-lia",
+  "id": "R25",
+  "requete": "6101 seuil dormant embout set d'assemblage",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "claude-lia",
+  "id": "R25",
+  "requete": "seuil 9C42 dormant 6101 débit 2008",
+  "facettes": {},
+  "rang": 3
+ },
+ {
+  "source": "claude-lia",
+  "id": "R27",
+  "requete": "ralentisseur amortisseur frein fermeture vantail coulissant",
+  "facettes": {},
+  "rang": 22
+ },
+ {
+  "source": "claude-lia",
+  "id": "R27",
+  "requete": "coulissant PVC amortisseur freinage fin de course vantail ralentit",
+  "facettes": {},
+  "rang": 46
+ },
+ {
+  "source": "claude-lia",
+  "id": "R28",
+  "requete": "embout embouts dormant standard compatibles",
+  "facettes": {},
+  "rang": 8
+ },
+ {
+  "source": "claude-lia",
+  "id": "R29",
+  "requete": "LUMINE 55 performance acoustique affaiblissement dB Rw",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R29",
+  "requete": "acoustique affaiblissement dB Rw Rw+Ctr SOLEAL FY 55",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R29",
+  "requete": "Soleal 55 FYa FYm acoustique essais affaiblissement Rw décibels",
+  "facettes": {},
+  "rang": 3
+ },
+ {
+  "source": "claude-lia",
+  "id": "R30",
+  "requete": "tapée isolation 180 mm doublage épaisseur isolant",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R30",
+  "requete": "tapée isolation 180 mm 76772 doublage",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R31",
+  "requete": "parclose 2452 épaisseur vitrage",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R32",
+  "requete": "Eneo CC raccordement électrique tension alimentation fils câble carte électronique",
+  "facettes": {},
+  "rang": 3
+ },
+ {
+  "source": "claude-lia",
+  "id": "R33",
+  "requete": "TGY3702 crémone coulissant 3 points 4 points",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R34",
+  "requete": "carbone noir coloris PERFORM",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "claude-lia",
+  "id": "R35",
+  "requete": "zone sismique séisme sismicité fenêtre",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R35",
+  "requete": "sismicité parasismique sismique Eurocode 8 bâtiment catégorie d'importance",
+  "facettes": {},
+  "rang": 4
+ },
+ {
+  "source": "claude-lia",
+  "id": "R35",
+  "requete": "pose en zones sismiques éléments de remplissage 4 m² guide de dimensionnement parasismique éléments non structuraux",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R36",
+  "requete": "retombée membrane applique extérieure monomur pose",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R36",
+  "requete": "membrane d'étanchéité retombée ITE applique extérieure",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "R36",
+  "requete": "membrane monomur applique extérieure technal aluminium",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "S01",
+  "requete": "crémone 4 points coulissant TGY3702 TGY3704 rallonge",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "S02",
+  "requete": "TGY3710 rallonge",
+  "facettes": {},
+  "rang": 3
+ },
+ {
+  "source": "claude-lia",
+  "id": "S02",
+  "requete": "TGY3710",
+  "facettes": {},
+  "rang": null
+ },
+ {
+  "source": "claude-lia",
+  "id": "S02",
+  "requete": "connexion rallonge tringle fermeture 3 points gabarit réglage crochet haut support de guidage",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "claude-lia",
+  "id": "S02",
+  "requete": "montage rallonge crémone fermeture 3 points TGY3704 fabrication",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "S03",
+  "requete": "TGY3704 rallonge 4ème point crémone compatible TGY3702 TGY3703",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "S04",
+  "requete": "ouvrant minimal parclose joint vitrage 24 mm",
+  "facettes": {},
+  "rang": 3
+ },
+ {
+  "source": "claude-lia",
+  "id": "S05",
+  "requete": "763392 crémone",
+  "facettes": {},
+  "rang": 6
+ },
+ {
+  "source": "claude-lia",
+  "id": "S05",
+  "requete": "763392",
+  "facettes": {},
+  "rang": null
+ },
+ {
+  "source": "claude-lia",
+  "id": "S06",
+  "requete": "acajou 1 face plaxé coloris",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "S07",
+  "requete": "chicane SOLEAL choix inertie dimensions hauteur largeur",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "S07",
+  "requete": "abaque choix chicane montant central pression vent hauteur largeur vantail combinaison",
+  "facettes": {},
+  "rang": 14
+ },
+ {
+  "source": "claude-lia",
+  "id": "S07",
+  "requete": "dimensions maximales porte-fenêtre 2 vantaux battement central hauteur largeur abaque vent",
+  "facettes": {},
+  "rang": 12
+ },
+ {
+  "source": "claude-lia",
+  "id": "G01",
+  "requete": "TGY3701 hauteur minimale châssis",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "G02",
+  "requete": "T940023 charge maxi",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "G02",
+  "requete": "T940023 T940022 paumelle sur pivot",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "G03",
+  "requete": "W4070495 carré longueur",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "G03",
+  "requete": "W4070495 W1041261 carré de manœuvre poignée",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "G04",
+  "requete": "787347 LFF",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "G05",
+  "requete": "0729T largeur épaisseur",
+  "facettes": {},
+  "rang": 5
+ },
+ {
+  "source": "claude-lia",
+  "id": "G06",
+  "requete": "NT1947 patte 76171 épaisseur isolant",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "G07",
+  "requete": "PSK200 Portal poids vantail",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "G08",
+  "requete": "10/14/4 affaiblissement acoustique dB vitrage Rw",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "G09",
+  "requete": "PPU01PROF DIN gauche droite",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "G10",
+  "requete": "AIP36 coffre profondeur maçonnerie",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "N01",
+  "requete": "porte d'entrée aluminium coupe-feu EI30 procès-verbal",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "N01",
+  "requete": "coupe-feu EI30 EI 30 résistance au feu",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "N01",
+  "requete": "porte coupe-feu pare-flammes EI30 PV feu",
+  "facettes": {},
+  "rang": 2
+ },
+ {
+  "source": "claude-lia",
+  "id": "N01",
+  "requete": "EI30 coupe-feu",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "N02",
+  "requete": "LA 37 lame tablier volet roulant résistance grêle classe",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "N02",
+  "requete": "grêle résistance à la grêle classe tablier",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "N02",
+  "requete": "grele grêlons LA37",
+  "facettes": {},
+  "rang": null
+ },
+ {
+  "source": "claude-lia",
+  "id": "N03",
+  "requete": "TGY3731 clé pompier fermeture",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "N03",
+  "requete": "TGY3731",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "N03",
+  "requete": "clé pompier ouverture d'urgence ERP",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "N04",
+  "requete": "Illbruck SP350 mastic collage vitrage temps de polymérisation séchage manipulation vantail",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "N04",
+  "requete": "SP350",
+  "facettes": {},
+  "rang": 1
+ },
+ {
+  "source": "claude-lia",
+  "id": "N04",
+  "requete": "collage vitrage polymérisation délai avant manutention",
+  "facettes": {},
+  "rang": 1
+ }
+]

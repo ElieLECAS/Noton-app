@@ -84,6 +84,24 @@ Deux garde-fous ne dépendent pas de la discipline du modèle :
 Et une reprise : si le modèle répond sans avoir chargé la moindre page, il est renvoyé lire **une
 fois**, et ce qu'il avait commencé à écrire est effacé de l'écran.
 
+La recherche aussi est tenue par le serveur (30/09/2026, mesuré sur les recherches réelles de
+Mistral) :
+
+- **les références de la question sont remises dans chaque recherche** du tour (TGY3702 : le
+  modèle ne la gardait que 3 fois sur 8), et l'étape affichée montre la recherche réellement
+  faite ;
+- **une cote de la question n'est pas une référence** (« 1 800 mm », « 1 200 de large ») : elle
+  ne reçoit pas le poids ×3 qui ramenait les grands tableaux de ferrures ;
+- **le filtre `type` ne classe plus** : Mistral le devine mal (« Profilé » pour une limite que
+  fixe une page de gamme) ; bonne page dans les trois premières 68 % → 85 % sans lui ;
+- **une référence qu'aucune page ne porte est annoncée** (« Absent de tout le wiki ») au lieu de
+  six recherches pour une absence ;
+- les graphies se rejoignent : œ, « 487 206 », « LUMINE 65 », pluriel en -s/-x (pas plus) ;
+- la page d'une **coupe servie rejoint les sources**, que le modèle la cite ou non.
+
+La règle 14 des consignes interdit un « oui » de faisabilité sans avoir lu la limite (3 → 8 sur 9
+justes sur les trois questions de faisabilité du golden).
+
 ## Le tour vocal (`/vocal`, 22/09/2026)
 
 Le même tour, dit à voix haute : `POST /api/vocal/tour?conversation_id=` reçoit l'enregistrement
@@ -139,7 +157,7 @@ disque, un dépôt abandonné est ramassé au suivant.
   réponse fausse se corrige d'abord dans le wiki, ensuite dans les consignes. Mesurer avant de
   proposer, proposer avant de coder.
 - Une facette **remonte** une page, elle ne l'exclut pas : une facette mal choisie cachait la
-  bonne page.
+  bonne page. Le `type` ne classe pas du tout ; il ne sert qu'à lister sans mot-clé.
 - Tests : `docker compose exec web pytest` (dépendances Docker-only).
 - Migrations Alembic idempotentes (`IF EXISTS`) ; `create_all` tourne aussi au démarrage. Deux
   révisions : `lia_wiki_schema` (le schéma) puis `lia_vocal_mode` (le mode d'une conversation).

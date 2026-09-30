@@ -1,8 +1,8 @@
 ---
 type: Quincaillerie
-title: Roulements, fermetures et manœuvres Technal SOLEAL GY 55
-description: Guide technique exhaustif de la quincaillerie du coulissant SOLEAL GY 55 de TECHNAL (chariots simples/doubles alu et inox jusqu'à 200 kg, fermetures 1 à 4 points, crémones à clé, organes de manœuvre, poignée réversible TGY3606, fermeture pompier et gâches).
-tags: [technal, soleal, soleal-gy, quincaillerie, roulettes, chariots, serrures, cremona, poignées, gâches]
+title: Chariots, crémones, poignées et gâches du coulissant SOLEAL GY 55
+description: "Références, hauteurs minimales de châssis et de poignée des crémones TGY3700 à TGY3704 (dont la rallonge 4ème point), chariots jusqu'à 200 kg, fermetures de 1 à 4 points, poignées, fermeture pompier et gâches du coulissant SOLEAL GY 55 de TECHNAL."
+tags: [technal, soleal, soleal-gy, quincaillerie, roulettes, chariots, serrure, cremone, poignee, gache]
 gamme: LUMINE
 systeme: SOLEAL GY
 fournisseur: TECHNAL
@@ -64,7 +64,7 @@ La condamnation s'effectue par des mécanismes encastrés à têtière filante e
 | **TGY3701** | 1 point à clé | Oui (cylindre) | 525 mm | 346 mm | 4 vis TGY3723 |
 | **TGY3702** | 3 points | Non | 1 292 mm | 721 mm | 6 vis TGY3723 |
 | **TGY3703** | 3 points à clé | Oui (cylindre) | 1 292 mm | 721 mm | 8 vis TGY3723 |
-| **TGY3704** | Rallonge 4ème point | Raccordée à TGY3702/03 | Pour très grandes hauteurs | — | 2 vis TGY3723 |
+| **TGY3704** | Rallonge 4ème point | Raccordée à TGY3702 ou TGY3703 | Pour très grandes hauteurs | — | 2 vis TGY3723 |
 | **TKG025** | Fermeture 1 point coquille | Non | 395 mm | 219 mm | Encastrée + pêne déporté TGY6006 |
 
 ### 2. Cylindres et barillets européens

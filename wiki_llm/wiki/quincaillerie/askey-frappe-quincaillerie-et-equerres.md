@@ -2,7 +2,7 @@
 type: Quincaillerie
 title: Quincaillerie et équerres ASKEY Frappe 65
 description: Nomenclatures des équerres d'assemblage, raccords, goupilles, visserie, ferrures Ferco Unijet et bouchons d'étanchéité de la gamme Frappe 65 ASKEY.
-tags: [quincaillerie, equerres, raccords, ferco, unijet, frappe, askey, hydro]
+tags: [quincaillerie, equerre, raccords, ferco, unijet, frappe, askey, hydro]
 gamme: [Frappe 65 Ouvrant Caché, Frappe 65 Ouvrant Visible]
 fournisseur: ASKEY
 usage: atelier

@@ -410,7 +410,7 @@ vitrage) autres que ceux proposés par KÖMMERLING seront rejetées !!! »** [2 
 Le système e.VOLUTION permet de recevoir les épaisseurs de vitrage suivantes, selon l'élément qui
 porte la parclose ; l'élargisseur de parclose 728 est le profilé clippé en bout de feuillure qui
 permet un vitrage plus épais ([Profilés complémentaires du système
-70](/profiles/systeme-70-profiles-complementaires.md#élargisseur-de-parclose-728)) [2 p. 243].
+70](/profiles/systeme-70-parcloses-appuis-et-elargisseurs-evo2008.md#élargisseur-de-parclose-728)) [2 p. 243].
 
 | Élément (2008) | Épaisseur du verre (mm) | Épaisseur du verre avec élargisseur de parclose 728 (mm) |
 | --- | --- | --- |

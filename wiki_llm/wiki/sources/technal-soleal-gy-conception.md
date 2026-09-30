@@ -2,7 +2,7 @@
 type: Document source
 title: Catalogue de conception Technal SOLEAL GY 55
 description: Catalogue technique de conception générale Technal pour la gamme de coulissants universels SOLEAL GY 55 (Réf. 5744.005 - 09/2021, 184 pages).
-tags: [technal, soleal, soleal-gy, coulissant, galandage, conception, profilés, inertie, seuil-pmr, 55mm]
+tags: [technal, soleal, soleal-gy, coulissant, galandage, conception, profile, inertie, seuil-pmr, 55mm]
 gamme: LUMINE
 systeme: SOLEAL GY
 fournisseur: TECHNAL
@@ -43,11 +43,11 @@ La pagination du catalogue comprend 184 pages.
 | 40-63 | Applications traditionnelles et galandages : débits complets des profilés, rails alu/inox, boucliers PVC, accessoires et vis pour 2 vtx, 3 vtx indép., 4 vtx, 3R 3 vtx, 3R 6 vtx, 4R 4 vtx, 4R 8 vtx, galandages 1 à 4 vtx, composé frappe FY | à faire | [Cotes de débit SOLEAL GY](/profiles/soleal-gy-cotes-de-debit.md) |
 | 64-75 | Applications coulissant d'angle à 90° sans poteau : débits détaillés, profils de percussion TGY1206, profils d'angle TGY2203, butées et étanchéité TGY3619 | à faire | [Cotes de débit SOLEAL GY](/profiles/soleal-gy-cotes-de-debit.md), [Pose et galandage SOLEAL GY](/procedures/pose-soleal-gy-galandage.md) |
 | 76-81 | Options Seuil PMR : rampe TGY2100, clips TGY3608, débits traditionnels et d'angle, pièces d'appui tubulaires | à faire | [Dormants et rails SOLEAL GY](/profiles/soleal-gy-dormants-et-rails.md), [Cotes de débit SOLEAL GY](/profiles/soleal-gy-cotes-de-debit.md), [Pose et galandage SOLEAL GY](/procedures/pose-soleal-gy-galandage.md) |
-| 82-85 | Choix des dormants, équerres d'assemblage TGY3603/3600, goupilles TAY0000/01/02, choix des montants centraux et latéraux | à faire | [Dormants et rails SOLEAL GY](/profiles/soleal-gy-dormants-et-rails.md), [Quincaillerie SOLEAL GY](/quincaillerie/soleal-gy-roulements-et-fermetures.md) |
+| 82-85 | Choix des dormants, équerres d'assemblage TGY3603/3600, goupilles TAY0000, TAY0001 et TAY0002, choix des montants centraux et latéraux | à faire | [Dormants et rails SOLEAL GY](/profiles/soleal-gy-dormants-et-rails.md), [Quincaillerie SOLEAL GY](/quincaillerie/soleal-gy-roulements-et-fermetures.md) |
 | 86-103 | Roulettes (T401011 à TGY3872), crémones 1 à 4 points, cylindres, organes de manœuvre (cuvettes, poignées tirage, réversibilité TGY3606, fermeture pompier ERP TGY3731, gâches réglables, centreurs TGY3832) | à faire | [Quincaillerie SOLEAL GY](/quincaillerie/soleal-gy-roulements-et-fermetures.md) |
-| 104-122 | Options techniques : traverses intermédiaires T141018/T141009, drainage bas et boucliers thermiques, rejet d'eau rapporté TGY2509/10, rail inox TGY4007, bande filante, ventilation neuve/réno | à faire | [Dormants et rails SOLEAL GY](/profiles/soleal-gy-dormants-et-rails.md), [Cotes de débit SOLEAL GY](/profiles/soleal-gy-cotes-de-debit.md), [Pose et galandage SOLEAL GY](/procedures/pose-soleal-gy-galandage.md) |
+| 104-122 | Options techniques : traverses intermédiaires T141018/T141009, drainage bas et boucliers thermiques, rejet d'eau rapporté TGY2509 et TGY2510, rail inox TGY4007, bande filante, ventilation neuve/réno | à faire | [Dormants et rails SOLEAL GY](/profiles/soleal-gy-dormants-et-rails.md), [Cotes de débit SOLEAL GY](/profiles/soleal-gy-cotes-de-debit.md), [Pose et galandage SOLEAL GY](/procedures/pose-soleal-gy-galandage.md) |
 | 123-131 | Traitement de l'effet bilame : montant spécifique TGY1220, renfort acier plat 50x5 avec capot TGY2516, débits et largeurs de passage libre galandage | à faire | [Dormants et rails SOLEAL GY](/profiles/soleal-gy-dormants-et-rails.md), [Cotes de débit SOLEAL GY](/profiles/soleal-gy-cotes-de-debit.md) |
-| 132-138 | Pose et installation : supports d'étanchéité BTC TFY2528/29, tapées 100 à 160 mm, pattes TGY3725-30, calage de seuil, pose entre tableaux | à faire | [Pose et galandage SOLEAL GY](/procedures/pose-soleal-gy-galandage.md) |
+| 132-138 | Pose et installation : supports d'étanchéité BTC TFY2528 et TFY2529, tapées 100 à 160 mm, pattes TGY3725-30, calage de seuil, pose entre tableaux | à faire | [Pose et galandage SOLEAL GY](/procedures/pose-soleal-gy-galandage.md) |
 | 139-184 | Nomenclatures complètes des profilés, accessoires, joints, visserie et outillages d'atelier | à faire | [Dormants et rails SOLEAL GY](/profiles/soleal-gy-dormants-et-rails.md), [Quincaillerie SOLEAL GY](/quincaillerie/soleal-gy-roulements-et-fermetures.md) |
 
 **Le registre de couverture est intégral : 184/184 pages couvertes, zéro `à faire`.**

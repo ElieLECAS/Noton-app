@@ -2,7 +2,7 @@
 type: Quincaillerie
 title: Siegenia
 description: La quincaillerie Siegenia PSK200 Portal, nommée par le DTD du système 70 pour l'oscillo-coulissant jusqu'à 200 kg, les types d'ouvrant pour lesquels les directives profine approuvent Siegenia, et les autres mentions de Siegenia dans le corpus.
-tags: [siegenia, psk200, portal, oscillo-coulissant, quincaillerie, dtd, systeme-70]
+tags: [siegenia, portal, oscillo-coulissant, quincaillerie, dtd, systeme-70]
 systeme: [70, 76]
 usage: [atelier, chiffrage]
 status: draft
@@ -27,7 +27,7 @@ generated:
 
 Siegenia est un fabricant de quincaillerie. Dans le corpus, il est nommé surtout pour la
 **PSK200 Portal**, la quincaillerie de l'**oscillo-coulissant** du système 70 : une fenêtre dont
-l'ouvrant bascule en soufflet, puis se décale et coulisse parallèlement au dormant.
+l'ouvrant bascule en soufflet, puis se décale et coulisse parallèlement au dormant. Chez PROFERM, le système 76 est celui de la fenêtre PERFORM76 ([PERFORM](/gammes/perform.md)) ; aucun document PROFERM ne rattache le système 70 à une gamme (**VER-28**).
 
 # Caractéristiques
 

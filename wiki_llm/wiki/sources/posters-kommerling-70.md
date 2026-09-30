@@ -2,7 +2,7 @@
 type: Document source
 title: Posters Gamme 70 KÖMMERLING, mars 2025
 description: Deux planches A0 KÖMMERLING du système 70 Plateforme — profilés principaux et profilés complémentaires — dessinant en coupe cotée chaque profilé avec son capot aluminium, les renforts acier et leurs inerties Iz, les seuils, les embouts et les sets d'assemblage.
-tags: [poster, kommerling, gamme-70, profine, profile, reference, renforts, capotage, assemblages]
+tags: [poster, kommerling, gamme-70, profine, profile, reference, renfort, capotage, assemblage]
 systeme: 70
 fournisseur: KÖMMERLING
 status: stable

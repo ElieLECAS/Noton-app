@@ -2,7 +2,7 @@
 type: Porte d'entrée
 title: Panneaux et monoblocs
 description: Les deux modes de fabrication d'une porte d'entrée PROFERM, panneau et monobloc, avec leurs gammes ; les compositions du panneau de couleur, du panneau blanc et du panneau verrier VERRISSIMA (classes EN 356, vitrage SP510) ; les monoblocs THERMIXEL et THERMALUX et leurs Up ; les vitrages de sécurité du panneau (33.2) et du monobloc (44.2/4/4) selon le décor.
-tags: [porte-entree, panneau, monobloc, thermixel, thermalux, verrissima, aerolame, en-356, sp510, up]
+tags: [porte-entree, panneau, monobloc, thermixel, thermalux, verrissima, aerolame, en-356, up]
 gamme: [PERFORM, HYBRIDE, LUMINE, TEXTURAL]
 usage: chiffrage
 status: draft

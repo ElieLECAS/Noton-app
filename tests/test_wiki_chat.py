@@ -195,6 +195,49 @@ def test_le_serveur_injecte_les_anomalies(snapshot):
     assert answer.anomalies == [{"id": "CTR-09", "path": "/anomalies/contradictions-entre-sources.md"}]
 
 
+def test_le_serveur_remet_la_reference_de_la_question(snapshot):
+    """TGY3702 : le modèle cherchait « crémone 4 points » et tombait sur une autre gamme."""
+    answer = WikiAnswer(question="J'ai une crémone 3 points TGY3702, il me faut la 4 points",
+                        history=[], snapshot=snapshot)
+    args = {"mots_cles": "crémone 4 points coulissant"}
+    resultat = answer._executer("chercher", args, [])
+    # L'étape affichée (et enregistrée) montre la recherche réellement faite.
+    assert args["mots_cles"] == "crémone 4 points coulissant tgy3702"
+    assert "/quincaillerie/soleal-gy-roulements-et-fermetures.md" in resultat
+    # Une cote de la question n'est pas une référence : elle n'est pas ajoutée.
+    cote = WikiAnswer(question="SoftOpen sur un INNOSLIDE de 1 800 mm ?", history=[], snapshot=snapshot)
+    args = {"mots_cles": "INNOSLIDE SoftOpen"}
+    cote._executer("chercher", args, [])
+    assert args["mots_cles"] == "INNOSLIDE SoftOpen"
+
+
+def test_la_page_d_une_coupe_servie_rejoint_les_sources(snapshot):
+    """Une réponse réduite à une image avait zéro source ; la coupe vient pourtant d'une page."""
+    appels = []
+
+    async def fake_stream(message, *, context, **kwargs):
+        appels.append(1)
+        if len(appels) == 1:
+            yield json.dumps({"tool_calls": [_outil("chercher", {"mots_cles": "parclose 76507"})]})
+            return
+        yield json.dumps({"message": {"content":
+                          "![Parclose 76507](/assets/profiles/perform76/parcloses/parclose-76507.png)"}})
+
+    answer = WikiAnswer(question="Montre-moi la coupe de la parclose 76507", history=[],
+                        snapshot=snapshot, stream_fn=fake_stream)
+    _collect(answer)
+    # L'image servie est celle que le contrôle des coupes a retenue ; sa page est la source.
+    servies = re.findall(r"\]\((/assets/[^)]+)\)", answer.text)
+    assert servies and answer.sources
+    assert all(any(i in snapshot.pages[s["path"]].body for s in answer.sources) for i in servies)
+
+
+def test_une_reference_absente_du_wiki_est_signalee(snapshot):
+    answer = WikiAnswer(question="La parclose 3702 existe-t-elle en PERFORM ?", history=[], snapshot=snapshot)
+    resultat = answer._executer("chercher", {"mots_cles": "parclose 3702 PERFORM"}, [])
+    assert resultat.startswith("Absent de tout le wiki : 3702.")
+
+
 def test_relance_quand_aucune_page_n_a_ete_chargee(snapshot):
     """Répondre sans avoir rien ouvert est la faute la plus fréquente : on renvoie lire, une fois."""
     contextes = []

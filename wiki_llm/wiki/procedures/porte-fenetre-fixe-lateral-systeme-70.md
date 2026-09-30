@@ -2,7 +2,7 @@
 type: Procédure
 title: Porte-fenêtre avec fixe latéral du système 70
 description: La fabrication de la porte-fenêtre avec fixe latéral sur seuil filant 9F67, 9F68, 9F69 ou Z043 du système 70 Plateforme — pièces nécessaires, cote de débit par l'axe du meneau 2425, 6127 ou 6157, et les trois reconstitutions de feuillure sous le fixe, par réhausse A271 et verrou A272, par dormant 6101 sur profilé 1248 et équerres 9714, ou par élargisseur 0303.
-tags: [systeme-70, e-volution, profine, porte-fenetre, fixe-lateral, seuil-filant, 9f67, 9f68, 9f69, z043, a271, a272, 6101, 1248, 9714, 0303, v601, v045, atelier]
+tags: [systeme-70, e-volution, profine, porte-fenetre, fixe-lateral, seuil-filant, atelier]
 systeme: 70
 fournisseur: KÖMMERLING
 usage: atelier

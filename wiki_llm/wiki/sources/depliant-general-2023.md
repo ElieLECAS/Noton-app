@@ -2,7 +2,7 @@
 type: Document source
 title: Dépliant général PROFERM, édition juin 2023
 description: Dépliant commercial général de 8 pages présentant en juin 2023 les portes d'entrée et les quatre gammes PERFORM, HYBRIDE, LUMINE et TEXTURAL avant leur division — équipements, coloris, finitions, garanties et labels.
-tags: [depliant, general, perform, hybride, lumine, textural, portes, garanties]
+tags: [depliant, general, perform, hybride, lumine, textural, porte, garantie]
 gamme: [PERFORM, HYBRIDE, LUMINE, TEXTURAL]
 status: stable
 sources:

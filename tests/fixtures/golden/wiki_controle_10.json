@@ -1,0 +1,459 @@
+{
+  "version": 1,
+  "kind": "generation_golden",
+  "created": "2026-09-30",
+  "description": "10 questions de contrôle, tenues à l'écart des corrections du wiki et de la recherche : elles mesurent si une correction généralise au-delà des 20 questions de wiki_20_questions.json, dont elles ne reprennent aucun sujet. Deux faisabilités hors PERFORM76 1 vantail OF/OB, deux absences, deux contradictions enregistrées, deux lectures de cote (dont une coupe), deux pièges de gamme ou de fournisseur. Chaque réponse attendue est vérifiée ligne à ligne dans le wiki du 30/09 ; le champ verification donne la page, la ligne et l'extrait exact, le champ pages les pages de preuve.",
+  "entries": [
+    {
+      "id": "c10_01",
+      "tags": [
+        "faisabilite",
+        "coulissant",
+        "galandage",
+        "lumine"
+      ],
+      "difficulte": "simple",
+      "question": "Un client veut un galandage alu à un seul vantail qui fait 2 mètres de large, on peut le faire ?",
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "1800",
+          "1,80",
+          "1,8"
+        ],
+        "mode": "un",
+        "regex_any": [
+          "\\bnon\\b|depasse|au-dela|hors (des |du )?(dimensions|limites|domaine)|pas (faisable|possible|realisable|admis|autorise)|trop large|excede"
+        ]
+      },
+      "verite": "Non en 1 vantail : le GALANDAGE55 (TECHNAL SOLEAL GY) va de 800 à 1 800 mm de large en 1 vantail. 2 m demandent 2 vantaux (jusqu'à 3 200 mm, 3 600 mm en 2 vantaux - 2 rails).",
+      "pages": [
+        "/gammes/coulissants-aluminium.md"
+      ],
+      "verification": [
+        {
+          "page": "/gammes/coulissants-aluminium.md",
+          "ligne": 124,
+          "extrait": "## GALANDAGE55"
+        },
+        {
+          "page": "/gammes/coulissants-aluminium.md",
+          "ligne": 131,
+          "extrait": "| 1 vantail | 800 | 1 800 |"
+        },
+        {
+          "page": "/gammes/coulissants-aluminium.md",
+          "ligne": 132,
+          "extrait": "| 2 vantaux | 800 | 3 200 |"
+        },
+        {
+          "page": "/gammes/coulissants-aluminium.md",
+          "ligne": 133,
+          "extrait": "| 2 vantaux - 2 rails | 800 | 3 600 |"
+        }
+      ]
+    },
+    {
+      "id": "c10_02",
+      "tags": [
+        "faisabilite",
+        "systeme-70",
+        "soufflet",
+        "dta"
+      ],
+      "difficulte": "complexe",
+      "question": "Châssis à soufflet en PVC système 70 Kömmerling, 1 400 mm de large pour 700 mm de haut : c'est dans les clous ?",
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "1,30",
+          "1,3",
+          "1300"
+        ],
+        "mode": "un",
+        "regex_any": [
+          "\\bnon\\b|depasse|au-dela|hors (des |du )?(dimensions|limites|domaine|dta|dtd)|pas (faisable|possible|realisable|admis|autorise|couvert)|trop large|excede|certificat de qualification|sur etude"
+        ]
+      },
+      "verite": "Non dans le domaine du DTD : un soufflet en système 70 est limité à 0,80 × 1,30 m (H × L) ; 1,40 m de large dépasse, la hauteur de 0,70 m passe. Au-delà, seul un Certificat de Qualification (fabrication certifiée) peut admettre plus. Piège : la ferrure Roto NX soufflet admet une LFF jusqu'à 2 400 mm, ce n'est pas elle qui limite.",
+      "pages": [
+        "/certifications/dtd-6-16-2335.md"
+      ],
+      "verification": [
+        {
+          "page": "/certifications/dtd-6-16-2335.md",
+          "ligne": 377,
+          "extrait": "#### 2.2.3.8 Dimensions maximales (Baie H × L) en m"
+        },
+        {
+          "page": "/certifications/dtd-6-16-2335.md",
+          "ligne": 391,
+          "extrait": "| Soufflet | 0,80 | 1,30 |"
+        },
+        {
+          "page": "/certifications/dtd-6-16-2335.md",
+          "ligne": 393,
+          "extrait": "La ligne « Oscillo battante 2 vantaux » est l'objet de l'entrée **VER-30**. Pour les fabrications / certifiées, des dimensions supérieures peuvent être envisagées. Elles sont alors précisées dans le / Certificat de Qualification attribué au menuisier."
+        },
+        {
+          "page": "/quincaillerie/roto-nx-champs-application.md",
+          "ligne": 66,
+          "extrait": "| Soufflet, fenêtre rectangulaire | Sécurité de base | 310 | 2400 | 290 | 1200 | 80 |"
+        }
+      ]
+    },
+    {
+      "id": "c10_03",
+      "tags": [
+        "abstention",
+        "lumine",
+        "coulissant"
+      ],
+      "difficulte": "complexe",
+      "question": "Sur le coulissant alu LUMINE65, c'est combien le poids maxi d'un vantail, et avec quelles roulettes ? J'ai de grands vantaux bien lourds.",
+      "attendu": {
+        "type": "abstention",
+        "regex_any": [
+          "ne (donne|precise|mentionne|fournit|communique|contient|renseigne|documente) (pas|aucun)|n'indique (pas|aucun)|ne figure (pas|nulle part)|aucune? (poids|charge|valeur|indication|information|donnee|limite|roulette|reference)|pas (de|d') ?(poids|charge|valeur|indication|information|donnee|limite)",
+          "n'est pas (indique|donne|precise|mentionne|renseigne|documente|communique|specifie)e?|pas (indique|renseigne|documente|precise|specifie)e?|non (renseigne|documente|precise|communique|specifie)e?|je n'ai pas (trouve|d'information)|ne dispose pas|introuvable"
+        ],
+        "interdits": [
+          "200 kg",
+          "300 kg",
+          "160 kg",
+          "250 kg"
+        ]
+      },
+      "verite": "Le wiki ne donne ni poids de vantail ni roulette pour le coulissant LUMINE65 : seulement ses dimensions (2 vantaux 2 rails 1 000 à 4 000 mm, 4 vantaux 2 rails 2 000 à 6 000 mm, H 500 à 2 580 mm), vitrage 28 mm (32 possible), Uw 1,6, 36 dB, et « se rapprocher d'un technicien PROFERM ». Pièges : 300 kg du LUMÉAL55 sur la même page, 200 kg des chariots doubles SOLEAL GY, 160 / 250 kg de l'ASKEY Coulissant 65 NV.",
+      "pages": [
+        "/gammes/coulissants-aluminium.md"
+      ],
+      "verification": [
+        {
+          "page": "/gammes/coulissants-aluminium.md",
+          "ligne": 249,
+          "extrait": "| 2 vantaux | 2 rails | 1 000 | 4 000 | 500 | 2 580 |"
+        },
+        {
+          "page": "/gammes/coulissants-aluminium.md",
+          "ligne": 250,
+          "extrait": "| 4 vantaux | 2 rails | 2 000 | 6 000 | 500 | 2 580 |"
+        },
+        {
+          "page": "/gammes/coulissants-aluminium.md",
+          "ligne": 163,
+          "extrait": "| Charge maximale par vantail | 300 | kg | - | [4 p. 2] | (ligne du LUMÉAL55, piège)"
+        },
+        {
+          "page": "(recherche)",
+          "ligne": 0,
+          "extrait": "grep -i 'kg|poids|roulette|chariot' sur /sources/brochure-lumine65.md, /commercial/lumine.md, /gammes/lumine.md, /gammes/coulissants-aluminium.md, /certifications/labels-et-certifications.md, /coloris/coloris-lumine.md, /quincaillerie/poignees-et-croisillons.md : aucune charge ni roulette rattachée au LUMINE65 (seuls « 300 kg » du LUMÉAL et « 2,3 kg de CO2 »)."
+        }
+      ]
+    },
+    {
+      "id": "c10_04",
+      "tags": [
+        "abstention",
+        "askey",
+        "atelier"
+      ],
+      "difficulte": "simple",
+      "question": "Les goupilles à visser Torx 25 W4070002 dans les équerres d'angle de l'ASKEY frappe 65, je les serre à quel couple ?",
+      "attendu": {
+        "type": "abstention",
+        "regex_any": [
+          "ne (donne|precise|mentionne|fournit|communique|renseigne|documente|specifie) (pas|aucun)|n'indique (pas|aucun)|ne figure (pas|nulle part)|aucun (couple|valeur)|aucune (valeur|indication|information|donnee|preconisation)|pas (de|d') ?(couple|valeur|indication|information|donnee|preconisation)",
+          "n'est pas (indique|donne|precise|mentionne|renseigne|documente|communique|specifie|fourni)e?|pas (indique|renseigne|documente|precise|specifie)e?|non (renseigne|documente|precise|communique|specifie)e?|je n'ai pas (trouve|d'information)|ne dispose pas|introuvable"
+        ],
+        "interdits": [
+          "10 nm",
+          "20 nm",
+          "5 nm",
+          "10 n.m",
+          "20 n.m",
+          "5 n.m",
+          "5 n·m",
+          "10 a 15"
+        ]
+      },
+      "verite": "Le wiki dit explicitement que la source ne fournit pas le couple de serrage des vis coniques Torx 25 W4070002 dans les équerres en zamak ; il donne seulement la pièce (goupille à visser Ø 6,6 × 9,5 mm, Torx 25). Pièges : 20 Nm (profilé Y3740022 du coulissant ASKEY), 10 Nm (maintenance Roto NX, assemblages système 70), 5 N·m (boîtiers SOLEAL FY), 10 à 15 N.m (paumelles SOLEAL PY).",
+      "pages": [
+        "/quincaillerie/askey-frappe-quincaillerie-et-equerres.md"
+      ],
+      "verification": [
+        {
+          "page": "/quincaillerie/askey-frappe-quincaillerie-et-equerres.md",
+          "ligne": 141,
+          "extrait": "* La source ne fournit pas le couple de serrage recommandé en Nm pour les vis coniques Torx 25 W4070002 dans les équerres en zamak."
+        },
+        {
+          "page": "/quincaillerie/askey-frappe-quincaillerie-et-equerres.md",
+          "ligne": 104,
+          "extrait": "* **W4070002** : Goupille à visser dia 6,6 x 9,5 mm à empreinte Torx 25 [1 p. 90]."
+        },
+        {
+          "page": "/procedures/fabrication-coulissant-askey-65-nv.md",
+          "ligne": 97,
+          "extrait": "* Fixer le profilé de jonction centrale rapportée Y3740022 à l'aide de vis TF ST3.5x16 au pas de 300 mm (couple maxi 20 Nm) [1 p. 54, 117]. (piège)"
+        }
+      ]
+    },
+    {
+      "id": "c10_05",
+      "tags": [
+        "anomalie",
+        "contradiction",
+        "perform76",
+        "quincaillerie"
+      ],
+      "difficulte": "complexe",
+      "question": "Sur une fenêtre PERFORM76, l'ouvrant peut peser jusqu'à combien de kilos sur le pivot du bas ?",
+      "attendu": {
+        "type": "liste",
+        "elements": [
+          "100",
+          "130",
+          "CTR-01"
+        ],
+        "min": 3
+      },
+      "verite": "100 kg par ouvrant sur pivot bas selon le cahier technique PERFORM76, contre « jusqu'à 130 kg » pour le poids d'une fenêtre au catalogue général : contradiction CTR-01, valeur à retenir 100 kg pour l'atelier. La réponse doit donner les deux et l'identifiant.",
+      "pages": [
+        "/quincaillerie/perform76-poignee-et-pivot.md",
+        "/anomalies/contradictions-entre-sources.md"
+      ],
+      "verification": [
+        {
+          "page": "/quincaillerie/perform76-poignee-et-pivot.md",
+          "ligne": 35,
+          "extrait": "La charge admissible sur le pivot bas d'une PERFORM76 est de **100 kg par ouvrant** [1 p. 6]."
+        },
+        {
+          "page": "/quincaillerie/perform76-poignee-et-pivot.md",
+          "ligne": 37,
+          "extrait": "Le catalogue général annonce 130 kg pour « le poids d'une fenêtre ». Les deux énoncés ne portent / peut-être pas sur le même objet, et l'écart est de 30 % : **retenir 100 kg pour un / dimensionnement d'atelier** — entrée **CTR-01** du registre"
+        },
+        {
+          "page": "/anomalies/contradictions-entre-sources.md",
+          "ligne": 114,
+          "extrait": "| CTR-01 | Charge du pivot bas | Cahier technique PERFORM76, p. 3 (PDF 6) : 100 kg par ouvrant sur pivot bas | Catalogue général, p. 6 : jusqu'à 130 kg | **100 kg** — c'est le document technique | ..."
+        },
+        {
+          "page": "/gammes/perform.md",
+          "ligne": 88,
+          "extrait": "Le pivot du repère 4 est donné pour 130 kg ; le cahier technique PERFORM76 limite l'ouvrant à / 100 kg"
+        }
+      ]
+    },
+    {
+      "id": "c10_06",
+      "tags": [
+        "anomalie",
+        "contradiction",
+        "systeme-70",
+        "atelier"
+      ],
+      "difficulte": "complexe",
+      "question": "Fixe latéral sur seuil en PVC système 70 : sous la réhausse A271, je mets les verrous tous les combien au maximum ?",
+      "attendu": {
+        "type": "liste",
+        "elements": [
+          "700",
+          "800",
+          "CTR-62"
+        ],
+        "min": 3
+      },
+      "verite": "Verrous A272 à 30 mm de chaque extrémité, entraxe maxi 700 mm selon le manuel de mise en œuvre Système 70 (registre 2.4.6), contre 800 mm sur le schéma du DTD 6/16-2335 (p. 31) : contradiction CTR-62, valeur à retenir 700 mm (la plus contraignante). La réponse doit donner les deux et l'identifiant.",
+      "pages": [
+        "/procedures/porte-fenetre-fixe-lateral-systeme-70.md",
+        "/procedures/fabrication-systeme-70.md",
+        "/anomalies/contradictions-entre-sources.md"
+      ],
+      "verification": [
+        {
+          "page": "/procedures/porte-fenetre-fixe-lateral-systeme-70.md",
+          "ligne": 168,
+          "extrait": "4. Verrouiller le profilé A271 avec le verrou A272 5 à 30 mm de chaque extrémité, entraxe maxi / de 700 mm."
+        },
+        {
+          "page": "/procedures/porte-fenetre-fixe-lateral-systeme-70.md",
+          "ligne": 194,
+          "extrait": "L'entraxe maxi de 700 mm des verrous A272 diffère de l'entraxe maxi de 800 mm porté sur le schéma / du DTD (entrée **CTR-62**)."
+        },
+        {
+          "page": "/procedures/fabrication-systeme-70.md",
+          "ligne": 209,
+          "extrait": "seuil, sur le support **A272 (entraxe maxi = 800 mm)**, avec la légende « Callage suivant NF DTU"
+        },
+        {
+          "page": "/anomalies/contradictions-entre-sources.md",
+          "ligne": 156,
+          "extrait": "| CTR-62 | Entraxe du verrou A272 sous le fixe latéral | ... « à 30 mm de chaque extrémité, entraxe maxi de **700** mm » | DTD n° DBV-24-6/16-2335_V5, p. 31 : « A272 (entraxe maxi = **800** mm) » | **700 mm**, la valeur la plus contraignante, en attendant l'arbitrage | ..."
+        }
+      ]
+    },
+    {
+      "id": "c10_07",
+      "tags": [
+        "image",
+        "perform76",
+        "battement"
+      ],
+      "difficulte": "complexe",
+      "question": "PERFORM76 deux vantaux avec des ouvrants 76272 : le battement central fait combien de large en tout ? Tu peux me montrer la coupe ?",
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "226",
+          "/assets/profiles/perform76/battements/battement-76833.png"
+        ],
+        "mode": "tous"
+      },
+      "verite": "Assemblage 76272 / 76833 / 76272 : 226 mm hors tout (73 / 80 / 73), clair intérieur 48 mm. Coupe battement-76833.png du dossier perform76/battements (l'image du même nom sous systeme70 ou systeme76 ne montre que le profilé 76833 seul, 48 mm). Voisin : 112 mm avec l'ouvrant 76281.",
+      "pages": [
+        "/profiles/perform76-ouvrants-et-battements.md"
+      ],
+      "verification": [
+        {
+          "page": "/profiles/perform76-ouvrants-et-battements.md",
+          "ligne": 73,
+          "extrait": "| 76272 / 76833 / 76272 | 76272 | 226 | 48 |"
+        },
+        {
+          "page": "/profiles/perform76-ouvrants-et-battements.md",
+          "ligne": 87,
+          "extrait": "![Battement 76272 / 76833 / 76272](/assets/profiles/perform76/battements/battement-76833.png)"
+        },
+        {
+          "page": "/profiles/perform76-ouvrants-et-battements.md",
+          "ligne": 89,
+          "extrait": "Même coupe avec les ouvrants 76272 : **226 mm** hors tout, décomposés en 73 / 80 / 73 ; sous la"
+        }
+      ]
+    },
+    {
+      "id": "c10_08",
+      "tags": [
+        "cote",
+        "askey",
+        "dormant"
+      ],
+      "difficulte": "simple",
+      "question": "En ASKEY frappe ouvrant caché, le dormant avec tapée intégrée pour un doublage de 120 : c'est quelle référence et il fait combien de large ?",
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "Y1715151",
+          "136,5"
+        ],
+        "mode": "tous"
+      },
+      "verite": "Y1715151, dormant tapée intégrée doublage 120 mm (pour ouvrant caché OC36) : largeur 136,5 mm, hauteur 55, ailette 44. Voisins de ligne : Y1715150 (140 mm, 156,5) et Y1715152 (100 mm, 116,5). Le tableau ne porte pas d'image.",
+      "pages": [
+        "/profiles/askey-frappe-65-oc-dormants-et-ouvrants.md"
+      ],
+      "verification": [
+        {
+          "page": "/profiles/askey-frappe-65-oc-dormants-et-ouvrants.md",
+          "ligne": 55,
+          "extrait": "| **Y1715151** | Dormant tapée intégrée dbl 120 mm (OC36) | 136,5 | 55 | 44 | 102,82 | 31,47 | 6,53 |"
+        },
+        {
+          "page": "/profiles/askey-frappe-65-oc-dormants-et-ouvrants.md",
+          "ligne": 54,
+          "extrait": "| **Y1715150** | Dormant tapée intégrée dbl 140 mm (OC36) | 156,5 | 55 | 44 | 146,42 | 32,58 | 6,62 |"
+        }
+      ]
+    },
+    {
+      "id": "c10_09",
+      "tags": [
+        "piege-gamme",
+        "technal",
+        "debit"
+      ],
+      "difficulte": "complexe",
+      "question": "Coulissant LUMÉAL 2 vantaux de 3 000 mm de large : je coupe les traverses basses d'ouvrant T141015 à quelle longueur ?",
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "1435"
+        ],
+        "mode": "tous",
+        "interdits": [
+          "1409",
+          "1420,5"
+        ]
+      },
+      "verite": "LUMÉAL55 = TECHNAL LUMEAL GA : traverses basses d'ouvrant T141015 (ou T141021) débitées à L/2 − 65, soit 1 500 − 65 = 1 435 mm (2 unités). Piège : la même T141015 sur le SOLÉAL55 (SOLEAL GY) se débite à L/2 − 91, soit 1 409 mm ; l'ASKEY 65 NV (W1041274, L/2 − 79,5) donnerait 1 420,5 mm.",
+      "pages": [
+        "/profiles/lumeal-ga-cotes-de-debit.md"
+      ],
+      "verification": [
+        {
+          "page": "/profiles/lumeal-ga-cotes-de-debit.md",
+          "ligne": 47,
+          "extrait": "| **Traverses basses ouvrant** | T141015 (ou T141021) | 2 | $L/2 - 65$ | Aluminium à coupure thermique |"
+        },
+        {
+          "page": "/profiles/soleal-gy-cotes-de-debit.md",
+          "ligne": 62,
+          "extrait": "Profilés traverses : **T141015** (vitrage 24-28 mm) ou **T141021** (vitrage 29-32 mm). (piège)"
+        },
+        {
+          "page": "/profiles/soleal-gy-cotes-de-debit.md",
+          "ligne": 66,
+          "extrait": "| **Fenêtre / Porte-fenêtre 2 vantaux** | 2 vtx / 2 rails | 4 | $\\mathbf{L/2 - 91\\text{ mm}}$ | (piège)"
+        },
+        {
+          "page": "/profiles/askey-coulissant-65-nv-cotes-de-debit.md",
+          "ligne": 44,
+          "extrait": "| Ouvrant traverse | **W1041274** | Traverse d'ouvrant 32 mm | 4 | $L/2 - 79{,}5$ | 90°-90° | (piège)"
+        }
+      ]
+    },
+    {
+      "id": "c10_10",
+      "tags": [
+        "piege-gamme",
+        "piege-fournisseur",
+        "lumine",
+        "quincaillerie"
+      ],
+      "difficulte": "complexe",
+      "question": "Fenêtre alu LUMINE65 : le client veut la ferrure cachée, sans paumelles visibles, qui ouvre à 180°. On peut le faire ?",
+      "attendu": {
+        "type": "texte",
+        "regex_any": [
+          "^\\W*non\\b",
+          "(pas|non) disponible[^.]{0,100}lumine ?65|lumine ?65[^.]{0,120}(pas|non) disponible",
+          "lumine ?65[^.]{0,120}(n'est pas|pas) (proposee?|possible|prevue?|offerte?|realisable)|(n'est pas|pas) (proposee?|possible|prevue?|offerte?|realisable)[^.]{0,100}lumine ?65",
+          "(uniquement|seulement|exclusivement|reservee?)[^.]{0,60}lumine ?55"
+        ]
+      },
+      "verite": "Non : la quincaillerie invisible (paumelles intégrées, poignée TOULON décalée, ouverture à 180°) est en standard sur la LUMINE55 (selon abaques) et n'est pas disponible sur la gamme LUMINE65. Piège fournisseur : le système TECHNAL SOLEAL FY décrit une quincaillerie cachée QC 180° commune aux modules 55 et 65 mm, mais PROFERM ne la propose pas en LUMINE65.",
+      "pages": [
+        "/gammes/lumine.md"
+      ],
+      "verification": [
+        {
+          "page": "/gammes/lumine.md",
+          "ligne": 107,
+          "extrait": "Les menuiseries LUMINE55 sont équipées en standard de la quincaillerie invisible (selon abaques) : les paumelles sont intégrées à la structure de la fenêtre et la poignée TOULON est décalée ; la fenêtre s'ouvre à 180°. **La quincaillerie invisible n'est pas disponible sur la gamme LUMINE65** [1 p. 14]."
+        },
+        {
+          "page": "/gammes/lumine.md",
+          "ligne": 53,
+          "extrait": "| LUMINE65 | 65 | caché monobloc, caché à tapées rapportées ou apparent | non disponible | 1,51 (fenêtre 1 vantail 1 010 × 1 365 mm) [2 p. 2] |"
+        },
+        {
+          "page": "/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md",
+          "ligne": 37,
+          "extrait": "2. **La quincaillerie cachée (QC 180°)** : mécanisme entièrement invisible dissimulé dans la gorge européenne des profilés, commun aux modules 55 mm et 65 mm. (piège)"
+        }
+      ]
+    }
+  ]
+}

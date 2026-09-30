@@ -28,7 +28,7 @@ raidisseur fixé sur un élément pour qu'il tienne mieux au vent. Cette procéd
 1.3.5 « Couplages d'éléments » des directives générales profine, commun aux systèmes 70 et 76. Les
 profilés, dimensions maximales, inerties et étapes propres au système 76 Advanced sont dans
 [Accouplement d'éléments du système 76 Advanced](/procedures/accouplement-elements-systeme-76.md)
-[1 p. 94].
+[1 p. 94]. Chez PROFERM, le système 76 est celui de la fenêtre PERFORM76 ([PERFORM](/gammes/perform.md)) ; aucun document PROFERM ne rattache le système 70 à une gamme (**VER-28**).
 
 # Conditions et interdictions
 

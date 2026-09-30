@@ -27,7 +27,7 @@ Le système **76 Advanced à joint central** de [profine](/fournisseurs/profine.
 dans les types d'ouverture dessinés ci-dessous, en **vue intérieure** (la menuiserie vue depuis
 la pièce). Les termes sont définis dans le [glossaire](/reference/glossaire.md) : une ouverture
 **à la française** (OF) pivote sur un axe vertical, **à soufflet** bascule sur un axe horizontal
-bas, **oscillo-battante** combine les deux ; un **châssis fixe** ne s'ouvre pas [1 p. 54-56].
+bas, **oscillo-battante** combine les deux ; un **châssis fixe** ne s'ouvre pas [1 p. 54-56]. Chez PROFERM, le système 76 est celui de la fenêtre PERFORM76 ([PERFORM](/gammes/perform.md)).
 
 ## Fenêtre et porte-fenêtre
 

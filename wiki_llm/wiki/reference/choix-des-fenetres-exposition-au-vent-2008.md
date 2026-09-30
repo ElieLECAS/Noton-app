@@ -1,7 +1,7 @@
 ---
 type: Référence
 title: Choix des fenêtres en fonction de leur exposition, registre 4.2 des plans e.VOLUTION de 2008
-description: Les classes A*E*V* à préconiser pour une fenêtre ou une porte extérieure selon la zone de vent NV 65, la situation d'environnement (a, b, c, d) et la hauteur au-dessus du sol, telles que les reproduit le registre 4.2 « Statique » du classeur e.VOLUTION d'août 2008 : exigences de sécurité, de rigidité et de flèche, pressions P3 et P1, classes de résistance au vent, de perméabilité à l'air et d'étanchéité à l'eau, départements par zone et carte.
+description: "Les classes A*E*V* à préconiser pour une fenêtre ou une porte extérieure selon la zone de vent NV 65, la situation d'environnement (a, b, c, d) et la hauteur au-dessus du sol, telles que les reproduit le registre 4.2 « Statique » du classeur e.VOLUTION d'août 2008 : exigences de sécurité, de rigidité et de flèche, pressions P3 et P1, classes de résistance au vent, de perméabilité à l'air et d'étanchéité à l'eau, départements par zone et carte."
 tags: [aev, classification, vent, pression-p1, pression-p3, fleche, zone-de-vent, nv-65, situation, hauteur, permeabilite-air, etancheite-eau, nf-en-12210, systeme-70, e-volution, reference]
 systeme: 70
 fournisseur: KÖMMERLING

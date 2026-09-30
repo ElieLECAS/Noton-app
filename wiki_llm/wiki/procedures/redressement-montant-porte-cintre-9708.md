@@ -2,7 +2,7 @@
 type: Procédure
 title: Redressement d'un montant de porte cintré par le profilé 9708
 description: Préconisation profine pour redresser un montant de porte déformé au moyen du profilé acier précontraint 9708, sans dégonder l'ouvrant.
-tags: [profine, 9708, porte, montant-cintre, renfort, profilé-acier, calage]
+tags: [profine, porte, montant-cintre, renfort, profile-acier, calage]
 fournisseur: KÖMMERLING
 usage: sav
 famille: renforts

@@ -70,7 +70,7 @@ Cette procédure décrit les étapes d'usinage, de drainage, d'étanchéité par
 2. Déposer un cordon d'élastomère translucide **TW118** sous le chemin de roulement **T341000** sur 100 mm à partir de l'axe de chicane [1 p. 90].
 3. Clipper le chemin de roulement T341000 dans les rails bas en veillant au bon alignement.
 4. Insérer les profilés PVC pré-percés de drainage **T431024** et **T431025** dans le rail bas à l'aide d'une cale martyr en bois et d'un maillet [1 p. 59, 61].
-5. Assembler les montants latéraux T141030/31 et les traverses dormantes au moyen des vis à tôles inox **T471001** ($4,2 \times 55\text{ mm}$ bout pilote) à travers les talons d'angle T441000 [1 p. 62-63].
+5. Assembler les montants latéraux T141030 et T141031 et les traverses dormantes au moyen des vis à tôles inox **T471001** ($4,2 \times 55\text{ mm}$ bout pilote) à travers les talons d'angle T441000 [1 p. 62-63].
 6. Étanquer les tranches d'assemblage profilé/talon au mastic Butyl TW150 et poser les bouchons latéraux de traverse basse **T401006** avec élastomère TW118 [1 p. 60, 62].
 
 ### 3. Assemblage des cadres ouvrants cachés
@@ -79,7 +79,7 @@ Cette procédure décrit les étapes d'usinage, de drainage, d'étanchéité par
 2. Insérer les chariots de roulement doubles **T441004** (ou triples **TGA3608** après entaille de 80 mm) dans la traverse basse et les positionner à 25 mm des extrémités [1 p. 146, 149].
 3. Poser la cale de vitrage **TGA3817** dans la feuillure de la traverse basse directement au-dessus de chaque roulette et l'immobiliser par un point de colle [1 p. 154].
 4. Envelopper le pourtour du vitrage avec le joint portefeuille continu en EPDM (réf. **T411005** à **T411009** selon épaisseur), en débutant par le milieu de la traverse haute : fendre les lèvres d'angle jusqu'au pied du solin et appliquer une goutte d'adhésif Butyl TW150 aux 4 coins [1 p. 158].
-5. Monter les bouchons d'angle d'ouvrant **T441010** (latéral) et **T441011/12** (central) garnis de colle d'étanchéité **TW110** [1 p. 150, 153].
+5. Monter les bouchons d'angle d'ouvrant **T441010** (latéral) et **T441011 et T441012** (central) garnis de colle d'étanchéité **TW110** [1 p. 150, 153].
 6. Visser les profilés d'ouvrants aux 4 angles par vis inox **T471000** ($4,2 \times 55\text{ mm}$) et **T471001** ($3,9 \times 35\text{ mm}$) [1 p. 150, 153].
 7. Si $H_{\text{vantail}} > 2,20\text{ m}$, délarder le joint EPDM sur 200 mm à mi-hauteur et injecter un cordon de colle mastic structurel **Illbruck SP350** le long de la rainure intérieure [1 p. 159].
 

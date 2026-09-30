@@ -31,7 +31,7 @@ generated:
 Les consignes d'utilisation, de nettoyage et d'entretien d'une fenêtre ou d'une porte en profilés
 profine (systèmes 70 et 76), écrites pour l'occupant : registre 1.3.9 « Utilisation, nettoyage et
 entretien » des directives générales profine. S'y ajoutent les consignes de maintenance et de
-sécurité des ferrures que le registre 1.3.4 adresse au fabricant et au poseur [1 p. 88, 111].
+sécurité des ferrures que le registre 1.3.4 adresse au fabricant et au poseur [1 p. 88, 111]. Chez PROFERM, le système 76 est celui de la fenêtre PERFORM76 ([PERFORM](/gammes/perform.md)) ; aucun document PROFERM ne rattache le système 70 à une gamme (**VER-28**).
 
 Le nettoyage de l'aluminium laqué côté atelier et la perte de la garantie de laquage sont sur
 [Surfaces des profilés profine, collage et nettoyage](/procedures/surfaces-collage-nettoyage-profine.md) ;

@@ -11,9 +11,22 @@ top-k sémantique les met en concurrence. Trois choix méritent d'être rappelé
 
 * les **facettes remontent une page, elles ne l'excluent pas**. Une facette mal choisie
   cachait la bonne page : « garantie structure LUMINE65 » filtré par ``tags=coulissant``
-  écartait la page des garanties ;
+  écartait la page des garanties. Le ``type`` ne compte même plus dans le classement : le
+  modèle le devine (« Profilé » pour une limite que fixe un DTA ou une page de gamme) et,
+  compté double, il reléguait la page qui répond — 68 % des recherches réelles de Mistral
+  trouvaient la bonne page dans les trois premières, 85 % sans lui (30/09/2026). Il ne sert
+  plus qu'à lister une catégorie sans mot-clé ;
 * une **référence** (76526, NT1947, A076) vaut trois mots ordinaires : c'est le signal le
-  plus sûr de la question d'un menuisier, et elle ne figure dans aucun tag ;
+  plus sûr de la question d'un menuisier, et elle ne figure dans aucun tag. Une **cote** de
+  la question (« 1 800 mm », « 1 200 de large ») a la forme d'une référence mais n'en est
+  pas une : elle ne reçoit pas ce poids, sans quoi « SoftOpen 1800 » ramenait les grands
+  tableaux de ferrures devant la page du coulissant. Un nom de gamme suivi de son épaisseur
+  (PERFORM76, LUMINE55) non plus : c'est un produit, pas une pièce (``_reference``) ;
+* les mots sont **ramenés à une graphie** : sans accent ni ligature (« manœuvre » =
+  « manoeuvre »), chiffres groupés recollés (« 487 206 » = « 487206 »), un nom suivi d'un
+  nombre également collé (« LUMINE 65 » = « LUMINE65 »), pluriel en -s ou -x des mots de plus
+  de quatre lettres retiré (« parcloses » = « parclose »). Ce n'est pas une lemmatisation :
+  « vantaux » ne trouve pas « vantail » ;
 * ``trier_resultats`` écarte les registres d'``anomalies/`` — ils se lisent entrée par
   entrée, et les entrées utiles sont injectées par le serveur — et fait passer les pages
   concept **avant** les pages ``sources/`` : une source résume un document, une page concept
@@ -57,8 +70,44 @@ def deaccent(texte: str) -> str:
     )
 
 
+# « œ » et « æ » ne se décomposent pas en NFD : sans cette table, « manœuvre » ne trouvait pas
+# « manoeuvre ».
+LIGATURES = str.maketrans({"œ": "oe", "æ": "ae"})
+# Un nombre imprimé en groupes de trois chiffres : « 487 206 », « 1 800 ». Les virgules et les
+# points en sont exclus de part et d'autre, pour ne pas recoller « 2,15 1,00 ».
+GROUPES_RE = re.compile(r"(?<![\d,.])(\d{1,3})((?:[   ]\d{3})+)(?![\d,])")
+
+
+def _recolle(texte: str) -> str:
+    return GROUPES_RE.sub(lambda m: m.group(1) + re.sub(r"\D", "", m.group(2)), texte)
+
+
+def _racine(jeton: str) -> str:
+    """Le pluriel en -s ou -x d'un mot de plus de quatre lettres, rien d'autre."""
+    if len(jeton) > 4 and jeton[-1] in "sx" and jeton.isalpha():
+        return jeton[:-1]
+    return jeton
+
+
+def mots(texte: Any) -> List[str]:
+    """Les mots tels qu'ils sont écrits, ramenés à une graphie — sans les noms collés."""
+    plat = _recolle(deaccent(str(texte).lower().translate(LIGATURES)))
+    return [_racine(t) for t in TOKEN_RE.findall(plat)]
+
+
 def tokenise(texte: Any) -> List[str]:
-    return TOKEN_RE.findall(deaccent(str(texte).lower()))
+    """Les mots d'un texte, ramenés à une graphie (voir l'en-tête du module).
+
+    Appliquée à l'identique aux pages et aux requêtes : c'est ce qui rend les deux graphies
+    équivalentes, et c'est pourquoi aucune n'est jamais réécrite dans le wiki.
+    """
+    jetons = mots(texte)
+    colles = [
+        a + b
+        for a, b in zip(jetons, jetons[1:])
+        if a.isalpha() and len(a) >= 3 and a not in VIDES and b.isdigit() and 2 <= len(b) <= 3
+    ]
+    return jetons + colles
 
 
 def normalise(valeur: Any) -> List[str]:
@@ -82,6 +131,35 @@ def est_reference(token: str) -> bool:
 
 def references(texte: str) -> Set[str]:
     return set(REFERENCE_RE.findall(texte or ""))
+
+
+# Une dimension dans la question : un nombre suivi de son unité, de « de large / de haut », ou
+# pris dans un « L × H ». Le nombre précédé de lettres (PERFORM76) n'en est pas une.
+_CHIFFRES = r"(\d+)(?:[.,]\d+)?"
+_NOMBRE = r"(?<![a-z0-9])" + _CHIFFRES
+COTE_RES = (
+    re.compile(_NOMBRE + r"\s*(?:mm|cm|m|kg|dan|pa|°)(?![a-z])"),
+    re.compile(_NOMBRE + r"\s*(?:de\s+)?(?:large|haut|long|largeur|hauteur|longueur|epaisseur)\b"),
+    re.compile(_NOMBRE + r"\s*[x×*]\s*(?=\d)"),
+    re.compile(r"[x×*]\s*" + _CHIFFRES),
+)
+
+
+def cotes_de(question: str) -> Set[str]:
+    """Les nombres que la question donne comme dimensions, dans leur forme de jeton."""
+    plat = _recolle(deaccent(str(question or "").lower()))
+    return {m.group(1) for motif in COTE_RES for m in motif.finditer(plat)}
+
+
+def references_de(question: str) -> List[str]:
+    """Les références que porte la question (TGY3702, 76507, LUMINE65), cotes exclues."""
+    cotes = cotes_de(question)
+    vues: List[str] = []
+    # Les mots écrits, pas les noms collés : « vitrage 24 » ne fait pas une référence.
+    for jeton in mots(question):
+        if est_reference(jeton) and jeton not in cotes and jeton not in vues:
+            vues.append(jeton)
+    return vues
 
 
 # Une référence de menuiserie est un nombre de 3 à 6 chiffres (76507, 2636), parfois précédé
@@ -110,11 +188,16 @@ class WikiIndex:
         self.df: Counter = Counter()
         self.longueur_moyenne: float = 1.0
         self.anomalies: Dict[str, Dict[str, Any]] = {}
+        # Les jetons que le wiki écrit tels quels. Un nom collé par la recherche (« vitrage 24 »
+        # → vitrage24) n'a le poids d'une référence que si une page l'écrit ainsi (LUMINE65) :
+        # sinon les pages pleines de « vitrage 24 » passaient devant la bonne (30/09/2026).
+        self.natifs: Set[str] = set()
 
         for page in pages:
             if page.reserved or page.missing:
                 continue
             sac = _sac_de_tokens(page)
+            self.natifs.update(mots(" ".join([page.title or "", page.description or "", page.body or ""])))
             self.entries.append({
                 "chemin": page.id,
                 "type": page.type or "-",
@@ -132,6 +215,12 @@ class WikiIndex:
             if page.id in ANOMALY_PAGES:
                 self._charger_anomalies(page)
 
+        # Les noms de gamme, en lettres seules : « PERFORM », « LUMINE » (voir ``_reference``).
+        self.noms_gamme: Set[str] = {
+            re.sub(r"[^a-z]", "", deaccent(str(g).lower()))
+            for e in self.entries for g in e["gamme"]
+        } - {""}
+
         self.entries.sort(key=lambda e: e["chemin"])
         for entry in self.entries:
             self.df.update(entry["tf"].keys())
@@ -141,23 +230,35 @@ class WikiIndex:
     # ---- construction --------------------------------------------------
 
     def _charger_anomalies(self, page: Any) -> None:
-        """Une entrée par ligne de table dont la première cellule est un identifiant."""
+        """Une entrée par ligne de table dont la première cellule est un identifiant.
+
+        La dernière colonne des tableaux d'entrées, ``Pages du wiki``, sert au rapprochement
+        (``liens``) et à ``lire_anomalie`` ; l'entrée injectée d'office (``ligne``) en est
+        allégée — un cinquième de son poids — et ses mots ne comptent pas dans le rapprochement
+        par sujet : les titres des pages liées n'en sont pas le sujet.
+        """
+        avec_pages = False
         for ligne in page.body.splitlines():
             if not ligne.lstrip().startswith("|"):
                 continue
-            cellules = [c.strip() for c in ligne.strip().strip("|").split("|")]
+            ligne = ligne.strip()
+            cellules = [c.strip() for c in ligne.strip("|").split("|")]
+            if cellules and cellules[0] == "ID":
+                avec_pages = cellules[-1] == "Pages du wiki"
             if not cellules or not ENTREE_RE.match(cellules[0]):
                 continue
             identifiant = cellules[0]
             if identifiant in self.anomalies:
                 continue
+            allegee = ligne[: ligne.rstrip("|").rfind("|") + 1] if avec_pages else ligne
             self.anomalies[identifiant] = {
                 "id": identifiant,
                 "sujet": cellules[1] if len(cellules) > 1 else "-",
                 "registre": page.id,
-                "ligne": ligne.strip(),
+                "ligne": allegee,
+                "complete": ligne,
                 "liens": set(LIEN_RE.findall(ligne)),
-                "tokens": set(tokenise(ligne)),
+                "tokens": set(tokenise(allegee)),
             }
 
     # ---- recherche -----------------------------------------------------
@@ -181,7 +282,9 @@ class WikiIndex:
         # saisies tantôt « LUMINE », tantôt « LUMINE65 ».
         return any(v in d or d in v for v in voulus for d in disponibles)
 
-    def _score_bm25(self, requete: Sequence[str], entry: Dict[str, Any]) -> float:
+    def _score_bm25(
+        self, requete: Sequence[str], entry: Dict[str, Any], cotes: Set[str] = frozenset()
+    ) -> float:
         score = 0.0
         for token in requete:
             tf = entry["tf"].get(token, 0)
@@ -189,9 +292,25 @@ class WikiIndex:
                 continue
             norme = 1 - B + B * entry["longueur"] / self.longueur_moyenne
             contribution = self._idf(token) * tf * (K1 + 1) / (tf + K1 * norme)
-            # Une référence trouvée est un signal bien plus sûr qu'un mot courant.
-            score += contribution * (3.0 if est_reference(token) else 1.0)
+            # Une référence trouvée est un signal bien plus sûr qu'un mot courant ; une cote de
+            # la question en a la forme, pas la valeur.
+            score += contribution * (3.0 if self._reference(token, cotes) else 1.0)
         return score
+
+    def _reference(self, token: str, cotes: Set[str] = frozenset()) -> bool:
+        """Le poids ×3 est pour une référence de pièce (TGY3702, 76507, NT1947), pas pour :
+
+        * une cote de la question (``cotes``) ;
+        * un nom que la recherche a collé elle-même (« vitrage 24 » → vitrage24) et qu'aucune
+          page n'écrit ainsi ;
+        * un nom de gamme suivi de son épaisseur (PERFORM76, LUMINE55) : c'est un produit, que
+          la page de gamme, le nuancier et l'argumentaire répètent sans porter la pièce
+          demandée — compté triple, il les faisait passer devant les parcloses SOLEAL FY.
+        """
+        if not est_reference(token) or token in cotes or token not in self.natifs:
+            return False
+        nom = re.fullmatch(r"([a-z]+)\d+", token)
+        return not (nom and nom.group(1) in self.noms_gamme)
 
     def _compte_facettes(self, entry: Dict[str, Any], facettes: Dict[str, Any]) -> int:
         return sum(1 for champ, demande in facettes.items() if self._facette_ok(entry, champ, demande))
@@ -205,7 +324,9 @@ class WikiIndex:
         systeme: Optional[str] = None,
         statut: Optional[str] = None,
         limite: int = 10,
+        cotes: Set[str] = frozenset(),
     ) -> List[Dict[str, Any]]:
+        """``cotes`` : les nombres que la question donne comme dimensions (``cotes_de``)."""
         requete = [t for t in tokenise(mots_cles) if t not in VIDES]
         demandees = {
             k: v
@@ -225,12 +346,14 @@ class WikiIndex:
             ][:limite]
 
         # Les facettes remontent une page, elles ne l'excluent pas : les familles jumelles
-        # se départagent en les voyant toutes les deux, pas en en masquant une.
+        # se départagent en les voyant toutes les deux, pas en en masquant une. Le type, lui,
+        # ne classe pas (voir l'en-tête du module).
+        classantes = {k: v for k, v in demandees.items() if k != "type"}
         classees: List[Tuple[float, Dict[str, Any]]] = []
         for entry in entries:
-            score = self._score_bm25(requete, entry)
+            score = self._score_bm25(requete, entry, cotes)
             if score > 0:
-                classees.append((score * 2.0 ** self._compte_facettes(entry, demandees), entry))
+                classees.append((score * 2.0 ** self._compte_facettes(entry, classantes), entry))
         classees.sort(key=lambda c: c[0], reverse=True)
         return [entry for _, entry in classees[:limite]]
 
@@ -272,7 +395,7 @@ class WikiIndex:
                 f"Aucune entrée {identifiant}. N'appelle lire_anomalie que sur un identifiant "
                 "écrit dans une page lue ou dans les entrées qui t'ont été fournies."
             )
-        return f"{entree['registre']} :\n{entree['ligne']}"
+        return f"{entree['registre']} :\n{entree['complete']}"
 
     def match_anomalies(
         self, question: str, pages_lues: Sequence[Dict[str, Any]], limite: int = 6

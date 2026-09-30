@@ -24,7 +24,7 @@ Le registre 1.1.2 « Terminologie et légendes » des directives générales pro
 cotes et des parties d'une menuiserie PVC employés dans tous les manuels profine (systèmes 70 et
 76), et la manière de passer d'une cote d'ouvrant à une cote de fenêtre. Les sigles seuls sont
 aussi dans le [glossaire](/reference/glossaire.md) ; cette page porte les planches qui les
-définissent [1 p. 9-16].
+définissent [1 p. 9-16]. Chez PROFERM, le système 76 est celui de la fenêtre PERFORM76 ([PERFORM](/gammes/perform.md)) ; aucun document PROFERM ne rattache le système 70 à une gamme (**VER-28**).
 
 # Tailles d'ouvrants maximales et cote d'élément
 

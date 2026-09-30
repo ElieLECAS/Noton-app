@@ -2,7 +2,7 @@
 type: Quincaillerie
 title: Aperçu des ferrures Roto NX, côté paumelles P
 description: Les compositions de ferrure Roto NX côté paumelles P du catalogue PVC de juin 2023, configuration par configuration (OB, TiltSafe, confort, fenêtres inclinée et cintrée, TiltFirst, OF, battement, sécurité de base à CDR 3) — vue d'ensemble, liste des positions avec les pages du catalogue et champ d'application.
-tags: [roto, roto-nx, catalogue, apercu-ferrures, oscillo-battant, ouvrant-francaise, battement, cdr, tiltsafe, champs-application]
+tags: [roto, roto-nx, catalogue, apercu-ferrures, oscillo-battant, ouvrant-francaise, battement, cdr, tiltsafe, champ-application]
 systeme: Roto NX
 fournisseur: ROTO
 usage: [atelier, chiffrage]

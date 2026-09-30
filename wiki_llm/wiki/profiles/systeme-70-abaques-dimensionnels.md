@@ -2,7 +2,7 @@
 type: Profilé
 title: Abaques dimensionnels de renforcement du système 70
 description: Les règles générales de renforcement des ouvrants du système 70 Plateforme (vitrage de 35 kg/m² au plus, classements A*3 E*7B V*A2 et V*A3, entraxe de verrouillage, paumelles, renfort V258) et la clé de lecture des dix-huit abaques de renforcement d'ouvrant, repères A à G et 1 à 7, relevés case par case sur deux pages par classement au vent, avec les remarques du classeur e.VOLUTION de 2008 (vitrage de 30 kg/m² au plus, renfort V127).
-tags: [profine, systeme-70, abaque, renforcement, ouvrant, of, ob, deux-vantaux, v158, v258, v057, paumelle, verrouillage, va2, va3]
+tags: [profine, systeme-70, abaque, renforcement, ouvrant, of, ob, deux-vantaux, paumelle, verrouillage, va2, va3]
 systeme: 70
 fournisseur: KÖMMERLING
 usage: [atelier, chiffrage]

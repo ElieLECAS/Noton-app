@@ -2,7 +2,7 @@
 type: Porte d'entrée
 title: Ouvrants de porte d'entrée
 description: Les trois ouvrants des portes d'entrée PROFERM — Kömmerling 97 et 118 en PVC (PERFORM, HYBRIDE, TEXTURAL), Technal SOLEAL de 100 en aluminium à rupture de pont thermique (LUMINE) — avec ce qui est réalisable, leurs dimensions, sécurité, quincaillerie et coupe cotée, la matrice des équipements de série, options, plus-values et moins-values par gamme et par ouvrant, et les seuils.
-tags: [porte-entree, ouvrant, soleal, kommerling, serrure, paumelle, cylindre, seuil, pmr, cotes]
+tags: [porte-entree, ouvrant, soleal, kommerling, serrure, paumelle, cylindre, seuil, pmr, cote]
 gamme: [PERFORM, HYBRIDE, TEXTURAL, LUMINE]
 usage: [chiffrage, atelier]
 status: draft

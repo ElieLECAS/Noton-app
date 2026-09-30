@@ -1,8 +1,8 @@
 ---
 type: Profilé
 title: Abaques de renforcement du système 70, plans e.VOLUTION de 2008
-description: Les seize diagrammes de renforcement d'ouvrant du classeur KÖMMERLING e.VOLUTION d'août 2008 (registre 4.1, système F 91 : OF et OB 1 vantail, 2 vantaux OF/OB, 2 vantaux OF avec et sans repère G, classements VA2 et VA3, renforts V058, V057, V059), relevés case par case avec leurs limites, leurs légendes et les renforts dessinés, pour les menuiseries du système 70 fabriquées d'après ce classeur.
-tags: [kommerling, profine, systeme-70, e-volution, abaque, diagramme-de-renforcement, renforcement, ouvrant, of, ob, oscillo-battant, deux-vantaux, va2, va3, v058, v057, v059, paumelle, verrouillage]
+description: "Les seize diagrammes de renforcement d'ouvrant du classeur KÖMMERLING e.VOLUTION d'août 2008 (registre 4.1, système F 91 : OF et OB 1 vantail, 2 vantaux OF/OB, 2 vantaux OF avec et sans repère G, classements VA2 et VA3, renforts V058, V057, V059), relevés case par case avec leurs limites, leurs légendes et les renforts dessinés, pour les menuiseries du système 70 fabriquées d'après ce classeur."
+tags: [kommerling, profine, systeme-70, e-volution, abaque, diagramme-de-renforcement, renforcement, ouvrant, of, ob, oscillo-battant, deux-vantaux, va2, va3, paumelle, verrouillage]
 systeme: 70
 fournisseur: KÖMMERLING
 usage: [atelier, sav]

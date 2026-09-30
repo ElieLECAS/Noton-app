@@ -2,7 +2,7 @@
 type: Document source
 title: Directives générales profine, version janvier 2023
 description: Manuel de mise en œuvre de 113 pages de profine, commun aux systèmes 70 et 76, qui couvre la terminologie, livraison et stockage, fabrication, surfaces, drainage et vitrage, exigences statiques et classification A*E*V*, ferrure, couplages, montage, entrées d'air, usage et entretien ; retraité en entier en image.
-tags: [profine, directives, terminologie, mise-en-oeuvre, dimensions, manuel]
+tags: [profine, directives, terminologie, mise-en-oeuvre, dimension, manuel]
 fournisseur: KÖMMERLING
 status: stable
 sources:

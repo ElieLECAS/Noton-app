@@ -24,7 +24,7 @@ La **ferrure** est l'ensemble des pièces métalliques qui font tourner, bascule
 ouvrant et le verrouillent dans son dormant : paumelles ou pivots, compas, crémone, gâches, points
 de verrouillage. Cette page porte le registre 1.3.4 « Ferrure » des directives générales profine,
 commun aux systèmes 70 et 76 : les règles de choix et de fixation, puis les marques de
-quincaillerie approuvées par type d'ouvrant [1 p. 87].
+quincaillerie approuvées par type d'ouvrant [1 p. 87]. Chez PROFERM, le système 76 est celui de la fenêtre PERFORM76 ([PERFORM](/gammes/perform.md)) ; aucun document PROFERM ne rattache le système 70 à une gamme (**VER-28**).
 
 # Caractéristiques
 

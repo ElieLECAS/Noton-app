@@ -2,7 +2,7 @@
 type: Procédure
 title: Mise en œuvre du seuil du système 76 Advanced
 description: L'assemblage des dormants 76171 à 76185 et des meneaux 76372 et 76373 sur les seuils aluminium A076, A077, A343 et A075 du système 76 Advanced à joint central, en coupe droite ou sur dormant grugé, avec les sets d'accessoires, les schémas de perçage, les gabarits T021, T064, T022 et T070, les rejets d'eau A062 et A064 et les windstops.
-tags: [systeme-76-advanced, profine, joint-central, seuil, seuil-pmr, a076, a077, a343, a075, rejet-d-eau, windstop, gabarit, percage, atelier]
+tags: [systeme-76-advanced, profine, joint-central, seuil, seuil-pmr, rejet-d-eau, windstop, gabarit, percage, atelier]
 systeme: 76
 fournisseur: KÖMMERLING
 usage: atelier

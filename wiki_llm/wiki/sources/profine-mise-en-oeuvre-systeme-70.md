@@ -2,7 +2,7 @@
 type: Document source
 title: Mise en œuvre Système 70 Plateforme, profine
 description: Manuel technique d'atelier de 371 pages du système PVC 70 Plateforme de profine (e.VOLUTION, e.MOTION et e.XCLUSIVE) couvrant profilés, débit, statique et mise en œuvre.
-tags: [profine, systeme-70, e-volution, fabrication, cotes-de-debit, renfort, statique, manuel]
+tags: [profine, systeme-70, e-volution, fabrication, cote-de-debit, renfort, statique, manuel]
 systeme: 70
 fournisseur: KÖMMERLING
 status: stable

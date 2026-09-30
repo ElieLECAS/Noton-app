@@ -2,7 +2,7 @@
 type: Document source
 title: Catalogues de conception Technal SOLEAL FY 55 et 55/65 QC
 description: Catalogues techniques de conception générale Technal pour la gamme à frappe SOLEAL FY 55 Évolution (apparent et minimal, réf. 6057.003) et SOLEAL FY 55/65 Quincaillerie Cachée QC (réf. 6319.003).
-tags: [technal, soleal, soleal-fy, frappe, conception, profilés, quincaillerie-cachee, 55mm, 65mm]
+tags: [technal, soleal, soleal-fy, frappe, conception, profile, quincaillerie-cachee, 55mm, 65mm]
 gamme: LUMINE
 systeme: SOLEAL FY
 fournisseur: TECHNAL

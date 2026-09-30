@@ -2,7 +2,7 @@
 type: Procédure
 title: Mise en œuvre des profilés complémentaires du système 70
 description: La mise en œuvre des profilés complémentaires du système 70 Plateforme — réhausses 0374 et 0379, élargisseurs 0204, 0210, 0207, 0301 et 70703 avec leurs embouts 9D02 à 9D05 et 9C73, embouts de finition 9F97, 9F08 et 9F10 du dormant monobloc, pièces d'appui 6134 à 6137 et 76768 et leurs embouts de remplissage, patins M298 et M613 et fixation des tapées, compensateurs 6143 et 6144, coulisses et rejet d'eau sur clip S076 ou vis plot, petits bois collés et protège-seuil 9G13.
-tags: [systeme-70, e-volution, profine, rehausse, elargisseur, embout, piece-d-appui, tapee, patin-d-etancheite, compensateur, coulisse, rejet-d-eau, petits-bois, croisillon, protege-seuil, 9g13, s076, atelier]
+tags: [systeme-70, e-volution, profine, rehausse, elargisseur, embout, piece-d-appui, tapee, patin-d-etancheite, compensateur, coulisse, rejet-d-eau, petits-bois, croisillon, protege-seuil, atelier]
 systeme: 70
 fournisseur: KÖMMERLING
 usage: atelier

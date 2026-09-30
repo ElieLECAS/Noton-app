@@ -279,7 +279,7 @@
       },
       "verite": "Dormant de rénovation à aile du système 70 : épaisseur 70, hauteur 95 = 55 + 40 (aile), 20 + 75 à droite ; INC-12 (hauteur 75 ou 95 selon la page du manuel). Image dormant-6106.png (ou version manuel / 2008).",
       "pages": [
-        "/profiles/systeme-70-profiles-et-renforts.md"
+        "/profiles/systeme-70-dormants.md"
       ]
     },
     {
@@ -369,7 +369,8 @@
       "verite": "Non : 2,40 × 1,30 m (H × L) dépasse le maximum du DTA pour un 1 vantail OF, 2,15 × 1,00 m ; au-delà seul un Certificat de Qualification peut l'admettre. L'abaque d'ouvrant bloque aussi (153 cm de haut admis à cette largeur). Calculé par app/services/faisabilite.py.",
       "pages": [
         "/certifications/dta-6-16-2334.md",
-        "/profiles/systeme-76-abaques-dimensionnels.md"
+        "/profiles/systeme-76-abaques-dimensionnels.md",
+        "/gammes/perform.md"
       ]
     },
     {
@@ -393,7 +394,8 @@
       },
       "verite": "Non : 1,60 × 1,20 m (H × L) dépasse les maxima du DTA pour un 1 vantail OB, 1,50 × 1,40 m ou 2,15 × 1,00 m. Calculé par app/services/faisabilite.py.",
       "pages": [
-        "/certifications/dta-6-16-2334.md"
+        "/certifications/dta-6-16-2334.md",
+        "/gammes/perform.md"
       ]
     },
     {
@@ -432,7 +434,7 @@
       "attendu": {
         "type": "abstention",
         "regex_any": [
-          "aucune parclose 3702|pas de parclose 3702|n'existe pas|ne figure (pas|nulle part|sur aucune)|introuvable|ne connai(s|t) (pas|aucune)|n'apparait (pas|sur aucune|dans aucune)"
+          "aucune parclose 3702|pas de parclose 3702|n'existe pas|ne figure (pas|nulle part|sur aucune)|introuvable|ne connai(s|t) (pas|aucune)|n'apparait (pas|sur aucune|dans aucune)|n'existe dans aucun|n'est documentee (nulle part|dans aucun)|aucune page ne (porte|cite|mentionne)|dans aucune (source|page)"
         ]
       },
       "verite": "Aucune parclose 3702 dans le wiki, ni en PERFORM76 ni en système 70. TGY3702 est une crémone TECHNAL SOLEAL GY, TPY3702 une pièce SOLEAL PY. La réponse doit le dire, sans inventer d'épaisseur.",

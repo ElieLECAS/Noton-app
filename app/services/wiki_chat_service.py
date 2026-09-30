@@ -40,7 +40,10 @@ from app.services.mistral_service import chat_stream
 from app.services.wiki_index import (
     REFERENCE_RE,
     WikiIndex,
+    cotes_de,
     formate_resultats,
+    references_de,
+    tokenise,
     trier_resultats,
 )
 from app.services.wiki_service import WikiSnapshot
@@ -87,7 +90,11 @@ TOOLS: List[Dict[str, Any]] = [
                     },
                     "type": {
                         "type": "string",
-                        "description": "Facette optionnelle : Profilé, Quincaillerie, Gamme, Procédure, Document source…",
+                        "description": (
+                            "Optionnel : Profilé, Quincaillerie, Gamme, Procédure, Document source… "
+                            "Sert à lister une catégorie sans mot-clé ; avec des mots-clés, il ne "
+                            "change pas le classement."
+                        ),
                     },
                     "tags": {
                         "type": "string",
@@ -447,6 +454,9 @@ class WikiAnswer:
             self.system_prompt = self.snapshot.system_prompt
         if self.cache_key is None:
             self.cache_key = self.snapshot.cache_key
+        # Lues une fois dans la question, pour toutes les recherches du tour.
+        self._cotes = cotes_de(self.question)
+        self._references = references_de(self.question)
 
     @property
     def index(self) -> WikiIndex:
@@ -464,6 +474,14 @@ class WikiAnswer:
     def _executer(self, nom: str, args: Dict[str, Any], pages_lues: List[Dict[str, Any]]) -> str:
         if nom == "chercher":
             mots = str(args.get("mots_cles") or "")
+            # La référence de la question est le signal le plus sûr, et le modèle l'oublie dans
+            # sa requête (TGY3702 : gardée 3 fois sur 8 le 30/09) : le serveur la remet. L'étape
+            # affichée montre la recherche réellement faite.
+            presents = set(tokenise(mots))
+            oubliees = [r for r in self._references if r not in presents]
+            if oubliees:
+                mots = " ".join([mots, *oubliees]).strip()
+                args["mots_cles"] = mots
             try:
                 limite = min(int(args.get("limite") or 10), 15)
             except (TypeError, ValueError):
@@ -475,6 +493,7 @@ class WikiAnswer:
                 gamme=args.get("gamme"),
                 systeme=args.get("systeme"),
                 limite=limite,
+                cotes=self._cotes,
             )
             # Les pages livrées entières comptent comme lues : elles alimentent le rapprochement
             # avec les registres d'anomalies, et le modèle a le droit de les citer sans repasser
@@ -483,7 +502,16 @@ class WikiAnswer:
             for page in livrees:
                 if page not in pages_lues:
                     pages_lues.append(page)
-            return formate_resultats(self.index, pages, mots, completes=PAGES_COMPLETES)
+            resultat = formate_resultats(self.index, pages, mots, completes=PAGES_COMPLETES)
+            # Une référence qu'aucune page ne porte : le dire d'emblée évite six recherches pour
+            # une absence (parclose 3702 : 369 000 tokens) et la tentation de la compléter.
+            absentes = [r.upper() for r in self._references if not self.index.df.get(r)]
+            if absentes:
+                resultat = (
+                    f"Absent de tout le wiki : {', '.join(absentes)}. Aucune page ne porte "
+                    "cette référence.\n\n" + resultat
+                )
+            return resultat
         if nom == "lire_page":
             chemin = args.get("chemin", "")
             entree = next((e for e in self.index.entries if e["chemin"] == chemin), None)
@@ -663,6 +691,7 @@ class WikiAnswer:
         think_parts: List[str],
     ) -> AsyncIterator[str]:
         """Filtre les coupes, vérifie les citations, mesure le tour."""
+        coupes: Dict[str, List[str]] = {"servies": []}
         if self.images:
             texte, coupes = preparer_images(texte, self.question, pages_lues, self.snapshot.root)
             # Le texte servi peut différer de celui qui a été streamé : une coupe inventée a été
@@ -674,6 +703,14 @@ class WikiAnswer:
         self.text = texte.strip()
         self.thinking = "".join(think_parts)
         self.sources = extract_citations(self.text, self.snapshot)
+        # Une coupe servie vient d'une page chargée : c'est sa source, que le modèle l'ait citée
+        # ou non (le 30/09, les réponses réduites à une image n'avaient aucune source).
+        citees = {s["path"] for s in self.sources}
+        for image in dict.fromkeys(coupes["servies"]):
+            page = next((p["chemin"] for p in pages_lues if image in (p.get("corps") or "")), None)
+            if page and page not in citees:
+                self.sources += extract_citations(f"({page})", self.snapshot)
+                citees.add(page)
         self.anomalies = extract_anomalies(self.text)
 
         usage = self.usage or {}

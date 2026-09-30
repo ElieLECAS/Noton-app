@@ -2,7 +2,7 @@
 type: Quincaillerie
 title: Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)
 description: Les compositions de ferrure Roto NX côté paumelles Designo (BA 13) du catalogue PVC de juin 2023, configuration par configuration (OB, TiltSafe, TiltFirst, OF, battement, sécurité de base à CDR 2 / CDR 2 N) — vue d'ensemble, liste des positions avec les pages du catalogue et champ d'application sans et avec report de charge.
-tags: [roto, roto-nx, catalogue, apercu-ferrures, designo, oscillo-battant, ouvrant-francaise, battement, cdr, tiltsafe, report-de-charge, champs-application]
+tags: [roto, roto-nx, catalogue, apercu-ferrures, designo, oscillo-battant, ouvrant-francaise, battement, cdr, tiltsafe, report-de-charge, champ-application]
 systeme: Roto NX
 fournisseur: ROTO
 usage: [atelier, chiffrage]

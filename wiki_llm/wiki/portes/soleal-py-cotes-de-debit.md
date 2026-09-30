@@ -144,7 +144,7 @@ Les tringles plates en aluminium **T525058** actionnent les pênes hauts et bas 
 | **Serrure 2 points à fouillot (T920004)** | Simple Action standard | $\mathbf{T_1 = Hp - 261\text{ mm}}$ | $\mathbf{T_2 = Hv - Hp - 210\text{ mm}}$ |
 | **Serrure 2 points à cylindre (T920003)** | Avec gâche seuil PMR **TPY6000** | $\mathbf{T_1 = Hp - 276\text{ mm}}$ | $\mathbf{T_2 = Hv - Hp - 210\text{ mm}}$ |
 | **Serrure 2 points** | Double Action (PSA / PDA) | $\mathbf{T_1 = Hp - 261\text{ mm}}$ | $\mathbf{T_2 = Hv - Hp - 197\text{ mm}}$ |
-| **Serrure 3 points pênes verticaux (T920005/06)**| Simple Action standard | $\mathbf{T_1 = Hp - 261\text{ mm}}$ | $\mathbf{T_2 = Hv - Hp - 210\text{ mm}}$ |
+| **Serrure 3 points pênes verticaux (T920005 et T920006)**| Simple Action standard | $\mathbf{T_1 = Hp - 261\text{ mm}}$ | $\mathbf{T_2 = Hv - Hp - 210\text{ mm}}$ |
 | **Serrure 3 points pênes verticaux** | Avec gâche seuil PMR **TPY6000** | $\mathbf{T_1 = Hp - 276\text{ mm}}$ | $\mathbf{T_2 = Hv - Hp - 210\text{ mm}}$ |
 | **Serrure 3 points modulaire (T920008)** | Pêne basculant à renvoi | $\mathbf{T_1 = Hp - 621\text{ mm}}$ | $\mathbf{T_2 = Hv - Hp - 554\text{ mm}}$ |
 | **Serrure multipoints modulaire (grande hauteur)**| Renvoi haut/bas additionnel | $\mathbf{Tx_1 = \text{variable}}$ | $\mathbf{Ty_2 = 100\text{ mm mini}}$ |

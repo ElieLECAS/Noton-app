@@ -212,6 +212,8 @@ async def ask(client, *, base_url: str, token: str, message: str, timeout_s: flo
     """Un tour de chat complet dans une conversation NEUVE (aucun historique), supprimée après.
 
     Chaque question est indépendante : c'est la condition pour comparer deux exécutions."""
+    import httpx
+
     headers = {"Authorization": f"Bearer {token}"}
     result: Dict[str, Any] = {"answer": "", "sources": [], "anomalies": [], "trace": {},
                               "thinking_chars": 0, "error": None, "first_token_s": None, "total_s": None}
@@ -269,6 +271,10 @@ async def ask(client, *, base_url: str, token: str, message: str, timeout_s: flo
                     continue
                 if event.get("done"):
                     result["trace"] = event.get("trace") or {}
+    except httpx.TransportError as exc:
+        # Un flux coupé laisse une réponse tronquée : on ne la note pas, le tour est rejoué.
+        result["error"] = f"flux coupé : {type(exc).__name__}"
+        result["coupure"] = True
     finally:
         result["answer"] = "".join(chunks)
         result["total_s"] = time.perf_counter() - t0
@@ -283,7 +289,7 @@ async def run_one(client, entry: Dict[str, Any], *, base_url: str, token: str, t
                   pages_by_file: Dict[str, List[str]]) -> Dict[str, Any]:
     out = await ask(client, base_url=base_url, token=token, message=entry["question"], timeout_s=timeout_s)
     answer = out["answer"]
-    if out["error"] and not answer:
+    if (out["error"] and not answer) or out.get("coupure"):
         score = {"verdict": "erreur", "trouves": [], "manquants": [], "interdits_presents": [], "regex": None}
     else:
         score = score_answer(entry.get("attendu") or {}, answer)
@@ -508,6 +514,13 @@ async def main_async(args: argparse.Namespace) -> int:
           f"— modèle {reglages['MODEL_FAST']} — wiki {reglages['wiki_pages']} pages")
     print(f"[eval] endpoint {args.base_url}")
 
+    out_dir = Path(args.out)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    stamp = time.strftime("%Y%m%d-%H%M%S")
+    path = out_dir / f"generation_wiki_{args.label}_{stamp}.json"
+    # Écrit après chaque tour : une mesure d'une heure ne se perd plus sur une coupure.
+    partiel = path.with_suffix(".partiel.json")
+
     results: List[Dict[str, Any]] = []
     all_runs: Dict[str, List[Dict[str, Any]]] = {}
     async with httpx.AsyncClient(limits=httpx.Limits(max_connections=max(1, args.concurrency))) as client:
@@ -540,14 +553,12 @@ async def main_async(args: argparse.Namespace) -> int:
                 print(f"  {marks.get(res['verdict'], '?  ')} [{run_no}] {res['id']:<9} {res['verdict']:<14} "
                       f"doc={'oui' if res['doc_cite'] else 'non'} {cache}{res['total_s']}s  "
                       f"{(res['answer'] or res['error'] or '')[:66].strip()}", flush=True)
+                partiel.write_text(json.dumps({"label": args.label, "tous_les_essais": all_runs},
+                                              ensure_ascii=False, indent=1), encoding="utf-8")
             done.sort(key=lambda r: [e["id"] for e in entries].index(r["id"]))
             if run_no == 1:
                 results = list(done)
 
-    out_dir = Path(args.out)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    stamp = time.strftime("%Y%m%d-%H%M%S")
-    path = out_dir / f"generation_wiki_{args.label}_{stamp}.json"
     report = {
         "label": args.label, "golden": str(golden_path), "date": stamp, "repeat": args.repeat,
         "reglages": reglages, "agregat": aggregate(results),
@@ -556,6 +567,7 @@ async def main_async(args: argparse.Namespace) -> int:
         "chemin": str(path),
     }
     path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    partiel.unlink(missing_ok=True)
     print_report(report)
     return 0
 

@@ -2,7 +2,7 @@
 type: Procédure
 title: Porte d'entrée du système 70
 description: La fabrication de la porte d'entrée du système 70 Plateforme sur seuil aluminium — ouvrants 2415 et 2416 et leurs renforts, dimensions maximales d'ouvrant en teinté masse et en plaxé, inserts de soudure 9287 et outil T038, porte d'entrée avec fixe latéral sur élargisseur 0303, et porte d'entrée à ouverture extérieure, avec leurs coupes cotées.
-tags: [systeme-70, e-volution, profine, porte-d-entree, 2415, 2416, 0303, 9287, t038, v003, v154, v290, v045, seuil, fixe-lateral, ouverture-exterieure, atelier]
+tags: [systeme-70, e-volution, profine, porte-d-entree, seuil, fixe-lateral, ouverture-exterieure, atelier]
 systeme: 70
 fournisseur: KÖMMERLING
 usage: [atelier, chiffrage]

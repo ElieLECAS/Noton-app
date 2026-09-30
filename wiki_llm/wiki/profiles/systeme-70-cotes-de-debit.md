@@ -169,7 +169,7 @@ fixe, renfort, meneau) ne sont pas données — entrée **VER-85** du registre
 [Informations à vérifier](/anomalies/informations-a-verifier.md).
 
 Les cotes des profilés eux-mêmes (largeurs, ailes, chambres) sont dans
-[Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md#cotes-des-dormants).
+[Profilés et renforts du système 70](/profiles/systeme-70-dormants.md#cotes-des-dormants).
 
 # Cotes de débit des meneaux et traverses
 
@@ -373,7 +373,7 @@ dimension extérieure d'ouvrant obtenue au tableau précédent.
 Le battement 0140 se débite à DEO − 72 mm ; tous les battements extérieurs des autres planches à
 DEO − 70 mm et tous les battements intérieurs à DEO − 12 mm. Les planches ne donnent ni le débit
 d'un renfort de battement ni d'embout. Le registre 2.4.3 du même manuel donne d'autres débits (battement 0140 à DFO − 32 mm, 1578 à DFO − 35 mm, battement intérieur à DEO − 6 mm) : la contradiction n'est pas arbitrée (**INC-153**). Les profilés battements sont décrits dans
-[Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md#cotes-des-battements),
+[Profilés et renforts du système 70](/profiles/systeme-70-battements.md#cotes-des-battements),
 leur mise en œuvre dans [Traitement du battement du système 70](/procedures/traitement-du-battement-systeme-70.md).
 
 # Cotes de débit des plans e.VOLUTION de 2008

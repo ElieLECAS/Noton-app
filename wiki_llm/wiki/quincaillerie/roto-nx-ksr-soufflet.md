@@ -2,7 +2,7 @@
 type: Quincaillerie
 title: Configurations Roto NX KSR — ouvrant à soufflet
 description: La quincaillerie et le positionnement du compas et des gâches de l'ouvrant à soufflet Roto NX KSR, avec et sans renvoi d'angle — crémone verrou poignée milieu, paumelle OF, compas soufflet et verrouilleur médian vertical.
-tags: [roto, roto-nx, ksr, soufflet, quincaillerie, champs-application, paumelle]
+tags: [roto, roto-nx, ksr, soufflet, quincaillerie, champ-application, paumelle]
 systeme: Roto NX
 fournisseur: ROTO
 usage: atelier

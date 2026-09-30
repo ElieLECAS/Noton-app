@@ -2,7 +2,7 @@
 type: Procédure
 title: Surfaces des profilés profine, collage, étanchéité, nettoyage et aluminium laqué
 description: Les colles de référence profine (C008, C009, C004, C005, C120, polymère MS), le collage à froid à la colle PVC, la préparation des surfaces, les mastics admis, les nettoyants des profilés blancs et plaxés, et la commande, la manipulation, le montage, le nettoyage et la réparation des profilés aluminium laqués livrés par profine.
-tags: [profine, colle, collage, c008, c009, c004, c005, c120, korapop, silicone, nettoyage, koraclean, c002, aluminium-laque, pre-anodisation, corrosion-filiforme, qualicoat, gsb, atelier]
+tags: [profine, colle, collage, korapop, silicone, nettoyage, koraclean, aluminium-laque, pre-anodisation, corrosion-filiforme, qualicoat, gsb, atelier]
 systeme: [70, 76]
 fournisseur: KÖMMERLING
 usage: [atelier, sav]
@@ -27,7 +27,7 @@ commun aux systèmes 70 et 76 : quelles colles employer sur les profilés PVC et
 quels mastics sont admis, comment nettoyer les surfaces des profilés en atelier, et comment
 commander, manipuler, monter, nettoyer et réparer les profilés aluminium laqués que livre profine
 (les capotages, par exemple) [1 p. 44-48]. Les références suivies d'un astérisque sont des
-articles du programme de livraison profine.
+articles du programme de livraison profine. Chez PROFERM, le système 76 est celui de la fenêtre PERFORM76 ([PERFORM](/gammes/perform.md)) ; aucun document PROFERM ne rattache le système 70 à une gamme (**VER-28**).
 
 # Conditions et interdictions
 

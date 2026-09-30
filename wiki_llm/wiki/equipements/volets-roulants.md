@@ -3,7 +3,8 @@ type: Équipement
 title: Volets roulants
 description: Volets roulants intégrés PROFERM, hauteurs de coffre, technologie brevetée GoodNight et motorisations SOMFY.
 tags: [volet-roulant, somfy, goodnight, domotique, tahoma]
-fournisseur: SOMFY
+systeme: [Chrono One, Chrono PSE², Mono VI, Bloc LX, TRADI]
+fournisseur: [SOPROFEN, SOMFY]
 usage: chiffrage
 status: stable
 sources:

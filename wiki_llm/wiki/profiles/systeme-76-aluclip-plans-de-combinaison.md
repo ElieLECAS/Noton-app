@@ -32,7 +32,7 @@ un cadre vu de l'intérieur, **où passe la coupe** (deux flèches sur le trait 
 chaque coupe, un tableau donne le **capot alu**, le profilé et les **renforts** admis, avec la
 **valeur IW** (inertie au vent du renfort, en cm⁴) ; le profilé et le renfort marqués d'un
 astérisque sont ceux qui sont dessinés dans la coupe (« * Profilés représentés dans les
-coupes »). Les valeurs IW sont écrites avec un point décimal sur la planche [1 p. 313-323].
+coupes »). Les valeurs IW sont écrites avec un point décimal sur la planche [1 p. 313-323]. Chez PROFERM, le système 76 est celui de la fenêtre PERFORM76 ([PERFORM](/gammes/perform.md)).
 
 Les plans de la même fenêtre sans capot sont dans
 [Types d'ouverture et plans de combinaison du système 76](/profiles/systeme-76-plans-de-combinaison.md) ;

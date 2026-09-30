@@ -2,7 +2,7 @@
 type: Profilé
 title: Profilés dormants et ouvrants ASKEY Frappe 65 Ouvrant Caché
 description: Nomenclatures, cotes d'atelier, inerties et compatibilités des profilés aluminium dormants, ouvrants cachés, traverses et battements de la gamme Frappe 65 OC ASKEY.
-tags: [profilé, aluminium, frappe, ouvrant-cache, askey, dormant, ouvrant, battement]
+tags: [profile, aluminium, frappe, ouvrant-cache, askey, dormant, ouvrant, battement]
 gamme: Frappe 65 Ouvrant Caché
 fournisseur: ASKEY
 usage: atelier

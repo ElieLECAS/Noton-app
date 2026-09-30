@@ -2,7 +2,7 @@
 type: Procédure
 title: Porte-fenêtre avec fixe latéral du système 76 Advanced
 description: La fabrication de la porte-fenêtre à ouvrant 76281 avec fixe latéral sur seuil filant A076 / A077 ou A075 du système 76 Advanced, avec la traverse basse fixe 76171 assemblée par la pièce J156, ses cotes de débit, ses contours de fraisage, ses perçages et son montage bas au compribande.
-tags: [systeme-76-advanced, profine, joint-central, porte-fenetre, fixe-lateral, seuil-filant, a076, a077, a075, j156, compribande, fraisage, atelier]
+tags: [systeme-76-advanced, profine, joint-central, porte-fenetre, fixe-lateral, seuil-filant, compribande, fraisage, atelier]
 systeme: 76
 fournisseur: KÖMMERLING
 usage: atelier

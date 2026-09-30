@@ -2,7 +2,7 @@
 type: Document source
 title: Catalogue de conception Technal LUMEAL GA
 description: Catalogue technique officiel de conception générale Technal pour la gamme de coulissants minimaux à ouvrant caché LUMEAL GA (Réf. 5156.007 - 01/2021, 94 pages).
-tags: [technal, lumeal, lumeal-ga, coulissant, ouvrant-cache, conception, profilés, inertie, seuil-pmr, rc3]
+tags: [technal, lumeal, lumeal-ga, coulissant, ouvrant-cache, conception, profile, inertie, seuil-pmr, rc3]
 gamme: LUMINE
 systeme: LUMEAL GA
 fournisseur: TECHNAL
@@ -43,7 +43,7 @@ La pagination du catalogue comprend 94 pages (88 pages numérotées + pages de g
 | 18-20 | Prises de volume pour vitrages 24 à 28 mm et 29 à 32 mm sur ouvrants et fixes, joints portefeuille EPDM à solin réduit (repères couleur rouge à rose) | à faire | [Dormants et ouvrants LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md) |
 | 21-39 | Applications détaillées et nomenclatures complètes : fenêtre 2 vtx, PF 2 vtx, PF 2 vtx retard effraction RC3, PF 4 vtx 2 rails, PF 3 vtx 3 rails, PF 1 vtl + fixe, PF 2 vtx + fixe central, PF 2 vtx seuil PMR | à faire | [Cotes de débit LUMEAL GA](/profiles/lumeal-ga-cotes-de-debit.md), [Roulements et fermetures LUMEAL GA](/quincaillerie/lumeal-ga-roulements-et-fermetures.md) |
 | 40-41 | Options de profilés bas : option deux rails hauteur réduite (T141014 + T821008 + T401017) et option monorail hauteur réduite (T141013 + T821009 + T401018) | à faire | [Dormants et ouvrants LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md), [Cotes de débit LUMEAL GA](/profiles/lumeal-ga-cotes-de-debit.md) |
-| 42-50 | Quincaillerie : sélection des roulettes simples (50 kg), doubles (100 kg/roulette, 200 kg/vantail), triples inox (300 kg/vantail) avec cale TGA3817, poignées TGA3618/TGA3606/TGA6000, fermetures 1 à 3 points T621001-03, verrous T641002-06, serrure extérieure T621005, arrêt de vantail à clé TGY3622/23 | à faire | [Roulements et fermetures LUMEAL GA](/quincaillerie/lumeal-ga-roulements-et-fermetures.md) |
+| 42-50 | Quincaillerie : sélection des roulettes simples (50 kg), doubles (100 kg/roulette, 200 kg/vantail), triples inox (300 kg/vantail) avec cale TGA3817, poignées TGA3618/TGA3606/TGA6000, fermetures 1 à 3 points T621001-03, verrous T641002-06, serrure extérieure T621005, arrêt de vantail à clé TGY3622 et TGY3623 | à faire | [Roulements et fermetures LUMEAL GA](/quincaillerie/lumeal-ga-roulements-et-fermetures.md) |
 | 51-57 | Options techniques : traverses intermédiaires T141018 / T141009, débits des vitrages, option joint brosse T1311, retard à l'effraction RC3 (insert dormant TGA3614, renforts chicane TGA3703) | à faire | [Cotes de débit LUMEAL GA](/profiles/lumeal-ga-cotes-de-debit.md), [Roulements et fermetures LUMEAL GA](/quincaillerie/lumeal-ga-roulements-et-fermetures.md) |
 | 58-59 | Formules de déduction de largeur maximum de passage libre selon configuration (2 vantaux, 3 vantaux, 1 vantail + fixe) | à faire | [Cotes de débit LUMEAL GA](/profiles/lumeal-ga-cotes-de-debit.md) |
 | 60-63 | Environnement de pose : détails de seuil PMR T401028, bavettes T391006-07 et T591153-54, tapées 120 à 200 mm avec pattes TGY3725-30, principe de dormant caché | à faire | [Cotes de débit LUMEAL GA](/profiles/lumeal-ga-cotes-de-debit.md), [Fabrication et pose LUMEAL GA](/procedures/fabrication-et-pose-lumeal-ga.md) |
