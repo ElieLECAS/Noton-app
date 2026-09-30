@@ -1,0 +1,2201 @@
+===== PAGE 1 : /portes/collection-lumiere.md =====
+# Définition
+
+La collection **Lumière** rassemble des portes d'entrée « entièrement vitrées pour un maximum de
+luminosité », équipées d'un vitrage haute sécurité [1 p. 106]. Le vitrage occupe tout le panneau
+de la porte : c'est un **panneau verrier**, fabriqué par VERRISSIMA, dont le logo « Verrissima,
+l'art et la matière » ouvre la collection [1 p. 105] ; sa composition et sa résistance sont sur
+[Panneaux et monoblocs](/portes/panneaux-et-monoblocs.md), section *Le panneau verrier*. Les
+modèles sont rangés sous le bandeau « Panneau (alu & gamme TEXTURAL®) » : la porte Lumière est un
+panneau, posé dans un ouvrant (la partie mobile de la porte), et non un monobloc [1 p. 106-122].
+
+La collection Lumière est **réalisable dans les gammes [HYBRIDE](/gammes/hybride.md),
+[TEXTURAL](/gammes/textural.md) et [LUMINE](/gammes/lumine.md)** ; elle ne se fait pas en
+[PERFORM](/gammes/perform.md), et chaque modèle porte les trois pictogrammes vert, gris et bleu
+canard de ces gammes [1 p. 106-122]. Le panneau verrier du cahier technique ne porte que les pictogrammes
+LUMINE et TEXTURAL (**INC-41**, registre [Incohérences internes](/anomalies/incoherences-internes.md))
+[1 p. 147]. Ce que la marque annonce de la collection est sur
+[Arguments de vente des portes d'entrée](/commercial/portes-d-entree.md). La photo d'ouverture
+montre le modèle Esprit PS MA [1 p. 105].
+
+![Modèle Esprit PS MA, photo d'ouverture de la collection Lumière](/assets/portes/collection-lumiere/esprit-ps-ma-ouverture.png)
+
+(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 105)
+
+# Les trois traitements du verre
+
+Chaque motif de la collection existe en plusieurs traitements du verre, désignés par le suffixe
+du nom du modèle [1 p. 106] :
+
+| Suffixe | Nom du traitement | Ce que fait le traitement |
+| --- | --- | --- |
+| PS | Dépoli sable | Projection par action mécanique sous pression de corindon sur le vitrage ; de manière standard, le fond du vitrage est sablé et non le motif |
+| ML | Motif dépoli acide (Matelux light) | Vitrage dépoli acide mais non sablé, laissant apparaître le motif mais sans transparence |
+| PP | Impression numérique | Impression du décor avec une imprimante jet d'encre haut de gamme |
+
+(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 106)
+
+Le corindon est un abrasif minéral très dur ; le dépoli acide rend le verre translucide par
+attaque à l'acide. Un modèle « PS » a donc un fond translucide et un motif transparent, un modèle
+« ML » un motif visible sans aucune transparence. Les suffixes « MA » (Métal Art) et « CA »
+(Cristal Art) ajoutent une pièce d'inox ou de verre cristal gravée à la main, à un modèle PS ou,
+pour trois modèles MA, à une œuvre en impression numérique, voir ci-dessous.
+
+# Comment lire les tables
+
+Une ligne par modèle, dans l'ordre du catalogue. « Référence » est la référence imprimée
+(`Réf.`). « DIN » est le sens d'ouverture imprimé dans la légende, gauche ou droite, selon la
+norme DIN. « Vitrage » reprend la légende, dans l'ordre et les mots
+du catalogue : le **Warm Edge** est l'intercalaire isolant qui sépare les verres du vitrage
+isolant, ici noir ; « motif transparent » ou « pas de transparence » dit si l'on voit au travers
+du motif. « Luminosité » est la luminosité annoncée pour le modèle. « Gammes » liste les
+pictogrammes imprimés (HYBRIDE, LUMINE, TEXTURAL). « Coloris présenté » est la teinte de la photo,
+pas une restriction. « Prix » est l'indicateur relatif du catalogue, ★ à ★★★, du moins au plus
+élevé pour chaque modèle, panneau seul sans option [1 p. 106].
+
+# Modèles PS, ML et PP
+
+Sept motifs, ARPÈGE, PERSPECTIVE, HAUSSMANNIENNE 2, SYMBIOSE, HARMONIE, ANÉMONE et MILLENIUM, chacun sous son propre bandeau et décliné en PS, ML et PP (ANÉMONE en PS et PP seulement) ; tous sont annoncés à luminosité très forte [1 p. 107 à 113]. Les modèles photographiés posés sur une façade ou dans une pièce portent la mention « photo en situation ».
+
+| Modèle | Référence | DIN | Vitrage | Luminosité | Gammes | Coloris présenté | Prix | Photo |
+| --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| ARPÈGE PS | PS01PROF | Gauche | Dépoli sablé ; verre trempé ; Warm Edge noir ; motif transparent | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 7016 | ★★ | ![ARPÈGE PS](/assets/portes/collection-lumiere/arpege-ps.png) |
+| ARPÈGE ML | PS01MLPROF | Droite | Dépoli sablé sur vitrage dépoli acide ; Warm Edge noir ; motif dépoli acide, pas de transparence | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 9005 | ★★★ | ![ARPÈGE ML](/assets/portes/collection-lumiere/arpege-ml.png) |
+| ARPÈGE PP | PPU01PROF | Droite | Impression numérique gris anthracite sur vitrage dépoli acide ; verre trempé ; Warm Edge noir ; pas de transparence | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 7016 | ★★★ | ![ARPÈGE PP](/assets/portes/collection-lumiere/arpege-pp.png) |
+| PERSPECTIVE PS | PS02PROF | Gauche | Dépoli sablé ; verre trempé ; Warm Edge noir ; motif transparent | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 3000 | ★★ | ![PERSPECTIVE PS](/assets/portes/collection-lumiere/perspective-ps.png) |
+| PERSPECTIVE PP | PPU02PROF | Gauche | Impression numérique gris anthracite ; sur vitrage dépoli acide ; verre trempé ; Warm Edge noir ; pas de transparence | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 7016 | ★★★ | ![PERSPECTIVE PP](/assets/portes/collection-lumiere/perspective-pp.png) |
+| PERSPECTIVE ML | PS02MLPROF | Gauche | Dépoli sablé ; sur vitrage dépoli acide ; Warm Edge noir ; verre trempé ; motif dépoli acide, pas de transparence ; photo en situation | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 7016 | ★★★ | ![PERSPECTIVE ML](/assets/portes/collection-lumiere/perspective-ml.png) |
+| HAUSSMANNIENNE 2 PS | PS03PROF | Droite | Dépoli sablé ; verre trempé ; Warm Edge noir ; motif transparent | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 7016 | ★★ | ![HAUSSMANNIENNE 2 PS](/assets/portes/collection-lumiere/haussmannienne-2-ps.png) |
+| HAUSSMANNIENNE 2 ML | PS03MLPROF | Gauche | Dépoli sablé ; sur vitrage dépoli acide ; Warm Edge noir ; verre trempé ; motif dépoli acide, pas de transparence | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 5012 | ★★★ | ![HAUSSMANNIENNE 2 ML](/assets/portes/collection-lumiere/haussmannienne-2-ml.png) |
+| HAUSSMANNIENNE 2 PP | PPU03PROF | Gauche | Impression numérique gris anthracite ; sur vitrage dépoli acide ; verre trempé ; Warm Edge noir ; pas de transparence | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 7016 | ★★★ | ![HAUSSMANNIENNE 2 PP](/assets/portes/collection-lumiere/haussmannienne-2-pp.png) |
+| SYMBIOSE PS | PS04PROF | Gauche | Dépoli sablé ; verre trempé ; Warm Edge noir ; motif transparent | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 7016 | ★★ | ![SYMBIOSE PS](/assets/portes/collection-lumiere/symbiose-ps.png) |
+| SYMBIOSE PP | PPU04PROF | Gauche | Impression numérique gris anthracite ; sur vitrage dépoli acide ; verre trempé ; Warm Edge noir ; pas de transparence | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 7016 | ★★★ | ![SYMBIOSE PP](/assets/portes/collection-lumiere/symbiose-pp.png) |
+| SYMBIOSE ML | PS04MLPROF | Gauche | Dépoli sablé ; sur vitrage dépoli acide ; Warm Edge noir ; verre trempé ; motif dépoli acide, pas de transparence ; photo en situation | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL Gris SM | ★★★ | ![SYMBIOSE ML](/assets/portes/collection-lumiere/symbiose-ml.png) |
+| HARMONIE PS | PS05PROF | Droite | Dépoli sablé ; verre trempé ; Warm Edge noir ; motif transparent | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 5021 | ★★ | ![HARMONIE PS](/assets/portes/collection-lumiere/harmonie-ps.png) |
+| HARMONIE ML | PS05MLPROF | Gauche | Dépoli sablé ; sur vitrage dépoli acide ; Warm Edge noir ; verre trempé ; motif dépoli acide, pas de transparence | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 7016 | ★★★ | ![HARMONIE ML](/assets/portes/collection-lumiere/harmonie-ml.png) |
+| HARMONIE PP | PPU05PROF | Gauche | Impression numérique gris anthracite ; sur vitrage dépoli acide ; verre trempé ; Warm Edge noir ; pas de transparence ; photo en situation | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 7016 | ★★★ | ![HARMONIE PP](/assets/portes/collection-lumiere/harmonie-pp.png) |
+| ANÉMONE PS | PS06PROF | Gauche | Dépoli sablé ; verre trempé ; Warm Edge noir ; motif transparent ; deux photos | très forte | HYBRIDE, LUMINE, TEXTURAL | blanc cérusé intérieur | ★★ | ![ANÉMONE PS](/assets/portes/collection-lumiere/anemone-ps.png) |
+| ANÉMONE PP | PPU06PROF | Gauche | Impression numérique gris anthracite sur vitrage dépoli acide ; verre trempé ; Warm Edge noir ; pas de transparence ; photo en situation | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 9005 | ★★★ | ![ANÉMONE PP](/assets/portes/collection-lumiere/anemone-pp.png) |
+| MILLENIUM PP | PPU07PROF | Gauche | Impression numérique gris anthracite ; sur vitrage dépoli acide ; verre trempé ; Warm Edge noir ; pas de transparence | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 9016 | ★★★ | ![MILLENIUM PP](/assets/portes/collection-lumiere/millenium-pp.png) |
+| MILLENIUM ML | PS07MLPROF | Gauche | Dépoli sablé ; sur vitrage dépoli acide ; Warm Edge noir ; verre trempé ; motif dépoli acide, pas de transparence | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 7016 | ★★★ | ![MILLENIUM ML](/assets/portes/collection-lumiere/millenium-ml.png) |
+| MILLENIUM PS | PS07PROF | Droite | Dépoli sablé ; verre trempé ; Warm Edge noir ; motif transparent ; photo en situation | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 3022 | ★★ | ![MILLENIUM PS](/assets/portes/collection-lumiere/millenium-ps.png) |
+
+(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 107 à 113)
+
+La légende de l'ARPÈGE ML ne mentionne pas le verre trempé, que portent les légendes des six autres modèles ML [1 p. 107-113].
+
+# Métal Art, pièces d'inox gravées à la main
+
+Les modèles « PS MA », étiquetés « Métal Art », associent au vitrage dépoli sablé une pièce d'inox poli-miroir gravée à la main. Ils suivent la page titrée « Amandine Mangenot by Verrissima », qui présente l'artiste plasticienne et matiériste Amandine Mangenot et annonce « l'art de mettre en lumière un bijou en métal gravé main grâce à une création spécifique de panneaux graphiques » [1 p. 114] ; sa présentation est sur [Arguments de vente des portes d'entrée](/commercial/portes-d-entree.md). La colonne « Pièce d'art » reprend la ligne imprimée en gras dans la légende : nombre de pièces, dimensions en mm, nom du modèle de la pièce ; un `-` dit que la légende n'en porte pas. Chaque photo est accompagnée d'une vue de détail de la pièce, reliée à la porte par un pointillé et incluse dans l'image.
+
+| Modèle | Référence | DIN | Vitrage | Pièce d'art | Luminosité | Gammes | Coloris présenté | Prix | Photo |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| HAUSSMANNIENNE 2 PS MA | AMPSG03PROF | Droite | Dépoli sablé ; verre trempé ; Warm Edge noir ; motif transparent | 1x inox poli-miroir ø 100 mm, modèle DIAM gravé à la main | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 7016 | ★★ | ![HAUSSMANNIENNE 2 PS MA](/assets/portes/collection-lumiere/haussmannienne-2-ps-ma.png) |
+| ESPRIT PS MA | AMPS136PROF | Droite | Dépoli sablé ; verre trempé triple vitrage ; Warm Edge noir ; motif transparent ; photo en situation | ellipse inox poli-miroir 100 x 700 mm, modèle TOPAZ gravé à la main et inséré façon vitrail Tiffany | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 7016 | ★★★ | ![ESPRIT PS MA](/assets/portes/collection-lumiere/esprit-ps-ma.png) |
+| PERSPECTIVE PS MA | AMPSG01PROF | Gauche | Dépoli sablé ; verre trempé ; Warm Edge noir ; motif transparent | - | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 7016 | ★★★ | ![PERSPECTIVE PS MA](/assets/portes/collection-lumiere/perspective-ps-ma.png) |
+| OSMOSE PS MA | AMPSG14PROF | Droite | Dépoli sablé ; verre trempé ; Warm Edge noir ; motif transparent | 1x inox poli-miroir 150 x 150 mm, modèle ATRIA gravé à la main | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 7004 | ★★★ | ![OSMOSE PS MA](/assets/portes/collection-lumiere/osmose-ps-ma.png) |
+| ANÉMONE PS MA 1 | AMPSG06APROF | Droite | Dépoli sablé ; verre trempé ; Warm Edge noir ; motif transparent | 1x inox poli-miroir 60 x 60 mm, modèle ASCELLA gravé à la main | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 9005 | ★★ | ![ANÉMONE PS MA 1](/assets/portes/collection-lumiere/anemone-ps-ma-1.png) |
+| ANÉMONE PS MA 2 | AMPSG06BPROF | Droite | Dépoli sablé ; verre trempé ; Warm Edge noir ; motif transparent | 1x inox poli-miroir 150 x 150 mm, modèle ATRIA gravé à la main ; 1x inox poli-miroir ø 100 mm, modèle DIAM gravé à la main | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 9005 | ★★★ | ![ANÉMONE PS MA 2](/assets/portes/collection-lumiere/anemone-ps-ma-2.png) |
+
+(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 114 à 116)
+
+**L'inox poli-miroir, tout en ayant une surface brillante, comportera des micro-rayures inévitables** liées aux différents processus de fabrication des pièces et du vitrage isolant [1 p. 115]. Le PERSPECTIVE PS MA est présenté avec une vue de détail de sa pièce, mais sa légende ne porte pas de ligne de pièce [1 p. 115]. Le détail du médaillon DIAM du HAUSSMANNIENNE 2 PS MA est montré en deux vues : la pièce entière et un gros plan de sa gravure [1 p. 114].
+
+![Médaillon DIAM du HAUSSMANNIENNE 2 PS MA, pièce entière et gros plan de la gravure](/assets/portes/collection-lumiere/haussmannienne-2-ps-ma-detail.png)
+
+(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 114)
+
+# Cristal Art, pièces de verre cristal
+
+Les modèles « PS CA » associent au vitrage dépoli sablé une pièce en verre cristal ciselée main, sous l'étiquette « Cristal Art » [1 p. 117]. La colonne « Pièce d'art » se lit comme celle des modèles Métal Art.
+
+| Modèle | Référence | DIN | Vitrage | Pièce d'art | Luminosité | Gammes | Coloris présenté | Prix | Photo |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| RELAX PS CA | AMPSG100PROF | Droite | Dépoli sablé ; verre trempé ; Warm Edge noir ; motif transparent ; photo en situation | 1x Cristal Art 150 x 150 mm, modèle CURSA gravé à la main | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 7016 | ★★ | ![RELAX PS CA](/assets/portes/collection-lumiere/relax-ps-ca.png) |
+| SYMBIOSE PS CA | AMPSG104PROF | Gauche | Dépoli sablé ; verre trempé ; Warm Edge noir ; motif transparent | 1x Cristal Art 120 x 120 mm, modèle CLAVA gravé à la main | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 9016 | ★★ | ![SYMBIOSE PS CA](/assets/portes/collection-lumiere/symbiose-ps-ca.png) |
+| ARPÈGE PS CA | AMPSG101PROF | Gauche | Dépoli sablé ; verre trempé ; Warm Edge noir ; motif transparent | 1x Cristal Art 120 x 120 mm, modèle CLAVA gravé à la main | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 7000 | ★★ | ![ARPÈGE PS CA](/assets/portes/collection-lumiere/arpege-ps-ca.png) |
+| ANÉMONE PS CA | AMPSG106PROF | Droite | Dépoli sablé ; verre trempé ; Warm Edge noir ; motif transparent | 1x Cristal Art 120 x 120 mm, modèle CLAVA gravé à la main | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 9005 | ★★★ | ![ANÉMONE PS CA](/assets/portes/collection-lumiere/anemone-ps-ca.png) |
+
+(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 117 à 118)
+
+# Collection d'œuvres d'Amandine Mangenot
+
+Sept modèles suivent le titre « Collection d'œuvres d'Amandine Mangenot : l'association parfaite avec les textures intérieures de notre gamme TEXTURAL® » [1 p. 118] ; tous sont en impression numérique 100 %, sans transparence, à luminosité moyenne à faible [1 p. 119-121] : pour trois modèles, une vignette montre la face intérieure et nomme sa texture (colonne « Intérieur »). Les vingt-sept textures exclusives intérieures, dont les parcloses sont contretypées ou laquées dans le RAL s'approchant de la texture choisie, sont celles de la table *Textures exclusives TEXTURAL des portes d'entrée* de [Coloris des portes d'entrée](/coloris/coloris-portes-entree.md), reproduites avec les mêmes teintes de parclose [1 p. 13, 118].
+
+| Modèle | Référence | DIN | Vitrage | Intérieur | Luminosité | Gammes | Coloris présenté | Prix | Photo |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| PASIPHAE | AMOEU05PROF | Gauche | Impression numérique 100 % ; verre trempé ; Warm Edge noir ; pas de transparence ; photo en situation | gris écaillé | moyenne à faible | HYBRIDE, LUMINE, TEXTURAL | Gris écaillé intérieur | ★★★ | ![PASIPHAE](/assets/portes/collection-lumiere/pasiphae.png) |
+| AMALTHE | AMOEU07PROF | Droite | Impression numérique 100 % ; verre trempé ; Warm Edge noir ; pas de transparence | cuir noir | moyenne à faible | HYBRIDE, LUMINE, TEXTURAL | Cuir noir intérieur | ★★★ | ![AMALTHE](/assets/portes/collection-lumiere/amalthe.png) |
+| ANANKE | AMOEU51PROF | Droite | Impression numérique 100 % ; verre trempé ; Warm Edge noir ; pas de transparence | carbone gris clair | moyenne à faible | HYBRIDE, LUMINE, TEXTURAL | Carbone gris clair intérieur | ★★★ | ![ANANKE](/assets/portes/collection-lumiere/ananke.png) |
+| ADRASTÉE | AMOEU01NBPROF | Droite | Impression numérique 100 % ; verre trempé ; Warm Edge noir ; pas de transparence | - | moyenne à faible | HYBRIDE, LUMINE, TEXTURAL | RAL 9005 | ★★★ | ![ADRASTÉE](/assets/portes/collection-lumiere/adrastee.png) |
+| THÉBÉ | AMOEU07PROF | Droite | Impression numérique 100 % ; verre trempé ; Warm Edge noir ; pas de transparence | - | moyenne à faible | HYBRIDE, LUMINE, TEXTURAL | RAL 7016 | ★★★ | ![THÉBÉ](/assets/portes/collection-lumiere/thebe.png) |
+| HIMALIA | AMOEU04PROF | Gauche | Impression numérique 100 % (œuvre et effet dépoli) ; verre trempé ; Warm Edge noir ; pas de transparence | - | moyenne à faible | HYBRIDE, LUMINE, TEXTURAL | RAL 9005 | ★★★ | ![HIMALIA](/assets/portes/collection-lumiere/himalia.png) |
+| SYNOPE | AMOEU01QPROF | Droite | Impression numérique 100 % ; verre trempé ; Warm Edge noir ; pas de transparence ; photo en situation | - | moyenne à faible | HYBRIDE, LUMINE, TEXTURAL | RAL 9005 | ★★★ | ![SYNOPE](/assets/portes/collection-lumiere/synope.png) |
+
+(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 119 à 121)
+
+**AMALTHE et THÉBÉ portent la même référence AMOEU07PROF** alors que leurs œuvres diffèrent [1 p. 119, 120] (**VER-41**, registre [Informations à vérifier](/anomalies/informations-a-verifier.md)).
+
+# Œuvres imprimées avec pièce Métal Art
+
+Trois modèles « MA » associent une œuvre en impression numérique à une pièce Métal Art gravée à la main, entourée d'un filet transparent ; ils sont à luminosité moyenne à faible et portent l'étiquette « Métal Art » [1 p. 121-122]. Le SYMBIOSE MA et l'ARPÈGE MA partagent leur nom avec des motifs PS de la collection (SYMBIOSE, ARPÈGE) ; leurs références et leurs légendes sont distinctes. La colonne « Pièce d'art » se lit comme celle des modèles Métal Art ; chaque photo inclut la vue de détail de la pièce.
+
+| Modèle | Référence | DIN | Vitrage | Pièce d'art | Luminosité | Gammes | Coloris présenté | Prix | Photo |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| SYMBIOSE MA | AMART04PROF | Gauche | Impression numérique ; verre trempé ; Warm Edge noir ; filets transparents | 1x inox poli-miroir ø 100 mm, modèle DIAM gravé à la main | moyenne à faible | HYBRIDE, LUMINE, TEXTURAL | RAL 9005 | ★★★ | ![SYMBIOSE MA](/assets/portes/collection-lumiere/symbiose-ma.png) |
+| ARPÈGE MA | AMART01PROF | Droite | Impression numérique (œuvre et effet dépoli) ; verre trempé ; Warm Edge noir ; filet transparent (autour de la pièce en inox) | 1x inox poli-miroir 120 x 120 mm, modèle ALYA gravé à la main | moyenne à faible | HYBRIDE, LUMINE, TEXTURAL | RAL 9005 | ★★★ | ![ARPÈGE MA](/assets/portes/collection-lumiere/arpege-ma.png) |
+| MÉTIS MA | AMART50PROF | Droite | Impression numérique ; verre trempé ; Warm Edge noir ; filet transparent (autour de la pièce) ; photo en situation | 1x Métal Art ø 100 mm, modèle AME gravé à la main | moyenne à faible | HYBRIDE, LUMINE, TEXTURAL | RAL 9005 | ★★★ | ![MÉTIS MA](/assets/portes/collection-lumiere/metis-ma.png) |
+
+(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 121 à 122)
+
+# Numéro universel
+
+Le **numéro universel** est une plaque de numéro de maison en verre, proposée avec la
+collection Lumière et « universel pour toute porte » [1 p. 107]. Deux versions sont présentées :
+
+| Référence | Désignation imprimée | Dimensions (mm) | Photo |
+| --- | --- | --- | ---: |
+| PSNUM | Universel pour toute porte ; impression numérique 100 % ; numéro en gris anthracite ; effet dépoli ; verre feuilleté trempé | 200 x 200 x 8 | ![Numéro universel PSNUM](/assets/portes/collection-lumiere/numero-universel-psnum.png) |
+| AMNUM | Impression numérique 100 % ; œuvre et effet dépoli ; verre feuilleté trempé | 300 x 200 x 8 | ![Numéro universel AMNUM](/assets/portes/collection-lumiere/numero-universel-amnum.png) |
+
+(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 107, 120)
+
+Sous le titre « Le soucis du détail », à côté de la version AMNUM : « VERRISSIMA vous propose
+d'associer à votre panneau de porte, un élégant numéro d'habitation en verre 44/2 feuilleté trempé,
+monté sur entretoises en inox » [1 p. 120]. La notation 44/2 désigne un verre feuilleté de deux verres de
+4 mm assemblés par deux films intercalaires ; les entretoises sont les petites pièces qui tiennent la plaque à
+distance du support.
+
+# Vitrage haute sécurité SP510
+
+Le panneau verrier de la collection Lumière est un vitrage haute sécurité : **tous les panneaux
+de la collection Lumière sont équipés d'un vitrage SP510**, vitrage de protection préconisé par
+l'APSAD (Assemblée Plénière des Sociétés d'Assurances Dommages). Le degré de protection de ce
+vitrage est nettement supérieur au minimum que les assureurs préconisent pour les particuliers ; il
+répond à la protection souhaitée pour les locaux des artisans et commerçants et à la protection
+minimale souhaitée pour les locaux des bijoutiers détaillants [1 p. 121]. La composition du SP510,
+sa classe de résistance selon la norme EN 356 et le panneau verrier VERRISSIMA sont décrits sur
+[Panneaux et monoblocs](/portes/panneaux-et-monoblocs.md), section *Le panneau verrier*.
+
+# Citations
+
+[1] [Catalogue portes d'entrée PROFERM, édition mars 2024](raw/catalogue-portes-entree-2024-03.pdf), p. 105 à 122, 147
+
+# Voir aussi
+
+- [Panneaux et monoblocs](/portes/panneaux-et-monoblocs.md)
+- [Coloris des portes d'entrée](/coloris/coloris-portes-entree.md)
+- [HYBRIDE](/gammes/hybride.md)
+- [LUMINE](/gammes/lumine.md)
+- [TEXTURAL](/gammes/textural.md)
+- [Informations à vérifier](/anomalies/informations-a-verifier.md)
+- [Catalogue portes d'entrée PROFERM](/sources/catalogue-portes-entree.md)
+
+===== PAGE 2 : /quincaillerie/roto-nx-compas-et-paliers.md =====
+# Compas, paliers et pivots Roto NX
+
+# Lire les tableaux de compas du catalogue
+
+Le **compas** est la ferrure de l'angle haut de l'ouvrant ; le compas OF équipe un ouvrant à la
+française, le compas OB un oscillo-battant, dont il retient le vantail basculé en soufflet (voir le
+[glossaire](/reference/glossaire.md)). Dans le catalogue Roto NX PVC,
+le chapitre 6 « Compas » range ses pièces en tolérance de châssis fixe, têtière de compas (la
+longue ferrure plate vissée le long du haut de l'ouvrant), bras de compas, compas articulé à
+commande forcée, équerre de compas OF, bras de compas en feuillure, charnière en feuillure,
+paumelle de recouvrement, palier compas, broches de palier et caches, côté paumelles P et, pour
+une partie d'entre elles, côté paumelles Designo (BA 13) [1 p. 277].
+
+Les tableaux ont des **pictogrammes en en-tête de colonne**, définis dans la légende du catalogue
+([Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md))
+[1 p. 10-12]. Les tables de cette page reprennent la référence (N° de matériel) en première
+colonne, puis les colonnes dans l'ordre du catalogue, nommées d'après la légende : aération
+intégrée, blocage, LFF (largeur fond de feuillure d'ouvrant, plage en mm), longueur (mm), zone de
+recoupe (mm, longueur dont la pièce peut être raccourcie), taille (taille de compas, nombre
+imprimé sans unité), nombre de galets, type de goujon de verrouillage (galets E, P, V, voir
+[Roto NX](/quincaillerie/roto-nx.md)), système (système de profilé, voir
+[Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md)), traitement de
+surface, DIN gauche / droite. Comme sur les tableaux de crémones, les colonnes oui / non portent
+**J** ou **N**, reportés tels qu'imprimés (entrée **INC-288**). Une plage ou une valeur imprimée
+une seule fois pour un groupe de lignes (cellule fusionnée) est répétée ici sur chaque ligne.
+
+Au-dessus de chaque tableau, le catalogue dessine la pièce et les pictogrammes des types
+d'ouverture auxquels elle s'applique ; ils sont nommés d'après la p. 12 du catalogue.
+
+# Tolérance de châssis fixe
+
+La *tolérance de châssis fixe* est l'encombrement de la paumelle, côté paumelles, entre
+l'ouvrant et l'embrasure (le tableau de la maçonnerie) ; elle est donnée caches compris (voir le
+[glossaire](/reference/glossaire.md)) [1 p. 278].
+
+## Côté paumelles P
+
+Tolérance de châssis fixe pour 20 mm de largeur de recouvrement. La coupe horizontale montre le
+dormant en rose saumon posé contre la maçonnerie (hachurée à droite) et l'ouvrant en gris : [A] est
+la tolérance de châssis fixe, cotée sur le dessin entre l'ouvrant et la maçonnerie, [B]
+la hauteur de recouvrement, [C] l'espace extérieur, en profondeur de l'embrasure [1 p. 278].
+
+![Tolérance de châssis fixe, côté paumelles P, coupe](/assets/quincaillerie/roto-nx-catalogue/compas/tolerance-chassis-fixe-cote-p-coupe.png)
+
+Une ligne par poids d'ouvrant, cotes en mm [1 p. 278] :
+
+| Poids d'ouvrant (kg) | Angle d'ouverture | Tolérance de châssis fixe [A] (mm) | Hauteur de recouvrement [B] (mm) | Espace extérieur [C] (mm) |
+| --- | --- | --- | --- | --- |
+| 130 | env. 180° (note [3]) | ≥ 21,0 | ≥ 16 | 100 |
+| 150 | env. 150° (note [4]) | ≥ 26,5 | ≥ 16 | 100 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 278)
+
+Notes du tableau : [3] selon l'embrasure, l'angle d'ouverture peut être inférieur à 180° ; [4]
+selon l'embrasure, l'angle d'ouverture peut être inférieur à 150° [1 p. 278].
+
+**INFO.** Tolérance, caches compris. Angle d'ouverture jusqu'à 20 mm de hauteur de recouvrement
+[1 p. 278].
+
+Le manuel de montage KSR donne la même tolérance avec un angle d'ouverture d'environ 180° pour
+130 kg comme pour 150 kg, et appelle [C] et [D] les jeux en haut et en bas du vantail
+(entrée **CTR-118**) ; ses valeurs sont sur
+[Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md).
+
+**DANGER — Danger de mort par endommagement des composants du palier !** Des hauteurs de
+recouvrement importantes [B] ou des éléments de construction dans la zone de l'embrasure (comme
+les plinthes) peuvent générer des forces de levier trop élevées du côté paumelles. Cela peut
+endommager les composants du palier et entraîner la chute de l'ouvrant [1 p. 278].
+
+- Dans la zone libre [C], l'ouvrant ne doit pas toucher l'embrasure ou les éléments dans la zone
+  de l'embrasure.
+- Si la profondeur de l'embrasure est < 100 mm, vérifier l'utilisation du limiteur d'ouverture.
+
+**ATTENTION — Dommages matériels dus à l'endommagement des composants du palier !** Même texte et
+mêmes deux consignes que l'encadré DANGER [1 p. 278].
+
+### Vues de face, côté paumelles P
+
+Quatre vues de face : le vantail en gris dans le dormant rose saumon, côté paumelles à droite, une
+pièce dessinée en haut et une en bas de ce côté. Chaque vue porte la cote horizontale au droit de la
+pièce haute, la cote au droit de la pièce basse, la cote verticale sous le vantail et, sur les deux premières, une cote verticale
+« ≥ 10* » au-dessus de la pièce haute. L'astérisque renvoie à la note : **pour le démontage de la broche,
+laisser un espace d'au moins 10 mm jusqu'à l'embrasure** [1 p. 279].
+
+![Tolérance de châssis fixe, poids d'ouvrant 130 kg](/assets/quincaillerie/roto-nx-catalogue/compas/tolerance-chassis-fixe-cote-p-130-kg.png)
+
+![Tolérance de châssis fixe, poids d'ouvrant 150 kg](/assets/quincaillerie/roto-nx-catalogue/compas/tolerance-chassis-fixe-cote-p-150-kg.png)
+
+![Tolérance de châssis fixe, cintré, poids d'ouvrant 80 kg](/assets/quincaillerie/roto-nx-catalogue/compas/tolerance-chassis-fixe-cote-p-cintre.png)
+
+![Tolérance de châssis fixe, ferrure soufflet, poids d'ouvrant 80 kg](/assets/quincaillerie/roto-nx-catalogue/compas/tolerance-chassis-fixe-cote-p-soufflet.png)
+
+Cotes portées sur les vues, en mm ; « - » : cote non portée sur la vue [1 p. 279] :
+
+| Vue | Poids d'ouvrant (kg) | Au droit de la pièce haute (mm) | Au droit de la pièce basse (mm) | Sous le vantail (mm) | Au-dessus de la pièce haute (mm) |
+| --- | --- | --- | --- | --- | --- |
+| Rectangulaire | 130 | 21 | 19 | 8 | ≥ 10* |
+| Rectangulaire | 150 | 26,5 | 19 | 8 | ≥ 10* |
+| Cintré | 80 | 25 | 19 | 8 | - |
+| Ferrure soufflet | 80 | - | - | 23 | - |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 279)
+
+Sur la vue « Ferrure soufflet », deux pièces sont dessinées sous le vantail, le long du bas du
+dormant, et la seule cote est la cote verticale de 23 mm à gauche [1 p. 279].
+
+## Côté paumelles Designo (BA 13)
+
+Tolérance de châssis fixe (en mm) pour un angle d'ouverture de 90°. La coupe montre le dormant
+rose saumon et l'ouvrant gris côté paumelles Designo (BA 13) : [A] tolérance de châssis fixe, [B]
+hauteur de recouvrement, [C] largeur de recouvrement, [D] axe de ferrure [1 p. 280].
+
+![Tolérance de châssis fixe, côté paumelles Designo (BA 13), coupe](/assets/quincaillerie/roto-nx-catalogue/compas/tolerance-chassis-fixe-designo-coupe.png)
+
+Une ligne par combinaison de recouvrement, côté paumelles Designo (BA 13), cotes en mm
+[1 p. 280] :
+
+| Angle d'ouverture | Tolérance de châssis fixe [A] (mm) | Hauteur de recouvrement [B] (mm) | Largeur de recouvrement [C] (mm) | Axe de ferrure [D] (mm) |
+| --- | --- | --- | --- | --- |
+| 90° | 5,2 | 16 | 18 | 13 |
+| 90° | 7,6 | 20 | 18 | 13 |
+| 90° | 10,6 | 24 | 18 | 13 |
+| 90° | 4,9 | 16 | 20 | 13 |
+| 90° | 7,2 | 20 | 20 | 13 |
+| 90° | 9,9 | 24 | 20 | 13 |
+| 90° | 4,7 | 16 | 22 | 13 |
+| 90° | 6,8 | 20 | 22 | 13 |
+| 90° | 9,3 | 24 | 22 | 13 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 280)
+
+# Têtière de compas, côté paumelles P
+
+La têtière de compas est la longue ferrure plate vissée le long du haut de l'ouvrant, sur laquelle
+se monte le compas (voir le [glossaire](/reference/glossaire.md)) ; les tableaux la classent par
+niveau de sécurité et par largeur fond de feuillure (LFF) [1 p. 281-282].
+
+## Sécurité de base – CDR 1 N, côté paumelles P
+
+![Têtière de compas côté P, sécurité de base – CDR 1 N](/assets/quincaillerie/roto-nx-catalogue/compas/tetiere-compas-cote-p-securite-de-base-cdr-1-n.png)
+
+Types d'ouverture : fenêtre oscillo-battante ; fenêtre à la française / oscillo-battante à
+ouvrant semi-fixe. Une ligne par référence, cotes en mm [1 p. 281] :
+
+| N° de matériel | Aération intégrée | Blocage | LFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Taille | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | :---: | :---: | --- | ---: | ---: | ---: | :---: | :---: | --- |
+| 787345 | J | J | 290 – 410 | 300 | 120 | 150 | – | – | Roto Sil |
+| 787346 | J | J | 411 – 600 | 490 | 190 | 250 | – | – | Roto Sil |
+| 787347 | J | J | 601 – 800 | 690 | 200 | 350 | – | – | Roto Sil |
+| 787348 | J | J | 801 – 1000 | 890 | 200 | 500 | – | – | Roto Sil |
+| 788617 | J | J | 801 – 1000 | 890 | 200 | 500 | 1 | E | Roto Sil |
+| 787350 | J | J | 1001 – 1200 | 1090 | 200 | 500 | – | – | Roto Sil |
+| 787349 | J | J | 1001 – 1200 | 1090 | 200 | 500 | 1 | E | Roto Sil |
+| 787351 | J | J | 1201 – 1400 | 1290 | 200 | 500 | 1 | E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 281)
+
+**INFO.** Pour les LFF à partir de 1 400 mm, 2ème compas requis [1 p. 281].
+
+## Sécurité – CDR 2 / CDR 2 N, côté paumelles P
+
+![Têtière de compas côté P, sécurité – CDR 2 / CDR 2 N](/assets/quincaillerie/roto-nx-catalogue/compas/tetiere-compas-cote-p-cdr-2-cdr-2-n.png)
+
+Types d'ouverture : fenêtre oscillo-battante ; fenêtre à la française / oscillo-battante à
+ouvrant semi-fixe. Une ligne par référence, cotes en mm [1 p. 281] :
+
+| N° de matériel | Aération intégrée | Blocage | LFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Taille | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | :---: | :---: | --- | ---: | ---: | ---: | :---: | :---: | --- |
+| 787360 | J | J | 801 – 1000 | 890 | 200 | 500 | 1 | V | Roto Sil |
+| 787361 | J | J | 1001 – 1200 | 1090 | 200 | 500 | 1 | V | Roto Sil |
+| 787362 | J | J | 1201 – 1400 | 1290 | 200 | 500 | 1 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 281)
+
+## Sécurité – CDR 3, côté paumelles P
+
+![Têtière de compas côté P, sécurité – CDR 3](/assets/quincaillerie/roto-nx-catalogue/compas/tetiere-compas-cote-p-cdr-3.png)
+
+Types d'ouverture : fenêtre oscillo-battante ; fenêtre à la française / oscillo-battante à
+ouvrant semi-fixe. Une ligne, cotes en mm [1 p. 282] :
+
+| N° de matériel | Aération intégrée | Blocage | LFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Taille | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | :---: | :---: | --- | ---: | ---: | ---: | :---: | :---: | --- |
+| 787358 | J | J | 801 – 1000 | 890 | 200 | 350 | 1 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 282)
+
+**INFO.** Pour les LFF à partir de 1 001 mm, verrouilleur médian (200 mm, galet 1V) requis. En
+supplément pour les LFF à partir de 1 201 mm, 2ème compas requis [1 p. 282].
+
+## Vantail pivotant, côté paumelles P
+
+![Têtière de compas côté P, vantail pivotant](/assets/quincaillerie/roto-nx-catalogue/compas/tetiere-compas-cote-p-vantail-pivotant.png)
+
+Type d'ouverture : fenêtre à la française / oscillo-battante à ouvrant semi-fixe. La première
+colonne est la classe de sécurité ; il n'y a pas de colonne aération intégrée ni blocage. Une ligne
+par référence, cotes en mm [1 p. 282] :
+
+| N° de matériel | Classe de sécurité | LFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Taille | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | --- | ---: | ---: | ---: | :---: | :---: | --- |
+| 787366 | Sécurité de base | 290 – 410 | 300 | 120 | 150 | – | – | Roto Sil |
+| 787367 | Sécurité de base | 411 – 600 | 490 | 190 | 250 | – | – | Roto Sil |
+| 787368 | Sécurité de base | 601 – 800 | 690 | 200 | 350 | – | – | Roto Sil |
+| 787369 | Sécurité de base | 801 – 1000 | 890 | 200 | 500 | 1 | E | Roto Sil |
+| 787370 | Sécurité | 801 – 1000 | 890 | 200 | 500 | 1 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 282)
+
+**INFO.** « Pour les LVFF à partir de 1001 mm, allonge de crémone requise. » [1 p. 282] L'abréviation
+LVFF n'est pas dans la liste des abréviations du catalogue, qui ne connaît que LFF et HFF
+(entrée **INC-293**).
+
+# Têtière de compas, côté paumelles Designo (BA 13)
+
+## Sécurité de base, côté paumelles Designo
+
+![Têtière de compas Designo, sécurité de base](/assets/quincaillerie/roto-nx-catalogue/compas/tetiere-compas-designo-securite-de-base.png)
+
+Types d'ouverture : fenêtre oscillo-battante ; fenêtre ouvrant à la française ; fenêtre à la
+française / oscillo-battante à ouvrant semi-fixe. La colonne « Information » (pictogramme « i »)
+porte une précision par référence. Une ligne par référence, cotes en mm ; les deux premières
+lignes sont p. 282, la dernière en haut de la p. 283 [1 p. 282-283] :
+
+| N° de matériel | LFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Taille | Nombre de galets | Type de goujon de verrouillage | Information | Traitement de surface |
+| --- | --- | ---: | ---: | ---: | :---: | :---: | --- | --- |
+| 385393 | 330 – 600 | 490 | 170 | 250 | – | – | Sécurité de fin de course | Roto Sil |
+| 385394 | 601 – 800 | 690 | 200 | 350 | – | – | – | Roto Sil |
+| 385415 | 801 – 1000 | 890 | 200 | 500 | 1 | E | – | Roto Sil |
+| 385416 | 1001 – 1200 | 1090 | 200 | 500 | 1 | E | – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 282-283)
+
+**INFO.** Pour les LFF à partir de 1 201 mm, 2ème compas requis [1 p. 283].
+
+## Sécurité, côté paumelles Designo
+
+![Têtière de compas Designo, sécurité](/assets/quincaillerie/roto-nx-catalogue/compas/tetiere-compas-designo-securite.png)
+
+Types d'ouverture : fenêtre oscillo-battante ; fenêtre ouvrant à la française ; fenêtre à la
+française / oscillo-battante à ouvrant semi-fixe. Une ligne par référence, cotes en mm
+[1 p. 283] :
+
+| N° de matériel | LFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Taille | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | ---: | ---: | :---: | :---: | --- |
+| 450373 | 801 – 1000 | 890 | 200 | 500 | 1 | V | Roto Sil |
+| 450374 | 1001 – 1200 | 1090 | 200 | 500 | 1 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 283)
+
+**INFO.** Pour les LFF à partir de 1 201 mm, 2ème compas requis [1 p. 283].
+
+## Fenêtre OF, côté paumelles Designo : têtière de la crémone de semi-fixe
+
+Sous le titre « 6.2.2.3 Fenêtre OF », deux têtières dessinées avec leur crémone de semi-fixe (la
+crémone du vantail semi-fixe d'une fenêtre à deux vantaux, voir
+[Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)). Type d'ouverture : fenêtre à la
+française / oscillo-battante à ouvrant semi-fixe [1 p. 284].
+
+### Crémone de semi-fixe - standard
+
+![Têtière de compas Designo, fenêtre OF, crémone de semi-fixe standard](/assets/quincaillerie/roto-nx-catalogue/compas/tetiere-compas-designo-of-semi-fixe-standard.png)
+
+Une ligne par référence, cotes en mm [1 p. 284] :
+
+| N° de matériel | Classe de sécurité | LFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Taille | Nombre de galets | Type de goujon de verrouillage | Information | Traitement de surface |
+| --- | --- | --- | ---: | ---: | ---: | :---: | :---: | --- | --- |
+| 482571 | Sécurité | 430 – 510 | 400 | 80 | 250 | – | – | Course 18 mm | Roto Sil |
+| 491796 | Sécurité | 511 – 710 | 600 | 200 | 250 | – | – | Course 36 mm | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 284)
+
+**INFO.** Entre LFF 711 – 1 400 mm avec allonge de crémone [1 p. 284].
+
+### Crémone de semi-fixe - Plus
+
+![Têtière de compas Designo, fenêtre OF, crémone de semi-fixe Plus](/assets/quincaillerie/roto-nx-catalogue/compas/tetiere-compas-designo-of-semi-fixe-plus.png)
+
+Une ligne, cotes en mm [1 p. 284] :
+
+| N° de matériel | Classe de sécurité | LFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Taille | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | --- | ---: | ---: | ---: | :---: | :---: | --- |
+| 2003336 | Sécurité | 601 – 800 | 690 | 200 | 250 | – | – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 284)
+
+**INFO.** Entre LFF 801 – 1 400 mm avec allonge de crémone [1 p. 284].
+
+# Bras de compas, côté paumelles P
+
+Bras de compas côté paumelles P : le dessin montre le bras, sa longue partie plate et, à son
+extrémité droite, une paumelle. Il se commande par système de profilé, LFF, taille, finition et
+sens DIN (gauche / droite) [1 p. 285].
+
+## Standard, côté paumelles P
+
+![Bras de compas côté P, standard](/assets/quincaillerie/roto-nx-catalogue/compas/bras-compas-cote-p-standard.png)
+
+Types d'ouverture : fenêtre oscillo-battante ; fenêtre à la française / oscillo-battante à
+ouvrant semi-fixe. La colonne « Système » est le système de profilé Roto (jeu de feuillure /
+largeur de recouvrement - axe de ferrure, voir le [glossaire](/reference/glossaire.md)). Une ligne
+par référence, cotes en mm ; le tableau se poursuit p. 286 [1 p. 285] :
+
+| N° de matériel | Système | LFF (mm) | Taille | Aération intégrée | Traitement de surface | DIN |
+| --- | --- | --- | ---: | :---: | --- | --- |
+| 787217 | 12/18-9 | 290 – 410 | 150 | J | Roto Sil | Gauche |
+| 787218 | 12/18-9 | 290 – 410 | 150 | J | Roto Sil | Droite |
+| 788440 | 12/18-9 | 290 – 410 | 150 | J | Blanc | Gauche |
+| 788441 | 12/18-9 | 290 – 410 | 150 | J | Blanc | Droite |
+| 787219 | 12/18-9 | 411 – 600 | 250 | J | Roto Sil | Gauche |
+| 787220 | 12/18-9 | 411 – 600 | 250 | J | Roto Sil | Droite |
+| 788442 | 12/18-9 | 411 – 600 | 250 | J | Blanc | Gauche |
+| 788443 | 12/18-9 | 411 – 600 | 250 | J | Blanc | Droite |
+| 787221 | 12/18-9 | 601 – 800 | 350 | J | Roto Sil | Gauche |
+| 787222 | 12/18-9 | 601 – 800 | 350 | J | Roto Sil | Droite |
+| 788444 | 12/18-9 | 601 – 800 | 350 | J | Blanc | Gauche |
+| 788445 | 12/18-9 | 601 – 800 | 350 | J | Blanc | Droite |
+| 787223 | 12/18-9 | 801 – 1400 | 500 | J | Roto Sil | Gauche |
+| 787224 | 12/18-9 | 801 – 1400 | 500 | J | Roto Sil | Droite |
+| 788446 | 12/18-9 | 801 – 1400 | 500 | J | Blanc | Gauche |
+| 788447 | 12/18-9 | 801 – 1400 | 500 | J | Blanc | Droite |
+| 787225 | 12/20-9 | 290 – 410 | 150 | J | Roto Sil | Gauche |
+| 787226 | 12/20-9 | 290 – 410 | 150 | J | Roto Sil | Droite |
+| 788448 | 12/20-9 | 290 – 410 | 150 | J | Blanc | Gauche |
+| 788449 | 12/20-9 | 290 – 410 | 150 | J | Blanc | Droite |
+| 787227 | 12/20-9 | 411 – 600 | 250 | J | Roto Sil | Gauche |
+| 787228 | 12/20-9 | 411 – 600 | 250 | J | Roto Sil | Droite |
+| 788450 | 12/20-9 | 411 – 600 | 250 | J | Blanc | Gauche |
+| 788451 | 12/20-9 | 411 – 600 | 250 | J | Blanc | Droite |
+| 787229 | 12/20-9 | 601 – 800 | 350 | J | Roto Sil | Gauche |
+| 787230 | 12/20-9 | 601 – 800 | 350 | J | Roto Sil | Droite |
+| 788452 | 12/20-9 | 601 – 800 | 350 | J | Blanc | Gauche |
+| 788453 | 12/20-9 | 601 – 800 | 350 | J | Blanc | Droite |
+| 787231 | 12/20-9 | 801 – 1400 | 500 | J | Roto Sil | Gauche |
+| 787232 | 12/20-9 | 801 – 1400 | 500 | J | Roto Sil | Droite |
+| 788454 | 12/20-9 | 801 – 1400 | 500 | J | Blanc | Gauche |
+| 788455 | 12/20-9 | 801 – 1400 | 500 | J | Blanc | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 285)
+
+Suite du tableau des bras de compas standard côté paumelles P, systèmes à axe de ferrure 13 mm :
+système 12/20-13, en Roto Sil, blanc et titane [1 p. 286] :
+
+| N° de matériel | Système | LFF (mm) | Taille | Aération intégrée | Traitement de surface | DIN |
+| --- | --- | --- | ---: | :---: | --- | --- |
+| 787233 | 12/20-13 | 290 – 410 | 150 | J | Roto Sil | Gauche |
+| 787234 | 12/20-13 | 290 – 410 | 150 | J | Roto Sil | Droite |
+| 788456 | 12/20-13 | 290 – 410 | 150 | J | Blanc | Gauche |
+| 788457 | 12/20-13 | 290 – 410 | 150 | J | Blanc | Droite |
+| 795092 | 12/20-13 | 290 – 410 | 150 | J | Titane | Gauche |
+| 795093 | 12/20-13 | 290 – 410 | 150 | J | Titane | Droite |
+| 787235 | 12/20-13 | 411 – 600 | 250 | J | Roto Sil | Gauche |
+| 787236 | 12/20-13 | 411 – 600 | 250 | J | Roto Sil | Droite |
+| 788458 | 12/20-13 | 411 – 600 | 250 | J | Blanc | Gauche |
+| 788459 | 12/20-13 | 411 – 600 | 250 | J | Blanc | Droite |
+| 795094 | 12/20-13 | 411 – 600 | 250 | J | Titane | Gauche |
+| 795095 | 12/20-13 | 411 – 600 | 250 | J | Titane | Droite |
+| 787237 | 12/20-13 | 601 – 800 | 350 | J | Roto Sil | Gauche |
+| 787238 | 12/20-13 | 601 – 800 | 350 | J | Roto Sil | Droite |
+| 788460 | 12/20-13 | 601 – 800 | 350 | J | Blanc | Gauche |
+| 788461 | 12/20-13 | 601 – 800 | 350 | J | Blanc | Droite |
+| 795096 | 12/20-13 | 601 – 800 | 350 | J | Titane | Gauche |
+| 795097 | 12/20-13 | 601 – 800 | 350 | J | Titane | Droite |
+| 787239 | 12/20-13 | 801 – 1400 | 500 | J | Roto Sil | Gauche |
+| 787240 | 12/20-13 | 801 – 1400 | 500 | J | Roto Sil | Droite |
+| 788462 | 12/20-13 | 801 – 1400 | 500 | J | Blanc | Gauche |
+| 788463 | 12/20-13 | 801 – 1400 | 500 | J | Blanc | Droite |
+| 795098 | 12/20-13 | 801 – 1400 | 500 | J | Titane | Gauche |
+| 795099 | 12/20-13 | 801 – 1400 | 500 | J | Titane | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 286)
+
+Systèmes 12/21-13 et 12/22-13, en Roto Sil et blanc [1 p. 286] :
+
+| N° de matériel | Système | LFF (mm) | Taille | Aération intégrée | Traitement de surface | DIN |
+| --- | --- | --- | ---: | :---: | --- | --- |
+| 795132 | 12/21-13 | 290 – 410 | 150 | J | Roto Sil | Gauche |
+| 795133 | 12/21-13 | 290 – 410 | 150 | J | Roto Sil | Droite |
+| 817199 | 12/21-13 | 290 – 410 | 150 | J | Blanc | Gauche |
+| 817200 | 12/21-13 | 290 – 410 | 150 | J | Blanc | Droite |
+| 795134 | 12/21-13 | 411 – 600 | 250 | J | Roto Sil | Gauche |
+| 795135 | 12/21-13 | 411 – 600 | 250 | J | Roto Sil | Droite |
+| 817201 | 12/21-13 | 411 – 600 | 250 | J | Blanc | Gauche |
+| 817202 | 12/21-13 | 411 – 600 | 250 | J | Blanc | Droite |
+| 795136 | 12/21-13 | 601 – 800 | 350 | J | Roto Sil | Gauche |
+| 795137 | 12/21-13 | 601 – 800 | 350 | J | Roto Sil | Droite |
+| 817203 | 12/21-13 | 601 – 800 | 350 | J | Blanc | Gauche |
+| 817204 | 12/21-13 | 601 – 800 | 350 | J | Blanc | Droite |
+| 795138 | 12/21-13 | 801 – 1400 | 500 | J | Roto Sil | Gauche |
+| 795139 | 12/21-13 | 801 – 1400 | 500 | J | Roto Sil | Droite |
+| 817205 | 12/21-13 | 801 – 1400 | 500 | J | Blanc | Gauche |
+| 817206 | 12/21-13 | 801 – 1400 | 500 | J | Blanc | Droite |
+| 787241 | 12/22-13 | 290 – 410 | 150 | J | Roto Sil | Gauche |
+| 787242 | 12/22-13 | 290 – 410 | 150 | J | Roto Sil | Droite |
+| 788464 | 12/22-13 | 290 – 410 | 150 | J | Blanc | Gauche |
+| 788465 | 12/22-13 | 290 – 410 | 150 | J | Blanc | Droite |
+| 787243 | 12/22-13 | 411 – 600 | 250 | J | Roto Sil | Gauche |
+| 787244 | 12/22-13 | 411 – 600 | 250 | J | Roto Sil | Droite |
+| 788466 | 12/22-13 | 411 – 600 | 250 | J | Blanc | Gauche |
+| 788467 | 12/22-13 | 411 – 600 | 250 | J | Blanc | Droite |
+| 787245 | 12/22-13 | 601 – 800 | 350 | J | Roto Sil | Gauche |
+| 787246 | 12/22-13 | 601 – 800 | 350 | J | Roto Sil | Droite |
+| 788468 | 12/22-13 | 601 – 800 | 350 | J | Blanc | Gauche |
+| 788469 | 12/22-13 | 601 – 800 | 350 | J | Blanc | Droite |
+| 787247 | 12/22-13 | 801 – 1400 | 500 | J | Roto Sil | Gauche |
+| 787248 | 12/22-13 | 801 – 1400 | 500 | J | Roto Sil | Droite |
+| 788470 | 12/22-13 | 801 – 1400 | 500 | J | Blanc | Gauche |
+| 788471 | 12/22-13 | 801 – 1400 | 500 | J | Blanc | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 286)
+
+Sous le tableau : « Palier de compas adapté, voir → à partir de la page 306→ à partir de la
+page 306. » (renvoi imprimé deux fois) ; « Caches adaptés, voir → à partir de la page 311. »
+[1 p. 287].
+
+**INFO.** Pour les HFF < 500 mm, régler l'ouverture 80 mm (pour compas à partir de la taille
+250) [1 p. 287].
+
+## TiltFirst (TF), côté paumelles P
+
+Bras de compas de la ferrure TiltFirst, dont la composition est sur
+[Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md).
+
+![Bras de compas côté P, TiltFirst (TF)](/assets/quincaillerie/roto-nx-catalogue/compas/bras-compas-cote-p-tiltfirst.png)
+
+Types d'ouverture : fenêtre oscillo-battante ; fenêtre à la française / oscillo-battante à
+ouvrant semi-fixe. Colonne aération intégrée à **N** sur toutes les lignes. Systèmes 12/18-9,
+12/20-9 et 12/20-13, une ligne par référence, cotes en mm [1 p. 287] :
+
+| N° de matériel | Système | LFF (mm) | Taille | Aération intégrée | Traitement de surface | DIN |
+| --- | --- | --- | ---: | :---: | --- | --- |
+| 814684 | 12/18-9 | 290 – 410 | 150 | N | Roto Sil | Gauche |
+| 814695 | 12/18-9 | 290 – 410 | 150 | N | Roto Sil | Droite |
+| 814696 | 12/18-9 | 411 – 600 | 250 | N | Roto Sil | Gauche |
+| 814697 | 12/18-9 | 411 – 600 | 250 | N | Roto Sil | Droite |
+| 814698 | 12/18-9 | 601 – 800 | 350 | N | Roto Sil | Gauche |
+| 814699 | 12/18-9 | 601 – 800 | 350 | N | Roto Sil | Droite |
+| 814700 | 12/18-9 | 801 – 1400 | 500 | N | Roto Sil | Gauche |
+| 814701 | 12/18-9 | 801 – 1400 | 500 | N | Roto Sil | Droite |
+| 814703 | 12/20-9 | 290 – 410 | 150 | N | Roto Sil | Gauche |
+| 814704 | 12/20-9 | 290 – 410 | 150 | N | Roto Sil | Gauche |
+| 814705 | 12/20-9 | 411 – 600 | 250 | N | Roto Sil | Gauche |
+| 814706 | 12/20-9 | 411 – 600 | 250 | N | Roto Sil | Droite |
+| 814707 | 12/20-9 | 601 – 800 | 350 | N | Roto Sil | Gauche |
+| 814708 | 12/20-9 | 601 – 800 | 350 | N | Roto Sil | Droite |
+| 814709 | 12/20-9 | 801 – 1400 | 500 | N | Roto Sil | Gauche |
+| 814710 | 12/20-9 | 801 – 1400 | 500 | N | Roto Sil | Droite |
+| 814711 | 12/20-13 | 290 – 410 | 150 | N | Roto Sil | Gauche |
+| 814712 | 12/20-13 | 290 – 410 | 150 | N | Roto Sil | Droite |
+| 814727 | 12/20-13 | 290 – 410 | 150 | N | Blanc | Gauche |
+| 814728 | 12/20-13 | 290 – 410 | 150 | N | Blanc | Droite |
+| 814713 | 12/20-13 | 411 – 600 | 250 | N | Roto Sil | Gauche |
+| 814714 | 12/20-13 | 411 – 600 | 250 | N | Roto Sil | Droite |
+| 814729 | 12/20-13 | 411 – 600 | 250 | N | Blanc | Gauche |
+| 814730 | 12/20-13 | 411 – 600 | 250 | N | Blanc | Droite |
+| 814715 | 12/20-13 | 601 – 800 | 350 | N | Roto Sil | Gauche |
+| 814716 | 12/20-13 | 601 – 800 | 350 | N | Roto Sil | Droite |
+| 814731 | 12/20-13 | 601 – 800 | 350 | N | Blanc | Gauche |
+| 814732 | 12/20-13 | 601 – 800 | 350 | N | Blanc | Droite |
+| 814717 | 12/20-13 | 801 – 1400 | 500 | N | Roto Sil | Gauche |
+| 814718 | 12/20-13 | 801 – 1400 | 500 | N | Roto Sil | Droite |
+| 814733 | 12/20-13 | 801 – 1400 | 500 | N | Blanc | Gauche |
+| 814734 | 12/20-13 | 801 – 1400 | 500 | N | Blanc | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 287)
+
+Les deux références du système 12/20-9, LFF 290 – 410, sont toutes deux imprimées « Gauche »
+(814703 et 814704), là où chaque autre paire du tableau porte Gauche puis Droite (entrée
+**INC-294**).
+
+Systèmes 12/21-13 et 12/22-13 [1 p. 288] :
+
+| N° de matériel | Système | LFF (mm) | Taille | Aération intégrée | Traitement de surface | DIN |
+| --- | --- | --- | ---: | :---: | --- | --- |
+| 895923 | 12/21-13 | 290 – 410 | 150 | N | Roto Sil | Gauche |
+| 895924 | 12/21-13 | 290 – 410 | 150 | N | Roto Sil | Droite |
+| 895925 | 12/21-13 | 411 – 600 | 250 | N | Roto Sil | Gauche |
+| 895926 | 12/21-13 | 411 – 600 | 250 | N | Roto Sil | Droite |
+| 895927 | 12/21-13 | 601 – 800 | 350 | N | Roto Sil | Gauche |
+| 895928 | 12/21-13 | 601 – 800 | 350 | N | Roto Sil | Droite |
+| 895929 | 12/21-13 | 801 – 1400 | 500 | N | Roto Sil | Gauche |
+| 895930 | 12/21-13 | 801 – 1400 | 500 | N | Roto Sil | Droite |
+| 814719 | 12/22-13 | 290 – 410 | 150 | N | Roto Sil | Gauche |
+| 814720 | 12/22-13 | 290 – 410 | 150 | N | Roto Sil | Droite |
+| 814721 | 12/22-13 | 411 – 600 | 250 | N | Roto Sil | Gauche |
+| 814722 | 12/22-13 | 411 – 600 | 250 | N | Roto Sil | Droite |
+| 814723 | 12/22-13 | 601 – 800 | 350 | N | Roto Sil | Gauche |
+| 814724 | 12/22-13 | 601 – 800 | 350 | N | Roto Sil | Droite |
+| 814725 | 12/22-13 | 801 – 1400 | 500 | N | Roto Sil | Gauche |
+| 814726 | 12/22-13 | 801 – 1400 | 500 | N | Roto Sil | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 288)
+
+Sous le tableau, les mêmes renvois que pour le bras standard : palier de compas adapté « à partir
+de la page 306 » (imprimé deux fois), caches adaptés « à partir de la page 311 » ; **INFO** : pour
+les HFF < 500 mm, régler l'ouverture 80 mm (pour compas à partir de la taille 250) [1 p. 288].
+
+## Fenêtre inclinée (SF), côté paumelles P
+
+![Bras de compas côté P, fenêtre inclinée (SF)](/assets/quincaillerie/roto-nx-catalogue/compas/bras-compas-cote-p-fenetre-inclinee.png)
+
+Type d'ouverture : fenêtre inclinée oscillo-battante. Systèmes 12/18-9 et 12/20-9, une ligne par
+référence, cotes en mm [1 p. 288] :
+
+| N° de matériel | Système | LFF (mm) | Taille | Aération intégrée | Traitement de surface | DIN |
+| --- | --- | --- | ---: | :---: | --- | --- |
+| 795148 | 12/18-9 | 290 – 410 | 150 | J | Roto Sil | Gauche |
+| 795149 | 12/18-9 | 290 – 410 | 150 | J | Roto Sil | Droite |
+| 795150 | 12/18-9 | 411 – 600 | 250 | J | Roto Sil | Gauche |
+| 795151 | 12/18-9 | 411 – 600 | 250 | J | Roto Sil | Droite |
+| 795152 | 12/18-9 | 601 – 800 | 350 | J | Roto Sil | Gauche |
+| 795153 | 12/18-9 | 601 – 800 | 350 | J | Roto Sil | Droite |
+| 795154 | 12/18-9 | 801 – 1400 | 500 | J | Roto Sil | Gauche |
+| 795155 | 12/18-9 | 801 – 1400 | 500 | J | Roto Sil | Droite |
+| 795156 | 12/20-9 | 290 – 410 | 150 | J | Roto Sil | Gauche |
+| 795157 | 12/20-9 | 290 – 410 | 150 | J | Roto Sil | Droite |
+| 795158 | 12/20-9 | 411 – 600 | 250 | J | Roto Sil | Gauche |
+| 795159 | 12/20-9 | 411 – 600 | 250 | J | Roto Sil | Droite |
+| 795160 | 12/20-9 | 601 – 800 | 350 | J | Roto Sil | Gauche |
+| 795161 | 12/20-9 | 601 – 800 | 350 | J | Roto Sil | Droite |
+| 795162 | 12/20-9 | 801 – 1400 | 500 | J | Roto Sil | Gauche |
+| 795163 | 12/20-9 | 801 – 1400 | 500 | J | Roto Sil | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 288)
+
+Systèmes 12/20-13 (Roto Sil et blanc) et 12/22-13 (Roto Sil) [1 p. 289] :
+
+| N° de matériel | Système | LFF (mm) | Taille | Aération intégrée | Traitement de surface | DIN |
+| --- | --- | --- | ---: | :---: | --- | --- |
+| 795164 | 12/20-13 | 290 – 410 | 150 | J | Roto Sil | Gauche |
+| 795165 | 12/20-13 | 290 – 410 | 150 | J | Roto Sil | Droite |
+| 795180 | 12/20-13 | 290 – 410 | 150 | J | Blanc | Gauche |
+| 795181 | 12/20-13 | 290 – 410 | 150 | J | Blanc | Droite |
+| 795166 | 12/20-13 | 411 – 600 | 250 | J | Roto Sil | Gauche |
+| 795167 | 12/20-13 | 411 – 600 | 250 | J | Roto Sil | Droite |
+| 795182 | 12/20-13 | 411 – 600 | 250 | J | Blanc | Gauche |
+| 795183 | 12/20-13 | 411 – 600 | 250 | J | Blanc | Droite |
+| 795168 | 12/20-13 | 601 – 800 | 350 | J | Roto Sil | Gauche |
+| 795169 | 12/20-13 | 601 – 800 | 350 | J | Roto Sil | Droite |
+| 795184 | 12/20-13 | 601 – 800 | 350 | J | Blanc | Gauche |
+| 795185 | 12/20-13 | 601 – 800 | 350 | J | Blanc | Droite |
+| 795170 | 12/20-13 | 801 – 1400 | 500 | J | Roto Sil | Gauche |
+| 795171 | 12/20-13 | 801 – 1400 | 500 | J | Roto Sil | Droite |
+| 795186 | 12/20-13 | 801 – 1400 | 500 | J | Blanc | Gauche |
+| 795187 | 12/20-13 | 801 – 1400 | 500 | J | Blanc | Droite |
+| 795188 | 12/22-13 | 290 – 410 | 150 | J | Roto Sil | Gauche |
+| 795189 | 12/22-13 | 290 – 410 | 150 | J | Roto Sil | Droite |
+| 795190 | 12/22-13 | 411 – 600 | 250 | J | Roto Sil | Gauche |
+| 795191 | 12/22-13 | 411 – 600 | 250 | J | Roto Sil | Droite |
+| 795192 | 12/22-13 | 601 – 800 | 350 | J | Roto Sil | Gauche |
+| 795193 | 12/22-13 | 601 – 800 | 350 | J | Roto Sil | Droite |
+| 795194 | 12/22-13 | 801 – 1400 | 500 | J | Roto Sil | Gauche |
+| 795195 | 12/22-13 | 801 – 1400 | 500 | J | Roto Sil | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 289)
+
+Sous le tableau : palier de compas adapté « à partir de la page 306 » (imprimé deux fois), caches
+adaptés « à partir de la page 311 », « Pièce d'extrémité, voir → à partir de la page 424. » ;
+**INFO** : pour les HFF < 500 mm, régler l'ouverture 80 mm (pour compas à partir de la taille 250)
+[1 p. 289].
+
+## Cintré, côté paumelles P
+
+![Bras de compas côté P, cintré](/assets/quincaillerie/roto-nx-catalogue/compas/bras-compas-cote-p-cintre.png)
+
+Types d'ouverture : fenêtre plein cintre oscillo-battante ; fenêtre inclinée oscillo-battante. Les
+colonnes sont ici système, nombre de galets, type de goujon de verrouillage, traitement de
+surface et DIN gauche / droite, cette dernière à « – » sur toutes les lignes. Une ligne par
+référence [1 p. 290] :
+
+| N° de matériel | Système | Nombre de galets | Type de goujon de verrouillage | Traitement de surface | DIN |
+| --- | --- | :---: | :---: | --- | --- |
+| 896116 | 12/18-9 | 1 | V | Roto Sil | – |
+| 896117 | 12/20-9 | 1 | V | Roto Sil | – |
+| 896118 | 12/20-13 | 1 | V | Roto Sil | – |
+| 896120 | 12/20-13 | 1 | V | Blanc | – |
+| 2007009 | 12/20-13 | 1 | V | Titane | – |
+| 896119 | 12/22-13 | 1 | V | Roto Sil | – |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 290)
+
+Sous le tableau : « Palier de compas adapté, voir → à partir de la page 308→ à partir de la
+page 306. » (deux pages différentes dans le même renvoi, entrée **INC-296**) ; « Caches adaptés,
+voir → à partir de la page 311. » [1 p. 290].
+
+**INFO.** Ensemble cintré comprenant un bras de compas pour cintré, un support et une compression
+de feuillure [1 p. 290].
+
+**INFO.** Pour les systèmes 12/18-9, 12/20-9 et 12/22-13, en fonction du système de profils, il
+peut s'avérer nécessaire de couper le joint d'ouvrant dans la zone de la paumelle de compas
+[1 p. 290].
+
+# Bras de compas, côté paumelles Designo (BA 13)
+
+Côté paumelles Designo (BA 13), le tableau des bras de compas n'a pas de colonne système Roto
+(12/20-13…) ni LFF : sa première colonne est le **système de profil** (pictogramme « système de
+profil », profil en perspective, p. 11), une liste de noms de profilés du marché ; chaque bras
+existe en taille 250, 350 ou 500, en Roto Sil, en DIN gauche et droite. Dans le catalogue, une liste
+de systèmes de profil est imprimée une fois pour la paire gauche / droite ; elle est répétée ici sur
+chaque ligne, les systèmes séparés par « ; ». « Kömmerling 76 » et « Trocal 76 » sont dans la liste
+qui commence par « Deceuninck Elegant » [1 p. 290-297].
+
+Types d'ouverture de tous les bras Designo des p. 290 à 297 : fenêtre oscillo-battante ; fenêtre à
+la française / oscillo-battante à ouvrant semi-fixe.
+
+## Standard – bras de compas 250, côté paumelles Designo
+
+![Bras de compas Designo, standard, taille 250](/assets/quincaillerie/roto-nx-catalogue/compas/bras-compas-designo-standard-250.png)
+
+Une ligne par référence [1 p. 290-291] :
+
+| N° de matériel | Systèmes de profil | Taille | Traitement de surface | DIN |
+| --- | --- | ---: | --- | --- |
+| 623968 | Aluplast Ideal 2000 | 250 | Roto Sil | Gauche |
+| 623967 | Aluplast Ideal 2000 | 250 | Roto Sil | Droite |
+| 628938 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | 250 | Roto Sil | Gauche |
+| 628937 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | 250 | Roto Sil | Droite |
+| 635229 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 ; Veka Softline 76 AD ; Veka Softline 76 MD | 250 | Roto Sil | Gauche |
+| 635228 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Brügmann AD 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 ; Veka Softline 76 AD ; Veka Softline 76 MD | 250 | Roto Sil | Droite |
+| 635396 | Deceuninck Eforte ; Deceuninck Prestige ; Inoutic AD 13 ; Inoutic MD 100 | 250 | Roto Sil | Gauche |
+| 635395 | Deceuninck Eforte ; Deceuninck Prestige ; Inoutic AD 13 ; Inoutic MD 100 | 250 | Roto Sil | Droite |
+| 812024 | Deceuninck Elegant ; Deceuninck Legend ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | 250 | Roto Sil | Gauche |
+| 812023 | Deceuninck Elegant ; Deceuninck Legend ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | 250 | Roto Sil | Droite |
+| 623948 | Deceuninck Zendow ; KBE 70 AD | 250 | Roto Sil | Gauche |
+| 623947 | Deceuninck Zendow ; KBE 70 AD | 250 | Roto Sil | Droite |
+| 807532 | Gealan Kubus | 250 | Roto Sil | Gauche |
+| 807531 | Gealan Kubus | 250 | Roto Sil | Droite |
+| 606334 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | 250 | Roto Sil | Gauche |
+| 606326 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | 250 | Roto Sil | Droite |
+| 606347 | Kömmerling 88 Plus ; Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 250 | Roto Sil | Gauche |
+| 606346 | Kömmerling 88 Plus ; Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 250 | Roto Sil | Droite |
+| 610950 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) | 250 | Roto Sil | Gauche |
+| 610949 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) | 250 | Roto Sil | Droite |
+| 606364 | Rehau S 980 Geneo | 250 | Roto Sil | Gauche |
+| 606363 | Rehau S 980 Geneo | 250 | Roto Sil | Droite |
+| 635510 | Salamander 2D ; Salamander 3D ; Salamander Streamline 76 | 250 | Roto Sil | Gauche |
+| 635509 | Salamander 2D ; Salamander 3D ; Salamander Streamline 76 | 250 | Roto Sil | Droite |
+| 635620 | Salamander BluEvolution 92 | 250 | Roto Sil | Gauche |
+| 635619 | Salamander BluEvolution 92 | 250 | Roto Sil | Droite |
+| 764817 | Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD | 250 | Roto Sil | Gauche |
+| 764816 | Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD | 250 | Roto Sil | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 290-291)
+
+Pour les bras 250 Brügmann / Veka / Salamander, le catalogue imprime deux listes distinctes : la
+liste du bras gauche 635229 porte « Salamander BluEvolution 73 », celle du bras droit 635228
+porte à sa place « Brügmann AD 73 » ; aux tailles 350 et 500, une seule liste pour la paire, avec
+« Salamander BluEvolution 73 » (entrée **INC-295**).
+
+## Standard – bras de compas 350, côté paumelles Designo
+
+![Bras de compas Designo, standard, taille 350](/assets/quincaillerie/roto-nx-catalogue/compas/bras-compas-designo-standard-350.png)
+
+Une ligne par référence [1 p. 292-293] :
+
+| N° de matériel | Systèmes de profil | Taille | Traitement de surface | DIN |
+| --- | --- | ---: | --- | --- |
+| 623970 | Aluplast Ideal 2000 | 350 | Roto Sil | Gauche |
+| 623969 | Aluplast Ideal 2000 | 350 | Roto Sil | Droite |
+| 628941 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | 350 | Roto Sil | Gauche |
+| 628939 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | 350 | Roto Sil | Droite |
+| 635231 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 ; Veka Softline 76 AD ; Veka Softline 76 MD | 350 | Roto Sil | Gauche |
+| 635230 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 ; Veka Softline 76 AD ; Veka Softline 76 MD | 350 | Roto Sil | Droite |
+| 635398 | Deceuninck Eforte ; Deceuninck Prestige ; Inoutic AD 13 ; Inoutic MD 100 | 350 | Roto Sil | Gauche |
+| 635397 | Deceuninck Eforte ; Deceuninck Prestige ; Inoutic AD 13 ; Inoutic MD 100 | 350 | Roto Sil | Droite |
+| 812066 | Deceuninck Elegant ; Deceuninck Legend ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | 350 | Roto Sil | Gauche |
+| 812065 | Deceuninck Elegant ; Deceuninck Legend ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | 350 | Roto Sil | Droite |
+| 623950 | Deceuninck Zendow ; KBE 70 AD | 350 | Roto Sil | Gauche |
+| 623949 | Deceuninck Zendow ; KBE 70 AD | 350 | Roto Sil | Droite |
+| 807534 | Gealan Kubus | 350 | Roto Sil | Gauche |
+| 807533 | Gealan Kubus | 350 | Roto Sil | Droite |
+| 606336 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | 350 | Roto Sil | Gauche |
+| 606335 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | 350 | Roto Sil | Droite |
+| 606349 | Kömmerling 88 Plus ; Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 350 | Roto Sil | Gauche |
+| 606348 | Kömmerling 88 Plus ; Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 350 | Roto Sil | Droite |
+| 610952 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) | 350 | Roto Sil | Gauche |
+| 610951 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) | 350 | Roto Sil | Droite |
+| 606366 | Rehau S 980 Geneo | 350 | Roto Sil | Gauche |
+| 606365 | Rehau S 980 Geneo | 350 | Roto Sil | Droite |
+| 635512 | Salamander 2D ; Salamander 3D ; Salamander Streamline 76 | 350 | Roto Sil | Gauche |
+| 635511 | Salamander 2D ; Salamander 3D ; Salamander Streamline 76 | 350 | Roto Sil | Droite |
+| 635622 | Salamander BluEvolution 92 | 350 | Roto Sil | Gauche |
+| 635621 | Salamander BluEvolution 92 | 350 | Roto Sil | Droite |
+| 764819 | Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD | 350 | Roto Sil | Gauche |
+| 764818 | Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD | 350 | Roto Sil | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 292-293)
+
+## Standard – bras de compas 500, côté paumelles Designo
+
+![Bras de compas Designo, standard, taille 500](/assets/quincaillerie/roto-nx-catalogue/compas/bras-compas-designo-standard-500.png)
+
+Une ligne par référence [1 p. 293-294] :
+
+| N° de matériel | Systèmes de profil | Taille | Traitement de surface | DIN |
+| --- | --- | ---: | --- | --- |
+| 623972 | Aluplast Ideal 2000 | 500 | Roto Sil | Gauche |
+| 623971 | Aluplast Ideal 2000 | 500 | Roto Sil | Droite |
+| 628948 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | 500 | Roto Sil | Gauche |
+| 628947 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | 500 | Roto Sil | Droite |
+| 635233 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 ; Veka Softline 76 AD ; Veka Softline 76 MD | 500 | Roto Sil | Gauche |
+| 635232 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 ; Veka Softline 76 AD ; Veka Softline 76 MD | 500 | Roto Sil | Droite |
+| 635400 | Deceuninck Eforte ; Deceuninck Prestige ; Inoutic AD 13 ; Inoutic MD 100 | 500 | Roto Sil | Gauche |
+| 635399 | Deceuninck Eforte ; Deceuninck Prestige ; Inoutic AD 13 ; Inoutic MD 100 | 500 | Roto Sil | Droite |
+| 812068 | Deceuninck Elegant ; Deceuninck Legend ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | 500 | Roto Sil | Gauche |
+| 812067 | Deceuninck Elegant ; Deceuninck Legend ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | 500 | Roto Sil | Droite |
+| 623952 | Deceuninck Zendow ; KBE 70 AD | 500 | Roto Sil | Gauche |
+| 623951 | Deceuninck Zendow ; KBE 70 AD | 500 | Roto Sil | Droite |
+| 807536 | Gealan Kubus | 500 | Roto Sil | Gauche |
+| 807535 | Gealan Kubus | 500 | Roto Sil | Droite |
+| 606339 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | 500 | Roto Sil | Gauche |
+| 606338 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | 500 | Roto Sil | Droite |
+| 606353 | Kömmerling 88 Plus ; Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 500 | Roto Sil | Gauche |
+| 606352 | Kömmerling 88 Plus ; Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 500 | Roto Sil | Droite |
+| 610954 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) | 500 | Roto Sil | Gauche |
+| 610953 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) | 500 | Roto Sil | Droite |
+| 606369 | Rehau S 980 Geneo | 500 | Roto Sil | Gauche |
+| 606367 | Rehau S 980 Geneo | 500 | Roto Sil | Droite |
+| 635514 | Salamander 2D ; Salamander 3D ; Salamander Streamline 76 | 500 | Roto Sil | Gauche |
+| 635513 | Salamander 2D ; Salamander 3D ; Salamander Streamline 76 | 500 | Roto Sil | Droite |
+| 635624 | Salamander BluEvolution 92 | 500 | Roto Sil | Gauche |
+| 635623 | Salamander BluEvolution 92 | 500 | Roto Sil | Droite |
+| 764821 | Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD | 500 | Roto Sil | Gauche |
+| 764820 | Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD | 500 | Roto Sil | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 293-294)
+
+## TiltFirst (TF) – bras de compas 250, côté paumelles Designo
+
+![Bras de compas Designo, TiltFirst, taille 250](/assets/quincaillerie/roto-nx-catalogue/compas/bras-compas-designo-tiltfirst-250.png)
+
+Les listes TiltFirst diffèrent des listes standard : la liste Brügmann / Veka / Salamander s'arrête
+à « Salamander GreenEvolution 76 » (sans Veka Softline 76 AD / MD), Gealan Kubus, Salamander 2D /
+3D / Streamline 76 et Salamander BluEvolution 92 n'ont pas de ligne, et une ligne « Veka Softline
+70 MD » seule s'ajoute en fin de tableau. Une ligne par référence [1 p. 294-295] :
+
+| N° de matériel | Systèmes de profil | Taille | Traitement de surface | DIN |
+| --- | --- | ---: | --- | --- |
+| 643271 | Aluplast Ideal 2000 | 250 | Roto Sil | Gauche |
+| 643270 | Aluplast Ideal 2000 | 250 | Roto Sil | Droite |
+| 643247 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | 250 | Roto Sil | Gauche |
+| 643246 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | 250 | Roto Sil | Droite |
+| 643277 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 | 250 | Roto Sil | Gauche |
+| 643276 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 | 250 | Roto Sil | Droite |
+| 643259 | Deceuninck Eforte ; Deceuninck Prestige ; Inoutic AD 13 ; Inoutic MD 100 | 250 | Roto Sil | Gauche |
+| 643258 | Deceuninck Eforte ; Deceuninck Prestige ; Inoutic AD 13 ; Inoutic MD 100 | 250 | Roto Sil | Droite |
+| 757738 | Deceuninck Elegant ; Deceuninck Legend ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | 250 | Roto Sil | Gauche |
+| 757737 | Deceuninck Elegant ; Deceuninck Legend ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | 250 | Roto Sil | Droite |
+| 643253 | Deceuninck Zendow ; KBE 70 AD | 250 | Roto Sil | Gauche |
+| 643252 | Deceuninck Zendow ; KBE 70 AD | 250 | Roto Sil | Droite |
+| 638965 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | 250 | Roto Sil | Gauche |
+| 638944 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | 250 | Roto Sil | Droite |
+| 643265 | Kömmerling 88 Plus ; Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 250 | Roto Sil | Gauche |
+| 643264 | Kömmerling 88 Plus ; Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 250 | Roto Sil | Droite |
+| 640572 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) | 250 | Roto Sil | Gauche |
+| 640573 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) | 250 | Roto Sil | Droite |
+| 640566 | Rehau S 980 Geneo | 250 | Roto Sil | Gauche |
+| 640567 | Rehau S 980 Geneo | 250 | Roto Sil | Droite |
+| 764825 | Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD | 250 | Roto Sil | Gauche |
+| 764824 | Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD | 250 | Roto Sil | Droite |
+| 636481 | Veka Softline 70 MD | 250 | Roto Sil | Gauche |
+| 636480 | Veka Softline 70 MD | 250 | Roto Sil | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 294-295)
+
+## TiltFirst (TF) – bras de compas 350, côté paumelles Designo
+
+![Bras de compas Designo, TiltFirst, taille 350](/assets/quincaillerie/roto-nx-catalogue/compas/bras-compas-designo-tiltfirst-350.png)
+
+Une ligne par référence [1 p. 295-296] :
+
+| N° de matériel | Systèmes de profil | Taille | Traitement de surface | DIN |
+| --- | --- | ---: | --- | --- |
+| 643273 | Aluplast Ideal 2000 | 350 | Roto Sil | Gauche |
+| 643272 | Aluplast Ideal 2000 | 350 | Roto Sil | Droite |
+| 643249 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | 350 | Roto Sil | Gauche |
+| 643248 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | 350 | Roto Sil | Droite |
+| 643279 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 | 350 | Roto Sil | Gauche |
+| 643278 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 | 350 | Roto Sil | Droite |
+| 643261 | Deceuninck Eforte ; Deceuninck Prestige ; Inoutic AD 13 ; Inoutic MD 100 | 350 | Roto Sil | Gauche |
+| 643260 | Deceuninck Eforte ; Deceuninck Prestige ; Inoutic AD 13 ; Inoutic MD 100 | 350 | Roto Sil | Droite |
+| 757740 | Deceuninck Elegant ; Deceuninck Legend ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | 350 | Roto Sil | Gauche |
+| 757739 | Deceuninck Elegant ; Deceuninck Legend ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | 350 | Roto Sil | Droite |
+| 643255 | Deceuninck Zendow ; KBE 70 AD | 350 | Roto Sil | Gauche |
+| 643254 | Deceuninck Zendow ; KBE 70 AD | 350 | Roto Sil | Droite |
+| 638967 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | 350 | Roto Sil | Gauche |
+| 638966 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | 350 | Roto Sil | Droite |
+| 643267 | Kömmerling 88 Plus ; Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 350 | Roto Sil | Gauche |
+| 643266 | Kömmerling 88 Plus ; Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 350 | Roto Sil | Droite |
+| 640574 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) | 350 | Roto Sil | Gauche |
+| 640575 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) | 350 | Roto Sil | Droite |
+| 640568 | Rehau S 980 Geneo | 350 | Roto Sil | Gauche |
+| 640569 | Rehau S 980 Geneo | 350 | Roto Sil | Droite |
+| 764827 | Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD | 350 | Roto Sil | Gauche |
+| 764826 | Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD | 350 | Roto Sil | Droite |
+| 636484 | Veka Softline 70 MD | 350 | Roto Sil | Gauche |
+| 636483 | Veka Softline 70 MD | 350 | Roto Sil | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 295-296)
+
+## TiltFirst (TF) – bras de compas 500, côté paumelles Designo
+
+![Bras de compas Designo, TiltFirst, taille 500](/assets/quincaillerie/roto-nx-catalogue/compas/bras-compas-designo-tiltfirst-500.png)
+
+Une ligne par référence [1 p. 296-297] :
+
+| N° de matériel | Systèmes de profil | Taille | Traitement de surface | DIN |
+| --- | --- | ---: | --- | --- |
+| 643275 | Aluplast Ideal 2000 | 500 | Roto Sil | Gauche |
+| 643274 | Aluplast Ideal 2000 | 500 | Roto Sil | Droite |
+| 643251 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | 500 | Roto Sil | Gauche |
+| 643250 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | 500 | Roto Sil | Droite |
+| 643281 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 | 500 | Roto Sil | Gauche |
+| 643280 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 | 500 | Roto Sil | Droite |
+| 643263 | Deceuninck Eforte ; Deceuninck Prestige ; Inoutic AD 13 ; Inoutic MD 100 | 500 | Roto Sil | Gauche |
+| 643262 | Deceuninck Eforte ; Deceuninck Prestige ; Inoutic AD 13 ; Inoutic MD 100 | 500 | Roto Sil | Droite |
+| 757742 | Deceuninck Elegant ; Deceuninck Legend ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | 500 | Roto Sil | Gauche |
+| 757741 | Deceuninck Elegant ; Deceuninck Legend ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | 500 | Roto Sil | Droite |
+| 643257 | Deceuninck Zendow ; KBE 70 AD | 500 | Roto Sil | Gauche |
+| 643256 | Deceuninck Zendow ; KBE 70 AD | 500 | Roto Sil | Droite |
+| 638969 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | 500 | Roto Sil | Gauche |
+| 638968 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | 500 | Roto Sil | Droite |
+| 643269 | Kömmerling 88 Plus ; Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 500 | Roto Sil | Gauche |
+| 643268 | Kömmerling 88 Plus ; Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 500 | Roto Sil | Droite |
+| 640576 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) | 500 | Roto Sil | Gauche |
+| 640577 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) | 500 | Roto Sil | Droite |
+| 640570 | Rehau S 980 Geneo | 500 | Roto Sil | Gauche |
+| 640571 | Rehau S 980 Geneo | 500 | Roto Sil | Droite |
+| 764829 | Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD | 500 | Roto Sil | Gauche |
+| 764828 | Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD | 500 | Roto Sil | Droite |
+| 636516 | Veka Softline 70 MD | 500 | Roto Sil | Gauche |
+| 636515 | Veka Softline 70 MD | 500 | Roto Sil | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 296-297)
+
+Les bras Designo des p. 290 à 297 n'ont ni renvoi vers un palier ni encadré INFO ; le bas de la
+p. 297 est vide [1 p. 297].
+
+# Compas articulé à commande forcée, côté paumelles P
+
+Section 6.4 du catalogue, une seule sous-section « Confort » (6.4.1.1) côté paumelles P
+[1 p. 298].
+
+## Confort, côté paumelles P
+
+![Compas articulé à commande forcée côté P, confort](/assets/quincaillerie/roto-nx-catalogue/compas/compas-articule-commande-forcee-cote-p-confort.png)
+
+Type d'ouverture : fenêtre oscillo-battante. Le tableau ajoute une colonne « poids d'ouvrant »
+(pictogramme poids), à « max. 50 kg » sur toutes les lignes. Une ligne par référence, cotes en mm
+[1 p. 298] :
+
+| N° de matériel | Système | LFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Taille | Poids d'ouvrant (kg) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface | DIN |
+| --- | --- | --- | ---: | ---: | ---: | --- | :---: | :---: | --- | --- |
+| 795042 | 12/20-9 | 460 – 600 | 490 | 190 | 250 | max. 50 | – | – | Roto Sil | Gauche |
+| 795043 | 12/20-9 | 460 – 600 | 490 | 190 | 250 | max. 50 | – | – | Roto Sil | Droite |
+| 795044 | 12/20-9 | 601 – 800 | 690 | 200 | 350 | max. 50 | – | – | Roto Sil | Gauche |
+| 795045 | 12/20-9 | 601 – 800 | 690 | 200 | 350 | max. 50 | – | – | Roto Sil | Droite |
+| 795046 | 12/20-9 | 801 – 1000 | 890 | 200 | 500 | max. 50 | 1 | E | Roto Sil | Gauche |
+| 795047 | 12/20-9 | 801 – 1000 | 890 | 200 | 500 | max. 50 | 1 | E | Roto Sil | Droite |
+| 795032 | 12/20-13 | 460 – 600 | 490 | 190 | 250 | max. 50 | – | – | Roto Sil | Gauche |
+| 795033 | 12/20-13 | 460 – 600 | 490 | 190 | 250 | max. 50 | – | – | Roto Sil | Droite |
+| 795036 | 12/20-13 | 601 – 800 | 690 | 200 | 350 | max. 50 | – | – | Roto Sil | Gauche |
+| 795037 | 12/20-13 | 601 – 800 | 690 | 200 | 350 | max. 50 | – | – | Roto Sil | Droite |
+| 795040 | 12/20-13 | 801 – 1000 | 890 | 200 | 500 | max. 50 | 1 | E | Roto Sil | Gauche |
+| 795041 | 12/20-13 | 801 – 1000 | 890 | 200 | 500 | max. 50 | 1 | E | Roto Sil | Droite |
+| 795048 | 12/20-13 | 801 – 1000 | 890 | 200 | 500 | max. 50 | 1 | V | Roto Sil | Gauche |
+| 795049 | 12/20-13 | 801 – 1000 | 890 | 200 | 500 | max. 50 | 1 | V | Roto Sil | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 298)
+
+Sous le tableau : « Palier de compas adapté, voir → à partir de la page 306. » ; « Caches
+adaptés, voir → à partir de la page 311. » [1 p. 298].
+
+**INFO.** « Entre LVFF 1001 – 1400 mm avec allonge de crémone. » [1 p. 298] (abréviation LVFF,
+entrée **INC-293**).
+
+# Équerre de compas OF
+
+Pièce du compas OF, c'est-à-dire du compas d'un ouvrant à la française (voir le
+[glossaire](/reference/glossaire.md), *Compas OF, compas OB*) ; le catalogue renvoie pour le bras de
+compas OF adapté aux p. 300 (côté P) et 301 (Designo). Types
+d'ouverture de la section côté P : fenêtre ouvrant à la française ; fenêtre basculante
+[1 p. 299].
+
+## Côté paumelles P
+
+![Équerre de compas OF côté paumelles P](/assets/quincaillerie/roto-nx-catalogue/compas/equerre-compas-of-cote-p.png)
+
+La colonne « Longueur » porte une paire « a / b » dont le catalogue ne définit pas les deux
+positions ; elle est reportée telle quelle. Une ligne [1 p. 299] :
+
+| N° de matériel | Désignation | Longueur (mm) | Traitement de surface |
+| --- | --- | --- | --- |
+| 331488 | Équerre de compas OF côté paumelles P / T / A16 | 110 / 65 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 299)
+
+« Bras de compas OF adapté, voir → à partir de la page 300. » [1 p. 299]
+
+Sous ce renvoi, une seconde pièce sans pictogramme de type d'ouverture [1 p. 299] :
+
+![Cale vantail abattant 230651](/assets/quincaillerie/roto-nx-catalogue/compas/cale-vantail-abattant-230651.png)
+
+| N° de matériel | Désignation | Traitement de surface |
+| --- | --- | --- |
+| 230651 | Cale vantail abattant | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 299)
+
+## Côté paumelles Designo (BA 13)
+
+![Équerre de compas OF côté paumelles Designo](/assets/quincaillerie/roto-nx-catalogue/compas/equerre-compas-of-designo.png)
+
+Types d'ouverture : fenêtre ouvrant à la française ; fenêtre basculante ; fenêtre à trois
+vantaux. Longueur en paire « a / b » reportée telle quelle ; AF = axe de ferrure. Une ligne par
+référence [1 p. 299] :
+
+| N° de matériel | Désignation | Longueur (mm) | Information | Traitement de surface |
+| --- | --- | --- | --- | --- |
+| 477255 | Équerre de compas OF côté paumelles Designo (AF 9 / AF 13) | 224 / 15 | Non adapté aux fenêtres à soufflet | Roto Sil |
+| 640563 | Équerre de compas OF côté paumelles Designo (AF 9 / AF 13) | 224 / 50 | – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 299)
+
+« Bras de compas OF adapté, voir → à partir de la page 301. » [1 p. 299]
+
+# Bras de compas en feuillure
+
+## Côté paumelles P
+
+![Bras de compas en feuillure côté paumelles P](/assets/quincaillerie/roto-nx-catalogue/compas/bras-compas-feuillure-cote-p.png)
+
+Types d'ouverture : fenêtre ouvrant à la française ; fenêtre basculante. Une ligne par
+référence, par système, finition et sens DIN [1 p. 300] :
+
+| N° de matériel | Système | Traitement de surface | DIN |
+| --- | --- | --- | --- |
+| 787371 | 12/18-9 | Roto Sil | Gauche |
+| 787372 | 12/18-9 | Roto Sil | Droite |
+| 788472 | 12/18-9 | Blanc | Gauche |
+| 788473 | 12/18-9 | Blanc | Droite |
+| 787373 | 12/20-9 | Roto Sil | Gauche |
+| 787374 | 12/20-9 | Roto Sil | Droite |
+| 788474 | 12/20-9 | Blanc | Gauche |
+| 788475 | 12/20-9 | Blanc | Droite |
+| 787375 | 12/20-13 | Roto Sil | Gauche |
+| 787376 | 12/20-13 | Roto Sil | Droite |
+| 788476 | 12/20-13 | Blanc | Gauche |
+| 788477 | 12/20-13 | Blanc | Droite |
+| 795210 | 12/20-13 | Titane | Gauche |
+| 795211 | 12/20-13 | Titane | Droite |
+| 817207 | 12/21-13 | Roto Sil | Gauche |
+| 817208 | 12/21-13 | Roto Sil | Droite |
+| 817209 | 12/21-13 | Blanc | Gauche |
+| 817210 | 12/21-13 | Blanc | Droite |
+| 787377 | 12/22-13 | Roto Sil | Gauche |
+| 787378 | 12/22-13 | Roto Sil | Droite |
+| 788478 | 12/22-13 | Blanc | Gauche |
+| 788479 | 12/22-13 | Blanc | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 300)
+
+Sous le tableau : « Palier de compas adapté, voir → à partir de la page 306. » ; « Equerre de
+compas OF adaptée, voir → à partir de la page 299. » [1 p. 300].
+
+## Standard, côté paumelles Designo (BA 13)
+
+![Bras de compas en feuillure côté paumelles Designo, standard](/assets/quincaillerie/roto-nx-catalogue/compas/bras-compas-feuillure-designo-standard.png)
+
+Types d'ouverture : fenêtre ouvrant à la française ; fenêtre basculante. Première colonne : système
+de profil (liste de profilés imprimée une fois par paire gauche / droite, répétée ici). Une ligne
+par référence, les deux dernières paires p. 302 [1 p. 301-302] :
+
+| N° de matériel | Systèmes de profil | Traitement de surface | DIN |
+| --- | --- | --- | --- |
+| 623966 | Aluplast Ideal 2000 | Roto Sil | Gauche |
+| 623965 | Aluplast Ideal 2000 | Roto Sil | Droite |
+| 628936 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | Roto Sil | Gauche |
+| 628914 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | Roto Sil | Droite |
+| 635227 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 ; Veka Softline 76 AD ; Veka Softline 76 MD | Roto Sil | Gauche |
+| 635226 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 ; Veka Softline 76 AD ; Veka Softline 76 MD | Roto Sil | Droite |
+| 635274 | Deceuninck Eforte ; Deceuninck Prestige ; Inoutic AD 13 ; Inoutic MD 100 | Roto Sil | Gauche |
+| 635273 | Deceuninck Eforte ; Deceuninck Prestige ; Inoutic AD 13 ; Inoutic MD 100 | Roto Sil | Droite |
+| 812022 | Deceuninck Elegant ; Deceuninck Legend ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | Roto Sil | Gauche |
+| 812021 | Deceuninck Elegant ; Deceuninck Legend ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | Roto Sil | Droite |
+| 623946 | Deceuninck Zendow ; KBE 70 AD | Roto Sil | Gauche |
+| 623945 | Deceuninck Zendow ; KBE 70 AD | Roto Sil | Droite |
+| 807530 | Gealan Kubus | Roto Sil | Gauche |
+| 807529 | Gealan Kubus | Roto Sil | Droite |
+| 606325 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | Roto Sil | Gauche |
+| 606324 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | Roto Sil | Droite |
+| 606345 | Kömmerling 88 Plus ; Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | Roto Sil | Gauche |
+| 606344 | Kömmerling 88 Plus ; Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | Roto Sil | Droite |
+| 610948 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) | Roto Sil | Gauche |
+| 610947 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) | Roto Sil | Droite |
+| 606362 | Rehau S 980 Geneo | Roto Sil | Gauche |
+| 606361 | Rehau S 980 Geneo | Roto Sil | Droite |
+| 635508 | Salamander 2D ; Salamander 3D ; Salamander Streamline 76 | Roto Sil | Gauche |
+| 635507 | Salamander 2D ; Salamander 3D ; Salamander Streamline 76 | Roto Sil | Droite |
+| 635618 | Salamander BluEvolution 92 | Roto Sil | Gauche |
+| 635617 | Salamander BluEvolution 92 | Roto Sil | Droite |
+| 764815 | Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD | Roto Sil | Gauche |
+| 764794 | Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD | Roto Sil | Droite |
+| 606388 | Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD | Roto Sil | Gauche |
+| 606387 | Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD | Roto Sil | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 301-302)
+
+« Équerre de compas OF adaptée, voir → à partir de la page 299. » [1 p. 302]
+
+## Fenêtre à trois ouvrants (ouvrant central), côté paumelles Designo
+
+![Bras de compas en feuillure Designo, fenêtre à trois ouvrants, ouvrant central](/assets/quincaillerie/roto-nx-catalogue/compas/bras-compas-feuillure-designo-trois-ouvrants.png)
+
+Type d'ouverture : fenêtre à trois vantaux. Les listes de systèmes de profil de ce tableau
+diffèrent de celles du tableau standard (par exemple « Trocal InnoNova 70.A5 AD », « Schüco Corona
+AD », « Rehau S 969 Synego », « Salamander Design 3D »). Une ligne par référence, les deux
+dernières paires p. 303 [1 p. 302-303] :
+
+| N° de matériel | Systèmes de profil | Traitement de surface | DIN |
+| --- | --- | --- | --- |
+| 741501 | Aluplast Ideal 2000 ; Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD ; Trocal InnoNova 70.A5 AD ; Trocal InnoNova 70.M5 MD | Roto Sil | Gauche |
+| 741500 | Aluplast Ideal 2000 ; Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD ; Trocal InnoNova 70.A5 AD ; Trocal InnoNova 70.M5 MD | Roto Sil | Droite |
+| 741515 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona AD ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | Roto Sil | Gauche |
+| 741504 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona AD ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | Roto Sil | Droite |
+| 738588 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander GreenEvolution 76 | Roto Sil | Gauche |
+| 738554 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander GreenEvolution 76 | Roto Sil | Droite |
+| 741497 | Deceuninck Eforte ; Deceuninck Prestige ; Inoutic AD 13 ; Inoutic MD 100 | Roto Sil | Gauche |
+| 741496 | Deceuninck Eforte ; Deceuninck Prestige ; Inoutic AD 13 ; Inoutic MD 100 | Roto Sil | Droite |
+| 766738 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | Roto Sil | Gauche |
+| 766739 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | Roto Sil | Droite |
+| 766121 | KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | Roto Sil | Gauche |
+| 766122 | KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | Roto Sil | Droite |
+| 766742 | Rehau S 730 AD ; Rehau S 735 MD ; Rehau S 799 Brillant Design (S 730) | Roto Sil | Gauche |
+| 766743 | Rehau S 730 AD ; Rehau S 735 MD ; Rehau S 799 Brillant Design (S 730) | Roto Sil | Droite |
+| 766766 | Rehau S 969 Synego ; Rehau S 980 Geneo ; Salamander BluEvolution 92 | Roto Sil | Gauche |
+| 766767 | Rehau S 969 Synego ; Rehau S 980 Geneo ; Salamander BluEvolution 92 | Roto Sil | Droite |
+| 766770 | Salamander 2D ; Salamander 3D ; Salamander Design 3D ; Salamander Streamline 76 | Roto Sil | Gauche |
+| 766771 | Salamander 2D ; Salamander 3D ; Salamander Design 3D ; Salamander Streamline 76 | Roto Sil | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 302-303)
+
+« Équerre de compas OF adaptée, voir → à partir de la page 299. » ; le reste de la p. 303 est vide
+[1 p. 303].
+
+# Charnière en feuillure de vantail oscillo-battant, côté paumelles P
+
+![Charnière en feuillure de vantail oscillo-battant côté paumelles P](/assets/quincaillerie/roto-nx-catalogue/compas/charniere-feuillure-oscillo-battant-cote-p.png)
+
+Types d'ouverture : fenêtre ouvrant à la française ; fenêtre basculante. Colonnes : système,
+réglage (pictogramme étoile de flèches, en mm), information (avec ou sans compensation),
+rainure (pictogramme profil en U, J sur toutes les lignes), traitement de surface. Une ligne par
+référence [1 p. 304] :
+
+| N° de matériel | Système | Réglage (mm) | Information | Rainure | Traitement de surface |
+| --- | --- | --- | --- | :---: | --- |
+| 787379 | 12/18-9 | ± 3,0 | avec compensation | J | Roto Sil |
+| 788480 | 12/18-9 | ± 3,0 | avec compensation | J | Blanc |
+| 787380 | 12/18-9 | – | sans compensation | J | Roto Sil |
+| 788481 | 12/18-9 | – | sans compensation | J | Blanc |
+| 787383 | 12/20-9 | ± 3,0 | avec compensation | J | Roto Sil |
+| 788484 | 12/20-9 | ± 3,0 | avec compensation | J | Blanc |
+| 787384 | 12/20-9 | – | sans compensation | J | Roto Sil |
+| 788485 | 12/20-9 | – | sans compensation | J | Blanc |
+| 787381 | 12/18-13 | ± 3,0 | avec compensation | J | Roto Sil |
+| 788482 | 12/18-13 | ± 3,0 | avec compensation | J | Blanc |
+| 787382 | 12/18-13 | – | sans compensation | J | Roto Sil |
+| 788483 | 12/18-13 | – | sans compensation | J | Blanc |
+| 787387 | 12/20-13 | ± 3,0 | avec compensation | J | Roto Sil |
+| 788488 | 12/20-13 | ± 3,0 | avec compensation | J | Blanc |
+| 795264 | 12/20-13 | ± 3,0 | avec compensation | J | Titane |
+| 787388 | 12/20-13 | – | sans compensation | J | Roto Sil |
+| 788489 | 12/20-13 | – | sans compensation | J | Blanc |
+| 795265 | 12/20-13 | – | sans compensation | J | Titane |
+| 787389 | 12/21-13 | ± 3,0 | avec compensation | J | Roto Sil |
+| 788490 | 12/21-13 | ± 3,0 | avec compensation | J | Blanc |
+| 787390 | 12/21-13 | – | sans compensation | J | Roto Sil |
+| 788491 | 12/21-13 | – | sans compensation | J | Blanc |
+| 787391 | 12/22-13 | ± 3,0 | avec compensation | J | Roto Sil |
+| 788492 | 12/22-13 | ± 3,0 | avec compensation | J | Blanc |
+| 787392 | 12/22-13 | – | sans compensation | J | Roto Sil |
+| 788493 | 12/22-13 | – | sans compensation | J | Blanc |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 304)
+
+Sous le tableau : « Palier de compas adapté, voir → à partir de la page 306. » ; « Caches
+adaptés, voir → à partir de la page 311. » [1 p. 304].
+
+**INFO.** Dans le cas des ouvrants pivotants, ne mettre des charnières en feuillure de vantail
+oscillo-battant qu'uniquement comme paumelle médiane de soutien [1 p. 304].
+
+# Paumelle de recouvrement d'ouvrant oscillo-battant
+
+## Montage & Explications
+
+Le schéma de montage montre, en vue de face, une pièce grise contre une pièce rose saumon, avec cinq perçages rouges alignés sur un axe vertical. Cotes portées : 10.5 mm entre
+l'axe des perçages et le bord de la partie rose saumon, 17 mm entre le haut de la partie grise et
+le premier perçage, 54 mm et 24 mm entre perçages (lignes de rappel du premier au cinquième et du
+deuxième au quatrième) [1 p. 305].
+
+![Paumelle de recouvrement d'ouvrant oscillo-battant, montage](/assets/quincaillerie/roto-nx-catalogue/compas/paumelle-recouvrement-ob-montage.png)
+
+| Affectation | Signification |
+| --- | --- |
+| [A] | En cas de recouvrement de 20 mm |
+| [B] | Ø 3 mm, perçage de 5 mm de profondeur |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 305)
+
+## Côté paumelles P
+
+![Paumelle de recouvrement d'ouvrant oscillo-battant côté paumelles P](/assets/quincaillerie/roto-nx-catalogue/compas/paumelle-recouvrement-ob-cote-p.png)
+
+Types d'ouverture : fenêtre ouvrant à la française ; fenêtre basculante. Colonnes : système,
+poids d'ouvrant, ergot (J), perçage ergot, traitement de surface. Une ligne [1 p. 305] :
+
+| N° de matériel | Système | Poids d'ouvrant (kg) | Ergot | Perçage ergot | Traitement de surface |
+| --- | --- | --- | :---: | --- | --- |
+| 787400 | 12/20-9, 12/20-13 | max. 80 | J | 2 x Ø 3 mm | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 305)
+
+Sous le tableau : « Palier de compas adapté, voir → à partir de la page 307. » ; « Caches
+adaptés, voir → à partir de la page 312. » [1 p. 305].
+
+# Palier compas, côté paumelles P
+
+Le palier compas côté paumelles P est dessiné, sur les schémas de montage, sur le dormant (en
+rose saumon) ; il est désigné par sa version, « P 3 » ou « P 6 »
+suivi du poids d'ouvrant maximal (P 3/130, P 6/130, P 6/150, P 3/100, P 6/100) [1 p. 306-308].
+
+## Montage & Explications
+
+Deux schémas de montage en coupe, un par version : le dormant en rose saumon, l'ouvrant en gris
+(zone hachurée), le palier dessiné en pointillé sur le dormant avec ses trous alignés sur un axe ;
+[A] est la cote horizontale portée en haut du schéma jusqu'à l'axe des trous du palier, [B] le centre de palier de
+compas, [C] les deux perçages de fixation (rouges) [1 p. 306].
+
+### Standard – P 3/130 | P 6/130
+
+![Palier compas côté P, montage P 3/130 et P 6/130](/assets/quincaillerie/roto-nx-catalogue/compas/palier-compas-cote-p-montage-p3-130-p6-130.png)
+
+Cotes portées : 36 mm et 12 mm sur la partie grise, 16, 48 et 80 mm entre trous du palier (le 80 entre les
+deux perçages [C]) [1 p. 306].
+
+| Repère | Signification | Système |
+| --- | --- | --- |
+| [A] | 16,5 mm | 12/18-9, 12/18-13 |
+| [A] | 18,5 mm | 12/20-9, 12/20-13 |
+| [A] | 19,5 mm | 12/21-13 |
+| [A] | 20,5 mm | 12/22-13 |
+| [B] | Centre de palier de compas | - |
+| [C] | Palier de compas P 3/130, perçage Ø 3 mm, 4 mm de profondeur | - |
+| [C] | Palier de compas P 6/130, perçage Ø 6 mm, 9 mm de profondeur | - |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 306)
+
+### Standard – P 6/150
+
+![Palier compas côté P, montage P 6/150](/assets/quincaillerie/roto-nx-catalogue/compas/palier-compas-cote-p-montage-p6-150.png)
+
+Cotes portées : 36 mm et 12 mm sur la partie grise, 10 mm en haut entre l'axe des trous et une seconde
+rangée de deux trous, 16, 48, 74 et 80 mm entre trous du palier [1 p. 306].
+
+| Repère | Signification | Système |
+| --- | --- | --- |
+| [A] | 16,5 mm | 12/18-9, 12/18-13 |
+| [A] | 18,5 mm | 12/20-9, 12/20-13 |
+| [A] | 19,5 mm | 12/21-13 |
+| [A] | 20,5 mm | 12/22-13 |
+| [B] | Centre de palier de compas | - |
+| [C] | Palier de compas P 6/150, perçage Ø 6 mm, 9 mm de profondeur | - |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 306)
+
+Le manuel de montage KSR donne pour les mêmes versions des longueurs d'ergot, section
+*Longueurs de palier P3 et P6* ci-dessous.
+
+## Standard – P 3/130 | P 6/130
+
+![Palier compas côté P, P 3/130 et P 6/130](/assets/quincaillerie/roto-nx-catalogue/compas/palier-compas-cote-p-p3-130-p6-130.png)
+
+Colonnes : version (système), poids d'ouvrant, ergot, perçage ergot, traitement de surface. Une
+ligne par référence [1 p. 307] :
+
+| N° de matériel | Version | Poids d'ouvrant (kg) | Ergot | Perçage ergot | Traitement de surface |
+| --- | --- | --- | :---: | --- | --- |
+| 859171 | P 3/130 | max. 130 | J | 2 x Ø 3 mm | Roto Sil |
+| 859174 | P 3/130 | max. 130 | J | 2 x Ø 3 mm | Blanc |
+| 859964 | P 3/130 | max. 130 | J | 2 x Ø 3 mm | Titane |
+| 859172 | P 6/130 | max. 130 | J | 2 x Ø 6 mm | Roto Sil |
+| 859960 | P 6/130 | max. 130 | J | 2 x Ø 6 mm | Blanc |
+| 859965 | P 6/130 | max. 130 | J | 2 x Ø 6 mm | Titane |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 307)
+
+**Une broche de palier de compas est nécessaire pour chaque palier de compas.** Voir détails « à
+partir de la page 308 ». Caches adaptés, voir « à partir de la page 309 » [1 p. 307].
+
+## Standard – P 6/150
+
+![Palier compas côté P, P 6/150](/assets/quincaillerie/roto-nx-catalogue/compas/palier-compas-cote-p-p6-150.png)
+
+Une ligne par référence [1 p. 307] :
+
+| N° de matériel | Version | Poids d'ouvrant (kg) | Ergot | Perçage ergot | Traitement de surface |
+| --- | --- | --- | :---: | --- | --- |
+| 859173 | P 6/150 | max. 150 | J | 2 x Ø 6 mm | Roto Sil |
+| 859961 | P 6/150 | max. 150 | J | 2 x Ø 6 mm | Blanc |
+| 859966 | P 6/150 | max. 150 | J | 2 x Ø 6 mm | Titane |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 307)
+
+**Une broche de palier de compas est nécessaire pour chaque palier de compas** (détails p. 308) ;
+caches adaptés à partir de la p. 309 [1 p. 307].
+
+## Réglage latéral
+
+![Palier compas côté P, réglage latéral](/assets/quincaillerie/roto-nx-catalogue/compas/palier-compas-cote-p-reglage-lateral.png)
+
+Une ligne par référence [1 p. 308] :
+
+| N° de matériel | Version | Poids d'ouvrant (kg) | Ergot | Perçage ergot | Traitement de surface |
+| --- | --- | --- | :---: | --- | --- |
+| 840384 | P 3/100 | max. 100 | J | 2 x Ø 3 mm | Roto Sil |
+| 840401 | P 3/100 | max. 100 | J | 2 x Ø 3 mm | Blanc |
+| 840402 | P 3/100 | max. 100 | J | 2 x Ø 3 mm | Titane |
+| 840403 | P 6/100 | max. 100 | J | 2 x Ø 6 mm | Roto Sil |
+| 840404 | P 6/100 | max. 100 | J | 2 x Ø 6 mm | Blanc |
+| 840405 | P 6/100 | max. 100 | J | 2 x Ø 6 mm | Titane |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 308)
+
+**Une broche de palier de compas est nécessaire pour chaque palier de compas** (détails p. 308) ;
+« Caches adaptés, voir → à partir de la page 310. » [1 p. 308].
+
+## Broches de palier de compas
+
+![Broche de palier de compas 834705](/assets/quincaillerie/roto-nx-catalogue/compas/broche-palier-compas-834705.png)
+
+| N° de matériel | Désignation | Longueur (mm) | Traitement de surface |
+| --- | --- | ---: | --- |
+| 834705 | Broche | 86 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 308)
+
+La note de la p. 279 impose, pour le démontage de la broche, un espace d'au moins 10 mm jusqu'à
+l'embrasure (voir *Tolérance de châssis fixe*) [1 p. 279].
+
+# Caches, côté paumelles P
+
+Les caches du chapitre « Compas » (palier de compas, bras de compas, paumelle de recouvrement) se
+commandent par version ou système et par **code couleur Roto** (pictogramme palette, voir
+[Finitions Roto NX](/quincaillerie/roto-nx-finitions.md)), la colonne « Couleur » (pictogramme
+pinceau) donnant le nom de la teinte [1 p. 13, 309].
+
+## Palier de compas – Standard : caches
+
+![Cache de palier de compas standard](/assets/quincaillerie/roto-nx-catalogue/compas/cache-palier-compas-standard.png)
+
+Une ligne par référence [1 p. 309] :
+
+| N° de matériel | Système | Code couleur Roto | Couleur |
+| --- | --- | --- | --- |
+| 861148 | P 3/130, P 6/130 | R01.1 | Argent naturel |
+| 861149 | P 3/130, P 6/130 | R01.2 | Champagne |
+| 861155 | P 3/130, P 6/130 | R01.3 | Titane |
+| 861156 | P 3/130, P 6/130 | R03.1 | Laiton mat |
+| 861160 | P 3/130, P 6/130 | R03.2 | Laiton brillant |
+| 861152 | P 3/130, P 6/130 | R04.1 | Brun-gris |
+| 861153 | P 3/130, P 6/130 | R04.3 | Brun-olive |
+| 861154 | P 3/130, P 6/130 | R04.4 | Brun-noir |
+| 861165 | P 3/130, P 6/130 | R05.3 | Bronze moyen |
+| 861166 | P 3/130, P 6/130 | R05.5 | Bronze |
+| 862558 | P 3/130, P 6/130 | R06.2 | Noir profond |
+| 861167 | P 3/130, P 6/130 | R07.2 | Blanc trafic |
+| 861168 | P 3/130, P 6/130 | R07.3 | Blanc crème |
+| 862560 | P 3/130, P 6/130 | SF | Couleur spéciale |
+| 861169 | P 6/150 | R01.1 | Argent naturel |
+| 861170 | P 6/150 | R01.2 | Champagne |
+| 861171 | P 6/150 | R01.3 | Titane |
+| 861172 | P 6/150 | R03.1 | Laiton mat |
+| 861174 | P 6/150 | R03.2 | Laiton brillant |
+| 861175 | P 6/150 | R04.1 | Brun-gris |
+| 861176 | P 6/150 | R04.3 | Brun-olive |
+| 861177 | P 6/150 | R04.4 | Brun-noir |
+| 861178 | P 6/150 | R05.3 | Bronze moyen |
+| 861179 | P 6/150 | R05.5 | Bronze |
+| 862562 | P 6/150 | R06.2 | Noir profond |
+| 861197 | P 6/150 | R07.2 | Blanc trafic |
+| 861198 | P 6/150 | R07.3 | Blanc crème |
+| 862563 | P 6/150 | SF | Couleur spéciale |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 309)
+
+## Palier de compas – Standard : bouchon
+
+![Bouchon, palier de compas P 6/150](/assets/quincaillerie/roto-nx-catalogue/compas/bouchon-palier-compas-p6-150.png)
+
+| N° de matériel | Version | Code couleur Roto | Couleur |
+| --- | --- | --- | --- |
+| 788500 | P 6/150 | R01.3 | Titane |
+| 788435 | P 6/150 | R07.2 | Blanc trafic |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 310)
+
+## Palier de compas – réglable latéral
+
+![Cache de palier de compas réglable latéral](/assets/quincaillerie/roto-nx-catalogue/compas/cache-palier-compas-reglable-lateral.png)
+
+Colonne DIN gauche / droite à « – » sur toutes les lignes ; les lignes R07.3 et R07.2 sont
+imprimées dans cet ordre. Une ligne par référence [1 p. 310] :
+
+| N° de matériel | Système | Code couleur Roto | Couleur | DIN |
+| --- | --- | --- | --- | --- |
+| 840406 | P 3/100, P 6/100 | R01.1 | Argent naturel | – |
+| 840407 | P 3/100, P 6/100 | R01.2 | Champagne | – |
+| 840408 | P 3/100, P 6/100 | R01.3 | Titane | – |
+| 840409 | P 3/100, P 6/100 | R03.1 | Laiton mat | – |
+| 840415 | P 3/100, P 6/100 | R03.2 | Laiton brillant | – |
+| 840416 | P 3/100, P 6/100 | R04.1 | Brun-gris | – |
+| 840417 | P 3/100, P 6/100 | R04.3 | Brun-olive | – |
+| 840418 | P 3/100, P 6/100 | R04.4 | Brun-noir | – |
+| 840419 | P 3/100, P 6/100 | R05.3 | Bronze moyen | – |
+| 840420 | P 3/100, P 6/100 | R05.5 | Bronze | – |
+| 2005470 | P 3/100, P 6/100 | R06.2 | Noir profond | – |
+| 840421 | P 3/100, P 6/100 | R07.3 | Blanc crème | – |
+| 840422 | P 3/100, P 6/100 | R07.2 | Blanc trafic | – |
+| 840423 | P 3/100, P 6/100 | SF | Couleur spéciale | – |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 310)
+
+## Bras de compas & paumelle d'ouvrant pivotant / paumelle soufflet en feuillure
+
+**INFO.** Convient aux éléments suivants : bras de compas - standard ; bras de compas – TiltFirst
+(TF) ; bras de compas – fenêtre inclinée (SF) ; bras de compas – cintré ; paumelle soufflet en
+feuillure / ouvrant oscillo-battant [1 p. 311].
+
+### Avec patte de fixation
+
+![Cache de bras de compas avec patte de fixation](/assets/quincaillerie/roto-nx-catalogue/compas/cache-bras-compas-avec-patte.png)
+
+Une ligne par référence [1 p. 311] :
+
+| N° de matériel | Système | Code couleur Roto | Couleur |
+| --- | --- | --- | --- |
+| 788403 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R01.1 | Argent naturel |
+| 810816 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R01.2 | Champagne |
+| 788404 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R01.3 | Titane |
+| 788405 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R03.1 | Laiton mat |
+| 810817 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R03.2 | Laiton brillant |
+| 788406 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R04.1 | Brun-gris |
+| 810818 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R04.3 | Brun-olive |
+| 788407 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R04.4 | Brun-noir |
+| 788408 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R05.3 | Bronze moyen |
+| 788409 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R05.5 | Bronze |
+| 821926 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R06.2 | Noir profond |
+| 788410 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R07.2 | Blanc trafic |
+| 810819 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R07.3 | Blanc crème |
+| 840752 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | SF | Couleur spéciale |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 311)
+
+### Sans patte de fixation
+
+![Cache de bras de compas sans patte de fixation](/assets/quincaillerie/roto-nx-catalogue/compas/cache-bras-compas-sans-patte.png)
+
+Une ligne par référence [1 p. 312] :
+
+| N° de matériel | Système | Code couleur Roto | Couleur |
+| --- | --- | --- | --- |
+| 788395 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R01.1 | Argent naturel |
+| 795969 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R01.2 | Champagne |
+| 788396 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R01.3 | Titane |
+| 788397 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R03.1 | Laiton mat |
+| 795974 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R03.2 | Laiton brillant |
+| 788398 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R04.1 | Brun-gris |
+| 795979 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R04.3 | Brun-olive |
+| 788399 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R04.4 | Brun-noir |
+| 788400 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R05.3 | Bronze moyen |
+| 788401 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R05.5 | Bronze |
+| 894965 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R06.2 | Noir profond |
+| 788402 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R07.2 | Blanc trafic |
+| 795984 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | R07.3 | Blanc crème |
+| 840747 | 12/18-9, 12/20-9, 12/20-13, 12/21-13, 12/22-13 | SF | Couleur spéciale |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 312)
+
+## Paumelle de recouvrement d'ouvrant oscillo-battant : caches
+
+![Cache de paumelle de recouvrement d'ouvrant oscillo-battant](/assets/quincaillerie/roto-nx-catalogue/compas/cache-paumelle-recouvrement-ob.png)
+
+Une ligne par référence [1 p. 312] :
+
+| N° de matériel | Système | Code couleur Roto | Couleur |
+| --- | --- | --- | --- |
+| 792387 | 12/20-9, 12/20-13 | R01.1 | Argent naturel |
+| 810820 | 12/20-9, 12/20-13 | R01.2 | Champagne |
+| 792388 | 12/20-9, 12/20-13 | R01.3 | Titane |
+| 810821 | 12/20-9, 12/20-13 | R03.1 | Laiton mat |
+| 810822 | 12/20-9, 12/20-13 | R03.2 | Laiton brillant |
+| 792389 | 12/20-9, 12/20-13 | R04.1 | Brun-gris |
+| 810823 | 12/20-9, 12/20-13 | R04.3 | Brun-olive |
+| 792390 | 12/20-9, 12/20-13 | R04.4 | Brun-noir |
+| 792391 | 12/20-9, 12/20-13 | R05.3 | Bronze moyen |
+| 810825 | 12/20-9, 12/20-13 | R05.5 | Bronze |
+| 2029912 | 12/20-9, 12/20-13 | R06.2 | Noir profond |
+| 792392 | 12/20-9, 12/20-13 | R07.2 | Blanc trafic |
+| 810824 | 12/20-9, 12/20-13 | R07.3 | Blanc crème |
+| 840748 | 12/20-9, 12/20-13 | SF | Couleur spéciale |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 312)
+
+## Renvois de page vers les caches
+
+Les renvois « caches adaptés » des tableaux du chapitre pointent vers des pages différentes :
+p. 311 depuis les bras de compas côté P, le compas articulé à commande forcée et la charnière en
+feuillure (p. 287-290, 298, 304) ; p. 312 depuis la paumelle de recouvrement (p. 305) ; p. 309
+depuis le palier standard (p. 307) ; p. 310 depuis le palier à réglage latéral (p. 308) [1 p. 287-312].
+
+# Pivots et paliers d'angle
+
+Les pivots d'angle, paliers d'angle, reports de charge et leurs caches (chapitre 8 du catalogue,
+p. 333-345) sont sur [Pivots et paliers d'angle Roto NX](/quincaillerie/roto-nx-pivots-et-paliers-angle.md).
+Le pivot d'angle côté paumelles Designo y est le 634705, numéro des nomenclatures NT Designo II du
+manuel KSR [2 p. 68, 70, 72] (entrée **VER-113**).
+
+# Longueurs de palier P3 et P6
+
+Le manuel de montage donne une longueur par version de palier (P3/130, P6/130, P6/150), repérée
+[1] à [4] sur le dessin de chaque pièce ; chaque repère pointe un ergot dessiné sur la pièce
+[2 p. 35].
+
+![Longueurs de palier Roto NX](/assets/quincaillerie/roto-nx-ksr/paliers/longueurs-de-palier.png)
+
+| Pièce | Version | Repère | Longueur (mm) |
+| --- | --- | --- | --- |
+| Palier de compas | P3/130 | [1] | 4 |
+| Palier de compas | P6/130 | [2] | 9 |
+| Palier de compas | P6/150 | [2] | 9 |
+| Palier d'angle | P3/130 | [1] | 3 |
+| Palier d'angle | P6/130 | [2] | 3 |
+| Palier d'angle | P6/150 | [2] | 3 |
+| Palier d'angle | P6/130 | [3] | 9 |
+| Palier d'angle | P6/150 | [3] | 19 |
+| Pivot d'angle | P6/150 | [4] | 23 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 35)
+
+Le pivot d'angle n'est dessiné qu'en P6, avec la seule valeur P6/150 [2 p. 35].
+
+# Réglages d'atelier et tolérances
+
+Les plages de réglage du palier d'angle et du palier de compas sont sur
+[Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md), section *Réglages (uniquement si nécessaire)*,
+et les forces de traction de la directive TBDK sur
+[Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md), section *Cotes de force de traction par poids de vantail*.
+
+# Chapitre 10 « Compas »
+
+Le 2ème compas, les compas d'arrêt, les limiteurs d'ouverture à blocage indexé, le releveur
+d'ouvrant, les compas d'entrebâillement et de nettoyage et les compas d'aération (chapitre 10 du
+catalogue, p. 369-382) sont sur
+[Deuxième compas, compas d'arrêt, limiteurs et compas d'aération Roto NX](/quincaillerie/roto-nx-compas-complementaires.md).
+
+# Citations
+
+[1] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 — `raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 10-13, 277 à 312
+[2] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 35, 36 et 68 à 73 (numérotation du PDF)
+
+# Voir aussi
+
+- [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md)
+- [Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md)
+- [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md)
+- [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md)
+- [Finitions Roto NX](/quincaillerie/roto-nx-finitions.md)
+- [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md)
+- [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md)
+- [Pivots et paliers d'angle Roto NX](/quincaillerie/roto-nx-pivots-et-paliers-angle.md)
+- [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)
+- [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md)
+- [Pièces de fermeture et gâches Roto NX](/quincaillerie/roto-nx-pieces-fermeture-gaches.md)
+- [Deuxième compas, compas d'arrêt, limiteurs et compas d'aération Roto NX](/quincaillerie/roto-nx-compas-complementaires.md)
+- [Catalogue Roto NX pour profils PVC](/sources/roto-nx-catalogue-pvc.md)
+
+===== PAGE 3 : /quincaillerie/roto-nx-pieces-fermeture-gaches.md =====
+# Pièces de fermeture et gâches Roto NX
+
+La **gâche** est la pièce fixée sur le dormant (le cadre fixe de la fenêtre) dans laquelle
+s'engage le galet de verrouillage porté par l'ouvrant et entraîné par la crémone (voir le
+[glossaire](/reference/glossaire.md) et [Roto NX](/quincaillerie/roto-nx.md) pour les galets E,
+P et V). Le chapitre 9 « Pièces de fermeture » du catalogue Roto NX PVC les range en gâche de
+basculement (9.1 : standard, TiltFirst, seuils, oscillo-battant latéral) et gâches (9.2 :
+standard, sécurité, deux vantaux, têtière, crochet) [1 p. 349].
+
+Dans les vues d'ensemble des ferrures, la gâche de basculement est la position [28] « Gâche OB »
+(« à partir de la p. 350 »), la gâche standard la position [23] (p. 356), la gâche de sécurité la
+position [24] (p. 357) et la gâche de sécurité pour ventilation basculante la position [29]
+(p. 361) : voir [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md)
+et [côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md).
+
+Les tableaux ont des pictogrammes en en-tête de colonne, définis dans la légende du catalogue
+([Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md)) :
+système de profil (profil en perspective), axe de ferrure (deux profils emboîtés, trait d'axe
+mixte, en mm : 9 ou 13), sol (contour de pièce à deux trous vissés), traitement de surface, DIN
+gauche / droite (deux vantaux), classe de sécurité (document avec cadenas), réglage (étoile de six
+flèches), désignation (bulle), N° de matériel [1 p. 10-12]. Conventions de transcription :
+
+- le **système de profil** est le profilé PVC du fabricant pour lequel la gâche est faite ; une
+  liste de systèmes imprimée une seule fois pour un groupe de lignes (cellule fusionnée) est
+  reprise sur chaque ligne, les noms séparés par « ; », dans l'ordre et l'orthographe du
+  catalogue ;
+- les colonnes oui / non portent « J » ou « N » (**INC-288**) ;
+- la colonne **sol** n'est définie que par son pictogramme ; les tableaux de repères des gâches
+  zinc associent « avec sol » aux niveaux CDR 1 N, CDR 2 / CDR 2 N et « sans sol » à la sécurité
+  de base (**VER-124**) ;
+- « – » dans la colonne DIN gauche / droite : gâche imprimée sans version gauche ou droite ;
+- les niveaux de sécurité (sécurité de base, CDR 1 N, CDR 2, CDR 2 N) sont ceux de
+  [Roto NX](/quincaillerie/roto-nx.md).
+
+Les tableaux des gâches de basculement standard (zinc, acier) et TiltFirst, de la gâche standard
+et des gâches de sécurité zinc et acier se terminent par l'encadré « INFO — Autres versions sur demande. » [1 p. 352, 353, 354, 357, 359, 360].
+
+# Gâche de basculement
+
+## Gâche de basculement standard, zinc
+
+![Gâches de basculement standard en zinc, repères A et B](/assets/quincaillerie/roto-nx-catalogue/pieces-fermeture/gache-basculement-standard-zinc.png)
+
+Section 9.1.1.1 « Zinc » : deux dessins repérés. [A] : avec sol, sécurité CDR 1 N, CDR 2 /
+CDR 2 N. [B] : sans sol, sécurité de base [1 p. 350].
+
+Le tableau ci-dessous donne une ligne par N° de matériel : le système de profil, l'axe de ferrure
+(mm), sol (J / N), le traitement de surface et la version gauche ou droite (p. 350 à 352).
+
+| N° de matériel | Système de profil | Axe de ferrure (mm) | Sol | Traitement de surface | DIN gauche / droite |
+| --- | --- | ---: | :---: | --- | --- |
+| 331487 | Aluplast Ideal 2000 ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD ; LB Profile Pad ; Schüco LivIng 82 | 13 | N | Roto Sil | – |
+| 260501 | Aluplast Ideal 2000 ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD ; LB Profile Pad ; Schüco LivIng 82 | 13 | J | Roto Sil | Gauche |
+| 260502 | Aluplast Ideal 2000 ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD ; LB Profile Pad ; Schüco LivIng 82 | 13 | J | Roto Sil | Droite |
+| 350190 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Schüco Corona AD ; Aluplast energeto 5000 ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast energeto 8000 ; Aluplast Ideal 8000 ; Aluplast Ideal 7000 | 13 | N | Roto Sil | – |
+| 257364 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Schüco Corona AD ; Aluplast energeto 5000 ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast energeto 8000 ; Aluplast Ideal 8000 ; Aluplast Ideal 7000 | 13 | J | Roto Sil | Gauche |
+| 257365 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Schüco Corona AD ; Aluplast energeto 5000 ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast energeto 8000 ; Aluplast Ideal 8000 ; Aluplast Ideal 7000 | 13 | J | Roto Sil | Droite |
+| 292195 | Brügmann AD 13 ; Brügmann MD 13 | 13 | J | Roto Sil | Gauche |
+| 292196 | Brügmann AD 13 ; Brügmann MD 13 | 13 | J | Roto Sil | Droite |
+| 260499 | Deceuninck Eforte ; Deceuninck Prestige AD ; Inoutic AD 13 ; Inoutic MD 100 | 13 | J | Roto Sil | Gauche |
+| 260500 | Deceuninck Eforte ; Deceuninck Prestige AD ; Inoutic AD 13 ; Inoutic MD 100 | 13 | J | Roto Sil | Droite |
+| 370073 | Deceuninck Zendow ; Deceuninck Elegant ; Deceuninck Legend | 13 | J | Roto Sil | Gauche |
+| 370074 | Deceuninck Zendow ; Deceuninck Elegant ; Deceuninck Legend | 13 | J | Roto Sil | Droite |
+| 281599 | Deceuninck Klassiek ; Deceuninck Mondial VK | 13 | J | Roto Sil | Gauche |
+| 281600 | Deceuninck Klassiek ; Deceuninck Mondial VK | 13 | J | Roto Sil | Droite |
+| 729039 | Deceuninck Prestige MD ; Inoutic AD 13 | 13 | N | Roto Sil | – |
+| 288117 | Deceuninck Prestige MD | 13 | J | Roto Sil | Gauche |
+| 288118 | Deceuninck Prestige MD | 13 | J | Roto Sil | Droite |
+| 807518 | Gealan Kubus | 13 | N | Roto Sil | – |
+| 807515 | Gealan Kubus | 13 | J | Roto Sil | Gauche |
+| 807516 | Gealan Kubus | 13 | J | Roto Sil | Droite |
+| 367200 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 ; Gealan S9000 ; Gealan Linear | 13 | N | Roto Sil | – |
+| 260497 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 ; Gealan S9000 ; Gealan Linear | 13 | J | Roto Sil | Gauche |
+| 260498 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 ; Gealan S9000 ; Gealan Linear | 13 | J | Roto Sil | Droite |
+| 338071 | KBE 70 AD ; KBE 70 MD | 13 | N | Roto Sil | – |
+| 289973 | KBE 70 AD ; KBE 70 MD | 13 | J | Roto Sil | Gauche |
+| 289974 | KBE 70 AD ; KBE 70 MD | 13 | J | Roto Sil | Droite |
+| 738472 | KBE 76 ; Kömmerling 76 ; Panorama 3000 ; Trocal 76 ; KBE 88 MD ; Kömmerling 88 MD ; Trocal 88 MD | 13 | N | Roto Sil | – |
+| 780787 | KBE 76 ; Kömmerling 76 ; Panorama 3000 ; Trocal 76 ; KBE 88 MD ; Kömmerling 88 MD ; Trocal 88 MD | 13 | J | Roto Sil | Gauche |
+| 780788 | KBE 76 ; Kömmerling 76 ; Panorama 3000 ; Trocal 76 ; KBE 88 MD ; Kömmerling 88 MD ; Trocal 88 MD | 13 | J | Roto Sil | Droite |
+| 260493 | KBE AD | 9 | J | Roto Sil | Gauche |
+| 260494 | KBE AD | 9 | J | Roto Sil | Droite |
+| 260505 | KBE MD ; Trocal S900 | 9 | J | Roto Sil | Gauche |
+| 260506 | KBE MD ; Trocal S900 | 9 | J | Roto Sil | Droite |
+| 334954 | Kömmerling 88 Plus ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 13 | N | Roto Sil | – |
+| 260489 | Kömmerling Eurodur 3S | 13 | J | Roto Sil | Gauche |
+| 260490 | Kömmerling Eurodur 3S | 13 | J | Roto Sil | Droite |
+| 261794 | Panorama 2000 | 9 | J | Roto Sil | Gauche |
+| 281710 | Panorama 2000 | 9 | J | Roto Sil | Droite |
+| 264420 | Plus Plan Plus Tec | 13 | J | Roto Sil | Gauche |
+| 264421 | Plus Plan Plus Tec | 13 | J | Roto Sil | Droite |
+| 338021 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) ; Rehau S 969 Synego ; Rehau S 986 EuroDesign 86 | 13 | N | Roto Sil | – |
+| 316939 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) ; Rehau S 986 EuroDesign 86 | 13 | J | Roto Sil | Gauche |
+| 316940 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) ; Rehau S 986 EuroDesign 86 | 13 | J | Roto Sil | Droite |
+| 496018 | Rehau S 980 Geneo | 13 | J | Roto Sil | Gauche |
+| 496017 | Rehau S 980 Geneo | 13 | J | Roto Sil | Droite |
+| 260507 | Roplasto 4K ; Roplasto 7001 AD ; Roplasto 7001 MD | 13 | J | Roto Sil | Gauche |
+| 260508 | Roplasto 4K ; Roplasto 7001 AD ; Roplasto 7001 MD | 13 | J | Roto Sil | Droite |
+| 561212 | Salamander 2D ; Salamander 3D ; Salamander Streamline 76 | 13 | N | Roto Sil | – |
+| 261724 | Salamander 2D ; Salamander 3D ; Salamander Streamline 76 | 13 | J | Roto Sil | Gauche |
+| 261725 | Salamander 2D ; Salamander 3D ; Salamander Streamline 76 | 13 | J | Roto Sil | Droite |
+| 338019 | Schüco Corona CT70 AD ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 ; Veka Softline 82 MD ; Veka Softline 76 AD ; Veka Softline 76 MD | 13 | N | Roto Sil | – |
+| 256783 | Schüco Corona CT70 AD ; Veka Softline 70 AD ; Veka Softline 70 MD ; Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 ; Veka Softline 76 AD ; Veka Softline 76 MD | 13 | J | Roto Sil | Gauche |
+| 256784 | Schüco Corona CT70 AD ; Veka Softline 70 AD ; Veka Softline 70 MD ; Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 ; Veka Softline 76 AD ; Veka Softline 76 MD | 13 | J | Roto Sil | Droite |
+| 604887 | Salamander BluEvolution 92 | 13 | N | Roto Sil | – |
+| 599778 | Salamander BluEvolution 92 | 13 | J | Roto Sil | Gauche |
+| 599779 | Salamander BluEvolution 92 | 13 | J | Roto Sil | Droite |
+| 290131 | Trocal 88+ ; Trocal InnoNova 2000 | 13 | J | Roto Sil | Gauche |
+| 290152 | Trocal 88+ ; Trocal InnoNova 2000 | 13 | J | Roto Sil | Droite |
+| 336808 | Trocal InnoNova 70.A5 AD ; Trocal InnoNova 70.M5 MD | 13 | N | Roto Sil | – |
+| 260495 | Veka Softline AD 9 | 9 | J | Roto Sil | Gauche |
+| 260496 | Veka Softline AD 9 | 9 | J | Roto Sil | Droite |
+| 254468 | Wymar 2500 | 13 | J | Roto Sil | Gauche |
+| 294893 | Wymar 2500 | 13 | J | Roto Sil | Droite |
+| 373964 | Wymar 3000 | 13 | J | Roto Sil | Gauche |
+| 373963 | Wymar 3000 | 13 | J | Roto Sil | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 350-352)
+
+## Gâche de basculement standard, acier
+
+![Gâches de basculement standard en acier, repères A et B](/assets/quincaillerie/roto-nx-catalogue/pieces-fermeture/gache-basculement-standard-acier.png)
+
+Section 9.1.1.2 « Acier » : deux dessins, avec un tableau « Classement » : [A] axe de ferrure
+9 mm, [B] axe de ferrure 13 mm. Toutes les lignes portent « J » en colonne sol et « – » en DIN
+gauche / droite [1 p. 352-353].
+
+| N° de matériel | Système de profil | Axe de ferrure (mm) | Sol | Traitement de surface | DIN gauche / droite |
+| --- | --- | ---: | :---: | --- | --- |
+| 856773 | Aluplast Ideal 2000 ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD ; Schüco LivIng 82 ; Veka Softline 82 MD | 13 | J | Roto Sil | – |
+| 856789 | Aluplast energeto 5000 ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 4000 ; Aluplast energeto 8000 ; Aluplast Ideal 5000 ; Aluplast Ideal 7000 ; Aluplast Ideal 8000 ; Schüco Corona AD | 13 | J | Roto Sil | – |
+| 856786 | Brügmann AD 13 ; Brügmann MD 13 | 13 | J | Roto Sil | – |
+| 856797 | Inoutic AD 13 ; Deceuninck Eforte ; Inoutic MD 100 ; Deceuninck Prestige AD | 13 | J | Roto Sil | – |
+| 856783 | Deceuninck Elegant ; Deceuninck Legend ; Deceuninck Zendow | 13 | J | Roto Sil | – |
+| 856781 | Gealan Linear ; Gealan S3000 ; Gealan S7000 ; Gealan S8000 ; Gealan S9000 | 13 | J | Roto Sil | – |
+| 856800 | KBE AD | 9 | J | Roto Sil | – |
+| 856787 | KBE 70 AD | 13 | J | Roto Sil | – |
+| 856799 | KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | 13 | J | Roto Sil | – |
+| 857009 | Kömmerling 88 Plus ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 13 | J | Roto Sil | – |
+| 857008 | Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance ; Wymar 3000 | 13 | J | Roto Sil | – |
+| 856788 | Plus Plan Plus Tec ; Roplasto 4K ; Roplasto 7001 AD ; Roplasto 7001 MD | 13 | J | Roto Sil | – |
+| 856785 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) ; Rehau S 969 Synego ; Rehau S 980 Geneo ; Rehau S 986 EuroDesign 86 | 13 | J | Roto Sil | – |
+| 856782 | Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Schüco Corona CT70 AD ; Veka Softline 70 AD ; Veka Softline 76 AD ; Veka Softline 76 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 | 13 | J | Roto Sil | – |
+| 857131 | Salamander Design 2D ; Salamander Design 3D ; Salamander Streamline 76 | 13 | J | Roto Sil | – |
+| 897733 | Salamander GreenEvolution 76 | 13 | J | Roto Sil | – |
+| 856774 | Schüco Corona CT70 MD | 13 | J | Roto Sil | – |
+| 856796 | Trocal 88+ ; Trocal InnoNova 2000 ; Trocal S900 | 13 | J | Roto Sil | – |
+| 856801 | Veka Softline AD 9 | 9 | J | Roto Sil | – |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 352-353)
+
+## Gâche de basculement TiltFirst (TF)
+
+![Gâches de basculement TiltFirst, repères A et B](/assets/quincaillerie/roto-nx-catalogue/pieces-fermeture/gache-basculement-tiltfirst.png)
+
+Section 9.1.2 « TiltFirst (TF) », gâche de basculement de la ferrure TiltFirst (voir
+[Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md)).
+Deux dessins repérés : [A] palier oscillant à droite / à gauche ; [B] palier oscillant
+symétrique [1 p. 353-354].
+
+| N° de matériel | Système de profil | Axe de ferrure (mm) | Sol | Traitement de surface | DIN gauche / droite |
+| --- | --- | ---: | :---: | --- | --- |
+| 891744 | Aluplast Ideal 2000 ; Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD | 13 | J | Roto Sil | Gauche |
+| 891743 | Aluplast Ideal 2000 ; Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD | 13 | J | Roto Sil | Droite |
+| 891747 | Aluplast energeto 5000 ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast energeto 8000 ; Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 7000 ; Aluplast Ideal 8000 ; Schüco Corona AD | 13 | J | Roto Sil | Gauche |
+| 891748 | Aluplast energeto 5000 ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast energeto 8000 ; Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 7000 ; Aluplast Ideal 8000 ; Schüco Corona AD | 13 | J | Roto Sil | Droite |
+| 320608 | Brügmann AD 13 ; Brügmann MD 13 | 13 | J | Roto Sil | Gauche |
+| 320609 | Brügmann AD 13 ; Brügmann MD 13 | 13 | J | Roto Sil | Droite |
+| 493840 | Deceuninck Eforte ; Deceuninck Prestige AD ; Deceuninck Prestige MD ; Inoutic AD 13 | 13 | J | Roto Sil | Gauche |
+| 493839 | Deceuninck Eforte ; Deceuninck Prestige AD ; Deceuninck Prestige MD ; Inoutic AD 13 | 13 | J | Roto Sil | Droite |
+| 493547 | Deceuninck Zendow ; Deceuninck Elegant ; Deceuninck Legend | 13 | J | Roto Sil | Gauche |
+| 493426 | Deceuninck Zendow ; Deceuninck Elegant ; Deceuninck Legend | 13 | J | Roto Sil | Droite |
+| 807519 | Gealan Kubus | 13 | J | Roto Sil | Gauche |
+| 807520 | Gealan Kubus | 13 | J | Roto Sil | Droite |
+| 280122 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | 13 | J | Roto Sil | Gauche |
+| 280123 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | 13 | J | Roto Sil | Droite |
+| 891745 | KBE 70 AD ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | 13 | J | Roto Sil | Gauche |
+| 891746 | KBE 70 AD ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | 13 | J | Roto Sil | Droite |
+| 317004 | KBE AD | 9 | J | Roto Sil | Gauche |
+| 317005 | KBE AD | 9 | J | Roto Sil | Droite |
+| 309132 | Kömmerling 88 Plus ; Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 13 | J | Roto Sil | Gauche |
+| 309133 | Kömmerling 88 Plus ; Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 13 | J | Roto Sil | Droite |
+| 891718 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) ; Rehau S 969 Synego ; Rehau S 980 Geneo | 13 | J | Roto Sil | Gauche |
+| 891719 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) ; Rehau S 969 Synego ; Rehau S 980 Geneo | 13 | J | Roto Sil | Droite |
+| 316977 | Salamander 2D ; Salamander 3D ; Salamander Streamline 76 | 13 | J | Roto Sil | Gauche |
+| 316978 | Salamander 2D ; Salamander 3D ; Salamander Streamline 76 | 13 | J | Roto Sil | Droite |
+| 891741 | Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 ; Veka Softline 76 AD ; Veka Softline 76 MD ; Veka Topline AD 13 ; Veka Topline MD 13 | 13 | J | Roto Sil | Gauche |
+| 891742 | Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 ; Veka Softline 76 AD ; Veka Softline 76 MD ; Veka Topline AD 13 ; Veka Topline MD 13 | 13 | J | Roto Sil | Droite |
+| 606635 | Trocal 88+ ; Trocal InnoNova 2000 | 13 | J | Roto Sil | Gauche |
+| 606636 | Trocal 88+ ; Trocal InnoNova 2000 | 13 | J | Roto Sil | Droite |
+| 309136 | Trocal S900 | 9 | J | Roto Sil | Gauche |
+| 309137 | Trocal S900 | 9 | J | Roto Sil | Droite |
+| 336107 | Trocal InnoNova 70.A5 AD ; Trocal InnoNova 70.M5 MD | 13 | J | Roto Sil | Gauche |
+| 336108 | Trocal InnoNova 70.A5 AD ; Trocal InnoNova 70.M5 MD | 13 | J | Roto Sil | Droite |
+| 617391 | Veka Softline 70 AD ; Veka Topline AD 13 ; Veka Softline 76 AD ; Veka Softline 76 MD | 13 | N | Roto Sil | – |
+| 328015 | Veka Softline AD 9 | 9 | J | Roto Sil | Gauche |
+| 328016 | Veka Softline AD 9 | 9 | J | Roto Sil | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 353-354)
+
+## Gâche de basculement de seuil
+
+La section 9.1.3 « Seuils » ne porte aucune référence : elle se compose d'un encadré « INFO —
+Raccordement des seuils » : « Vous trouverez dans le document suivant une description détaillée
+du raccordement des seuils au système de ferrures Roto NX. », suivi d'un code QR et du nom du
+document **IMO_347**, qui n'est pas dans le corpus [1 p. 355].
+
+## Gâche de basculement oscillo-battant latéral
+
+![Gâche de basculement oscillo-battant latéral](/assets/quincaillerie/roto-nx-catalogue/pieces-fermeture/gache-basculement-oscillo-battant-lateral.png)
+
+Section 9.1.4 « Oscillo-battant latéral » : un dessin [1 p. 355].
+
+| N° de matériel | Système de profil | Axe de ferrure (mm) | Sol | Traitement de surface | DIN gauche / droite |
+| --- | --- | ---: | :---: | --- | --- |
+| 363626 | Aluplast Ideal 2000 | 13 | J | Roto Sil | Gauche |
+| 363627 | Aluplast Ideal 2000 | 13 | J | Roto Sil | Droite |
+| 764504 | KBE AD | 9 | J | Roto Sil | Gauche |
+| 764676 | KBE AD | 9 | J | Roto Sil | Droite |
+| 772925 | KBE 70 AD | 13 | J | Roto Sil | Gauche |
+| 772926 | KBE 70 AD | 13 | J | Roto Sil | Droite |
+| 772927 | Rehau S 799 Brillant Design (S 730) | 13 | J | Roto Sil | Gauche |
+| 772928 | Rehau S 799 Brillant Design (S 730) | 13 | J | Roto Sil | Droite |
+| 363632 | Salamander 2D ; Salamander 3D | 13 | J | Roto Sil | Gauche |
+| 363634 | Salamander 2D ; Salamander 3D | 13 | J | Roto Sil | Droite |
+| 772913 | Veka Softline 70 AD | 13 | J | Roto Sil | Gauche |
+| 772914 | Veka Softline 70 AD | 13 | J | Roto Sil | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 355)
+
+# Gâches
+
+## Gâche standard
+
+![Gâche standard](/assets/quincaillerie/roto-nx-catalogue/pieces-fermeture/gache-standard.png)
+
+Section 9.2.1 « Standard » : un dessin ; le tableau n'a pas de colonne DIN gauche / droite
+[1 p. 356-357].
+
+| N° de matériel | Système de profil | Axe de ferrure (mm) | Sol | Traitement de surface |
+| --- | --- | ---: | :---: | --- |
+| 331489 | Aluplast Ideal 2000 ; LB Profile Pad ; Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD ; Schüco LivIng 82 | 13 | N | Roto Sil |
+| 350192 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona AD ; Schüco Corona MD ; Aluplast energeto 5000 ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast energeto 8000 ; Aluplast Ideal 7000 | 13 | N | Roto Sil |
+| 341485 | Brügmann AD 13 ; Brügmann MD 13 | 13 | N | Roto Sil |
+| 292193 | Brügmann AD 13 ; Brügmann MD 13 | 13 | J | Roto Sil |
+| 260370 | Deceuninck Eforte ; Deceuninck Prestige AD ; Deceuninck Prestige MD ; Inoutic AD 13 ; Inoutic MD 100 | 13 | J | Roto Sil |
+| 370071 | Deceuninck Zendow ; Deceuninck Elegant ; Deceuninck Legend | 13 | N | Roto Sil |
+| 281601 | Deceuninck Klassiek ; Deceuninck Mondial VK | 13 | J | Roto Sil |
+| 796675 | Gealan Kubus | 13 | N | Roto Sil |
+| 319744 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 ; Gealan S9000 ; Gealan Linear | 13 | N | Roto Sil |
+| 260367 | KBE AD | 9 | J | Roto Sil |
+| 260373 | KBE MD ; Trocal S900 | 9 | J | Roto Sil |
+| 338070 | KBE 70 AD ; KBE 70 MD | 13 | N | Roto Sil |
+| 738470 | KBE 76 ; Kömmerling 76 ; Trocal 76 ; KBE 88 MD ; Kömmerling 88 MD ; Panorama 3000 ; Trocal 88 MD | 13 | N | Roto Sil |
+| 457090 | Kömmerling Eurodur 3S | 13 | N | Roto Sil |
+| 260365 | Kömmerling Eurodur 3S | 13 | J | Roto Sil |
+| 334957 | Kömmerling 88 Plus ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 13 | N | Roto Sil |
+| 281723 | Panorama 2000 | 9 | J | Roto Sil |
+| 264316 | Plus Plan Plus Tec | 13 | J | Roto Sil |
+| 332439 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) ; Rehau S 969 Synego ; Rehau S 980 Geneo ; Rehau S 986 EuroDesign 86 | 13 | N | Roto Sil |
+| 482541 | Roplasto 4K ; Roplasto 7001 AD ; Roplasto 7001 MD | 13 | N | Roto Sil |
+| 486195 | Salamander 2D ; Salamander 3D ; Salamander BluEvolution 92 ; Salamander Streamline 76 | 13 | N | Roto Sil |
+| 332438 | Salamander BluEvolution 82 ; Schüco Corona CT70 AD ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander BluEvolution 73 ; Veka Softline 82 MD ; Veka Softline 76 AD ; Veka Softline 76 MD | 13 | N | Roto Sil |
+| 897004 | Salamander GreenEvolution 76 | 13 | N | Roto Sil |
+| 290127 | Trocal 88+ ; Trocal InnoNova 2000 | 13 | J | Roto Sil |
+| 336797 | Trocal InnoNova 70.A5 AD ; Trocal InnoNova 70.M5 MD | 13 | N | Roto Sil |
+| 260368 | Veka Softline AD 9 | 9 | N | Roto Sil |
+| 380088 | Wymar 2500 | 13 | N | Roto Sil |
+| 374157 | Wymar 3000 | 13 | N | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 356-357)
+
+## Gâche de sécurité, zinc
+
+![Gâches de sécurité en zinc, repères A et B](/assets/quincaillerie/roto-nx-catalogue/pieces-fermeture/gache-securite-zinc.png)
+
+Section 9.2.2.1 « Zinc » des gâches de sécurité : deux dessins repérés. [A] : avec sol, sécurité
+CDR 1 N, CDR 2 / CDR 2 N. [B] : sans sol, sécurité de base [1 p. 357-359].
+
+| N° de matériel | Système de profil | Axe de ferrure (mm) | Sol | Traitement de surface | DIN gauche / droite |
+| --- | --- | ---: | :---: | --- | --- |
+| 331490 | Aluplast Ideal 2000 ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD ; Schüco LivIng 82 | 13 | N | Roto Sil | – |
+| 260395 | Aluplast Ideal 2000 ; LB Profile Pad ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD ; Schüco LivIng 82 | 13 | J | Roto Sil | – |
+| 350191 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Schüco Corona AD ; Aluplast energeto 5000 ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast energeto 8000 ; Aluplast Ideal 7000 ; Aluplast Ideal 8000 | 13 | N | Roto Sil | – |
+| 257357 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Schüco Corona AD ; Aluplast energeto 5000 ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast energeto 8000 ; Aluplast Ideal 7000 ; Aluplast Ideal 8000 | 13 | J | Roto Sil | – |
+| 292194 | Brügmann AD 13 ; Brügmann MD 13 | 13 | J | Roto Sil | – |
+| 260394 | Deceuninck Eforte ; Deceuninck Prestige AD ; Deceuninck Prestige MD ; Inoutic AD 13 ; Inoutic MD 100 | 13 | J | Roto Sil | – |
+| 370072 | Deceuninck Zendow ; Deceuninck Elegant ; Deceuninck Legend | 13 | J | Roto Sil | – |
+| 281632 | Deceuninck Klassiek ; Deceuninck Mondial VK | 13 | J | Roto Sil | – |
+| 807521 | Gealan Kubus | 13 | N | Roto Sil | – |
+| 367201 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 ; Gealan Linear ; Gealan S9000 | 13 | N | Roto Sil | – |
+| 260393 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 ; Gealan Linear ; Gealan S9000 | 13 | J | Roto Sil | – |
+| 289941 | KBE 70 AD | 13 | J | Roto Sil | – |
+| 738471 | KBE 76 ; Kömmerling 76 ; Trocal 76 ; KBE 88 MD ; Kömmerling 88 MD ; Trocal 88 MD | 13 | J | Roto Sil | – |
+| 260391 | KBE AD | 9 | J | Roto Sil | – |
+| 260398 | KBE MD ; Trocal S900 | 9 | J | Roto Sil | Droite |
+| 260397 | KBE MD ; Trocal S900 | 9 | J | Roto Sil | Gauche |
+| 258303 | Kömmerling Eurodur 3S | 13 | J | Roto Sil | – |
+| 334958 | Kömmerling 88 Plus ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 13 | N | Roto Sil | – |
+| 281768 | Panorama 3000 | 13 | J | Roto Sil | – |
+| 264327 | Plus Plan Plus Tec | 13 | J | Roto Sil | – |
+| 316942 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) ; Rehau S 969 Synego ; Rehau S 986 EuroDesign 86 | 13 | J | Roto Sil | – |
+| 348407 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) ; Rehau S 969 Synego ; Rehau S 986 EuroDesign 86 | 13 | N | Roto Sil | – |
+| 496019 | Rehau S 980 Geneo | 13 | J | Roto Sil | – |
+| 260399 | Roplasto 4K ; Roplasto 7001 AD ; Roplasto 7001 MD | 13 | J | Roto Sil | – |
+| 365385 | Salamander 2D ; Salamander 3D ; Salamander Streamline 76 | 13 | J | Roto Sil | – |
+| 260396 | Salamander BluEvolution 82 ; Schüco Corona CT70 AD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander BluEvolution 73 ; Veka Softline 82 MD ; Veka Softline 76 AD ; Veka Softline 76 MD | 13 | J | Roto Sil | – |
+| 348410 | Salamander BluEvolution 82 ; Schüco Corona CT70 AD ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander BluEvolution 73 ; Veka Softline 76 AD ; Veka Softline 76 MD | 13 | N | Roto Sil | – |
+| 601574 | Salamander BluEvolution 92 | 13 | J | Roto Sil | – |
+| 897080 | Salamander GreenEvolution 76 | 13 | J | Roto Sil | – |
+| 290128 | Trocal 88+ ; Trocal InnoNova 2000 | 13 | N | Roto Sil | – |
+| 260392 | Veka Softline AD 9 | 9 | J | Roto Sil | – |
+| 374194 | Wymar 3000 | 13 | J | Roto Sil | – |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 357-359)
+
+## Gâche de sécurité, acier
+
+![Gâches de sécurité en acier, repères A et B](/assets/quincaillerie/roto-nx-catalogue/pieces-fermeture/gache-securite-acier.png)
+
+Section 9.2.2.2 « Acier » : deux dessins, avec un tableau « Classement » : [A] gâche symétrique,
+[B] gâche gauche / droite [1 p. 359-360].
+
+| N° de matériel | Système de profil | Axe de ferrure (mm) | Sol | Traitement de surface | DIN gauche / droite |
+| --- | --- | ---: | :---: | --- | --- |
+| 856737 | Aluplast Ideal 2000 ; LB Profile Pad ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD ; Schüco LivIng 82 | 13 | J | Roto Sil | – |
+| 856753 | Aluplast energeto 5000 ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 4000 ; Aluplast energeto 8000 ; Aluplast Ideal 5000 ; Aluplast Ideal 7000 ; Aluplast Ideal 8000 ; Schüco Corona AD | 13 | J | Roto Sil | – |
+| 856757 | Brügmann AD 13 ; Brügmann MD 13 | 13 | J | Roto Sil | Gauche |
+| 856756 | Brügmann AD 13 ; Brügmann MD 13 | 13 | J | Roto Sil | Droite |
+| 856752 | Inoutic AD 13 ; Deceuninck Eforte ; Inoutic Favorite AD 13 ; Inoutic MD 100 ; Deceuninck Prestige AD ; Deceuninck Prestige MD | 13 | J | Roto Sil | – |
+| 856751 | Deceuninck Elegant ; Deceuninck Legend ; Deceuninck Zendow | 13 | J | Roto Sil | – |
+| 856749 | Gealan Linear ; Gealan S3000 ; Gealan S7000 ; Gealan S8000 ; Gealan S9000 | 13 | J | Roto Sil | – |
+| 857007 | KBE AD | 9 | N | Roto Sil | – |
+| 857004 | KBE 70 AD | 13 | J | Roto Sil | Gauche |
+| 857005 | KBE 70 AD | 13 | J | Roto Sil | Droite |
+| 856754 | KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | 13 | J | Roto Sil | – |
+| 857003 | Kömmerling 88 Plus ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 13 | J | Roto Sil | – |
+| 857006 | Kömmerling Eurodur 3S ; Wymar 3000 | 13 | J | Roto Sil | – |
+| 856750 | Plus Plan Plus Tec ; Roplasto 4K ; Roplasto 7001 AD ; Roplasto 7001 MD | 13 | J | Roto Sil | – |
+| 856748 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) ; Rehau S 969 Synego ; Rehau S 980 Geneo ; Rehau S 986 EuroDesign 86 | 13 | J | Roto Sil | – |
+| 856738 | Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Schüco Corona CT70 AD ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 76 AD ; Veka Softline 76 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 | 13 | J | Roto Sil | – |
+| 858209 | Salamander Design 2D ; Salamander Design 3D ; Salamander Streamline 76 | 13 | J | Roto Sil | Gauche |
+| 858210 | Salamander Design 2D ; Salamander Design 3D ; Salamander Streamline 76 | 13 | J | Roto Sil | Droite |
+| 897003 | Salamander GreenEvolution 76 | 13 | J | Roto Sil | Gauche |
+| 856763 | Trocal 88+ ; Trocal InnoNova 2000 ; Trocal S900 | 13 | J | Roto Sil | Gauche |
+| 856762 | Trocal 88+ ; Trocal InnoNova 2000 ; Trocal S900 | 13 | J | Roto Sil | Droite |
+| 858211 | Trocal InnoNova 70.A5 AD ; Trocal InnoNova 70.M5 MD | 13 | J | Roto Sil | – |
+| 856761 | Veka Softline AD 9 | 9 | N | Roto Sil | – |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 359-360)
+
+## Gâche de sécurité de l'aération par ouverture à soufflet (TiltSafe)
+
+![Gâche de sécurité de l'aération par ouverture à soufflet TiltSafe](/assets/quincaillerie/roto-nx-catalogue/pieces-fermeture/gache-aeration-soufflet-tiltsafe.png)
+
+Section 9.2.2.3 « Aération par ouverture à soufflet (TiltSafe) » : c'est la « gâche de sécurité
+pour ventilation basculante » [29] des vues d'ensemble TiltSafe. Un dessin ; le tableau n'a pas
+de colonne sol [1 p. 361].
+
+| N° de matériel | Système de profil | Axe de ferrure (mm) | Traitement de surface | DIN gauche / droite |
+| --- | --- | ---: | --- | --- |
+| 816132 | Aluplast Ideal 2000 ; Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD ; Schüco LivIng 82 | 13 | Roto Sil | Gauche |
+| 816131 | Aluplast Ideal 2000 ; Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD ; Schüco LivIng 82 | 13 | Roto Sil | Droite |
+| 795447 | Aluplast energeto 5000 ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast energeto 8000 ; Aluplast Ideal 8000 ; Aluplast Ideal 7000 | 13 | Roto Sil | Gauche |
+| 795448 | Aluplast energeto 5000 ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast energeto 8000 ; Aluplast Ideal 8000 ; Aluplast Ideal 7000 | 13 | Roto Sil | Droite |
+| 795450 | Gealan S8000 ; Gealan Linear | 13 | Roto Sil | Gauche |
+| 795451 | Gealan S8000 ; Gealan Linear | 13 | Roto Sil | Droite |
+| 839325 | Deceuninck Eforte ; Deceuninck Prestige AD ; Deceuninck Prestige MD | 13 | Roto Sil | Gauche |
+| 839327 | Deceuninck Eforte ; Deceuninck Prestige AD ; Deceuninck Prestige MD | 13 | Roto Sil | Droite |
+| 795445 | Deceuninck Elegant ; Deceuninck Legend ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | 13 | Roto Sil | Gauche |
+| 795446 | Deceuninck Elegant ; Deceuninck Legend ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | 13 | Roto Sil | Droite |
+| 794922 | Rehau S 730 AD ; Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) ; Rehau S 986 EuroDesign 86 | 13 | Roto Sil | Gauche |
+| 795449 | Rehau S 730 AD ; Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) ; Rehau S 986 EuroDesign 86 | 13 | Roto Sil | Droite |
+| 828260 | Salamander Streamline 76 | 13 | Roto Sil | Gauche |
+| 828261 | Salamander Streamline 76 | 13 | Roto Sil | Droite |
+| 795443 | Veka Topline AD 13 ; Veka Softline 82 MD ; Veka Softline 76 AD ; Veka Softline 76 MD | 13 | Roto Sil | Gauche |
+| 795444 | Veka Topline AD 13 ; Veka Softline 82 MD ; Veka Softline 76 AD ; Veka Softline 76 MD | 13 | Roto Sil | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 361)
+
+### Support de sécurité de l'aération par ouverture à soufflet (TiltSafe)
+
+![Support de sécurité de l'aération par ouverture à soufflet TiltSafe](/assets/quincaillerie/roto-nx-catalogue/pieces-fermeture/support-securite-aeration-soufflet-tiltsafe.png)
+
+Même section, en haut de la p. 362 : un dessin et une seule référence, commune à 22 systèmes de
+profil, avec la classe de sécurité imprimée « RC 2 / RC 2 N » [1 p. 362].
+
+| N° de matériel | Désignation | Système de profil | Axe de ferrure (mm) | Classe de sécurité |
+| --- | --- | --- | ---: | --- |
+| 816934 | Supports de sécurité aération par ouverture à soufflet (TiltSafe) | Aluplast Ideal 2000 ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Aluplast Ideal 7000 ; Gealan S8000 ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Rehau S 730 AD ; Rehau S 799 Brillant Design (S 730) ; Rehau S 986 EuroDesign 86 ; Schüco Corona CT70 AD ; Schüco Corona SI82 MD ; Schüco LivIng 82 ; Trocal 76 ; Trocal 88 MD ; Veka Softline 82 MD ; Veka Topline AD 13 | 13 | RC 2 ; RC 2 N |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 362)
+
+Encadré « INFO — Élément recommandé pour le test du système (CDR 2 / CDR 2 N) » : « Le support de
+sécurité de l'aération par ouverture à soufflet (TiltSafe) réduit au minimum la zone d'attaque
+sur la gâche de sécurité de l'aération par soufflet (TiltSafe). » [1 p. 362]
+
+## Gâche deux vantaux
+
+![Gâche deux vantaux](/assets/quincaillerie/roto-nx-catalogue/pieces-fermeture/gache-deux-vantaux.png)
+
+Section 9.2.3 « Deux vantaux » : un dessin ; le tableau n'a que le système de profil, l'axe de
+ferrure et le traitement de surface [1 p. 362-363].
+
+| N° de matériel | Système de profil | Axe de ferrure (mm) | Traitement de surface |
+| --- | --- | ---: | --- |
+| 260439 | Aluplast Ideal 2000 ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD | 13 | Roto Sil |
+| 257360 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Schüco Corona AD ; Aluplast energeto 5000 ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast energeto 8000 ; Aluplast Ideal 7000 ; Aluplast Ideal 8000 | 13 | Roto Sil |
+| 263783 | Brügmann AD 13 ; Brügmann MD 13 ; Salamander BluEvolution 82 ; Schüco Corona CT70 AD ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander BluEvolution 73 ; Salamander GreenEvolution 76 ; Veka Softline 76 AD ; Veka Softline 76 MD | 13 | Roto Sil |
+| 260438 | Deceuninck Eforte ; Deceuninck Prestige AD ; Deceuninck Prestige MD ; Inoutic AD 13 ; Inoutic Favorite AD 13 ; Inoutic MD 100 | 13 | Roto Sil |
+| 370177 | Deceuninck Zendow ; Deceuninck Elegant ; Deceuninck Legend | 13 | Roto Sil |
+| 260437 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | 13 | Roto Sil |
+| 260442 | KBE MD ; Trocal S900 | 13 | Roto Sil |
+| 286640 | KBE 70 AD ; KBE 76 ; Kömmerling 76 ; Trocal 76 ; KBE 88 MD ; Kömmerling 88 MD ; Trocal 88 MD | 13 | Roto Sil |
+| 485436 | KBE AD | 13 | Roto Sil |
+| 260433 | Kömmerling 88 Plus ; Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | 13 | Roto Sil |
+| 281730 | Panorama 2000 | 9 | Roto Sil |
+| 264369 | Plus Plan Plus Tec | 13 | Roto Sil |
+| 260434 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) ; Rehau S 969 Synego ; Rehau S 980 Geneo ; Rehau S 986 EuroDesign 86 | 13 | Roto Sil |
+| 260443 | Roplasto 4K ; Roplasto 7001 AD ; Roplasto 7001 MD | 13 | Roto Sil |
+| 260446 | Salamander 2D ; Salamander 3D ; Salamander Streamline 76 | 13 | Roto Sil |
+| 604886 | Salamander BluEvolution 92 | 13 | Roto Sil |
+| 263035 | Trocal InnoNova 70.A5 AD ; Trocal InnoNova 70.M5 MD | 13 | Roto Sil |
+| 290213 | Trocal 88+ ; Trocal InnoNova 2000 | 13 | Roto Sil |
+| 374161 | Wymar 3000 | 13 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 362-363)
+
+## Gâche de têtière
+
+Section 9.2.4 « Têtière » : deux pièces, chacune dessinée au-dessus de son tableau d'une ligne,
+sans système de profil [1 p. 364].
+
+| N° de matériel | Désignation | Traitement de surface | Dessin |
+| --- | --- | --- | ---: |
+| 260359 | Galet V | Roto Sil | ![Gâche de têtière, galet V](/assets/quincaillerie/roto-nx-catalogue/pieces-fermeture/gache-tetiere-galet-v.png) |
+| 339395 | Gâche vissable pour crémone de semi-fixe (hauteur de poignée variable) | Roto Sil | ![Gâche vissable pour crémone de semi-fixe](/assets/quincaillerie/roto-nx-catalogue/pieces-fermeture/gache-vissable-cremone-semi-fixe.png) |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 364)
+
+Les crémones de semi-fixe sont sur [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md).
+
+## Gâche à crochet
+
+![Gâche à crochet](/assets/quincaillerie/roto-nx-catalogue/pieces-fermeture/gache-crochet.png)
+
+Section 9.2.5 « Crochet » : un dessin ; la colonne réglage (étoile de six flèches) porte
+« Réglable en compression » sur toutes les lignes [1 p. 364-365]. Les verrouilleurs à crochet
+sont sur [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md).
+
+| N° de matériel | Système de profil | Réglage | Traitement de surface |
+| --- | --- | --- | --- |
+| 349261 | Aluplast Ideal 2000 ; Schüco Corona CT70 AD ; Schüco Corona CT70 MD | Réglable en compression | Roto Sil |
+| 349290 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 | Réglable en compression | Roto Sil |
+| 350507 | Deceuninck Prestige ; Inoutic AD 13 ; Inoutic MD 100 | Réglable en compression | Roto Sil |
+| 382703 | Deceuninck Zendow | Réglable en compression | Roto Sil |
+| 349237 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 ; KBE 70 AD | Réglable en compression | Roto Sil |
+| 349214 | Rehau S 788 ; Rehau S 799 Brillant Design (S 730) ; Rehau S 986 EuroDesign 86 | Réglable en compression | Roto Sil |
+| 355675 | Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Topline AD 13 ; Veka Topline MD 13 | Réglable en compression | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 364-365)
+
+# Ce que la source ne donne pas
+
+- Le sens de la colonne « sol » (**VER-124**), et la règle de choix entre version gauche et
+  version droite d'une gâche de basculement (**VER-110**).
+- Les cotes de pose des gâches sur le dormant : elles sont sur les pages de configuration Roto NX
+  KSR, voir *Voir aussi*.
+
+# Citations
+
+[1] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 — `raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 10-12, 349-365
+
+# Voir aussi
+
+- [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)
+- [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md)
+- [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md)
+- [Pivots et paliers d'angle Roto NX](/quincaillerie/roto-nx-pivots-et-paliers-angle.md)
+- [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md)
+- [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md)
+- [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md)
+- [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md)
+- [Configurations Roto NX KSR — châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md)
+- [Transformation d'un ouvrant à la française en oscillo-battant, gamme ROTO NX](/procedures/transformation-of-en-ob-roto-nx.md)
+- [Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md)
+- [Roto NX](/quincaillerie/roto-nx.md)
+- [Catalogue Roto NX pour profils PVC](/sources/roto-nx-catalogue-pvc.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /quincaillerie/roto-nx-legende-catalogue.md | Quincaillerie | Légende des tableaux du catalogue Roto NX PVC | roto, roto-nx, catalogue, pictogramme, legende, abreviation | Les pictogrammes qui servent d'en-têtes de colonne aux tableaux de commande du catalogue Roto NX PVC de juin 2023, les pictogrammes des types d'ouverture et les abréviations du catalogue, avec le dessin de chaque pictogramme. | -nx-catalogue/pictogrammes/percage-ergot.png) / / DIN gauche/droite / deux vantaux, repères au milieu / ![DIN gauche/droite](/assets/quincaillerie/rot |
+| /quincaillerie/roto-nx-pivots-et-paliers-angle.md | Quincaillerie | Pivots et paliers d'angle Roto NX | roto, roto-nx, pivot-d-angle, palier-d-angle, designo, report-de-charge | Les références de commande du chapitre 8 « Pivots d'angle / palier d'angle » du catalogue Roto NX PVC — pivots d'angle P 6/150 et Designo, paliers d'angle P 3/130, P 6/130, P 6/150 et Designo par système de profil, report de charge Designo, caches et bouchon — avec leurs schémas de montage et de perçage. | l (profil en perspective), traitement de surface, DIN gauche / droite, désignation (bulle), type de montage (vis et outil), code couleur (palette) et |
+| /quincaillerie/roto-nx-compas-complementaires.md | Quincaillerie | Deuxième compas, compas d'arrêt, limiteurs et compas d'aération Roto NX | roto, roto-nx, compas, deuxieme-compas, compas-d-arret, limiteur-d-ouverture | Le chapitre 10 « Compas » du catalogue Roto NX PVC — deuxième compas (standard, TiltFirst, plein cintre), compas d'arrêt, limiteur d'ouverture à blocage indexé, releveur d'ouvrant, compas d'entrebâillement et de nettoyage, compas d'aération — avec leurs schémas de montage, cotes, tableaux de choix et références de commande. | , système de profil, axe de ferrure (9 ou 13 mm), DIN gauche / droite, nombre de galets et type de goujon de verrouillage (galet), hauteur fond de feu |
+| /procedures/roto-nx-ksr-consignes-generales.md | Procédure | Roto NX KSR — conventions, documents applicables et consignes de sécurité du manuel de montage | roto, roto-nx, ksr, ferrure, montage, securite | Ce qui encadre tout ferrage Roto NX KSR sur fenêtre et porte-fenêtre PVC : documents et directives applicables, repères de couleur, symboles, pictogrammes et abréviations des dessins, groupes cibles et leurs obligations d'instruction, responsabilité, protection des surfaces, consignes de sécurité et utilisation conforme. | tions sont représentées dans la version à droite (DIN 107)** — la DIN 107 est la norme allemande qui définit la main, droite ou gauche, d'une fenêtre |
+| /quincaillerie/roto-nx-accessoires-et-gabarits.md | Quincaillerie | Accessoires et gabarits d'atelier Roto NX | roto, roto-nx, accessoire, loqueteau, aeration, anti-fausse-manoeuvre | Les chapitres 11 « Accessoires » et 12 « Gabarits / Outils » du catalogue Roto NX PVC — loqueteaux, aération, anti-fausse manœuvre, blocages de commutation, limiteurs d'ouverture par pivotement, éléments de sécurité et de raccordement, serrures de condamnation OF, réhausses, supports, verrouilleur médian, divers ; gabarits de perçage, d'insertion et de traçage, presses à estamper, outils, graisse — avec leurs schémas, tableaux et références de commande. | ement de surface, type de montage (vis et outil), DIN gauche / droite (deux vantaux), position (carré entouré de quatre flèches), information (« i »), |
+| /quincaillerie/roto-nx.md | Quincaillerie | Roto NX | roto, roto-nx, tiltsafe, rc2, oscillo-battant, anticorrosion | Quincaillerie ROTO équipant les gammes PERFORM+ et HYBRIDE+, avec traitement Roto Sil Level 6, système TiltSafe et accès au RC2. | ent mat) pour résistance à la corrosion maximale (DIN EN 13126 / 8 et exempte de composés de chrome VI) » [3 p. 21]. # Accès au RC2 La Roto NX peut |
+| /quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md | Quincaillerie | Renvois d'angle et verrouilleurs Roto NX | roto, roto-nx, renvoi-angle, verrouilleur, galet, quincaillerie | Les références de commande des renvois d'angle Roto NX pour menuiseries PVC (standard, spécial court, têtière, seuil, compas, cintré, fenêtre inclinée, aération, gâche et sortie de tringle) et des verrouilleurs (standard, sécurité, seuils, recoupable, crémone, têtière, opposé, crochet, plein cintre, confort), avec leurs galets, longueurs, positions et dessins. | »), jeu, axe de ferrure, profondeur de feuillure, DIN gauche / droite, sortie de tringle, nombre de gâches soudées [1 p. 10-11, 266-272]. Conventions |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/incoherences-internes.md :
+| INC-294 | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023 | PDF p. 287 (6.3.1.2, bras de compas côté P, TiltFirst), relue en image à 250 dpi le 29/09/2026 | Système 12/20-9, LFF 290 – 410, taille 150 : les deux références sont imprimées « Gauche » (**814703** Gauche, **814704** Gauche), alors que chacune des autres paires du tableau, et des tableaux voisins, est imprimée Gauche puis Droite | 814704 probablement DIN droite ; à confirmer par ROTO | Bras TiltFirst droit introuvable dans le tableau, ou 814704 commandé comme un second bras gauche ; voir [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) |
+/anomalies/informations-a-verifier.md :
+| VER-113 | Numéro d'article du pivot d'angle NT Designo II | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, PDF p. 68, 70 et 72, relues en image le 29/09/2026 : « Pivot d'angle Designo 634705 » (un seul numéro, sans gauche / droite), « Palier d'angle Designo » et « Compas Designo » renvoyés au fichier gamme. La page [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) porte « Pivot d'angle ouvrant Designo II — 626594 (gauche) / 626595 (droite) », attribués au catalogue CTL_105 (p. 298-312, 344-348), non relu en image dans cette session ; le manuel était cité à tort sous ce tableau (locator retiré). Relire le catalogue en image : si les deux documents diffèrent, ouvrir un CTR ; complément du 29/09/2026 (tranche 6) : le chapitre « Compas » du catalogue, PDF p. 277-312, relu en image en entier, ne porte ni 626594 / 626595, ni les « compas Designo II » 626578 à 626583 que la page attribuait aux p. 298-312 (retirés de la page) ; ses pièces Designo sont des têtières de compas (385393, 385394, 385415, 385416, 450373, 450374, p. 282-283) et des bras de compas par système de profil (p. 290-297, 301-303) ; les pivots d'angle sont au chapitre « Pivots d'angle / palier d'angle », p. 334-349, pas encore relu ; complément du 29/09/2026 (tranche 7) : le chapitre 8 « Pivots d'angle / palier d'angle », PDF p. 333-345, relu en image à 110-250 dpi, porte **« Pivot d'angle - côté paumelles Designo (BA 13) » 634705**, Roto Sil, un seul numéro sans gauche / droite (p. 338), soit le numéro du manuel ; il ne porte ni 626594 / 626595 ni le palier d'angle Designo « 626590 / 626591 » : ses paliers d'angle Designo sont des paires gauche / droite par système de profil (623974 / 623973 … 606397 / 606396, p. 340-341 ; trois ouvrants 741503 / 741502 … 766768 / 766769, p. 342). La table qui portait 626590 / 626591 et 626594 / 626595 est retirée de la page ; ces quatre numéros n'ont plus aucune source dans le corpus relu | ROTO : confirmer que 626594 / 626595 et 626590 / 626591 n'existent pas (ou désignent d'anciennes pièces) ; aucune source du corpus ne les porte ; voir [Pivots et paliers d'angle Roto NX](/quincaillerie/roto-nx-pivots-et-paliers-angle.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-118 | Angle d'ouverture et repère [C] de la tolérance de châssis fixe côté paumelles P, poids d'ouvrant 150 kg | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 36 (3.6.1 « Côté paumelles P »), relue en image à 110 dpi le 29/09/2026 : tableau « Côté paumelles P », 130 kg et 150 kg, angle d'ouverture « env. 180° [2] » imprimé une fois pour les deux lignes, tolérance 21,0 / 26,5 mm, hauteur de recouvrement mini. 16 mm, colonnes « En haut [C] » 1,0 mm et « En bas [D] » 8 mm | Catalogue Roto NX pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 278 (6.1.1), relu en image à 110-300 dpi le 29/09/2026 : 130 kg « env. 180° [3] », **150 kg « env. 150° [4] »** (notes : selon l'embrasure, l'angle peut être inférieur à 180° / 150°), tolérance ≥ 21,0 / ≥ 26,5 mm, recouvrement ≥ 16 mm, **« Espace extérieur [C] » 100 mm** ; p. 279, vues de face : cote 8 mm sous le vantail, « ≥ 10* » au-dessus de la pièce haute | Non arbitré : chaque valeur reste dans sa source | Vantail de 150 kg posé en prévoyant une ouverture à 180° qui n'est pas garantie ; [C] lu comme un jeu de 1 mm ou comme un espace de 100 mm selon le document ; voir [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md), [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
+/anomalies/incoherences-internes.md :
+| INC-293 | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023 | PDF p. 282 (6.2.1.4, têtière de compas côté P, vantail pivotant) et p. 298 (6.4.1.1, compas articulé à commande forcée, confort), relues en image à 110-200 dpi le 29/09/2026 | Encadrés INFO : « Pour les LVFF à partir de 1001 mm, allonge de crémone requise. » (p. 282) ; « Entre LVFF 1001 – 1400 mm avec allonge de crémone. » (p. 298). L'abréviation **LVFF** n'est pas dans la liste des abréviations (p. 13-14), qui ne définit que LFF et HFF ; les tableaux de ces deux pages sont indexés en LFF ; complément du 29/09/2026 (tranche 9) : PDF p. 403 (11.5.1 limiteur d'ouverture par pivotement 191), repère [D] « Largeur de feuillure d'ouvrant (LVFF) : 240 [7] – 660 mm » — seule page où LVFF est glosé, par « largeur de feuillure d'ouvrant » ; la p. 405 écrit pour le même repère « Largeur de feuillure d'ouvrant (LFF) » | Probablement LFF (largeur fond de feuillure d'ouvrant) ; à confirmer par ROTO | Seuil de l'allonge de crémone lu sur une cote non définie : allonge oubliée ou commandée à tort sur un vantail pivotant ou un compas confort ; voir [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) |
+/anomalies/incoherences-internes.md :
+| INC-295 | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023 | PDF p. 291 (6.3.2.1, bras de compas 250 côté Designo) contre p. 292-293 (bras 350 et 500), relues en image à 170-220 dpi le 29/09/2026 | Bras 250 : deux listes de systèmes de profil distinctes, l'une pour le gauche **635229** (… « Veka Topline MD 13 », « **Salamander BluEvolution 73** », « Salamander BluEvolution 82 » …), l'autre pour le droit **635228** (même liste, « **Brügmann AD 73** » à la place de « Salamander BluEvolution 73 ») ; aux tailles 350 (635231 / 635230) et 500 (635233 / 635232), une seule liste pour la paire, avec « Salamander BluEvolution 73 » | Une seule liste pour la paire, reste à savoir laquelle ; à confirmer par ROTO | Bras 250 gauche et droit apparemment non valables pour les mêmes profilés (Salamander BluEvolution 73, Brügmann AD 73) ; voir [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) |
+/anomalies/incoherences-internes.md :
+| INC-296 | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023 | PDF p. 290 (6.3.1.4, bras de compas côté P, cintré), et p. 287-289 (bras standard, TiltFirst, fenêtre inclinée), relues en image à 110 dpi le 29/09/2026 | Sous le tableau du bras cintré : « Palier de compas adapté, voir → à partir de la page 308→ à partir de la page 306. » (deux pages différentes dans un même renvoi) ; sous les bras standard, TiltFirst et fenêtre inclinée, le renvoi porte deux fois la même page (« … page 306→ à partir de la page 306 ») ; le palier compas commence p. 306 (sommaire p. 277), la p. 308 porte le palier à réglage latéral et les broches | Renvoi probablement « à partir de la page 306 » ; à confirmer par ROTO | Palier du bras cintré cherché sur la mauvaise page (réglage latéral 100 kg au lieu du standard) ; voir [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) |

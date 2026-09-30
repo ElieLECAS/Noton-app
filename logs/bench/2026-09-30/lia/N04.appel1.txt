@@ -1,0 +1,373 @@
+===== PAGE 1 : /procedures/fabrication-et-pose-lumeal-ga.md =====
+# Ce que fait cette procédure
+
+Cette procédure décrit les étapes d'usinage, de drainage, d'étanchéité par injection, d'assemblage en atelier et de mise en œuvre sur chantier des fenêtres et portes-fenêtres coulissantes à ouvrant caché **LUMEAL GA** [1 p. 1, 2 p. 1].
+
+---
+
+# Conditions et interdictions
+
+- **Interdiction absolue de percer le rail bas du dormant** : les eaux de drainage sont collectées dans une chambre indépendante étanchée par talons et évacuées par des orifices frontaux spécifiques [2 p. 4, 3 p. 9].
+- **Interdiction d'associer des roulettes à galets inox sur un chemin de roulement en aluminium** : risque d'usure immédiate par matage (rails inox TGA4001 ou TGY4007 obligatoires) [1 p. 14].
+- La traverse basse doit être calée de façon continue et pouvoir supporter une charge ponctuelle de **100 daN** sans déformation de la menuiserie ou du doublage [2 p. 2].
+- **Tolérances de pose selon NF DTU 36.5** :
+  - Faux aplomb (verticalité) : **$\le 2\text{ mm/m}$**.
+  - Faux niveau (horizontalité) : **$\le 2\text{ mm}$** si $L \le 1,50\text{ m}$, **$3\text{ mm}$** au-delà.
+  - Écart de diagonales du cadre dormant : **$\Delta \le 2\text{ mm}$**.
+- **Collage structurel obligatoire** : si la hauteur d'ouvrant dépasse **$2,20\text{ m}$**, le vitrage doit impérativement faire l'objet d'un collage structurel au mastic **Illbruck SP350** sur une longueur de 200 mm à mi-hauteur des montants centraux et latéraux [1 p. 159, 202].
+- **Soulagement du vantail** : lors du réglage de hauteur des roulettes à la clé Allen de 4 mm, il est obligatoire de soulager le poids du vantail au moyen de ventouses de vitrier pour éviter d'endommager la cage de réglage [2 p. 9, 14].
+
+---
+
+# Étapes
+
+### 1. Usinage et perçage du drainage dormant
+
+1. Percer les orifices oblongs de drainage de **$5 \times 25\text{ mm}$** en sous-face de rail bas à l'aide de l'outil d'atelier **TWU0031** [1 p. 26, 28] :
+   - Pour $L < 2\,000\text{ mm}$ : 2 drainages extérieurs équipés de déflecteurs **T401003** (ou **T401004** en seuil PMR) et 3 drainages intérieurs libres.
+   - Pour $2\,000 \le L < 3\,000\text{ mm}$ : 3 drainages avec déflecteur et 4 drainages libres.
+   - Pour $L \ge 3\,000\text{ mm}$ : 4 drainages avec déflecteur et 5 drainages libres.
+   - Écartement maximal entre 2 drainages : **$\le 500\text{ mm}$**.
+2. Pour les configurations à seuil PMR T141014, usiner les encoches d'évacuation d'angle de $14 \times 19,3\text{ mm}$ pour recevoir les bouchons d'angle **T441005** [1 p. 29].
+
+### 2. Assemblage du cadre dormant
+
+1. Mettre en place un cordon continu de mastic Butyl **TW150** dans les cavités sous les talons d'étanchéité **T401001** (au droit de la chicane) et **T441000** (aux angles montants) [1 p. 56, 60].
+2. Déposer un cordon d'élastomère translucide **TW118** sous le chemin de roulement **T341000** sur 100 mm à partir de l'axe de chicane [1 p. 90].
+3. Clipper le chemin de roulement T341000 dans les rails bas en veillant au bon alignement.
+4. Insérer les profilés PVC pré-percés de drainage **T431024** et **T431025** dans le rail bas à l'aide d'une cale martyr en bois et d'un maillet [1 p. 59, 61].
+5. Assembler les montants latéraux T141030/31 et les traverses dormantes au moyen des vis à tôles inox **T471001** ($4,2 \times 55\text{ mm}$ bout pilote) à travers les talons d'angle T441000 [1 p. 62-63].
+6. Étanquer les tranches d'assemblage profilé/talon au mastic Butyl TW150 et poser les bouchons latéraux de traverse basse **T401006** avec élastomère TW118 [1 p. 60, 62].
+
+### 3. Assemblage des cadres ouvrants cachés
+
+1. Réaliser les perçages de drainage de **Ø 8 mm** sur la traverse basse d'ouvrant T141015 : un trou à 150 mm de chaque extrémité côté extérieur, et un trou supplémentaire au centre si $L_{\text{vantail}} > 1\text{ m}$ [1 p. 145].
+2. Insérer les chariots de roulement doubles **T441004** (ou triples **TGA3608** après entaille de 80 mm) dans la traverse basse et les positionner à 25 mm des extrémités [1 p. 146, 149].
+3. Poser la cale de vitrage **TGA3817** dans la feuillure de la traverse basse directement au-dessus de chaque roulette et l'immobiliser par un point de colle [1 p. 154].
+4. Envelopper le pourtour du vitrage avec le joint portefeuille continu en EPDM (réf. **T411005** à **T411009** selon épaisseur), en débutant par le milieu de la traverse haute : fendre les lèvres d'angle jusqu'au pied du solin et appliquer une goutte d'adhésif Butyl TW150 aux 4 coins [1 p. 158].
+5. Monter les bouchons d'angle d'ouvrant **T441010** (latéral) et **T441011/12** (central) garnis de colle d'étanchéité **TW110** [1 p. 150, 153].
+6. Visser les profilés d'ouvrants aux 4 angles par vis inox **T471000** ($4,2 \times 55\text{ mm}$) et **T471001** ($3,9 \times 35\text{ mm}$) [1 p. 150, 153].
+7. Si $H_{\text{vantail}} > 2,20\text{ m}$, délarder le joint EPDM sur 200 mm à mi-hauteur et injecter un cordon de colle mastic structurel **Illbruck SP350** le long de la rainure intérieure [1 p. 159].
+
+### 4. Pose et calage du dormant sur gros œuvre
+
+1. Déposer sur l'appui maçonnerie la bande préformée d'étanchéité munie de son limiteur d'écrasement, en assurant une remontée d'étanchéité minimale de **100 mm** dans les angles de tableau [2 p. 4].
+2. Présenter le dormant et insérer les cales d'assise sous la traverse basse : calage continu impératif sous les roulettes (vantaux en position fermée) et sous les butées [2 p. 3].
+3. Fixer les pattes de scellement ou d'équerre (**T480015-17** ou **TGY3725-30**) isolées du profilé aluminium par les cales isolantes de rupture thermique **T440074** [1 p. 188, 2 p. 3] :
+   - Entraxe maximal : **$\le 600\text{ mm}$**.
+   - Distance des angles : **$250\text{ mm}$**.
+   - Positionner impérativement une patte de fixation au droit de chaque point de verrouillage [2 p. 3].
+   - Si la largeur dépasse $900\text{ mm}$, fixer obligatoirement le rail bas à l'axe du châssis au moyen d'un étrier sans percer la chambre d'eau [2 p. 3].
+4. Régler l'aplomb et le niveau par les trous oblongs des pattes, serrer définitivement et contrôler les diagonales ($\Delta \le 2\text{ mm}$) [2 p. 5].
+
+### 5. Gondage et réglages des vantaux
+
+1. **Ordre de gondage strict** :
+   - Insérer d'abord le vantail semi-fixe sur le rail haut extérieur, puis le faire descendre sur le rail bas extérieur [2 p. 9].
+   - Insérer ensuite le vantail de service sur le rail intérieur [2 p. 9].
+2. Soulager le vantail au moyen de ventouses et ajuster la hauteur des roulettes à la clé Allen de 4 mm par l'orifice prévu à 25 mm du bas jusqu'à alignement parfait des montants centraux et chicanes [2 p. 9].
+3. Monter le gabarit de réglage **T621000** sur le pêne de serrure pour positionner la gâche en face avec un jeu de fonctionnement exact de **6 mm**, puis bloquer définitivement la gâche à la vis autoforeuse [1 p. 172, 2 p. 10].
+4. Visser le talon d'étanchéité haut **T401000** au droit de la chicane centrale (vis placée impérativement côté aluminium et sous l'ouvrant) et clipser les butées anti-dégondage [1 p. 178, 2 p. 11].
+5. Vérifier que le joint de dormant **T411003** est bien interrompu sur une hauteur de 232 mm au droit du passage de la poignée de tirage intérieure pour éviter toute gêne à la fermeture [2 p. 13].
+
+---
+
+# Cotes
+
+### 1. Tableau d'attribution des pattes de fixation selon doublage intérieur
+
+Cotes en mm pour pose en applique intérieure avec appui aligné ou décalé [1 p. 62] :
+
+| Épaisseur doublage (mm) | Référence tapée aluminium | Patte pour appui aligné | Patte pour appui décalé (40 mm) | Cale isolante associée |
+| --- | --- | --- | --- | --- |
+| **120 mm** | T401022 | TGY3728 | TGY3725 | T440074 |
+| **140 mm** | T401023 | TGY3729 | TGY3726 | T440074 |
+| **160 mm** | T401024 | TGY3730 | TGY3728 | T440074 |
+| **180 mm** | TGA2117 | TFY3745 | TGY3729 | T440074 |
+| **200 mm** | TGA2118 | TFY3746 | TGY3730 | T440074 |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 62)
+
+---
+
+# Ce que le document ne dit pas
+
+- Le document ne traite pas du remplacement de vitrage sur chantier pour les cadres fixes intégrés : le DTA stipule expressément que le vitrage du cadre fixe doit obligatoirement être monté en atelier [3 p. 6].
+
+---
+
+# Citations
+
+[1] LUMEAL GA — Guide d'atelier et catalogue de fabrication (Réf. 5074.007 - 01/2021) — `raw/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf`
+[2] LUMEAL GA — Notice de pose sur chantier (Réf. 5850.002 - 07/2018) — `raw/LUMEAL-GA-notice-installation-5850-002-072018-FR (3).pdf`
+[3] DTA n° 6/14-2166_V2, procédé LUMEAL Minimal Ga (27/05/2024) — `raw/DTA Lumeal GA 6-14-2166-v2.pdf`
+
+---
+
+# Voir aussi
+
+- [Profilés dormants et ouvrants LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md)
+- [Cotes de débit LUMEAL GA](/profiles/lumeal-ga-cotes-de-debit.md)
+- [Roulements et fermetures LUMEAL GA](/quincaillerie/lumeal-ga-roulements-et-fermetures.md)
+- [Coulissants aluminium](/gammes/coulissants-aluminium.md)
+- [TECHNAL](/fournisseurs/technal.md)
+
+===== PAGE 2 : /quincaillerie/lumeal-ga-roulements-et-fermetures.md =====
+# Définition
+
+Les organes de roulement, de fermeture et de sécurité du coulissant **LUMEAL GA** intègrent des chariots de roulement à rupture thermique supportant jusqu'à **300 kg par vantail**, des serrures manuelles à têtière filante dissimulées dans le dormant et des équipements certifiés retard à l'effraction **classe RC3** [1 p. 4, 12, 42].
+
+---
+
+# Caractéristiques
+
+### 1. Chariots de roulement et capacités de charge
+
+Les roulettes sont équipées d'un corps isolant conservant la continuité de rupture thermique des traverses basses d'ouvrants.
+
+| Référence | Type de chariot | Réglage | Galets | Charge admissible par vantail (kg) | Rail compatible |
+| --- | --- | --- | --- | --- | --- |
+| **T401011** | Simple | Non réglable | Polyamide sur axe inox | 100 (50 kg / roulette) | Rail aluminium T341000 ou inox |
+| **T401012** | Double | Non réglable | Polyamide sur aiguilles | 200 (100 kg / roulette) | Rail aluminium T341000 ou inox |
+| **TGY3873** | Double inox | Non réglable | Inox décolleté | 200 (100 kg / roulette) | **Rail inox TGA4001 / TGY4007 uniquement** (incompatible rail alu) |
+| **T441003** | Simple | Réglable par vis | Polyamide | 100 (50 kg / roulette) | Rail aluminium T341000 ou inox |
+| **T441004** | Double | Réglable par vis | Polyamide sur aiguilles | 200 (100 kg / roulette) | Rail aluminium T341000 ou inox (obligatoire en seuil réduit) |
+| **TGY3872** | Double inox | Réglable par vis | Inox décolleté | 200 (100 kg / roulette) | **Rail inox TGA4001 / TGY4007 uniquement** |
+| **TGA3608** | Triple | Non réglable | Polyamide haute densité | **300** (150 kg / roulette) | Rail aluminium ou inox (fraisage traverse 80 mm obligatoire) |
+| **TGA3609** | Triple inox | Non réglable | Inox décolleté | **300** (150 kg / roulette) | **Rail inox TGA4001 / TGY4007 uniquement** |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 42 ; catalogue-fabrication, p. 146-149)
+
+**Règles de calage de vitrage au droit des roulettes (cale TGA3817)** :
+- Sur traverse basse T141021 (vitrage 29 à 32 mm) : **cale TGA3817 obligatoire et systématique** sous le joint de vitrage au droit de chaque roulette [1 p. 42].
+- Sur traverse basse T141015 (vitrage 24 à 28 mm) : cale TGA3817 obligatoire dès que la largeur du vantail dépasse **1,50 m** ou que le poids du vantail dépasse **120 kg** [1 p. 42].
+
+---
+
+### 2. Ferrures de verrouillage et blocs serrures
+
+Les serrures sont encastrées directement dans la rainure du montant dormant vertical.
+
+| Référence | Nombre de points | Hauteur minimale du châssis (mm) | Type de condamnation |
+| --- | --- | --- | --- |
+| **T621001** | 1 point de verrouillage | $H \ge 200\text{ mm}$ | Pêne champignon réglable |
+| **T621002** | 2 points de verrouillage | $H \ge 850\text{ mm}$ | 2 pênes réglables sur tringle filante |
+| **T621003** | 3 points de verrouillage | $H \ge 1\,800\text{ mm}$ | 3 pênes réglables (standard porte-fenêtre) |
+| **T621005** | Serrure extérieure à clé | Hauteur axe poignée $\ge 1\,090\text{ mm}$ | Cylindre européen traversant avec 2 clés |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 46-48)
+
+---
+
+### 3. Verrous et commandes de manœuvre
+
+| Référence | Désignation | Application | Remarque technique |
+| --- | --- | --- | --- |
+| **T641002** | Verrou de vantail de service | Vantail de service intérieur | Positionné à mi-hauteur ou centré sur poignée |
+| **T641003** | Verrou de vantail semi-fixe | Vantail semi-fixe intérieur | Commande de tringle haute et basse |
+| **T641004** | Verrou non indexé | Fermeture libre | Sans crantage de maintien |
+| **T641005** | Verrou intérieur à clé | Vantail de service | Condamnation par clé (obligatoire en RC3) |
+| **T641006** | Verrou intérieur à clé | Vantail semi-fixe | Condamnation par clé (obligatoire en RC3) |
+| **TGY3622** | Arrêt de vantail à clé | Traverse basse | Verrou de blocage en position entrebâillée |
+| **TGY3623** | Cale d'arrêt de vantail | Sous TGY3622 | Support d'adaptation sur traverse basse |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 46-50)
+
+---
+
+### 4. Poignées de tirage et accessoires de manœuvre
+
+| Référence | Désignation | Emplacement | Compatibilité |
+| --- | --- | --- | --- |
+| **TGA3618** | Poignée de tirage inclinée | Intérieur ou extérieur | Vantaux service, semi-fixe et percussion |
+| **TGA3706** | Support pour poignée TGA3618 | Montant latéral T141039/40 | Vantail de service et semi-fixe |
+| **TGA3707** | Support percussion TGA3618 | Montant central T141033/34 | Châssis 4 et 6 vantaux (percussion centrale) |
+| **TGA3606** | Poignée de tirage plate inclinée | Intérieure-extérieure | Permet le croisement sans encombrement |
+| **TGA3607** | Poignée de tirage plate percussion | Montant central T141033 | Percussion centrale 4 et 6 vantaux |
+| **TGA6000** | Poignée de tirage droite tubulaire | Montant latéral | Vantail de service uniquement |
+| **T661004** | Cuvette de tirage encastrée | Traverse basse T141015 | Pour vantail semi-fixe sur fenêtre |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 43-45)
+
+---
+
+# Retard à l'effraction classe RC3
+
+Le système LUMEAL GA bénéficie de la classification anti-effraction **classe RC3** selon les normes européennes **NF EN 1627 à 1630** (Rapport d'essais CNPP n° MD130037) [1 p. 12] :
+- **Domaine dimensionnel homologué** :
+  - Hauteur de baie : **$1\,800\text{ mm}$ à $2\,700\text{ mm}$**.
+  - Largeur de baie : **$1\,800\text{ mm}$ à $3\,300\text{ mm}$**.
+- **Vitrage minimal obligatoire** : vitrage de sécurité certifié **classe P5A** selon NF EN 356 (composition minimale type $44.6 / 16 / 5$).
+- **Équipements de renforcement requis** :
+  1. **Insert acier de dormant TGA3614** : glissé dans la cage du montant dormant T141030 avant assemblage et fixé par 7 vis (ebavurage des trous Ø6 mm) [2 p. 192, 196].
+  2. **Renforts de chicane centraux TGA3703** : fixés par vis pression à travers les montants centraux renforcés T141042/T141043 [2 p. 195, 201].
+  3. **Pênes renforcés et gâches renforcées TGA3705** : montés sur la serrure 3 points T621003 [2 p. 197, 200].
+  4. **Guide et butée anti-dégondage TGA3613** : vissés sur rail haut [2 p. 193, 205].
+  5. **Bouchons renforcés TGA3617** : pour montants centraux [2 p. 201, 204].
+  6. **Verrous intérieurs à clé obligatoires** : T641005 (service) et T641006 (semi-fixe) [2 p. 198, 199].
+  7. **Collage structurel obligatoire des vitrages** : joint délardé sur 200 mm à mi-hauteur et cordon de mastic de collage type **Illbruck SP350** sur montants latéraux et centraux [2 p. 202, 204].
+
+---
+
+# Ce que la source ne donne pas
+
+- Les galets en acier inoxydable (TGY3872, TGY3873, TGA3609) sont strictement incompatibles avec les chemins de roulement en aluminium extrudé T341000 : leur usage impose un chemin de roulement rapporté en acier inoxydable TGA4001 ou TGY4007 sous peine de dégradation rapide du rail [1 p. 42].
+
+---
+
+# Citations
+
+[1] LUMEAL GA — Catalogue de conception Le Coulissant Minimal (Réf. 5156.007 - 01/2021) — `raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf`
+[2] LUMEAL GA — Guide d'atelier et catalogue de fabrication (Réf. 5074.007 - 01/2021) — `raw/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf`
+
+---
+
+# Voir aussi
+
+- [Profilés dormants et ouvrants LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md)
+- [Cotes de débit LUMEAL GA](/profiles/lumeal-ga-cotes-de-debit.md)
+- [Fabrication et pose LUMEAL GA](/procedures/fabrication-et-pose-lumeal-ga.md)
+- [Coulissants aluminium](/gammes/coulissants-aluminium.md)
+- [TECHNAL](/fournisseurs/technal.md)
+
+===== PAGE 3 : /procedures/fabrication-coulissant-askey-65-nv.md =====
+# Ce que fait cette procédure
+
+Cette procédure décrit l'ensemble des opérations d'atelier pour la confection des menuiseries coulissantes **ASKEY Coulissant 65 NV** : débit, poinçonnage pneumatique sur table, usinages de drainage caché, assemblage des dormants en coupe droite, pose du seuil réduit RPT W1040050 ou du seuil PMR W3090163, et ferrage des vantaux [1 p. 5, 25, 65].
+
+---
+
+# Conditions et interdictions
+
+* **Obligation chicane PVC avant poinçonnage** : Le montage des chicanes centrales PVC W4030242 (ouvrant 24 mm) ou W4030243 (ouvrant 32 mm) est **obligatoire** avant tout passage du profilé dans l'outil de poinçonnage Y5740007 [1 p. 30, 31].
+* **Interdiction de perçage traversant en façade de rail** : Tous les drainages de traverse basse doivent déboucher dans la chambre de décompression sous le rail ; aucun trou n'est toléré en vue directe sur le rail bas [1 p. 58].
+* **Sécurité outillage** : Les poinçonneuses pneumatiques doivent être alimentées à une pression nominale de 6 à 7 bars avec commande bi-manuelle ou pédale protégée [1 p. 6, 8, 12].
+* **Masticage obligatoire des tubulures de seuil** : Sur seuil réduit W1040050, il est impératif d'injecter du mastic colle dans les tubulures par le dernier trou de drainage n°1 pour bloquer les échanges air/eau [1 p. 84].
+
+---
+
+# Étapes
+
+### 1. Débit des profilés
+* Couper l'ensemble des profilés d'ossature (dormants, ouvrants, chicanes, couvre-joints, tapées) à coupe droite à angle droit ($90^\circ - 90^\circ$) selon les formules de la fiche [Cotes de débit Coulissant 65 NV](/profiles/askey-coulissant-65-nv-cotes-de-debit.md) [1 p. 25].
+
+### 2. Poinçonnage et usinages d'atelier
+* **Montants dormants CD 65 (W1041284)** :
+  * Découpe des traverses sur poinçonneuse W5040370 (postes 1G et 1D, découpe de 50 mm) [1 p. 7].
+  * Perçage des passages de vis Ø5 mm et trous Ø10 mm sur poinçonneuse W5040371 (poste 3, entraxes 43,3 mm et 10,85 mm) [1 p. 9].
+* **Montants d'ouvrants (24 et 32 mm)** :
+  * Clipper la chicane PVC sur le profilé aluminium [1 p. 30].
+  * Passer dans l'outil Y5740007 :
+    * Poste 1 (ouvrants 28-32 mm) ou Poste 5 (ouvrants 24 mm) : délardage des ailettes sur 64 mm aux extrémités [1 p. 15].
+    * Postes 2, 3 et 4 : poinçonnage du passage de rail aux extrémités (lumière de 22 mm de hauteur, découpe à 28 mm et 39 mm) [1 p. 15, 31].
+* **Traverses d'ouvrants** :
+  * Réaliser les perçages de drainage et d'équilibrage de pression Ø8 mm sur perceuse à colonne :
+    * Traverses hautes et basses : 1 trou Ø8 mm à 140 mm de chaque extrémité [1 p. 36].
+    * Traverses intermédiaires : 1 trou Ø8 mm à 5 mm de chaque extrémité [1 p. 36].
+* **Traverses basses dormants (drainage caché)** :
+  * Sur outil Y5740008 (poste 1) : découper les lumières oblongues de 6x25 mm (2 fentes séparées de 8 mm) [1 p. 17, 58].
+  * Espacement : 1 double trou à 85 mm de chaque extrémité, puis répartir des trous intermédiaires au pas maximal de 300 mm [1 p. 59-62].
+
+### 3. Montage des dormants coupe droite
+1. **Pose des rails rapportés** : Emboîter le rail de roulement aluminium W3041224 ou inox W4000158 dans la gorge du profilé bas, et le sertir par frappe douce à l'aide d'une cale martyr en bois [1 p. 66].
+2. **Équipements de traverse haute** : Glisser le joint brosse W4010503 dans la rainure centrale de traverse haute, en laissant un retrait de 3 mm aux extrémités [1 p. 67].
+3. **Mise en place de l'étanchéité** :
+   * Positionner les busettes de drainage caché W4040615 au droit des découpes [1 p. 69].
+   * Poser le talon d'étanchéité W4040540 au centre du croisement des rails, injecter du mastic colle SNJF neutre bas module sur les marteaux de sertissage [1 p. 70].
+   * Appliquer les flasques mousse adhésives Y4720013 / Y4720014 ou les flasques TPE Y4720004 / Y4720005 sur le bout du profilé [1 p. 74-79].
+4. **Assemblage mécanique du cadre** :
+   * Rapprocher les montants et traverses en coupe droite.
+   * Visser les vis à tôle inox CBLX ST4.8x32 T25 W4070050 dans les alvéoles de vissage (couple de serrage contrôlé) [1 p. 74-78].
+5. **Finition thermique** : Clipper les boucliers thermiques PVC W4030239 (drainé en traverse basse), W4030240 (entre-rail) et W4030241 (montant) à l'aide de la roulette de montage W5040218 [1 p. 80].
+
+### 4. Usinage et montage du seuil réduit W1040050
+1. Réaliser les grugeages d'extrémité sur le seuil réduit à la fraiseuse [1 p. 84].
+2. Usiner les drainages du seuil :
+   * Usinage n°1 (vantail principal) : oblong 15x5 mm sans clapet.
+   * Usinage n°2 (vantail secondaire) : oblong 26x5 mm avec busette à clapet W4040625.
+   * Usinage n°3 : évacuation du recueil d'eaux.
+3. Injecter un cordon de mastic d'étanchéité dans les tubulures par le dernier trou n°1 [1 p. 84].
+4. Positionner la flasque mousse de seuil réduit Y4720012, clipser le pontet d'étanchéité W4040802 au droit du croisement central et visser la lisse de pose W8020007 sous le seuil [1 p. 88, 91, 95].
+
+### 5. Assemblage des ouvrants
+1. **Pose du vitrage** : Dérouler le joint portefeuille de vitrage (Y4710001, Y4710009 ou Y4710010) autour du double vitrage. Couper le solin dans les angles et rabattre le joint en continu [1 p. 98].
+2. **Pose des roulettes** :
+   * Ouvrants 24 mm : insérer les roulettes simples W6050151 ou doubles W6050153 dans les montants latéraux et centraux [1 p. 99].
+   * Ouvrants 32 mm : clipser la cale d'adaptation W6050149, puis insérer la roulette [1 p. 100, 101].
+3. **Assemblage du cadre d'ouvrant** :
+   * Emboîter les traverses hautes et basses W1041264 ou W1041274 sur les montants.
+   * Visser les vis inox Torx ST4.8x41 W0198125 à travers les montants dans les alvéoles de traverses [1 p. 102, 103].
+   * Poser les embouts plastiques d'ouvrants W4040500 / W4040501 faisant office d'antidégondage [1 p. 102].
+4. **Montage des ferrures et poignées** :
+   * Glisser la crémone 1, 2 ou 3 points (W6050100 à 104) dans la gorge du montant latéral.
+   * Poser les rivets taraudés et visser la poignée W6050120 ou W6050125 avec le carré de 7 mm correspondant [1 p. 109, 110].
+   * Placer le centreur de vantail W4040622 immédiatement au-dessus du système anti-fausse manœuvre [1 p. 128].
+
+### 6. Percussion centrale réduite (option 4 vantaux)
+* Usiner les passages de rails sur les montants réduits Y1740040 (semi-fixe) et Y1740041 (principal) [1 p. 116].
+* Fixer le profilé de jonction centrale rapportée Y3740022 à l'aide de vis TF ST3.5x16 au pas de 300 mm (couple maxi 20 Nm) [1 p. 54, 117].
+* Poser les embouts spécifiques de percussion centrale réduite Y4740038 et Y4740039 [1 p. 118].
+
+---
+
+# Cotes
+
+Positionnement des usinages et des outillages [1 p. 7, 9, 31, 38] :
+
+| Opération | Outil d'atelier | Cote relevée (mm) | Tolérance |
+| --- | --- | --- | --- |
+| Découpe montants CD65 | W5040370 | Découpe 50 mm sur ailette | $\pm 0{,}5\text{ mm}$ |
+| Perçages passage vis montant | W5040371 | Entraxes 10,85 mm et 43,3 mm | $\pm 0{,}2\text{ mm}$ |
+| Délardage ailettes ouvrants | Y5740007 | Longueur 64 mm | $\pm 0{,}5\text{ mm}$ |
+| Passage de rail ouvrant | Y5740007 | Hauteur 22 mm, retraits 28 et 39 mm | $\pm 0{,}2\text{ mm}$ |
+| Lumière drainage dormant | Y5740008 | 2 fentes 6 x 25 mm, entre-axe 8 mm | $\pm 0{,}5\text{ mm}$ |
+| Trous drainage traverses ouvrant | Perceuse | Ø8 mm à 140 mm des extrémités | $\pm 2\text{ mm}$ |
+| Fixation poignée sur montant | Gabarit | Entraxe 43 mm, carrés 7 mm | $\pm 0{,}2\text{ mm}$ |
+
+(schéma: raw/askey5.pdf, p. 7, 9, 15, 17, 31, 38)
+
+---
+
+# Ce que le document ne dit pas
+
+* Le temps de polymérisation complet du mastic colle SNJF avant manipulation du cadre n'est pas spécifié (se conformer à la fiche technique du fabricant de mastic, typiquement 24 h à 20°C).
+
+---
+
+# Citations
+
+[1] [Coulissant 65 NV ASKEY - Fabrication](raw/askey5.pdf), p. 5-20, 25-56, 57-64, 65-82, 83-96, 97-118
+
+---
+
+# Voir aussi
+
+- [Gamme Coulissant 65 NV](/gammes/askey-coulissant-65-nv.md)
+- [Profilés dormants et ouvrants Coulissant 65 NV](/profiles/askey-coulissant-65-nv-dormants-et-ouvrants.md)
+- [Cotes de débit Coulissant 65 NV](/profiles/askey-coulissant-65-nv-cotes-de-debit.md)
+- [Quincaillerie Coulissant 65 NV](/quincaillerie/askey-coulissant-65-nv-quincaillerie.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /sources/technal-lumeal-ga-fabrication.md | Document source | Catalogues de fabrication et notices de pose Technal LUMEAL GA | technal, lumeal, lumeal-ga, coulissant, fabrication, atelier | Guide technique officiel d'atelier et catalogue de fabrication Technal (Réf. 5074.007 - 01/2021, 214 pages) et notice officielle de pose chantier (Réf. 5850.002 - 07/2018, 18 pages) pour le coulissant minimal LUMEAL GA. | urnant T411005-09 fendu au pied du solin, collage SP350 sur 200 mm si $H > 2,20\text{ m}$, ouvrant percussion / à faire / [Fabrication et pose LUMEAL |
+| /entretien/usage-nettoyage-entretien-menuiseries-profine.md | Entretien | Usage, nettoyage et entretien d'une menuiserie profine | profine, usage, nettoyage, entretien, poignee, koraclean | L'utilisation de la poignée, le nettoyage des profilés PVC, de l'aluminium, des joints et des vitres, l'entretien des ferrures (fréquence, maintenance, consignes de sécurité), les irisations, les stores intérieurs et la condensation extérieure et intérieure d'une menuiserie profine. | s et des portes à commande manuelle. Une mauvaise manipulation, en particulier si des personnes ou des parties du corps se trouvent entre le dormant e |
+| /procedures/directives-generales-systeme-70-evo2008.md | Procédure | Directives générales de fabrication du système 70, classeur e.VOLUTION de 2008 | profine, kommerling, e-volution, systeme-70, fabrication, matiere | Les registres 5.1 « Directives générales », 5.10 « Soudure à plat » et 5.2 « Drainage/Décompression » du classeur KÖMMERLING e.VOLUTION d'août 2008 (système 70, système F 91) — matière Kömalit Z, livraison, stockage, débit, fraisage, renforcement, soudure, ébavurage, joints, quincailleries, soudure à plat, drainage, décompression et ventilation des profilés filmés — pour les menuiseries fabriquées à cette époque. | nécessaire, répéter l'opération après un temps de séchage d'environ 5 à 10 min. 4. Laisser ensuite le produit s'aérer environ 2 heures sans toucher |
+| /procedures/surfaces-collage-nettoyage-profine.md | Procédure | Surfaces des profilés profine, collage, étanchéité, nettoyage et aluminium laqué | profine, colle, collage, c008, c009, c004 | Les colles de référence profine (C008, C009, C004, C005, C120, polymère MS), le collage à froid à la colle PVC, la préparation des surfaces, les mastics admis, les nettoyants des profilés blancs et plaxés, et la commande, la manipulation, le montage, le nettoyage et la réparation des profilés aluminium laqués livrés par profine. | voir le [glossaire](/reference/glossaire.md). **Manipulation en zone de stockage et en fabrication.** Les produits en aluminium laqués nécessitent u |
+| /procedures/fabrication-profiles-pvc.md | Procédure | Fabrication des profilés PVC, directives profine | profine, fabrication, debit, fraisage, percage, renfort | Les règles communes aux systèmes profine pour le débit, le fraisage et le perçage, le renforcement acier et son vissage, le soudage et l'ébavurage (paramètres standard et à inserts, joints soudables, profilés plaxés), les assemblages de meneaux et traverses, la pose des joints et la fixation des profilés complémentaires et des petits bois collés, avec le contrôle intermédiaire et final (check-list de 35 points) et le stockage et le transport des menuiseries finies. | e réelle [1 p. 34]. ### Remarques générales - **Manipulation négligente : rayures sur les surfaces visibles.** En sortant les profilés des cassett |
+| /certifications/dtd-6-16-2335.md | Certification | DTD n° DBV-24-6/16-2335_V5, système 70 (e.XCLUSIVE, e.MOTION, e.VOLUTION) | dtd, dta, cstb, avis-technique, profine, e-volution | Dossier Technique Détaillé CSTB du système PVC 70 de profine (TROCAL e.XCLUSIVE, KBE e.MOTION, KÖMMERLING e.VOLUTION), relatif au DTA 6/16-2335_V5, avec ses prescriptions de fabrication clause par clause, ses dimensions maximales et ses tableaux d'assemblage. | ce système est le Perennator FA101 blanc de chez ILLBRUCK. Le même produit est attribué à Tremco au § 2.4.4 (**INC-83**) [1 p. 5]. *Assemblage par a |
+| /sources/profine-directives-generales.md | Document source | Directives générales profine, version janvier 2023 | profine, directives, terminologie, mise-en-oeuvre, dimensions, manuel | Manuel de mise en œuvre de 113 pages de profine, commun aux systèmes 70 et 76, qui couvre la terminologie, livraison et stockage, fabrication, surfaces, drainage et vitrage, exigences statiques et classification A*E*V*, ferrure, couplages, montage, entrées d'air, usage et entretien ; retraité en entier en image. | lés, aluminium laqué (commande, défauts, qualité, manipulation, montage, nettoyage, réparation) / transcrit / [Surfaces des profilés profine](/procedu |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/incoherences-internes.md :
+| INC-83 | DTD n° DBV-24-6/16-2335_V5 (système 70) | p. 5 (§ 2.2.3.3) et p. 8 (§ 2.4.4), relues en image le 28/09/2026 | Le même mastic est attribué à deux fabricants : « le Perennator FA101 blanc de chez **ILLBRUCK** » pour l'étanchéité complémentaire des assemblages mécaniques (p. 5), et « Perennator FA 101 de **Tremco** » parmi les produits d'étanchéité de mise en œuvre (p. 8) | Un seul produit, sous une marque et un fabricant à confirmer par profine (le document ne dit pas si ILLBRUCK et Tremco désignent la même société) | Un atelier ou un poseur qui commande « Perennator FA 101 » chez l'un des deux fabricants ne sait pas si c'est le produit essayé ; la teinte « blanc » n'est écrite qu'en p. 5 |
+/anomalies/incoherences-internes.md :
+| INC-230 | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008 | PDF p. 203, 204 et 205 (registre 5.1, pages imprimées 11, 12 et 13), relue en image à 200 dpi le 29/09/2026 | p. 203 : « L'ébavurage ne pourra s'effectuer au plus tôt qu'après une minute » ; p. 204 (fiche de soudage) : « Temps de refroidissement avant ébavurage minimum 45 sec. (mais pas plus de 30 min.) » ; p. 205 : « L'ébavurage ne doit pas être effectué avant 1 min. … Le laps de temps d'attente idéal est de 30 mn. » | Un seul délai minimal (45 s ou 1 min) ; 30 min donné comme idéal sur une page et comme maximum sur l'autre | Selon la page lue, on ébavure à 45 s ou à 1 min, et l'on vise ou l'on ne dépasse pas 30 min |

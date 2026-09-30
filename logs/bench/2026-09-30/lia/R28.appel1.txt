@@ -1,0 +1,1391 @@
+===== PAGE 1 : /profiles/systeme-70-assemblages.md =====
+# Méthodes d'assemblage des traverses et meneaux
+
+Dans le **système 70 Plateforme** de [profine](/fournisseurs/profine.md) (TROCAL e.XCLUSIVE, KBE
+e.MOTION, KÖMMERLING e.VOLUTION), une traverse ou un meneau (le profilé horizontal ou vertical
+qui recoupe un cadre) s'assemble sur un dormant ou sur un ouvrant mécaniquement ou par
+thermosoudure, et **le couple profilé / traverse détermine les méthodes admises** : c'est l'objet
+des tableaux 2 et 3 du DTD [1 p. 3, 12-13]. Chaque tableau porte sa propre légende, reprise
+telle quelle.
+
+| Code | Tableau 2, dormants / traverses | Tableau 3, ouvrants / traverses |
+| --- | --- | --- |
+| M | assemblage mécanique | assemblage mécanique |
+| S | soudure en V | soudure |
+| SP\* | soudure à plat avec équerres | - |
+| SP | - | soudure à plat |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 12 et 13)
+
+# Assemblage dormant / traverse
+
+Tableau 2 du DTD : méthodes admises entre chaque dormant du système 70 (une ligne par dormant,
+groupés comme la source en standard, large et rénovation) et chacune des quatre traverses. Une
+cellule énonce toutes les méthodes possibles, séparées par `/`.
+
+| Dormant | Famille | Traverse 6127 | Traverse 2427 | Traverse 2425 | Traverse 6157 |
+| --- | --- | --- | --- | --- | --- |
+| 6100 | standard | M/S/SP\* | M | M | M/S |
+| 6101 | standard | M/S/SP\* | M | M | M/S |
+| 2502 | standard | M/SP\* | M | M | M |
+| 2501 | standard | M/SP\* | M | M | M |
+| 6104 | large | M/S/SP\* | M | M | M/S |
+| 6108 | large | M/S/SP\* | M | M | M/S |
+| 6109 | large | M/S/SP\* | M | M | M/S |
+| 6110 | large | M/S/SP\* | M | M | M/S |
+| 6111 | large | M/S/SP\* | M | M | M/S |
+| 6158 | large | M/S/SP\* | M | M | M/S |
+| 6102 | rénovation | M/S/SP\* | M | M | M/S |
+| 6105 | rénovation | M/S/SP\* | M | M | M/S |
+| 6106 | rénovation | M/S/SP\* | M | M | M/S |
+| 6107 | rénovation | M/S/SP\* | M | M | M/S |
+| 6155 | rénovation | M/S/SP\* | M | M | M/S |
+| 6156 | rénovation | M/S/SP\* | M | M | M/S |
+| 6159 | rénovation | M/S/SP\* | M | M | M/S |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 12)
+
+Les dormants 2501 et 2502 sont les seuls du tableau 2 sans soudure en V (S) sur la traverse 6127,
+et les seuls à n'avoir que l'assemblage mécanique sur la traverse 6157. La soudure à plat avec
+équerres (SP\*) n'est donnée que pour la traverse 6127 [1 p. 12].
+
+# Assemblage ouvrant / traverse
+
+Tableau 3 du DTD : méthodes admises entre chaque ouvrant du système 70 (une ligne par ouvrant) et
+chacune des cinq traverses.
+
+| Ouvrant | Traverse 6126 | Traverse 6127 | Traverse 2427 | Traverse 2425 | Traverse 6157 |
+| --- | --- | --- | --- | --- | --- |
+| 6112C | M/SP | M/S/SP | M | M | M/S |
+| 6113 | M/SP | M/S/SP | M | M | M/S |
+| 6115 | M/SP | M/S/SP | M | M | M/S |
+| 6116 | M/SP | M/S/SP | M | M | M/S |
+| 6117 | M/SP | M/SP | M | M | M |
+| 6118 | M/SP | M/SP | M | M | M |
+| 6119 | M/SP | M/SP | M | M | M |
+| 6120 | M/SP | M/SP | M | M | M |
+| 6121 | - | M/SP | M | M | M |
+| 6122 | - | M/SP | M | M | M |
+| 6123 | - | M/SP | M | M | M |
+| 6124 | - | M/SP | M | M | M |
+| 6150 | - | M/SP | M | M | M |
+| 6151 | - | M/SP | M | M | M |
+| 6152 | - | M/SP | M | M | M |
+| 6153 | - | M/SP | M | M | M |
+| 2416 | M/SP | M/S/SP | M | M | M/S |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 13)
+
+Le tableau 3 ne donne **aucune méthode d'assemblage des ouvrants 6121 à 6124 et 6150 à 6153 sur
+la traverse 6126** (case marquée d'un tiret). La soudure (S) n'y est donnée que sur les traverses
+6127 et 6157, et seulement pour les ouvrants 6112C, 6113, 6115, 6116 et 2416 [1 p. 13]. Le tableau 3
+donne la soudure à plat (SP) sur la traverse 6126, alors que le § 2.8.5 réserve les soudures à plat
+à l'assemblage du meneau 6127 (**INC-84**).
+
+# Set d'assemblage dormant / seuil
+
+Tableau 4 du DTD : pièce d'assemblage à employer entre chaque dormant et chacun des trois seuils
+aluminium, dont la hauteur est écrite dans l'en-tête. Un `ou` dans une cellule signale deux pièces
+également admises.
+
+| Dormant | Famille | Seuil 9F67 (20 mm) | Seuil 9F68 (36 mm) | Seuil Z043 (20 mm) |
+| --- | --- | --- | --- | --- |
+| 6100 | standard | 9F57 ou 9F72 | 9F61 ou 9F72 | 9F72 |
+| 6101 | standard | 9F65 ou 9F71 | 9F66 ou 9F71 | 9F71 |
+| 2502 | standard | 9F65 ou J077 | 9F66 ou J077 | J077+M002 |
+| 2501 | standard | 9F65 | 9F66 | - |
+| 6104 | large | 9F65 ou 9F71 | 9F66 ou 9F71 | 9F71 |
+| 6108 | large | 9F65 ou 9F71 | 9F66 ou 9F71 | 9F71 |
+| 6109 | large | 9F65 ou 9F71 | 9F66 ou 9F71 | 9F71 |
+| 6110 | large | 9F65 ou 9F71 | 9F66 ou 9F71 | 9F71 |
+| 6111 | large | 9F65 ou 9F71 | 9F66 ou 9F71 | 9F71 |
+| 6158 | large | 9F65 ou 9F71 | 9F66 ou 9F71 | 9F71 |
+| 6102 | rénovation | 9F57 ou 9F72 | 9F61 ou 9F72 | 9F72 |
+| 6105 | rénovation | 9F58 ou 9F72 | 9F62 ou 9F72 | 9F72 |
+| 6106 | rénovation | 9F59 ou 9F72 | 9F63 ou 9F72 | 9F72 |
+| 6107 | rénovation | 9F60 ou 9F72 | 9F64 ou 9F72 | 9F72 |
+| 6155 | rénovation | 9F58 ou 9F72 | 9F62 ou 9F72 | 9F72 |
+| 6156 | rénovation | J087 ou 9F72 | J088 ou 9F72 | 9F72 |
+| 6159 | rénovation | 9F72 | 9F72 | 9F72 |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 13)
+
+Le tableau 4 ne donne **aucun set pour le dormant 2501 sur le seuil Z043** (tiret). Le 2502 y
+demande la pièce J077 complétée de l'embout M002, seul cas de la table où deux pièces sont
+cumulées. Excepté dans le cas d'un oscillo-coulissant, le cadre dormant peut être muni d'un seuil
+aluminium selon le tableau 4 [1 p. 4, 13].
+
+La table du DTD donne au dormant **6159** la seule pièce 9F72 sur les trois seuils (relu en image
+le 28/09/2026) ; le poster des profilés principaux lui donne les embouts **M833** (seuil 9F67) et
+**M834** (seuil 9F68) et ne le nomme pas parmi les dormants du set 9F72 — entrée **CTR-39** du
+registre [Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
+
+# Seuils aluminium
+
+Le **seuil** est le profilé aluminium qui remplace la traverse basse du dormant d'une porte-fenêtre.
+Le poster des profilés principaux dessine quatre seuils en coupe hachurée ; chaque coupe porte la
+largeur en haut et la hauteur à droite, en mm.
+
+| Seuil | Largeur (mm) | Hauteur totale (mm) | Hauteur de la partie arrière (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| 9F67 | 70 | 20 | 16 | ![Seuil 9F67](/assets/profiles/systeme70/seuils/seuil-9f67.png) |
+| 9F68 | 70 | 36 | 16 | ![Seuil 9F68](/assets/profiles/systeme70/seuils/seuil-9f68.png) |
+| 9F69 | 125,5 | - | 16 | ![Seuil 9F69](/assets/profiles/systeme70/seuils/seuil-9f69.png) |
+| Z043 | 125 | - | 16 | ![Seuil Z043](/assets/profiles/systeme70/seuils/seuil-z043.png) |
+
+(schéma: raw/poster-kommerling-70-principaux-2025-03.pdf, p. 1, coin inférieur droit)
+
+Le 9F67 porte en plus une cote de 1,5 mm, à gauche. Les 9F69 et Z043 ne portent pas de hauteur
+totale sur le poster. Le **9F69** n'apparaît dans aucune table d'assemblage du DTD.
+
+L'annexe du DTD dessine trois seuils, sans hachure, avec leur largeur en bas et leur hauteur à
+gauche, en mm [1 p. 16] :
+
+| Seuil | Largeur (mm) | Hauteur (mm) |
+| --- | --- | --- |
+| 9F68 | 70 | 36 |
+| 9F67 | 70 | 20 |
+| Z043 | 125 | - |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 16)
+
+La cote verticale du Z043 est portée à droite du dessin et coupée par le bord de l'image sur la
+page ; seule la hauteur de 20 mm de l'en-tête du tableau 4, « Z043 (20mm) », la donne [1 p. 13, 16].
+
+## Seuil 9C42 et profilé 9F46 des plans de 2008
+
+Le classeur KÖMMERLING « Système e.VOLUTION, plan des profilés » d'août 2008 dessine, sur les
+planches des ouvrants de porte 2416 et 2415 (registre 1.2, planche des ouvrants), le profilé
+**9C42** et le profilé **9F46**, en coupe hachurée, sans légende de fonction. La planche des
+seuils de porte d'entrée du registre 2 les légende « Seuil alu F95-50- 9C42 » et « Rejet d'eau alu
+F95-50- 9F46 », sous les ouvrants 2416 et 2415 (coupes sur [Types d'ouverture et plans de combinaison du système 70](/profiles/systeme-70-plans-de-combinaison.md)) [3 p. 108]. Le 9C42 a la forme
+d'un seuil : une partie arrière de 20 mm de haut et un nez incliné vers l'extérieur ; le 9F46
+porte en pied une brosse dessinée en noir. Cotes en mm [3 p. 12, 14].
+
+| Profilé | Désignation complète | Largeur (mm) | Hauteur (mm) | Autre cote (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 9C42 | F95-50- 9C42 | 70 | 20 | - | 12 | ![Profilé 9C42](/assets/profiles/systeme70/seuils/seuil-9c42-evo2008.png) |
+| 9C42 | F95-50- 9C42 | 70 | 20 | - (dessin inversé, nez à droite) | 14 | ![Profilé 9C42, dessin inversé](/assets/profiles/systeme70/seuils/seuil-9c42-inverse-evo2008.png) |
+| 9F46 | F95-50- 9F46 | 44,5 hors tout | 18 | 16,8 : largeur de la partie inclinée, à gauche | 12 | ![Profilé 9F46](/assets/profiles/systeme70/accessoires/profil-9f46-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 12 et 14)
+
+Le 9C42 et le 9F46 ne sont dessinés ni au poster, ni au DTD, ni au manuel de mise en œuvre de
+2023, qui dessinent les seuils 9F67, 9F68, 9F69 et Z043. Le montage du seuil 9C42, du rejet d'eau
+9F46 et leurs débits par dormant sont sur
+[Seuil aluminium de porte 9C42 du système 70, 2008](/procedures/seuil-alu-9c42-systeme-70-evo2008.md).
+
+# Pièces d'assemblage dessinées sur le poster
+
+La colonne de droite du poster des profilés principaux porte les pièces qui assemblent les
+profilés entre eux et sur les seuils, chacune avec la liste des profilés auxquels elle est
+destinée. Une ligne par pièce et par groupe de profilés, dans les termes de la planche [2 p. 1].
+
+## Embouts pour seuil 9F67 et 9F68
+
+L'**embout de seuil** ferme l'extrémité du seuil contre le montant du dormant et reçoit son
+vissage.
+
+| Embout | Seuil | Pour les dormants |
+| --- | --- | --- |
+| 9F57 | 9F67 | 6100, 6102 |
+| 9F58 | 9F67 | 6105, 6155 |
+| 9F59 | 9F67 | 6106 |
+| 9F60 | 9F67 | 6107 |
+| J087 | 9F67 | 6156 |
+| 9F65 | 9F67 | 6101, 6104, 6108, 6109, 6110, 6111, 2501, 2502 |
+| M833 | 9F67 | 6159 |
+| 9F61 | 9F68 | 6100, 6102 |
+| 9F62 | 9F68 | 6105, 6155 |
+| 9F63 | 9F68 | 6106 |
+| 9F64 | 9F68 | 6107 |
+| J088 | 9F68 | 6156 |
+| 9F66 | 9F68 | 6101, 6104, 6108, 6109, 6110, 6111, 2501, 2502 |
+| M834 | 9F68 | 6159 |
+
+(schéma: raw/poster-kommerling-70-principaux-2025-03.pdf, p. 1, colonne de droite)
+
+![Embouts pour seuil 9F67, angle d'assemblage 9326](/assets/profiles/systeme70/assemblages/embouts-seuil-9f67.png)
+
+![Embouts pour seuil 9F68, angle d'assemblage 9669](/assets/profiles/systeme70/assemblages/embouts-seuil-9f68.png)
+
+Chaque bloc montre à gauche un angle de dormant sur seuil en perspective, repéré **9326** (seuil
+9F67) et **9669** (seuil 9F68), et à droite l'embout en perspective, avec son trou oblong de
+vissage. Le manuel de mise en œuvre Système 70 Plateforme désigne le 9326 comme « Support de cale de vitrage » (PDF p. 126) : la lecture de ce repère est à vérifier (**VER-87**).
+
+## Set d'assemblage mécanique dormant / seuil
+
+| Set | Pour les dormants |
+| --- | --- |
+| 9F71 | 6101, 6104, 6108, 6109, 6110, 6111 |
+| 9F72 | 6100, 6102, 6105, 6106, 6107, 6155, 6156 |
+| J077 | 2502 |
+
+« Pour une bonne applique de l'aile de 60 mm du dormant 6107, sur le seuil, utilisez l'insert
+9F78 ! » [2 p. 1]
+
+![Set d'assemblage mécanique dormant / seuil, avec l'insert 9F78](/assets/profiles/systeme70/assemblages/set-dormant-seuil-9f71-9f72-j077.png)
+
+Le dessin éclaté montre, de haut en bas, la pièce d'assemblage avec sa vis, sa rondelle et sa
+goupille, le montant du dormant marqué « Avec le dormant 6107 », la pièce d'ancrage basse, l'insert
+**9F78** et le seuil avec ses deux vis de fixation.
+
+## Sets d'assemblage mécanique des meneaux et traverses
+
+| Set | Type sur la planche | Pour les profilés |
+| --- | --- | --- |
+| 9F73 | set d'assemblage mécanique en T, vissage dans la feuillure | 2425 |
+| 9F76 | set d'assemblage mécanique en T, vissage dans la feuillure | 6127, 6157 |
+| 9F75 | set d'assemblage mécanique en T, vissage dans la feuillure | 6126 |
+| 9316 | set d'assemblage mécanique en T | 2425 |
+| 9B51 | set d'assemblage mécanique en T | 2427 |
+| 9B52 | set d'assemblage mécanique en croix | 2427 |
+| 9F39 | assemblage mécanique pour angle variable | 2425 |
+
+(schéma: raw/poster-kommerling-70-principaux-2025-03.pdf, p. 1, colonne de droite et cinquième bande)
+
+![Set d'assemblage mécanique en T, vissage dans la feuillure](/assets/profiles/systeme70/assemblages/set-t-vissage-feuillure.png)
+
+Le set en T à vissage dans la feuillure est une platine à deux ailes percées, qui se visse en fond
+de feuillure, avec sa goupille et ses bouchons.
+
+![Set d'assemblage mécanique en T 9316 et 9B51](/assets/profiles/systeme70/assemblages/set-t-9316-9b51.png)
+
+![Set d'assemblage mécanique en croix 9B52](/assets/profiles/systeme70/assemblages/set-croix-9b52.png)
+
+Les sets en T et en croix sont des pièces d'ancrage logées dans la chambre de renfort, tenues par
+une goupille et serrées par une vis à tête cylindrique ; le set en croix ajoute une seconde pièce
+d'ancrage traversée par une vis plus longue.
+
+![Assemblage mécanique pour angle variable 9F39](/assets/profiles/systeme70/meneaux/assemblage-9f39-2425.png)
+
+## Patins d'étanchéité et équerres
+
+| Pièce | Désignation sur la planche | Pour les profilés |
+| --- | --- | --- |
+| 9718 | patin d'étanchéité | 6127, 6157 |
+| 9719 | patin d'étanchéité | 2425 |
+| 9B89 | patin d'étanchéité | 2427 |
+| 9B56 | patin d'étanchéité | 6126 |
+| 9714 | équerres G/D | - |
+
+![Patin d'étanchéité et équerres G/D 9714](/assets/profiles/systeme70/assemblages/patins-etancheite-equerres-9714.png)
+
+(schéma: raw/poster-kommerling-70-principaux-2025-03.pdf, p. 1, colonne de droite)
+
+Le **patin d'étanchéité** est la plaque souple posée entre l'about de la traverse et le profilé
+qui la reçoit. Les équerres 9714 sont dessinées par paire, gauche et droite ; le DTD les emploie
+sur une partie fixe à seuil et en complément de la soudure à plat du 6127 (voir plus bas).
+
+Le seuil aluminium est exclu sur un **oscillo-coulissant** [1 p. 4].
+
+# Nomenclature des accessoires du DTD
+
+La planche « Accessoires » de l'annexe du DTD dessine en perspective, sans cote sauf pour les
+cales, les pièces d'accessoire du système 70 : embouts, sets d'assemblage, pièces de seuil,
+patins d'étanchéité, cales. Elle ne donne pas leur fonction ; les fonctions ci-dessous sont celles
+que le texte du DTD attribue à la même référence, au paragraphe cité [1 p. 24].
+
+| Rangée sur la planche | Références telles qu'écrites | Fonction donnée par le texte du DTD |
+| --- | --- | --- |
+| 1 | 9414.1, 9A81, 9F30, 9F31, 9A82, 9F33, 9F35, 9F29, 9F28, M278, M375, M664 | embouts collés des battements (§ 2.2.3.2.1), sans attribution par référence |
+| 2 | M626, M628, M629, et deux pièces sans légende | - |
+| 3 | 9B51 / 9B52, 9C69, 9316.2, 9312, J077, M375, 9714 L+R | J077 : set dormant / seuil (tableau 4) ; 9714 : équerres (§ 2.2.3.1.1, § 2.2.3.1.4) |
+| 4 | 9F71, 9F72, 9F73, 9F76, 9F75 | 9F71, 9F72 : sets dormant / seuil (tableau 4, § 2.2.3.1.4) |
+| 5 | 9718, 9719, 9B56, 9714, 9F13, M771 | 9718 : patin d'étanchéité serré par l'assemblage par alvéovis (§ 2.2.3.3) |
+| 6 | 9F66, 9F65, 9F57, 9F61, 9F58, 9F62, 9F59 | pièces d'assemblage dormant / seuil (tableau 4, § 2.2.3.1.4) |
+| 7 | 9F63, 9F60, 9F64, J087, J088, M299, A272, M002 | 9F60, 9F63, 9F64, J087, J088 : pièces d'assemblage dormant / seuil ; M299 : patin d'étanchéité (§ 2.2.3.3) ; A272 : support de cale ; M002 : complément du J077 sur Z043 (tableau 4) |
+| 8 | M298, M329, 9F97, EMBJ701 | M298 : étanchéité pièce d'appui / tapée (§ 2.2.3.1.3) |
+| 9 | M325, 9D02 (25,5), 9D03 (33), 9D04 (58), 9D05 (88) | - |
+| 10 | M613, M450, G008, G250, embout M643, embout M646, 5685, 5686 | M613 : étanchéité pièce d'appui / tapée ; M450, G008 : busette et manchon de drainage du capot complet ; G250 : mousse des angles bas ; M643, M646 : embouts d'appui et de tapée alu (§ 2.2.3.1.3, § 2.2.3.5) |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 24)
+
+Les cotes entre parenthèses sont les hauteurs, en mm, portées à droite des cales 9D02 à 9D05.
+La référence **M375** est écrite deux fois sur la planche : sur un embout de la rangée 1 et sur la
+pièce dessinée à côté des équerres 9714 L+R, rangée 3.
+
+![Accessoires du DTD, rangées 1 à 3 : embouts de battement et sets d'assemblage](/assets/certifications/dtd-6-16-2335/accessoires-1-embouts-et-sets.png)
+
+![Accessoires du DTD, rangées 4 à 8 : sets, patins, pièces de seuil](/assets/certifications/dtd-6-16-2335/accessoires-2-seuils-et-patins.png)
+
+![Accessoires du DTD, rangées 9 et 10 : cales, patins, busette, manchon, embouts](/assets/certifications/dtd-6-16-2335/accessoires-3-cales-et-embouts.png)
+
+Chaque pièce est dessinée en perspective avec sa référence sous le dessin ; les vis, goupilles
+et bouchons dessinés à côté des sets appartiennent au set voisin.
+
+# Pose du seuil aluminium, assemblages mécaniques et soudure à plat
+
+Le mode opératoire de pose du seuil aluminium (cas des assemblages 9F57 à 9F66, J087 et J088, et
+cas des 9F71, 9F72, J077 + M002, partie fixe sur seuil 9F67 ou Z043) est transcrit au § 2.2.3.1.4,
+et les quatre types d'assemblage mécanique des meneaux et traverses (alvéovis, pièces d'ancrage et
+goupille, équerres, ancrage avec fixation en feuillure) au § 2.2.3.3, de la page
+[DTD n° DBV-24-6/16-2335_V5](/certifications/dtd-6-16-2335.md) [1 p. 4-5]. Les planches
+d'assemblage, la soudure à plat du meneau 6127 (zone soudée d'inertie X 8,43 cm⁴ et Y 5,39 cm⁴,
+équerres 9714 L+R dont les plots de centrage ont été supprimés) et l'usinage de la traverse avant
+soudure sont sur [Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md)
+[1 p. 26-27].
+
+Le manuel de mise en œuvre du système 70 donne, pour les mêmes seuils (et le 9F69), les débits de
+seuil et de montant par dormant, les contours de fraisage, le gabarit de perçage 9918, le
+drainage et le rejet d'eau A465 : voir
+[Mise en œuvre du seuil aluminium du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md),
+[Porte-fenêtre avec fixe latéral du système 70](/procedures/porte-fenetre-fixe-lateral-systeme-70.md)
+et [Porte d'entrée du système 70](/procedures/porte-d-entree-systeme-70.md) ; les accouplements
+d'éléments et poteaux d'angle sont sur
+[Accouplement d'éléments du système 70](/procedures/accouplement-elements-systeme-70.md).
+
+# Accessoires et sets d'assemblage des plans e.VOLUTION de 2008
+
+Les planches « Accessoires » 2 et 3 du classeur KÖMMERLING e.VOLUTION d'août 2008 (registre 1.6,
+p. 46 et 47, échelle 1:2) dessinent les cales de transport, le recouvrement de seuil, le profilé
+1023, les ponts de vitrage et l'équerre d'angle, puis trois tableaux : les sets d'assemblage de
+chaque meneau, les sets d'assemblage des dormants et le set d'assemblage du meneau 2425. Les
+joints de la première planche « Accessoires » (p. 45) sont sur
+[Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md) [3 p. 46-47].
+
+## Cales, recouvrement de seuil, profilé 1023, ponts de vitrage et équerre (p. 46)
+
+Une ligne par pièce, avec la désignation et la légende écrites sur la planche. Les pièces sans
+cote sont dessinées en perspective ; la [cale de transport](/reference/glossaire.md) est
+dessinée seule puis en place dans la gorge d'un profilé coupé ; les ponts de vitrage et l'équerre
+sont dessinés en place dans un angle d'ouvrant [3 p. 46].
+
+| Pièce | Désignation complète | Légende sur la planche | Cotes portées (mm) | Dessin |
+| --- | --- | --- | --- | ---: |
+| 9A39 | F90-75- 9A39 | Cale de transport | - | ![Cale de transport 9A39](/assets/profiles/systeme70/accessoires/cale-transport-9a39-evo2008.png) |
+| 9856 | F00-75- 9856 | Cale de transport | - | ![Cale de transport 9856](/assets/profiles/systeme70/accessoires/cale-transport-9856-evo2008.png) |
+| 9G13 | F00-57- 9G13 | Recouvrement de seuil | 18,3 de large ; 27,5 et 22,6 de haut | ![Recouvrement de seuil 9G13](/assets/profiles/systeme70/accessoires/recouvrement-seuil-9g13-evo2008.png) |
+| 1023 | F00-62- 1023 | F00-75- 9A23 Embout | 13 de large ; 34,5 de haut | ![Profilé 1023 et embout 9A23](/assets/profiles/systeme70/accessoires/profil-1023-embout-9a23-evo2008.png) |
+| 9646 | F40-75- 9646 | Pont de vitrage ouvrant semi à fleur | - | ![Pont de vitrage 9646](/assets/profiles/systeme70/accessoires/pont-vitrage-9646-evo2008.png) |
+| 9326 | F90-75- 9326 | Pont de vitrage ouvrant à déport | - | ![Pont de vitrage 9326](/assets/profiles/systeme70/accessoires/pont-vitrage-9326-evo2008.png) |
+| 9669 | F90-67- 9669 | Equerre pour renforcement d'angle | - | ![Équerre 9669](/assets/profiles/systeme70/accessoires/equerre-9669-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 46)
+
+Le 9G13 est dessiné clippé en tête de l'aile d'un profilé coupé, sans référence, avec deux
+cotes verticales portées à gauche, 27,5 mm et 22,6 mm, et sa largeur de 18,3 mm en haut. Le 1023
+est dessiné une seconde fois engagé entre deux profilés coupés dos à dos, avec une pièce conique
+sous l'assemblage ; ni les deux profilés ni la pièce conique ne portent de référence. Le 9326 est
+dessiné comme une grille posée en fond de feuillure, le long des deux côtés de l'angle ; le 9646
+comme une pièce mince au fond de la feuillure ; l'équerre 9669 est vissée dans l'angle intérieur
+du cadre [3 p. 46].
+
+Le manuel de mise en œuvre de 2023 désigne le 9G13 « protège feuillure extérieure » et le 9326
+« Support de cales de vitrage » (voir
+[Renforts et accessoires par profilé du système 70](/profiles/systeme-70-accessoires-par-profile.md)) :
+entrée **CTR-75** du registre [Contradictions entre sources](/anomalies/contradictions-entre-sources.md)
+pour le 9G13 ; la légende de 2008 du 9326 est versée à **VER-87**.
+
+## Sets d'assemblage des meneaux (p. 47)
+
+Le tableau du haut de la p. 47 donne, pour chaque meneau dessiné en première colonne, la pièce
+de trois assemblages : le [set d'assemblage mécanique](/reference/glossaire.md) en T (le meneau
+aboutit sur un profilé), le set d'assemblage mécanique en croix (deux traverses se croisent) et
+le set d'équerre de feuillure ; sous chaque pièce, son [gabarit de perçage](/reference/glossaire.md).
+Une ligne par meneau et par assemblage ; « — » est écrit tel quel sur la planche quand le meneau
+n'a pas cet assemblage [3 p. 47].
+
+| Meneau | Assemblage | Pièce | Gabarit de perçage |
+| --- | --- | --- | --- |
+| 6127 (F91-15- 6127) | set d'assemblage mécanique en T | — | - |
+| 6127 (F91-15- 6127) | set d'assemblage mécanique en croix | — | - |
+| 6127 (F91-15- 6127) | set d'équerre de feuillure | F90-75- 9718.3 | F90-70- 9918 |
+| 2425 (F95-15- 2425) | set d'assemblage mécanique en T | F90-84- 9316 | F90-70- 9918 |
+| 2425 (F95-15- 2425) | set d'assemblage mécanique en croix | F90-84- 9317 | F90-70- 9918 |
+| 2425 (F95-15- 2425) | set d'équerre de feuillure | F90-75- 9719 | F90-70- 9918 |
+| 2427 (F95-15- 2427) | set d'assemblage mécanique en T | F90-84- 9B51 | F95-70- 9B44 |
+| 2427 (F95-15- 2427) | set d'assemblage mécanique en croix | F90-75- 9B52 | F95-70- 9B44 |
+| 2427 (F95-15- 2427) | set d'équerre de feuillure | F90-75- 9B89 | F90-70- 9918 |
+| 2469 (F95-15- 2469) | set d'assemblage mécanique en T | F90-84- 9C69 | F90-70- 9918 |
+| 2469 (F95-15- 2469) | set d'assemblage mécanique en croix | — | - |
+| 2469 (F95-15- 2469) | set d'équerre de feuillure | F90-75- 9B56 | F90-70- 9918 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 47)
+
+L'en-tête du tableau dessine chaque type de set en perspective éclatée :
+
+![Set d'assemblage mécanique en T, 2008](/assets/profiles/systeme70/assemblages/set-assemblage-t-evo2008.png)
+
+Le set en T : une pièce d'ancrage à logement carré, une vis à tête cylindrique avec sa rondelle,
+une goupille longue et deux bouchons.
+
+![Set d'assemblage mécanique en croix, 2008](/assets/profiles/systeme70/assemblages/set-assemblage-croix-evo2008.png)
+
+Le set en croix : deux pièces d'ancrage, une vis plus longue, une goupille et des bouchons.
+
+![Set d'équerre de feuillure, 2008](/assets/profiles/systeme70/assemblages/set-equerre-feuillure-evo2008.png)
+
+Le set d'équerre de feuillure : un patin et deux équerres percées. Les coupes des quatre meneaux
+sont sur [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md),
+*Meneaux et traverses des plans e.VOLUTION de 2008*.
+
+Ce tableau ne donne pas les mêmes pièces que la liste écrite sous chaque meneau aux p. 22 et 23
+du même classeur : pour le 6127, l'équerre de feuillure y est écrite 9714 (9718.3 à la p. 47) ;
+pour le 2427, l'assemblage en T y est écrit 9B54 (9B51 à la p. 47) et le seul gabarit écrit est le
+9918 (9B44 pour le T et la croix à la p. 47) — entrée **INC-213** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md). Le poster de 2025 donne comme les
+p. 47 le 9B51 au 2427 et le 9316 au 2425 (*Sets d'assemblage mécanique des meneaux et traverses*
+ci-dessus) ; il donne le patin 9B56 à la traverse d'ouvrant 6126, là où la p. 47 le donne au
+meneau 2469 [3 p. 22-23, 47].
+
+## Sets d'assemblage des dormants et du meneau 2425 (p. 47)
+
+Le tableau « Set d'assemblage dormant » associe à chaque dormant son set d'assemblage, une ligne
+par dormant ; l'encadré « Set d'assemblage meneaux » donne le set du meneau 2425 [3 p. 47].
+
+| Dormant | Set d'assemblage |
+| --- | --- |
+| 2502 (F95-01- 2502) | F95-94- 9C79 |
+| 6101 (F91-01- 6101) | F91-84- 9F40 |
+| 6104 (F91-01- 6104) | F91-84- 9F41 |
+| 6108 (F91-01- 6108) | F91-84- 9F41 |
+| 6109 (F91-01- 6109) | F91-84- 9F41 |
+| 6110 (F91-01- 6110) | F91-84- 9F41 |
+| 6111 (F91-01- 6111) | F91-84- 9F41 |
+| 6102 (F91-01- 6102) | F91-84- 9F43 |
+| 6105 (F91-01- 6105) | F91-84- 9F43 |
+| 6106 (F91-01- 6106) | F91-84- 9F43 |
+| 6107 (F91-01- 6107) | F91-84- 9F43 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 47)
+
+![Set d'assemblage dormant, 2008 : tableau et perspective](/assets/profiles/systeme70/assemblages/sets-assemblage-dormant-evo2008.png)
+
+À gauche du tableau, trois perspectives de haut en bas : le montant du dormant, la pièce
+d'assemblage à deux flasques percées et un profilé plat strié dessiné en pied. Le dormant 6100
+n'est pas dans ce tableau.
+
+![Set d'assemblage meneaux 9C84 pour le meneau 2425](/assets/profiles/systeme70/assemblages/set-assemblage-meneau-9c84-evo2008.png)
+
+L'encadré « Set d'assemblage meneaux » dessine de la même façon le meneau « F95-15- 2425 », le
+« Set d'assemblage F95-94- 9C84 » et le profilé plat strié en pied. Aucun de ces deux tableaux ne
+nomme le profilé strié ni ne dit sur quoi le set assemble le dormant ou le meneau. Les sets 9C79,
+9F40, 9F41, 9F43 et 9C84 ne figurent dans aucune des tables du poster et du DTD reprises
+ci-dessus, qui donnent pour les mêmes dormants les sets dormant / seuil 9F71, 9F72 et J077
+(*Set d'assemblage dormant / seuil*) [3 p. 47].
+
+# Citations
+
+[1] [DTD n° DBV-24-6/16-2335_V5, système e.XCLUSIVE, e.MOTION, e.VOLUTION](raw/dtd-6-16-2335-v5-e-volution.pdf)
+
+[2] [Poster Kömmerling Gamme 70, profilés principaux, mars 2025](raw/poster-kommerling-70-principaux-2025-03.pdf), p. 1
+
+[3] [Système e.VOLUTION, plan des profilés, système F 91, édition août 2008](raw/profine-plans-profiles-e-volution-2008-08.pdf), p. 12, 14, 22-23 et 46-47
+
+# Voir aussi
+
+- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
+- [Posters Gamme 70 KÖMMERLING](/sources/posters-kommerling-70.md)
+- [Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md)
+- [DTD n° DBV-24-6/16-2335_V5](/certifications/dtd-6-16-2335.md)
+- [Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md)
+- [Mise en œuvre du seuil aluminium du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md)
+- [Accouplement d'éléments du système 70](/procedures/accouplement-elements-systeme-70.md)
+- [profine](/fournisseurs/profine.md)
+- [KÖMMERLING](/fournisseurs/kommerling.md)
+
+===== PAGE 2 : /procedures/seuil-alu-9c42-systeme-70-evo2008.md =====
+# Ce que fait cette procédure
+
+Le **seuil** est le profilé posé au sol, en bas d'une porte, sur lequel viennent s'assembler les
+montants du [dormant](/reference/glossaire.md) (le cadre fixe) et, s'il y en a, le
+[meneau](/reference/glossaire.md) (le montant fixe entre deux vantaux). Le seuil F95-50- **9C42** est
+un seuil de porte en aluminium, dessiné par le classeur KÖMMERLING « Système e.VOLUTION » d'août 2008
+(système F 91, système 70 de profine) dans son registre 5.8 « Seuils Aluminium de portes ». Ce
+registre est paginé à partir de 1 : sa page imprimée N est la page N + 291 du PDF [1 p. 292-296].
+
+Le **rejet d'eau** est le profilé fixé en bas de l'ouvrant qui écarte l'eau de pluie ; le **joint
+brosse** est une bande de poils qui ferme le jeu entre le rejet d'eau et le seuil. DHT est la
+dimension hors tout (la cote extérieure) d'un dormant ; AEV désigne les performances d'étanchéité à
+l'air, à l'eau et de résistance au vent ([glossaire](/reference/glossaire.md)). Les seuils du manuel
+profine de 2023 (9F67, 9F68, 9F69, Z043) sont sur
+[Mise en œuvre du seuil du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md) ; la coupe du
+9C42 et du 9F46 sous les ouvrants de porte 2416 et 2415 est sur
+[Types d'ouverture et plans de combinaison du système 70](/profiles/systeme-70-plans-de-combinaison.md).
+
+# Conditions et interdictions
+
+- « Seuil filant sur toute la largeur de l'élément l'assemblage des montants sur le seuil se faisant
+  à l'aide des sets d'assemblages. Ce type d'assemblage assure une étancheité et un positionnement
+  optimal. » [1 p. 292]
+- « Pour garantir une bonne étanchéité il est nécessaire d'étancher entre le dormant et
+  l'assemblage de seuil. » (écrit au montage du dormant et à celui du meneau) [1 p. 293-294]
+- Rejet d'eau 9F46 avec le seuil 9C42 : « **Attention:** Cette combinaison nécessite le respect d'un
+  jeu de 10 mm (voir croquis 1). » [1 p. 295]
+
+# Seuil 9C42 : plan et description
+
+## 1) Plan du seuil F95-50- 9C42
+
+Le plan est à l'échelle 1:1 : profilé de 70 mm de large et 20 mm de haut, avec un nez incliné vers
+la gauche ; l'inclinaison du dessus du nez est cotée **6°** (chiffre tourné, lu sur le rendu à
+400 dpi) [1 p. 292].
+
+| Profilé | Largeur (mm) | Hauteur (mm) | Inclinaison du nez (°) | Coupe |
+| --- | --- | --- | --- | ---: |
+| F95-50- 9C42 | 70 | 20 | 6 | ![Seuil 9C42](/assets/procedures/directives-evo2008/seuil-9c42-plan-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 292)
+
+Le même profilé, dessiné sur les planches des ouvrants de porte, est aussi sur
+[Assemblages du système 70](/profiles/systeme-70-assemblages.md#seuil-9c42-et-profilé-9f46-des-plans-de-2008).
+
+## 2) Description et 3) avantages
+
+« Seuil de porte en aluminium anodisé conforme aux normes pour personnes handicapées. » Le seuil
+possède, dans les termes de la planche [1 p. 292] :
+
+- « Ce seuil et à rupture de pont thermique. » (la rupture de pont thermique est une barrière
+  isolante entre la face intérieure et la face extérieure du profilé métallique) ;
+- « Ce seuil est conforme à la norme handicapés. » ;
+- « Il permet l'utilisation de gâche affleuranté. » (la gâche est la pièce qui reçoit le pêne de la
+  serrure).
+
+## Sets d'assemblage dormant et meneau
+
+Le set d'assemblage est la pièce vissée sur le seuil sur laquelle se pose le bas du montant. La
+page imprimée 1 du registre 5.8 porte la table « Set d'assemblage dormant » et l'encadré « Set d'assemblage meneaux » (meneau
+F95-15- 2425, set F95-94- 9C84), identiques à ceux du registre 1.6 du même
+classeur : la table, une ligne par dormant, est sur
+[Assemblages du système 70](/profiles/systeme-70-assemblages.md#sets-dassemblage-des-dormants-et-du-meneau-2425-p-47)
+[1 p. 292].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 292)
+
+![Set d'assemblage dormant : montant, set et seuil](/assets/procedures/directives-evo2008/seuil-9c42-sets-assemblage-dormant-evo2008.png)
+
+![Set d'assemblage meneau 9C84 sur le seuil, meneau 2425](/assets/procedures/directives-evo2008/seuil-9c42-set-assemblage-meneau-9c84-evo2008.png)
+
+# Étapes
+
+## 4) Montage dormant sur seuil
+
+1. « Couper le seuil F95-50- 9C42 (1) (Longueur= voir croquis suivant) » — le débit du seuil de
+   chaque dormant est donné aux pages imprimées 5 à 9 (voir *Débits par dormant*).
+2. « Prépercer selon croquis avec un foret de Ø 3 mm. »
+3. « Couper éventuellement le couvercle en PVC pour une fixation au sol ».
+4. « Visser le set d'assemblage adéquat (3) avec le seuil (1) à l'aide de vis inox (4) Ø 4,0 x
+   19 mm. »
+5. Étancher entre le dormant et l'assemblage de seuil.
+6. « Positionner le dormant sur le seuil/l'assemblage de seuil et visser latéralement avec des vis
+   auto foreuse (6) Ø 3,9 x 25 mm. »
+
+[1 p. 293]
+
+Le dessin (échelle 1:1) montre de haut en bas le montant du dormant, débité « DHT - 20 mm », le set
+d'assemblage (3) avec ses vis inox (4) et ses vis auto-foreuses (6), puis le seuil (1) et la pièce
+repérée (2), posée sur le seuil au droit du montant et que la planche ne légende pas. Le perçage Ø 3
+est coté 11 et 17 mm depuis un bord du seuil et à la distance X de son extrémité ; en pied, le seuil
+est coté 20 mm de haut, 5 mm de retrait, Y « Cote seuil » et DHT.
+
+![Montage du dormant sur le seuil 9C42 : set d'assemblage, vis et perçage](/assets/procedures/directives-evo2008/seuil-9c42-montage-dormant-sur-seuil-evo2008.png)
+
+| Repère ou cote du dessin | Valeur |
+| --- | --- |
+| (1) | seuil F95-50- 9C42 |
+| (3) | set d'assemblage adéquat (voir *Sets d'assemblage dormant et meneau*) |
+| (4) | vis inox Ø 4,0 × 19 mm |
+| (6) | vis auto-foreuse Ø 3,9 × 25 mm |
+| Débit du montant de dormant | DHT – 20 mm |
+| Perçage (mm) | Ø 3 |
+| Position du perçage (mm) | 11 ; 17 ; X |
+| Hauteur du seuil (mm) | 20 |
+| Retrait en bout (mm) | 5 |
+| Cote seuil | Y |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 293)
+
+Les valeurs de X et de Y ne sont pas données sur la planche.
+
+## 5) Montage meneau sur seuil
+
+1. « Couper le seuil F95-50- 9C42 (1) (Longueur = Dim. Hors Tout Dormant – 10 mm) »
+2. « Prépercer selon croquis avec un foret de Ø 3 mm. »
+3. « Couper éventuellement le couvercle en PVC pour une fixation au sol ».
+4. « Visser le set d'assemblage du meneau (3) avec le seuil (1) à l'aide de vis inox (4) Ø 4,0 x
+   19 mm. »
+5. « Pour garantir une bonne étanchéité il est nécessaire d'étancher entre le dormant et
+   l'assemblage de seuil. »
+6. « Positionner le meneau sur le seuil/l'assemblage de seuil et visser latéralement avec des vis
+   auto foreuse (6) Ø 3,9 x 25 mm. »
+
+[1 p. 294]
+
+Le dessin (échelle 1:1, cartouche « Seuils Aluminium de portes — Contours de fraisage ») montre le
+meneau (5) débité « DHT - 20 mm », le set d'assemblage du meneau (3) avec quatre vis inox (4) et
+quatre vis auto-foreuses (6), le seuil (1) et la pièce (2). Le perçage Ø 3 est coté 19 mm, 11 et
+17 mm ; la position du meneau est cotée 57 mm jusqu'à la « Cote à l'axe ».
+
+![Montage du meneau sur le seuil 9C42 : set d'assemblage, vis et perçage](/assets/procedures/directives-evo2008/seuil-9c42-montage-meneau-sur-seuil-evo2008.png)
+
+| Repère ou cote du dessin | Valeur |
+| --- | --- |
+| (1) | seuil F95-50- 9C42 |
+| (3) | set d'assemblage du meneau (F95-94- 9C84 pour le meneau 2425) |
+| (4) | vis inox Ø 4,0 × 19 mm |
+| (5) | meneau |
+| (6) | vis auto-foreuse Ø 3,9 × 25 mm |
+| Débit du seuil | dimension hors tout dormant – 10 mm |
+| Débit du meneau | DHT – 20 mm |
+| Perçage (mm) | Ø 3 |
+| Position du perçage (mm) | 19 ; 11 ; 17 |
+| Distance à la « Cote à l'axe » (mm) | 57 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 294)
+
+## 6) Montage du rejet d'eau F95-50- 9F46
+
+« Nous vous conseillons d'utiliser avec le seuil 9C42 le set de rejet d'eau 9F46 pour garantir de
+meilleurs résultats AEV. » [1 p. 295] Étapes de la planche :
+
+1. Respecter un jeu de 10 mm entre le rejet d'eau et le seuil (croquis 1).
+2. « Couper le rejet d'eau 9C46 (Longueur = Dim ext. Ouvrant – 80 mm), voir croquis 3. »
+3. « Percer Ø 8 mm au droit des trous d'evacuation dans le rejet d'eau. »
+4. « Coller les embouts de rejet d'eau avec de la cyano et les visser avec des vis inox (3) Ø 3,9 x
+   13 mm (voir croquis 2). » (la cyano est une colle cyanoacrylate, à prise rapide)
+5. « Positionner le rejet d'eau sur l'ouvrant et presser le sur la surface nettoyé au préalable
+   avec le double face. Visser ensuite le rejet d'eau à l'aide de vis inox Ø 3,9 x 19 mm sur
+   l'ouvrant (4) (voir croquis 1). »
+6. « Coller les joints brosse 9C44 à chaque extrémité (Longueur = Dim. ext. Ouvrant – 40 mm). »
+
+[1 p. 295]
+
+Le titre et le premier paragraphe écrivent « 9F46 », l'étape de débit et le croquis 3 « 9C46 »
+(**INC-256**). Le débit du rejet d'eau est « Dim ext. Ouvrant – 80 mm » sur cette page et
+« Largeur hors tout ouvrant – 74 » à la page imprimée 5 (**INC-257**).
+
+Le croquis 1 est la coupe verticale du bas de l'ouvrant : le rejet d'eau 9F46 vissé sur l'ouvrant,
+le seuil 9C42 en dessous ; le jeu de 10 mm est coté verticalement entre le rejet d'eau et le seuil,
+17 mm et 7 mm horizontalement sous le rejet d'eau.
+
+![Rejet d'eau 9F46 sur seuil 9C42, croquis 1 : jeu de 10 mm](/assets/procedures/directives-evo2008/seuil-9c42-rejet-d-eau-croquis1-jeu-10-evo2008.png)
+
+Le croquis 2 montre l'embout de rejet d'eau et sa vis.
+
+![Rejet d'eau, croquis 2 : embout et vis](/assets/procedures/directives-evo2008/seuil-9c42-rejet-d-eau-croquis2-embout-evo2008.png)
+
+Le croquis 3 est la vue en bout du rejet d'eau sur le seuil : première vis à « environ 100 mm » du
+bout, « Distance maxi de vissage 400 mm » ensuite ; « Percage Ø 8 au niveau des trous
+d'évacuation » ; en pied, « Coupe joint brosse 9C44 » à 20 mm et « Coupe rejet d'eau 9C46 » à 40 mm
+du bout.
+
+![Rejet d'eau, croquis 3 : débit, vissage et perçage d'évacuation](/assets/procedures/directives-evo2008/seuil-9c42-rejet-d-eau-croquis3-debit-vissage-evo2008.png)
+
+| Cote du rejet d'eau | Valeur |
+| --- | --- |
+| Jeu rejet d'eau / seuil (mm) | 10 |
+| Débit du rejet d'eau | dimension extérieure d'ouvrant – 80 mm (**INC-257**) |
+| Débit du joint brosse 9C44 | dimension extérieure d'ouvrant – 40 mm |
+| Coupe du joint brosse depuis le bout (mm) | 20 |
+| Coupe du rejet d'eau depuis le bout (mm) | 40 |
+| Première vis depuis le bout (mm) | environ 100 |
+| Entraxe maximal de vissage (mm) | 400 |
+| Perçage d'évacuation (mm) | Ø 8 |
+| Vis des embouts | inox Ø 3,9 × 13 mm |
+| Vis du rejet d'eau sur l'ouvrant | inox Ø 3,9 × 19 mm |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 295)
+
+# Débits par dormant
+
+Les pages imprimées 5 à 9 du registre 5.8 dessinent chacune, pour une famille de dormants, la même
+vue de face du bas d'une porte : en haut la coupe horizontale du montant de dormant, au milieu
+l'« Embout de fixation », à gauche la coupe verticale du bas de l'ouvrant 6123 avec le rejet d'eau
+(légendé « 9C46 ») sur le seuil 9C42, en bas l'« Embout de rejet d'eau ». Chacune porte un tableau
+« Correspondance des dormants / embouts » et les formules de débit. Une ligne par dormant ; les
+débits sont écrits comme sur les planches (cotes en mm) [1 p. 296-300].
+
+| Dormant | Famille (titre de la planche) | Embout (correspondance) | Débit du montant de dormant | Débit du seuil 9C42 | Débit du rejet d'eau | Page PDF |
+| --- | --- | --- | --- | --- | --- | --- |
+| 2502 | dormant standard | 9C79 | hauteur hors tout – 20, coupe droite | hors tout dormant – 10 | largeur hors tout ouvrant – 74 | 296 |
+| 6101 | dormant standard | 9F40 | hauteur hors tout – 20, coupe droite | hors tout dormant – 10 | largeur hors tout ouvrant – 74 | 296 |
+| 6102 | dormant rénovation | 9F43 | hauteur hors tout – 20 + recouvrement, coupe droite | hors tout dormant + 6 | largeur hors tout ouvrant – 74 | 297 |
+| 6105 | dormant rénovation | 9F43 | hauteur hors tout – 20 + recouvrement, coupe droite | hors tout dormant + 6 | largeur hors tout ouvrant – 74 | 297 |
+| 6107 | dormant rénovation | 9F43 | hauteur hors tout – 20 + recouvrement, coupe droite | hors tout dormant + 6 | largeur hors tout ouvrant – 74 | 297 |
+| 6106 | dormant rénovation | 9F41 | hauteur hors tout – 20 + recouvrement, coupe droite | hors tout dormant – 10 | largeur hors tout ouvrant – 74 | 298 |
+| 6104 | dormant neuf | 9F46 | hauteur hors tout – 20 + recouvrement, coupe droite | hors tout dormant – 10 | largeur hors tout ouvrant – 74 | 299 |
+| 6108 | dormant large | 9F41 | hauteur hors tout, coupe droite | hors tout dormant – 52 | largeur hors tout ouvrant – 74 | 300 |
+| 6109 | dormant large | 9F41 | hauteur hors tout, coupe droite | hors tout dormant – 52 | largeur hors tout ouvrant – 74 | 300 |
+| 6110 | dormant large | 9F41 | hauteur hors tout, coupe droite | hors tout dormant – 52 | largeur hors tout ouvrant – 74 | 300 |
+| 6111 | dormant large | 9F41 | hauteur hors tout, coupe droite | hors tout dormant – 52 | largeur hors tout ouvrant – 74 | 300 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 296-300)
+
+Sur chaque planche, une cote verticale de 10 mm est portée au-dessus du seuil, sous le rejet d'eau.
+Le « recouvrement » ajouté au débit du montant n'est pas chiffré. Trois cases ne concordent pas
+avec le reste du registre : le rejet d'eau se débite à « Dim ext. Ouvrant – 80 mm » à la page
+imprimée 4 et à « largeur hors tout ouvrant – 74 » ici (**INC-257**) ; le 6106 reçoit l'embout 9F41
+ici et le set 9F43 dans la table de la page imprimée 1 (**INC-258**) ; le 6104 reçoit ici un
+« embout » 9F46, référence du rejet d'eau, et le set 9F41 dans la table de la page imprimée 1
+(**INC-259**).
+
+## Dormant standard 2502 et 6101 (page imprimée 5)
+
+![Montage du seuil 9C42 sur dormant standard : débits du montant, du seuil et du rejet d'eau](/assets/procedures/directives-evo2008/seuil-9c42-dormant-standard-debits-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 296)
+
+## Dormants rénovation 6102, 6105 et 6107 (page imprimée 6)
+
+![Montage du seuil 9C42 sur dormants rénovation 6102, 6105, 6107](/assets/procedures/directives-evo2008/seuil-9c42-dormants-renovation-6102-6105-6107-debits-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 297)
+
+## Dormant rénovation 6106 (page imprimée 7)
+
+![Montage du seuil 9C42 sur dormant rénovation 6106](/assets/procedures/directives-evo2008/seuil-9c42-dormant-renovation-6106-debits-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 298)
+
+## Dormant neuf 6104 (page imprimée 8)
+
+![Montage du seuil 9C42 sur dormant neuf 6104](/assets/procedures/directives-evo2008/seuil-9c42-dormant-6104-debits-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 299)
+
+## Dormants larges 6108, 6109, 6110 et 6111 (page imprimée 9)
+
+Sur les dormants larges, le montant se débite à la hauteur hors tout, coupe droite, et le dormant
+est découpé en pied pour recevoir le seuil : le dessin « DECOUPE DORMANT » montre le seuil 9C42
+(70 mm de large, 20 mm de haut) logé dans l'entaille du montant, avec la « COTE DE DEBIT DORMANT »
+portée jusqu'au dessous du seuil [1 p. 300].
+
+| Cote de la découpe | Valeur (mm) |
+| --- | --- |
+| Largeur du seuil dans la découpe | 70 |
+| Hauteur du seuil dans la découpe | 20 |
+
+![Montage du seuil 9C42 sur dormants larges 6108 à 6111, découpe du dormant](/assets/procedures/directives-evo2008/seuil-9c42-dormants-larges-6108-a-6111-debits-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 300)
+
+# Seuil avec élargisseur 0207
+
+« Seuil avec elargisseur » (page imprimée 10, échelle 1:1) : coupe verticale du bas de l'ouvrant
+6123 avec son rejet d'eau (légendé « 9C46 »), sur le seuil 9C42, lui-même posé sur l'élargisseur
+0207 (l'élargisseur est un profilé qui rehausse ou élargit le dormant). Cotes de haut en bas sur la
+droite de la coupe [1 p. 301] :
+
+| Cote | Valeur (mm) |
+| --- | --- |
+| 1re cote, en haut | 10 |
+| 2e cote | 10 |
+| 3e cote | 10 |
+| 4e cote, hauteur de l'élargisseur 0207 | 50 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 301)
+
+![Seuil 9C42 sur élargisseur 0207 sous l'ouvrant 6123](/assets/procedures/directives-evo2008/seuil-9c42-avec-elargisseur-0207-evo2008.png)
+
+# Ce que le document ne dit pas
+
+- La pièce repérée (2) sur les dessins de montage du dormant et du meneau
+- Les valeurs de X et de Y du perçage et de la « Cote seuil »
+- Le produit d'étanchéité entre le dormant et l'assemblage de seuil
+
+# Citations
+
+[1] [Système e.VOLUTION, plan des profilés et manuel technique, système F 91, édition août 2008](raw/profine-plans-profiles-e-volution-2008-08.pdf),
+registre 5.8, PDF p. 292 à 301
+
+# Voir aussi
+
+- [Mise en œuvre du seuil du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md)
+- [Assemblages du système 70](/profiles/systeme-70-assemblages.md)
+- [Types d'ouverture et plans de combinaison du système 70](/profiles/systeme-70-plans-de-combinaison.md)
+- [Plans des profilés e.VOLUTION, août 2008](/sources/plans-profiles-e-volution-2008.md)
+
+===== PAGE 3 : /procedures/traitement-du-battement-systeme-70-evo2008.md =====
+# Ce que fait cette procédure
+
+Le **battement** est le profilé vertical qui ferme le jeu entre les deux vantaux d'une fenêtre ou
+d'une porte-fenêtre à deux vantaux sans meneau (le [meneau](/reference/glossaire.md) est le
+montant fixe qui sépare deux ouvrants ; ici il n'y en a pas). Il est rapporté sur l'ouvrant du
+**vantail semi-fixe**, le vantail qui s'ouvre en second. Un [ouvrant](/reference/glossaire.md) est
+le cadre mobile qui porte le vitrage.
+
+Le classeur KÖMMERLING « Système e.VOLUTION » d'août 2008 (système F 91, système 70 de profine)
+décrit dans son registre 5.7 deux familles de montage [1 p. 269-277] :
+
+- les **battements 0140 et 0141**, profilés collés et vissés sur l'ouvrant du vantail semi-fixe,
+  utilisables avec tous les ouvrants de la gamme ;
+- le **battement central réduit avec renvoi de manœuvre** : l'ouvrant vertical du vantail
+  semi-fixe est un **ouvrant réduit** (profil plus étroit, soudé à 45° sur les ouvrants
+  horizontaux), qui reçoit un battement extérieur et un battement intérieur rapportés ; les pointes
+  de l'ouvrant horizontal qui dépassent après soudure sont délignées et fermées par un **embout de
+  frappe**. Le **renvoi de manœuvre** (ou renvoi de fouillot) est la pièce de quincaillerie qui
+  déporte la commande de la poignée pour la centrer sur le battement.
+
+Le registre 5.7 est paginé à partir de 1 : sa page imprimée N est la page N + 268 du PDF. Les
+termes DFO (dimension de feuillure d'ouvrant) et DEO (dimension extérieure d'ouvrant) sont au
+[glossaire](/reference/glossaire.md). Le même montage, décrit par le manuel profine de septembre
+2023, est sur [Traitement du battement du système 70](/procedures/traitement-du-battement-systeme-70.md) ;
+les débits du registre 3 de ce même classeur sont sur
+[Cotes de débit du système 70](/profiles/systeme-70-cotes-de-debit.md#débit-des-battements-de-2008).
+
+# Conditions et interdictions
+
+- « Pour la fabrication de fenêtres et portes-fenêtres à deux vantaux, il est impératif de tenir
+  compte des contraintes statiques (cf. diagramme: Dimensions maximales d'ouvrants, registre 2). »
+  Les diagrammes de renforcement de ce classeur sont au registre 4.1, pas au registre 2 (**INC-250**) :
+  voir [Abaques de renforcement du système 70, 2008](/profiles/systeme-70-abaques-evo2008.md)
+  [1 p. 269-270].
+- Au battement central réduit : « Dimensions maximales pour OF et OB: voir diagramme
+  correspondant. » (OF : ouvrant à la française ; OB : oscillo-battant) [1 p. 272].
+- L'assemblage du battement 0140 ou 0141 sur l'ouvrant « devra être étanche » [1 p. 269-270].
+- « Le collage est à effectuer soigneusement avec une colle appropriée, les surfaces à coller
+  devant être propres, sèches et exemptes de graisse. » [1 p. 269-270] Au battement central
+  réduit : « Toutes les parties à coller devront être impérativement propres, sèches et surtout
+  exemptes de graisse. » [1 p. 273]
+
+# Battements 0140 et 0141
+
+## Profilés et pièces
+
+Une ligne par battement ; les deux planches ont la même liste de pièces [1 p. 269-270].
+
+| Battement | Embouts (haut / bas) | Ouvrants | Ouvrants pour porte d'entrée | Vis de fixation | Page PDF |
+| --- | --- | --- | --- | --- | --- |
+| F90-25- 0140 | F90-88- 9414.1 | tous les ouvrants de la gamme e.VOLUTION | F95-13- 2416 (ouvrant vers l'intérieur), F95-13- 2415 (ouvrant vers l'extérieur) | vis à tête fraisée à empreinte cruciforme 4,2 × 45 mm, entraxe env. 300 mm | 269 |
+| F90-25- 0141 | F90-88- 9415.1 | tous les ouvrants de la gamme e.VOLUTION | F95-13- 2416 (ouvrant vers l'intérieur), F95-13- 2415 (ouvrant vers l'extérieur) | vis à tête fraisée à empreinte cruciforme 4,2 × 45 mm, entraxe env. 300 mm | 270 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 269-270)
+
+Le texte des deux planches écrit « Utiliser des vis à tête bombée à empreinte cruciforme 4,2 x 45 »
+alors que leurs dessins légendent « Vis à tête fraisée à empreinte cruciforme 4,2 x 45 mm »
+(**INC-247**).
+
+## Étapes
+
+Les étapes sont les mêmes pour le 0140 et le 0141 ; seules les références changent [1 p. 269-270].
+
+1. Débiter le profilé de battement : « Cote de débit du profilé de battement = dimension feuillure
+   ouvrant – 32 mm » (« Débit = DFO – 32 mm » sur le dess. 5).
+2. Coller les embouts haut et bas (9414.1 pour le 0140, 9415.1 pour le 0141) : « Les contours de
+   l'embouts […] en PVC rigide s'adaptent à la forme du profilé de battement […] et à celle des
+   ouvrants. »
+3. Coller le profilé de battement sur l'ouvrant du vantail semi-fixe ; « l'assemblage devra être
+   étanche » (dess. 1 pour le 0140, dess. 3 pour le 0141, flèches « Surfaces à coller »).
+4. Visser le battement, vis 4,2 × 45, entraxe env. 300 mm (dess. 2). « L'axe de perçage est
+   identique à la rainure du profilés de battement ».
+
+Ferrures : « Pour la réalisation de fenêtres et portes-fenêtres à deux vantaux avec le profilé de
+battements F90-25- 0140 [ou 0141], les quincailleries standards peuvent être utilisées; il est par
+exemple possible d'utiliser les mêmes ferrures pour les deux vantaux. » [1 p. 269-270]
+
+Le débit du registre 3 de ce classeur pour les mêmes battements (« DEO – 72 mm ») est sur
+[Cotes de débit du système 70](/profiles/systeme-70-cotes-de-debit.md#débit-des-battements-de-2008).
+
+## Battement 0140 : dessins 1 et 2
+
+Le dess. 1 montre en perspective l'embout 9414.1 et la vis au-dessus du battement 0140 posé sur
+l'ouvrant ; les flèches repèrent les « Surfaces à coller » de l'embout.
+
+![Battement 0140, dess. 1 : embout 9414.1, vis et surfaces à coller](/assets/procedures/directives-evo2008/battement-0140-dess1-collage-vissage-embout-9414-1-evo2008.png)
+
+Le dess. 2 est la coupe horizontale des deux ouvrants avec le 0140 vissé : la vis traverse le
+battement, son renfort et l'ouvrant ; le « Silicone » est repéré à gauche, sous la tête de vis. La
+vis est cotée à 21,1 mm du bord extérieur du battement ; en pied, 6 mm et 23 mm sont cotés depuis
+l'axe du jeu entre ouvrants.
+
+![Battement 0140, dess. 2 : coupe du vissage](/assets/procedures/directives-evo2008/battement-0140-dess2-coupe-vissage-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 269)
+
+## Battement 0141 : dessins 3 et 2
+
+Le dess. 3 montre l'embout 9415.1, la vis et les « Surfaces à coller » sur le battement 0141.
+
+![Battement 0141, dess. 3 : embout 9415.1, vis et surfaces à coller](/assets/procedures/directives-evo2008/battement-0141-dess3-collage-vissage-embout-9415-1-evo2008.png)
+
+La coupe du vissage du 0141 est légendée « Dess. 2 », alors que le texte y renvoie aussi comme
+« dessin 4 » (**INC-246**). Elle cote 6 mm et 23 mm en pied, comme celle du 0140 ; la hauteur de
+la vis sous le bord extérieur du battement est tracée par une ligne de cote **sans valeur**.
+
+![Battement 0141, dess. 2 : coupe du vissage](/assets/procedures/directives-evo2008/battement-0141-dess2-coupe-vissage-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 270)
+
+## Débit et embout bas : dessin 5
+
+Le dess. 5 (échelle 1:1, page intitulée « Fenêtre/porte fenêtre à 2 vantaux sans meneau ») est la
+coupe verticale du bas du battement sur la traverse basse du dormant (le
+[dormant](/reference/glossaire.md) est le cadre fixe). La cote « DFO » part du fond de feuillure du
+dormant ; « Débit = DFO – 32 mm » s'arrête 16 mm plus haut, au-dessus de l'« Embout bas » (tracé en
+pointillé) ; 12 mm sont cotés entre le dessous de l'ouvrant et le dormant.
+
+![Battements 0140 et 0141, dess. 5 : débit et embout bas](/assets/procedures/directives-evo2008/battement-0140-0141-dess5-debit-embout-bas-evo2008.png)
+
+| Cote du dess. 5 | Valeur |
+| --- | --- |
+| Débit du battement | DFO – 32 mm |
+| Retrait du débit sous la DFO, occupé par l'embout bas (mm) | 16 |
+| Jeu entre l'ouvrant et le dormant (mm) | 12 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 271)
+
+# Battement central réduit
+
+## Ouvrants 6112 et 6113 : profilés, renforts et embouts
+
+« Battement central réduit avec renvoi de manoeuvre pour système 2 vantaux sans meneau (ouvrants
+6112/6113) » : liste des profilés, une ligne par pièce, dans l'ordre de la planche
+[1 p. 272].
+
+| Pièce | Référence | Pour |
+| --- | --- | --- |
+| Ouvrant | F91-06- 6112 | - |
+| Renfort | F00-40- V600 | 6112 |
+| Embout haut / bas | F91-75- 9F13 | 6112 |
+| Ouvrant (ouvrant réduit) | F91-08- 6113 | - |
+| Renfort | F00-40- V600 | 6113 |
+| Battement extérieur | F91-25- 6130 | - |
+| Battement extérieur | F40-25- 1459 | - |
+| Battement extérieur | F40-25- 1578 | - |
+| Embout haut / bas | F40-75- 9662 | 1459 / 1578 (ordre de la liste) |
+| Embout haut / bas | F00-75- 9A81 | 1459 / 1578 (ordre de la liste) |
+| Embout haut / bas | F91-75- 9F30 | 6130 |
+| Battement intérieur | F40-62- 1458 | - |
+| Embout haut / bas | F40-75- 9663 | 1458 |
+| Battement intérieur | F69-61- 1547 | - |
+| Embout haut / bas | F69-75- 9A82 | 1547 |
+| Battement intérieur | F91-62- 6133 | - |
+| Embout haut / bas | F91-75- 9F33 | 6133 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 272)
+
+La liste range les embouts 9662 et 9A81 face à « F40-25- 1459/1578 » sans dire lequel va sur quel
+battement ; le dess. 4 de la page suivante les associe un par un : 1459 avec 9662, 1578 avec 9A81
+[1 p. 273]. Le renfort V600 des ouvrants 6112 et 6113 est celui du registre 1.2 de ce classeur ; le
+manuel de 2023 renforce ces ouvrants autrement (**CTR-69**).
+
+Quincailleries : « Pour le renvoi de fouillot et afin de centrer la poignée vous pouvez opter pour
+les systèmes proposées par Siegenia, Ferco, Maco, Winkhaus ou Roto adaptés aux profilés de la gamme
+KÖMMERLING référençés ci-dessus. » [1 p. 272]
+
+## Ouvrants 6112 et 6113 : directives de fabrication
+
+Étapes de la planche, dans son ordre [1 p. 273] :
+
+1. « Souder l'ouvrant vertical F91-08- 6113, après coupe à 45°, avec les ouvrants horizontaux haut
+   et bas F91-06- 6112 (dessin 1 et 2). »
+2. « Après soudure et ébavurage déligner par fraisage ou sciage les deux pointes résiduelles du
+   profil ouvrant F91-06- 6112 (dessin 1). » Sur le dess. 1, la pointe délignée est cotée 19,5 mm
+   de haut sur 32 mm de large, et la coupe à 45° 32 × 32 mm.
+3. « Coller avec une colle appropriée les deux embouts de frappe haut et bas F91-75- 9F13 sur cette
+   partie délignée (dessin 2 et 6). »
+4. Débiter les battements (tableau ci-dessous).
+5. Mise en place du battement extérieur (6130, 1459 ou 1578) : « Avant sa mise en plaçe préencoler
+   avec une colle appropriée les 2 parties de contact du battement choisi avec l'ouvrant F91-08-
+   6113 ceci sur toute la hauteur. Clipper le battement choisi sur l'ouvrant F91-08- 6113. Les
+   embouts hauts et bas 9F13 épousant le contour du profil F91-08- 6113 seront collés à chaque
+   extrémité (dessin 3 et 5). »
+6. Mise en place du battement intérieur (6133, 1458 ou 1547) : « Avant sa mise en place sur
+   l'ouvrant F91-06- 6112 le battement intérieur choisi est préencollé avec une colle appropriée
+   sur toute sa hauteur de contact et mise en place avec eventuellement un positionnement préalable
+   par clip. Les embouts hauts et bas correspontel épousant le contour du profil choisi seront
+   collés à chaque extrémité (dessin 4). »
+
+| Battement | Position | Débit | Page PDF |
+| --- | --- | --- | --- |
+| F91-25- 6130 | extérieur | feuillure ouvrant – 32 mm | 273 |
+| F40-25- 1459 | extérieur | feuillure ouvrant – 32 mm | 273 |
+| F40-25- 1578 | extérieur | feuillure ouvrant – 32 mm | 273 |
+| F91-62- 6133 | intérieur | extérieur ouvrant – 6 mm | 273 |
+| F40-62- 1458 | intérieur | extérieur ouvrant – 6 mm | 273 |
+| F69-61- 1547 | intérieur | extérieur ouvrant – 6 mm | 273 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 273)
+
+Le débit du battement extérieur (DFO – 32 mm, retrait de 16 mm en pied) et la fixation du
+battement intérieur (préencollé, clip éventuel) ne sont pas ceux du manuel de 2023 (**CTR-96**,
+**CTR-97**). Le registre 3 de ce classeur débite les battements extérieurs 6130 et 6132 à « DEO –
+70 mm » et les intérieurs à « DEO – 6 mm » : voir
+[Cotes de débit du système 70](/profiles/systeme-70-cotes-de-debit.md#débit-des-battements-de-2008).
+Deux références de la planche ne concordent pas avec le reste : le titre « Mise en place du
+battement extérieur » écrit « F00-25- 1459 » où la liste et les dessins écrivent « F40-25- 1459 »
+(**INC-248**), et le dess. 3 légende parmi les embouts des battements extérieurs le « F69-75- 9A82 »,
+qui est l'embout du battement intérieur 1547, là où la liste et le dess. 4 donnent le 9A81 pour le
+1578 (**INC-249**).
+
+## Ouvrants 6112 et 6113 : dessins 1 à 4
+
+Le dess. 1 montre en haut la pointe résiduelle de l'ouvrant horizontal 6112 après délignage (19,5 ×
+32 mm), en bas la coupe à 45° de l'ouvrant 6112 et de l'ouvrant réduit 6113 (32 × 32 mm).
+
+![Ouvrants 6112 / 6113, dess. 1 : coupe à 45° et délignage des pointes](/assets/procedures/directives-evo2008/ouvrants-6112-6113-dess1-delignage-evo2008.png)
+
+Le dess. 2 montre l'ouvrant réduit 6113 descendu sur l'angle de l'ouvrant 6112, et l'embout de
+frappe 9F13 qui vient fermer la pointe délignée.
+
+![Ouvrants 6112 / 6113, dess. 2 : soudure et embout de frappe 9F13](/assets/procedures/directives-evo2008/ouvrants-6112-6113-dess2-soudure-embout-9f13-evo2008.png)
+
+Le dess. 3 montre le battement extérieur en pointillé sur l'angle soudé, l'embout de battement
+(légendé 9F30, 9662, 9A82) en haut et l'embout de frappe 9F13 en pied.
+
+![Ouvrants 6112 / 6113, dess. 3 : embouts de battement et embout de frappe](/assets/procedures/directives-evo2008/ouvrants-6112-6113-dess3-embouts-9f13-9f30-9662-9a82-evo2008.png)
+
+Le dess. 4 est la coupe horizontale du battement : ouvrants 6113 (à gauche) et 6112 (à droite),
+renforcés F00-40- V600 ; en haut le battement extérieur, au choix 6130 avec l'embout 9F30, 1459 avec
+9662 ou 1578 avec 9A81 ; en bas le battement intérieur, au choix 6133 avec 9F33, 1458 avec 9663 ou
+1547 avec 9A82 ; l'embout 9F13 dans le jeu de 12 mm entre ouvrants. Les flèches repèrent les
+« Surfaces de collage ».
+
+![Ouvrants 6112 / 6113, dess. 4 : battements au choix et surfaces de collage](/assets/procedures/directives-evo2008/ouvrants-6112-6113-dess4-battements-surfaces-de-collage-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 273)
+
+## Ouvrants 6112 et 6113 : vue éclatée, dessin 5
+
+Le dess. 5 est la vue éclatée de l'angle bas : ouvrant F91-06- 6112 et ouvrant F91-08- 6113, tous
+deux renforcés F00-40- V600 ; battement extérieur F91-25- 6130, F40-25- 1459 ou F40-25- 1578 ;
+embouts F91-75- 9F30, F40-75- 9662 ou F00-75- 9A81, un « (haut) » et un « (bas) » ; « Embout de
+frappe F91-75- 9F13 (haut + bas) ». Le débit est coté « Débit battement DFO – 32 mm », avec 16 mm
+en pied sous le débit [1 p. 274].
+
+![Ouvrants 6112 / 6113, dess. 5 : vue éclatée du battement extérieur et de ses embouts](/assets/procedures/directives-evo2008/ouvrants-6112-6113-dess5-vue-eclatee-battement-exterieur-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 274)
+
+## Ouvrants 6112 et 6113 : coupes cotées, dessin 6
+
+Trois coupes horizontales, toutes légendées « Dess. 6 » : en haut les deux ouvrants au droit du
+battement, en bas l'ouvrant sur le dormant. Elles ne portent pas les références des battements
+dessinés ; elles se distinguent par la cote verticale du profilé rapporté de droite : 54, 60 ou
+46 mm. Une ligne par coupe ; cotes en mm, relevées sur les planches rendues à 200 dpi
+[1 p. 275-277]. Gauche et droite sont celles de la planche.
+
+| Coupe | Masse centrale, cote encadrée (mm) | Cote verticale du profilé de gauche (mm) | Cote verticale du profilé de droite (mm) | Cote en haut à droite (mm) | Cote en haut à gauche (mm) | Jeu entre ouvrants (mm) | Cote de 7 (mm) | Cotes de 0,5 (mm) | En pied, côté intérieur (mm) | Jeu ouvrant / dormant en pied (mm) | En pied, côté extérieur (mm) | Échelle | Page PDF |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| page imprimée 7 | 118 | 34 | 54 | 12,4 | 16 | 12 | 7 | 0,5 ; 0,5 | 16 ; 2 ; 1 | 12 | 2 | 1:1 | 275 |
+| page imprimée 8 | 118 | 40 | 60 | 13,4 | 16 | 12 | 7 | 0,5 ; 0,5 | 16 ; 2 ; 1 | 12 | 2 | non à l'échelle | 276 |
+| page imprimée 9 | 118 | 40 | 46 | 12,8 | 16 | 12 | 7 | 0,5 | 16 ; 2 ; 1 | 12 | 2 | non à l'échelle | 277 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 275-277)
+
+Aucune légende ne dit quel battement extérieur (6130, 1459, 1578) et quel battement intérieur (6133,
+1458, 1547) chaque coupe dessine (**VER-117**). Les cotes « en pied, côté intérieur » sont celles
+portées à gauche de la coupe de l'ouvrant sur le dormant : deux cotes verticales de 16 et 2 mm et
+une cote horizontale de 1 mm ; « côté extérieur », la cote verticale de 2 mm portée à droite. Ces
+colonnes valent pour toutes les coupes de cette page.
+
+![Coupe du battement central réduit, ouvrants 6112 / 6113, profilé de droite coté 54 mm](/assets/procedures/directives-evo2008/ouvrants-6112-6113-dess6-coupe-battement-54-evo2008.png)
+
+![Coupe du battement central réduit, ouvrants 6112 / 6113, profilé de droite coté 60 mm](/assets/procedures/directives-evo2008/ouvrants-6112-6113-dess6-coupe-battement-60-evo2008.png)
+
+![Coupe du battement central réduit, ouvrants 6112 / 6113, profilé de droite coté 46 mm](/assets/procedures/directives-evo2008/ouvrants-6112-6113-dess6-coupe-battement-46-evo2008.png)
+
+## Ouvrants 6115 et 6116 : profilés, renforts et embouts
+
+« Battement central réduit avec renvoi de manoeuvre pour système 2 vantaux sans meneau (ouvrants
+6115/6116) » : liste des profilés, une ligne par pièce, dans l'ordre de la planche
+[1 p. 278]. Les battements et leurs embouts sont ceux des ouvrants 6112 / 6113 ; seuls les ouvrants
+et leurs renforts changent.
+
+| Pièce | Référence | Pour |
+| --- | --- | --- |
+| Ouvrant | F91-06- 6115 | - |
+| Renfort | F00-40- V057 | 6115 |
+| Renfort | F00-40- V059 | 6115 |
+| Renfort | F00-40- V069 | 6115 |
+| Embout haut / bas | F91-75- 9F13 | 6115 |
+| Ouvrant (ouvrant réduit) | F91-08- 6116 | - |
+| Renfort | F00-40- V057 | 6116 |
+| Renfort | F00-40- V059 | 6116 |
+| Renfort | F00-40- V069 | 6116 |
+| Battement extérieur | F91-25- 6130 | - |
+| Battement extérieur | F40-25- 1459 | - |
+| Battement extérieur | F40-25- 1578 | - |
+| Embout haut / bas | F40-75- 9662 | 1459 / 1578 (ordre de la liste) |
+| Embout haut / bas | F40-75- 9A81 | 1459 / 1578 (ordre de la liste) |
+| Embout haut / bas | F91-75- 9F30 | 6130 |
+| Battement intérieur | F40-62- 1458 | - |
+| Embout haut / bas | F40-75- 9663 | 1458 |
+| Battement intérieur | F69-61- 1547 | - |
+| Embout haut / bas | F69-75- 9A82 | 1547 |
+| Battement intérieur | F91-62- 6133 | - |
+| Embout haut / bas | F91-75- 9F33 | 6133 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 278)
+
+Cette liste écrit l'embout « F40-75- 9A81 », les planches des ouvrants 6112 / 6113 et les dess. 4 et
+5 des ouvrants 6115 / 6116 « F00-75- 9A81 » (**INC-251**). La liste et le dess. 4 renforcent les
+6115 et 6116 par V057, V059 ou V069 ; la vue éclatée (dess. 5) légende « V057, V058, V069 »
+(**INC-253**). « Dimensions maximales pour OF et OB: voir diagramme correspondant. » Le paragraphe
+« Quincailleries » est celui des ouvrants 6112 / 6113 [1 p. 278].
+
+## Ouvrants 6115 et 6116 : directives de fabrication
+
+Le texte de la planche est celui des ouvrants 6112 / 6113, ouvrants 6115 (horizontal) et 6116
+(vertical réduit) à la place des 6112 et 6113 : soudure du 6116 à 45° sur les 6115 haut et bas
+(dessins 1 et 2), délignage des deux pointes résiduelles du 6115 « par fraisage ou sciage »
+(dessin 1 : 19,5 × 32 mm, coupe à 45° 32 × 32 mm), collage des embouts de frappe 9F13 (dessins 2 et
+6), mêmes débits (battements extérieurs 6130, 1459, 1578 : feuillure ouvrant – 32 mm ;
+battements intérieurs 6133, 1458, 1547 : extérieur ouvrant – 6 mm), même mise en place des
+battements, même avertissement sur les surfaces à coller [1 p. 279].
+
+Deux passages ne concordent pas avec la planche : « préencoler avec une colle appropriée les 2
+parties de contact du battement choisi avec l'ouvrant F91-08- **6113** », alors que l'ouvrant
+réduit de la planche est le 6116 et que la phrase suivante dit « Clipper le battement choisi sur
+l'ouvrant F91-08- 6116 » (**INC-252**) ; et le titre « F00-25- 1459 » (**INC-248**).
+
+## Ouvrants 6115 et 6116 : dessins 1 à 5
+
+Dess. 1 : pointe délignée de l'ouvrant 6115 (19,5 × 32 mm) et coupe à 45° des 6115 et 6116
+(32 × 32 mm).
+
+![Ouvrants 6115 / 6116, dess. 1 : coupe à 45° et délignage des pointes](/assets/procedures/directives-evo2008/ouvrants-6115-6116-dess1-delignage-evo2008.png)
+
+Dess. 2 : l'ouvrant réduit 6116 descendu sur l'angle du 6115, et l'embout de frappe 9F13.
+
+![Ouvrants 6115 / 6116, dess. 2 : soudure et embout de frappe 9F13](/assets/procedures/directives-evo2008/ouvrants-6115-6116-dess2-soudure-embout-9f13-evo2008.png)
+
+Dess. 3 : battement extérieur en pointillé, embouts de battement « F91-75- 9F30, F40-75- 9662,
+F40-75- 9A81 » en haut, embout de frappe 9F13 en pied.
+
+![Ouvrants 6115 / 6116, dess. 3 : embouts de battement et embout de frappe](/assets/procedures/directives-evo2008/ouvrants-6115-6116-dess3-embouts-9f13-9f30-9662-9a81-evo2008.png)
+
+Dess. 4 : coupe horizontale du battement, ouvrants 6116 (à gauche) et 6115 (à droite) renforcés
+V057, V059 ou V069 ; battement extérieur 6130 / 9F30, 1459 / 9662 ou 1578 / 9A81 ; battement
+intérieur 6133 / 9F33, 1458 / 9663 ou 1547 / 9A82 ; embout 9F13 dans le jeu de 12 mm ; flèches
+« Surfaces de collage ».
+
+![Ouvrants 6115 / 6116, dess. 4 : battements au choix et surfaces de collage](/assets/procedures/directives-evo2008/ouvrants-6115-6116-dess4-battements-surfaces-de-collage-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 279)
+
+Dess. 5, vue éclatée de l'angle bas : ouvrants 6116 et 6115 (renforts légendés V057, V058, V069),
+battement extérieur 6130, 1459 ou 1578, embouts 9F30, 9662 ou 9A81 « (haut) » et « (bas) », embout
+de frappe 9F13 « (haut + bas) », « Débit battement DFO – 32 mm » et 16 mm en pied [1 p. 280].
+
+![Ouvrants 6115 / 6116, dess. 5 : vue éclatée du battement extérieur et de ses embouts](/assets/procedures/directives-evo2008/ouvrants-6115-6116-dess5-vue-eclatee-battement-exterieur-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 280)
+
+## Ouvrants 6115 et 6116 : coupes cotées, dessin 6
+
+Trois coupes « Dess. 6 », mêmes colonnes que pour les ouvrants 6112 / 6113 ; masse centrale de 166 mm
+au lieu de 118. Cotes en mm, relevées sur les planches rendues à 200 dpi [1 p. 281-283].
+
+| Coupe | Masse centrale, cote encadrée (mm) | Cote verticale du profilé de gauche (mm) | Cote verticale du profilé de droite (mm) | Cote en haut à droite (mm) | Cote en haut à gauche (mm) | Autre cote en haut à gauche (mm) | Jeu entre ouvrants (mm) | Cote de 7 (mm) | Cotes de 0,5 (mm) | En pied, côté intérieur (mm) | Jeu ouvrant / dormant en pied (mm) | En pied, côté extérieur (mm) | Page PDF |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| page imprimée 13 | 166 | 34 | 54,5 | 12,3 | 16 | - | 12 | 7 | 0,5 ; 0,5 | 16 ; 2 ; 1 | 12 | 2 | 281 |
+| page imprimée 14 | 166 | 40 | 60 | - | 16 | - | 12 | 7 | 0,5 ; 0,5 | 16 ; 2 ; 1 | 12 | 2 | 282 |
+| page imprimée 15 | 166 | 40 | 46 | 12,8 | 16 | 1,1 | 12 | 7 | 0,5 | 16 ; 2 ; 1 | 12 | 2 | 283 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 281-283)
+
+Sur la coupe de la p. 282, la cote en haut à droite n'est pas portée ; la coupe de la p. 283 ajoute
+une cote de 1,1 mm au-dessus du profilé de gauche. Comme pour les ouvrants 6112 / 6113, aucune
+légende ne dit quels battements chaque coupe dessine (**VER-117**).
+
+![Coupe du battement central réduit, ouvrants 6115 / 6116, profilé de droite coté 54,5 mm](/assets/procedures/directives-evo2008/ouvrants-6115-6116-dess6-coupe-battement-54-5-evo2008.png)
+
+![Coupe du battement central réduit, ouvrants 6115 / 6116, profilé de droite coté 60 mm](/assets/procedures/directives-evo2008/ouvrants-6115-6116-dess6-coupe-battement-60-evo2008.png)
+
+![Coupe du battement central réduit, ouvrants 6115 / 6116, profilé de droite coté 46 mm](/assets/procedures/directives-evo2008/ouvrants-6115-6116-dess6-coupe-battement-46-evo2008.png)
+
+## Ouvrants 6121 et 6122, et 6123 et 6124 : profilés, renforts et embouts
+
+« Battement central réduit avec renvoi de manoeuvre pour système 2 vantaux sans meneau » pour les
+ouvrants 6121 / 6122 [1 p. 284] et 6123 / 6124 [1 p. 288]. Ces deux couples ne reçoivent qu'un
+battement extérieur et un battement intérieur. Une ligne par pièce et par couple, dans l'ordre des
+planches.
+
+| Couple d'ouvrants | Pièce | Référence | Pour | Page PDF |
+| --- | --- | --- | --- | --- |
+| 6121 / 6122 | Ouvrant | F91-09- 6121 | - | 284 |
+| 6121 / 6122 | Renfort | F00-40- V058 | 6121 | 284 |
+| 6121 / 6122 | Embout haut / bas | F91-75- 9F13 | 6121 | 284 |
+| 6121 / 6122 | Ouvrant (ouvrant réduit) | F91-08- 6122 | - | 284 |
+| 6121 / 6122 | Renfort | F00-40- V058 | 6122 | 284 |
+| 6121 / 6122 | Battement extérieur | F91-25- 6132 | - | 284 |
+| 6121 / 6122 | Embout haut / bas | F91-75- 9F35 | 6132 | 284 |
+| 6121 / 6122 | Battement intérieur | F91-62- 6131 | - | 284 |
+| 6121 / 6122 | Embout haut / bas | F91-75- 9F31 | 6131 | 284 |
+| 6123 / 6124 | Ouvrant | F91-09- 6123 | - | 288 |
+| 6123 / 6124 | Renfort | F00-40- V057, V059 ou V069 | 6123 | 288 |
+| 6123 / 6124 | Embout haut / bas | F91-75- 9F13 | 6123 | 288 |
+| 6123 / 6124 | Ouvrant (ouvrant réduit) | F91-08- 6124 | - | 288 |
+| 6123 / 6124 | Renfort | F00-40- V057, V059 ou V069 | 6124 | 288 |
+| 6123 / 6124 | Battement extérieur | F91-25- 6132 | - | 288 |
+| 6123 / 6124 | Embout haut / bas | F91-75- 9F35 | 6132 | 288 |
+| 6123 / 6124 | Battement intérieur | F91-62- 6131 | - | 288 |
+| 6123 / 6124 | Embout haut / bas | F91-75- 9F31 | 6131 | 288 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 284, 288)
+
+Les deux planches ajoutent « Dimensions maximales pour OF et OB: voir diagramme correspondant » et le
+paragraphe « Quincailleries » des ouvrants 6112 / 6113 [1 p. 284, 288]. Les ouvrants 6121 et 6123
+sont écrits « F91-09- » dans les listes et sur les dess. 4 et 5, « F91-06- » dans le texte et sur
+les dess. 1 et 2 (**INC-254**). Le renfort V058 des 6121 et 6122 est celui du registre 1.2 de ce
+classeur (**CTR-69** pour le manuel de 2023).
+
+## Ouvrants 6121 et 6122, et 6123 et 6124 : directives de fabrication
+
+Les deux planches portent le même texte, aux références d'ouvrants près ; il est donné ici pour les
+ouvrants 6121 / 6122, les références des 6123 / 6124 entre crochets [1 p. 285, 289] :
+
+1. « Souder l'ouvrant vertical F91-08- 6122 [6124], après coupe à 45°, avec les ouvrants
+   horizontaux haut et bas F91-06- 6121 [6123] (dessin 1 et 2). »
+2. « Après soudure et ébavurage déligner par fraisage ou sciage les deux pointes résiduelles du
+   profil ouvrant F91-06- 6121 [6123] (dessin 1). » Dess. 1 : pointe délignée 19,5 × 32 mm, coupe
+   à 45° 32 × 32 mm.
+3. « Coller avec une colle appropriée les deux embouts de frappe haut et bas F91-75- 9F13 sur cette
+   partie délignée (dessin 2 et 6). »
+4. Débiter les battements : « Débit pour le battement extérieur F91-25- 6132 — Feuillure ouvrant –
+   32 mm » ; « Débit pour le battement intérieur F91-62- 6131 — Extérieur ouvrant – 6 mm ».
+5. Mise en place du battement extérieur F91-25- 6132 : « Avant sa mise en plaçe préencoler […] une
+   colle appropriée les 2 parties de contact du battement F91-25- 6132 avec l'ouvrant F91-08- 6122
+   [6124] ceci sur toute la hauteur. Clipper le battement F91-25- 6132 sur l'ouvrant F91-08- 6122
+   [6124]. » Les embouts haut et bas du 6132 sont collés à chaque extrémité (dessin 3 et 5).
+6. Mise en place du battement intérieur F91-62- 6131 : « Avant sa mise en place sur l'ouvrant
+   F91-06- 6121 [6123] le battement intérieur F91-62- 6131 est préencollé avec une colle appropriée
+   sur toute sa hauteur de contact et mise en place avec eventuellement un positionnement préalable
+   par clip. » Ses embouts haut et bas sont collés à chaque extrémité (dessin 4).
+
+« Attention: Toutes les parties à coller devront être impérativement propres, sèches et surtout
+exemptes de graisse. » [1 p. 285, 289]
+
+Les embouts à coller aux étapes 5 et 6 ne sont pas les mêmes sur les deux planches : la planche des
+6123 / 6124 écrit « F91-75- 9F35 » pour le 6132 et « F91-75- 9F31 » pour le 6131, comme les listes et
+les dess. 4 ; celle des 6121 / 6122 écrit « F91-75- 9F13 » pour le 6132 et « F91-75- 9F35 » pour le
+6131 (**INC-255**).
+
+## Ouvrants 6121 et 6122 : dessins 1 à 5
+
+Dess. 1 : pointe délignée de l'ouvrant 6121 et coupe à 45° des 6121 et 6122.
+
+![Ouvrants 6121 / 6122, dess. 1 : coupe à 45° et délignage des pointes](/assets/procedures/directives-evo2008/ouvrants-6121-6122-dess1-delignage-evo2008.png)
+
+Dess. 2 : l'ouvrant réduit 6122 descendu sur l'angle du 6121, et l'embout de frappe 9F13.
+
+![Ouvrants 6121 / 6122, dess. 2 : soudure et embout de frappe 9F13](/assets/procedures/directives-evo2008/ouvrants-6121-6122-dess2-soudure-embout-9f13-evo2008.png)
+
+Dess. 3 : battement extérieur en pointillé, embout de battement 9F35 en haut, embout de frappe 9F13
+en pied.
+
+![Ouvrants 6121 / 6122, dess. 3 : embout 9F35 et embout de frappe 9F13](/assets/procedures/directives-evo2008/ouvrants-6121-6122-dess3-embouts-9f13-9f35-evo2008.png)
+
+Dess. 4 : coupe horizontale, ouvrants 6122 (à gauche) et 6121 (à droite) renforcés V058, battement
+extérieur 6132 avec son embout 9F35 en haut, battement intérieur 6131 avec son embout 9F31 en bas,
+embout 9F13 dans le jeu de 12 mm, flèches « Surfaces de collage ».
+
+![Ouvrants 6121 / 6122, dess. 4 : battements 6132 et 6131, surfaces de collage](/assets/procedures/directives-evo2008/ouvrants-6121-6122-dess4-battements-6132-6131-surfaces-de-collage-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 285)
+
+Dess. 5, vue éclatée de l'angle bas : ouvrant F91-08- 6122 et ouvrant F91-09- 6121 renforcés
+F00-40- V058, battement F91-25- 6132, embouts F91-75- 9F35 « (haut) » et « (bas) », embout de frappe
+F91-75- 9F13 « (haut + bas) », « Débit battement DFO – 32 mm » et 16 mm en pied [1 p. 286].
+
+![Ouvrants 6121 / 6122, dess. 5 : vue éclatée du battement 6132 et de ses embouts 9F35](/assets/procedures/directives-evo2008/ouvrants-6121-6122-dess5-vue-eclatee-battement-6132-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 286)
+
+## Ouvrants 6123 et 6124 : dessins 1 à 5
+
+Dess. 1 : pointe délignée de l'ouvrant 6123 et coupe à 45° des 6123 et 6124.
+
+![Ouvrants 6123 / 6124, dess. 1 : coupe à 45° et délignage des pointes](/assets/procedures/directives-evo2008/ouvrants-6123-6124-dess1-delignage-evo2008.png)
+
+Dess. 2 : l'ouvrant réduit 6124 descendu sur l'angle du 6123, et l'embout de frappe 9F13.
+
+![Ouvrants 6123 / 6124, dess. 2 : soudure et embout de frappe 9F13](/assets/procedures/directives-evo2008/ouvrants-6123-6124-dess2-soudure-embout-9f13-evo2008.png)
+
+Dess. 3 : battement extérieur en pointillé, embout 9F35 en haut, embout de frappe 9F13 en pied.
+
+![Ouvrants 6123 / 6124, dess. 3 : embout 9F35 et embout de frappe 9F13](/assets/procedures/directives-evo2008/ouvrants-6123-6124-dess3-embouts-9f13-9f35-evo2008.png)
+
+Dess. 4 : coupe horizontale, ouvrants 6124 (à gauche) et 6123 (à droite), chacun « V057 ou V059 ou
+V069 », battement extérieur 6132 / 9F35, battement intérieur 6131 / 9F31, embout 9F13 dans le jeu de
+12 mm, flèches « Surfaces de collage ».
+
+![Ouvrants 6123 / 6124, dess. 4 : battements 6132 et 6131, surfaces de collage](/assets/procedures/directives-evo2008/ouvrants-6123-6124-dess4-battements-6132-6131-surfaces-de-collage-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 289)
+
+Dess. 5, vue éclatée de l'angle bas : ouvrant F91-08- 6124 et ouvrant F91-09- 6123, renfort
+« F00-40- V057 ou F00-40- V059, F00-40- V069 », battement F91-25- 6132, embouts F91-75- 9F35
+« (haut) » et « (bas) », embout de frappe F91-75- 9F13 « (haut + bas) », « Débit battement DFO –
+32 mm » et 16 mm en pied [1 p. 290].
+
+![Ouvrants 6123 / 6124, dess. 5 : vue éclatée du battement 6132 et de ses embouts 9F35](/assets/procedures/directives-evo2008/ouvrants-6123-6124-dess5-vue-eclatee-battement-6132-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 290)
+
+## Ouvrants 6121 et 6122, et 6123 et 6124 : coupes cotées, dessin 6
+
+Une coupe « Dess. 6 » par couple, battement extérieur 6132 et battement intérieur 6131 (les seuls de
+ces planches). Mêmes colonnes que plus haut ; cotes en mm relevées sur les planches rendues à
+200 dpi [1 p. 287, 291].
+
+| Coupe | Ouvrants | Masse centrale (mm) | Cote verticale du profilé de gauche (mm) | Cote verticale du profilé de droite (mm) | Cote en haut à droite (mm) | Cote en haut à gauche (mm) | Jeu entre ouvrants (mm) | Cote de 7 (mm) | Cotes de 0,3 / 0,5 (mm) | En pied, côté intérieur (mm) | Jeu ouvrant / dormant en pied (mm) | En pied, côté extérieur (mm) | Échelle | Page PDF |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| page imprimée 19 | 6121 / 6122 | 118 | 40 | 54 | 12,9 | 13,3 | 12 | 7 | 0,3 ; 0,5 ; 0,5 | 16 ; 2 ; 1 | 12 | 2 | 1:1 | 287 |
+| page imprimée 23 | 6123 / 6124 | 166 | 39,9 | 54 | 12,9 | 13,3 | 12 | - | 0,3 ; 0,5 ; 0,5 | 16 ; 2 ; 1 | 12 | 2 | non à l'échelle | 291 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 287, 291)
+
+La masse centrale de 118 mm n'est pas encadrée sur la coupe de la p. 287 ; celle de 166 mm l'est
+sur la p. 291. La coupe des 6123 / 6124 ne porte pas la cote de 7 mm et cote le profilé de gauche
+39,9 mm, là où la coupe des 6121 / 6122, qui porte les mêmes battements 6132 et 6131, le cote 40 mm
+(**VER-118**).
+
+![Coupe du battement central réduit, ouvrants 6121 / 6122, battement 6132](/assets/procedures/directives-evo2008/ouvrants-6121-6122-dess6-coupe-battement-6132-evo2008.png)
+
+![Coupe du battement central réduit, ouvrants 6123 / 6124, battement 6132](/assets/procedures/directives-evo2008/ouvrants-6123-6124-dess6-coupe-battement-6132-evo2008.png)
+
+# Ce que le document ne dit pas
+
+- Le battement extérieur et le battement intérieur dessinés sur chaque coupe cotée (**VER-117**)
+- La valeur de la cote verticale de la vis sur la coupe du 0141
+- La nature de la « colle appropriée »
+- Le type et l'espacement du clip de positionnement du battement intérieur
+
+# Citations
+
+[1] [Système e.VOLUTION, plan des profilés et manuel technique, système F 91, édition août 2008](raw/profine-plans-profiles-e-volution-2008-08.pdf),
+registre 5.7, PDF p. 269 à 291
+
+# Voir aussi
+
+- [Traitement du battement du système 70](/procedures/traitement-du-battement-systeme-70.md)
+- [Cotes de débit du système 70](/profiles/systeme-70-cotes-de-debit.md)
+- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
+- [Types d'ouverture et plans de combinaison du système 70](/profiles/systeme-70-plans-de-combinaison.md)
+- [Plans des profilés e.VOLUTION, août 2008](/sources/plans-profiles-e-volution-2008.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md | Procédure | Mise en œuvre des profilés complémentaires du système 70 | systeme-70, e-volution, profine, rehausse, elargisseur, embout | La mise en œuvre des profilés complémentaires du système 70 Plateforme — réhausses 0374 et 0379, élargisseurs 0204, 0210, 0207, 0301 et 70703 avec leurs embouts 9D02 à 9D05 et 9C73, embouts de finition 9F97, 9F08 et 9F10 du dormant monobloc, pièces d'appui 6134 à 6137 et 76768 et leurs embouts de remplissage, patins M298 et M613 et fixation des tapées, compensateurs 6143 et 6144, coulisses et rejet d'eau sur clip S076 ou vis plot, petits bois collés et protège-seuil 9G13. | hauteur ; la table donne ses accessoires, avec l'embout de finition (pièce collée qui ferme le bout du profilé) et l'embout de finition 3 côtés [1 p. |
+| /procedures/traitement-du-battement-systeme-70.md | Procédure | Traitement du battement du système 70 | systeme-70, e-volution, e-motion, e-xclusive, profine, battement | La mise en œuvre des profilés de battement du système 70 Plateforme — battement 0140 collé et vissé, battement central réduit sur ouvrants 6112 / 6113, 6115 / 6116, 6121 / 6122 et 6123 / 6124 avec battements extérieurs 6130 / 6132 et intérieurs 6133 / 6131, embouts, débits, collage et coupes cotées. | de l'ouvrant après délignage sont fermées par un embout d'épointage. Les cotes de débit des dormants recevant un battement et le débit des battement |
+| /procedures/mise-en-oeuvre-seuil-systeme-70.md | Procédure | Mise en œuvre du seuil aluminium du système 70 | systeme-70, e-volution, profine, seuil, seuil-alu, rupture-pont-thermique | La mise en œuvre des seuils aluminium à rupture de pont thermique 9F67, 9F68, 9F69 et Z043 du système 70 Plateforme — pièces et accessoires, débit du seuil et du montant par dormant, montage en coupe droite sur embouts (variante 1) ou sur dormant grugé avec sets 9F71 / 9F72 et gabarit 9918 (variante 2), contours de fraisage, drainage, rejet d'eau A465 et élargisseurs sous seuil. | euil est coupé droit et reçoit à chaque bout un embout (pièce plastique qui ferme l'extrémité du seuil et reçoit le vissage du montant) ; seuils 9 |
+| /sources/plans-profiles-e-volution-2008.md | Document source | Plans des profilés et manuel de fabrication e.VOLUTION, août 2008 | profine, kommerling, e-volution, systeme-70, plan, renfort | Classeur KÖMMERLING « Système e.VOLUTION » de 395 pages (système F 91, édition août 2008) — plans des profilés du système 70 dessinés un par un avec leur renfort et son inertie, combinaisons, cotes de débit, statique, directives de fabrication, systèmes spéciaux et mise en œuvre. | 101, 2502, 6104, dormants larges 6108 à 6111 avec embouts 9F97, 9F08, 9F10, dormants rénovation 6102, 6105, 6106, 6107, profilé 95 38 00 ; tableau Ren |
+| /procedures/capotage-aluclip-systeme-70.md | Procédure | Capotage AluClip du système 70 | systeme-70, e-volution, e-motion, e-xclusive, profine, aluclip | La mise en œuvre des capots aluminium AluClip sur les profilés PVC du système 70 Plateforme de profine — poinçonnage et fraisage des capots, étanchéité des jonctions, positionnement et collage des capots, joints enfilés, battement rapporté 0140 et capot 9C40, drainage en façade par busette M450 et joint G008, décompression par joint 9043, drainages des dormants, ouvrants et traverses capotés — et les profilés complémentaires capotés — réhausses et plats alu, demi-capot A474, patin G250, tapées A469 à A473, appuis A475 à A491, embouts M646 et M643, cotes de débit des tapées et appuis. | 40 à droite avec le délignage coté 1,5 × 8 mm. ![Embout de battement 9414.1 repris pour l'AluClip](/assets/procedures/moe-systeme-70/aluclip/embout-b |
+| /profiles/systeme-70-profiles-complementaires.md | Profilé | Profilés complémentaires du système 70 | systeme-70, gamme-70, profine, elargisseur, liaison, appui | Les élargisseurs, profilés de liaison, poteaux d'angle et de contreventement, habillages, réhausses, battements intérieurs, pièces d'appui PVC et aluminium, tapées, compensations, cornières, profilés plats, coulisses, parcloses avec l'épaisseur de remplissage, joints et accessoires du système 70 (Kömmerling Gamme 70), avec leurs cotes, leurs renforts et leur coupe. | ur ajoutée (mm) / Renfort écrit dans la chambre / Embouts écrits sous la coupe / Coupe / / --- / --- / --- / --- / --- / ---: / / 0204B / 70 / 15 / - |
+| /profiles/systeme-70-accessoires-par-profile.md | Profilé | Renforts et accessoires par profilé du système 70 | systeme-70, e-volution, profine, nomenclature, accessoire, renfort | La nomenclature des renforts, capots, embouts, pièces d'assemblage sur seuil, supports de cale, équerres et gabarits que le manuel profine associe à chaque dormant, ouvrant, seuil, battement, meneau et profilé complémentaire du système 70 Plateforme, avec les inerties IG et IW des renforts et le dessin de chaque pièce. | apot aluminium clippé sur la face extérieure, ses embouts, ses pièces d'assemblage sur seuil, son support de cales de vitrage (la pièce qui porte les |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/incoherences-internes.md :
+| INC-258 | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008 | PDF p. 292 et 298 (registre 5.8, pages imprimées 1 et 7), relues en image à 200 dpi le 29/09/2026 | Dormant rénovation 6106 : table « Set d'assemblage dormant » de la p. 292 → « F91-84- **9F43** » (avec 6102, 6105, 6107) ; « Correspondance des dormants / embouts » de la p. 298 → « 6106 **9F41** » (la même table du registre 1.6, p. 47, donne 9F43) | 9F43, à confirmer par profine | Le set commandé pour un seuil sur 6106 change selon la page ; voir [Seuil aluminium de porte 9C42 du système 70, 2008](/procedures/seuil-alu-9c42-systeme-70-evo2008.md) |
+/anomalies/incoherences-internes.md :
+| INC-259 | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008 | PDF p. 292 et 299 (registre 5.8, pages imprimées 1 et 8), relues en image à 200 dpi le 29/09/2026 | Dormant 6104 : table « Set d'assemblage dormant » de la p. 292 → « F91-84- **9F41** » ; « Correspondance des dormants / embouts » de la p. 299 → « 6104 **9F46** », référence du rejet d'eau du même registre | 9F41 | Commande d'un rejet d'eau à la place du set d'assemblage ; voir [Seuil aluminium de porte 9C42 du système 70, 2008](/procedures/seuil-alu-9c42-systeme-70-evo2008.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-96 | Débit du battement extérieur au battement central réduit du système 70 | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008, PDF p. 273 (registre 5.7, page imprimée 5) : « Débit pour le battement extérieur F91-25- 6130 / F40-25- 1459 / F40-25- 1578 — Feuillure ouvrant – 32 mm » ; PDF p. 274, vue éclatée : « Débit battement DFO – 32 mm », 16 mm en pied ; relues en image à 200 dpi le 29/09/2026 (le registre 3 du même classeur, PDF p. 116-119, écrit « DEO – 70 mm ») | Mise en œuvre Système 70 Plateforme, profine, septembre 2023, PDF p. 216-217, 221-222, 226-227, 230-231 : « FFO - 30 mm » au texte, « Débit battement DFO – 30 mm » et 15 mm en pied sur les vues éclatées (voir aussi INC-152, INC-153) | Aucune : chaque débit reste avec son document et sa date ; à confirmer par profine | 2 mm d'écart sur la longueur du battement extérieur selon le document suivi ; voir [Traitement du battement du système 70, 2008](/procedures/traitement-du-battement-systeme-70-evo2008.md) et [Traitement du battement du système 70](/procedures/traitement-du-battement-systeme-70.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-97 | Fixation du battement intérieur au battement central réduit du système 70 | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008, PDF p. 273 (registre 5.7, page imprimée 5), relue en image à 200 dpi le 29/09/2026 : « le battement intérieur choisi est préencollé avec une colle appropriée sur toute sa hauteur de contact et mise en place avec eventuellement un positionnement préalable par clip » | Mise en œuvre Système 70 Plateforme, profine, septembre 2023, PDF p. 216, 221, 226, 230 : « Le battement intérieur est clippé collé sur l'ouvrant. Clippage par vis plot S073, 100 mm de chaque extrémité et entraxe de 300 mm » | Aucune : chaque mode de fixation reste avec son document et sa date | En SAV, un battement intérieur de 2008 peut être seulement collé, un battement posé selon 2023 est aussi tenu par des vis plots ; voir [Traitement du battement du système 70, 2008](/procedures/traitement-du-battement-systeme-70-evo2008.md) |
+/anomalies/incoherences-internes.md :
+| INC-246 | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008 | PDF p. 270 (registre 5.7, page imprimée 2), relue en image à 200 dpi le 29/09/2026 | Battement 0141 : le texte renvoie à la coupe du vissage comme « cf. dessin 2 » puis « voir dessin 4 » ; la seule coupe de la page est légendée « Dess. 2 », et sa ligne de cote verticale (hauteur de la vis sous le bord du battement) ne porte aucune valeur, là où la même coupe du 0140 (p. 269) cote 21,1 | « voir dessin 2 » ; la cote du 0141 est à demander à profine | La position de la vis dans le 0141 ne peut pas être relevée sur la planche ; voir [Traitement du battement du système 70, 2008](/procedures/traitement-du-battement-systeme-70-evo2008.md) |
+/anomalies/incoherences-internes.md :
+| INC-247 | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008 | PDF p. 269 et 270 (registre 5.7, pages imprimées 1 et 2), relues en image à 200 dpi le 29/09/2026 | Battements 0140 et 0141 : le texte écrit « Utiliser des vis à tête bombée à empreinte cruciforme 4,2 x 45 » ; les dess. 1, 2 et 3 des mêmes pages légendent « Vis à tête fraisée à empreinte cruciforme 4,2 x 45 mm » (même écart que INC-155 dans le manuel de 2023) | Une seule forme de tête, à confirmer par profine | Une tête bombée et une tête fraisée ne se logent pas de la même façon dans la rainure du battement ; voir [Traitement du battement du système 70, 2008](/procedures/traitement-du-battement-systeme-70-evo2008.md) |

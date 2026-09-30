@@ -1,0 +1,30 @@
+{
+  "question": "Le 0729T fait quelle largeur et quelle épaisseur ?",
+  "pages_lues": [
+    "/profiles/systeme-70-profiles-complementaires.md",
+    "/profiles/systeme-76-abaques-dimensionnels.md",
+    "/profiles/perform76-tapees-et-isolation.md"
+  ],
+  "anomalies": [
+    "CTR-38",
+    "CTR-40",
+    "CTR-63",
+    "CTR-64",
+    "CTR-68",
+    "INC-45"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "0729T largeur épaisseur"
+      },
+      "pages_nouvelles": [
+        "/profiles/systeme-70-profiles-complementaires.md",
+        "/profiles/systeme-76-abaques-dimensionnels.md",
+        "/profiles/perform76-tapees-et-isolation.md"
+      ],
+      "caracteres": 190052
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "question": "parle moi de poignée Shangai",
+  "pages_lues": [
+    "/quincaillerie/poignees-et-croisillons.md",
+    "/portes/collection-graphite.md",
+    "/quincaillerie/roto-nx-apercu-ferrures-cote-p.md",
+    "/fournisseurs/technal.md",
+    "/gammes/coulissants-aluminium.md",
+    "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+  ],
+  "anomalies": [
+    "CTR-110",
+    "CTR-111",
+    "CTR-112",
+    "CTR-113",
+    "CTR-12",
+    "CTR-28"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "poignée Shangai"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/poignees-et-croisillons.md",
+        "/portes/collection-graphite.md",
+        "/quincaillerie/roto-nx-apercu-ferrures-cote-p.md"
+      ],
+      "caracteres": 161486
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "SHANGHAI poignée coulissant SOLEAL galandage"
+      },
+      "pages_nouvelles": [
+        "/fournisseurs/technal.md",
+        "/gammes/coulissants-aluminium.md"
+      ],
+      "caracteres": 45120
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+      ],
+      "caracteres": 9841
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "question": "il y a des poignée uniquement pour galandage ?",
+  "pages_lues": [
+    "/fournisseurs/technal.md",
+    "/quincaillerie/poignees-et-croisillons.md",
+    "/profiles/soleal-gy-cotes-de-debit.md",
+    "/procedures/pose-soleal-gy-galandage.md",
+    "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+  ],
+  "anomalies": [
+    "CTR-12",
+    "CTR-28",
+    "INC-196",
+    "VER-53"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "poignée galandage"
+      },
+      "pages_nouvelles": [
+        "/fournisseurs/technal.md",
+        "/quincaillerie/poignees-et-croisillons.md",
+        "/profiles/soleal-gy-cotes-de-debit.md"
+      ],
+      "caracteres": 42788
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/procedures/pose-soleal-gy-galandage.md"
+      },
+      "pages_nouvelles": [
+        "/procedures/pose-soleal-gy-galandage.md"
+      ],
+      "caracteres": 8686
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+      ],
+      "caracteres": 9841
+    }
+  ]
+}

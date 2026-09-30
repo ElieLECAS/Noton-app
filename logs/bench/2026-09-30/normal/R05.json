@@ -1,0 +1,24 @@
+{
+ "id": "R05",
+ "reponse": "Le wiki ne donne **pas de diamètre maximum** pour un œil de bœuf PVC. Ce qu'il donne :\n- PROFERM a un atelier de cintrage et fabrique notamment des œils de bœuf ; **le cintrage (hors triangle et trapèze) n'est possible qu'en PERFORM70**, pas en PERFORM76 (catalogue général 2026, p. 6).\n- Pour le système 70 (profine), seul un **diamètre minimum de cintrage** est donné, par profilé : diamètre mini = largeur du profilé × 10, par exemple dormant 6100 Ø 0,50 m, 6101 / 2502 / 6104 Ø 0,70 m, 6102 / 6105 / 6106 / 6108 / 6109 / 6155 Ø 0,85 m, 6107 / 6110 / 6111 Ø 0,90 m ; ouvrants 6112 / 6121 Ø 0,70 m, 6115 / 6123 Ø 0,80 m, 2418 Ø 0,90 m, 2415 / 2416 Ø 1,00 m. Conditions : utiliser les inserts du constructeur de la machine, ne pas cintrer les profilés avec leurs joints (joints enfilés à la main après cintrage).\nLa borne haute (diamètre max d'un œil de bœuf) est à demander au service technique / atelier de cintrage.",
+ "dans_le_wiki": "non",
+ "preuves": [
+  {"page": "/gammes/perform.md", "extrait": "menuiseries de différentes formes : plein cintre ou cintre surbaissé, œil de bœuf, anse de panier ou chapeau de gendarme (à partir d'un gabarit), triangle ou trapèze. **Le cintrage (hors triangle et trapèze) n'est possible que pour la PERFORM70** [1 p. 6]."},
+  {"page": "/procedures/chassis-cintres-trapezoidaux-systeme-70.md", "extrait": "Le diamètre de cintrage minimum est égal à la largeur du profilé × 10 [1 p. 312]."},
+  {"page": "/procedures/chassis-cintres-trapezoidaux-systeme-70.md", "extrait": "| 6100 | 0,50 |"}
+ ],
+ "ambiguite": "« Diamètre max » : la question peut viser la dimension maximale de l'œil de bœuf (absente du wiki) ou être une confusion avec le diamètre minimal de cintrage (présent pour le système 70). Gamme implicite : PERFORM70, seule gamme PVC cintrable.",
+ "outils": 5,
+ "comment_trouve": "Grep « bœuf / boeuf » : une seule occurrence (gammes/perform.md, section cintrage). Grep « diamètre / cintrage » : procedures/chassis-cintres-trapezoidaux-systeme-70.md (diamètres minimum) et directives-generales-systeme-70-evo2008.md (même liste 2008). Aucune dimension maximale trouvée, ni dans les pages PERFORM ni dans les pages cintrées Roto NX KSR.",
+ "formulations": [
+  "Quelle taille maximum pour une fenêtre ronde (oculus) en PVC ?",
+  "oeil de boeuf diamètre maxi",
+  "Jusqu'à quel diamètre peut-on faire une fenêtre ronde cintrée en PERFORM70 ?"
+ ],
+ "defauts_wiki": [
+  "Donnée absente : aucune dimension maximale d'œil de bœuf (ni de châssis cintré) dans le wiki.",
+  "Graphie : le wiki écrit « œil de bœuf » avec ligature œ ; la requête « oeil de boeuf » ne matche pas sans normalisation œ → oe.",
+  "La seule mention est une phrase de gammes/perform.md (14,5 Ko) ; la page de cintrage (chassis-cintres-trapezoidaux-systeme-70.md) ne contient pas le mot « œil de bœuf » ni « PERFORM70 » : le lien produit → règle de cintrage n'est pas lexical.",
+  "Le tableau donne un diamètre minimum en mètres (0,50), alors que la question porte sur un maximum : risque qu'un modèle présente le minimum comme la réponse."
+ ]
+}

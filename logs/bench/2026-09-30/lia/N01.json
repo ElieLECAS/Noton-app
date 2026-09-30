@@ -1,0 +1,68 @@
+{
+  "question": "On peut faire une porte d'entrée alu coupe-feu EI30 ? Sous quel PV ?",
+  "pages_lues": [
+    "/procedures/mise-en-oeuvre-renovation-systeme-70-evo2008.md",
+    "/certifications/at-cstb-6-16-2339-coffres-chrono.md",
+    "/procedures/mise-en-oeuvre-systeme-70-evo2008.md",
+    "/certifications/dta-6-16-2334.md",
+    "/portes/panneaux-et-monoblocs.md",
+    "/procedures/technal-seuil-pmr-py1100.md",
+    "/procedures/directives-generales-systeme-70-evo2008.md"
+  ],
+  "anomalies": [
+    "CTR-100",
+    "CTR-101",
+    "CTR-102",
+    "CTR-103",
+    "INC-273",
+    "INC-277"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "porte d'entrée aluminium coupe-feu EI30 procès-verbal"
+      },
+      "pages_nouvelles": [
+        "/procedures/mise-en-oeuvre-renovation-systeme-70-evo2008.md",
+        "/certifications/at-cstb-6-16-2339-coffres-chrono.md",
+        "/procedures/mise-en-oeuvre-systeme-70-evo2008.md"
+      ],
+      "caracteres": 144869
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "coupe-feu EI30 EI 30 résistance au feu",
+        "type": "Porte d'entrée"
+      },
+      "pages_nouvelles": [
+        "/certifications/dta-6-16-2334.md",
+        "/portes/panneaux-et-monoblocs.md"
+      ],
+      "caracteres": 85978
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "porte coupe-feu pare-flammes EI30 PV feu",
+        "systeme": "SOLEAL PY"
+      },
+      "pages_nouvelles": [
+        "/procedures/technal-seuil-pmr-py1100.md"
+      ],
+      "caracteres": 74736
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "EI30 coupe-feu",
+        "limite": 10
+      },
+      "pages_nouvelles": [
+        "/procedures/directives-generales-systeme-70-evo2008.md"
+      ],
+      "caracteres": 153004
+    }
+  ]
+}

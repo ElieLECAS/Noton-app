@@ -1,0 +1,44 @@
+{
+  "question": "parle moi de la référence 763392563",
+  "pages_lues": [
+    "/quincaillerie/roto-nx-ksr-ouvrant-francaise.md",
+    "/quincaillerie/roto-nx-ksr-oscillo-battant.md",
+    "/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md"
+  ],
+  "anomalies": [
+    "CTR-110",
+    "CTR-112",
+    "CTR-113",
+    "INC-22"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "763392563"
+      },
+      "pages_nouvelles": [],
+      "caracteres": 1437
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "76339"
+      },
+      "pages_nouvelles": [],
+      "caracteres": 98
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "763 392 563"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/roto-nx-ksr-ouvrant-francaise.md",
+        "/quincaillerie/roto-nx-ksr-oscillo-battant.md",
+        "/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md"
+      ],
+      "caracteres": 94342
+    }
+  ]
+}

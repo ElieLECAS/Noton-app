@@ -1,0 +1,23 @@
+{
+ "id": "G08",
+ "reponse": "Le double vitrage acoustique 10/14/4 (verre de 10 mm, lame de gaz argon de 14 mm, verre de 4 mm, intercalaire warm edge faible émissivité) donne un affaiblissement acoustique de 33 dB. PROFERM le propose pour les façades situées sur des routes à fort trafic ; il « permet de ne pas perdre tant en performance thermique qu'acoustique ». Pour comparaison : vitrage de base 6/18/4 des gammes PVC de l'ordre de 31 dB ; 44.6/14/10 pour zones très bruyantes, 40 dB. Source : catalogue menuiseries PROFERM janvier 2026, p. 27. Le wiki ne précise pas l'indice (Rw, Rw+Ctr…) ni les conditions d'essai.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/vitrages/performances-vitrages.md", "extrait": "| façades situées sur des routes à fort trafic | 33 | 10 / 14 / 4 | warm edge faible émissivité, gaz argon | cette solution permet de ne pas perdre tant en performance thermique qu'acoustique |"},
+  {"page": "/vitrages/performances-vitrages.md", "extrait": "| Exposition | Affaiblissement acoustique (dB) | Composition (mm) | Intercalaire et gaz | Description | Schéma |"}
+ ],
+ "ambiguite": "",
+ "outils": 3,
+ "comment_trouve": "Grep sur la composition avec espaces optionnels (« 10 ?/ ?14 ?/ ?4 ») : la page Performances des vitrages l'écrit « 10 / 14 / 4 » avec espaces ; un grep strict « 10/14/4 » n'aurait trouvé que le log et le nom de l'image. Grep complémentaire « 33 dB|Rw|RA,tr » : aucune autre valeur acoustique pour cette composition.",
+ "formulations": [
+  "Quel affaiblissement acoustique pour un double vitrage 10-14-4 ?",
+  "10/14/4 dB ?",
+  "Quel vitrage acoustique PROFERM pour une façade sur route à fort trafic, et combien de dB ?"
+ ],
+ "defauts_wiki": [
+  "La composition est écrite « 10 / 14 / 4 » avec espaces dans le tableau, alors qu'un menuisier tape « 10/14/4 » : selon la tokenisation, la recherche lexicale découpe « 10 », « 14 », « 4 », tokens très fréquents et peu discriminants ; seul le chemin de l'image porte « 10-14-4 ».",
+  "L'indice acoustique n'est pas nommé (Rw, Rw+C, Rw+Ctr) : valeur commerciale du catalogue général, sans conditions d'essai.",
+  "Pas de « dB » dans les cellules (unité dans l'en-tête, conforme) : une recherche « 33 dB » ne matche que sur l'en-tête « (dB) » et le log.",
+  "Page courte (≈ 7 ko), bien titrée : pas de problème de taille."
+ ]
+}

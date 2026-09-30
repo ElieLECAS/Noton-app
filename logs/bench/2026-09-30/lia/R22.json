@@ -1,0 +1,58 @@
+{
+  "question": "Je cherche la procédure pour activer la 'fonction domotique intégrée' du limiteur d'ouverture à 80 mm (réf. 487 206) sur une fenêtre Roto NX pour piloter l'ouverture via mon smartphone. Quelles sont les étapes de connexion au Wi-Fi de la platine ?",
+  "pages_lues": [
+    "/quincaillerie/roto-nx-accessoires-et-gabarits.md",
+    "/quincaillerie/roto-nx-apercu-ferrures-designo.md",
+    "/quincaillerie/roto-nx-ksr-confort-designo.md",
+    "/fournisseurs/somfy.md",
+    "/equipements/volets-roulants.md",
+    "/quincaillerie/controle-acces-eneo-cc.md",
+    "/procedures/percage-montage-roto-nx.md"
+  ],
+  "anomalies": [
+    "CTR-111",
+    "CTR-119",
+    "INC-206",
+    "INC-302",
+    "INC-304",
+    "VER-125"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "487206 limiteur d'ouverture 80 mm Designo",
+        "limite": 3
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/roto-nx-accessoires-et-gabarits.md",
+        "/quincaillerie/roto-nx-apercu-ferrures-designo.md",
+        "/quincaillerie/roto-nx-ksr-confort-designo.md"
+      ],
+      "caracteres": 253890
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "domotique Wi-Fi smartphone application connexion platine motorisation ouverture fenêtre",
+        "limite": 3
+      },
+      "pages_nouvelles": [
+        "/fournisseurs/somfy.md",
+        "/equipements/volets-roulants.md",
+        "/quincaillerie/controle-acces-eneo-cc.md"
+      ],
+      "caracteres": 43104
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/procedures/percage-montage-roto-nx.md"
+      },
+      "pages_nouvelles": [
+        "/procedures/percage-montage-roto-nx.md"
+      ],
+      "caracteres": 28934
+    }
+  ]
+}

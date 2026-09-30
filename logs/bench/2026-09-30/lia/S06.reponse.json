@@ -1,0 +1,11 @@
+{
+ "id": "S06",
+ "reponse": "Oui : l'acajou 1 face existe en PERFORM, en **plaxé**.\n\n| Menuiserie PERFORM | Acajou | Condition |\n| --- | --- | --- |\n| Fenêtres PVC (PERFORM70 et PERFORM76) | plaxé, **1 face extérieure** (l'intérieur reste blanc) | **finition DESIGN** uniquement |\n| Portes d'entrée PVC | plaxé, 1 face extérieure uniquement | **collection AUTHENTIQUE** uniquement, finition design uniquement |\n\nLe catalogue général de janvier 2026 et le dépliant de juin 2023 donnent la même chose pour l'acajou : même nombre de faces, même finition (/coloris/coloris-perform.md). Pour les portes, la source est le catalogue portes d'entrée de mars 2024 (/coloris/coloris-portes-entree.md).\n\nC'est pour ça que la réponse précédente disait non en 2 faces : en PERFORM, l'acajou n'existe qu'en plaxé 1 face. Il n'existe ni en teinté dans la masse, ni en plaxé 2 faces. Si le client est en finition DROIT, l'acajou n'est pas proposé.",
+ "pages_citees": [
+  "/coloris/coloris-perform.md",
+  "/coloris/coloris-portes-entree.md"
+ ],
+ "appels": 1,
+ "trouve": "oui",
+ "navigation": "Un seul appel : chercher « acajou 1 face plaxé coloris » avec la facette gamme PERFORM, la relance portant sur le nuancier PERFORM évoqué dans l'historique. La première page livrée, /coloris/coloris-perform.md, a la réponse directement dans son tableau : Acajou, plaxé, 1 face extérieure, finition design, identique en 2023 et en 2026. La deuxième, /coloris/coloris-portes-entree.md, ajoute le cas des portes d'entrée PERFORM (acajou 1 face extérieure, collection AUTHENTIQUE seulement, finition design) : c'est la famille jumelle, je l'ai donc donnée aussi. Les entrées d'anomalie injectées (INC-36, VER-55) portent sur des modèles de porte, pas sur l'acajou, et n'ont pas été signalées. Rien ne manquait : la facette gamme et le mot « acajou » suffisaient."
+}

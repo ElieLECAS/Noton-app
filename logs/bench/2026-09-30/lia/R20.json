@@ -1,0 +1,44 @@
+{
+  "question": "Quand on installe le bras de report de charge (le modèle Designo II pour les fenêtres lourdes) sur le palier d'angle inférieur, on doit fixer la pièce dormant. C'est quoi le piège au niveau du vissage pour pas bloquer ou foirer l'ancien matos ?",
+  "pages_lues": [
+    "/procedures/report-de-charge-roto-nx.md",
+    "/procedures/percage-montage-roto-nx.md",
+    "/quincaillerie/roto-nx-ksr-confort-designo.md",
+    "/quincaillerie/roto-nx-pivots-et-paliers-angle.md"
+  ],
+  "anomalies": [
+    "CTR-111",
+    "CTR-114",
+    "CTR-119",
+    "INC-199",
+    "INC-297",
+    "VER-108",
+    "VER-113",
+    "VER-32"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "report de charge Designo II palier d'angle pièce dormant vissage vis montage",
+        "systeme": "Roto NX"
+      },
+      "pages_nouvelles": [
+        "/procedures/report-de-charge-roto-nx.md",
+        "/procedures/percage-montage-roto-nx.md",
+        "/quincaillerie/roto-nx-ksr-confort-designo.md"
+      ],
+      "caracteres": 82943
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/quincaillerie/roto-nx-pivots-et-paliers-angle.md"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/roto-nx-pivots-et-paliers-angle.md"
+      ],
+      "caracteres": 29751
+    }
+  ]
+}

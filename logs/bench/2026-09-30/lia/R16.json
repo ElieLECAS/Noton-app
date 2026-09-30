@@ -1,0 +1,31 @@
+{
+  "question": "Quelle est l'épaisseur de l'ouvrant galbé Perform 76 ?",
+  "pages_lues": [
+    "/profiles/perform76-ouvrants-et-battements.md",
+    "/gammes/perform.md",
+    "/profiles/askey-frappe-65-oc-dormants-et-ouvrants.md"
+  ],
+  "anomalies": [
+    "CTR-02",
+    "CTR-17",
+    "CTR-70",
+    "CTR-71",
+    "CTR-81",
+    "INC-101"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "ouvrant galbé épaisseur",
+        "gamme": "PERFORM"
+      },
+      "pages_nouvelles": [
+        "/profiles/perform76-ouvrants-et-battements.md",
+        "/gammes/perform.md",
+        "/profiles/askey-frappe-65-oc-dormants-et-ouvrants.md"
+      ],
+      "caracteres": 37809
+    }
+  ]
+}

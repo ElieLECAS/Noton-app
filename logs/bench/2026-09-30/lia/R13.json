@@ -1,0 +1,30 @@
+{
+  "question": "quelle est la référence du Levier pour M335 et sa coupe",
+  "pages_lues": [
+    "/portes/systeme-76-advanced-porte-d-entree.md",
+    "/profiles/systeme-76-profiles-principaux.md",
+    "/profiles/systeme-76-accessoires-par-profile.md"
+  ],
+  "anomalies": [
+    "CTR-12",
+    "CTR-21",
+    "CTR-26",
+    "CTR-32",
+    "CTR-35",
+    "VER-47"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "M335 levier"
+      },
+      "pages_nouvelles": [
+        "/portes/systeme-76-advanced-porte-d-entree.md",
+        "/profiles/systeme-76-profiles-principaux.md",
+        "/profiles/systeme-76-accessoires-par-profile.md"
+      ],
+      "caracteres": 130670
+    }
+  ]
+}

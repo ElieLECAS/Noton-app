@@ -1,0 +1,13 @@
+{
+ "id": "R29",
+ "reponse": "Le wiki ne donne **aucune valeur en dB pour la LUMINE55**. Le catalogue général n'en dit que « très bon rempart contre le bruit », sans chiffre (/commercial/lumine.md).\n\nLes seules valeurs acoustiques chiffrées de la gamme LUMINE sont celles de la LUMINE65 :\n\n| Produit | Affaiblissement acoustique | Source |\n| --- | --- | --- |\n| Fenêtre LUMINE65 | jusqu'à 40 dB | brochure LUMINE65 (/gammes/lumine.md) |\n| Coulissant LUMINE65 | jusqu'à 36 dB | brochure LUMINE65 (/gammes/coulissants-aluminium.md) |\n\nCes valeurs ne se reportent pas à la LUMINE55 : elles portent sur un autre module (65 mm, avec joint central).\n\nLa LUMINE55 est fabriquée sur le système Technal SOLEAL FY 55. Son catalogue de conception annonce des « performances AEV et acoustiques » dans ses pages 1 à 12, mais ces pages ne sont pas encore transcrites dans le wiki (/sources/technal-soleal-fy-conception.md). Pour une valeur en dB, il faut demander au service technique ou à TECHNAL.",
+ "pages_citees": [
+  "/gammes/lumine.md",
+  "/commercial/lumine.md",
+  "/gammes/coulissants-aluminium.md",
+  "/sources/technal-soleal-fy-conception.md"
+ ],
+ "appels": 4,
+ "trouve": "non",
+ "navigation": "J'ai d'abord cherché avec la facette gamme LUMINE : la page de la gamme ne donne une valeur en dB que pour la fenêtre LUMINE65 (40 dB), la page des coulissants donne 36 dB pour le coulissant LUMINE65, et la page commerciale précise qu'aucune valeur en dB n'accompagne « très bon rempart contre le bruit ». Comme la LUMINE55 est fabriquée sur SOLEAL FY 55, j'ai relancé avec la facette système SOLEAL FY, puis avec le type Document source (pour viser le DTA ou le catalogue Technal) : aucune page profilé ou procédure ne porte d'acoustique. La fiche du catalogue de conception SOLEAL FY montre que les pages 1-12 (performances AEV et acoustiques) sont « à faire », donc non transcrites. C'est ce qui explique le trou : ce qui aurait aidé, c'est la transcription de ces pages. À noter aussi : la même fiche dit à la fois que les tranches sont « à faire » et « zéro à faire », une incohérence du registre."
+}

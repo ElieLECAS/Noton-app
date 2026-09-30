@@ -159,10 +159,13 @@ async def carte_page(request: Request, session: Session = Depends(get_session)):
 
 @app.get("/faisabilite", response_class=HTMLResponse)
 async def faisabilite_page(request: Request, session: Session = Depends(get_session)):
-    """Le vérificateur de faisabilité PERFORM76 : un verdict calculé sur les tableaux du wiki."""
+    """Le vérificateur de faisabilité PERFORM76 : un verdict calculé sur les tableaux du wiki.
+    Réservé au rôle admin ; les autres sont renvoyés au chat."""
     user = _get_authenticated_user(request, session)
     if not user:
         return RedirectResponse(url="/login", status_code=303)
+    if "admin" not in (user.roles or []):
+        return RedirectResponse(url="/", status_code=303)
     return templates.TemplateResponse("faisabilite.html", {"request": request, "user": user})
 
 

@@ -1,0 +1,658 @@
+===== PAGE 1 : /procedures/livraison-et-stockage-semi-produits-profine.md =====
+# Ce que fait cette procédure
+
+Elle couvre ce qui arrive aux semi-produits profine — profilés PVC, renforts en acier,
+semi-produits en aluminium (capotages) — entre le camion et le poste de débit : contrôle de la
+livraison, déchargement, stockage, manutention, et les soins propres aux profilés revêtus d'un
+film lisse ou grainé. C'est le registre 1.2.1 « Livraison et stockage du matériel » des
+directives générales profine, commun aux systèmes 70 et 76 [1 p. 17-25]. La suite de la chaîne
+est sur [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md).
+
+# Conditions et interdictions
+
+## Produits blancs et produits en couleur
+
+**Le traitement est différent pour les produits blancs et en couleur.** Les produits en couleur
+sont les profilés revêtus et laqués, les profilés plaxés (revêtus d'un film décor) et le capotage
+en aluminium, si la couleur utilisée pour le traitement de l'élément fini n'est pas blanc
+(similaire à RAL 9016) ou Blanc crème (similaire à RAL 9001) [1 p. 17]. Toutes les règles
+« profilé blanc / profilé couleur » des directives (renforcement, vissage, ventilation) se lisent
+avec cette définition.
+
+## Interdictions
+
+- **Les profilés avec du ruban adhésif ne doivent pas être stockés à l'extérieur** [1 p. 19].
+- **Ne stockez pas les semi-produits en aluminium à l'extérieur** [1 p. 20].
+- **Il ne faut jamais coller deux surfaces filmées** : le vieillissement accéléré de la colle
+  provoquera le décollement des profilés [1 p. 22]. Les profilés filmés ne se fixent pas à la
+  colle : ils se fixent ensemble à l'aide de clips ou de vis et de silicone garantissant
+  l'étanchéité nécessaire [1 p. 23].
+- **Ne jamais utiliser de solvants pour nettoyer les surfaces filmées** [1 p. 23].
+- **Les chambres de renforts ne doivent en aucun cas être percées**, ce qui engendrerait des
+  dommages à moyen et long terme [1 p. 23].
+
+# Étapes
+
+## 1. Livraison du matériel
+
+En fonction de la quantité commandée, les profilés sont livrés par longueurs individuelles, par
+paquets ou par cassettes ; les quantités contenues dans une cassette sont indiquées dans la liste
+des prix en vigueur [1 p. 17].
+
+Le matériel reçu doit être soumis immédiatement à un contrôle des entrées. Les dommages dus au
+transport doivent être signalés immédiatement, éventuellement avec la mention « Réception sous
+réserve », car le temps pour faire valoir l'assurance du transport est limité. Ce contrôle doit
+être assuré aussi pour les livraisons à des tiers (sous-traitant, transformateur) [1 p. 17].
+
+Contrôler au moment de la livraison [1 p. 17] :
+
+1. si la livraison est complète (conformément au bon de livraison) ;
+2. si les emballages ou les cassettes sont endommagés ;
+3. si le matériel est endommagé.
+
+## 2. Déchargement et mise en entrepôt
+
+**Généralités.** En cas de livraison par cassettes, utiliser des engins de manutention d'une
+capacité de charge d'au moins **2,5 t**, par exemple un chariot élévateur frontal ou latéral, ou
+un pont roulant [1 p. 17].
+
+**Avertissement — déchargement non conforme : danger de dommages corporels ou matériels.**
+Respecter les modes d'emploi des engins de manutention (chariots élévateurs et grues) et des
+moyens de transport (palettes en acier et en bois), les dispositions légales concernant la
+protection contre les accidents et les réglementations nationales pour la prévention des
+accidents [1 p. 17].
+
+**Attention — vriller, déformer ou égratigner : danger de dommages matériels.** Lors du
+déchargement, veiller à ce que les profilés ne puissent pas être vrillés, déformés ou égratignés
+[1 p. 18].
+
+**Déchargement de semi-produits en aluminium.** Transporter les semi-produits en aluminium en les
+préservant de l'humidité. Décharger les profilés en aluminium toujours sous abri, pour éviter de
+mouiller les semi-produits et les emballages fermés. Sécher le matériel humide le jour même ; il
+n'est admissible de le laisser sécher à l'air que si les couches humides intermédiaires sont
+enlevées et les pièces stockées de manière à ce qu'elles ne soient pas en contact les unes avec
+les autres (circulation d'air) [1 p. 18].
+
+**Attention — déchargement non conforme des semi-produits : danger de dommages matériels.**
+Soulever les semi-produits longs à plusieurs endroits simultanément pour empêcher qu'ils ne soient
+déformés ; rembourrer et protéger au droit des élingues ; s'il y a des endroits prévus ou marqués
+sur le matériel pour le chariot élévateur, utiliser uniquement ces endroits [1 p. 18].
+
+**Mise en entrepôt de semi-produits en aluminium.** Si des semi-produits en aluminium froids sont
+déplacés directement à des endroits chauds ou humides, il peut se produire de la condensation qui
+attaque très vite la surface, surtout si le matériel est emballé. Pour l'éviter, selon les
+possibilités et les situations [1 p. 18] :
+
+- le matériel est entreposé temporairement dans un endroit frais et sec où il ne faut pas
+  craindre la formation de condensation ;
+- pour diminuer l'entrée d'air, les semi-produits sont couverts de bâches tant qu'ils n'ont pas
+  atteint la température ambiante ;
+- les semi-produits emballés doivent être déballés immédiatement.
+
+Le tableau D.I.1 donne les conditions de formation de condensation sur les surfaces métalliques
+froides : pour chaque humidité relative de l'air (HR, en %), l'écart de température (ΔT, en °C)
+entre l'air et le métal à partir duquel la condensation se forme [1 p. 18].
+
+| Humidité relative HR (%) | Différence de température ΔT (°C) |
+| --- | --- |
+| 95 | 1 |
+| 90 | 2 |
+| 85 | 2-3 |
+| 80 | 3-4 |
+| 75 | 4-5 |
+| 70 | 5-6 |
+| 65 | 6-8 |
+| 60 | 7-9 |
+| 55 | 9-12 |
+| 50 | 10-13 |
+| 45 | 12-14 |
+| 40 | 13-17 |
+| 35 | 16-19 |
+| 30 | 18-21 |
+| 25 | 21-23 |
+| 20 | 24-27 |
+
+(schéma: raw/profine-directives-generales-2023-01.pdf, p. 18)
+
+## 3. Stockage des profilés en PVC
+
+- Les profilés doivent être posés à plat sur une surface plane pour éviter des déformations ;
+  poser des tablettes stables et planes sur les étagères au sol ou au mur.
+- La température ambiante doit se situer entre **18 et 35 °C**, avec une humidité d'air
+  d'environ **50 %**.
+- Les profilés avec du ruban adhésif ne doivent pas être stockés à l'extérieur.
+- Il est possible de stocker les profilés blancs à l'extérieur ; il faut bien les protéger
+  contre les salissures.
+- Les profilés en couleur stockés à l'extérieur doivent être protégés des intempéries
+  (toit, bâche).
+- En découpant les emballages (paquets ou cassettes), on empêche la formation d'une pression de
+  vapeur à l'intérieur de l'emballage, qui pourrait endommager la surface des profilés.
+
+[1 p. 19]
+
+**Attention — en cas de stockage trop long, d'accumulation de chaleur due à un emballage inadapté,
+ou d'usinage des profilés en PVC avec une température propre inférieure à 15 °C, il y a un risque
+de dommages matériels** [1 p. 19] :
+
+- les profilés doivent être usinés dans les **6 mois** ;
+- procéder selon le principe de stockage « first in - first out » (premier entré, premier sorti) ;
+- assurer une aération suffisante des profilés emballés ;
+- au moment de l'usinage, les profilés doivent avoir une température propre d'**au moins 15 °C** ;
+- respecter un délai de stockage intérieur avant transformation du produit : à une température
+  ambiante de 18-20 °C (température d'atelier), les profilés de fenêtres PVC se réchauffent
+  d'environ **1 °C par heure** ;
+- prendre note à ce sujet de la directive DVS 2207 partie 5, jointe au registre, et de la liste
+  de contrôle ;
+- respecter les indications séparées pour les produits avec exécution spéciale (ProEnergyTec,
+  Tape, etc.).
+
+## 4. Stockage des renforts en acier
+
+Afin d'éviter la formation de rouille blanche, stocker de préférence les renforts en acier
+toujours dans des endroits fermés. Si l'unique possibilité de stockage est à l'extérieur, prévoir
+une protection par bâches imperméables et bien aérées ; éviter un état humide permanent et
+l'humidité stagnante [1 p. 19].
+
+## 5. Stockage des semi-produits en aluminium
+
+Les semi-produits en aluminium ne se stockent pas à l'extérieur. L'endroit de stockage doit
+remplir les conditions suivantes : faible taux d'humidité de l'air ; température moyenne
+**18 °C** ; faibles variations de température ; propre et exempt d'huile, de poussière et de
+produits de nettoyage ; pas d'acide dans le même dépôt ; protégé contre la chaux, le mortier, les
+copeaux d'acier, les étincelles [1 p. 20].
+
+Les produits absolument secs peuvent aussi être conservés dans l'emballage d'origine. Les
+semi-produits déballés ne doivent pas venir en contact direct avec d'autres métaux lors du
+stockage (danger de corrosion de contact) : couvrir les surfaces d'appui du support avec un
+matériel qui n'accumule pas l'humidité, qui présente une réaction chimique neutre et qui ne raie
+pas la surface (matière plastique, bois, etc.). L'empilage doit être limité, de manière à ce que
+le matériel du bas ne soit pas endommagé [1 p. 20].
+
+La figure 1 montre comment stocker les semi-produits en aluminium, selon leur forme.
+
+![Comment stocker les semi-produits en aluminium, fig. 1](/assets/procedures/directives-profine/stockage-semi-produits-aluminium.png)
+
+Les cinq cas, de gauche à droite [1 p. 20] :
+
+| Cas | Semi-produit | Mode de stockage |
+| --- | --- | --- |
+| a | tôles et disques | à plat ; les semi-produits ne doivent pas entrer en contact avec le sol en ciment et la bâtisse |
+| b | tôles | debout ; supports en bois ou en aluminium ; en cas de supports en fer, les surfaces d'appui doivent être couvertes par du matériel plus doux, par exemple du bois |
+| c | bobines | stockage correct des bobines en rouleaux |
+| d | tubes, barres et profilés de sections grandes et résistantes | debout, longueur max. 2 m |
+| e | tubes, barres et profilés de sections petites et sensibles | à plat |
+
+(schéma: raw/profine-directives-generales-2023-01.pdf, p. 20)
+
+**Manipulation.** Lors du déplacement du matériel, veiller à ne pas le rayer [1 p. 20-21] :
+
+- pour le transport à l'intérieur de l'entreprise, mettre entre les pièces des matériaux ne
+  favorisant pas la corrosion, comme du carton, des plaques en bois ou des produits spéciaux
+  synthétiques ;
+- porter toujours des gants propres en tissu doux pour travailler avec les semi-produits en
+  aluminium : la transpiration des mains attaque très rapidement la surface du métal ;
+- effacer les empreintes de doigts immédiatement avec de l'éthanol ou du méthanol ; plus tard,
+  les produits chimiques n'ont plus aucun effet et les défauts devront être corrigés péniblement
+  par un traitement mécanique comme un ponçage ou un brossage ;
+- pour le transport à l'intérieur de l'entreprise, par exemple dans une pièce plus chaude,
+  suivre les règles de mise en entrepôt de semi-produits en aluminium (étape 2) et la figure 1.
+
+## 6. Stockage des profilés débités
+
+Les profilés débités doivent être stockés avec la surface de coupe en bas et usinés dans un délai
+de **48 heures**. Des durées de stockage supérieures peuvent causer la salissure de la surface de
+coupe et diminuer la qualité de la soudure [1 p. 21].
+
+**Attention — arêtes de coupe sales : diminution de la qualité de la soudure.** Enlever les
+salissures avant le procédé de soudage, sans laisser de traces [1 p. 21].
+
+## 7. Profilés à film lisse ou grainé
+
+Aux films à surface structurée (aspect bois) de la palette de couleurs profine se sont ajoutés des
+films à surface lisse et à surface grainée, qui nécessitent une mise en œuvre et des procédés de
+fabrication très soignés et précis. Les consignes qui suivent visent surtout les profilés qui ne
+sont pas teintés dans la masse, c'est-à-dire les profilés filmés [1 p. 22].
+
+Plus une couleur est sombre, plus elle absorbe d'énergie : les profilés filmés absorbent davantage
+d'énergie que les profilés teintés dans la masse, ce qui entraîne une hausse de leur température.
+Dans des cas extrêmes, l'ouverture d'une porte ou d'une fenêtre peut rester bloquée du fait de la
+dilatation ; de même, les profilés peuvent se vriller, se cintrer ou se gondoler s'ils ne sont pas
+correctement renforcés ou ventilés [1 p. 22].
+
+La finition lisse ou grainée laisse beaucoup plus facilement apparaître toutes les traces de
+manutention ou de fabrication que les films à surface structurée, qui avaient l'avantage
+d'absorber ces défauts. L'excellence des finitions est garantie si les outils appropriés sont
+utilisés lors du process de fabrication : appuis parfaitement réglés, état des miroirs des têtes
+des soudeuses, affûtage des outils d'usinage, postes de travail propres et dégagés des copeaux PVC
+ou métalliques et autres éléments coupants pouvant endommager les surfaces. Les trous
+d'évacuation d'eau aux dimensions et distances préconisées, la compensation des pressions et la
+ventilation des préchambres sont essentiels au bon fonctionnement de la fenêtre. Ces consignes
+sont à diffuser auprès de tous les acteurs de la chaîne de fabrication [1 p. 22].
+
+Directives spécifiques aux profilés à film lisse ou grainé [1 p. 23] :
+
+1. Ne jamais utiliser de solvants pour nettoyer les surfaces filmées.
+2. Lors du cintrage, une certaine brillance peut apparaître sur les profilés chauds ; pour que
+   cette brillance ne soit pas détectable sur la menuiserie PVC, il est préférable que la
+   fabrication de l'ensemble soit confiée à la société chargée du cintrage.
+3. Entamer ou terminer la coupe des barres filmées à environ **15 mm des extrémités** : le film
+   adhère seulement correctement à partir de 15 mm de l'extrémité de la barre.
+4. Utiliser les couteaux appropriés pour nettoyer le cordon de soudure.
+5. Ne pas utiliser de colle pour fixer les profilés filmés : les fixer ensemble à l'aide de clips
+   ou de vis et de silicone garantissant l'étanchéité nécessaire.
+6. Ventiler toutes les chambres extérieures des profilés, pour éviter que l'air emprisonné monte
+   en température et déforme les profilés ; les chambres de renforts ne doivent en aucun cas être
+   percées.
+7. Retoucher le cordon de soudure avec un feutre de retouche de la couleur appropriée.
+
+Les dispositions suivantes, écrites pour les films lisses ou grainés, sur lesquels toute marque
+de manutention ou d'usinage est plus perceptible, sont également applicables aux autres types de
+profilés [1 p. 24-25].
+
+**Manutention des profilés filmés.** Ne pas tirer un profilé sur un autre en ne le soulevant que
+par une des extrémités : le profilé servant de base en portera les marques malgré les films de
+protection. Soulever complètement le profilé à sortir des rayons ou de la cassette ; si ce n'est
+pas possible, le faire glisser à plat sur toute la longueur du profilé qui sert d'appui [1 p. 24].
+
+Position correcte : le profilé est soulevé sur toute sa longueur, à deux, au-dessus de la
+cassette.
+
+![Position correcte de manipulation d'un profilé filmé](/assets/procedures/directives-profine/manutention-profile-filme-correcte.png)
+
+Le dessin montre les deux profilés parallèles, sans contact ; la photographie, deux opérateurs
+soulevant la barre à ses deux extrémités — position évitant frottements ou marques à la surface
+du profilé.
+
+Position incorrecte : le profilé est tiré par une extrémité, en appui sur ceux du dessous.
+
+![Position incorrecte de manipulation d'un profilé filmé](/assets/procedures/directives-profine/manutention-profile-filme-incorrecte.png)
+
+Le dessin barré montre le profilé tiré en biais sur celui du dessous ; la photographie, un
+opérateur tirant seul la barre par un bout — position présentant des risques de frottement sur le
+profilé.
+
+(schéma: raw/profine-directives-generales-2023-01.pdf, p. 24)
+
+**Maintien sur machines.** Sur les machines équipées de fixations ou de vérins de maintien du
+profilé (tronçonneuses, contre-profileuses, soudeuses, ébavureuses, etc.), ces fixations ou vérins
+ne doivent présenter aucune bavure ni aucun autre élément dur ou perçant susceptible de rayer ou
+de laisser des marques très visibles sur le film, surtout sur les bases lisses ou grainées
+[1 p. 25].
+
+**Tables de travail.** Elles doivent être parfaitement propres, afin d'éviter de marquer ou de
+rayer le film en faisant glisser les profilés ou les châssis [1 p. 25].
+
+**Soudure.** Sur les films lisses, une température élevée fait apparaître des zones de brillance
+très visibles : contrôler les températures idéales, les plus basses possibles. La même
+recommandation s'applique aux procédés de cintrage [1 p. 25].
+
+**Propreté des angles.** Les couteaux doivent être parfaitement affûtés et l'ébavureuse en parfait
+état ; un temps supplémentaire de refroidissement, par rapport aux profilés teintés dans la
+masse, pourra être requis entre la soudeuse et l'ébavureuse afin de garantir une finition sans
+accrocs [1 p. 25].
+
+**Feutres de retouche.** Des feutres de retouche à pointes fines, qui ne déposent pas de laque sur
+le film, permettent une meilleure finition [1 p. 25].
+
+**Film de protection.** Sur les profilés filmés à surface lisse, le film de protection
+(indépendamment de la légende qui y est inscrite) doit immédiatement être retiré après
+installation ou exposition de la menuiserie au soleil ; dans le cas contraire, la colle dont ce
+film est enduit adhérera à la surface du profilé filmé. Afin de s'assurer que les profilés ou
+menuiseries n'ont subi aucun dommage lors des différentes opérations de fabrication, il faut
+impérativement retirer le film de protection après l'installation (indépendamment de la légende
+qui y est inscrite) [1 p. 25].
+
+# Ce que le document ne dit pas
+
+La directive DVS 2207 partie 5 et la liste de contrôle, annoncées « jointes », ne figurent pas
+dans le PDF (**VER-65**) ; les indications séparées pour les exécutions spéciales ProEnergyTec et
+Tape ne sont pas dans les directives générales.
+
+# Citations
+
+[1] [Directives générales profine, version janvier 2023](raw/profine-directives-generales-2023-01.pdf),
+registre 1.2.1 « Livraison et stockage du matériel » (pages de version février 2023), PDF p. 17 à 25
+(imprimées 1.2.1 p. 1 à 9)
+
+# Voir aussi
+
+- [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md)
+- [Directives générales profine](/sources/profine-directives-generales.md)
+- [Glossaire des sigles et des cotes](/reference/glossaire.md)
+
+===== PAGE 2 : /quincaillerie/lumeal-ga-roulements-et-fermetures.md =====
+# Définition
+
+Les organes de roulement, de fermeture et de sécurité du coulissant **LUMEAL GA** intègrent des chariots de roulement à rupture thermique supportant jusqu'à **300 kg par vantail**, des serrures manuelles à têtière filante dissimulées dans le dormant et des équipements certifiés retard à l'effraction **classe RC3** [1 p. 4, 12, 42].
+
+---
+
+# Caractéristiques
+
+### 1. Chariots de roulement et capacités de charge
+
+Les roulettes sont équipées d'un corps isolant conservant la continuité de rupture thermique des traverses basses d'ouvrants.
+
+| Référence | Type de chariot | Réglage | Galets | Charge admissible par vantail (kg) | Rail compatible |
+| --- | --- | --- | --- | --- | --- |
+| **T401011** | Simple | Non réglable | Polyamide sur axe inox | 100 (50 kg / roulette) | Rail aluminium T341000 ou inox |
+| **T401012** | Double | Non réglable | Polyamide sur aiguilles | 200 (100 kg / roulette) | Rail aluminium T341000 ou inox |
+| **TGY3873** | Double inox | Non réglable | Inox décolleté | 200 (100 kg / roulette) | **Rail inox TGA4001 / TGY4007 uniquement** (incompatible rail alu) |
+| **T441003** | Simple | Réglable par vis | Polyamide | 100 (50 kg / roulette) | Rail aluminium T341000 ou inox |
+| **T441004** | Double | Réglable par vis | Polyamide sur aiguilles | 200 (100 kg / roulette) | Rail aluminium T341000 ou inox (obligatoire en seuil réduit) |
+| **TGY3872** | Double inox | Réglable par vis | Inox décolleté | 200 (100 kg / roulette) | **Rail inox TGA4001 / TGY4007 uniquement** |
+| **TGA3608** | Triple | Non réglable | Polyamide haute densité | **300** (150 kg / roulette) | Rail aluminium ou inox (fraisage traverse 80 mm obligatoire) |
+| **TGA3609** | Triple inox | Non réglable | Inox décolleté | **300** (150 kg / roulette) | **Rail inox TGA4001 / TGY4007 uniquement** |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 42 ; catalogue-fabrication, p. 146-149)
+
+**Règles de calage de vitrage au droit des roulettes (cale TGA3817)** :
+- Sur traverse basse T141021 (vitrage 29 à 32 mm) : **cale TGA3817 obligatoire et systématique** sous le joint de vitrage au droit de chaque roulette [1 p. 42].
+- Sur traverse basse T141015 (vitrage 24 à 28 mm) : cale TGA3817 obligatoire dès que la largeur du vantail dépasse **1,50 m** ou que le poids du vantail dépasse **120 kg** [1 p. 42].
+
+---
+
+### 2. Ferrures de verrouillage et blocs serrures
+
+Les serrures sont encastrées directement dans la rainure du montant dormant vertical.
+
+| Référence | Nombre de points | Hauteur minimale du châssis (mm) | Type de condamnation |
+| --- | --- | --- | --- |
+| **T621001** | 1 point de verrouillage | $H \ge 200\text{ mm}$ | Pêne champignon réglable |
+| **T621002** | 2 points de verrouillage | $H \ge 850\text{ mm}$ | 2 pênes réglables sur tringle filante |
+| **T621003** | 3 points de verrouillage | $H \ge 1\,800\text{ mm}$ | 3 pênes réglables (standard porte-fenêtre) |
+| **T621005** | Serrure extérieure à clé | Hauteur axe poignée $\ge 1\,090\text{ mm}$ | Cylindre européen traversant avec 2 clés |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 46-48)
+
+---
+
+### 3. Verrous et commandes de manœuvre
+
+| Référence | Désignation | Application | Remarque technique |
+| --- | --- | --- | --- |
+| **T641002** | Verrou de vantail de service | Vantail de service intérieur | Positionné à mi-hauteur ou centré sur poignée |
+| **T641003** | Verrou de vantail semi-fixe | Vantail semi-fixe intérieur | Commande de tringle haute et basse |
+| **T641004** | Verrou non indexé | Fermeture libre | Sans crantage de maintien |
+| **T641005** | Verrou intérieur à clé | Vantail de service | Condamnation par clé (obligatoire en RC3) |
+| **T641006** | Verrou intérieur à clé | Vantail semi-fixe | Condamnation par clé (obligatoire en RC3) |
+| **TGY3622** | Arrêt de vantail à clé | Traverse basse | Verrou de blocage en position entrebâillée |
+| **TGY3623** | Cale d'arrêt de vantail | Sous TGY3622 | Support d'adaptation sur traverse basse |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 46-50)
+
+---
+
+### 4. Poignées de tirage et accessoires de manœuvre
+
+| Référence | Désignation | Emplacement | Compatibilité |
+| --- | --- | --- | --- |
+| **TGA3618** | Poignée de tirage inclinée | Intérieur ou extérieur | Vantaux service, semi-fixe et percussion |
+| **TGA3706** | Support pour poignée TGA3618 | Montant latéral T141039/40 | Vantail de service et semi-fixe |
+| **TGA3707** | Support percussion TGA3618 | Montant central T141033/34 | Châssis 4 et 6 vantaux (percussion centrale) |
+| **TGA3606** | Poignée de tirage plate inclinée | Intérieure-extérieure | Permet le croisement sans encombrement |
+| **TGA3607** | Poignée de tirage plate percussion | Montant central T141033 | Percussion centrale 4 et 6 vantaux |
+| **TGA6000** | Poignée de tirage droite tubulaire | Montant latéral | Vantail de service uniquement |
+| **T661004** | Cuvette de tirage encastrée | Traverse basse T141015 | Pour vantail semi-fixe sur fenêtre |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 43-45)
+
+---
+
+# Retard à l'effraction classe RC3
+
+Le système LUMEAL GA bénéficie de la classification anti-effraction **classe RC3** selon les normes européennes **NF EN 1627 à 1630** (Rapport d'essais CNPP n° MD130037) [1 p. 12] :
+- **Domaine dimensionnel homologué** :
+  - Hauteur de baie : **$1\,800\text{ mm}$ à $2\,700\text{ mm}$**.
+  - Largeur de baie : **$1\,800\text{ mm}$ à $3\,300\text{ mm}$**.
+- **Vitrage minimal obligatoire** : vitrage de sécurité certifié **classe P5A** selon NF EN 356 (composition minimale type $44.6 / 16 / 5$).
+- **Équipements de renforcement requis** :
+  1. **Insert acier de dormant TGA3614** : glissé dans la cage du montant dormant T141030 avant assemblage et fixé par 7 vis (ebavurage des trous Ø6 mm) [2 p. 192, 196].
+  2. **Renforts de chicane centraux TGA3703** : fixés par vis pression à travers les montants centraux renforcés T141042/T141043 [2 p. 195, 201].
+  3. **Pênes renforcés et gâches renforcées TGA3705** : montés sur la serrure 3 points T621003 [2 p. 197, 200].
+  4. **Guide et butée anti-dégondage TGA3613** : vissés sur rail haut [2 p. 193, 205].
+  5. **Bouchons renforcés TGA3617** : pour montants centraux [2 p. 201, 204].
+  6. **Verrous intérieurs à clé obligatoires** : T641005 (service) et T641006 (semi-fixe) [2 p. 198, 199].
+  7. **Collage structurel obligatoire des vitrages** : joint délardé sur 200 mm à mi-hauteur et cordon de mastic de collage type **Illbruck SP350** sur montants latéraux et centraux [2 p. 202, 204].
+
+---
+
+# Ce que la source ne donne pas
+
+- Les galets en acier inoxydable (TGY3872, TGY3873, TGA3609) sont strictement incompatibles avec les chemins de roulement en aluminium extrudé T341000 : leur usage impose un chemin de roulement rapporté en acier inoxydable TGA4001 ou TGY4007 sous peine de dégradation rapide du rail [1 p. 42].
+
+---
+
+# Citations
+
+[1] LUMEAL GA — Catalogue de conception Le Coulissant Minimal (Réf. 5156.007 - 01/2021) — `raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf`
+[2] LUMEAL GA — Guide d'atelier et catalogue de fabrication (Réf. 5074.007 - 01/2021) — `raw/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf`
+
+---
+
+# Voir aussi
+
+- [Profilés dormants et ouvrants LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md)
+- [Cotes de débit LUMEAL GA](/profiles/lumeal-ga-cotes-de-debit.md)
+- [Fabrication et pose LUMEAL GA](/procedures/fabrication-et-pose-lumeal-ga.md)
+- [Coulissants aluminium](/gammes/coulissants-aluminium.md)
+- [TECHNAL](/fournisseurs/technal.md)
+
+===== PAGE 3 : /procedures/surfaces-collage-nettoyage-profine.md =====
+# Ce que fait cette procédure
+
+Elle porte le registre 1.2.7 « Surfaces et leur traitement » des directives générales profine,
+commun aux systèmes 70 et 76 : quelles colles employer sur les profilés PVC et comment coller,
+quels mastics sont admis, comment nettoyer les surfaces des profilés en atelier, et comment
+commander, manipuler, monter, nettoyer et réparer les profilés aluminium laqués que livre profine
+(les capotages, par exemple) [1 p. 44-48]. Les références suivies d'un astérisque sont des
+articles du programme de livraison profine.
+
+# Conditions et interdictions
+
+- **Les surfaces et les matériaux doivent être adaptés à l'application** : utiliser uniquement des
+  adhésifs testés et approuvés [1 p. 44].
+- **Collage avec des adhésifs à base de solvant sur des profilés revêtus : risque de décollement et
+  de formation de cloques.** Utiliser uniquement des colles liquides à base de cyanoacrylates
+  monomères, appelées superglues [1 p. 44].
+- **« Scellage » avec colle PVC : décoloration du joint de colle.** Ne jamais utiliser de colle PVC
+  pour sceller [1 p. 44].
+- **En principe, seuls les silicones réticulés neutres sont autorisés** comme mastics [1 p. 46].
+- **Le pliage d'un profilé aluminium laqué n'est pas autorisé** [1 p. 48].
+- **L'emballage des profilés aluminium laqués n'est pas prévu pour un stockage extérieur** [1 p. 47].
+
+# Étapes
+
+## 1. Colles de référence
+
+Les colles ci-dessous ne sont que quelques exemples des diverses utilisations des colles ;
+l'utilisation d'autres colles est possible, si le fabricant de colle autorise l'application
+souhaitée. profine recommande toujours un test de surface et de matériau avant utilisation dans le
+produit final [1 p. 44].
+
+| Référence | Colle | Usage |
+| --- | --- | --- |
+| C008 \* | colle rapide à viscosité moyenne, à durcissement rapide, à une composante | collage des joints EPDM |
+| C009 \* | colle rapide à viscosité haute, épaisse, à durcissement rapide, à une composante | collage des embouts |
+| C004 \* (transparent), C005 \* (blanc) | colle PVC à base de solvants | collage de pièces en PVC ; en fabrication de fenêtres, collage des profilés complémentaires |
+| C120 | colle acrylique (« Akril ») 2 composants, à élasticité permanente et durcissement rapide, très bonne adhérence sur le PVC dur et les films acryliques rigides ; fiche technique TeDa_ATG006 | - |
+| KöraPop (Kö Chemie), par exemple | colle polymère MS | joints de remplissage, mix de matériaux (PVC sur aluminium) ou profilés filmés ; retirer soigneusement les résidus de colle dans la zone visible |
+
+(schéma: raw/profine-directives-generales-2023-01.pdf, p. 44)
+
+La colle acrylique est intitulée « C120 » et décrite dans le texte comme « colle acrylique
+2-composants **C012** » (voir **INC-90**) ; la fiche technique citée porte C120.
+
+## 2. Collage à froid avec la colle PVC C004 / C005
+
+1. Appliquer la colle directement du tube, d'un côté, rapidement, en une seule passe régulière ;
+   veiller au dosage suivant la prescription du fournisseur [1 p. 44].
+2. Assembler les pièces immédiatement après l'application de la colle, **au plus tard après
+   30 secondes** [1 p. 45].
+3. Fixer les pièces pendant environ **2 à 4 minutes** [1 p. 45].
+4. Enlever la colle sortie des bords des pièces avec un racloir, **après le durcissement** de la
+   colle [1 p. 45].
+
+**Remarque.** L'évaporation des solvants très volatils de la colle a tendance à l'épaissir : fermer
+immédiatement les tubes après le collage, enlever les peaux qui se seraient formées, ne jamais
+utiliser une colle fortement concentrée [1 p. 45].
+
+**Attention — essuyer les restes de colle : modifications de coloris par l'exposition aux
+intempéries.** Ne pas essuyer de colle encore liquide ; attendre que la colle ait pris, puis
+l'enlever [1 p. 45].
+
+| Délai après collage | Sollicitation admise |
+| --- | --- |
+| 4 heures | sollicitations légères |
+| 8 heures | sollicitations moyennes |
+| 24 heures | sollicitations totales prévues |
+
+Pour des températures inférieures à 10 °C, doubler ou tripler le temps de durcissement [1 p. 45].
+
+## 3. Préparation des surfaces avant collage
+
+Nettoyer les profilés en PVC dur blanc avec le nettoyant PVC légèrement dissolvant **C002** et un
+chiffon en cellulose propre. Les profilés colorés ne se nettoient de la saleté qu'avec de l'eau et
+un chiffon en cellulose. Pour différentes colles, un prétraitement de la surface (apprêt) est
+également nécessaire : suivre les spécifications du fabricant [1 p. 45].
+
+**Attention — les surfaces à coller sales entraînent une faible durabilité du collage** : nettoyer
+soigneusement les surfaces de collage, mais **ne pas les nettoyer plusieurs fois**. **Le nettoyage
+de grandes zones des profilés peut entraîner des changements de couleur sous l'influence des
+intempéries** : nettoyer uniquement les surfaces à coller, avec un chiffon en cellulose propre,
+changé après chaque nettoyage. En nettoyant avec un chiffon sale, des quantités résiduelles de
+colle peuvent être étalées sur la fenêtre, ce qui conduit à un jaunissement tacheté [1 p. 45].
+
+## 4. Matériaux d'étanchéité compatibles
+
+Si des mastics sont utilisés, par exemple pour fermer des joints capillaires ou des transitions de
+profilés, veiller à la compatibilité des matériaux des mastics utilisés ; en principe, seuls les
+silicones réticulés neutres sont autorisés [1 p. 46].
+
+## 5. Nettoyage des surfaces de profilés
+
+**Profilés blancs et décor.** Enlever les salissures normales avec des nettoyants habituels non
+abrasifs, dilués avec de l'eau selon indication. Les salissures résistantes s'enlèvent avec
+[1 p. 46] :
+
+| Produit | Surface |
+| --- | --- |
+| Köraclean-extra (kit de nettoyage C027 \*) | surfaces blanches |
+| Köraclean-color (kit de nettoyage C028 \*) | surfaces avec film |
+| 9979 \* Köraclean R 100 C \* | surfaces blanches ou décor |
+
+**Attention — agents de polissage et de nettoyage ou solvants qui attaquent le PVC (produit de
+nettoyage de PVC légèrement diluant C002 ou Körasolv AR) : danger de fissurations dues à la
+contrainte et de modifications de coloris par l'exposition aux intempéries.** Ne **pas** utiliser
+ces produits pour nettoyer les films décor [1 p. 46].
+
+**Profilés de fenêtres plaxés.** Nettoyer avec Köraclean Color (art. n° 9957 \*), des nettoyants
+habituels non abrasifs (dilués avec de l'eau selon indication) ou des essences minérales
+[1 p. 46].
+
+**Attention — produits de nettoyage contenant plus de 30 % d'alcool : endommagement possible de la
+surface.** Ne pas utiliser de produit de nettoyage d'une teneur en alcool de 30 % ou plus pour
+nettoyer les films décor [1 p. 46].
+
+L'usage et l'entretien des menuiseries posées sont sur
+[Usage, nettoyage et entretien des menuiseries](/entretien/usage-nettoyage-entretien-menuiseries-profine.md).
+
+## 6. Profilés aluminium laqués livrés par profine
+
+Les types de revêtement et de produits se trouvent dans le programme de livraison en cours de
+validité [1 p. 47].
+
+**Commande.** À la commande des profilés aluminium laqués, tenir compte de leur mise en œuvre
+ultérieure : près des côtes (environ **75 km**), dans les piscines, ou le long des voiries
+fortement salées en période hivernale, **les profilés aluminium doivent être pré-anodisés avant
+laquage**, pour éviter toute formation de corrosion filiforme : commander le produit pré-anodisé
+[1 p. 47].
+
+**Attention — eau salée, charge en chlore sur profilés en aluminium : risque de dommages causés
+par corrosion filiforme.** L'aluminium doit être pré-anodisé [1 p. 47].
+
+Dans le process de laquage, de petites différences de couleur peuvent être visibles à l'œil d'une
+charge à l'autre, techniquement toujours dans les tolérances : commander toujours la quantité
+nécessaire par lot de laquage et la faire laquer avec la même charge ; éviter de diviser une
+commande en plusieurs lots laqués avec des charges différentes [1 p. 47].
+
+**Défauts de laquage et barres utilisables.** Les défauts de laquage ne peuvent pas être évités,
+mais le profilé reste utilisable si on le place dans une zone optiquement non pertinente ; au débit,
+on peut exclure les zones avec défauts, ou débiter de façon qu'elles se retrouvent dans des zones
+optiquement non pertinentes après montage. Du fait du procédé de laquage (système de fixation),
+**jusqu'à 5 cm de profilé peuvent devoir être coupés aux extrémités**, la qualité du laquage n'y
+étant pas garantie [1 p. 47].
+
+**Qualité du revêtement.** Le laquage est réalisé par un apport de poudre de polyester de qualité
+supérieure (thermolaquage), labels **Qualicoat** et **GSB International** [1 p. 47] — voir le
+[glossaire](/reference/glossaire.md).
+
+**Manipulation en zone de stockage et en fabrication.** Les produits en aluminium laqués
+nécessitent une manipulation particulière ; suivre les instructions de stockage et de traitement
+des semi-produits en aluminium (registre 1.2, voir
+[Livraison et stockage des semi-produits profine](/procedures/livraison-et-stockage-semi-produits-profine.md))
+[1 p. 47-48] :
+
+- lors de la manipulation et du transport, ne jamais tirer ou pousser les profilés sur la surface
+  laquée ;
+- l'emballage n'est pas prévu pour un stockage extérieur ;
+- lors de l'usinage, les postes de travail doivent être exempts de tous copeaux, et les dispositifs
+  de fixation ne doivent présenter ni arêtes vives ni arêtes abrasives, ni exercer de pression au
+  serrage, pour éviter tout endommagement du laquage ;
+- les profilés laqués peuvent être poinçonnés, débités, fraisés, percés ; le pliage du profilé
+  n'est pas autorisé.
+
+**Éléments terminés.** Techniquement, les bords des profilés n'ont pas besoin d'être retravaillés ;
+les réajustements se traduisent parfois par des différences de couleur et ne sont donc pas
+recommandés. En zone côtière ou le long de voiries fortement salées en période hivernale, prévoir
+un traitement spécifique sur ces champs. Protéger les surfaces laquées lors du transport et de la
+pose des menuiseries ; veiller par exemple, lors du transport, à ce que les éléments ne se touchent
+pas [1 p. 48].
+
+**Montage.** Les adhésifs et produits d'étanchéité utilisés lors de l'assemblage doivent être
+adaptés à une utilisation sur des surfaces en aluminium laquées : consulter le fournisseur de ces
+matériaux. Les produits d'étanchéité à base d'eau, en particulier, ont des propriétés d'adhérence
+plutôt défavorables sur les surfaces revêtues. Les restes de colle ou autres sur les surfaces
+visibles doivent être éliminés immédiatement [1 p. 48].
+
+**Nettoyage.** Utiliser un produit neutre, de l'eau savonneuse. Pour enlever la couche blanchâtre
+qui peut se former et être à l'origine d'écarts de couleur, profine recommande son kit de
+nettoyage, en vente auprès de profine GmbH ; utiliser des chiffons en coton doux, à recycler après
+utilisation. Référence : GRM (Gütegemeinschaft Reinigung von Fassaden e.V.),
+Alexander-von-Humboldt-Str. 19, D-73529 Schwäbisch Gmünd ; fiche technique sous
+http://grm-online.de/index.php?id=66 [1 p. 48].
+
+**Attention — non-respect des intervalles de nettoyage des menuiseries : garantie pour le laquage
+non applicable.** Les surfaces doivent être soigneusement nettoyées **1 à 2 fois par an** ; le
+fabricant le signale à ses clients [1 p. 48]. Les garanties PROFERM sont sur
+[Garanties par composant](/garanties/garanties-par-composant.md).
+
+**Réparation.** La réparation de surfaces laquées endommagées demande l'intervention d'un
+spécialiste : contacter le service technique profine, qui communique l'adresse d'un prestataire
+[1 p. 48].
+
+# Citations
+
+[1] [Directives générales profine, version janvier 2023](raw/profine-directives-generales-2023-01.pdf),
+registre 1.2.7 « Surfaces et leur traitement » (pages de version février 2023), PDF p. 44 à 48
+(imprimées 1.2.7 p. 1 à 5)
+
+# Voir aussi
+
+- [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md)
+- [Livraison et stockage des semi-produits profine](/procedures/livraison-et-stockage-semi-produits-profine.md)
+- [Usage, nettoyage et entretien des menuiseries](/entretien/usage-nettoyage-entretien-menuiseries-profine.md)
+- [Directives générales profine](/sources/profine-directives-generales.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /sources/technal-lumeal-ga-fabrication.md | Document source | Catalogues de fabrication et notices de pose Technal LUMEAL GA | technal, lumeal, lumeal-ga, coulissant, fabrication, atelier | Guide technique officiel d'atelier et catalogue de fabrication Technal (Réf. 5074.007 - 01/2021, 214 pages) et notice officielle de pose chantier (Réf. 5850.002 - 07/2018, 18 pages) pour le coulissant minimal LUMEAL GA. | uille tournant T411005-09 fendu au pied du solin, collage SP350 sur 200 mm si $H > 2,20\text{ m}$, ouvrant percussion / à faire / [Fabrication et pose |
+| /procedures/fabrication-profiles-pvc.md | Procédure | Fabrication des profilés PVC, directives profine | profine, fabrication, debit, fraisage, percage, renfort | Les règles communes aux systèmes profine pour le débit, le fraisage et le perçage, le renforcement acier et son vissage, le soudage et l'ébavurage (paramètres standard et à inserts, joints soudables, profilés plaxés), les assemblages de meneaux et traverses, la pose des joints et la fixation des profilés complémentaires et des petits bois collés, avec le contrôle intermédiaire et final (check-list de 35 points) et le stockage et le transport des menuiseries finies. | diminution de rigidité des angles. Respecter un délai de stockage avant l'usinage : à 18-20 °C (température d'atelier), les profilés de fenêtres P |
+| /sources/profine-directives-generales.md | Document source | Directives générales profine, version janvier 2023 | profine, directives, terminologie, mise-en-oeuvre, dimensions, manuel | Manuel de mise en œuvre de 113 pages de profine, commun aux systèmes 70 et 76, qui couvre la terminologie, livraison et stockage, fabrication, surfaces, drainage et vitrage, exigences statiques et classification A*E*V*, ferrure, couplages, montage, entrées d'air, usage et entretien ; retraité en entier en image. | film lisse ou grainé : cintrage, chute de 15 mm, manutention (2 dessins, 2 photographies), machines, soudure, film de protection / transcrit / [Livra |
+| /procedures/fabrication-coulissant-askey-65-nv.md | Procédure | Procédure de fabrication ASKEY Coulissant 65 NV | procédure, atelier, fabrication, coulissant, drainage, usinage | Méthode d'atelier pour l'usinage, le poinçonnage, le drainage caché, l'assemblage des dormants coupe droite et le montage des ouvrants du Coulissant 65 NV ASKEY. | - # Ce que le document ne dit pas * Le temps de polymérisation complet du mastic colle SNJF avant manipulation du cadre n'est pas spécifié (se confo |
+| /procedures/fabrication-et-pose-lumeal-ga.md | Procédure | Fabrication en atelier et pose sur chantier Technal LUMEAL GA | technal, lumeal, lumeal-ga, coulissant, fabrication, atelier | Règles de fabrication en atelier, plans de drainage, injection d'étanchéité Butyl/élastomère, vitrage en portefeuille et mise en œuvre chantier selon le NF DTU 36.5 du coulissant minimal LUMEAL GA de Technal. | cadre dormant : **$\Delta \le 2\text{ mm}$**. - **Collage structurel obligatoire** : si la hauteur d'ouvrant dépasse **$2,20\text{ m}$**, le vitrage d |
+| /procedures/technal-seuil-pmr-py1100.md | Procédure | Fabrication et mise en œuvre du seuil PMR Technal PY1100 | technal, soleal, soleal-py, porte, seuil-pmr, py1100 | Procédure d'atelier et de chantier pour le seuil à rupture de pont thermique pour personnes à mobilité réduite (PMR) PY1100 de TECHNAL (portes battantes SOLEAL PY 55, gabarit EK7020, pièces d'angle 720028/29, gâche basse PY6000 et règles NF DTU 36.5). | rtement PY4000** pendant toutes les opérations de manutention et de transport de l'atelier vers le chantier, afin de garantir l'absence totale de défo |
+| /procedures/directives-generales-systeme-70-evo2008.md | Procédure | Directives générales de fabrication du système 70, classeur e.VOLUTION de 2008 | profine, kommerling, e-volution, systeme-70, fabrication, matiere | Les registres 5.1 « Directives générales », 5.10 « Soudure à plat » et 5.2 « Drainage/Décompression » du classeur KÖMMERLING e.VOLUTION d'août 2008 (système 70, système F 91) — matière Kömalit Z, livraison, stockage, débit, fraisage, renforcement, soudure, ébavurage, joints, quincailleries, soudure à plat, drainage, décompression et ventilation des profilés filmés — pour les menuiseries fabriquées à cette époque. | chargement des cassettes, se servir d'un engin de manutention tel que chariot élévateur frontal ou latéral ou pont roulant (2,5 t mini). Éviter tout m |

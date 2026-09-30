@@ -1,0 +1,8 @@
+{
+  "id": "S03",
+  "reponse": "Sur le coulissant **SOLEAL GY 55**, la rallonge 4e point **TGY3704** se raccorde à deux crémones : la **TGY3702**, et l'autre compatible, la **TGY3703**, qui est la version à clé.\n\n| Référence | Points de fermeture | Condamnation clé | Hauteur min. châssis | Hauteur min. poignée Hp | Fixation |\n| --- | --- | --- | --- | --- | --- |\n| TGY3702 | 3 points | Non | 1 292 mm | 721 mm | 6 vis TGY3723 |\n| TGY3703 | 3 points à clé | Oui (cylindre) | 1 292 mm | 721 mm | 8 vis TGY3723 |\n\nLa rallonge est notée « Raccordée à TGY3702/03 ». Elle n'est donnée avec aucune autre crémone du tableau : ni les 1 point TGY3700 et TGY3701, ni la fermeture coquille TKG025.\n\nSource : (/quincaillerie/soleal-gy-roulements-et-fermetures.md)",
+  "pages_citees": ["/quincaillerie/soleal-gy-roulements-et-fermetures.md"],
+  "appels": 1,
+  "trouve": "oui",
+  "navigation": "D'après l'historique, « cette rallonge » est la TGY3704 et la question porte sur l'autre crémone que la TGY3702. Un seul chercher avec les trois références (TGY3704, TGY3702, TGY3703) et « rallonge 4ème point crémone compatible » a remonté en tête la page quincaillerie SOLEAL GY. Son tableau des crémones donne directement « Raccordée à TGY3702/03 ». Les deux autres pages livrées (ouvrants de porte, renvois d'angle Roto NX) étaient hors sujet, tout comme les anomalies injectées (CTR-119, VER-123, INC-10). La recherche par référence a marché du premier coup."
+}

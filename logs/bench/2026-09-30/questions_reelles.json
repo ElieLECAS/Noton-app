@@ -1,0 +1,374 @@
+[
+  {
+    "id": "R01",
+    "source": "message 4335",
+    "categorie": "reelle",
+    "question": "Quelle parclose pour un vitrage de 44 mm ?",
+    "historique": []
+  },
+  {
+    "id": "R02",
+    "source": "message 4396",
+    "categorie": "reelle",
+    "question": "Comment transformer un ouvrant OF en OB avec Roto NX ?",
+    "historique": []
+  },
+  {
+    "id": "R03",
+    "source": "message 4543",
+    "categorie": "reelle",
+    "question": "Quelle est la garantie sur la structure d'une LUMINE 65 ?",
+    "historique": []
+  },
+  {
+    "id": "R04",
+    "source": "message 4551",
+    "categorie": "reelle",
+    "question": "sur un chassis alu lumine55, j'ai un remplissage de 24mm peux tu me donner la parclose et le joint à utiliser ?",
+    "historique": []
+  },
+  {
+    "id": "R05",
+    "source": "message 4575",
+    "categorie": "reelle",
+    "question": "un oeil de boeuf pvc combien de diametre max ?",
+    "historique": []
+  },
+  {
+    "id": "R06",
+    "source": "message 4583",
+    "categorie": "reelle",
+    "question": "parle moi de poignée Shangai",
+    "historique": []
+  },
+  {
+    "id": "R07",
+    "source": "message 4589",
+    "categorie": "reelle",
+    "question": "parle moi de l'effet bilame",
+    "historique": []
+  },
+  {
+    "id": "R08",
+    "source": "message 4593",
+    "categorie": "reelle",
+    "question": "il y a des poignée uniquement pour galandage ?",
+    "historique": []
+  },
+  {
+    "id": "R09",
+    "source": "message 4850",
+    "categorie": "reelle",
+    "question": "parle moi de la parclose 3702 de perform",
+    "historique": []
+  },
+  {
+    "id": "R10",
+    "source": "message 4866",
+    "categorie": "reelle",
+    "question": "donne moi les differente chicane lumine 55",
+    "historique": []
+  },
+  {
+    "id": "R11",
+    "source": "message 4884",
+    "categorie": "reelle",
+    "question": "montre moi la coupe de l'appui A491",
+    "historique": []
+  },
+  {
+    "id": "R12",
+    "source": "message 4886",
+    "categorie": "reelle",
+    "question": "liste moi les dormants compatibles avec l'Appui 6136",
+    "historique": []
+  },
+  {
+    "id": "R13",
+    "source": "message 4888",
+    "categorie": "reelle",
+    "question": "quelle est la référence du Levier pour M335 et sa coupe",
+    "historique": []
+  },
+  {
+    "id": "R14",
+    "source": "message 4896",
+    "categorie": "reelle",
+    "question": "parle moi de la référence 76576 et sa coupe",
+    "historique": []
+  },
+  {
+    "id": "R15",
+    "source": "message 5018",
+    "categorie": "reelle",
+    "question": "Quelle est la largeur du meneau ouvrant réf 76301 ?",
+    "historique": []
+  },
+  {
+    "id": "R16",
+    "source": "message 5028",
+    "categorie": "reelle",
+    "question": "Quelle est l'épaisseur de l'ouvrant galbé Perform 76 ?",
+    "historique": []
+  },
+  {
+    "id": "R17",
+    "source": "message 2841",
+    "categorie": "reelle",
+    "question": "Je fabrique un coulissant d'angle Soleal GY 55 (sans poteau maçonné). Le vantail principal mesure 2400 mm de haut pour 1300 mm de large. D'après l'abaque des masses de vitrage, quel est le poids maximum de vitrage autorisé au $m^2$ pour cette configuration spécifique, et le système affiche-t-il le graphique des limites de poids pour validation ?",
+    "historique": []
+  },
+  {
+    "id": "R18",
+    "source": "message 2931",
+    "categorie": "reelle",
+    "question": "Sur les grands coulissants à 4 vantaux avec une fermeture en percussion centrale, les chicanes du milieu viennent se taper de face. C'est quoi la petite pièce en plastique qu'il faut absolument coller et visser en haut et en bas sur le montant central avant d'enquiller les ouvrants, pour pas que l'air s'engouffre au milieu ?",
+    "historique": []
+  },
+  {
+    "id": "R19",
+    "source": "message 2935",
+    "categorie": "reelle",
+    "question": "J'ai une grosse porte d'entrée Soleal PY sur paumelles à pivot (le modèle pour les vantaux lourds jusqu'à 130 kg). Le vantail frotte un peu en bas côté serrure. On m'a dit qu'on pouvait régler ça sur site sans rien dégonder. Comment tu t'y prends avec tes clés ?",
+    "historique": []
+  },
+  {
+    "id": "R20",
+    "source": "message 2943",
+    "categorie": "reelle",
+    "question": "Quand on installe le bras de report de charge (le modèle Designo II pour les fenêtres lourdes) sur le palier d'angle inférieur, on doit fixer la pièce dormant. C'est quoi le piège au niveau du vissage pour pas bloquer ou foirer l'ancien matos ?",
+    "historique": []
+  },
+  {
+    "id": "R21",
+    "source": "message 2959",
+    "categorie": "reelle",
+    "question": "On doit poser un palier de compas pour un châssis PVC cintré (en forme d'arche). C'est quoi la cote de positionnement universelle pour installer notre gabarit de perçage sur le dormant par rapport au début de l'arc arrondi ?",
+    "historique": []
+  },
+  {
+    "id": "R22",
+    "source": "message 3013",
+    "categorie": "reelle",
+    "question": "Je cherche la procédure pour activer la 'fonction domotique intégrée' du limiteur d'ouverture à 80 mm (réf. 487 206) sur une fenêtre Roto NX pour piloter l'ouverture via mon smartphone. Quelles sont les étapes de connexion au Wi-Fi de la platine ?",
+    "historique": []
+  },
+  {
+    "id": "R23",
+    "source": "message 3041",
+    "categorie": "reelle",
+    "question": "Je prépare le débit et le montage d'une crémone Roto NX KSR pour une fenêtre PVC. Je bloque sur le positionnement du boîtier de crémone par rapport au fond de feuillure. Quelle est la cote millimétrée exacte ou la formule de calcul indiquée pour usiner l'emplacement de ce boîtier sans me louper ?",
+    "historique": []
+  },
+  {
+    "id": "R24",
+    "source": "message 3268",
+    "categorie": "reelle",
+    "question": "donne moi les cotes du dormants 6106",
+    "historique": []
+  },
+  {
+    "id": "R25",
+    "source": "message 3557",
+    "categorie": "reelle",
+    "question": "donne moi les seuils compatibles pour le 6101",
+    "historique": []
+  },
+  {
+    "id": "R26",
+    "source": "message 3604",
+    "categorie": "reelle",
+    "question": "parle moi de la référence 763392563",
+    "historique": []
+  },
+  {
+    "id": "R27",
+    "source": "message 3699",
+    "categorie": "reelle",
+    "question": "je cherche une fonction qui ralentit le vantail de mon coulissant PVC",
+    "historique": []
+  },
+  {
+    "id": "R28",
+    "source": "message 3906",
+    "categorie": "reelle",
+    "question": "quels sont les embouts compatibles avec les dormants standard de la gamme 70 de profine",
+    "historique": []
+  },
+  {
+    "id": "R29",
+    "source": "message 3974",
+    "categorie": "reelle",
+    "question": "Quelle est la performance acoustique maximale de la gamme LUMINE 55 en dB ?",
+    "historique": []
+  },
+  {
+    "id": "R30",
+    "source": "message 4035",
+    "categorie": "reelle",
+    "question": "Quelles tapées utiliser pour une Isolation de 180 mm ?",
+    "historique": []
+  },
+  {
+    "id": "R31",
+    "source": "message 4051",
+    "categorie": "reelle",
+    "question": "donne moi l'epaisseur de vitrage pour une parclose 2452",
+    "historique": []
+  },
+  {
+    "id": "R32",
+    "source": "message 2885",
+    "categorie": "reelle",
+    "question": "« J'étudie la notice simplifiée du système motorisé Proferm Eneo CC. Lors du raccordement électrique, quelles sont les tensions d'alimentation requises, à quoi correspondent les couleurs ou les repères des fils du câble de liaison, et quelles sont les consignes de sécurité pour éviter d'endommager la carte électronique (polarité, protection) ? »",
+    "historique": []
+  },
+  {
+    "id": "R33",
+    "source": "message 4921",
+    "categorie": "reelle",
+    "question": "pour un coulissant, il y a une crémone 3 point ref TGY3702, je cherche la référence de la crémone 4 points pour coulissant.",
+    "historique": []
+  },
+  {
+    "id": "R34",
+    "source": "message 3669",
+    "categorie": "reelle",
+    "question": "peut on faire du carbone noir dans avec Perform ?",
+    "historique": []
+  },
+  {
+    "id": "R35",
+    "source": "message 3457",
+    "categorie": "reelle",
+    "question": "comment choisir ses fenetres par rapport au zones sismiques ?",
+    "historique": []
+  },
+  {
+    "id": "R36",
+    "source": "message 3097",
+    "categorie": "reelle",
+    "question": "Quelle retombée de membrane prévoir en applique extérieure sur monomur ?",
+    "historique": []
+  },
+  {
+    "id": "S01",
+    "source": "message 4923",
+    "categorie": "relance",
+    "question": "chez la crémone chez technal",
+    "historique": [
+      {
+        "role": "user",
+        "content": "pour un coulissant, il y a une crémone 3 point ref TGY3702, je cherche la référence de la crémone 4 points pour coulissant."
+      },
+      {
+        "role": "assistant",
+        "content": "Pour un coulissant équipé de la crémone 3 points **TGY3702**, la référence de la crémone 4 points est :\n\n**TGY3704** (rallonge 4ème point, à raccorder à TGY3702 ou TGY3703).\n\nSource : /quincaillerie/soleal-gy-roulements-et-fermetures.md"
+      }
+    ]
+  },
+  {
+    "id": "S02",
+    "source": "message 4025",
+    "categorie": "relance",
+    "question": "et la rallonge TGY3710, elle se monte pareil ?",
+    "historique": [
+      {
+        "role": "user",
+        "content": "comment installer la rallonge TGY3704 sur une crémone TGY3702 ?"
+      },
+      {
+        "role": "assistant",
+        "content": "Voici la procédure exacte pour connecter la **rallonge TGY3704** à une **crémone TGY3702** (fermeture 3 points) dans la gamme SOLEAL GY 55, d'après la page 111 du catalogue de fabrication :\n\n---\n\n### Étapes de montage\n1. **Retirer le gabarit de réglage du crochet haut**\n   → Localisé sur la crémone TGY3702, ce gabarit doit être enlevé avant toute connexion.\n\n2. **Retirer le support de guidage**\n   → Démonter le support de guidage présent sur la tringle de la fermeture 3 points.\n\n3. **Connecter la tringle de la fermeture 3 points à la rallonge**\n   → Engager la tringle de la crémone TGY3702 dans la rallonge TGY3704.\n\n4. **Retirer le gabarit de réglage de la rallonge**\n   → Enlever le gabarit de réglage spécifique à la rallonge TGY3704.\n\n5. **Glisser le support de guidage de la rallonge dans la tringle de la fermeture 3 points**\n   → Réinstaller le support de guidage sur l’ensemble tringle + rallonge.\n\n6. **Remettre le gabarit de réglage du crochet haut** (si nécessaire)\n   → Une fois la connexion validée, repositionner le gabarit pour finaliser le réglage.\n\n---"
+      }
+    ]
+  },
+  {
+    "id": "S03",
+    "source": "message 4041",
+    "categorie": "relance",
+    "question": "quelle autre crémone est compatible avec cette rallonge ?",
+    "historique": [
+      {
+        "role": "user",
+        "content": "pour un coulissant, il y a une crémone 3 point ref TGY3702, je cherche la référence de la crémone 4 points pour coulissant."
+      },
+      {
+        "role": "assistant",
+        "content": "Pour un coulissant équipé d'une crémone 3 points **TGY3702**, la référence de la **rallonge 4 points** compatible est **TGY3704**.\n\nCette rallonge s'installe en complément de la crémone 3 points pour ajouter un quatrième point de verrouillage. Elle est explicitement conçue pour être associée à la fermeture 3 points (comme la TGY3702) dans les coulissants de la gamme **SOLEAL GY 55**. Les documents précisent sa fonction de \"rallonge 4ème point\" et son mode de connexion à la tringle de la fermeture 3 points."
+      }
+    ]
+  },
+  {
+    "id": "S04",
+    "source": "message 4567",
+    "categorie": "relance",
+    "question": "en ouvrant minimal ?",
+    "historique": [
+      {
+        "role": "user",
+        "content": "sur un chassis alu lumine55, j'ai un remplissage de 24mm peux tu me donner la parclose et le joint à utiliser ?"
+      },
+      {
+        "role": "assistant",
+        "content": "Pour un châssis alu **LUMINE55** avec un remplissage de **24 mm**, utilisez :\n\n- **Parclose** : T591005 (droite) ou TFY2412 (arrondie)\n- **Joint extérieur** : T410010\n- **Joint intérieur** : TAS0017 (vert, 7 mm)\n\nSource : (/profiles/soleal-fy-parcloses-et-vitrage.md)"
+      }
+    ]
+  },
+  {
+    "id": "S05",
+    "source": "message 3612",
+    "categorie": "relance",
+    "question": "chez Roto NX une crémone",
+    "historique": [
+      {
+        "role": "user",
+        "content": "parle moi de la référence 763392"
+      },
+      {
+        "role": "assistant",
+        "content": "La référence **763392** n’apparaît dans **aucun** des documents fournis (Profine, Kommerling, Roto, Technal).\n\nPrécisez-nous :\n- Le **fournisseur** (marque) concerné par cette référence (ex. : Kommerling, Profine, Roto, Technal, etc.) ?\n- Ou la **gamme** à laquelle elle appartient (ex. : Perform, Lumine, e.VOLUTION, etc.) ?\n\nCela nous permettra de relancer une recherche ciblée."
+      }
+    ]
+  },
+  {
+    "id": "S06",
+    "source": "message 4404",
+    "categorie": "relance",
+    "question": "et acajou 1 face sur perform ?",
+    "historique": [
+      {
+        "role": "user",
+        "content": "Existe il acajou 2 faces en gamme perform"
+      },
+      {
+        "role": "assistant",
+        "content": "Non.\n\nEn gamme **PERFORM**, les coloris en teinté dans la masse proposés sont :\n- **Blanc 9016** (1 ou 2 faces)\n- **Ivoire** (proche 9001, référence 607 Kömmerling®, **uniquement 2 faces**)\n\nL’acajou n’est pas disponible en teinté dans la masse sur la gamme PERFORM.\n\nEn revanche, l’acajou existe en **plaxé 2 faces** sur les gammes :\n- [HYBRIDE](/gammes/hybride.md) (catalogue général, p. 10)\n- [TEXTURAL](/gammes/textural.md) (catalogue général, p. 23)\n\nSi vous souhaitez un acajou 2 faces, il faut donc vous orienter vers l’une de ces deux gammes."
+      }
+    ]
+  },
+  {
+    "id": "S07",
+    "source": "message 4870",
+    "categorie": "relance",
+    "question": "pour un soleal de 2000 x 2150",
+    "historique": [
+      {
+        "role": "user",
+        "content": "donne moi les differente chicane lumine 55"
+      },
+      {
+        "role": "assistant",
+        "content": "Voici les différentes chicanes disponibles pour la gamme **LUMINE55** (SOLEAL FY 55) :\n\n---\n\n### Chicanes pour SOLEAL FY 55 (LUMINE55)\n\n| Référence | Désignation | Type | Usage | Face vue (mm) | Épaisseur vitrage admissible (mm) | Inertie $I_x$ (cm⁴) à 2 000 mm | Inertie $I_y$ (cm⁴) |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| **T215186** | Battement central standard | Standard | Fenêtre 2 vantaux (masse visible 66 mm) | 66 | 24 à 32 | 12,89 | 7,51 |\n| **T591022** | Battue rapportée | Profilé plat | Centrage de crémone pour ouvrant 2 vantaux | — | — | 16,48 | 0,96 |\n| **T591068** | Battement central réduit | Version Éclat | Battement central réduit (masse visible 116 mm) | 116 | 24 à 32 | 0,60 | 2,61 |\n| **T215202** | Traverse / meneau 15/77 | Traverse intermédiaire | Allège ou imposte (face vue 77 mm) | 77 | 24 à 32 | 12,66 | 10,45 |\n| **T215204** | Traverse / meneau 28/90 | Traverse intermédiaire | Traverse moyenne (face vue 90 mm) | 90 | 24 à 32 | 14,73 | 19,20 |\n| **T215205** | Traverse / meneau 38/100 | Traverse intermédiaire | Traverse lourde (face vue 100 mm) | 100 | 24 à 32 | 16,13 | 28,84 |\n| **T215207** | Traverse / meneau 58/120 | Traverse grande inertie | Traverse très grande inertie (face vue 120 mm) | 120 | 24 à 32 | 18,65 | 57,00 |\n| **T215208** | Traverse / meneau 68/130 | Traverse très grande inertie | Traverse maximale (face vue 130 mm) | 130 | 24 à 32 | 19,80 | 76,10 |\n| **T215211** | Traverse / meneau 98/160 | Traverse de renfort | Renfort d'inertie maximale (face vue 160 mm) | 160 | 24 à 32 | 23,45 | 160,00 |\n| **T215252** | Meneau renforcé intérieur 105 | Meneau vertical | Meneau tubulaire grande hauteur | 105 | 24 à 32 | 56,66 | 14,62 |\n| **T215261** | Meneau renforcé tubulaire 130 | Meneau vertical | Meneau pour châssis composés sous fort vent | 130 | 24 à 32 | 146,03 | 50,37 |\n| **T215268** | Poteau tubulaire 130 | Poteau d'accouplement | Poteau lourd multi-angles | 130 | 24 à 32 | 182,67 | 139,71 |\n\n---\n**Source** : \n- /profiles/soleal-fy-dormants-et-ouvrants.md\n\n---\n**Remarque** : Les chicanes pour LUMINE55 sont principalement des **battements centraux**, **traverses intermédiaires** et **meneaux** conçus pour les fenêtres à frappe. Leur choix dépend de la configuration (2 vantaux, allège, imposte, etc.) et des performances mécaniques requises."
+      },
+      {
+        "role": "user",
+        "content": "precise moi le couiple selon dimensions"
+      },
+      {
+        "role": "assistant",
+        "content": "Voici les **couples de serrage** applicables aux chicanes et éléments associés de la gamme **LUMINE55** (SOLEAL FY 55) :\n\n---\n\n### Couple de serrage pour les chicanes et éléments de fixation\n\n| Élément | Référence | Couple de serrage | Source |\n| --- | --- | --- | --- |\n| **Vis de boîtier crémone encastré** | T940046 | **5 N·m** (couple maximal) | /procedures/fabrication-soleal-fy.md |\n| **Vis de sécurité paumelles** | TAY0047 | **Non spécifié** (serrage contrôlé, sans dépassement) | /procedures/fabrication-soleal-fy.md |\n| **Goupilles de liaison (assemblage par goupillage)** | TAY0001 / TAY0002 | **Non spécifié** (serrage manuel jusqu'à refus) | /procedures/fabrication-soleal-fy.md |\n| **Vis de fixation des équerres d'angle** | T750201, T750219, T750204, etc. | **Non spécifié** (serrage manuel contrôlé) | /procedures/fabrication-soleal-fy.md |\n\n---\n**Remarque** :\n- Le **couple de 5 N·m** s'applique **uniquement** aux vis de fixation du boîtier crémone encastré T940046.\n- **Aucun couple de serrage n'est spécifié** dans le wiki pour les chicanes proprement dites (battements centraux, traverses intermédiaires, meneaux), car leur assemblage s'effectue principalement par **sertissage mécanique** ou **goupillage** (sans vissage direct).\n- Pour les vis de sécurité des paumelles (TAY0047) et les goupilles de liaison, le serrage est **contrôlé manuellement** sans valeur de couple imposée.\n\n---\n**Anomalie à prendre en compte** :\n- **CTR-09** : La garantie de la ferrure TECHNAL est affichée à **10 ans** dans le document fournisseur, mais le catalogue général la classe à **2 ans** pour les \"autres ferrures\". La valeur de 10 ans prime pour les ferrures TECHNAL."
+      }
+    ]
+  }
+]

@@ -1,0 +1,24 @@
+{
+ "id": "R36",
+ "reponse": "Pour le système 76 Advanced (PERFORM76), le plan de pose type « Pose en applique extérieure sur monomur avec capotage » du DTA 6/16-2334_V5 (p. 53 ; même planche au DTD 2334, p. 57) porte une retombée de membrane de 100 mm en tête (la membrane d'étanchéité descend de 100 mm sur le dormant), avec en pied un « Plat alu 20 x 2 » et une cote de 31 mm. Même valeur de 100 mm sur le plan « Pose en applique extérieure » (hors monomur), repère « Retombée latérale membrane d'étanchéité », avec une cote de 16 mm en pied. Rappel du DTA : l'applique extérieure avec ITE est admise sur monomur (à l'exclusion des ouvrages du guide incendie façades bardage rapporté ventilé de septembre 2017), elle se fait selon le NF DTU 36.5 et le e-cahier CSTB 3709_V2, avec un jeu suffisant en partie haute pour le dégondage des ouvrants à la française, et des limiteurs d'ouverture en feuillure. Pour le système 70 (PERFORM70), le plan « Pose en applique extérieure sur monomur » du DTD 6/16-2335 (p. 50) est reproduit mais le wiki ne donne aucune cote de retombée de membrane. Source : /procedures/fabrication-systeme-76-advanced.md.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/procedures/fabrication-systeme-76-advanced.md", "extrait": "Même pose sur monomur, dormant capoté : retombée de membrane de **100 mm** en tête, « Plat alu 20 x 2 » en pied avec une cote de **31 mm**, « COUPE A-A »."},
+  {"page": "/procedures/fabrication-systeme-76-advanced.md", "extrait": "Le dormant est fixé contre la face extérieure du mur, dans l'épaisseur de l'isolation par l'extérieur. Repères : « Retombée latérale membrane d'étanchéité » de **100 mm** en tête"},
+  {"page": "/procedures/fabrication-systeme-70.md", "extrait": "Coupe verticale, coupe horizontale et « Coupe A-A » d'une fenêtre en applique extérieure sur un mur monomur. Le titre est imprimé « P0SE » avec un zéro [1 p. 50]."}
+ ],
+ "ambiguite": "Système non précisé : la valeur de 100 mm est celle des plans du système 76 Advanced (PERFORM76). Le plan équivalent du système 70 n'a pas de cote. Le wiki ne dit pas non plus si 100 mm est un minimum ou une valeur type.",
+ "outils": 6,
+ "comment_trouve": "Grep « retomb » : deux lignes dans procedures/fabrication-systeme-76-advanced.md (plans du DTA p. 52 et 53). Grep « monomur » et « applique ext » pour les autres systèmes : le plan du système 70 (fabrication-systeme-70.md) n'a pas de cote ; image vérifiée, aucune cote de membrane. Image du plan 76 regardée : cote 100 sous la membrane en tête.",
+ "formulations": [
+  "de combien la bande d'étanchéité doit-elle recouvrir le dormant en pose applique extérieure ITE sur brique monomur ?",
+  "retombée membrane applique extérieure",
+  "pose en applique extérieure sur monomur : quelle longueur de membrane d'étanchéité en tête de fenêtre PERFORM76 ?"
+ ],
+ "defauts_wiki": [
+  "La valeur n'est que dans la légende d'un plan de pose, au fond d'une page de 51 ko intitulée « Fabrication et assemblage du système 76 Advanced » : le titre ne parle pas de pose, la description dit seulement « onze poses types » sans nommer applique extérieure, monomur ni membrane.",
+  "Aucune page de pose (procedures/pose-perform76.md) ne reprend la retombée de membrane ; la donnée est sur une page de fabrication.",
+  "Le plan système 70 équivalent n'a aucune cote transcrite : une question sans système peut tomber sur cette page et conclure à l'absence.",
+  "Le mot « membrane » n'apparaît que sur deux pages du wiki (dont un store screen) : une recherche avec « bande », « pare-pluie » ou « étanchéité » ne pointe pas cette ligne."
+ ]
+}

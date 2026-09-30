@@ -400,7 +400,7 @@
                     <a
                         href="/faisabilite"
                         id="nav-faisabilite"
-                        class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+                        class="hidden flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
                     >
                         <i class="ti ti-ruler-measure text-lg"></i>
                         <span>Faisabilité et débit</span>
@@ -603,6 +603,10 @@
                         if (adminLink) {
                             adminLink.classList.remove('hidden');
                         }
+                    }
+                    // Faisabilité et débit : rôle admin seulement (même règle que la page et l'API)
+                    if ((currentUser.roles || []).includes('admin')) {
+                        document.getElementById('nav-faisabilite')?.classList.remove('hidden');
                     }
                 } else {
                     window.location.href = "/login";

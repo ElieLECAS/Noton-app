@@ -1,0 +1,46 @@
+{
+  "question": "On doit poser un palier de compas pour un châssis PVC cintré (en forme d'arche). C'est quoi la cote de positionnement universelle pour installer notre gabarit de perçage sur le dormant par rapport au début de l'arc arrondi ?",
+  "pages_lues": [
+    "/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md",
+    "/procedures/percage-montage-roto-nx.md",
+    "/quincaillerie/roto-nx-apercu-ferrures-cote-p.md",
+    "/quincaillerie/roto-nx-accessoires-et-gabarits.md"
+  ],
+  "anomalies": [
+    "CTR-110",
+    "CTR-111",
+    "CTR-112",
+    "CTR-113",
+    "INC-283",
+    "INC-304",
+    "INC-305",
+    "VER-114",
+    "VER-126"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "palier compas cintré arc gabarit perçage dormant positionnement",
+        "systeme": "Roto NX"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md",
+        "/procedures/percage-montage-roto-nx.md",
+        "/quincaillerie/roto-nx-apercu-ferrures-cote-p.md"
+      ],
+      "caracteres": 182773
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "gabarit palier de compas réglable plein-cintre 2002405 2002406",
+        "limite": 3
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/roto-nx-accessoires-et-gabarits.md"
+      ],
+      "caracteres": 126137
+    }
+  ]
+}

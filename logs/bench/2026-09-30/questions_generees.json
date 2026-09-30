@@ -1,0 +1,142 @@
+[
+  {
+    "id": "G01",
+    "categorie": "reference",
+    "question": "Hauteur mini de châssis pour monter une TGY3701 ?",
+    "historique": [],
+    "attendu": "525 mm de hauteur mini de châssis (hauteur mini de poignée Hp : 346 mm ; crémone 1 point à clé, 4 vis TGY3723).",
+    "page": "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+    "ligne": "| **TGY3701** | 1 point à clé | Oui (cylindre) | 525 mm | 346 mm | 4 vis TGY3723 |",
+    "verification": "grep -rn 'TGY3701' wiki_llm/wiki : une seule occurrence, cette ligne (l. 64). Aucune page source ni anomalie ne la cite. Voisine à ne pas confondre : TPY3701 (gâche électrique GEP, porte SOLEAL PY), autre référence."
+  },
+  {
+    "id": "G02",
+    "categorie": "reference",
+    "question": "Quelle charge maxi pour la T940023 ?",
+    "historique": [],
+    "attendu": "130 kg (largeur de vantail maxi 1 600 mm ; 1 ensemble haut + bas ; pièce de renfort T940022 obligatoire entre 100 et 130 kg).",
+    "page": "/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md",
+    "ligne": "| **T940023** | Paumelle sur pivot réglable | **130 kg** | 1 600 mm | 1 ensemble haut + bas.<br>Pièce de renfort **T940022 obligatoire** entre 100 et 130 kg. |",
+    "verification": "grep -rn 'T940023\\|T940022' wiki_llm/wiki : seulement cette page, l. 51 (la ligne) et l. 55 (incompatibilité avec le seuil PMR, sans autre valeur de charge). Aucune valeur concurrente."
+  },
+  {
+    "id": "G03",
+    "categorie": "reference",
+    "question": "Le carré W4070495, il fait quelle longueur ?",
+    "historique": [],
+    "attendu": "56 mm (carré de 7 mm pour vantail 24 mm renforcé W1041261, poignées sur une ou deux faces).",
+    "page": "/quincaillerie/askey-coulissant-65-nv-quincaillerie.md",
+    "ligne": "| **W4070495** | 56 | Vantail 24 mm renforcé W1041261 | Poignées sur une ou deux faces |",
+    "verification": "grep -rn 'W4070495' wiki_llm/wiki : une seule occurrence, cette ligne (l. 94). W1041261 apparaît aussi dans /profiles/askey-coulissant-65-nv-dormants-et-ouvrants.md l. 73 (montant latéral renforcé carré), sans longueur de carré : pas de conflit."
+  },
+  {
+    "id": "G04",
+    "categorie": "reference",
+    "question": "La 787347, c'est pour quelle LFF ?",
+    "historique": [],
+    "attendu": "LFF 601 à 800 mm (têtière de compas côté paumelles P, sécurité de base CDR 1 N ; longueur 690 mm, zone de recoupe 200 mm, taille 350, Roto Sil).",
+    "page": "/quincaillerie/roto-nx-compas-et-paliers.md",
+    "ligne": "| 787347 | J | J | 601 – 800 | 690 | 200 | 350 | – | – | Roto Sil |",
+    "verification": "grep -rn '787347' wiki_llm/wiki : cette ligne (l. 177) et /quincaillerie/roto-nx-ksr-oscillo-battant.md l. 76 « 601 – 800 | 350 / 690 | 787347 » : même plage, même taille et même longueur. La correction du log (l. 206) porte sur 787346, pas sur 787347."
+  },
+  {
+    "id": "G05",
+    "categorie": "reference",
+    "question": "Le 0729T fait quelle largeur et quelle épaisseur ?",
+    "historique": [],
+    "attendu": "40 mm de large, 7 mm d’épaisseur (désignation F00-62- 0729T, plans de 2008).",
+    "page": "/profiles/systeme-70-profiles-complementaires.md",
+    "ligne": "| 0729T | F00-62- 0729T | 40 | 7 | ![Profilé 0729T](/assets/profiles/systeme70/profils-plats/profil-0729t-evo2008.png) |",
+    "verification": "grep -rn '0729' wiki_llm/wiki : cette ligne (l. 1397) et la phrase l. 1406 (« Les 0727T à 0731T ont une ou deux chambres », sans cote). Seule autre occurrence : 250729, un gabarit Roto NX (/quincaillerie/roto-nx-accessoires-et-gabarits.md l. 799), autre référence. Aucune valeur concurrente."
+  },
+  {
+    "id": "G06",
+    "categorie": "reference",
+    "question": "Patte NT1947 sur un dormant 76171, c'est pour quelle épaisseur d'isolant ?",
+    "historique": [],
+    "attendu": "155 mm (avec la tapée 6141, l’appui 76758 et la cale CTHNT0030 ; sur un dormant 76180, la même patte correspond à 140 mm).",
+    "page": "/profiles/perform76-tapees-et-isolation.md",
+    "ligne": "| NT1947 | 76171 | 155 |",
+    "verification": "grep -rn 'NT1947' wiki_llm/wiki : seulement cette page, l. 282 (76180 : 140 | 6141 | NT1947 | 6137), l. 371 (76171 : 155 | 6141 | NT1947 | 76758 | CTHNT0030), l. 463 (76180, 140) et l. 464 (76171, 155) : les valeurs concordent. Le mot « isolant » n'est pas dans le titre (« Tapées et isolation PERFORM76 ») et le tokeniseur de wiki_index.py ne fait pas de racinisation. Piège voulu : la même patte donne 140 mm sur un 76180."
+  },
+  {
+    "id": "G07",
+    "categorie": "reference",
+    "question": "Jusqu'à quel poids de vantail va la PSK200 Portal ?",
+    "historique": [],
+    "attendu": "200 kg (quincaillerie d’oscillo-coulissant du système 70 ; d’autres quincailleries sont possibles sur justifications ; aucune dimension admissible n’est donnée).",
+    "page": "/quincaillerie/siegenia.md",
+    "ligne": "| PSK200 Portal | oscillo-coulissant | 70 (e.XCLUSIVE, e.MOTION, e.VOLUTION) | 200 |",
+    "verification": "grep -rn 'PSK200' wiki_llm/wiki : siegenia.md (l. 4, 29, 38, 39, 47, 99, 103), /certifications/dtd-6-16-2335.md l. 115 et l. 354 (« jusqu'à 200 kg »), /procedures/fabrication-systeme-70.md l. 429, /quincaillerie/ferco.md l. 80, VER-20 (/anomalies/informations-a-verifier.md l. 248), sources/dtd-6-16-2335.md. Aucune autre valeur de poids."
+  },
+  {
+    "id": "G08",
+    "categorie": "reference",
+    "question": "Un 10/14/4, ça fait combien de dB d'affaiblissement ?",
+    "historique": [],
+    "attendu": "33 dB (vitrage pour façades sur routes à fort trafic ; warm edge faible émissivité, gaz argon).",
+    "page": "/vitrages/performances-vitrages.md",
+    "ligne": "| façades situées sur des routes à fort trafic | 33 | 10 / 14 / 4 | warm edge faible émissivité, gaz argon | cette solution permet de ne pas perdre tant en performance thermique qu'acoustique | ![Double vitrage 10/14/4](/assets/vitrages/performances/acoustique-10-14-4.png) |",
+    "verification": "grep -rnE '10 */ *14 */ *4\\b|10-14-4' wiki_llm/wiki : seulement cette ligne (l. 70, où la page écrit « 10 / 14 / 4 » avec espaces, et le nom de l'image acoustique-10-14-4.png) et log.md l. 2441 (même valeur, 33 dB). Aucune valeur concurrente."
+  },
+  {
+    "id": "G09",
+    "categorie": "reference",
+    "question": "La PPU01PROF, elle est en DIN gauche ou droite ?",
+    "historique": [],
+    "attendu": "DIN droite (modèle ARPÈGE PP).",
+    "page": "/portes/collection-lumiere.md",
+    "ligne": "| ARPÈGE PP | PPU01PROF | Droite | Impression numérique gris anthracite sur vitrage dépoli acide ; verre trempé ; Warm Edge noir ; pas de transparence | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 7016 | ★★★ | ![ARPÈGE PP](/assets/portes/collection-lumiere/arpege-pp.png) |",
+    "verification": "grep -rn 'PPU01PROF' wiki_llm/wiki : une seule occurrence, cette ligne (l. 84). Voisines à ne pas confondre : PS01PROF (ARPÈGE PS, DIN gauche, l. 82) et PS01MLPROF (ARPÈGE ML, DIN droite, l. 83). La question évite les gammes, car INC-41 note que le panneau verrier ne porte que LUMINE et TEXTURAL."
+  },
+  {
+    "id": "G10",
+    "categorie": "reference",
+    "question": "Coffre AIP36 : quelle profondeur de maçonnerie ?",
+    "historique": [],
+    "attendu": "343 mm (accès intérieur, plaque fibrociment pour ossature bois ; hauteur caisson + adaptateur 312 mm ; L max 3 000 mm, H max 3 500 mm).",
+    "page": "/equipements/volets-roulants-chrono-pse2.md",
+    "ligne": "| AIP36 | Accès Intérieur | 343 | 312 | 3 000 | 3 500 | Plaque fibrociment pour ossature bois |",
+    "verification": "grep -rn 'AIP36' wiki_llm/wiki : cette ligne (l. 45) et /sources/soprofen-guide-technique-blocs-baies-2022.md l. 85 (liste des codes d'accès, sans cote). Aucune valeur concurrente."
+  },
+  {
+    "id": "N01",
+    "categorie": "sans_reponse",
+    "question": "On peut faire une porte d'entrée alu coupe-feu EI30 ? Sous quel PV ?",
+    "historique": [],
+    "attendu": "le wiki ne le dit pas",
+    "page": "",
+    "ligne": "",
+    "verification": "grep -rniE 'coupe[- ]feu|pare[- ]flamme|\\bEI ?[0-9]{2}\\b|\\bE ?30\\b|\\bE ?60\\b|résistance au feu|EN 1634|EN 16034|PV feu' : aucune occurrence pertinente (seul hit « E30 » : le code coffre AE30 des volets CHRONO). « feu » ne renvoie qu'à la réaction au feu (M3 des coffres CHRONO dans at-cstb-6-16-2339, § 1.2.1.4 du DTA 6/16-2334 sur les profilés PVC, « difficilement inflammable » des directives 70). « incendie » ne renvoie qu'aux DTA et DTD (« à examiner selon la réglementation », façades ITE) et au risque d'incendie du câble Roto Safe E. Aucune porte d'entrée résistante au feu, aucun classement EI, aucun PV."
+  },
+  {
+    "id": "N02",
+    "categorie": "sans_reponse",
+    "question": "Quelle classe de résistance à la grêle pour un tablier de volet en lames LA 37 ?",
+    "historique": [],
+    "attendu": "le wiki ne le dit pas",
+    "page": "",
+    "ligne": "",
+    "verification": "grep -rniE 'grêle|grele|hagel|HW[0-9]|VKF' : 0 occurrence. Sujet voisin couvert : résistance au VENT des lames (V*2 à V*6, /reference/resistance-au-vent-volets-soprofen.md) ; LA 37 apparaît dans 8 pages volets (dimensions, poids, vent), jamais avec la grêle."
+  },
+  {
+    "id": "N03",
+    "categorie": "sans_reponse",
+    "question": "Quelle référence de clé pompier commander avec la fermeture TGY3731 ?",
+    "historique": [],
+    "attendu": "le wiki ne le dit pas",
+    "page": "",
+    "ligne": "",
+    "verification": "grep -rniE 'pompier' : /quincaillerie/soleal-gy-roulements-et-fermetures.md l. 75-79 (fermeture pompier ERP TGY3731, vis T770059, « clé spéciale pompier » SANS référence), sources/technal-soleal-gy-conception.md l. 47 et index.md. grep 'clé spéciale|triangle|carré de 11' : aucune référence de clé. Piège voulu : la seule référence voisine est la vis T770059."
+  },
+  {
+    "id": "N04",
+    "categorie": "sans_reponse",
+    "question": "Combien de temps laisser polymériser le mastic Illbruck SP350 avant de manipuler le vantail ?",
+    "historique": [],
+    "attendu": "le wiki ne le dit pas",
+    "page": "",
+    "ligne": "",
+    "verification": "grep -rniE 'SP ?350' : /procedures/fabrication-et-pose-lumeal-ga.md l. 51 et 84, /quincaillerie/lumeal-ga-roulements-et-fermetures.md l. 122, sources/technal-lumeal-ga-fabrication.md l. 50, log.md : aucune durée. grep 'polymérisation|temps de prise|durcissement|séchage|heures' : des durées existent pour d'AUTRES produits (colles profine C008/C009/C120 : 4 h, 8 h, 24 h dans /procedures/surfaces-collage-nettoyage-profine.md ; « efficacité maximale après 24 h » dans les directives 70 ; mastic SNJF ASKEY « non spécifié », /procedures/fabrication-coulissant-askey-65-nv.md l. 122). Rien pour le SP350 : les recopier serait une erreur."
+  }
+]

@@ -1,0 +1,23 @@
+{
+ "id": "R02",
+ "reponse": "Procédure PROFERM PRO-PVC-OFOB-01, révision A (19/03/2026, PVC), en cinq étapes :\n1. Démonter l'équerre de compas et le compas OF d'origine (angle haut).\n2. Installer et visser la têtière fournie à dimension, sur le haut de l'ouvrant.\n3. Installer le compas OB adéquat fourni sur la têtière : le coulisseau du bras de compas s'engage sur le téton de la têtière, le petit bras à lumière (plot) se relie au bras de compas ; ouverture à soufflet de 140 mm ; « Position finale la platine = anti-rabattement ».\n4. Retirer l'obturateur de manœuvre (petite pièce plastique grise logée dans la lumière de la ferrure d'origine) afin de libérer la manœuvre OB.\n5. Installer et visser la gâche OB (droite ou gauche) en traverse basse du dormant, au droit du téton de la ferrure d'angle bas de l'ouvrant.\n\nSeule cote donnée : ouverture à soufflet 140 mm. Ne sont pas donnés : les références de commande de la têtière, du compas OB et des gâches OB, la dimension de la têtière, la règle de choix du compas « adéquat », le choix gâche droite / gauche, les limites de dimension et de poids de l'ouvrant transformé (VER-31, VER-110 ; astérisque sans renvoi VER-109). Les champs d'application de l'OB Roto NX sont sur /quincaillerie/roto-nx-champs-application.md, le montage et réglage du compas sur /procedures/percage-montage-roto-nx.md.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/procedures/transformation-of-en-ob-roto-nx.md", "extrait": "La transformation tient en cinq opérations : on retire le compas OF et son équerre, on pose une têtière puis un compas OB, on retire l'obturateur de manœuvre de la ferrure d'origine, et on visse une gâche OB sur la traverse basse du dormant [1 p. 1-2]."},
+  {"page": "/procedures/transformation-of-en-ob-roto-nx.md", "extrait": "| Ouverture à soufflet (mm) | 140 | détail de l'étape 3 |"},
+  {"page": "/procedures/transformation-of-en-ob-roto-nx.md", "extrait": "Quatrième opération : **retirer l'obturateur de manœuvre sur la quincaillerie d'origine afin de libérer la manœuvre OB** [1 p. 2]."}
+ ],
+ "ambiguite": "",
+ "outils": 1,
+ "comment_trouve": "Page trouvée directement par son nom dans la liste des fichiers (procedures/transformation-of-en-ob-roto-nx.md) ; lecture intégrale.",
+ "formulations": [
+  "Comment passer une fenêtre à la française en oscillo-battant sur ferrure Roto NX ?",
+  "transformation OF OB Roto",
+  "Comment rendre un ouvrant battant basculant en soufflet ?"
+ ],
+ "defauts_wiki": [
+  "Aucun défaut majeur : titre, description et tags (of, ob, transformation, roto-nx) nomment l'objet ; page de 11 Ko.",
+  "Le sigle OF/OB : une requête en toutes lettres (« à la française », « oscillo-battant ») fonctionne aussi car le titre les porte.",
+  "Concurrence possible avec roto-nx-ksr-oscillo-battant.md et percage-montage-roto-nx.md (30 Ko) qui parlent aussi de compas OB."
+ ]
+}

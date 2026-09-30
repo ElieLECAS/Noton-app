@@ -1,0 +1,50 @@
+{
+  "question": "Quelle référence de clé pompier commander avec la fermeture TGY3731 ?",
+  "pages_lues": [
+    "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+    "/quincaillerie/lumeal-ga-roulements-et-fermetures.md",
+    "/quincaillerie/askey-coulissant-65-nv-quincaillerie.md",
+    "/sources/technal-soleal-gy-conception.md",
+    "/portes/soleal-py-dormants-et-ouvrants.md"
+  ],
+  "anomalies": [
+    "INC-174"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "TGY3731 clé pompier fermeture"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+        "/quincaillerie/lumeal-ga-roulements-et-fermetures.md",
+        "/quincaillerie/askey-coulissant-65-nv-quincaillerie.md"
+      ],
+      "caracteres": 28286
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "TGY3731",
+        "systeme": "SOLEAL GY",
+        "limite": 10
+      },
+      "pages_nouvelles": [
+        "/sources/technal-soleal-gy-conception.md"
+      ],
+      "caracteres": 14426
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "clé pompier ouverture d'urgence ERP",
+        "limite": 10
+      },
+      "pages_nouvelles": [
+        "/portes/soleal-py-dormants-et-ouvrants.md"
+      ],
+      "caracteres": 27876
+    }
+  ]
+}

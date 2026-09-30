@@ -1,0 +1,11 @@
+{
+  "id": "R13",
+  "reponse": "Le levier pour M335 est le **T038**. C'est un accessoire de la porte d'entrée du système 76 Advanced : il figure dans la nomenclature des ouvrants de porte de 126 mm **76206** et **76207**, sous la désignation « Levier pour M335 ». Le **M335** y est l'insert de soudure (« Insert de coin soudé » sur la planche du 76207).\n\n![T038](/assets/profiles/systeme76/ouvrants/piece-t038.png)\n\nCe n'est pas une coupe cotée : la planche le montre en photo, un outil à manche en bois, sans cote.\n\nLa même référence T038 figure aussi sur les ouvrants de fenêtre de 110 mm 76272, 76279 et 76283. Elle y est désignée « Outil de serrage pour insert », avec l'insert de coin soudé M164.\n\nSources : (/portes/systeme-76-advanced-porte-d-entree.md), (/profiles/systeme-76-accessoires-par-profile.md)",
+  "pages_citees": [
+    "/portes/systeme-76-advanced-porte-d-entree.md",
+    "/profiles/systeme-76-accessoires-par-profile.md"
+  ],
+  "appels": 1,
+  "trouve": "oui",
+  "navigation": "Une seule requête, « M335 levier », sans facette. La première page livrée, la porte d'entrée du système 76 Advanced, porte la ligne exacte « T038 | Levier pour M335 » avec sa cellule image, sur les ouvrants 76206 et 76207. Les deux autres pages livrées ont confirmé que le dessin est une photo et non une coupe, et ont montré le même T038 sous le nom « Outil de serrage pour insert » sur les ouvrants de 110 mm. Aucune entrée d'anomalie injectée ne portait sur le T038 ou le M335. La recherche plein texte sur la référence a suffi. Le seul coût : environ 130 000 caractères à lire pour une ligne de tableau."
+}

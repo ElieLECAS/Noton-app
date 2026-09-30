@@ -1,0 +1,42 @@
+{
+  "question": "chez la crémone chez technal",
+  "pages_lues": [
+    "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+    "/quincaillerie/poignees-et-croisillons.md",
+    "/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md",
+    "/quincaillerie/lumeal-ga-roulements-et-fermetures.md"
+  ],
+  "anomalies": [
+    "CTR-119",
+    "CTR-12",
+    "CTR-28",
+    "VER-123"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "crémone 4 points coulissant TGY3702 TGY3704 rallonge",
+        "tags": [
+          "technal"
+        ]
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+        "/quincaillerie/poignees-et-croisillons.md",
+        "/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md"
+      ],
+      "caracteres": 70997
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/quincaillerie/lumeal-ga-roulements-et-fermetures.md"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/lumeal-ga-roulements-et-fermetures.md"
+      ],
+      "caracteres": 8833
+    }
+  ]
+}

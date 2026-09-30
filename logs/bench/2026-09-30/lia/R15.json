@@ -1,0 +1,30 @@
+{
+  "question": "Quelle est la largeur du meneau ouvrant réf 76301 ?",
+  "pages_lues": [
+    "/profiles/perform76-meneaux.md",
+    "/procedures/assemblage-meneau-traverse-systeme-76.md",
+    "/procedures/drainage-decompression-ventilation-systeme-76.md"
+  ],
+  "anomalies": [
+    "CTR-71",
+    "INC-09",
+    "INC-63",
+    "VER-43",
+    "VER-44",
+    "VER-47"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "76301 meneau ouvrant largeur"
+      },
+      "pages_nouvelles": [
+        "/profiles/perform76-meneaux.md",
+        "/procedures/assemblage-meneau-traverse-systeme-76.md",
+        "/procedures/drainage-decompression-ventilation-systeme-76.md"
+      ],
+      "caracteres": 86498
+    }
+  ]
+}

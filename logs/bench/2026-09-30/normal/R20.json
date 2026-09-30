@@ -1,0 +1,36 @@
+{
+ "id": "R20",
+ "reponse": "Sur le report de charge NT Designo II (Roto NX, côté paumelles Designo, vantaux de 80 à 150 kg), la pièce dormant ne se visse pas par-dessus le palier d'angle tel qu'il est posé : il faut d'abord RETIRER LA VIS HAUTE DU PALIER D'ANGLE (la plus haute de sa partie verticale, sur le montant du dormant), puis mettre et visser la pièce dormant du report de charge sur le palier d'angle. Ordre complet de la notice : 1) visser le report de charge d'ouvrant en butée sur le pivot d'angle ; 2) retirer la vis haute du palier d'angle ; 3) mettre et visser la pièce dormant du report de charge sur le palier d'angle ; 4) poser le vantail sur le palier d'angle (seulement à ce moment) ; 5) mettre la tringle de soutien du vantail dans le dormant ; 6) régler la tension du ressort vantail ouvert à 90°, clé Allen de 4 mm, jusqu'à ce que les arcs argent (repère du haut) et rouge (repère du bas) forment ensemble un cercle plein. Autre point : après tout réglage en hauteur du palier / pivot d'angle, il faut refaire le réglage du report de charge. Références catalogue : élément d'ouvrant 567972 et composant de dormant 565254 (max. 150 kg, Roto Sil). Le wiki ne dit pas ce qui arrive si l'on garde la vis haute, ni le sens de rotation de la clé (VER-108).",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {
+   "page": "/procedures/report-de-charge-roto-nx.md",
+   "extrait": "- **La pièce dormant du report de charge se visse sur le palier d'angle après le retrait de la vis\n  haute de ce palier** : la vis est retirée à l'étape 2, la pièce dormant posée à l'étape 3."
+  },
+  {
+   "page": "/procedures/report-de-charge-roto-nx.md",
+   "extrait": "2. Retirer la vis haute du palier d'angle.\n3. Mettre et visser la pièce dormant du report de charge sur le palier d'angle.\n4. Mettre le vantail sur le palier d'angle."
+  },
+  {
+   "page": "/procedures/report-de-charge-roto-nx.md",
+   "extrait": "**Après le\nréglage en hauteur du palier / pivot d'angle, il faut régler le report de charge à nouveau**"
+  },
+  {
+   "page": "/quincaillerie/roto-nx-pivots-et-paliers-angle.md",
+   "extrait": "| 565254 | Composant de dormant | max. 150 | Roto Sil |"
+  }
+ ],
+ "ambiguite": "Le « piège » et l'« ancien matos » ne sont pas écrits comme tels : le wiki prescrit le retrait de la vis haute du palier, sans dire la conséquence d'un oubli (vis bloquée, palier arraché…). À valider : c'est bien ce point que visait la question.",
+ "outils": 5,
+ "comment_trouve": "Lecture directe de /procedures/report-de-charge-roto-nx.md (titre et tags explicites) : section « Conditions et interdictions » + étapes 1 à 6. Grep « report de charge » sur tout le wiki pour compléter : références 567972 / 565254 dans /quincaillerie/roto-nx-pivots-et-paliers-angle.md, re-réglage après réglage en hauteur dans /procedures/percage-montage-roto-nx.md.",
+ "formulations": [
+  "Quelle vis enlever sur le palier d'angle avant de monter la pièce dormant du report de charge NT Designo II ?",
+  "montage pièce dormant report de charge Roto",
+  "Comment fixer la pièce côté dormant du bras de soutien des fenêtres lourdes sur le palier bas ?"
+ ],
+ "defauts_wiki": [
+  "Contradiction interne : la procédure renvoie à VER-32 pour « la référence de commande … du report de charge », alors que /quincaillerie/roto-nx-pivots-et-paliers-angle.md donne 567972 (ouvrant) et 565254 (dormant).",
+  "Vocabulaire : la question dit « bras de report de charge » ; la page dit « report de charge » et « tringle de soutien du vantail » ; « bras » n'apparaît que dans le titre de la fiche source.",
+  "Le mot « report de charge » apparaît dans des dizaines de lignes de nomenclature de /quincaillerie/roto-nx-apercu-ferrures-designo.md (114 Ko) et /quincaillerie/roto-nx-champs-application.md (65 Ko) : ces grosses pages risquent de passer devant la procédure (11 Ko) en BM25."
+ ]
+}

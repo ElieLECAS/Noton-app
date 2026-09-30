@@ -1,0 +1,29 @@
+{
+ "id": "R01",
+ "reponse": "La gamme n'est pas précisée ; la réponse dépend du système.\n\n**PERFORM76 (PVC, cahier technique PERFORM76, feuillure de 62 mm avec joint post-extrudé)** : en ouvrant, parclose **76507** (épaisseur de parclose 14 mm) ; en dormant (vitrage fixe), parclose **76577** (épaisseur de parclose 14 mm). Les deux familles ne sont pas interchangeables : la série ouvrant se monte sur les ouvrants 76272, 76275, 76279, 76281, la série dormant sur les dormants 76171, 76172, 76177, 76180, 76185. (/profiles/perform76-parcloses.md)\n\n**Système 76 Advanced, tableau de vitrage du manuel profine (joint central)** : la parclose dépend aussi du joint de vitrage. Avec un joint A de 4 mm (PCE, G049.T, G047) : ouvrant **76507** (44 mm, tolérance +1,0 / −0,5), dormant/meneau sans compensateur **76577**. Avec un joint B de 2 mm (G048) : ouvrant **76506** (44 mm en B), dormant/meneau sans compensateur **76576**. Avec le compensateur 76570, le dormant et le meneau prennent les mêmes parcloses que l'ouvrant (76507 en joint A, 76506 en joint B). En AluClip Zero, 44 mm = parclose 76527. (/profiles/systeme-76-tableau-de-vitrage.md)\n\n**Système 70 (PERFORM70)** : 44 mm est hors de la feuillure de 54 mm (maximum 42 mm, parclose 76515) ; il faut la feuillure de 70 mm avec l'élargisseur 93025 : parclose **76503** (plage admise 43,5 à 45 mm), ou les références données pour la même épaisseur 0135, 1512, 6148. Le classeur e.VOLUTION 2008 donne, feuillure 70 mm avec élargisseur 728 (joint PCE 9C32/9B58, EPDM 9045) : 2432 / 0135 (43,5 – 45). (/profiles/systeme-70-tableau-de-vitrage.md)\n\n**SOLEAL FY 55 (LUMINE55, TECHNAL)** : 44 mm n'est possible qu'en châssis fixe avec l'élargisseur de feuillure T530031 : parclose **T591007** avec le joint intérieur blanc (8 mm), ou **T591008** avec le joint intérieur rouge (6 mm) ; sans élargisseur la prise de volume s'arrête à 42 mm. (/profiles/soleal-fy-parcloses-et-vitrage.md)\n\nLe wiki ne donne pas de parclose pour 44 mm sur les gammes ASKEY.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/profiles/perform76-parcloses.md", "extrait": "| 76507 | 44 | 14 | ![Parclose 76507](/assets/profiles/perform76/parcloses/parclose-76507.png) |"},
+  {"page": "/profiles/perform76-parcloses.md", "extrait": "| 76577 | 44 | 14 | ![Parclose 76577](/assets/profiles/perform76/parcloses/parclose-76577.png) |"},
+  {"page": "/profiles/systeme-76-tableau-de-vitrage.md", "extrait": "| 76507 | 44 | 46 | +1,0 / −0,5 | ![Parclose 76507](/assets/profiles/systeme76/tableau-vitrage/ouvrant-76507.png) |"},
+  {"page": "/profiles/systeme-76-tableau-de-vitrage.md", "extrait": "| 76506 | 42 | 44 | +1,0 / −0,5 | ![Parclose 76506](/assets/profiles/systeme76/tableau-vitrage/ouvrant-76506.png) |"},
+  {"page": "/profiles/systeme-76-tableau-de-vitrage.md", "extrait": "| 76577 | 44 | 46 | +1,0 / −0,5 | ![Parclose 76577](/assets/profiles/systeme76/tableau-vitrage/dormant-76577.png) |"},
+  {"page": "/profiles/systeme-70-tableau-de-vitrage.md", "extrait": "| 76503 | en gras | 44 | 43,5 | 45 | ![Parclose 76503, feuillure 70](/assets/profiles/systeme70/tableau-vitrage/feuillure-70-parclose-76503.png) |"},
+  {"page": "/profiles/soleal-fy-parcloses-et-vitrage.md", "extrait": "| **T591007** | 22 | 44 mm | 45 mm | 46 mm | 47 mm | 48 mm | 50 mm |"}
+ ],
+ "ambiguite": "Gamme non précisée (PERFORM76, système 76 Advanced selon le joint, PERFORM70 / système 70, LUMINE55 / SOLEAL FY) et emplacement non précisé (ouvrant ou dormant / fixe). Il faudrait demander la gamme, ouvrant ou dormant, et pour le 76 manuel profine le joint de vitrage (4 mm ou 2 mm). Réponse par défaut la plus probable : PERFORM76, ouvrant 76507 / dormant 76577.",
+ "outils": 14,
+ "comment_trouve": "Grep « parclose » sur le wiki puis grep « 44 » dans les pages de tableau de vitrage (perform76-parcloses, systeme-76-tableau-de-vitrage, systeme-70-tableau-de-vitrage, soleal-fy-parcloses-et-vitrage, pages ASKEY). La ligne 44 se trouve directement dans chaque tableau ; le piège est la multiplicité des pages et, pour le 76 manuel, la colonne B (joint 2 mm) où 44 mm tombe sur la 76506.",
+ "formulations": [
+  "Quelle parclose mettre pour un double vitrage de 44 mm en PVC 76 ?",
+  "parclose vitrage 44",
+  "Pour un triple vitrage de 44 mm d'épaisseur, quelle baguette de vitrage je commande ?"
+ ],
+ "defauts_wiki": [
+  "La donnée est répartie sur au moins quatre pages (perform76-parcloses 12 Ko, systeme-76-tableau-de-vitrage 21 Ko, systeme-70-tableau-de-vitrage 53 Ko, soleal-fy-parcloses-et-vitrage 12 Ko) : les 3 premières pages BM25 peuvent ne pas couvrir toutes les gammes.",
+  "« 44 » est un nombre très fréquent (cotes, inerties, dormants ASKEY « 44 » en colonne) : le terme lexical « 44 » remonte du bruit (askey-frappe-65-oc-dormants-et-ouvrants porte 20 fois « 44 »).",
+  "Le tableau du système 76 a deux colonnes d'épaisseur (joint A / joint B) : 44 apparaît sur la ligne 76506 (colonne B) et 76507 (colonne A), risque de mauvaise lecture.",
+  "systeme-70-tableau-de-vitrage.md fait 53 Ko et porte cinq tableaux différents (54, 70, 2008 54/70, 62/78, EPDM) : 44 mm y apparaît sur six parcloses différentes selon feuillure et joint.",
+  "Contradiction CTR-19 entre cahier PERFORM76 et DTD/manuel (sans effet sur 44 mm mais visible sur 46/48)."
+ ]
+}

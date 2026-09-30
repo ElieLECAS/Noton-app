@@ -38,14 +38,14 @@ def test_real_wiki_loads(real_snapshot):
 
 
 def test_le_prompt_permanent_ne_contient_pas_le_wiki(real_snapshot):
-    """Consignes, vocabulaire, index des anomalies — et rien du corps des pages."""
+    """Consignes et vocabulaire — ni le corps des pages, ni les anomalies."""
     prompt = real_snapshot.system_prompt
     consignes = wiki_service.CONSIGNES_PATH.read_text(encoding="utf-8").rstrip()
     assert prompt.startswith(consignes)
     assert "===== VOCABULAIRE DU WIKI" in prompt
-    assert "===== INDEX DES ANOMALIES" in prompt
-    # L'index des anomalies ne porte qu'un identifiant et un sujet par entrée.
-    assert "CTR-09 | " in prompt
+    # Les anomalies arrivent avec les pages lues, jamais dans le prompt permanent.
+    assert "INDEX DES ANOMALIES" not in prompt
+    assert "CTR-09" not in prompt
     # Aucune page n'est recopiée : c'est tout l'objet de la navigation outillée.
     assert "===== PAGE /" not in prompt
     for page in real_snapshot.concept_pages[:20]:

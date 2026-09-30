@@ -142,7 +142,7 @@ def test_le_prompt_vocal_ajoute_la_forme_parlee_devant_les_regles(snapshot):
     assert snapshot.vocal_prompt.startswith(vocales)
     assert generales in snapshot.vocal_prompt
     assert "===== VOCABULAIRE DU WIKI" in snapshot.vocal_prompt
-    assert "===== INDEX DES ANOMALIES" in snapshot.vocal_prompt
+    assert "INDEX DES ANOMALIES" not in snapshot.vocal_prompt
     assert snapshot.vocal_cache_key.startswith("lia-vocal-") and snapshot.vocal_cache_key != snapshot.cache_key
 
 

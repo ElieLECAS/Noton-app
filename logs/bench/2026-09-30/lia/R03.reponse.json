@@ -1,0 +1,12 @@
+{
+  "id": "R03",
+  "reponse": "La garantie de la structure de la fenêtre LUMINE65 dépend du document :\n\n| Document | Garantie structure |\n| --- | --- |\n| Brochure LUMINE65, février 2025, p. 5 (grille propre à la LUMINE65, macaron « Garantie 20 ans sur la structure de la fenêtre ») | **20 ans** |\n| Catalogue menuiseries PROFERM, janvier 2026, p. 35 (grille générale) | **15 ans** |\n\n**Contradiction connue, entrée CTR-03** : le wiki ne l'arbitre pas — la valeur ne suit ni la date (le document le plus récent, le catalogue 2026, donne 15 ans) ni le produit. Le risque signalé est un engagement contractuel erroné de 5 ans : faites confirmer la durée par le service commercial avant de l'écrire sur un devis.\n\nLe reste de la grille LUMINE65 est identique à la grille générale (vitrage 10 ans, ferrure ROTO 10 ans sur le fonctionnement, autre ferrure 2 ans…), et le laquage QUALICOAT classe 2 est garanti 25 ans (tenue, permanence de la couleur, vieillissement uniforme), 15 ans pour l'accroche de la laque.\n\nSources : (/garanties/garanties-par-composant.md), (/gammes/lumine.md), (/commercial/lumine.md)",
+  "pages_citees": [
+    "/garanties/garanties-par-composant.md",
+    "/gammes/lumine.md",
+    "/commercial/lumine.md"
+  ],
+  "appels": 2,
+  "trouve": "oui",
+  "navigation": "Recherche « garantie structure LUMINE 65 » avec la facette gamme LUMINE : les pages commerciale et gamme LUMINE sont arrivées entières et donnaient déjà « 20 ou 15 ans selon le document (CTR-03) », avec un renvoi vers la grille Garanties par composant, qui n'est pas remontée (la facette gamme l'a sans doute écartée du haut du classement, la page n'ayant pas de gamme). Je l'ai lue avec lire_page : elle tient la grille LUMINE65 (20 ans) et la grille générale 2026 (15 ans). CTR-03 a été injectée par le serveur, sans arbitrage. Réponse complète ; une recherche sans facette aurait peut-être remonté directement la page garanties."
+}

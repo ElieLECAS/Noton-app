@@ -182,6 +182,8 @@ def test_le_serveur_injecte_les_anomalies(snapshot):
         stream_fn=fake_stream,
     )
     _collect(answer)
+    # Rien avant la première recherche : on pose une question, il cherche dans le wiki.
+    assert not any("===== ENTRÉES D'ANOMALIE" in str(m.get("content")) for m in contextes[0])
     injecte = [
         m for m in contextes[-1]
         if m["role"] == "system" and "ENTRÉES D'ANOMALIE" in str(m.get("content"))

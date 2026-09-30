@@ -1,0 +1,464 @@
+===== PAGE 1 : /quincaillerie/soleal-gy-roulements-et-fermetures.md =====
+# Chariots de roulement et calage
+
+Les chariots SOLEAL GY 55 sont logés dans la traverse basse d'ouvrant (T141015 ou T141021). Leur corps en matériau isolant conserve la continuité de la rupture thermique de la traverse basse.
+
+### 1. Tableau de choix des roulettes et charges admissibles
+
+| Type de chariot | Référence | Réglage | Galets / Bandage | Poids maxi par vantail | Compatible Rail Alu T341000 | Compatible Rail Inox TGY4007 |
+| --- | --- | --- | --- | --- | --- | --- |
+| **Simple fixe** | **T401011** | Non réglable | Polyamide sur roulements à aiguilles | **100 kg** | Oui | Oui |
+| **Double fixe** | **T401012** | Non réglable | Polyamide sur roulements à aiguilles | **200 kg** | Oui | Oui |
+| **Double fixe Inox** | **TGY3873** | Non réglable | Galets 100% Inox | **200 kg** | **NON (Incompatible)** | **OUI** |
+| **Simple réglable** | **T441003** | Réglable en hauteur | Polyamide sur aiguilles | **100 kg** | Oui | Oui |
+| **Double réglable** | **T441004** | Réglable en hauteur | Polyamide sur aiguilles | **200 kg** | Oui | Oui |
+| **Double réglable Inox** | **TGY3872** | Réglable en hauteur | Galets 100% Inox | **200 kg** | **NON (Incompatible)** | **OUI** |
+
+> [!WARNING]
+> **Interdiction absolue** d'associer des chariots à roulettes inox (**TGY3872** / **TGY3873**) sur le chemin de roulement en aluminium **T341000**. L'inox détruirait par écrouissage le rail aluminium sous forte charge. L'utilisation du rail rapporté en acier inoxydable **TGY4007** est impérative avec les galets inox.
+
+### 2. Prescription de calage sous traverse : Cale TGA3817
+Pour transmettre directement la charge du vitrage vers les roulettes sans solliciter la rupture thermique des traverses :
+- **Prise de vitrage 29-32 mm (profilé T141021)** : Cale **TGA3817** obligatoire au droit de chaque roulette de manière systématique.
+- **Prise de vitrage 24-28 mm (profilé T141015)** : Cale **TGA3817** (zone sécable raccourcie) obligatoire si la largeur du vantail dépasse **1,50 m** OU si le poids du vantail dépasse **120 kg**.
+- La cale se fixe sur la traverse avec un point de colle avant vitrage.
+
+### 3. Réglage en hauteur des roulettes réglables
+- Les chariots réglables (T441003, T441004, TGY3872) sont ajustables en hauteur **sans dégonder le vantail** au moyen d'une clé Allen introduite par le chant latéral du montant d'ouvrant à travers l'orifice prévu à **25 mm** de hauteur.
+- Lors du réglage, il est obligatoire de soulager le vantail à l'aide de ventouses de vitrier pour éviter d'endommager la vis micrométrique de réglage sous la charge.
+
+---
+
+# Systèmes de fermeture et verrouillage
+
+La condamnation s'effectue par des mécanismes encastrés à têtière filante en acier inox (grade 3 anticorrosion NF EN 1670) :
+
+### 1. Gamme de crémones encastrées
+
+| Référence | Points de fermeture | Condamnation clé | Hauteur min. châssis | Hauteur min. poignée $Hp$ | Fixation |
+| --- | --- | --- | --- | --- | --- |
+| **TGY3700** | 1 point simple | Non | 395 mm | 219 mm | 2 vis TGY3723 |
+| **TGY3701** | 1 point à clé | Oui (cylindre) | 525 mm | 346 mm | 4 vis TGY3723 |
+| **TGY3702** | 3 points | Non | 1 292 mm | 721 mm | 6 vis TGY3723 |
+| **TGY3703** | 3 points à clé | Oui (cylindre) | 1 292 mm | 721 mm | 8 vis TGY3723 |
+| **TGY3704** | Rallonge 4ème point | Raccordée à TGY3702/03 | Pour très grandes hauteurs | — | 2 vis TGY3723 |
+| **TKG025** | Fermeture 1 point coquille | Non | 395 mm | 219 mm | Encastrée + pêne déporté TGY6006 |
+
+### 2. Cylindres et barillets européens
+- Montants latéraux standard TGY1202 et TGY1303 : Cylindre européen **30 x 30 mm** (Réf. **T1040**).
+- Montants latéraux à renfort tube TGY1301 et TGY1302 : Cylindre européen décentré **40 x 30 mm** (Réf. **T1044**).
+- Rosettes inox de protection de cylindre : Réf. **T960013** ou **TPY6003**.
+
+### 3. Fermeture pompier (Établissements Recevant du Public - ERP)
+Conforme à l'Arrêté du 25 juin 1980 et à l'article CO3 modifié du 28 avril 2016 :
+- Référence : **TGY3731** (avec vis de fixation T770059).
+- Compatible uniquement avec les montants simples **TGY1202** et **TGY1300**.
+- Permet l'ouverture d'urgence depuis l'extérieur à l'aide d'une clé spéciale pompier.
+- Exigence dimensionnelle réglementaire : passage libre minimum de **$H = 1\,800\text{ mm} \times L = 900\text{ mm}$**.
+
+### 4. Verrou central à clé TGY3622
+- Placé à la croisée centrale des vantaux en partie basse.
+- Montage sur cale **TGY3640** avec perçage Ø7 mm et écrou à sertir taraudé M5.
+- Vis de fixation CHc M5x16 et M5x25.
+- En cas d'utilisation du verrou central, les roulettes doivent être décalées à **62 mm** et les cales de vitrage à **71 mm** du chant du montant pour ne pas entrer en conflit avec le perçage Ø11 mm de la pièce de blocage.
+
+---
+
+# Organes de manœuvre et poignées
+
+### 1. Tableau de compatibilité des poignées selon les montants
+
+| Organe de manœuvre | Type | Réf. Laquée | Réf. Anodisée | Compatible Montant Standard (TGY1202/1300) | Compatible Montant Tube (TGY1301/1302) | Compatible Montant Lame (TGY1200/1201) | Compatible Montant Bilame (TGY1220) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **Cuvette encastrée** | Intérieure | **TGY3712** | **TGY3719** | Oui (OS / SF) | Oui (OS / SF) | Non | Oui |
+| **Bouton sur plaque** | Intérieure | **TGY3713** | **TGY3714** | Non | Non | **Oui (OS / SF)** | Oui |
+| **Poignée tirage Technal** | Intérieure | **TGY3717** | — | **Oui (OS / SF\*)** | **Oui (OS / SF\*)** | Non | Non |
+| **Poignée tirage extérieure**| Extérieure | **TGY3718** | — | Oui (OS / SF) | Oui (OS / SF) | Non | Non |
+| **Poignée fixe de tirage** | Int/Ext | **TGY3732 / TGY3733** | — | Oui (avec TGY3716) | Oui (avec TGY3716) | Oui | Oui |
+| **Poignée design droit** | Intérieure | **TGY3606** | — | Oui (OS) | Oui (OS) | Non | Non |
+| **Poignée anse galbée** | Intérieure | **TGY6004** | — | Oui (OS / SF) | Non | Non | Non |
+| **Cuvette à levier** | Intérieure | **TGY6003** | — | Oui (OS / SF) | Non | Non | Non |
+| **Béquille à carré de 7 mm**| Intérieure | **T960030 / TCZ61051**| — | Oui (avec kit TGY3721) | Non | Non | Non |
+
+*\*Note : Pour croiser les vantaux sans heurt avec la poignée TGY3717 sur semi-fixe, prévoir la butée TCG021.*
+
+### 2. Réversibilité de la poignée Design Droit TGY3606
+La poignée TGY3606 est réversible pour vantail de service à gauche ou à droite :
+1. Présenter la poignée en position ouverte.
+2. Retirer les 4 vis d'assemblage du corps arrière.
+3. Retirer la butée et le corps de fixation.
+4. Tourner le bras de manœuvre à 180°.
+5. Remonter la butée et visser.
+6. Retourner le corps arrière de 180° (les 2 logements de vis doivent être orientés côté serrure pour fixation par vis TGY3723).
+7. Revisser l'ensemble.
+
+---
+
+# Gâches, centreurs et accessoires de guidage
+
+### 1. Gâches de condamnation
+- **Gâche dormant périphérique TGY3705** : Se visse directement dans la gorge du dormant aluminium sans fraisage ni découpe du profilé à l'aide de vis Torx TGY3723.
+- **Gâche pour percussion centrale TGY3711** : Se visse en applique sur le profilé de percussion centrale TGY1204 ou de percussion d'angle TGY1206.
+- **Gâche renforcée anti-effraction TGY3742** : Équipée de vis de pré-positionnement et d'un contre-clameau en aluminium pour retard à l'effraction sur dormant 55 mm.
+- **Réglage micrométrique de la gâche** : La serrure Technal intègre un gabarit plastique réversible. En position horizontale, il sert de pige d'épaisseur pour aligner la gâche à exactement **6 mm** du boîtier de fermeture avant serrage définitif des vis.
+
+### 2. Centreurs d'ouvrants et guidage
+- **Centreur d'ouvrant TGY3832** : Se clipse par rotation au milieu du montant d'ouvrant. Garantit l'alignement parfait des vantaux en position fermée et le plaquage des joints brosses contre le vent.
+  - *Règle bilame :* Dans le cas d'une menuiserie soumise aux risques de bilame, poser obligatoirement **2 centreurs TGY3832** répartis sur la hauteur.
+- **Compensateur de centreur TGY3833** : Se monte face au centreur TGY3832 sur le profilé de percussion TGY1204 à l'aide d'une vis TGY3723.
+- **Guides de montants centraux TGY3883** : Se clipsent en tête et pied de chaque montant central après gondage des vantaux. Verrouillage par rotation des flèches à l'aide d'une clé Allen de 4 mm. Mousse d'étanchéité positionnée à fleur de profilé.
+- **Pièces anti-dégondage TGY3885** : Se montent sur chaque montant latéral après réglage des roulettes pour empêcher le soulèvement frauduleux de l'ouvrant.
+
+---
+
+# Voir aussi
+
+- [Profilés dormants et rails SOLEAL GY 55](/profiles/soleal-gy-dormants-et-rails.md)
+- [Cotes de débit SOLEAL GY 55](/profiles/soleal-gy-cotes-de-debit.md)
+- [Pose et galandage SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md)
+- [Fournisseur Technal](/fournisseurs/technal.md)
+
+===== PAGE 2 : /profiles/soleal-gy-dormants-et-rails.md =====
+# Présentation générale
+
+Le système **SOLEAL GY 55** (Le Coulissant Universel) de **TECHNAL** est conçu autour d'un module de base de **55 mm de profondeur** pour les profilés 2 rails périphériques. Il permet la réalisation de fenêtres et portes-fenêtres coulissantes en neuf et en rénovation, de 1 à 8 vantaux, ainsi que les solutions à galandage monorail, 2 et 3 rails, et les coulissants d'angle à 90° sans poteau intermédiaire.
+
+La rupture de pont thermique (RPT) est assurée par :
+- Des barrettes tubulaires ou plates en polyamide 6.6 renforcé à 25 % de fibres de verre de 30 mm sur les dormants.
+- Des barrettes de 22 mm sur les traverses d'ouvrants et 37 mm sur les montants latéraux d'ouvrants.
+- Des profilés isolants multichambres en PVC (Benvic ER019 extrudé par REHAU) clippés entre les rails.
+- Des chicanes serties en polyamide Tecatherm 66 ESP (Ensinger) sur les montants centraux.
+
+---
+
+# Profilés dormants
+
+## 1. Dormants 2 rails (profondeur 55 mm / hauteur vue 47,5 mm, encombrement 69,8 mm)
+
+| Référence | Type de dormant | Caractéristiques et intégration | Équerre d'angle |
+| --- | --- | --- | --- |
+| **TGY1104** | Périphérique sans rainure BTC | Face extérieure lisse, pose en tunnel ou applique avec pattes | TGY3603 (x2) |
+| **TGY1120** | Périphérique sans rainure BTC + recueil | Traverse basse avec gorge intérieure de recueil d'eau intégrée | TGY3603 (x2) |
+| **TGY1113** | Périphérique à rainure BTC | Double rainure pour clippage tapées de doublage 100 à 160 mm et couvre-joints | TGY3603 (x2) |
+| **TGY1114** | Périphérique à rainure BTC + recueil | Double rainure BTC avec gorge de recueil d'eau intégrée | TGY3603 (x2) |
+| **TGY1115** | Périphérique BTC + Couvre-joint intégré | Couvre-joint intérieur monobloc de 25 mm (hauteur totale 72,5 mm) | TGY3603 (x2) |
+| **TGY1116** | Périphérique BTC + CJ intégré + recueil | Couvre-joint intérieur monobloc 25 mm et recueil d'eau intégré | TGY3603 (x2) |
+| **TGY1121** | Dormant rénovation | Battement intérieur de 61 mm pour fixation de face en réhabilitation | TGY3603 (x2) + T85A04 |
+| **TGY1119** | Dormant d'intégration frappe 55 | Permet l'intégration du coulissant dans un ensemble composé SOLEAL FY 55 | T750229 + T750230 |
+| **TGY1143** | Dormant d'intégration frappe 65 | Permet l'intégration du coulissant dans un ensemble composé SOLEAL FY 65 | T750229 + T750230 |
+
+## 2. Dormants 3 rails (profondeur 106,2 mm / encombrement 121 mm)
+
+| Référence | Type de dormant | Caractéristiques et intégration | Équerres d'angle |
+| --- | --- | --- | --- |
+| **TGY1111** | 3 rails périphérique sans rainure | Version lisse pour pose sans doublage ou en tunnel | TGY3603 (x2) + TGY3600 (x1) |
+| **TGY1112** | 3 rails périphérique + recueil | Version sans rainure avec recueil d'eau intégré | TGY3603 (x2) + TGY3600 (x1) |
+| **TGY1100** | 3 rails périphérique avec rainure BTC | Reprise de doublages de 100 à 260 mm | TGY3603 (x2) + TGY3600 (x1) |
+| **TGY1101** | 3 rails périphérique BTC + recueil | Double rainure BTC et recueil d'eau intégré | TGY3603 (x2) + TGY3600 (x1) |
+| **TGY1141** | 3 rails spécial grand renfort | Inertie renforcée selon Axe XX' | TGY3603 (x2) + TGY3600 (x1) |
+| **TGY1142** | 3 rails spécial grand renfort + recueil | Inertie renforcée avec recueil d'eau | TGY3603 (x2) + TGY3600 (x1) |
+
+## 3. Dormants 4 rails (profondeur 157,4 mm / encombrement 172,2 mm)
+
+| Référence | Type de dormant | Caractéristiques et intégration | Équerres d'angle |
+| --- | --- | --- | --- |
+| **TGY1102** | 4 rails périphérique rainure BTC | Reprise de doublages jusqu'à 260 mm pour 4 vantaux ou 8 vantaux | TGY3603 (x2) + TGY3600 (x2) |
+| **TGY1103** | 4 rails périphérique BTC + recueil | Double rainure BTC et recueil d'eau intégré | TGY3603 (x2) + TGY3600 (x2) |
+
+---
+
+# Profilés ouvrants
+
+La gamme SOLEAL GY 55 propose deux familles d'ouvrants selon l'épaisseur de prise de vitrage :
+
+| Famille | Épaisseur vitrage | Traverse basse & haute | Montant latéral standard | Montant latéral renfort lame | Montant latéral tube renforcé |
+| --- | --- | --- | --- | --- | --- |
+| **Ouvrants 24-28 mm** | 24 à 28 mm | **T141015** (L=36, H=65) | **TGY1202** (L=41.2, H=64.5) | **TGY1200** (lame 40 mm) | **TGY1301** (tube 51.7 mm) |
+| **Ouvrants 29-32 mm** | 29 à 32 mm | **T141021** (L=40.2, H=65) | **TGY1300** (L=41.2, H=64.5) | **TGY1201** (lame 40 mm) | **TGY1302** (tube 51.7 mm) |
+
+### Montants centraux (Chicanes)
+
+Les montants centraux ont une face vue frontale ultra-fine de **32,8 mm** (ou 35,1 mm en combinaison d'accroche) :
+
+| Référence | Vitrage | Type de renfort | Inertie $I_x$ ($1\,200$ à $3\,000\text{ mm}$) | Inertie $I_y$ | Combinaisons courantes |
+| --- | --- | --- | --- | --- | --- |
+| **TGY1207** | 24-28 mm | Standard chicane | $6,12\text{ cm}^4$ | $1,96\text{ cm}^4$ | TGY1207 + TGY1207 ($I = 12,24\text{ cm}^4$) |
+| **TGY1208** | 24-28 mm | Renfort tubulaire rectangulaire | $23,00\text{ cm}^4$ | $4,89\text{ cm}^4$ | TGY1207 + TGY1208 ($I = 29,12\text{ cm}^4$) |
+| **TGY1209** | 24-28 mm | Grande inertie tubulaire | $54,45\text{ cm}^4$ | $7,08\text{ cm}^4$ | TGY1207 + TGY1209 ($I = 60,57\text{ cm}^4$) |
+| **TGY1210** | 24-28 mm | Renfort lame extérieure | $21,98\text{ cm}^4$ | $2,42\text{ cm}^4$ | Vantaux centraux 4 vtx percussion |
+| **TGY1211** | 24-28 mm | Renfort profil galbé Design | $25,26\text{ cm}^4$ | $4,73\text{ cm}^4$ | Gamme esthétique moderne |
+| **TGY1213** | 29-32 mm | Standard chicane | $5,96\text{ cm}^4$ | $1,68\text{ cm}^4$ | TGY1213 + TGY1213 ($I = 11,92\text{ cm}^4$) |
+| **TGY1214** | 29-32 mm | Renfort tubulaire rectangulaire | $23,00\text{ cm}^4$ | $4,68\text{ cm}^4$ | TGY1213 + TGY1214 ($I = 28,96\text{ cm}^4$) |
+| **TGY1215** | 29-32 mm | Grande inertie tubulaire | $54,26\text{ cm}^4$ | $6,89\text{ cm}^4$ | TGY1213 + TGY1215 ($I = 60,22\text{ cm}^4$) |
+| **TGY1216** | 29-32 mm | Renfort lame extérieure | $21,98\text{ cm}^4$ | $2,21\text{ cm}^4$ | Vantaux centraux 4 vtx 32 mm |
+| **TGY1217** | 29-32 mm | Renfort profil galbé Design | $25,26\text{ cm}^4$ | $4,50\text{ cm}^4$ | Design galbé 32 mm |
+
+### Combinaisons d'inertie maximale pour grandes baies
+- TGY1208 + TGY1208 = **$46,00\text{ cm}^4$**
+- TGY1208 + TGY1209 = **$77,45\text{ cm}^4$**
+- TGY1209 + TGY1209 = **$108,90\text{ cm}^4$** (permet des baies jusqu'à $H = 2,50\text{ m}$ et $L = 3,00\text{ m}$ en 2 vantaux sous vent 1 200 Pa Classe A3).
+
+---
+
+# Profilés spécifiques : Galandage, Angles et Bilame
+
+### 1. Galandage
+- **TGY1144** : Chicane fixe pour refoulement monorail (se visse en feuillure de dormant pour recréer la chicane d'étanchéité dans le caisson).
+- **TGY2523** : Chicane fixe pour châssis galandage 2 rails.
+- **TGY2519** : Profilé aluminium de reprise de cloison intérieure (reçoit la plaque de plâtre BA13/BA15).
+- **TGY2520** : Capot intérieur démontable à la spatule pour maintenance des chariots et accès au refoulement.
+- **TGY2525** : Capot de finition horizontal dans la zone de passage (remplacé par un rail T341000 dans les configurations PMR ou traverses continues).
+- **TGY3612** : Couvre-joint de finition de refoulement mural.
+
+### 2. Coulissant d'angle à 90° sans poteau
+- **TGY1206** : Profilé d'accroche percussion d'angle (se visse sur le montant d'ouvrant pour verrouiller l'angle à 90°).
+- **TGY2203** : Profilé d'angle pré-percé avec gorge de joint d'étanchéité de battue T410010.
+- **TGY2206** : Capot de finition extérieur d'angle.
+- **TGY3618** : Pièce d'angle de raccordement des rails bas extérieurs (à monter avant le rail T341000).
+- **TGY3619** : Ensemble étanchéité d'angle haut et bas avec injection TW110.
+
+### 3. Système anti-effet bilame
+Sous fort ensoleillement, la face extérieure de l'ouvrant se dilate plus vite que la face intérieure, entraînant un cintrage du montant latéral et des difficultés de manœuvre. Technal propose deux solutions certifiées :
+1. **Montant spécifique TGY1220** : profilé intégrant une lame de dilatation thermique décalée. Compense la dilatation jusqu'à $H = 2,18\text{ m}$ et la limite jusqu'à $H = 2,70\text{ m}$.
+2. **Renfort plat en acier galvanisé $50 \times 5\text{ mm}$** : glissé dans le montant tubulaire TGY1301 ou TGY1302, fixé par des douilles taraudées affleurantes M5 et vis FHC M5x20 tous les 250 mm, puis recouvert par le capot de finition clippable **TGY2516** (débit $H - 77\text{ mm}$).
+
+---
+
+# Table des moments d'inertie des profilés SOLEAL GY 55
+
+Calculée selon la norme européenne **NF EN 14024** (variation de la rupture thermique selon la longueur) :
+
+| Profilé | $I_x$ à $1\,200\text{ mm}$ | $I_x$ à $1\,600\text{ mm}$ | $I_x$ à $2\,000\text{ mm}$ | $I_x$ à $2\,250\text{ mm}$ | $I_x$ à $2\,500\text{ mm}$ | $I_x$ à $3\,000\text{ mm}$ | $I_y$ (axe fixe) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **T141009** (Tr. 29-32) | 5,30 | 6,81 | 7,86 | 8,35 | 8,73 | 9,29 | 9,48 |
+| **T141015** (Tr. 24-28) | 4,61 | 5,91 | 6,80 | 7,20 | 7,53 | 8,00 | 10,35 |
+| **T141018** (Tr. int. 24) | 4,63 | 5,94 | 6,83 | 7,24 | 7,57 | 8,04 | 9,19 |
+| **T141021** (Tr. 29-32) | 5,01 | 6,43 | 7,42 | 7,86 | 8,22 | 8,74 | 10,50 |
+| **TGY1100** (Dorm. 3R) | 69,56 | 82,45 | 92,89 | 98,18 | 102,63 | 109,54 | 15,13 |
+| **TGY1101** (Dorm. 3R rec) | 79,60 | 96,29 | 110,32 | 117,61 | 123,85 | 133,72 | 15,94 |
+| **TGY1102** (Dorm. 4R) | 203,49 | 229,36 | 250,92 | 262,07 | 271,58 | 286,56 | 20,04 |
+| **TGY1103** (Dorm. 4R rec) | 216,99 | 249,48 | 277,74 | 292,77 | 305,85 | 326,91 | 20,84 |
+| **TGY1104** (Dorm. 2R) | 15,35 | 19,41 | 22,45 | 23,92 | 25,12 | 26,91 | 9,98 |
+| **TGY1111** (Dorm. 3R) | 69,51 | 82,33 | 92,67 | 97,90 | 102,31 | 109,13 | 14,91 |
+| **TGY1112** (Dorm. 3R rec) | 79,55 | 96,18 | 110,13 | 117,36 | 123,56 | 133,33 | 15,71 |
+| **TGY1113** (Dorm. 2R BTC) | 15,23 | 19,30 | 22,35 | 23,82 | 25,03 | 26,83 | 10,21 |
+| **TGY1114** (Dorm. 2R rec) | 22,17 | 27,76 | 32,08 | 34,19 | 35,95 | 38,61 | 11,02 |
+| **TGY1115** (Dorm. 2R CJ) | 15,68 | 19,99 | 23,26 | 24,85 | 26,15 | 28,12 | 13,72 |
+| **TGY1116** (Dorm. 2R CJ rec)| 22,34 | 28,12 | 32,62 | 34,84 | 36,68 | 39,49 | 14,92 |
+| **TGY1119** (Intégr. FY55) | 25,41 | 31,41 | 36,29 | 38,77 | 40,86 | 44,11 | 25,74 |
+| **TGY1120** (Dorm. 2R rec) | 22,27 | 27,87 | 32,17 | 34,29 | 36,03 | 38,68 | 10,77 |
+| **TGY1121** (Dorm. Réno) | 22,20 | 27,87 | 32,34 | 34,56 | 36,42 | 39,26 | 21,70 |
+| **TGY1141** (Dorm. 3R) | 76,70 | 103,80 | 119,30 | 125,60 | 132,00 | 142,60 | 15,36 |
+| **TGY1142** (Dorm. 3R rec) | 64,40 | 82,40 | 95,70 | 101,70 | 105,90 | 113,00 | 14,57 |
+| **TGY1143** (Intégr. FY65) | 23,15 | 29,86 | 35,25 | 37,97 | 40,25 | 43,78 | 22,90 |
+| **TGY1200** (Lat. lame 24) | 15,94 | 19,69 | 22,64 | 24,11 | 25,33 | 27,20 | 19,47 |
+| **TGY1201** (Lat. lame 32) | 15,84 | 19,53 | 22,40 | 23,83 | 25,01 | 26,81 | 18,52 |
+| **TGY1202** (Lat. 24-28) | 5,46 | 7,28 | 8,63 | 9,27 | 9,79 | 10,56 | 14,58 |
+| **TGY1220** (Lat. bilame) | 70,98 | 80,39 | 88,12 | 92,07 | 95,42 | 100,64 | 23,38 |
+| **TGY1300** (Lat. 29-32) | 5,39 | 7,15 | 8,44 | 9,04 | 9,54 | 10,27 | 13,20 |
+| **TGY1301** (Lat. tube 24) | 8,70 | 11,65 | 13,97 | 15,12 | 16,08 | 17,54 | 21,41 |
+| **TGY1302** (Lat. tube 32) | 8,65 | 11,53 | 13,78 | 14,89 | 15,81 | 17,22 | 20,09 |
+| **TGY1303** (Lat. renf 24) | 17,97 | 21,78 | 24,74 | 26,20 | 27,42 | 29,26 | 20,99 |
+| **TGY1304** (Lat. renf 32) | 17,87 | 21,62 | 24,51 | 25,92 | 27,10 | 28,87 | 20,05 |
+
+---
+
+# Voir aussi
+
+- [Cotes de débit SOLEAL GY 55](/profiles/soleal-gy-cotes-de-debit.md)
+- [Roulements et fermetures SOLEAL GY 55](/quincaillerie/soleal-gy-roulements-et-fermetures.md)
+- [Pose et galandage SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md)
+- [Fournisseur Technal](/fournisseurs/technal.md)
+
+===== PAGE 3 : /profiles/soleal-gy-cotes-de-debit.md =====
+# Formules de débit des profilés du cadre dormant
+
+Les profilés dormants sont débités à coupe d'onglet à 45° sur les 4 côtés :
+
+| Configuration | Profilé traverse haute & montants | Profilé traverse basse (avec recueil) | Débit montants | Débit traverses |
+| --- | --- | --- | --- | --- |
+| **2 rails sans rainure BTC** | TGY1104 | TGY1120 | 2x $H$ à 45° | 2x $L$ à 45° |
+| **2 rails à rainure BTC** | TGY1113 | TGY1114 | 2x $H$ à 45° | 2x $L$ à 45° |
+| **2 rails avec Couvre-joint** | TGY1115 | TGY1116 | 2x $H$ à 45° | 2x $L$ à 45° |
+| **Dormant rénovation** | TGY1121 | TGY1121 | 2x $H$ à 45° | 2x $L$ à 45° |
+| **3 rails sans rainure BTC** | TGY1111 | TGY1112 | 2x $H$ à 45° | 2x $L$ à 45° |
+| **3 rails à rainure BTC** | TGY1100 | TGY1101 | 2x $H$ à 45° | 2x $L$ à 45° |
+| **4 rails à rainure BTC** | TGY1102 | TGY1103 | 2x $H$ à 45° | 2x $L$ à 45° |
+| **Intégration frappe 55** | TGY1119 | TGY1119 | 2x $(Hx + 8)$ à 45° | 2x $(Lx + 8)$ à 45° |
+| **Intégration frappe 65** | TGY1143 | TGY1143 | 2x $(H - 19)$ à 45° | 2x $(L - 19)$ à 45° |
+
+---
+
+# Formules de débit des profilés ouvrants
+
+Tous les profilés ouvrants sont débités à coupe droite à 90°.
+
+### 1. Hauteur des montants d'ouvrants
+La hauteur de tous les montants (latéraux et centraux) est strictement constante :
+$$\mathbf{H_{\text{montant}} = H - 77\text{ mm}}$$
+
+Profilés concernés :
+- Montants latéraux : TGY1202, TGY1300, TGY1200, TGY1201, TGY1301, TGY1302, TGY1303, TGY1304, TGY1220.
+- Montants centraux : TGY1207, TGY1208, TGY1209, TGY1210, TGY1211, TGY1213, TGY1214, TGY1215, TGY1216, TGY1217.
+
+Profilés additionnels d'ouvrant :
+- Battement de percussion centrale **TGY1204** : débit $= \mathbf{H - 170\text{ mm}}$
+- Battement de percussion d'angle **TGY1206** : débit $= \mathbf{H - 170\text{ mm}}$
+- Profilé d'angle prépercé **TGY2203** : débit $= \mathbf{H - 77\text{ mm}}$ (angle sortant) ou $\mathbf{H - 111\text{ mm}}$ (angle sortant avec seuil PMR ou angle rentrant)
+- Couvre-joint de finition d'angle **TGY2206** : débit $= \mathbf{H - 77\text{ mm}}$ (angle sortant) ou $\mathbf{H - 111\text{ mm}}$ (avec seuil PMR)
+
+### 2. Largeur des traverses d'ouvrants (basses et hautes)
+Profilés traverses : **T141015** (vitrage 24-28 mm) ou **T141021** (vitrage 29-32 mm).
+
+| Configuration du châssis | Nombre de vantaux / rails | Nombre de traverses | Débit unitaire traverse basse et haute |
+| --- | --- | --- | --- |
+| **Fenêtre / Porte-fenêtre 2 vantaux** | 2 vtx / 2 rails | 4 | $\mathbf{L/2 - 91\text{ mm}}$ |
+| **Porte-fenêtre 3 vantaux indépendants** | 3 vtx / 2 rails | 6 | $\mathbf{L/3 - 61\text{ mm}}$ |
+| **Porte-fenêtre 4 vantaux** | 4 vtx / 2 rails (percussion) | 8 | $\mathbf{L/4 - 73\text{ mm}}$ |
+| **Porte-fenêtre 3 vantaux 3 rails** | 3 vtx / 3 rails | 6 | $\mathbf{L/3 - 61\text{ mm}}$ |
+| **Porte-fenêtre 6 vantaux 3 rails** | 6 vtx / 3 rails (percussion) | 12 | $\mathbf{L/6 - 49,5\text{ mm}}$ |
+| **Porte-fenêtre 4 vantaux 4 rails** | 4 vtx / 4 rails | 8 | $\mathbf{L/4 - 45,5\text{ mm}}$ |
+| **Porte-fenêtre 8 vantaux 4 rails** | 8 vtx / 4 rails (percussion) | 16 | $\mathbf{L/8 - 37,5\text{ mm}}$ |
+| **Galandage 1 vantail** | 1 vtl monorail | 2 | $\mathbf{L - 73\text{ mm}}$ |
+| **Galandage 2 vantaux percussion** | 2 vtx monorail percussion | 4 | $\mathbf{L/2 - 37,5\text{ mm}}$ |
+| **Galandage 2 vantaux 2 rails** | 2 vtx sur 2 rails | 4 | $\mathbf{L/2 - 37,5\text{ mm}}$ |
+| **Intégration frappe SOLEAL FY** | 2 vtx coulissant | 4 | $\mathbf{Lx/2 - 106\text{ mm}}$ |
+
+### 3. Traverses intermédiaires
+- Pour vitrage 24 à 28 mm (**T141018**) :
+  $$\text{Débit } T141018 = \text{Débit traverse basse } T141015 + 0,5\text{ mm}$$
+  *(Exemple en 2 vantaux : $\mathbf{L/2 - 90,5\text{ mm}}$).*
+- Pour vitrage 29 à 32 mm (**T141009**) :
+  $$\text{Débit } T141009 = \text{Débit traverse basse } T141021 + 0,5\text{ mm}$$
+  *(Exemple en 2 vantaux : $\mathbf{L/2 - 90,5\text{ mm}}$).*
+
+Positionnement obligatoire de la traverse intermédiaire par rapport à la poignée $Hp$ :
+- Fermeture sans clé : $ht_1 < Hp - 148\text{ mm}$ ou $ht_1 > Hp + 103\text{ mm}$.
+- Fermeture avec verrouillage à clé : $ht_1 < Hp - 258\text{ mm}$ ou $ht_1 > Hp + 103\text{ mm}$.
+
+---
+
+# Cotes de vitrage et remplissage
+
+Le jeu de fond de feuillure est de 14 mm sur les 4 côtés de chaque panneau verrier.
+
+### 1. Hauteur de vitrage
+$$\mathbf{H_{\text{vitrage}} = H - 179\text{ mm}}$$
+
+En cas de traverse intermédiaire :
+$$\mathbf{h_1 = H - ht_2 - 108\text{ mm}} \quad \text{et} \quad \mathbf{h_2 = H - ht_1 - 108\text{ mm}}$$
+
+### 2. Largeur de vitrage selon typologie
+
+| Typologie de menuiserie | Formule de débit de la largeur de vitrage |
+| --- | --- |
+| **2 vantaux sur 2 rails** | $\mathbf{L_v = L/2 - 91,5\text{ mm}}$ |
+| **3 vantaux indépendants (2 rails)** | $\mathbf{L_v = L/3 - 61,5\text{ mm}}$ |
+| **4 vantaux sur 2 rails (percussion)** | $\mathbf{L_v = L/4 - 73,5\text{ mm}}$ |
+| **3 vantaux sur 3 rails** | $\mathbf{L_v = L/3 - 61,5\text{ mm}}$ |
+| **6 vantaux sur 3 rails (percussion)** | $\mathbf{L_v = L/6 - 50\text{ mm}}$ |
+| **4 vantaux sur 4 rails** | $\mathbf{L_v = L/4 - 46\text{ mm}}$ |
+| **8 vantaux sur 4 rails (percussion)** | $\mathbf{L_v = L/8 - 38\text{ mm}}$ |
+| **Galandage 1 vantail** | $\mathbf{L_v = L - 73,5\text{ mm}}$ |
+| **Galandage 2 vantaux percussion** | $\mathbf{L_v = L/2 - 38\text{ mm}}$ |
+| **Galandage 2 vantaux sur 2 rails** | $\mathbf{L_v = L/2 - 38\text{ mm}}$ |
+| **Châssis composé avec frappe FY** | $\mathbf{H_v = Hx - 209\text{ mm}} \quad ; \quad \mathbf{L_v = Lx/2 - 106,5\text{ mm}}$ |
+
+---
+
+# Cotes de débit des rails de roulement (Aluminium et Inox)
+
+### 1. Chemins de roulement aluminium rapportés (Réf. T341000)
+- 2 vantaux 2 rails : 2 rails de débit $= \mathbf{L - 95\text{ mm}}$.
+- 3 vantaux indépendants (2 rails) : 2 rails de débit $= \mathbf{L - 95\text{ mm}}$.
+- 4 vantaux 2 rails : 1 rail de débit $= \mathbf{L - 95\text{ mm}}$ + 2 rails de débit $= \mathbf{L/2 - 63\text{ mm}}$.
+- 3 vantaux 3 rails : 3 rails de débit $= \mathbf{L - 95\text{ mm}}$.
+- 6 vantaux 3 rails : 2 rails de débit $= \mathbf{L - 95\text{ mm}}$ + 2 rails de débit $= \mathbf{L/2 - 63\text{ mm}}$.
+- 4 vantaux 4 rails : 4 rails de débit $= \mathbf{L - 95\text{ mm}}$.
+- 8 vantaux 4 rails : 3 rails de débit $= \mathbf{L - 95\text{ mm}}$ + 2 rails de débit $= \mathbf{L/2 - 63\text{ mm}}$.
+- Galandage 1 vantail : 1 rail de débit $= \mathbf{2L - 116\text{ mm}}$.
+- Galandage 2 vantaux percussion : 2 rails de débit $= \mathbf{L - 47,5\text{ mm}}$.
+- Galandage 2 vantaux 2 rails : 2 rails de débit $= \mathbf{3L/2 - 47\text{ mm}}$.
+
+### 2. Chemins de roulement inox rapportés (Réf. TGY4007)
+- Ensemble des coulissants traditionnels (2 vtx, 3 vtx indép./dép., 4 vtx 2R, 3 vtx 3R, 6 vtx 3R, 4 vtx 4R, 8 vtx 4R) : débit $= \mathbf{L - 80\text{ mm}}$.
+- Composé intégration frappe FY : débit $= \mathbf{L - 110\text{ mm}}$.
+- Galandage 1 vantail : débit $= \mathbf{2L - 101\text{ mm}}$.
+- Galandage 2 vantaux percussion : débit $= \mathbf{L - 32,5\text{ mm}}$.
+- Galandage 2 vantaux 2 rails : débit $= \mathbf{3L/2 - 32\text{ mm}}$.
+
+---
+
+# Cotes de débit des boucliers thermiques PVC (T821000, T431025, TGY4006)
+
+### 1. Bouclier thermique intermédiaire T821000
+- Verticaux montants : 2 unités de débit $= \mathbf{H - 95\text{ mm}}$ (châssis 2 rails) ; 4 unités de débit $= \mathbf{H - 95\text{ mm}}$ (3 rails) ; 6 unités de débit $= \mathbf{H - 95\text{ mm}}$ (4 rails).
+- Horizontal traverse haute : 1 unité de débit $= \mathbf{L - 37\text{ mm}}$ (2 rails) ; 2 unités de débit $= \mathbf{L - 37\text{ mm}}$ (3 rails) ; 3 unités de débit $= \mathbf{L - 37\text{ mm}}$ (4 rails).
+- Galandage :
+  - 1 vantail : 2x $(H - 95)$ et 1x $(2L - 57)$.
+  - 2 vantaux percussion : 2x $(H - 95)$ et 1x $(2L - 6)$.
+  - 2 vantaux 2 rails : 2x $(H - 95)$ et 1x $(3L/2 + 12)$.
+
+### 2. Bouclier PVC supérieur TGY4006 (traverse haute et montants)
+- Montants verticaux : débit $= \mathbf{H - 47\text{ mm}}$ (2 unités en 2 rails, 4 en 3 rails, 6 en 4 rails).
+- Traverses horizontales :
+  - 2 vantaux : 4 unités de débit $= \mathbf{L/2 - 67,5\text{ mm}}$.
+  - 3 vantaux dépendants : 1x $(L/3 - 73)$ et 1x $(2L/3 - 61,5)$.
+  - 3 vantaux indépendants : 4x $(L/3 - 37,5)$ et 2x $(L/3 - 132)$.
+  - 4 vantaux 2 rails : 4x $(L/4 - 49,5)$ et 2x $(L/2 - 108,5)$.
+  - 3 vantaux 3 rails : 4x $(L/3 - 37,5)$ et 4x $(2L/3 - 97)$.
+  - 6 vantaux 3 rails : 4x $(L/3 - 73)$, 2x $(L/3 - 61)$, 4x $(L/6 - 26)$, 2x $(2L/3 - 156)$.
+  - 4 vantaux 4 rails : 4x $(L/4 - 23)$, 4x $(3L/4 - 111,5)$, 4x $(L/2 - 67,5)$.
+  - 8 vantaux 4 rails : 4x $(L/8 - 14)$, 2x $(3L/4 - 179,5)$, 4x $(L/4 - 49,5)$, 2x $(L/2 - 108,5)$, 4x $(3L/8 - 85)$, 2x $(L/4 - 37,5)$.
+
+---
+
+# Cotes de débit pour seuil PMR (TGY2100)
+
+- Profilé seuil plat d'accès PMR **TGY2100** : débit $= \mathbf{L - 12\text{ mm}}$ (coupe droite 90°).
+- Clip de maintien sur pièce d'appui **TGY3608** : quantité $= \mathbf{1 + L/500}$, vissé à l'aide de vis fournies hors tubulures.
+- Joint d'étanchéité entre rails bas **TGY2531** :
+  - 2 vantaux : 2 unités de débit $= \mathbf{L/2 - 67,5\text{ mm}}$.
+  - 3 vantaux dépendants : 1x $(L/3 - 73)$ et 1x $(2L/3 - 61,5)$.
+  - 3 vantaux indépendants : 2x $(L/3 - 37,5)$ et 1x $(L/3 - 132)$.
+  - 4 vantaux 2 rails : 2x $(L/4 - 49,5)$ et 1x $(L/2 - 108,5)$.
+
+---
+
+# Prises de cotes et débits spécifiques aux châssis d'angle à 90°
+
+Pour les coulissants d'angle sans poteau, les cotes $L_{1d}$ et $L_{2d}$ sont mesurées depuis l'appui de la tapée jusqu'à l'arrière du dormant. Les cotes fictives de calcul $L_1$ et $L_2$ valent :
+
+### 1. Angle sortant
+$$\mathbf{L_1 = L_{1d} - 43,7\text{ mm}} \quad \text{et} \quad \mathbf{L_2 = L_{2d} - 43,7\text{ mm}}$$
+- Pour 3 rails : déduction $= - 94,9\text{ mm}$.
+- Pour 4 rails : déduction $= - 146,1\text{ mm}$.
+- Seuil PMR angle sortant : débit $= \mathbf{(L_1 - 12) + 208,5\text{ mm}}$ (coupes 45°-90°).
+
+### 2. Angle rentrant
+$$\mathbf{L_1 = L_{1d} + 62,5\text{ mm}} \quad \text{et} \quad \mathbf{L_2 = L_{2d} + 62,5\text{ mm}}$$
+- Pour 3 rails : addition $= + 113,7\text{ mm}$.
+- Pour 4 rails : addition $= + 164,9\text{ mm}$.
+- Seuil PMR angle rentrant : débit $= \mathbf{(L_1 - 12) - 68,5\text{ mm}}$ (coupes 45°-90°).
+
+---
+
+# Voir aussi
+
+- [Profilés dormants et rails SOLEAL GY 55](/profiles/soleal-gy-dormants-et-rails.md)
+- [Roulements et fermetures SOLEAL GY 55](/quincaillerie/soleal-gy-roulements-et-fermetures.md)
+- [Pose et galandage SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md)
+- [Fournisseur Technal](/fournisseurs/technal.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /sources/technal-soleal-gy-conception.md | Document source | Catalogue de conception Technal SOLEAL GY 55 | technal, soleal, soleal-gy, coulissant, galandage, conception | Catalogue technique de conception générale Technal pour la gamme de coulissants universels SOLEAL GY 55 (Réf. 5744.005 - 09/2021, 184 pages). | fique TGY1220, renfort acier plat 50x5 avec capot TGY2516, débits et largeurs de passage libre galandage / à faire / [Dormants et rails SOLEAL GY](/pr |
+| /sources/technal-soleal-gy-fabrication.md | Document source | Catalogue de fabrication Technal SOLEAL GY 55 | technal, soleal, soleal-gy, coulissant, galandage, fabrication | Guide officiel de fabrication et catalogue d'atelier Technal pour le système coulissant et galandage SOLEAL GY 55 (Réf. 5746.003 - 09/2021, 200 pages). | TGY2509/10, cache recueil TGY2538, effet bilame (TGY1220 et plat acier 50x5), verrou central TGY3622, pièce de blocage TGY3616, moustiquaire / à fair |
+| /portes/panneaux-et-monoblocs.md | Porte d'entrée | Panneaux et monoblocs | porte-entree, panneau, monobloc, thermixel, thermalux, verrissima | Les deux modes de fabrication d'une porte d'entrée PROFERM, panneau et monobloc, avec leurs gammes ; les compositions du panneau de couleur, du panneau blanc et du panneau verrier VERRISSIMA (classes EN 356, vitrage SP510) ; les monoblocs THERMIXEL et THERMALUX et leurs Up ; les vitrages de sécurité du panneau (33.2) et du monobloc (44.2/4/4) selon le décor. | écifique au produit aluminium pour éviter l'effet bilame / mousse isolante haute densité 30 kg/m³ renforcée au choix par 1 ou 2 composites alvéolaires |
+| /procedures/fabrication-coulissant-askey-65-nv.md | Procédure | Procédure de fabrication ASKEY Coulissant 65 NV | procédure, atelier, fabrication, coulissant, drainage, usinage | Méthode d'atelier pour l'usinage, le poinçonnage, le drainage caché, l'assemblage des dormants coupe droite et le montage des ouvrants du Coulissant 65 NV ASKEY. | mm correspondant [1 p. 109, 110]. * Placer le centreur de vantail W4040622 immédiatement au-dessus du système anti-fausse manœuvre [1 p. 128]. ## |
+| /sources/profine-directives-generales.md | Document source | Directives générales profine, version janvier 2023 | profine, directives, terminologie, mise-en-oeuvre, dimensions, manuel | Manuel de mise en œuvre de 113 pages de profine, commun aux systèmes 70 et 76, qui couvre la terminologie, livraison et stockage, fabrication, surfaces, drainage et vitrage, exigences statiques et classification A*E*V*, ferrure, couplages, montage, entrées d'air, usage et entretien ; retraité en entier en image. | du renfort (fig. 1), fixation (fig. 2), effet de bilame, noyaux isolants / transcrit / [Fabrication des profilés PVC](/procedures/fabrication-profile |
+| /procedures/fabrication-profiles-pvc.md | Procédure | Fabrication des profilés PVC, directives profine | profine, fabrication, debit, fraisage, percage, renfort | Les règles communes aux systèmes profine pour le débit, le fraisage et le perçage, le renforcement acier et son vissage, le soudage et l'ébavurage (paramètres standard et à inserts, joints soudables, profilés plaxés), les assemblages de meneaux et traverses, la pose des joints et la fixation des profilés complémentaires et des petits bois collés, avec le contrôle intermédiaire et final (check-list de 35 points) et le stockage et le transport des menuiseries finies. | ge des profilés en PVC et des renforts : effet de bilame Les renforts et le profilé en PVC ont des coefficients de dilatation très différents. Cela c |
+| /reference/glossaire.md | Référence | Glossaire des sigles et des cotes | glossaire, sigle, abreviation, cote, coefficient, vocabulaire | Les sigles, coefficients et repères de cote employés dans la documentation PROFERM et chez ses fournisseurs, avec leur sens et la page qui les utilise. | nforcée de composites alvéolaires, contre l'effet bilame / / Effet bilame / déformation d'un panneau dont les deux faces se dilatent différemment / # |

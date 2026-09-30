@@ -5,8 +5,10 @@ plus dans aucune fenêtre de contexte (246 pages) : le modèle le **navigue par 
 le recevoir en entier. Mistral Small, trois outils, rien d'autre.
 
 **22/09/2026 — le CAG est remplacé par la navigation outillée.** Le prompt permanent ne porte que
-les consignes, un **vocabulaire** (types, tags, gammes, systèmes) et l'**index des anomalies**
-(identifiant + sujet) : ~4 600 tokens au lieu de 185 000. Les pages arrivent par `chercher`, qui
+les consignes et un **vocabulaire** (types, tags, gammes, systèmes) : ~3 200 tokens au lieu de
+185 000. **Aucune anomalie dans le prompt** (30/09) : on pose une question, il cherche dans le
+wiki. L'index des 479 entrées (35 000 car.) lui faisait perdre la référence demandée — audit
+`docs/audit_recherche_2026-09-30.md`. Les pages arrivent par `chercher`, qui
 livre directement le contenu **entier** des trois premières trouvées. On ne raccourcit jamais le
 wiki pour le faire rentrer quelque part. **La lecture des PDF est multimodale native** : chaque
 page est visualisée directement, sans script d'extraction ni PyMuPDF, pour garantir zéro perte
@@ -41,7 +43,8 @@ d'information technique. Le protocole d'écriture fait foi : `wiki_llm/CLAUDE.md
   navigateur ne fait que la mise en page. Plus de vue graphe (illisible, retirée le 25/09/2026) ;
   `/api/wiki/graph` reste, c'est la liste des pages du wiki, du chat et du vocal.
 - `app/services/faisabilite.py` + `faisabilite.html` (`/faisabilite`, 25/09/2026, premier jet) —
-  le vérificateur PERFORM76 de l'audit § 9.1 : débit → DTA → abaque de dormant → abaque
+  **réservé au rôle admin** (30/09 : API posée sur le routeur, page renvoyée au chat, lien du
+  menu caché ; débit compris) — le vérificateur PERFORM76 de l'audit § 9.1 : débit → DTA → abaque de dormant → abaque
   d'ouvrant (couleur, 25 %, courbe de verre, J079, zones) → parclose → ferrure Roto NX →
   pivot bas → isolant et tapée. Aucun modèle, toutes les
   valeurs lues dans les tableaux du wiki (un en-tête changé casse `tests/test_faisabilite.py`).
@@ -71,8 +74,9 @@ clair.
 
 Deux garde-fous ne dépendent pas de la discipline du modèle :
 
-- **les anomalies sont injectées par le serveur**, rapprochées de la question et des pages
-  chargées : la règle 2 (donner la valeur *et* signaler la contradiction) est trop importante ;
+- **les anomalies sont injectées par le serveur**, rapprochées des pages chargées, après chaque
+  recherche et jamais avant : la règle 2 (donner la valeur *et* signaler la contradiction) est
+  trop importante ;
 - **les coupes sont vérifiées sur disque**, et rattachées à la référence demandée par le couple
   référence/image relevé dans le tableau de la page : un chemin inventé est retiré, une image
   prise sur la ligne voisine est remplacée.

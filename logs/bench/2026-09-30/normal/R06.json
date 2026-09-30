@@ -1,0 +1,22 @@
+{
+ "id": "R06",
+ "reponse": "La **Technal® SHANGHAI** (écrite SHANGHAI dans le wiki) est une poignée de coulissant aluminium TECHNAL :\n- usage : coulissants **SOLÉAL et GALANDAGE** (SOLÉAL55, GALANDAGE55, gamme LUMINE), **sur l'ouvrant principal** (le vantail qui se manœuvre) ;\n- finitions : inox, blanc, noir ou 7016 ;\n- disponibilité : modèle **en option** ;\n- aucune restriction portée.\nSur ces mêmes coulissants, les autres poignées d'ouvrant principal sont la SYDNEY et la Technal PEKIN ; sur le semi-fixe, MILAN et Technal GRENADE ; BERLIN et ANTIBES sont communes à SOLÉAL, GALANDAGE et LUMÉAL. Le wiki ne donne ni référence de commande, ni cotes de la SHANGHAI (source : catalogue général janvier 2026, p. 17).",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/quincaillerie/poignees-et-croisillons.md", "extrait": "| Technal® SHANGHAI | poignée | SOLÉAL et GALANDAGE, sur ouvrant principal | inox, blanc, noir ou 7016 | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55) | - | ![Technal SHANGHAI](/assets/quincaillerie/poignees/technal-shanghai.png) |"},
+  {"page": "/fournisseurs/technal.md", "extrait": "| **SHANGHAI** | Coulissants SOLÉAL et GALANDAGE | Ouvrant principal |"}
+ ],
+ "ambiguite": "",
+ "outils": 2,
+ "comment_trouve": "Grep « shang » (insensible à la casse) : trois occurrences, la ligne du tableau de quincaillerie/poignees-et-croisillons.md porte tout (usage, finitions, option, gammes, image).",
+ "formulations": [
+  "Quelles finitions pour la poignée Technal SHANGHAI de coulissant ?",
+  "poignée shanghai",
+  "Quelles poignées pour l'ouvrant principal d'un coulissant SOLÉAL ?"
+ ],
+ "defauts_wiki": [
+  "Orthographe : l'utilisateur tape « Shangai » (sans h), le wiki écrit « SHANGHAI » : aucune correspondance lexicale exacte en BM25 sans correction orthographique ; seule une recherche par préfixe « shang » la trouve.",
+  "La donnée tient sur une ligne d'un tableau de 21 Ko couvrant toutes les poignées de toutes les gammes ; titre et description ne nomment pas les modèles.",
+  "Répétition partielle dans fournisseurs/technal.md (tableau « Poignées TECHNAL ») : deux pages portent la même donnée (règle « une donnée, une page »)."
+ ]
+}

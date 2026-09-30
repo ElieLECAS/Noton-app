@@ -1,0 +1,38 @@
+{
+ "id": "R22",
+ "reponse": "Le wiki ne connaît aucune « fonction domotique intégrée » ni aucune platine Wi-Fi sur la référence 487 206 : la prémisse est fausse. Le 487 206 est une pièce mécanique de la ferrure Roto NX : « Limiteur d'ouverture à 80 mm Designo » en option pour la têtière de compas 250 Designo 385393 (instructions de montage KSR, p. 113), appelée dans le catalogue PVC « Sécurité de fin de course Designo (AF 9 / AF 13) – ouverture 80 mm » (section 11.12.4, p. 424), à utiliser uniquement avec une têtière de compas Designo (BA 9 / BA 13) en sécurité de base. Elle limite l'ouverture à 80 mm (les dessins du compas 250 montrent une « ouverture à soufflet standard 140 mm » et une à « 80 mm »). Il n'y a ni électronique, ni connexion, ni pilotage par smartphone ; aucune procédure de connexion Wi-Fi n'existe dans le wiki. La seule mention de domotique pour Roto NX est l'argument commercial générique « intégration dans la domotique » du catalogue ; le seul produit PROFERM piloté par smartphone documenté est le contrôle d'accès Eneo CC des portes d'entrée (Bluetooth), sans lien avec ce limiteur.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {
+   "page": "/procedures/percage-montage-roto-nx.md",
+   "extrait": "**Option** : **Limiteur d'ouverture à 80 mm Designo, 487 206** (pour têtière de compas 250 Designo\n385393)"
+  },
+  {
+   "page": "/quincaillerie/roto-nx-accessoires-et-gabarits.md",
+   "extrait": "| 487206 | 11.12.4 Sécurité de fin de course | Sécurité de fin de course Designo (AF 9 / AF 13) – ouverture 80 mm | - | - | - |"
+  },
+  {
+   "page": "/quincaillerie/roto-nx-accessoires-et-gabarits.md",
+   "extrait": "INFO sous la sécurité de fin de course : « Utilisation uniquement avec têtière de compas Designo\n(BA 9 / BA 13) – sécurité de base. Voir → à partir de la page 282. » [1 p. 424]"
+  },
+  {
+   "page": "/commercial/roto-nx.md",
+   "extrait": "| Confort | Grand confort de manœuvre, facilité d'utilisation ; confort intérieur amélioré par des propriétés d'aération optimisées ou par l'intégration dans la domotique |"
+  }
+ ],
+ "ambiguite": "Question piège (fonction inexistante). Réponse attendue : dire que la pièce est mécanique et qu'aucune procédure Wi-Fi n'existe, sans en inventer.",
+ "outils": 3,
+ "comment_trouve": "Lecture de /quincaillerie/roto-nx-ksr-limiteur-ouverture.md (titre évident) : la réf. 487206 n'y figure pas. Grep « 487206|487 206 » : trouvé dans /procedures/percage-montage-roto-nx.md (écrit « 487 206 ») et /quincaillerie/roto-nx-accessoires-et-gabarits.md (écrit « 487206 »). Grep « domotique|wi-fi|wifi|smartphone » : seulement l'argument commercial Roto NX et le contrôle d'accès Eneo CC.",
+ "formulations": [
+  "Comment connecter en Wi-Fi la sécurité de fin de course Designo 80 mm Roto NX pour la piloter depuis le téléphone ?",
+  "limiteur 80 mm Roto domotique",
+  "Peut-on piloter l'ouverture à soufflet limitée d'une fenêtre Roto NX avec son smartphone ?"
+ ],
+ "defauts_wiki": [
+  "La page dédiée /quincaillerie/roto-nx-ksr-limiteur-ouverture.md (limiteur à frein OF) ne cite pas le 487206 : le limiteur d'ouverture à soufflet 80 mm est une autre pièce, documentée ailleurs ; une recherche « limiteur d'ouverture 80 mm » tombe sur la mauvaise page.",
+  "Référence écrite de deux façons : « 487 206 » (procédure, avec espace) et « 487206 » (catalogue) ; une recherche lexicale sur l'une ne trouve pas l'autre.",
+  "Deux noms pour la même pièce : « Limiteur d'ouverture à 80 mm Designo » (manuel KSR) et « Sécurité de fin de course Designo … ouverture 80 mm » (catalogue), sans phrase qui les relie.",
+  "Renvoi cassé : /procedures/percage-montage-roto-nx.md renvoie pour le 487 206 à /quincaillerie/roto-nx-ksr-confort-designo.md, qui ne contient pas cette référence.",
+  "Pages longues : roto-nx-accessoires-et-gabarits.md fait 110 Ko et percage-montage-roto-nx.md 30 Ko."
+ ]
+}

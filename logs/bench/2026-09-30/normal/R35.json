@@ -1,0 +1,21 @@
+{
+ "id": "R35",
+ "reponse": "Le wiki ne contient pas de méthode de choix des fenêtres par zone sismique (ni carte des zones, ni classes, ni règles par zone). La seule mention est dans le DTA n° 6/16-2334_V5 du système 76 Advanced (PERFORM76), clause 1.2.1.6 « Pose en zones sismiques » : le système ne présentant pas d'éléments de remplissage supérieurs à 4 m², il n'y a pas lieu d'apporter de justifications particulières (conformément au « Guide de dimensionnement parasismique des éléments non structuraux du cadre bâti » de septembre 2014) [DTA p. 5]. Autrement dit, pour une PERFORM76 dont les remplissages (vitrages) restent sous 4 m², aucune justification parasismique n'est demandée ; au-delà, le wiki ne dit pas quoi faire. Aucune clause équivalente n'est transcrite pour le système 70, ni pour les gammes aluminium TECHNAL (SOLEAL, LUMEAL). Le choix des fenêtres documenté dans le wiki porte sur l'exposition au vent et le classement AEV, pas sur le séisme. Source : /certifications/dta-6-16-2334.md.",
+ "dans_le_wiki": "partiel",
+ "preuves": [
+  {"page": "/certifications/dta-6-16-2334.md", "extrait": "**1.2.1.6 Pose en zones sismiques.** Le système ne présentant pas d'éléments de remplissage supérieurs à 4 m², il n'y a pas lieu d'apporter de justifications particulières (conformément au « Guide de dimensionnement parasismique des éléments non structuraux du cadre bâti » de septembre 2014) [1 p. 5]."}
+ ],
+ "ambiguite": "Gamme non précisée : la clause ne vaut que pour le système 76 Advanced (PERFORM76). Il faudrait demander la gamme (PVC 70, PVC 76, alu TECHNAL) et la surface des vitrages (seuil de 4 m²).",
+ "outils": 3,
+ "comment_trouve": "Grep « sismi / séism / parasism » sur tout le wiki : une seule page métier (certifications/dta-6-16-2334.md, clause 1.2.1.6) plus une ligne du journal. Rien dans les DTA TECHNAL ni le DTD 6/16-2335, rien dans reference/ (vent et AEV seulement).",
+ "formulations": [
+  "faut-il une justification parasismique pour poser des fenêtres PVC en zone sismique ?",
+  "fenêtre zone sismique",
+  "quelles règles pour les menuiseries en zone de séisme 4 ou 5 ?"
+ ],
+ "defauts_wiki": [
+  "La seule donnée est enfouie dans une page de 58 ko (DTA 76 Advanced) dont le titre et la description ne parlent pas de séisme ; tags sans « sismique ».",
+  "Le mot de la question « sismiques » est au pluriel ; la page écrit « zones sismiques » — correspondance correcte, mais « séisme » ou « parasismique » ne remontent que via « parasismique » dans la même phrase.",
+  "Pas de page de référence sur le séisme (reference/ ne traite que vent, AEV, régions climatiques) : la question « comment choisir » n'a pas de réponse générale dans le wiki."
+ ]
+}

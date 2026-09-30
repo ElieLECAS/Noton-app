@@ -1,0 +1,21 @@
+{
+ "id": "S03",
+ "reponse": "Outre la TGY3702 (3 points), la rallonge 4ème point TGY3704 se raccorde à la TGY3703, crémone 3 points à clé (condamnation par cylindre), même hauteur minimale de châssis 1 292 mm et hauteur minimale de poignée Hp 721 mm, fixée par 8 vis TGY3723. Ce sont les deux seules crémones compatibles avec la TGY3704 dans le wiki ; les crémones 1 point TGY3700 et TGY3701 ne sont pas données comme compatibles. Coulissant TECHNAL SOLEAL GY 55 (gamme LUMINE). Pour la TGY3703 à clé, le cylindre est un européen 30 x 30 mm T1040 sur montants TGY1202 / TGY1303, ou un décentré 40 x 30 mm T1044 sur montants à renfort tube TGY1301 / TGY1302. Source : /quincaillerie/soleal-gy-roulements-et-fermetures.md.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/quincaillerie/soleal-gy-roulements-et-fermetures.md", "extrait": "| **TGY3704** | Rallonge 4ème point | Raccordée à TGY3702/03 | Pour très grandes hauteurs | — | 2 vis TGY3723 |"},
+  {"page": "/quincaillerie/soleal-gy-roulements-et-fermetures.md", "extrait": "| **TGY3703** | 3 points à clé | Oui (cylindre) | 1 292 mm | 721 mm | 8 vis TGY3723 |"}
+ ],
+ "ambiguite": "",
+ "outils": 1,
+ "comment_trouve": "Tableau des crémones SOLEAL GY déjà lu (R33) ; relu la ligne TGY3704 (« Raccordée à TGY3702/03 ») et la ligne TGY3703, plus la section cylindres pour la variante à clé.",
+ "formulations": [
+  "la rallonge TGY3704 va-t-elle aussi sur la crémone à clé ?",
+  "TGY3704 compatible avec quelle crémone",
+  "quelle fermeture 3 points à clé accepte la rallonge 4e point sur un coulissant SOLEAL GY ?"
+ ],
+ "defauts_wiki": [
+  "La compatibilité est écrite en abrégé « TGY3702/03 » dans la colonne « Condamnation clé » : une recherche sur « TGY3703 » ne trouve pas la ligne de la rallonge, et la colonne ne porte pas le bon intitulé pour cette information.",
+  "Relance sans référence (« cette rallonge ») : le sens dépend de l'historique ; une recherche lexicale sur la seule relance ne trouve rien de précis."
+ ]
+}

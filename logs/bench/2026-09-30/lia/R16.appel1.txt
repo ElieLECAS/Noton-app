@@ -1,0 +1,566 @@
+===== PAGE 1 : /profiles/perform76-ouvrants-et-battements.md =====
+# Les quatre ouvrants
+
+L'**ouvrant** est le cadre mobile de la fenêtre, celui qui s'ouvre ; il porte le vitrage et la
+quincaillerie, et vient se fermer contre le dormant, le cadre fixe. La gamme
+[PERFORM76](/gammes/perform.md) compte quatre ouvrants, tous à **6 chambres**, avec joint de
+feuillure sous vitrage et renfort acier galvanisé de **2 mm** [1 p. 4].
+
+Deux axes les distinguent : le profil **droit à 76 mm** ou **galbé à 83 mm** d'épaisseur, et deux
+hauteurs de profil, une paire basse et une paire haute.
+
+Les quatre se montent sur les cinq dormants, sans restriction. Voir
+[Dormants PERFORM76](/profiles/perform76-dormants.md).
+
+# Cotes
+
+Les quatre ouvrants PERFORM76, cotes en mm. Chaque coupe montre l'ouvrant en tranche, vitrage
+en haut : l'épaisseur est la cote horizontale du bas (76 mm pour un ouvrant droit, 83 mm pour un
+galbé, dont la face arrondie déborde de 7 mm), les trois hauteurs sont les cotes verticales
+portées sur la planche — la première à gauche, les deux autres à droite.
+
+| Ouvrant | Profil | Épaisseur (mm) | Hauteur 1 (mm) | Hauteur 2 (mm) | Hauteur 3 (mm) | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 76281 | droit | 76 | 39 | 49 | 70 | ![Ouvrant 76281](/assets/profiles/perform76/ouvrants/ouvrant-76281.png) |
+| 76275 | galbé | 83 | 39 | 49 | 70 | ![Ouvrant 76275](/assets/profiles/perform76/ouvrants/ouvrant-76275.png) |
+| 76272 | droit | 76 | 79 | 89 | 110 | ![Ouvrant 76272](/assets/profiles/perform76/ouvrants/ouvrant-76272.png) |
+| 76279 | galbé | 83 | 79 | 89 | 110 | ![Ouvrant 76279](/assets/profiles/perform76/ouvrants/ouvrant-76279.png) |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 14, 15, 18, 20 et 21)
+
+La finesse des ouvrants apporte un gain de lumière important [1 p. 4].
+
+# Battements
+
+Sur une fenêtre à deux vantaux, les deux ouvrants se rejoignent au centre sur le **battement** :
+un ensemble de profils qui ferme le milieu de la fenêtre. Le cahier technique
+donne les battements comme des **assemblages**, associés à un ouvrant, et non comme des profils
+isolés. Largeur hors tout et clair intérieur, en mm :
+
+| Assemblage de battement | Ouvrant associé | Largeur hors tout (mm) | Clair intérieur (mm) |
+| --- | --- | --- | --- |
+| 76274 / 76473 / 1547 / 76281 | 76281 | 112 | 60 |
+| 76272 / 76833 / 76272 | 76272 | 226 | 48 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 14)
+
+## Battement 76274 / 76473 / 1547 / 76281, avec l'ouvrant 76281
+
+![Battement 76274 / 76473 / 1547 / 76281](/assets/profiles/perform76/battements/battement-76473.png)
+
+Coupe horizontale du centre de la fenêtre : les deux ouvrants 76281 à gauche et à droite, le
+battement au milieu. Au-dessus, la largeur hors tout de **112 mm**, décomposée en 33 / 46 / 33 ;
+sous la coupe, 5 / 60 / 5, soit 70.
+
+## Battement 76272 / 76833 / 76272, avec l'ouvrant 76272
+
+![Battement 76272 / 76833 / 76272](/assets/profiles/perform76/battements/battement-76833.png)
+
+Même coupe avec les ouvrants 76272 : **226 mm** hors tout, décomposés en 73 / 80 / 73 ; sous la
+coupe, 84 / 48 / 52.
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 14)
+
+Les largeurs de battement sont **indépendantes du dormant** : 112 mm avec l'ouvrant 76281 et
+226 mm avec l'ouvrant 76272, sur les cinq dormants.
+
+Le **battement central réduit de 112 mm** est la configuration qui porte l'argument de clarté de
+la gamme, avec renfort acier de 2 mm dans l'ouvrant, battement intérieur et poignée centrée
+[1 p. 4]. Le battement de l'ouvrant 76272, à 226 mm, en fait le double.
+
+## Ce que sont les références des chaînes d'assemblage
+
+| Référence | Nature | Cote propre (mm) |
+| --- | --- | --- |
+| 76274 | ouvrant réduit, version gauche | 50 |
+| 76276 | ouvrant réduit, variante Design | 50 |
+| 76473 | battement | 46 |
+| 76833 | battement intérieur, clippé et collé | - |
+| 1547 | battement intérieur, clippé et collé | - |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, registre 2.1.2, p. 2, 15, 16 et 34)
+
+Les battements **1547 et 76833** appartiennent à la famille des battements intérieurs clippés et
+collés, aux côtés des 6129, 6131 et 6133 ; les battements extérieurs du même système sont les
+1578, 6130, 6128, 6132, 6162 et A176 [3 § 2.2.3.2.1]. **Tous reçoivent des embouts collés.**
+
+# Les trois battements du système 76
+
+| Battement | Cote propre (mm) | Renfort associé | Au cahier PERFORM76 |
+| --- | --- | --- | --- |
+| 76471 | 62 | V316 | non |
+| 76472 | 80 | V317 | non |
+| 76473 | 46 | aucun | oui |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, registre 2.1.2, p. 2 et 16)
+
+PROFERM retient le plus étroit des trois, le **76473 à 46 mm**. Leurs cotes de débit sont dans
+[Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md).
+Leur débit, leurs embouts, leur collage et leur vissage sur l'ouvrant sont dans
+[Traitement du battement du système 76 Advanced](/procedures/traitement-du-battement-systeme-76.md).
+
+# Les ouvrants du système que PROFERM ne propose pas
+
+Le système 76 Advanced compte **huit ouvrants**, dont quatre au cahier PERFORM76.
+
+| Ouvrant | Cote propre (mm) | Au cahier PERFORM76 |
+| --- | --- | --- |
+| 76271 | 78 | non |
+| 76272 | 110 | oui |
+| 76274 | 50, ouvrant réduit | non, cité en chaîne d'assemblage |
+| 76275 | 70 | oui |
+| 76276 | 50, ouvrant réduit Design | non |
+| 76279 | 110 | oui |
+| 76281 | 70 | oui |
+| 76283 | 110, ouvrant extérieur | non |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, registre 2.1.2, p. 1 et 2)
+
+Le **76271, à 78 mm, est le seul ouvrant intermédiaire du système** entre les 70 mm de la paire
+basse et les 110 mm de la paire haute. C'est aussi le seul qui se réalise **sans renfort acier**,
+avec le capot aluminium A072 de la variante AluClip Pro.
+
+Les coupes cotées des huit ouvrants et des trois battements du système, avec leur capot
+aluminium, sont dans
+[Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md).
+
+# Compatibilités
+
+| Élément | 76281 | 76275 | 76272 | 76279 |
+| --- | --- | --- | --- | --- |
+| Les cinq dormants | oui | oui | oui | oui |
+| Battement 76274 / 76473 / 1547 | oui | - | non | - |
+| Battement 76272 / 76833 | non | - | oui | - |
+| Meneau d'ouvrant 76301, 84 mm | oui | oui | oui | oui |
+| Meneau d'ouvrant 76303, 110 mm | oui | oui | oui | oui |
+| Parcloses d'ouvrant | oui | oui | oui | oui |
+
+Les meneaux 76301 et 76303 **ne se montent jamais sur un dormant**. Voir
+[Meneaux PERFORM76](/profiles/perform76-meneaux.md).
+
+# Ce que la source ne donne pas
+
+- **L'usage de chaque paire d'ouvrants.** La paire haute 76272 et 76279 porte un renfort tubulaire
+  de section carrée et donne des assemblages nettement plus larges ; aucune destination n'est
+  écrite — entrée **VER-13** du registre
+  [Informations à vérifier](/anomalies/informations-a-verifier.md).
+- **Le battement des ouvrants galbés** 76275 et 76279 n'est associé à aucune chaîne d'assemblage.
+
+# Citations
+
+[1] Cahier technique PERFORM76, version 02/09/2026 CC03 —
+`raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, pages du PDF 4, 14, 15, 18, 20 et 21
+
+[2] Mise en œuvre Système 76 Advanced, profine —
+`raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`, registre 2.1.2
+
+[3] DTD n° DBV-24-6/16-2335_V5 — `raw/dtd-6-16-2335-v5-e-volution.pdf`, § 2.2.3.2.1
+
+# Voir aussi
+
+- [Traitement du battement du système 76 Advanced](/procedures/traitement-du-battement-systeme-76.md)
+- [Dormants PERFORM76](/profiles/perform76-dormants.md)
+- [Parcloses PERFORM76](/profiles/perform76-parcloses.md)
+- [Meneaux PERFORM76](/profiles/perform76-meneaux.md)
+- [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md)
+- [Renforts du système 76](/profiles/systeme-76-renforts.md)
+- [Cahier technique PERFORM76](/sources/cahier-technique-perform76.md)
+
+===== PAGE 2 : /gammes/perform.md =====
+# Définition et déclinaisons
+
+PERFORM est la gamme de menuiseries en PVC de PROFERM : fenêtres et portes, en ouverture à la
+française, oscillo-battante, soufflet, châssis fixe ou coulissant [1 p. 6]. Le coulissant PVC de
+la gamme a sa page : [INNOSLIDE](/gammes/innoslide.md). Ce que la marque annonce de la gamme
+(slogan, avantages) est sur [Arguments de vente PERFORM](/commercial/perform.md).
+
+Les menuiseries PERFORM sont conçues avec des profils PVC GREENLINE® de
+[KÖMMERLING](/fournisseurs/kommerling.md) ; elles sont garanties sans plomb ni cadmium, intègrent
+du PVC recyclé et sont entièrement recyclables [1 p. 6].
+
+La gamme est proposée en deux déclinaisons, qui se distinguent par l'épaisseur du profil
+(sa profondeur, de l'extérieur à l'intérieur) [1 p. 6] :
+
+- **PERFORM70** : profil 70 mm ;
+- **PERFORM76** : profil 76 mm.
+
+# Caractéristiques
+
+Épaisseur, structure et Uw (coefficient de transmission thermique de la fenêtre complète, en
+W/m²K : plus il est bas, plus la fenêtre isole) des deux déclinaisons PERFORM ; une ligne par
+déclinaison [1 p. 6-7].
+
+| Déclinaison | Épaisseur du profil (mm) | Nombre de chambres | Nombre de joints | Uw annoncé « jusque » (W/m²K) |
+| --- | --- | --- | --- | --- |
+| PERFORM70 | 70 | - | - | 1,3 |
+| PERFORM76 | 76 | 6 | 3 | 0,8 |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 6-7)
+
+La PERFORM76 est un profil étanche grâce à ses 3 joints et 6 chambres [1 p. 6] ; le détail des
+joints et des chambres est donné par les coupes du cahier technique, plus bas [2 p. 4 et 5]. Le
+nombre de chambres et de joints de la PERFORM70 n'est pas donné.
+
+## Équipements de série
+
+Dix équipements et procédés de la gamme PERFORM sont repérés de 1 à 10 sur une fenêtre à deux
+vantaux ; le tableau reprend la légende de chaque photo [1 p. 6].
+
+| Repère | Équipement ou procédé |
+| --- | --- |
+| 1 | Pivot symétrique systématique |
+| 2 | Profils à structure totalement renforcée KÖMMERLING® |
+| 3 | Parclose arrondie ou moulurée |
+| 4 | Pivot pouvant supporter le poids d'une fenêtre jusqu'à 130 kg |
+| 5 | Système sécurité : rouleau champignon anti-dégondage et anti-effraction |
+| 6 | Système anti-fausse manœuvre et levier de vantail |
+| 7 | Soudure finition grain d'orge. Assemblage en coupe d'onglet |
+| 8 | Câle anti-fatigue et jonc de finition en partie basse du dormant |
+| 9 | Compression et sécurité doublée grâce à la crémone du semi-fixe |
+| 10 | PERFORM76 : profil étanche grâce à ses 3 joints & 6 chambres |
+
+Le pivot du repère 4 est donné pour 130 kg ; le cahier technique PERFORM76 limite l'ouvrant à
+100 kg : voir [Poignée et pivot PERFORM76](/quincaillerie/perform76-poignee-et-pivot.md) [2 p. 6].
+
+Le schéma repère chaque équipement sur la fenêtre (numéros noirs cerclés) :
+
+![Équipements de série PERFORM, repères sur la fenêtre](/assets/gammes/perform/equipements-de-serie-reperes.png)
+
+Les dix photos, dans l'ordre des repères, montrent chaque équipement de près :
+
+![Équipements de série PERFORM, photos 1 à 10](/assets/gammes/perform/equipements-de-serie-photos.png)
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 6)
+
+## Équipements présentés en juin 2023
+
+Le dépliant général de juin 2023 repère neuf équipements de la PERFORM, numérotés de 1 à 9 sur une
+fenêtre à deux vantaux ; le tableau reprend la légende de chaque photo [3 p. 3]. Ce sont les neuf
+premiers repères de 2026, dans le même ordre et avec les mêmes mots ; le repère 10 de 2026 (profil
+PERFORM76 à 3 joints et 6 chambres) n'existe pas en juin 2023, où la gamme n'est pas divisée.
+
+| Repère | Équipement ou procédé, juin 2023 |
+| --- | --- |
+| 1 | Pivot symétrique systématique |
+| 2 | Profils à structure totalement renforcée KÖMMERLING® |
+| 3 | Parclose arrondie ou moulurée |
+| 4 | Pivot pouvant supporter le poids d'une fenêtre jusqu'à 130 kg |
+| 5 | Système sécurité : rouleau champignon anti-dégondage et anti-effraction |
+| 6 | Système anti-fausse manœuvre et levier de vantail |
+| 7 | Soudure finition grain d'orge. Assemblage en coupe d'onglet |
+| 8 | Câle anti-fatigue et jonc de finition en partie basse du dormant |
+| 9 | Compression et sécurité doublée grâce à la crémone du semi-fixe |
+
+![Équipements PERFORM de juin 2023, repères sur la fenêtre](/assets/gammes/perform/equipements-2023-reperes.png)
+
+![Équipements PERFORM de juin 2023, photos 1 à 9](/assets/gammes/perform/equipements-2023-photos.png)
+
+(schéma: raw/depliant-general-2023-06.pdf, p. 3)
+
+Les finitions DROIT et DESIGN sont présentées en juin 2023 avec les mêmes coupes d'angle que celles
+du profil 70 mm ci-dessus [3 p. 3].
+
+## Menuiseries sur mesure et cintrage
+
+PROFERM est doté d'un atelier de cintrage (mise en forme courbe des profilés) et fabrique des
+menuiseries de différentes formes : plein cintre ou cintre surbaissé, œil de bœuf, anse de panier
+ou chapeau de gendarme (à partir d'un gabarit), triangle ou trapèze. **Le cintrage (hors triangle
+et trapèze) n'est possible que pour la PERFORM70** [1 p. 6].
+
+![Formes de menuiseries sur mesure PERFORM](/assets/gammes/perform/formes-sur-mesure.png)
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 6)
+
+## Finitions DROIT et DESIGN
+
+Les menuiseries PERFORM se choisissent en deux niveaux de finition du profil : **DROIT** ou
+**DESIGN** [1 p. 8]. Les coupes d'angle ci-dessous montrent chaque profil, avec en loupe la forme
+de l'arête côté intérieur. Une ligne par déclinaison et par finition.
+
+| Déclinaison | Finition | Disponibilité | Coupe |
+| --- | --- | --- | ---: |
+| PERFORM70 | droit | disponible | ![Profil 70 mm droit](/assets/gammes/perform/profil-70-droit.png) |
+| PERFORM70 | design | disponible | ![Profil 70 mm design](/assets/gammes/perform/profil-70-design.png) |
+| PERFORM76 | droit | disponible | ![Profil 76 mm droit](/assets/gammes/perform/profil-76-droit.png) |
+| PERFORM76 | design | disponible à compter du 2ème trimestre 2026 (**VER-01**) | - |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 8)
+
+## Accessoires
+
+Les poignées de fenêtre, béquilles de porte-fenêtre, fausses crémones et croisillons de la gamme
+PERFORM, avec leurs finitions et leurs images, sont sur
+[Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md), avec la moustiquaire et les
+soubassements [1 p. 7]. Les menuiseries PERFORM peuvent être équipées de vitrages techniques et/ou
+décoratifs ([Performances des vitrages](/vitrages/performances-vitrages.md),
+[Vitrages décoratifs](/vitrages/vitrages-decoratifs.md)) et de volets roulants et de solutions
+domotiques ([Volets roulants](/equipements/volets-roulants.md)) [1 p. 7].
+
+# Performances
+
+- **Classement A\*E\*V** (étanchéité à l'air, à l'eau et résistance au vent) de la PERFORM70 :
+  voir [Labels et certifications](/certifications/labels-et-certifications.md) [1 p. 7].
+- **Isolation thermique** : Uw jusque 1,3 W/m²K en PERFORM70 et jusque 0,8 W/m²K en PERFORM76
+  [1 p. 7].
+
+Uw annoncé de la PERFORM, par période ; une ligne par période et par déclinaison :
+
+| Période (document) | Déclinaison | Uw « jusque » (W/m²K) |
+| --- | --- | --- |
+| juin 2023 (dépliant général) | PERFORM, gamme non divisée | 1,3 |
+| janvier 2026 (catalogue général) | PERFORM70 | 1,3 |
+| janvier 2026 (catalogue général) | PERFORM76 | 0,8 |
+
+(schéma: raw/depliant-general-2023-06.pdf, p. 3 ; raw/catalogue-general-2026-01.pdf, p. 7)
+
+La valeur de juin 2023 est imprimée « Uw jusque 1.3/m²K », sans le W de l'unité [3 p. 3].
+- **Résistance à l'effraction RC2** et **construction passive** de la fenêtre PERFORM76 : voir
+  [Labels et certifications](/certifications/labels-et-certifications.md) [1 p. 34].
+
+# Dimensions limites
+
+Dimensions maximales de baie issues du procédé certifié 76 Advanced documenté dans le [DTA 6/16-2334](/certifications/dta-6-16-2334.md) (p. 9), applicables à la gamme PERFORM76 hors fabrications dérogatoires d'atelier.
+
+| Configuration d'ouverture | Hauteur maximale de baie (m) | Largeur maximale de baie (m) |
+| --- | --- | --- |
+| 1 vantail ouvrant à la française | 2,15 | 1,00 |
+| 1 vantail oscillo-battant | 1,50 | 1,40 |
+| 1 vantail oscillo-battant | 2,15 | 1,00 |
+| 2 vantaux ouvrants à la française | 2,15 | 1,60 |
+| 2 vantaux ouvrants à la française avec fixe latéral | 2,15 | 2,40 |
+| Soufflet à loqueteaux | 0,80 | 1,30 |
+
+Ces cotes de baie se combinent avec les contraintes d'inertie et de dimensions d'ouvrant définies dans les [Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md), qui varient selon l'épaisseur du vitrage, les renforts acier retenus et la couleur du profilé.
+
+# Coloris
+
+Les menuiseries PERFORM se font en blanc 9016 et ivoire teintés dans la masse, en six plaxés et
+en laqué (PERFORM70 sous conditions) : le nuancier complet, teinte par teinte avec ses faces, sa
+finition et ses restrictions, est sur [Coloris PERFORM](/coloris/coloris-perform.md) [1 p. 8].
+
+# Ce qui n'est pas réalisable
+
+- **Pas de cintrage en PERFORM76** : le cintrage (hors triangle et trapèze) n'est possible que
+  pour la PERFORM70 [1 p. 6].
+- **Laquage** : possible en PERFORM70 si ouverture extérieure ou menuiserie cintrée
+  [1 p. 8] ; en juin 2023, « Laquage possible si : ouverture extérieure, menuiserie cintrée »
+  [3 p. 3].
+- **Pas de fausse crémone décorative sur une porte-fenêtre avec serrure** [1 p. 7].
+
+# Coupes de la PERFORM76
+
+Les deux coupes du cahier technique montrent comment la PERFORM76 est construite : chaque
+élément est repéré par un numéro, de 1 à 10, expliqué dans le tableau ci-dessous. Les coupes
+sont dessinées avec l'ouvrant droit de 76 mm ; les loupes montrent l'ouvrant galbé de 83 mm à la
+même place [2 p. 4 et 5].
+
+| Repère | Élément |
+| --- | --- |
+| 1 | système à 3 joints d'étanchéité : 1 joint à frappe sur l'ouvrant, 1 joint central, 1 joint à frappe sur le dormant |
+| 2a | chambre humide, créée par le joint central |
+| 2b | chambre sèche, qui protège la quincaillerie contre l'humidité, la corrosion et l'accès par l'extérieur en cas de tentative d'effraction |
+| 3 | dormant à 6 chambres de 76 mm d'épaisseur |
+| 4 | renfort acier galvanisé tubulaire de 1,5 mm du dormant, qui reçoit la visserie des gâches |
+| 5a | ouvrant droit à 6 chambres, 76 mm d'épaisseur |
+| 5b | ouvrant galbé, 83 mm d'épaisseur |
+| 6 | renfort acier galvanisé de 2 mm de l'ouvrant |
+| 7 | joint de feuillure sous vitrage |
+| 8 | parclose arrondie |
+| 9 | double vitrage de 28 mm (6 mm, 18 gaz argon, 4 mm), intercalaire TGI noir, Ug 1,1 W/m²K |
+| 10 | battement central réduit de 112 mm, battement intérieur et poignée centrée |
+
+## Coupe verticale
+
+La coupe verticale montre la PERFORM76 comme si on la tranchait de haut en bas, au niveau du
+bas de l'ouvrant : en bas le dormant (repère 3) et son renfort (4), au-dessus l'ouvrant droit
+(5a) et son renfort (6), le vitrage (9) tenu par la parclose (8). Les trois joints (1) ferment le
+passage de l'air et de l'eau ; entre eux, la chambre humide (2a, en bleu) côté extérieur et la
+chambre sèche (2b, en orange) côté intérieur, où se trouve la quincaillerie. La loupe en haut à
+gauche montre à la même place l'ouvrant galbé (5b).
+
+![Coupe verticale PERFORM76](/assets/profiles/perform76/generalites/coupe-verticale.png)
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 5)
+
+## Coupe horizontale
+
+La coupe horizontale tranche la fenêtre à deux vantaux de gauche à droite, au milieu, là où les
+deux ouvrants se rejoignent sur le battement central. On y retrouve les mêmes repères de part et
+d'autre : les deux ouvrants droits (5a), leurs renforts (6), les joints de feuillure sous vitrage
+(7), les parcloses (8), les vitrages (9), et au centre les chambres humide (2a) et sèche (2b). Les
+deux loupes montrent l'ouvrant galbé (5b) à la place de l'ouvrant droit.
+
+![Coupe horizontale PERFORM76](/assets/profiles/perform76/generalites/coupe-horizontale.png)
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 5)
+
+# Citations
+
+[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 6 à 8 et 34
+[2] [Cahier technique PERFORM76, version 02/09/2026 CC03](raw/cahier-technique-perform76-2026-09-02-cc03.pdf), pages du PDF 4 à 6
+[3] [Dépliant général PROFERM, édition juin 2023](raw/depliant-general-2023-06.pdf), p. 3
+
+# Voir aussi
+
+- [PERFORM+](/gammes/perform-plus.md)
+- [Coloris PERFORM](/coloris/coloris-perform.md)
+- [Arguments de vente PERFORM](/commercial/perform.md)
+- [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md)
+- [INNOSLIDE](/gammes/innoslide.md)
+- [Cahier technique PERFORM76](/sources/cahier-technique-perform76.md)
+- [Dormants PERFORM76](/profiles/perform76-dormants.md)
+- [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md)
+- [Poignée et pivot PERFORM76](/quincaillerie/perform76-poignee-et-pivot.md)
+- [Labels et certifications](/certifications/labels-et-certifications.md)
+- [Garanties par composant](/garanties/garanties-par-composant.md)
+
+===== PAGE 3 : /profiles/askey-frappe-65-oc-dormants-et-ouvrants.md =====
+# Profilés dormants et ouvrants ASKEY Frappe 65 Ouvrant Caché
+
+Les profilés de la **Frappe 65 Ouvrant Caché ASKEY** forment l'ossature thermique et structurelle (module 65 mm ou 75 mm HI+) des fenêtres, portes-fenêtres et châssis fixes à clair de vitrage maximal [1 p. 3].
+
+---
+
+# Cotes
+
+### Profilés dormants (module 65 mm et 75 mm HI+)
+
+Cotes en millimètres et inerties calculées selon l'annexe C de la norme EN 14024 [1 p. 12-15, 26-35] :
+
+| Référence | Désignation / Spécificité | Largeur (mm) | Hauteur (mm) | Ailette (mm) | $I_x$ à 2000 mm (cm⁴) | $I_y$ (cm⁴) | $W_x$ (cm³) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **W1010059** | Dormant C45 standard 65 mm | 65 | 74 | 44 | 19,46 | 13,78 | 3,71 |
+| **W1010064** | Dormant C45 standard 65 mm | 65 | 74 | 44 | 18,59 | 13,53 | 3,67 |
+| **W1010067** | Dormant C45 rénovation aile 25 mm | 65 | 74 | 44 | 22,06 | 16,18 | 4,74 |
+| **W1010130** | Dormant CD 65 mm standard | 66,5 | 74 | 44 | 19,93 | 13,65 | 3,66 |
+| **W1010131** | Dormant CD rénovation aile 25 mm | 66,5 | 74 | 44 | 22,77 | 16,26 | 4,72 |
+| **W1010132** | Dormant CD gorge 44 mm | 66,5 | 74 | 44 | 19,36 | 13,60 | 3,64 |
+| **W1010136** | Dormant CD gorge 44 mm | 66,5 | 74 | 44 | 20,22 | 13,84 | 3,68 |
+| **W1010364** | Dormant CD ailette 36 mm | 66,5 | 74 | 44 | 25,68 | 21,50 | 6,18 |
+| **W1010373** | Dormant CD ailette 44 mm | 66,5 | 74 | 44 | 25,57 | 24,39 | 6,93 |
+| **W1010390** | Dormant CD HI+ (barrettes isolantes) | 66,5 | 74 | 44 | 19,36 | 13,60 | 3,64 |
+| **W1010410** | Dormant CD 75 mm pour vitrage 36 mm | 65 | 74 | 44 | 25,23 | 13,50 | 3,63 |
+| **W1010504** | Dormant CD pose ITE ailette 130 mm | 65 | 94 | 44 | 33,20 | 90,61 | 15,03 |
+| **Y1715110** | Dormant C45 HI+ | 65 | 74 | 44 | 19,00 | 13,54 | 3,67 |
+| **Y1715111** | Dormant C45 rénovation HI+ aile 25 mm | 65 | 74 | 44 | 22,36 | 16,19 | 4,75 |
+| **Y1715125** | Dormant CD HI+ ailette 36 mm | 66,5 | 74 | 44 | 25,68 | 21,50 | 6,18 |
+| **Y1715147** | Dormant 75 mm BTC pour OC36 | 65 | 55 | 44 | 29,18 | 16,15 | 4,71 |
+| **Y1715150** | Dormant tapée intégrée dbl 140 mm (OC36) | 156,5 | 55 | 44 | 146,42 | 32,58 | 6,62 |
+| **Y1715151** | Dormant tapée intégrée dbl 120 mm (OC36) | 136,5 | 55 | 44 | 102,82 | 31,47 | 6,53 |
+| **Y1715152** | Dormant tapée intégrée dbl 100 mm (OC36) | 116,5 | 55 | 44 | 68,37 | 29,77 | 6,39 |
+| **Y1715153** | Dormant tapée intégrée dbl 80 mm (OC36) | 96,5 | 55 | 44 | 43,71 | 24,68 | 5,75 |
+
+(schéma: raw/askey3.pdf, p. 12, 13, 14, 15, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35)
+
+### Profilés ouvrants cachés
+
+| Référence | Rôle du profilé | Prise de vitrage | Largeur (mm) | Hauteur (mm) | Ailette (mm) | $I_{xx'}$ (cm⁴) | $I_{yy'}$ (cm⁴) | $I_{xx'}/v$ (cm³) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| **W1010137** | Ouvrant principal galbé | 24 mm | 65,1 | 53,5 | 34 | 5,77 | 6,22 | 2,78 |
+| **W1010454** | Ouvrant secondaire semi-fixe | 24 mm | 65,1 | 52,5 | 34 | 3,72 | 2,93 | 1,75 |
+| **W1010361** | Ouvrant principal à fiches | 24 mm | 73,6 | 53,5 | 42,5 | 10,12 | 9,77 | 3,94 |
+| **W1010456** | Ouvrant semi-fixe à fiches | 24 mm | 73,6 | 52,5 | 42,5 | 6,16 | 3,30 | 2,29 |
+| **W1010142** | Ouvrant principal galbé | 28 mm | 65,1 | 53,5 | 30 | 5,45 | 5,88 | 2,55 |
+| **W1010455** | Ouvrant secondaire semi-fixe | 28 mm | 65,1 | 52,5 | 30 | 3,52 | 2,73 | 1,70 |
+| **W1010289** | Ouvrant principal à fiches | 28 mm | 73,6 | 53,5 | 38,5 | 9,59 | 9,34 | 3,65 |
+| **W1010416** | Ouvrant semi-fixe à fiches | 28 mm | 80,6 | 52,5 | 38,5 | 5,86 | 3,12 | 2,23 |
+| **Y1715132** | Ouvrant principal design carré | 28 mm | 65,1 | 53,5 | 30 | 5,85 | 6,43 | 2,66 |
+| **Y1715133** | Ouvrant semi-fixe carré | 28 mm | 72,1 | 52,5 | 30 | 4,09 | 3,07 | 2,07 |
+| **W1010459** | Ouvrant principal carré fiches | 28 mm | 73,6 | 53,5 | 38,5 | 10,40 | 10,52 | 3,82 |
+| **W1010460** | Ouvrant semi-fixe carré fiches | 28 mm | 80,6 | 52,5 | 38,5 | 7,02 | 3,55 | 2,83 |
+| **Y1715126** | Ouvrant principal carré fiches | 32 mm | 73,6 | 53,5 | 34,5 | 9,62 | 9,73 | 3,51 |
+| **Y1715127** | Ouvrant semi-fixe carré fiches | 32 mm | 80,6 | 52,5 | 34,5 | 6,47 | 3,30 | 2,60 |
+
+(schéma: raw/askey3.pdf, p. 15, 16, 48, 49, 50, 51)
+
+### Traverses d'ouvrants et montants serrures
+
+| Référence | Rôle | Épaisseur vitrage | Largeur (mm) | Hauteur (mm) | $I_x$ à 2000 mm (cm⁴) | $I_y$ (cm⁴) | $W_x$ (cm³) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **W1010128** | Traverse d'ouvrant galbée | 28 mm | 45,7 | 80 | 7,37 | 23,51 | 6,48 |
+| **Y1715143** | Traverse ouvrant droite à capot | 28 mm | 41,9 | 80 | 6,86 | 27,24 | 7,41 |
+| **Y1715144** | Traverse ouvrant droite à capot | 32 mm | 45,9 | 80 | 8,61 | 27,24 | 7,41 |
+| **W1010507** | Traverse ouvrant droite à capot | 36 mm | 49,85 | 80 | 10,51 | 27,24 | 7,41 |
+| **W1010140** | Traverse d'ouvrant droite | 40 mm | 46,85 | 80 | 8,70 | 18,24 | 5,16 |
+| **W1010363** | Montant serrure porte-fenêtre | 24 mm | 64 | 55 | 18,98 | 22,60 | 6,04 |
+| **W1010371** | Montant serrure porte-fenêtre | 28 mm | 68 | 55 | 21,76 | 22,60 | 6,04 |
+| **Y1715122** | Montant serrure porte-fenêtre | 32 mm | 72 | 55 | 27,37 | 22,60 | 6,04 |
+| **W1010508** | Montant serrure porte-fenêtre | 36 mm | 76 | 55 | 31,16 | 22,60 | 6,04 |
+
+(schéma: raw/askey3.pdf, p. 19, 20, 52, 53, 54)
+
+### Seuil PMR et battements
+
+| Référence | Rôle | Largeur (mm) | Hauteur (mm) | Inertie $I_{xx'}$ (cm⁴) |
+| --- | --- | --- | --- | --- |
+| **W1010384** | Seuil PMR 20 mm à rupture thermique | 60,5 | 20 | 1,91 |
+| **Y3710012** | Battement central profilé pré-percé | 17,05 | 76 | - |
+| **W3090119** | Battement central standard | 26 | 76 | - |
+| **W3090223** | Battement central HI+ | 27,05 | 76 | - |
+| **W3090108** | Capot de battement poignée centrée galbé | 60 | 19,5 | - |
+| **Y3710004** | Capot de battement poignée centrée plat | 60 | 12 | - |
+| **Y3710018** | Capot de battement poignée centrée carré | 60 | 19,5 | - |
+
+(schéma: raw/askey3.pdf, p. 55, 78)
+
+---
+
+# Compatibilités
+
+* **Parcloses extérieures TPE** : Les ouvrants cachés de prise de volume 24 mm et 28 mm sont exclusivement équipés de la parclose coextrudée **W4033002** (noir) ou **W4033003** (gris). Les ouvrants en prise de volume 36 mm reçoivent la parclose TPE **W4030328** [1 p. 51, 122].
+* **Traverses d'ouvrants et capots** : Les traverses d'ouvrants Y1715143, Y1715144 et W1010507 s'associent obligatoirement au capot extérieur clipsé **Y3710014** assurant l'étanchéité et le drainage [1 p. 53, 125].
+* **Joints intérieurs de battée** : Le joint central tubulaire EPDM W4010423 (noir) ou W4010439 (gris) s'installe sur la battée de 44 mm du dormant [1 p. 82].
+
+---
+
+# Ce que la source ne donne pas
+
+* La masse linéique en kg/m de chaque profilé n'est pas consignée dans les fiches techniques du constructeur ; seules les inerties $I_x$ et $I_y$ sont données pour les calculs de résistance au vent.
+
+---
+
+# Citations
+
+[1] [Frappe 65 Ouvrant Caché ASKEY - Conception](raw/askey3.pdf), p. 12-24, 26-55, 78, 122, 125
+
+---
+
+# Voir aussi
+
+- [Gamme Frappe 65 Ouvrant Caché](/gammes/askey-frappe-65-oc.md)
+- [Cotes de débit Frappe 65 OC](/profiles/askey-frappe-65-oc-cotes-de-debit.md)
+- [Quincaillerie et équerres Frappe ASKEY](/quincaillerie/askey-frappe-quincaillerie-et-equerres.md)
+- [Fabrication Frappe 65 ASKEY](/procedures/fabrication-frappe-askey-65.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /sources/cahier-technique-perform76.md | Document source | Cahier technique PERFORM76, version 02/09/2026 CC03 | cahier-technique, perform76, profile, pose, kommerling | Document d'atelier et de chantier de la gamme PERFORM76 — profilés, cotes, références et principes de pose. | on (joints, chambres, renforts, ouvrants droit et galbé, parclose, vitrage, battement) / transcrit / [PERFORM](/gammes/perform.md) / / 5 / 2 / coupes |
+| /profiles/systeme-76-profiles-principaux.md | Profilé | Profilés principaux du système 76 | systeme-76-advanced, profine, dormant, ouvrant, meneau, traverse | Les dormants, cadres fixes, ouvrants, meneaux, traverses et battements du système 76 Advanced de profine, avec leurs cotes, leur capot aluminium et leur coupe. | it** a une face de 76 mm d'épaisseur, l'**ouvrant galbé** une face arrondie qui porte l'épaisseur à 83 mm. Chaque coupe porte : en haut, l'**épaisseur |
+| /gammes/lumine.md | Gamme | LUMINE | aluminium, fenetre, lumine, technal, qualicoat | Gamme de fenêtres aluminium de PROFERM sur profilés TECHNAL, déclinée en LUMINE55 et LUMINE65. | t droit - Droit », « 2. Ouvrant apparent design - Galbé extérieur », « 3. Ouvrant minimal caché - Chant clippable pour un effet de modernité assuré. G |
+| /profiles/soleal-gy-dormants-et-rails.md | Profilé | Profilés dormants, rails et ouvrants Technal SOLEAL GY 55 | technal, soleal, soleal-gy, coulissant, galandage, profilés | Architecture technique complète du système coulissant à rupture de pont thermique SOLEAL GY 55 de TECHNAL (dormants 2, 3 et 4 rails, ouvrants 24-28 mm et 29-32 mm, chemins de roulement alu et inox, boucliers thermiques et inerties mécaniques). | ssion / / **TGY1211** / 24-28 mm / Renfort profil galbé Design / $25,26\text{ cm}^4$ / $4,73\text{ cm}^4$ / Gamme esthétique moderne / / **TGY1213** / |
+| /profiles/askey-coulissant-65-nv-dormants-et-ouvrants.md | Profilé | Profilés dormants et ouvrants ASKEY Coulissant 65 NV | profilé, aluminium, coulissant, askey, dormant, ouvrant | Nomenclatures, dimensions, inerties et compatibilités des profilés aluminium dormants, rails, ouvrants et chicanes du Coulissant 65 NV ASKEY. | 76 / / **W1041263** / Montant latéral résidentiel galbé / 70 / 68 / 17 / 19,41 / 18,23 / 4,65 / / **Y1740028** / Montant latéral renforcé 1/4 / 56 / 6 |
+| /profiles/askey-frappe-65-ov-dormants-et-ouvrants.md | Profilé | Profilés dormants et ouvrants ASKEY Frappe 65 Ouvrant Visible | profilé, aluminium, frappe, ouvrant-visible, askey, dormant | Nomenclatures, dimensions, caractéristiques et parcloses des profilés aluminium dormants, ouvrants et seuils de la Frappe 65 OV ASKEY. | / **W1010327** / Ouvrant principal fenêtre / Plat galbé / 65,6 / 63 / 23 / / **W1010328** / Ouvrant secondaire fenêtre / Plat galbé / 65,6 / 63 / 23 / |
+| /profiles/perform76-parcloses.md | Profilé | Parcloses PERFORM76 | perform76, parclose, vitrage, profile, feuillure | Les 27 parcloses PERFORM76 d'ouvrant et de dormant, classées par épaisseur de vitrage admissible de 16 à 50 mm, avec sept parcloses complémentaires de famille non établie. | roite. Une parclose PERFORM76 se choisit par **l'épaisseur du vitrage à tenir**. Sur les planches, cette épaisseur est cotée en **bleu** et l'épaisse |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/contradictions-entre-sources.md :
+| CTR-02 | Épaisseur de vitrage de sécurité STADIP 44² | Catalogue général, p. 27 : STADIP 44²/16/4 sur PERFORM | Lecture multimodale erronée initiale : la notation vitrière 44² désigne le feuilleté 44.2 (8,76 mm) et non 44 mm. L'épaisseur totale réelle est de 28,76 mm (8,76 + 16 + 4 mm). | **Levée (erreur d'interprétation initiale)** : l'épaisseur réelle de 28,76 mm s'insère directement dans les parcloses standard de 28 mm (parclose 76526) et respecte le domaine d'emploi du DTA plafonné à 50 mm. | Aucune anomalie réelle sur le vitrage ni sur les parcloses. |
+/anomalies/contradictions-entre-sources.md :
+| CTR-17 | Épaisseur de vitrage maximale du système 76 | Mise en œuvre Système 76 Advanced, profine, registre 2.1.1, p. 1 (PDF p. 15, version janvier 2016) : « mise en oeuvre de différentes épaisseurs de vitrage ou panneau de remplissage **de 16 à 48 mm** » ; même manuel, registre 2.1.1 Porte d'entrée, p. 1 (PDF p. 2, octobre 2021) : « différentes épaisseurs de vitrage (jusqu'à 48 mm) » | DTA n° 6/16-2334_V5, p. 9 : vitrage jusqu'à **50 mm** ; même DTA, p. 38, « Prise de volume » : 50 mm sur ouvrant et sur dormant, 44 mm avec rehausseur de parclose ; cahier technique PERFORM76, p. 5 : parcloses d'ouvrant jusqu'à **50 mm** | **50 mm**, valeur réglementaire du DTA, qui est la pièce opposable. Le manuel de fabrication donne par ailleurs 36 à 50 mm pour la variante AluClip Zero (registre 2.6.5) : la borne de 48 mm n'est donc pas une limite du système entier | Un vitrage de 50 mm refusé à tort en atelier, ou accepté sans vérifier la parclose |
+/anomalies/contradictions-entre-sources.md :
+| CTR-70 | Épaisseur des ouvrants élégance 6121 à 6124 et décomposition de la face des ouvrants 6112 et 6121 du système 70 | Système e.VOLUTION, plan des profilés, système F 91, août 2008, PDF p. 16-17 (« Ouvrants élégance »), relues en image à 200 dpi le 29/09/2026 : les quatre ouvrants 6121, 6122, 6123, 6124 cotés **70** mm en haut ; PDF p. 9 et 16 : hauteur de face gauche du 6112 et du 6121, 73 mm, décomposée **51,5 + 21,5** | Mise en œuvre Système 70 Plateforme, septembre 2023, PDF p. 27-28 : 6121 à 6124 cotés **78** en haut ; 6112 et 6121 : à gauche **53 + 20** ; la planche des caractéristiques (PDF p. 2) écrit « les ouvrants Elégance semi affleurants de 78 mm ». Poster Kömmerling Gamme 70, profilés principaux, mars 2025, p. 1, et DTD n° DBV-24-6/16-2335_V5, p. 17 : 6121 à 6124 à **78** mm ; poster : 6112 et 6121 à gauche 53 + 20 | 78 mm pour les ouvrants élégance de la documentation actuelle (trois documents concordants, dont le DTD) ; la valeur de 2008 est portée telle quelle. À vérifier auprès de profine : les ouvrants élégance de 2008 avaient-ils une autre géométrie, ou la cote de 70 est-elle une erreur de la planche ? | Une épaisseur d'ouvrant fausse fausse la profondeur totale, le choix de la parclose et les cotes de débit ; l'écart de 1,5 mm entre les deux décompositions de face déplace un repère pris sur la face |
+/anomalies/contradictions-entre-sources.md :
+| CTR-71 | Renfort du battement 0140, épaisseur du battement 1547 et forme du meneau 2427 du système 70 | Système e.VOLUTION, plan des profilés, système F 91, août 2008, relu en image à 200 dpi le 29/09/2026 : PDF p. 21, battement « F90-25- 0140 », tableau « Renfort 9111 / Iz 2,60 » ; PDF p. 20, battement « F69-61- 1547 », 60 × **12,9** mm ; PDF p. 23, « F95-15- 2427 », 115 mm, décomposition droite **20 + 75 + 20** (deux ailes, dessin symétrique) | Mise en œuvre Système 70 Plateforme, septembre 2023 : PDF p. 36, 0140 avec le renfort **V600** (IW 2,1), mais PDF p. 329 (plans de combinaison AluClip), 0140 « renforcé 9111 », Iw 2.6 ; PDF p. 39, 2427 « à droite 20 + 75 ». Poster Kömmerling Gamme 70, profilés principaux, mars 2025, p. 1 : 0140 avec V600 ; 1547 60 × **12,7** ; 2427 20 + 75, une seule aile. DTD n° DBV-24-6/16-2335_V5, p. 19 : 2427, 20 + 75 | Pas de valeur retenue seule : les deux renforts du 0140 figurent dans le même manuel ; pour le 2427, la forme à une aile des trois documents récents décrit le profilé actuel, celle de 2008 les menuiseries de cette période. À vérifier auprès de profine : le 2427 de 2008 et celui de 2023 sont-ils le même profilé ? | Un 0140 renforcé V600 au lieu du 9111 perd 0,5 cm⁴ d'inertie (2,1 contre 2,6) dans un calcul statique ; un 2427 à deux ailes et un 2427 à une aile ne se montent pas de la même façon avec le dormant et l'ouvrant |
+/anomalies/contradictions-entre-sources.md :
+| CTR-81 | Renfort d'ouvrant associé aux dimensions maximales 650 × 2 070 mm et 550 × 2 170 mm (système 70) | Système e.VOLUTION, plan des profilés, système F 91, août 2008, PDF p. 120 (registre 4.1, page imprimée 1), relue en image le 29/09/2026 : « Avec utilisation du renfort **V127** en épaisseur 1,25 mm les dimensions maximales ouvrant à ne pas dépasser sont : 650 x 2070 mm (DHT 1400 x 2150 mm) ou 550 x 2170 mm (DHT 1200 x 2250 mm) » | Mise en œuvre Système 70 Plateforme, septembre 2023, PDF p. 128 (registre 2.3.3, p. 1) : mêmes dimensions et même épaisseur pour le renfort **V258**, avec l'encadré « attention » qui l'exclut des profilés laqués ou filmés | Pas de valeur retenue seule. À vérifier auprès de profine : le V258 remplace-t-il le V127, ou les deux renforts sont-ils différents avec les mêmes limites ? | Un renfort commandé sous la mauvaise référence ; l'exclusion des profilés laqués ou filmés, écrite pour le V258, n'est pas écrite pour le V127 |
+/anomalies/incoherences-internes.md :
+| INC-101 | Mise en œuvre Système 70 Plateforme, profine, version septembre 2023 | PDF p. 34 contre p. 10 et 42 (registres 2.1.2, 2.1.3), relues en image le 28/09/2026 | V030 « Renfort **2 mm** » sur l'ouvrant 2418, « Renfort 1,5 mm » sur le 2502 et le 0303 ; le dessin est coté 1,5 sur les trois | 1,5 mm | Épaisseur d'acier ou calcul faux sur l'ouvrant 2418 |

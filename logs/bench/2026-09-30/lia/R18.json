@@ -1,0 +1,78 @@
+{
+  "question": "Sur les grands coulissants à 4 vantaux avec une fermeture en percussion centrale, les chicanes du milieu viennent se taper de face. C'est quoi la petite pièce en plastique qu'il faut absolument coller et visser en haut et en bas sur le montant central avant d'enquiller les ouvrants, pour pas que l'air s'engouffre au milieu ?",
+  "pages_lues": [
+    "/profiles/askey-coulissant-65-nv-cotes-de-debit.md",
+    "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+    "/procedures/fabrication-coulissant-askey-65-nv.md",
+    "/profiles/lumeal-ga-cotes-de-debit.md",
+    "/quincaillerie/lumeal-ga-roulements-et-fermetures.md",
+    "/profiles/soleal-gy-dormants-et-rails.md",
+    "/procedures/fabrication-et-pose-lumeal-ga.md"
+  ],
+  "anomalies": [
+    "CTR-08",
+    "CTR-118",
+    "CTR-121",
+    "CTR-70",
+    "CTR-82",
+    "INC-53"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "coulissant 4 vantaux percussion centrale pièce d'étanchéité montant central haut bas collée vissée avant gondage chicane"
+      },
+      "pages_nouvelles": [
+        "/profiles/askey-coulissant-65-nv-cotes-de-debit.md",
+        "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+        "/procedures/fabrication-coulissant-askey-65-nv.md"
+      ],
+      "caracteres": 39854
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "bouchon embout percussion centrale 4 vantaux coller visser haut bas étanchéité air",
+        "tags": [
+          "coulissant"
+        ]
+      },
+      "pages_nouvelles": [
+        "/profiles/lumeal-ga-cotes-de-debit.md"
+      ],
+      "caracteres": 30397
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/quincaillerie/lumeal-ga-roulements-et-fermetures.md"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/lumeal-ga-roulements-et-fermetures.md"
+      ],
+      "caracteres": 8833
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "avant gondage montant de percussion embout d'étanchéité haut et bas collé vissé 4 vantaux percussion",
+        "limite": 8
+      },
+      "pages_nouvelles": [
+        "/profiles/soleal-gy-dormants-et-rails.md"
+      ],
+      "caracteres": 31689
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/procedures/fabrication-et-pose-lumeal-ga.md"
+      },
+      "pages_nouvelles": [
+        "/procedures/fabrication-et-pose-lumeal-ga.md"
+      ],
+      "caracteres": 10442
+    }
+  ]
+}

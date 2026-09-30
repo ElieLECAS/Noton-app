@@ -80,7 +80,7 @@ d'angle p. 266-277 et verrouilleurs p. 318-333 ([Renvois d'angle et verrouilleur
 NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md)) ; compas, paliers et pivots
 p. 278-317, 334-349, 370-387 ([Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md)) ;
 gâches p. 350-369 ([Pièces de fermeture et gâches Roto NX](/quincaillerie/roto-nx-pieces-fermeture-gaches.md)) ;
-accessoires p. 388-435 ([Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md)).
+accessoires p. 388-431 ([Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md)).
 
 # Crémone OB KSR, hauteur de poignée fixe
 

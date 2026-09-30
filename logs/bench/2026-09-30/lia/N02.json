@@ -1,0 +1,63 @@
+{
+  "question": "Quelle classe de résistance à la grêle pour un tablier de volet en lames LA 37 ?",
+  "pages_lues": [
+    "/equipements/volets-roulants-tradi-premonte.md",
+    "/equipements/volets-roulants-tradi-non-premonte.md",
+    "/equipements/volets-roulants-chrono-pse2.md",
+    "/equipements/volets-roulants.md",
+    "/reference/resistance-au-vent-volets-soprofen.md",
+    "/equipements/volet-roulant-bloc-lx-demi-linteau.md",
+    "/sources/soprofen-guide-technique-blocs-baies-2022.md"
+  ],
+  "anomalies": [
+    "CTR-94",
+    "INC-16",
+    "VER-16"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "LA 37 lame tablier volet roulant résistance grêle classe"
+      },
+      "pages_nouvelles": [
+        "/equipements/volets-roulants-tradi-premonte.md",
+        "/equipements/volets-roulants-tradi-non-premonte.md",
+        "/equipements/volets-roulants-chrono-pse2.md"
+      ],
+      "caracteres": 27117
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "grêle résistance à la grêle classe tablier"
+      },
+      "pages_nouvelles": [
+        "/equipements/volets-roulants.md"
+      ],
+      "caracteres": 28725
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/reference/resistance-au-vent-volets-soprofen.md"
+      },
+      "pages_nouvelles": [
+        "/reference/resistance-au-vent-volets-soprofen.md"
+      ],
+      "caracteres": 5360
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "grele grêlons LA37",
+        "limite": 10
+      },
+      "pages_nouvelles": [
+        "/equipements/volet-roulant-bloc-lx-demi-linteau.md",
+        "/sources/soprofen-guide-technique-blocs-baies-2022.md"
+      ],
+      "caracteres": 37063
+    }
+  ]
+}

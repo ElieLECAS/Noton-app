@@ -1,0 +1,25 @@
+{
+ "id": "R03",
+ "reponse": "Le wiki donne deux valeurs contradictoires, entrée **CTR-03** non arbitrée :\n- **20 ans** sur la structure de la fenêtre LUMINE65 d'après la grille de garanties de la brochure LUMINE65 (février 2025, p. 5) : « Garantie 20 ans sur la structure de la fenêtre » ;\n- **15 ans** sur la structure de la fenêtre d'après la grille générale du catalogue PROFERM de janvier 2026 (p. 35), qui s'applique à toutes les gammes sans distinction.\nLe registre ne retient aucune valeur : hypothèse (non confirmée) que les produits haut de gamme récents (PERFORM+, HYBRIDE+, LUMINE65) sont à 20 ans ; question à poser au service technique : « quels produits bénéficient de la garantie 20 ans, et depuis quand ». Pour mémoire, le reste de la grille LUMINE65 : laquage Qualicoat classe 2 25 ans (15 ans pour l'accroche de la laque), vitrage 10 ans, ferrure ROTO 10 ans sur le fonctionnement, autre ferrure 2 ans, soubassement mouluré et plate-bande 2 ans, motorisation 7 ans, volet roulant 5 ans, option bord de mer 5 ans (0 à 10 km) / 7 ans (au-delà).",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/garanties/garanties-par-composant.md", "extrait": "Elle diffère de la grille générale sur une ligne : la structure de la fenêtre y est garantie **20 ans** (« Garantie 20 ans sur la structure de la fenêtre », **CTR-03**)."},
+  {"page": "/garanties/garanties-par-composant.md", "extrait": "| Structure de la fenêtre | 15 | - (**CTR-03**) |"},
+  {"page": "/gammes/lumine.md", "extrait": "La garantie de la structure de la fenêtre LUMINE65 est de 20 ou de 15 ans selon le document (**CTR-03**) [1 p. 35, 2 p. 5]"},
+  {"page": "/anomalies/contradictions-entre-sources.md", "extrait": "| CTR-03 | Garantie structure | Catalogue général, p. 35 : 15 ans sur la structure de la fenêtre ; ... | Brochure PERFORM+/HYBRIDE+, p. 3 **et brochure LUMINE65, p. 5** : 20 ans sur la structure | **aucune** — la valeur ne suit ni la date ni le produit |"}
+ ],
+ "ambiguite": "Pas d'ambiguïté sur la question, mais la réponse est contradictoire entre deux sources (CTR-03 ouverte) : il faut donner les deux valeurs. Préciser éventuellement fenêtre LUMINE65 ou coulissant LUMINE65 (la brochure parle de la fenêtre).",
+ "outils": 4,
+ "comment_trouve": "Page propriétaire des garanties connue (garanties/garanties-par-composant.md), section « Grille de la LUMINE65 » ; confirmation par la page gamme lumine.md (déjà lue) et l'entrée CTR-03 du registre (grep « CTR-03 »).",
+ "formulations": [
+  "Combien d'années de garantie sur le cadre d'une fenêtre alu LUMINE65 ?",
+  "garantie structure LUMINE65",
+  "Quelle est la garantie structure d'une fenêtre aluminium haut de gamme PROFERM ?"
+ ],
+ "defauts_wiki": [
+  "Écriture de la gamme : la question tape « LUMINE 65 » (avec espace), le wiki écrit « LUMINE65 » collé : un tokeniseur BM25 ne rapproche pas « lumine » + « 65 » de « lumine65 ».",
+  "Contradiction entre sources (CTR-03) non arbitrée : 20 ans (brochure LUMINE65) contre 15 ans (catalogue général) ; la ligne « Structure de la fenêtre | 15 » du tableau principal peut être prise seule.",
+  "La valeur 20 ans de la LUMINE65 est en prose (section « Grille de la LUMINE65 »), pas dans un tableau ; le tableau principal de la page dit 15 ans.",
+  "Registre contradictions-entre-sources.md très long (127 Ko) : s'il remonte, il écrase le budget des 3 pages."
+ ]
+}

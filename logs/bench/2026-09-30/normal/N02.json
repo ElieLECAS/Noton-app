@@ -1,0 +1,22 @@
+{
+ "id": "N02",
+ "reponse": "Le wiki ne donne pas de classe de résistance à la grêle pour les tabliers de volets roulants, ni pour la lame aluminium LA 37 ni pour aucune autre lame : le mot « grêle » n'apparaît dans aucune page. Ce que le wiki donne pour la LA 37 est la résistance au VENT (NF EN 13659 / NF DTU 34-2) : largeur maximale entre coulisses 2 400 / 2 400 mm en V*2, 2 300 / 2 300 mm en V*3, 1 800 / 2 100 mm en V*4, 1 500 / 1 800 mm en V*5, « Non admissible » en V*6 (valeurs pour H ≤ 2 250 mm / H ≤ 1 400 mm sous coffre, voir la page Résistance au vent des volets roulants SOPROFEN) ; ainsi que ses limites dimensionnelles et son poids selon le coffre (par ex. CHRONO PSE² : largeur max 2 500 mm, 2,70 kg/m²). La classe grêle est à demander à SOPROFEN.",
+ "dans_le_wiki": "non",
+ "preuves": [
+  {"page": "/reference/resistance-au-vent-volets-soprofen.md", "extrait": "| LA 37 | Aluminium | 37 | 2 400 / 2 400 | 2 300 / 2 300 | 1 800 / 2 100 | 1 500 / 1 800 | Non admissible |"},
+  {"page": "/equipements/volets-roulants-tradi-premonte.md", "extrait": "* Conformité aux normes **NF EN 13241** et **NF EN 13659** [1 p. 2]."}
+ ],
+ "ambiguite": "",
+ "outils": 5,
+ "comment_trouve": "Grep insensible à la casse « grêle|grele|hagel|hail » : zéro résultat dans tout le wiki. Grep plus large « EN 13659|NF EN 1932|résistance au vent|classe de vent|choc » : uniquement la résistance au vent des tabliers et des essais de choc sur profilés PVC. Grep « LA ?37 » : toutes les pages volets roulants SOPROFEN (CHRONO PSE², BLOC LX, MONO VI, TRADI) et la page de résistance au vent. Grep « classe|impact|intempér|NF Fermeture|13659|résistance » sur les pages volets : conformité NF EN 13241 / NF EN 13659 et classes de vent, jamais de classe grêle.",
+ "formulations": [
+  "Classe de résistance à la grêle d'un tablier alu lame 37 ?",
+  "LA37 grêle ?",
+  "Un volet roulant alu résiste à quelle classe de grêle ?"
+ ],
+ "defauts_wiki": [
+  "Absence de donnée : aucune page ne dit que la classe grêle n'est pas documentée ; une recherche lexicale sur « classe de résistance LA 37 » remonte la page de résistance au vent (classes V*2 à V*6), réponse voisine qui peut être prise à tort pour la réponse.",
+  "La lame est écrite « LA 37 » (avec espace) dans les tableaux et « LA37 » dans d'autres pages et les fiches sources : deux formes pour la même référence.",
+  "La donnée LA 37 est répartie sur six pages équipement plus des fiches sources qui recopient les valeurs (entorse à « une donnée, une page »)."
+ ]
+}

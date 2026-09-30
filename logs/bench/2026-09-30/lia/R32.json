@@ -1,0 +1,30 @@
+{
+  "question": "« J'étudie la notice simplifiée du système motorisé Proferm Eneo CC. Lors du raccordement électrique, quelles sont les tensions d'alimentation requises, à quoi correspondent les couleurs ou les repères des fils du câble de liaison, et quelles sont les consignes de sécurité pour éviter d'endommager la carte électronique (polarité, protection) ? »",
+  "pages_lues": [
+    "/quincaillerie/roto-safe-e-jonction-de-cable.md",
+    "/procedures/montage-jonction-de-cable-roto-safe-e.md",
+    "/quincaillerie/controle-acces-eneo-cc.md"
+  ],
+  "anomalies": [
+    "CTR-66",
+    "INC-189",
+    "INC-190",
+    "INC-93",
+    "VER-111",
+    "VER-112"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "Eneo CC raccordement électrique tension alimentation fils câble carte électronique"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/roto-safe-e-jonction-de-cable.md",
+        "/procedures/montage-jonction-de-cable-roto-safe-e.md",
+        "/quincaillerie/controle-acces-eneo-cc.md"
+      ],
+      "caracteres": 94166
+    }
+  ]
+}

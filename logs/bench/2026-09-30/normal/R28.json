@@ -1,0 +1,27 @@
+{
+ "id": "R28",
+ "reponse": "Dans le système 70 profine (KÖMMERLING), le DTD 6/16-2335 classe en famille « standard » les dormants 6100, 6101, 2502 et 2501. Leurs embouts sont les embouts de seuil (pièce qui ferme le bout du seuil contre le montant du dormant et reçoit son vissage), au choix avec un set d'assemblage mécanique (tableau 4 du DTD) : 6100 → embout 9F57 sur seuil 9F67, 9F61 sur seuil 9F68 (ou set 9F72 ; seuil Z043 : set 9F72 seul) ; 6101 → 9F65 sur 9F67, 9F66 sur 9F68 (ou set 9F71 ; Z043 : 9F71 seul) ; 2502 → 9F65 sur 9F67, 9F66 sur 9F68 (ou set J077 ; Z043 : J077 + embout M002) ; 2501 → 9F65 sur 9F67, 9F66 sur 9F68 (aucun set, rien sur Z043). Accessoire commun : M002, embout d'étanchéité / obturateurs latéraux pour seuils 9F67, 9F69 et Z043. Attention : la planche du 2502 au manuel de mise en œuvre 2023 ne lui donne que le set J077, sans embout 9F65/9F66. Pour le seuil de porte 9C42 des plans e.VOLUTION 2008, l'embout de fixation est 9F40 sur le 6101 et 9C79 sur le 2502 (planche « dormant standard ») ; le 6100 n'y figure pas.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/profiles/systeme-70-assemblages.md", "extrait": "| 6100 | standard | 9F57 ou 9F72 | 9F61 ou 9F72 | 9F72 |"},
+  {"page": "/profiles/systeme-70-assemblages.md", "extrait": "| 6101 | standard | 9F65 ou 9F71 | 9F66 ou 9F71 | 9F71 |"},
+  {"page": "/profiles/systeme-70-assemblages.md", "extrait": "| 2502 | standard | 9F65 ou J077 | 9F66 ou J077 | J077+M002 |"},
+  {"page": "/profiles/systeme-70-assemblages.md", "extrait": "| 2501 | standard | 9F65 | 9F66 | - |"},
+  {"page": "/procedures/mise-en-oeuvre-seuil-systeme-70.md", "extrait": "| accessoire | M002 | embout d'étanchéité | 9F67, 9F69, Z043 |"},
+  {"page": "/procedures/seuil-alu-9c42-systeme-70-evo2008.md", "extrait": "| 6101 | dormant standard | 9F40 | hauteur hors tout – 20, coupe droite | hors tout dormant – 10 | largeur hors tout ouvrant – 74 | 296 |"}
+ ],
+ "ambiguite": "« Embouts » : embouts de seuil (réponse ci-dessus) ou embouts de rejet d'eau (M626, M628, M629 pour A465 ; M329 pour 93051), qui dépendent du rejet d'eau et non du dormant. « Dormants standard » : famille du DTD (6100, 6101, 2502, 2501) ; les plans 2008 n'appellent « standard » que le 2502 et le 6101.",
+ "outils": 4,
+ "comment_trouve": "Grep « embout » dans /profiles/systeme-70-accessoires-par-profile.md (sections par dormant) puis lecture du tableau 4 « Set d'assemblage dormant / seuil » de /profiles/systeme-70-assemblages.md, qui porte la colonne Famille = standard ; contrôle du 2502 (planche manuel : J077 seul) et du seuil 9C42 (2008).",
+ "formulations": [
+  "Quels embouts de seuil pour les dormants 6100, 6101 et 2502 du système 70 ?",
+  "embout seuil dormant standard 70",
+  "Quel embout pour fermer le seuil alu sur un dormant neuf Kömmerling 70 ?"
+ ],
+ "defauts_wiki": [
+  "La notion « dormant standard » n'existe que dans la colonne Famille du tableau 4 (/profiles/systeme-70-assemblages.md) ; les pages de profilés ne classent pas les dormants en standard / large / rénovation dans leur frontmatter ni leurs titres.",
+  "Contradiction non enregistrée pour le 2502 : DTD « 9F65 ou J077 » et poster « 9F65 » contre planche du manuel « J077 » seul.",
+  "Donnée répétée dans trois tables (DTD, poster, manuel) sur deux pages, plus une par dormant dans /profiles/systeme-70-accessoires-par-profile.md (81 Ko).",
+  "La question dit « gamme 70 de profine » : le frontmatter porte systeme: 70 et fournisseur: KÖMMERLING ; le mot « profine » est dans le corps, mais « gamme 70 » ne correspond à aucune facette (les gammes sont PERFORM, HYBRIDE…)."
+ ]
+}

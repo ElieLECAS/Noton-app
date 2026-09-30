@@ -1,0 +1,10 @@
+{
+ "id": "R26",
+ "reponse": "Le wiki ne connaît aucune référence 763392563 : ni profilé, ni article de quincaillerie, ni accessoire ne porte ce numéro (les numéros d'article Roto, par exemple, ont 6 ou 7 chiffres).\n\nEn revanche, la suite **763 – 392 – 563** est exactement une ligne de tableau : le positionnement des gâches Roto NX KSR pour un ouvrant à la française à deux vantaux sans meneau fixe, crémone à sortie de tringle (tables F8 et F-6) :\n\n| HFF (mm) | HP (mm) | G1 (mm) | AFM (mm) |\n| --- | --- | --- | --- |\n| 1801 – 2400 | 763 | 392 | 563 |\n\nHP = hauteur de l'axe de poignée, G1 = cote de la gâche G1 sur le battement depuis le bas de feuillure, AFM = gâche du releveur / anti-fausse manœuvre (/quincaillerie/roto-nx-ksr-ouvrant-francaise.md). Attention : la plage 1801 – 2400 porte aussi une seconde ligne (HP 1000, G1 622, AFM 800), et la source ne donne aucun critère pour choisir entre les deux.\n\nSi c'est bien un numéro d'article que vous cherchez, pouvez-vous me dire d'où il vient (étiquette, bon de commande, fournisseur) ?",
+ "pages_citees": [
+  "/quincaillerie/roto-nx-ksr-ouvrant-francaise.md"
+ ],
+ "appels": 3,
+ "trouve": "partiel",
+ "navigation": "J'ai cherché d'abord la référence seule (763392563) : aucune page. Puis le préfixe 76339, au cas où ce serait un profilé à 5 chiffres suivi d'un code : rien non plus. J'ai alors découpé le nombre en 763 / 392 / 563 : la recherche a livré en tête la page de l'ouvrant à la française Roto NX KSR, où ces trois nombres forment exactement une ligne du tableau de positionnement des gâches (HFF 1801-2400, HP 763, G1 392, AFM 563), ce qui laisse penser à une ligne de tableau collée d'un bloc. Aucun numéro d'article ne correspond : la réponse est donc une hypothèse fondée sur le wiki, pas une identification. Ce qui aurait aidé : une recherche capable de trouver une sous-chaîne de chiffres, ou que l'utilisateur dise d'où vient ce numéro."
+}

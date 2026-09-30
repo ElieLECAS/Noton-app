@@ -6,15 +6,21 @@ tags: [roto, roto-nx, ksr, palier, pivot, compas, quincaillerie, reference]
 systeme: Roto NX
 fournisseur: ROTO
 usage: atelier
-status: stable
+status: draft
 sources:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     id: roto-nx-ksr-montage-imo-180
     title: Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2
     last_modified: 2022-11-30
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    id: roto-nx-catalogue-ctl-105
+    title: Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023
+    last_modified: 2023-06-30
 source_pages:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     pages: 38, 40, 42, 44, 46-48, 50, 52, 54, 56, 58, 80, 84
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    pages: 389-393
 generated:
   by: process:claude-code
   at: 2026-09-19T23:50:00Z
@@ -188,6 +194,11 @@ semi-fixe ou dans une rainure de 16 mm, avec sa gâche (voir le [glossaire](/ref
 
 Les loqueteaux 1 et 2 portent le même numéro 788363 ; la version sur rainure de 16 mm y ajoute la
 cale 794997.
+
+Le catalogue Roto NX PVC donne les mêmes numéros sous d'autres désignations (788363 loqueteau pièce
+d'ouvrant, 788378 et 788507 loqueteaux de têtière, 794997 support, 244517 loqueteau magnétique
+pièce d'ouvrant) et n'a pas la cale 622589 : entrée **CTR-121**, voir
+[Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md).
 
 ![Loqueteau Roto NX, gâches, équerre et cale, repères 1 à 6](/assets/quincaillerie/roto-nx-ksr/composants/loqueteau-et-gaches.png)
 

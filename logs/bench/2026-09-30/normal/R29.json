@@ -1,0 +1,37 @@
+{
+ "id": "R29",
+ "reponse": "Le wiki ne donne aucune valeur d'affaiblissement acoustique (dB) pour la LUMINE55. La seule valeur acoustique de la gamme LUMINE concerne la LUMINE65 : fenêtre LUMINE65 jusqu'à 40 dB (brochure LUMINE65, février 2025, p. 2), et coulissant LUMINE65 36 dB (brochure p. 3). Le catalogue général ne rattache à aucun chiffre ses formules « très bon rempart contre le bruit » ou « performances acoustiques améliorées ». La LUMINE55 est fabriquée sur le système TECHNAL SOLEAL FY 55, dont les pages « performances AEV et acoustiques » du catalogue de conception (p. 1-12) ne sont pas transcrites. Il ne faut donc pas reprendre les 40 dB de la LUMINE65 pour la LUMINE55.",
+ "dans_le_wiki": "non",
+ "preuves": [
+  {
+   "page": "/gammes/lumine.md",
+   "extrait": "* **Affaiblissement acoustique de la fenêtre LUMINE65** : jusqu'à **40 dB** (décibels) [2 p. 2] ;"
+  },
+  {
+   "page": "/sources/brochure-lumine65.md",
+   "extrait": "| 3 | le coulissant LUMINE65 : présentation, trois avantages, performances (Uw 1,6, A\\*4 E\\*6A V\\*A3, 36 dB)"
+  },
+  {
+   "page": "/commercial/lumine.md",
+   "extrait": "« Très bon rempart contre le bruit » et « performances thermiques et acoustiques améliorées » ne\nsont rattachés à aucune valeur en dB dans le catalogue général"
+  },
+  {
+   "page": "/sources/technal-soleal-fy-conception.md",
+   "extrait": "| 1-12 | Présentation générale, caractéristiques techniques, performances AEV et acoustiques | à faire |"
+  }
+ ],
+ "ambiguite": "Le demandeur confond peut-être LUMINE55 et LUMINE65 (40 dB pour la fenêtre LUMINE65, 36 dB pour le coulissant LUMINE65). Demander s'il s'agit bien de la 55.",
+ "outils": 4,
+ "comment_trouve": "Grep « acousti|dB|Rw|affaiblissement » sur les pages LUMINE (gamme, commercial, brochure, labels) : seule la LUMINE65 est chiffrée. Grep « LUMINE55 » : coloris, commercial, fournisseur TECHNAL (LUMINE55 = SOLEAL FY 55). Grep acoustique sur les pages SOLEAL FY : rien de chiffré ; la plage « performances AEV et acoustiques » du catalogue de conception est « à faire ».",
+ "formulations": [
+  "Quel affaiblissement acoustique Rw en dB pour une fenêtre alu LUMINE55 ?",
+  "LUMINE 55 dB",
+  "Quelle isolation phonique maxi pour la fenêtre alu de 55 mm de PROFERM ?"
+ ],
+ "defauts_wiki": [
+  "Donnée absente pour la LUMINE55 ; source probable (catalogue de conception SOLEAL FY 55, p. 1-12) non transcrite.",
+  "Risque d'erreur : la seule valeur en dB de /gammes/lumine.md (40 dB) est celle de la LUMINE65, sur la même page que la LUMINE55 ; une recherche « LUMINE 55 acoustique » livre cette page et invite à reprendre 40 dB.",
+  "La question écrit « LUMINE 55 » (deux mots) ; le wiki écrit « LUMINE55 » collé.",
+  "Le 36 dB du coulissant LUMINE65 n'est chiffré que dans le registre de la fiche source et renvoyé à /gammes/coulissants-aluminium.md : valeur répartie sur deux pages."
+ ]
+}

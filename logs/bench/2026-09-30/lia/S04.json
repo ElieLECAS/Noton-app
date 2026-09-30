@@ -1,0 +1,26 @@
+{
+  "question": "en ouvrant minimal ?",
+  "pages_lues": [
+    "/profiles/soleal-fy-parcloses-et-vitrage.md",
+    "/profiles/soleal-fy-dormants-et-ouvrants.md",
+    "/procedures/fabrication-soleal-fy.md"
+  ],
+  "anomalies": [
+    "INC-192"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "ouvrant minimal parclose joint vitrage 24 mm",
+        "systeme": "SOLEAL FY"
+      },
+      "pages_nouvelles": [
+        "/profiles/soleal-fy-parcloses-et-vitrage.md",
+        "/profiles/soleal-fy-dormants-et-ouvrants.md",
+        "/procedures/fabrication-soleal-fy.md"
+      ],
+      "caracteres": 40530
+    }
+  ]
+}

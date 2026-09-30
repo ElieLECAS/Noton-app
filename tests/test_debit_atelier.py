@@ -111,9 +111,10 @@ def test_nomenclature_et_accessoires(snap):
     assert all(l["source"]["page"].startswith("/") for l in r["lignes"])
 
 
-def test_api_debit(client, lecteur_headers):
+def test_api_debit(client, admin_headers, lecteur_headers):
     assert client.post("/api/faisabilite/debit", json={}).status_code == 401
-    r = client.post("/api/faisabilite/debit", headers=lecteur_headers, json={
+    assert client.post("/api/faisabilite/debit", headers=lecteur_headers, json={}).status_code == 403
+    r = client.post("/api/faisabilite/debit", headers=admin_headers, json={
         "configuration": "1v_of", "largeur_mm": 900, "hauteur_mm": 1400, "dormant": "76171", "ouvrant": "76281",
         "surcote_soudure_mm": 3})
     assert r.status_code == 200 and r.json()["surcote"] == 3 and r.json()["lignes"]

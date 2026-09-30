@@ -1,0 +1,22 @@
+{
+ "id": "R33",
+ "reponse": "La TGY3702 est la crémone encastrée 3 points (sans clé) du coulissant TECHNAL SOLEAL GY 55 (gamme LUMINE). Le wiki ne donne pas de crémone 4 points d'un seul tenant : le 4e point s'obtient en ajoutant la rallonge 4ème point TGY3704, raccordée à la TGY3702 (ou à la TGY3703, 3 points à clé), fixée par 2 vis TGY3723, prévue « pour très grandes hauteurs ».\n\nRappel de la gamme de crémones SOLEAL GY : TGY3700 1 point simple (châssis ≥ 395 mm, Hp ≥ 219 mm) ; TGY3701 1 point à clé (525 / 346 mm) ; TGY3702 3 points (1 292 / 721 mm, 6 vis TGY3723) ; TGY3703 3 points à clé (1 292 / 721 mm, 8 vis) ; TGY3704 rallonge 4ème point ; TKG025 fermeture 1 point coquille.\n\nSource : /quincaillerie/soleal-gy-roulements-et-fermetures.md (tableau « Gamme de crémones encastrées »).",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/quincaillerie/soleal-gy-roulements-et-fermetures.md", "extrait": "| **TGY3702** | 3 points | Non | 1 292 mm | 721 mm | 6 vis TGY3723 |"},
+  {"page": "/quincaillerie/soleal-gy-roulements-et-fermetures.md", "extrait": "| **TGY3704** | Rallonge 4ème point | Raccordée à TGY3702/03 | Pour très grandes hauteurs | — | 2 vis TGY3723 |"}
+ ],
+ "ambiguite": "La question demande « la crémone 4 points » : le wiki n'en connaît pas, seulement la rallonge TGY3704 qui s'ajoute à la 3 points. Le préfixe TGY désigne le SOLEAL GY ; les autres coulissants (LUMEAL GA, ASKEY 65 NV) ont leur propre quincaillerie.",
+ "outils": 3,
+ "comment_trouve": "Grep « TGY37\\d\\d » : la seule page qui porte TGY3702 est quincaillerie/soleal-gy-roulements-et-fermetures.md (10 ko), tableau des crémones. Grep « 4 points / 4ème point » pour vérifier qu'aucune autre crémone 4 points n'existe : seule la TGY3704.",
+ "formulations": [
+  "quelle rallonge pour passer une fermeture 3 points SOLEAL GY en 4 points ?",
+  "crémone 4 points TGY",
+  "sur un coulissant alu Technal, comment ajouter un quatrième point de fermeture à la crémone 3 points ?"
+ ],
+ "defauts_wiki": [
+  "La question parle de « crémone 4 points » ; le tableau écrit « Rallonge 4ème point » : un menuisier qui cherche « 4 points » ne trouve que la description (« fermetures 1 à 4 points »), pas la ligne.",
+  "Les pages sources SOLEAL GY (conception p. 86-103, fabrication p. 108-122) sont marquées « à faire » : la page de quincaillerie n'a pas été relue page à page (pas de citations [1 p. N] dans le tableau des crémones).",
+  "Le tag « cremona » (sic) au lieu de « cremone » dans la frontmatter."
+ ]
+}

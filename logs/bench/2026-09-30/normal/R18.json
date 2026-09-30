@@ -1,0 +1,25 @@
+{
+ "id": "R18",
+ "reponse": "Le wiki ne décrit nulle part une pièce plastique « à coller et visser en haut et en bas du montant central avant de gonder les ouvrants » pour l'étanchéité à l'air d'une percussion centrale 4 vantaux. Ce qu'il donne de plus proche, selon la gamme : (1) ASKEY Coulissant 65 NV, 4 vantaux à percussion centrale réduite : après avoir fixé le profilé de jonction centrale rapporté Y3740022 (vis TF ST3.5x16 au pas de 300 mm), « poser les embouts spécifiques de percussion centrale réduite Y4740038 et Y4740039 » [askey5.pdf p. 118] — c'est le meilleur candidat (embouts d'extrémité du montant central de percussion), mais le wiki ne dit ni qu'ils se collent, ni qu'ils se vissent, ni leur rôle d'étanchéité à l'air. (2) SOLEAL GY 55 : les guides de montants centraux TGY3883 se clipsent en tête et en pied de chaque montant central, avec une mousse d'étanchéité à fleur de profilé — mais ils se posent APRÈS gondage et sont clipsés (verrouillés par rotation à la clé Allen de 4 mm), pas collés. (3) LUMEAL GA 4 vantaux percussion : profilé PVC de percussion T821003 (débit H − 140, « isolation de battement ») et bouchons d'angle d'ouvrant centraux T441011/12 garnis de colle TW110 ; talon d'étanchéité haut T401000 vissé au droit de la chicane centrale. Il faut préciser la gamme ; la pièce exacte n'est pas documentée.",
+ "dans_le_wiki": "partiel",
+ "preuves": [
+  {"page": "/procedures/fabrication-coulissant-askey-65-nv.md", "extrait": "* Poser les embouts spécifiques de percussion centrale réduite Y4740038 et Y4740039 [1 p. 118]."},
+  {"page": "/quincaillerie/soleal-gy-roulements-et-fermetures.md", "extrait": "- **Guides de montants centraux TGY3883** : Se clipsent en tête et pied de chaque montant central après gondage des vantaux. Verrouillage par rotation des flèches à l'aide d'une clé Allen de 4 mm. Mousse d'étanchéité positionnée à fleur de profilé."},
+  {"page": "/profiles/lumeal-ga-cotes-de-debit.md", "extrait": "| **Profilé PVC percussion** | T821003 | 1 | $H - 140$ | Isolation de battement |"},
+  {"page": "/sources/askey-coulissant-65-nv-conception.md", "extrait": "| 96-107 | Bouchons, flasques de dormant, caches usinages, talons d'étanchéité, embouts d'ouvrants, déflecteurs | à faire |"}
+ ],
+ "ambiguite": "Gamme non précisée : ASKEY Coulissant 65 NV (percussion centrale ou percussion centrale réduite), SOLEAL GY 55 (percussion TGY1204) ou LUMEAL GA (montants de percussion T141033/34). Demander la gamme et si le châssis est en percussion centrale « réduite » (ASKEY).",
+ "outils": 9,
+ "comment_trouve": "Grep « percussion » (toutes pages), puis « chicane », « talon|pièce d'étanchéité|bloc d'étanchéité », puis expressions « avant gondage », « en tête et pied », « en haut et en bas » ; lecture des sections percussion ASKEY (fabrication, débits, quincaillerie), LUMEAL GA (procédure) et SOLEAL GY (gâches, centreurs, guides). Aucune pièce à la fois collée, vissée, haut/bas, avant gondage. Les registres ASKEY (p. 96-107 : talons, embouts) et TECHNAL (talons hauts, butée centrale T401014) sont en « à faire ».",
+ "formulations": [
+  "Quel bouchon d'étanchéité poser en tête et en pied des montants de percussion d'un coulissant 4 vantaux alu ?",
+  "embout percussion centrale coulissant 4 vantaux",
+  "pièce d'étanchéité au centre d'un coulissant 4 vantaux à percussion"
+ ],
+ "defauts_wiki": [
+  "Donnée probablement absente : les pages sources des talons, embouts et bouchons (ASKEY conception p. 96-107, fabrication p. 115-118 ; LUMEAL fabrication p. 178-184 ; SOLEAL GY fabrication p. 158-163) sont toutes en « à faire ».",
+  "Les embouts Y4740038 / Y4740039 n'ont ni désignation, ni fonction, ni mode de fixation : une question qui décrit la pièce par sa fonction (« pour pas que l'air s'engouffre ») n'a aucun mot commun avec la ligne.",
+  "Vocabulaire du métier non repris : « enquiller » (= gonder), « se taper de face », « s'engouffrer » n'existent pas dans le wiki ; le glossaire n'a pas d'entrée « percussion ».",
+  "Donnée répartie sur trois gammes et cinq pages (procédure ASKEY, débits ASKEY, quincaillerie SOLEAL GY, débits LUMEAL, procédure LUMEAL) ; une recherche BM25 sur « percussion centrale » remonte surtout les pages de débit, pas les pièces d'étanchéité."
+ ]
+}

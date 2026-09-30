@@ -1,0 +1,414 @@
+===== PAGE 1 : /equipements/volets-roulants.md =====
+# Définition et principe d'intégration
+
+Le volet roulant intégré est assemblé à la menuiserie ; il s'adapte sur toutes les menuiseries PROFERM ([PERFORM](/gammes/perform.md), [HYBRIDE](/gammes/hybride.md), [LUMINE](/gammes/lumine.md), [TEXTURAL](/gammes/textural.md)) [1 p. 28]. Ce qui en est annoncé (« LA solution idéale en terme d'isolation thermique et de rapidité de pose ») est sur [Arguments de la marque PROFERM](/commercial/proferm.md).
+
+L'assemblage en usine sur le dormant repose sur le système bloc-baie **Chrono One** conçu par [SOPROFEN](/fournisseurs/soprofen.md), intégrant un adaptateur haut clippé/vissé avec joint de finition adhésif, un emboîtement par basculement verrouillé par vis FPZ-3.9-28-ST, et des coulisses encollées (2 cordons PVC/silicone) clippées sur vis plots VC4/10T (voir [Montage en atelier du volet roulant bloc-baie Chrono One SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md)).
+
+# Caractéristiques techniques du coffre
+
+Le coffre est la boîte qui loge le tablier enroulé au-dessus de la menuiserie. Hauteurs et finitions du coffre du volet roulant intégré ; une ligne par paramètre [1 p. 28].
+
+| Paramètre | Valeur | Condition |
+| --- | --- | --- |
+| Hauteur de coffre | 200 mm | selon la dimension de la menuiserie |
+| Hauteur de coffre | 230 mm | selon la dimension de la menuiserie |
+| Teinte du coffre | toutes les teintes RAL | - |
+| Plaxage du coffre | tous les films proposés dans les gammes de fenêtres | - |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 28)
+
+## Technologie brevetée GoodNight
+
+L'occultation est obtenue par la technologie brevetée **GoodNight** : intégration dans la coulisse (le rail vertical où glisse le tablier) d'un profilé d'insertion de coloris noir, d'un joint co-extrudé et d'un joint brosse [1 p. 28].
+
+## Coffres demi-linteau Bloc LX
+
+En construction neuve avec réservation demi-linteau en maçonnerie, la fermeture est réalisée au moyen du système **Bloc LX** de [SOPROFEN](/fournisseurs/soprofen.md), intégrant une fixation solidaire sur dormant, des profilés de renfort d'inertie (DL-R10 ou DL-R12) et un calfeutrement étanche à l'air (voir [Volet roulant coffre demi-linteau BLOC LX](/equipements/volet-roulant-bloc-lx-demi-linteau.md) et la procédure d'[Assemblage et pose du coffre demi-linteau Bloc LX SOPROFEN](/procedures/pose-bloc-lx-demi-linteau-soprofen.md)).
+
+## Blocs-baies Chrono One
+
+Évalué et certifié par le CSTB sous l'[Avis Technique n° 6/16-2339_V2](/certifications/at-cstb-6-16-2339-coffres-chrono.md), le coffre bloc-baie **Chrono One** de [SOPROFEN](/fournisseurs/soprofen.md) est disponible en hauteurs 200 mm ($\varnothing_{\text{enroulement}} = 165\text{ mm}$) et 230 mm ($\varnothing_{\text{enroulement}} = 185\text{ mm}$), avec une étanchéité à l'air de classe C3 ou C4 sous 4 Pa ($0,08\text{ m}^3/\text{h.m}$) et une rigidité flexionnelle $EI$ au vent atteignant $62\,160\text{ N.m}^2$ avec renfort MX20-2. Sa sous-face réversible MX01R permet d'augmenter l'épaisseur de doublage intérieur de 40 mm (de 120 à 160 mm) sans changer d'adaptateur. Il se décline selon deux méthodes de montage en atelier :
+* **Sur dormant standard** : montage avec pose préalable de l'adaptateur PVC et du joint adhésif de traverse haute, clippage du coffre par basculement et verrouillage latéral FPZ-3.9-28-ST, puis clippage frontal des coulisses sur pions VC4/10T avec double cordon de mastic PVC/silicone (voir [Montage en atelier du volet roulant bloc-baie Chrono One SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md)).
+* **Sur dormant monobloc** : vissage préalable des coulisses sur les montants de châssis (écartement max 400 mm, vis plots obligatoires pour coulisse centrale), emboîtement vertical du coffre dans la zone d'indexage sommitale des coulisses, relevage de la lame finale et vissage frontal traversant de l'adaptateur sur au moins 2 cloisons du profil dormant (voir [Montage en atelier du bloc-baie Chrono One sur dormant monobloc SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen.md)).
+* **Reprise de charge d'angle** : dans les deux configurations, des pattes métalliques déformables **VX26** (vis 15/3-9/9-5) assurent la liaison rigide et inclinable entre les joues du coffre et le dormant.
+
+## Blocs-baies haute performance CHRONO PSE² et inversé MONO VI
+
+La gamme de blocs-baies SOPROFEN s'étend à des architectures spécifiques :
+* **[Volet roulant et BSO bloc-baie CHRONO PSE²](/equipements/volets-roulants-chrono-pse2.md)** : corps isolant en polystyrène expansé haute densité ($U_c$ jusqu'à $0,3\text{ W/m}^2\text{K}$), caissons de 300 et 360 mm, accès intérieur ou extérieur, et compatibilité avec tabliers volets roulants ou Brise-Soleil Orientables (BSO).
+* **[Volet roulant inversé bloc-baie MONO VI](/equipements/volets-roulants-mono-vi.md)** : volet bloc-baie à enroulement extérieur et trappe d'accès affleurante intérieure, coffre ultra-compact de 140 mm maximisant le clair de jour sous linteau, idéal en rénovation et ITE ($U_c = 0,9 + 0,11/L_c$).
+
+## Résistance au vent des tabliers (NF EN 13659 et DTU 34-2)
+
+La tenue sous pression de vent des lames PVC (L37, L50) et aluminium (LA37, LA50) fait l'objet d'essais en usine selon les classes V\*2 à V\*6, en fonction de la zone géographique de vent (1 à 4), de la catégorie de terrain (IV urbain à 0 littoral) et de la hauteur de la baie (voir [Résistance au vent des volets roulants SOPROFEN](/reference/resistance-au-vent-volets-soprofen.md)).
+
+# Motorisations et commandes SOMFY
+
+L'équipement des volets fait appel aux solutions motorisées du fabricant [SOMFY](/fournisseurs/somfy.md) [1 p. 28] :
+
+| Motorisation | Description | Image |
+| --- | --- | ---: |
+| Moteur SOMFY® IO RS100 | Mouvement maîtrisé : démarrage et arrêt en douceur en fins de courses ; moteur bi-vitesse pour adapter le mouvement des volets. Nouveau confort acoustique : en « mode discret » le volet roulant devient silencieux ; confort acoustique inégalé. Mouvement protecteur : détection d'obstacles et arrêt immédiat ; équipé d'une détection du gel, ce qui évite la détérioration du matériel | ![Moteur SOMFY IO RS100](/assets/equipements/volets-roulants/moteur-somfy-io-rs100.png) |
+| Radio IO solaire | Plus besoin de câblage électrique : un capteur solaire est installé sur le coffre (en rénovation) ou au-dessus de la menuiserie (pour le neuf). Compatible avec toute la gamme des commandes RTS et TaHoma | ![Radio IO solaire](/assets/equipements/volets-roulants/radio-io-solaire.png) |
+| Moteur SOMFY® filaire | Solution plus économique ; la commande filaire permet de contrôler les volets roulants et de gérer leur ouverture et leur fermeture. Le système filaire permet de commander un seul volet | ![Moteur SOMFY filaire](/assets/equipements/volets-roulants/moteur-somfy-filaire.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 28)
+
+## Implantation du capteur solaire
+
+Le capteur solaire de la motorisation radio IO solaire est installé sur le coffre en rénovation, et au-dessus de la menuiserie pour le neuf [1 p. 28].
+
+## Domotique et gestion centralisée
+
+La technologie RADIO IO HOMECONTROL permet de piloter l'ensemble des équipements depuis un smartphone grâce au boîtier TaHoma. L'ensemble des volets roulants proposés par PROFERM sont compatibles avec cette technologie [1 p. 28].
+
+![Points de commande : boîtier TaHoma, télécommande, commande murale](/assets/equipements/volets-roulants/points-de-commande.png)
+
+# Manœuvres manuelles sans domotique
+
+Trois organes de manœuvre manuelle non motorisée sont disponibles [1 p. 28] :
+
+| Mécanisme manuel | Restriction d'emploi |
+| --- | --- |
+| Tirage direct | - |
+| Sangle | **non disponible en rénovation** |
+| Tringle oscillante | - |
+
+![Mécanismes manuels sans domotique : tirage direct, sangle, tringle oscillante](/assets/equipements/volets-roulants/mecanismes-manuels.png)
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 28)
+
+Sur les volets à tirage direct équipés d'une lame finale à serrure, la réalisation des lumières de verrouillage en fond de coulisses fait l'objet d'une méthodologie spécifique selon le profil de cylindre (voir [Perçage des coulisses pour lame à serrure sur volet à tirage direct](/procedures/percage-coulisses-lame-serrure-soprofen.md)).
+
+# Garanties
+
+Durées de garantie applicables aux volets roulants et motorisations [1 p. 35] :
+* **Composants du volet roulant** : garantie 5 ans.
+* **Motorisation (Somfy filaire, RS100 io, moteur solaire)** : garantie 7 ans.
+* **Garantie « bord de mer » contre la corrosion des parties laquées (en option)** :
+  * Distance de 0 à 10 km du littoral : garantie 5 ans.
+  * Distance supérieure à 10 km du littoral : garantie 7 ans.
+
+# Citations
+
+[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 28 et 35
+
+# Voir aussi
+
+- [SOMFY](/fournisseurs/somfy.md)
+- [SOPROFEN](/fournisseurs/soprofen.md)
+- [Volet roulant traditionnel TRADI PRÉMONTÉ](/equipements/volets-roulants-tradi-premonte.md)
+- [Volet roulant traditionnel TRADI NON PRÉMONTÉ](/equipements/volets-roulants-tradi-non-premonte.md)
+- [Volet roulant traditionnel TRADI pour COFFRE TUNNEL et TRADI VTR](/equipements/volets-roulants-tradi-tunnel-vtr.md)
+- [Volet roulant coffre demi-linteau BLOC LX](/equipements/volet-roulant-bloc-lx-demi-linteau.md)
+- [Volet roulant et BSO bloc-baie CHRONO PSE²](/equipements/volets-roulants-chrono-pse2.md)
+- [Volet roulant inversé bloc-baie MONO VI](/equipements/volets-roulants-mono-vi.md)
+- [Résistance au vent des volets roulants SOPROFEN](/reference/resistance-au-vent-volets-soprofen.md)
+- [Montage en atelier du volet roulant bloc-baie Chrono One SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md)
+- [Montage en atelier du bloc-baie Chrono One sur dormant monobloc SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen.md)
+- [Avis Technique CSTB n° 6/16-2339_V2, coffres Chrono SOPROFEN](/certifications/at-cstb-6-16-2339-coffres-chrono.md)
+- [Assemblage et pose du coffre demi-linteau Bloc LX SOPROFEN](/procedures/pose-bloc-lx-demi-linteau-soprofen.md)
+- [Perçage des coulisses pour lame à serrure sur volet à tirage direct](/procedures/percage-coulisses-lame-serrure-soprofen.md)
+- [Screen extérieur SCREENAMAX](/equipements/screen-exterieur-screenamax.md)
+- [Moustiquaires enroulables verticales](/equipements/moustiquaires-enroulables-verticales.md)
+- [Garanties par composant](/garanties/garanties-par-composant.md)
+- [Guide technique Blocs-baies SOPROFEN 2022](/sources/soprofen-guide-technique-blocs-baies-2022.md)
+- [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md)
+
+===== PAGE 2 : /equipements/volet-roulant-bloc-lx-demi-linteau.md =====
+# Présentation générale du système BLOC LX
+
+Le volet roulant **BLOC LX** de [SOPROFEN](/fournisseurs/soprofen.md) est un système conçu pour l'intégration invisible sous coffre demi-linteau en construction neuve [1 p. 110]. Il est assemblé en atelier directement sur la traverse haute de la menuiserie extérieure (PVC ou aluminium), son axe étant disposé à l'horizontale et ses coulisses fixées verticalement entre les tapées d'isolation [1 p. 110, 2 p. 1].
+
+### Périmètre des fournitures
+
+* **Prestations SOPROFEN incluses** : tablier complet, coulisses pré-percées d'usine, consoles support d'axe, axe d'enroulement, manœuvre (manuelle ou motorisée), et demi-coffre (tiroir) avec ses embouts latéraux d'étanchéité [1 p. 110].
+* **Prestations hors fourniture SOPROFEN** : coffre demi-linteau maçonné ou terre cuite, menuiserie extérieure, tapées d'isolation et trappe intérieure de visite [1 p. 110].
+
+---
+
+# Cotes de fabrication et règles d'encombrement
+
+Les dimensions d'exécution d'un volet BLOC LX sont déterminées par deux cotes fondamentales exprimées en millimètres [1 p. 111] :
+
+* **Largeur de fabrication $L$** : correspond à la **largeur de dos à dos des coulisses** [1 p. 111].
+  * Largeur maximale admissible pour un tablier d'un seul tenant : **3 500 mm** en lames aluminium LA50 [1 p. 111].
+  * Encombrement hors-tout du tiroir demi-coffre : $\text{Largeur demi-coffre} = L + 270\text{ mm}$ (débordement symétrique de $135\text{ mm}$ de chaque côté de la menuiserie, avec l'axe de coulisse positionné à $70\text{ mm}$ du bord extérieur de la console) [1 p. 111].
+* **Hauteur de fabrication $H$** : correspond à la hauteur mesurée du **bas des coulisses au-dessus de la feuillure de la menuiserie**, alignée rigoureusement avec le dessus de la trappe du coffre [1 p. 111].
+* **Contrainte d'alignement** : l'alignement entre le dessus de la trappe de visite et la feuillure du dormant est impératif afin de garantir que le tablier s'enroule librement sans frotter contre la partie supérieure du demi-linteau ni contre la sous-face [1 p. 111].
+* **Réservation gros œuvre** : hauteur standard de réservation demi-linteau $H_{\text{demi-linteau}} = 292,5\text{ mm}$, offrant un passage vertical libre de 216 mm minimum sans profilé de renfort [1 p. 111, 124, 125].
+
+---
+
+# Compatibilité et cotes d'intégration selon les coffres demi-linteaux
+
+L'encombrement du volet BLOC LX s'adapte aux coffres préfabriqués des principaux industriels du gros œuvre (brique terre cuite ou béton). Les cotes fonctionnelles d'intégration varient selon le fabricant et le type de manœuvre retenu (cotes en millimètres pour une isolation de 120 mm) [1 p. 124, 125] :
+
+| Fabricant de coffre demi-linteau | Type de manœuvre | Déport support $Sd$ (mm) | Axe tige $DC$ (mm) | Débord intérieur $Ti$ (mm) | Débord extérieur $Te$ (mm) | Diamètre d'enroulement $\varnothing C$ (mm) | Débord console $A$ (mm) | Axe coulisse console $B$ (mm) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| TERREAL | Treuil | 148,5 | 15 | 50 | 150 | 190 | 135 | 70 |
+| TERREAL | Moteur | - | - | 55 | 80 | 180 | 135 | 70 |
+| GENOVA | Treuil | 148,5 | 15 | 50 | 150 | 190 | 135 | 70 |
+| GENOVA | Moteur | - | - | 50 | 150 | 190 | 135 | 70 |
+| PREFATEC | Treuil | 148,5 | 15 | 70 | 210 | 180 | 135 | 70 |
+| PREFATEC | Moteur | - | - | 70 | 210 | 180 | 135 | 70 |
+| IMERYS | Treuil | 148,5 | 15 | 55 | 80 | 180 | 135 | 70 |
+| IMERYS | Moteur | - | - | 50 | 55 | 180 | 135 | 70 |
+| STRADAL | Moteur uniquement | - | - | 100 | 100 | 165 | 135 | 70 |
+
+(schéma: raw/moustiquaires/export_doc_133.zip, p. 124 et 125)
+
+> [!IMPORTANT]
+> **Incompatibilité formelle du coffre STRADAL avec la manœuvre par treuil** : le demi-linteau STRADAL ne disposant d'aucune réservation latérale pour le passage du déport de cardan, la manœuvre manuelle par treuil y est strictement impossible. Les volets sous coffre STRADAL doivent obligatoirement être motorisés [1 p. 114, 120, 124, 125].
+
+---
+
+# Tabliers, lames et limites dimensionnelles
+
+Le BLOC LX accepte des tabliers en lames de PVC extrudé ou en aluminium profilé double paroi avec mousse polyuréthane standard ou haute densité (HD) [1 p. 112].
+
+### Caractéristiques mécaniques des lames
+
+| Référence de lame | Matériau | Pas de lame (mm) | Épaisseur nominale (mm) | Largeur max 1 tablier (mm) | Poids tablier (kg/m²) | Hauteur max $H$ coffre Stradal (mm) | Hauteur max $H$ autres coffres (mm) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| L 37 | PVC | 37 | 8 | 1 500 | 3,2 | 2 750 | 3 000 |
+| L 50 | PVC | 50 | 12 | 2 000 | 3,5 | 1 850 | 2 150 |
+| LATH 37 | Alu thermique | 37 | 8 | 2 500 | 2,7 | 2 750 | 3 000 |
+| LA 37 | Alu standard | 37 | 8 | 2 500 | 2,7 | 2 750 | 3 000 |
+| LAHD 37 | Alu haute densité | 37 | 8 | 2 500 | 2,7 | 2 750 | 3 000 |
+| LATH 50 | Alu thermique | 50 | 13 | 3 500 | 2,8 | 1 950 | 2 250 |
+| LA 50 | Alu standard | 50 | 13 | 3 500 | 2,8 | 1 950 | 2 250 |
+| LAHD 50 | Alu haute densité | 50 | 13 | 3 500 | 3,3 | 1 950 | 2 250 |
+
+(schéma: raw/moustiquaires/export_doc_133.zip, p. 112)
+
+*Majoration de poids* : ajouter **1,1 kg par mètre linéaire** pour la lame finale en aluminium [1 p. 112].
+*Note de hauteur* : les « autres coffres » regroupent TERREAL, GENOVA, PREFATEC, IMERYS et EVENO (Ligne A du barème Soprofen) [1 p. 112].
+
+---
+
+# Coulisses et lames finales
+
+### Typologie des coulisses
+
+Les coulisses sont livrées en standard avec un pré-perçage étagé d'usine $\varnothing 5\text{ mm}$ et $\varnothing 10\text{ mm}$ à entraxe régulier de 500 mm pour fixation directe entre tapées [1 p. 110] :
+* **CTA 09** : section $41,5 \times 29\text{ mm}$, réservée aux tabliers en lames de 37 mm [1 p. 110].
+* **CTA 13 E** : section $41,5 \times 29\text{ mm}$, pour tabliers en lames de 50 mm jusqu'à 3 000 mm de largeur [1 p. 110].
+* **CTA 13** : ancienne coulisse grande section $54,7 \times 29\text{ mm}$, maintenue pour harmonisation SAV et **obligatoire pour toutes les largeurs supérieures à 3 000 mm** [1 p. 110].
+
+### Lames finales
+
+* **LF40 (Standard)** : profilé aluminium extrudé de 34 mm de hauteur pour lames de 37 et 50 mm, équipée de butoirs d'arrêt cachés escamotables **BLF3-V1** et lestée selon les dimensions du tablier [1 p. 113].
+* **Variantes optionnelles** :
+  * Butoirs apparents **KZ 12/60** (coloris blanc, gris ou brun) : leur présence impose d'avoir posé la trappe intérieure de visite avant toute manœuvre du volet [1 p. 113].
+  * Lame finale **LF40 sans joint**.
+  * Lame finale compacte **LF30** (limitée aux teintes Blanc, Beige 1015, Gris 7016 et Brun) [1 p. 110, 113].
+
+---
+
+# Motorisations et manœuvres
+
+Le volet BLOC LX intègre des motorisations [SOMFY](/fournisseurs/somfy.md) ou SOPROFEN M-Soft², ainsi que des manœuvres manuelles par treuil [1 p. 113-117].
+
+### Synthèse des motorisations et largeurs minimales ($L_{\min}$)
+
+| Protocole | Modèle de motorisation | Code commande | Manœuvre de secours | Largeur mini $L_{\min}$ (mm) | Largeur max moteur court (mm) |
+| --- | --- | --- | --- | --- | --- |
+| Radio RTS | Oximo court RTS | R1 | Non | 500 | 799 |
+| Radio RTS | Oximo RTS standard | R1 | Non | 750 | - |
+| Radio RTS | Oximo court RTS + secours | R1S | Oui | 600 | 944 |
+| Radio RTS | Oximo RTS + secours | R1S | Oui | 850 | - |
+| Radio IO | Oximo court IO | IO1 | Non | 500 | 659 |
+| Radio IO | S&SO RS100 IO standard | IO1 | Non | 610 | - |
+| Radio IO | Oximo court IO + secours | IO1S | Oui | 600 | 804 |
+| Radio IO | S&SO RS100 IO + secours | IO1S | Oui | 710 | - |
+| Radio M-SOFT 2 | M-Soft² MVM court | R11 | Non | 530 | 659 |
+| Radio M-SOFT 2 | M-Soft² MVM standard | R11 | Non | 610 | - |
+| Filaire WT | Ilmo court | M | Non | 500 | 699 |
+| Filaire WT | Ilmo standard | M | Non | 650 | - |
+| Filaire WT | Ilmo court + secours | MS | Oui | 600 | 844 |
+| Filaire WT | Ilmo standard + secours | MS | Oui | 750 | - |
+| Filaire WT | Ilmo 12 tours (couple réduit) | M1 | Non | 650 | - |
+| Filaire WT | Ilmo 12 tours + secours | M1S | Oui | 750 | - |
+| Filaire M-SOFT 2 | M-Soft² MVEC 06/23 | M11 | Non | 530 | - |
+| Filaire M-SOFT 2 | M-Soft² MVE standard | M11 | Non | 610 | - |
+| Hybride filaire/radio | S&SO RS100 IO Hybrid | IOH | Non | 610 | - |
+| Hybride filaire/radio | S&SO RS100 IO Hybrid + secours | IOHS | Oui | 710 | - |
+
+(schéma: raw/moustiquaires/export_doc_133.zip, p. 113)
+
+> [!WARNING]
+> **Incompatibilité des protocoles radio** : les technologies radio Somfy RTS, Somfy IO et Soprofen M-Soft 2 sont strictement incompatibles entre elles et ne peuvent être appairées sur les mêmes points de commande [1 p. 115, 118].
+
+### Manœuvres manuelles par treuil
+
+* **Treuil TX13/5-7 (Code T)** : treuil sans fin de course équipé de série d'un verrouillage automatique TLX, d'un cardan double CS20/12-7 (tige hexagonale 7 mm de 500 mm) et d'une tige oscillante $\varnothing 12\text{ mm}$ en acier revêtu polyester [1 p. 114].
+* **Treuil TX13/5-7FC (Code T10)** : treuil à fin de course avec attaches souples de tablier [1 p. 114].
+* **Déport latéral par barrettes BTD** : permet d'ajuster l'écartement de la tige oscillante pour ne pas heurter l'ouvrant de la fenêtre [1 p. 120] :
+  * **Position A** (7 barrettes BTD) : distance axe tige au dos coulisse $DC = 15\text{ mm}$ (réservation coffre $R = 50\text{ mm}$).
+  * **Position B** (9 barrettes BTD) : $DC = 25\text{ mm}$ ($R = 60\text{ mm}$).
+  * **Position C** (11 barrettes BTD) : $DC = 35\text{ mm}$ ($R = 70\text{ mm}$).
+
+---
+
+# Projection à l'italienne (Manuelle)
+
+Le volet BLOC LX propose en option un mécanisme de projection vers l'extérieur pour tamiser le rayonnement direct [1 p. 121] :
+* **Bras de projection** : compas de longueur 300 mm (hauteur minimale de fenêtre $H_{\min} = 920\text{ mm}$) ou 470 mm ($H_{\min} = 1 260\text{ mm}$), avec traverse basse de solidarisation EP25 [1 p. 121].
+* **Obligations techniques** : tablier d'un seul tenant en lames LA37 ou LA50 (largeur max 1 500 mm), butoirs apparents KZ 12/60, tapée d'au moins 60 mm et espace libre minimum de 30 mm entre la coulisse et la menuiserie pour le débattement des bras [1 p. 121].
+* **Interdiction absolue** : la projection est **strictement interdite en manœuvre motorisée** ; elle ne peut être mise en œuvre qu'avec une manœuvre manuelle par treuil [1 p. 121].
+
+---
+
+# Profilés acier de renfort d'inertie
+
+Afin de contrer la poussée du vent sur les ensembles composés et les grandes largeurs, un renfort acier tubulaire plié ($49,7 \times 32\text{ mm}$, épaisseur 2,5 mm) de longueur $L$ peut être vissé sur la traverse haute de menuiserie [1 p. 122, 2 p. 2] :
+
+| Code renfort | Destination doublage | Dimensions section (mm) | Épaisseur acier (mm) | Inertie axiale $I_{xx'}$ (cm⁴) | Inertie principale $I_{yy'}$ (cm⁴) |
+| --- | --- | --- | --- | --- | --- |
+| Renfort code 1 | ISO 100 et ISO 120 | $49,7 \times 32$ | 2,5 | 2,60 | 5,56 |
+| Renfort code 2 | ISO 140 et ISO 160 | $49,7 \times 32$ | 2,5 | 3,15 | 18,70 |
+
+(schéma: raw/moustiquaires/export_doc_133.zip, p. 122)
+
+---
+
+# Options et accessoires d'atelier
+
+1. **Trappe de visite VX03/18** : sous-face aluminium laquée avec recouvrement réglable de 35 à 55 mm, clipsée sur supports DL-SFI (intérieur), DL-SFE (extérieur) et équerres d'extrémité DL-ESF [1 p. 122].
+2. **Pattes déformables VX26** : brides de fixation d'angle assurant la triangulation rigide entre les joues du coffre et le dormant de menuiserie (vis 15/3-9/9-5) [1 p. 121, 2 p. 2].
+3. **Mortaises d'entrée d'air VMC** : usinage d'atelier en partie haute sans fourniture de grille [1 p. 123] :
+   * **Type A** : entaille unique de $250 \times 15\text{ mm}$.
+   * **Type B** : double fente de $2 \times (172 \times 12\text{ mm})$ espacée par un pontet matière de 5 mm.
+4. **Isolation thermique** : tiroir équipé en standard du bouclier isolant DL52 (possibilité d'option sans isolant) [1 p. 123].
+
+---
+
+# Citations
+
+[1] [Guide technique volet roulant demi-linteau Bloc LX SOPROFEN](raw/moustiquaires/export_doc_133.zip), p. 110 à 125
+[2] [Guide de pose Bloc LX coffre demi-linteau SOPROFEN, réf. NO-BB-T-BLX-00-FR-202111](raw/moustiquaires/export_doc_136(1).zip), p. 1 à 3
+
+---
+
+# Voir aussi
+
+- [SOPROFEN](/fournisseurs/soprofen.md)
+- [SOMFY](/fournisseurs/somfy.md)
+- [Volets roulants](/equipements/volets-roulants.md)
+- [Assemblage et pose du coffre demi-linteau Bloc LX SOPROFEN](/procedures/pose-bloc-lx-demi-linteau-soprofen.md)
+- [Guide technique volet roulant demi-linteau Bloc LX SOPROFEN](/sources/soprofen-guide-technique-bloc-lx.md)
+- [Guide de pose Bloc LX coffre demi-linteau SOPROFEN (2021)](/sources/soprofen-guide-pose-bloc-lx-demi-linteau.md)
+
+===== PAGE 3 : /sources/soprofen-guide-technique-blocs-baies-2022.md =====
+# Nature et identification du document
+
+Le document est le catalogue technique général de référence et d'aide à la commande édité par [SOPROFEN](/fournisseurs/soprofen.md) pour l'intégralité de sa gamme de fermetures en blocs-baies [1 p. 1-148] :
+* **Titre officiel** : « GUIDE TECHNIQUE BLOCS-BAIES 2022 – Coffres pour le neuf et la rénovation » [1 p. 1].
+* **Référence d'édition** : `DOC86505 – 09/2022` [1 p. 148].
+* **Certifications NF Fermetures et normes** : Conforme NF EN 13659, certificats CSTB n° 942-252-02, 943-278-02, 944-281-02 (CHRONO ONE, CX14, CRX14, CRX18) et n° 763-252-79, 762-281-79, 764-278-79 (BLOC LX) [1 p. 1].
+* **Organisation industrielle** : SOPROFEN, filiale du Groupe Bouyer Leroux depuis 1984 : jusqu'à 2 500 unités produites par jour, 528 collaborateurs experts, plus de 45 brevets déposés, 8 usines de production (Mertzwiller, Froideconche, Champagney, Cholet, Marssac-sur-Tarn, Lassay-les-Châteaux, Charleroi, Lokeren) [1 p. 2-3].
+* **Volume** : 148 pages réparties en 6 grandes parties techniques et commerciales [1 p. 5].
+
+---
+
+# Registre de couverture
+
+**Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
+
+| Pages PDF | Contenu | État | Page du wiki |
+| --- | --- | --- | --- |
+| toutes | document entier, relevé sous l'ancien protocole dans les sections ci-dessous | à faire | - |
+
+# Structure générale du guide et registre d'analyse
+
+## 1. Présentation générale et Atouts Produits (p. 1 à 5)
+* **Chrono ONE (p. 4, 6-38)** : coffre bloc-baie haute performance en neuf, rénovation et ITE ; coefficient $U_c < 0,7\text{ W/(m}^2\text{.K)}$ ; affaiblissement acoustique $D_{n,e,\text{tr}}$ de 50 à 57 dB en standard ; perméabilité à l'air Classe 4.
+* **Bloc LX (p. 4, 72-85)** : coffre demi-linteau neuf invisible intérieur/extérieur ; enroulement $\varnothing 180\text{ mm}$ ; prémonté en usine sur menuiserie.
+* **Chrono PSE² (p. 4, 86-123)** : système combinant les avantages du bloc-baie et du coffre tunnel ; corps isolant en polystyrène expansé haute densité ; $U_c$ jusqu'à $0,3\text{ W/(m}^2\text{.K)}$ (calcul logiciel Bisco) ; acoustique jusqu'à 47 dB ; bi-fonction volet roulant ou Brise-Soleil Orientable (BSO).
+* **Mono VI (p. 4, 124-135)** : bloc-baie inversé à enroulement extérieur et trappe d'accès affleurante intérieure ; coffre ultra-compact de 140 mm maximisant le clair de jour ; $U_c = 0,9 + 0,11 / L_c$ ; acoustique jusqu'à 50 dB.
+* **État de transcription** : Transcrit.
+
+## 2. Gamme CHRONO ONE (p. 6 à 38)
+* **Cotes et débords (p. 6-7)** : $L$ = dos à dos des coulisses ; $L_c = L + DG + DD$ ; hauteur de commande sous coffre $H$ ; largeur maximale multi-tabliers = 4 000 mm.
+* **Tailles et tabliers (p. 8)** : Coffre 200 mm ($\varnothing 165$, $H_{\max} = 2\,500\text{ mm}$ en L37/LA37, $1\,800\text{ mm}$ en L50/LA50) et Coffre 230 mm ($\varnothing 185$, $H_{\max} = 3\,300\text{ mm}$ en L37/LA37, $2\,600\text{ mm}$ en L50/LA50). Lames PVC (L37, L50) et alu (LA37, LATH37, LA50, LATH50).
+* **Nuanciers et finitions (p. 9-10)** : Teinté masse (blanc 9016, ivoire 1015, gris 7035) ; Plaxage (face extérieure apparente $\le 40\text{ mm}$, renfort VX21 obligatoire) ; Laquage RAL sur coffre blanc (lisse-satiné LS, lisse-mat LM, structuré-mat SM). Option cornière alu MX04-CA ou lambrequin alu obligatoire si face extérieure $> 40\text{ mm}$.
+* **Coulisses et adaptateurs (p. 10-15)** : Coulisses PVC monobloc (CM135, CM235 à CM2107 avec réhausses 12, 20, 40 mm) ; Coulisses PVC tapées (C135 à C1107) ; Coulisses alu monobloc (CMA130, CMA135, CA135, CA235, CAL155 en L) ; Coulisses moustiquaire intégrée CAM145 (largeur 770 à 1 500 mm, hauteur max 1 400 à 2 350 mm). 40 profilés adaptateurs alu/PVC (MX10/35 à MX10/70, MX10/U1, MX10/U2).
+* **Lames finales et acoustique (p. 16, 18-19)** : Lame finale LF40 standard et acoustique LFA40 (profil obturant LFOJ30). Isolants phoniques trappe MX58-14/17-T10 et sous-face MX58-8-T10, permettant d'atteindre $D_{n,e,\text{tr}} = 57\text{ dB}$ (sans grille) et 55 dB (avec grille).
+* **Manœuvres (p. 20-30)** :
+  * Treuils sous-face (TX13/5-7, TX16/8D-7) et latéral (TXL10/4), cardans MCS12, MCD12, TSL10-KIT. Tiges $\varnothing 12\text{ mm}$.
+  * Sangle enrouleur pivotant BES14/5.5 (sangle 15 mm, 5,60 m).
+  * Tirage direct TGD avec ressort compensateur CR50G, canne de tirage et serrure intermédiaire à 1 m du bas ou sur lame finale (code TGDF).
+  * Motorisations radio Somfy RTS (Oximo RTS, Oximo 40 WF solaire autonome A35), Somfy IO (Oximo IO, S&SO RS100 IO, Oximo 40 WF IO solaire autonome A45), Soprofen M-Soft² (MVMC, MVM, autonome solaire A55), Simu solaire (A65), Filaire WT (Ilmo, Ilmo 12 trs), M-Soft² filaire (MVEC, MVEF), Hybride filaire/radio IO (S&SO RS100 IO Hybrid IOH/IOHS).
+* **Renforts et brides (p. 30-34)** : Renfort lambrequin VX21 ; renfort sous-face MX20-1 (code 2, $I_{yy'} = 16,29\text{ cm}^4$) et MX20-2 (code 3, $I_{yy'} = 23,87\text{ cm}^4$). Brides de reprise au gros œuvre (1 bride pour $L \in [1\,500, 1\,800]\text{ mm}$, 2 pour $1\,800$ à $2\,500\text{ mm}$, 3 pour $> 2\,500\text{ mm}$). Croquage de coffre (feuillure 85 à 180 mm, surlongueur 20 à 100 mm).
+* **Planches d'atelier cotées (p. 35-38)** : Coupes coffres 200 et 230 mm, détails moustiquaire intégrée.
+* **État de transcription** : Transcrit.
+
+## 3. Gamme CHRONO CX14, CRX14 et CRX18 (p. 39 à 71)
+* **Concept bloc-baie neuf et réno (p. 39-40)** : CX14 ($153 \times 187,2\text{ mm}$), CRX14 ($183 \times 232\text{ mm}$) et CRX18 ($218 \times 232\text{ mm}$). Option spécifique pour dormant de 70 mm (CRX14-70 et CRX18-70, profondeur 243 mm).
+* **Coulisses PVC et alu (p. 41-44)** : CV23/35 à CV23/66 doubles, CV13/35 à CV13/66 simples avec/sans clip, coulisses alu CTA09, CVA37, CVA23/42.
+* **Adaptateurs et cotes (p. 45-46)** : VRX11, VRX11-41 à VRX11-66 (cote châssis + 2 mm) et VRX13 (châssis + 23 mm en rénovation). Joint de finition VX59 obligatoire.
+* **Tabliers et limites (p. 47)** : L37 ($L_{\max} = 1\,500\text{ mm}$, $1\,800\text{ mm}$ avec pare-tempête), LA37 et LATH37 ($L_{\max} = 2\,500\text{ mm}$). Hauteurs maximales : 1 500 mm en CX14/CRX14, 2 600 mm en CRX18.
+* **Écarteurs de fond de coulisse (p. 48)** : déductions de 37 à 91 mm pour pose d'écarteurs dans les embouts CX14.
+* **Manœuvres manuelles et motorisées (p. 48-56)** : Sangle BES14/5.5 et KZ6/5.5 (9 m pour CX14) ; Treuils TX13/5-7, TX16/8D-7 et treuil intégré CRX ; moteurs RTS, IO, M-Soft², filaire Ilmo/M-Soft² et hybride.
+* **Performances thermiques et acoustiques (p. 57-61)** :
+  * Acoustique CX14 : 50 à 56 dB avec renfort VX23 et plaques bitume VX58/6 et VX58/9.
+  * Acoustique CRX14/CRX18 : 38 à 48 dB (avec lame finale LFO30).
+  * Tableaux des $U_c$ (p. 60-61) : CX14 en doublage 100 ($U_c = 1,72$ à $2,10\text{ W/m}^2\text{K}$ sans renfort, $1,87$ à $2,23\text{ W/m}^2\text{K}$ avec renfort) ; CRX18 ($U_c = 1,48$ à $2,34\text{ W/m}^2\text{K}$ selon isolation renforcée et lame finale obturante).
+* **Planches d'atelier cotées (p. 64-71)** : Coupes CX14, CRX14, CRX18, montages sur dormant de 70 mm, adaptateurs et coulisses.
+* **État de transcription** : Transcrit.
+
+## 4. Gamme BLOC LX Coffre demi-linteau (p. 72 à 85)
+* Guide complet du coffre demi-linteau neuf : cotes $L$ et $H$, compatibilités Terreal, Genova, Prefatec, Imerys, Stradal (incompatibilité Stradal/treuil), tabliers PVC (L37, L50) et alu (LA37, LAHD37, LATH50, LA50, LAHD50), motorisations et projection manuelle interdite en motorisé.
+* **État de transcription** : Transcrit.
+
+## 5. Gamme CHRONO PSE² — Volet roulant et BSO (p. 86 à 123)
+* **Concept hybride bloc-baie / coffre tunnel (p. 86-90)** :
+  * Coffre monolithique en polystyrène expansé graphité PSE moulé : $U_c$ exceptionnel jusqu'à $0,3\text{ W/(m}^2\text{.K)}$ selon calcul Bisco.
+  * Profondeurs de coffre disponibles : P = 260 mm ($H = 275\text{ mm}$), P = 300 mm ($H = 312\text{ mm}$ ou 283 mm avec plaque fibrociment), P = 360 mm ($H = 312\text{ mm}$ ou 343 mm avec plaque).
+  * Deux types d'accès de visite : **Accès Intérieur** (AI30, AI36, AIP30, AIP36) et **Accès Extérieur** (AE30, AE36, AEP30, AEP36).
+* **Version Volet Roulant (p. 86-114)** :
+  * Lames : PVC 50 mm (L50, max $2\,000 \times 2\,700\text{ mm}$), Alu 37 mm (LA37, max $2\,500 \times 3\,500\text{ mm}$), Alu 50 mm (LA50, max $3\,000 \times 2\,700\text{ mm}$).
+  * Coulisses alu avec tapée : AT1 (accès intérieur, déport 49 mm) et AT2 (accès extérieur, déport 99 mm).
+  * Lame finale obturante LFO avec joint J-LFO. Mortaises VMC Type A ($250\text{ mm}$), Type B ($2 \times 172\text{ mm}$), Type C ($172\text{ mm}$).
+  * Manœuvres : Radio RTS (Oximo RTS, Oximo WF solaire), Radio IO (Oximo IO, RS100 IO, Oximo WF solaire A45), M-Soft² radio/filaire, Filaire Ilmo, Treuils (TB sortie basse, TF sortie façade), Tirage direct TGD.
+  * Isolant phonique renforcé PSX58 collé en sous-face.
+  * Coupes et plans d'intégration : ITE, ITI, ossature bois MOB, double mur et monomur (p. 105-114).
+* **Version Brise-Soleil Orientable BSO (p. 115-123)** :
+  * 3 profils de lames en alliage spécial alu laqué anti-corrosion :
+    1. **Lames ourlées 80 mm** : épaisseur 0,45 mm, œillets polyamide noir, max $4\,000 \times 2\,800\text{ mm}$.
+    2. **Lames plates 80 mm** : épaisseur 0,45 mm, faible empilement, max $4\,000 \times 4\,000\text{ mm}$.
+    3. **Lames en Z 73 mm** : profilage à joint PVC souple d'occultation et d'insonorisation, max $4\,000 \times 2\,500\text{ mm}$.
+  * Motorisations spécifiques BSO : filaire avec fin de course ou radio RTS (émetteur Variation à molette d'orientation fine), IO (Situo 1 IO Variation), M-Soft 2 (Monotel).
+  * Câbles supplémentaires de guidage anti-vent obligatoires au-delà de 2,40 m (lames plates) ou 3,00 m (lames ourlées).
+* **État de transcription** : Transcrit.
+
+## 6. Gamme MONO VI — Bloc-baie inversé (p. 124 à 135)
+* **Concept de volet inversé (p. 124)** : volet roulant de type bloc-baie avec **enroulement extérieur du tablier** et trappe de visite affleurante intérieure.
+* **Encombrement ultra-réduit** : hauteur de coffre de **140 mm seulement**, maximisant le clair de jour. Permet d'équiper fenêtres et portes-fenêtres jusqu'à **2 360 mm sous coffre** ($H_{\text{hors-tout}} = H_{\text{châssis}} + 140\text{ mm}$). Idéal en rénovation et en ITE.
+* **Lames et dimensions (p. 125-127)** :
+  * Lame ALU 37 mm (LA37, LATH37) : largeur max 2 500 mm en simple tablier, 3 000 mm en multi-tablier, hauteur max 2 500 mm.
+  * Lame PVC 37 mm (L37) : largeur max 1 500 mm, hauteur max 2 500 mm.
+* **Mise en œuvre et adaptateurs (p. 127-128)** : adaptation aux dormants de 60 et 70 mm par adaptateurs PVC et embouts de trappe dédiés (aile de recouvrement 10 mm pour dormant 60, aile 18 mm pour dormant 70).
+* **Manœuvres (p. 129-135)** : moteurs Oximo RTS, Oximo IO, RS100 IO, Oximo solaire déporté A35, S&SO RS100 IO Hybrid, Ilmo filaire, M-Soft² radio/filaire, et treuil manuel T. Isolant phonique en masse lourde VX58/9 en option.
+* **État de transcription** : Transcrit.
+
+## 7. Informations pratiques et Résistance au vent (p. 144)
+* **Règles de sélection selon NF EN 13659 et DTU 34-2** :
+  * Tableau des largeurs limites admissibles par classe de vent (V\*2 à V\*6) et par type de lame pour une hauteur de 2 250 mm et 1 400 mm :
+    - Lame PVC L37 : V\*2 (1 300 mm), V\*3 (1 200 mm), V\*4 (1 000 mm), V\*5 (850 mm).
+    - Lame Alu LA37 : V\*2 (2 400 mm), V\*3 (2 300 mm), V\*4 (1 800 / 2 100 mm), V\*5 (1 500 / 1 800 mm).
+    - Lame PVC L50 : V\*2 (1 600 / 1 800 mm), V\*3 (1 400 / 1 500 mm), V\*4 (1 150 / 1 300 mm), V\*5 (900 / 1 000 mm).
+    - Lame Alu LA50 : V\*2 (2 700 / 3 200 mm), V\*3 (2 500 / 3 000 mm), V\*4 (2 300 / 2 800 mm), V\*5 (1 950 / 2 600 mm), V\*6 (1 800 / 2 400 mm).
+    - Lame Alu LA50 avec coulisses profondes CTA13 : V\*2 (3 400 mm), V\*3 (2 900 mm), V\*4 (2 500 mm), V\*5 (2 300 mm), V\*6 (1 900 mm).
+  * Matrice des classes de vent requises selon les 4 zones géographiques de vent, les 5 catégories de terrain (IV urbain, IIIb industriel, IIIa bocage, II rase campagne, 0 littoral/mer) et les tranches de hauteur (jusqu'à 9 m, 9-18 m, 18-28 m, 28-50 m, 50-100 m).
+* **État de transcription** : Transcrit.
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /sources/soprofen-volet-tradi-tunnel-et-vtr-2025.md | Document source | Fiche produit Volet traditionnel TRADI COFFRE TUNNEL et TRADI VTR SOPROFEN 2025 | source, soprofen, volet-roulant, tradi, coffre-tunnel, vtr | Fiche produit technique et commerciale de 2 pages dédiée aux volets roulants traditionnels SOPROFEN pour coffres tunnel et rénovation sur coulisses existantes VTR. | tion et -6 dB, coulisse Goodnight jusqu'à 3000 mm LA37/50 avec exclusion LA546, préperçage coulisses) / à faire / [Volet roulant traditionnel TRADI po |
+| /sources/soprofen-guide-technique-bloc-lx.md | Source | Guide technique volet roulant demi-linteau Bloc LX SOPROFEN | source, soprofen, bloc-lx, demi-linteau, volet-roulant, guide-technique | Guide technique officiel et catalogue d'aide à la commande SOPROFEN (16 pages, p. 110 à 125) pour le volet roulant demi-linteau Bloc LX — cotes de fabrication, abaques de tabliers PVC/alu, compatibilités coffres préfabriqués (Terreal, Genova, Prefatec, Imerys, Stradal), motorisations et options. | , chêne doré et alu brut). * 1 seul tablier alu LA37 ou LA50, largeur max $L_{\max} = 1500\text{ mm}$. * **Interdiction absolue : strictly non réa |

@@ -1,0 +1,12 @@
+{
+  "id": "R34",
+  "reponse": "Non, le **carbone noir** n'existe pas en PERFORM.\n\n- **Fenêtres PERFORM** (PERFORM70 et PERFORM76) : le nuancier comprend blanc 9016, ivoire, les plaxés (acajou, chêne irlandais, chêne doré, chêne naturel, siena, 7016 lisse grainé) et le laquage. Le laquage n'est possible qu'en PERFORM70, à ouverture extérieure ou sur une menuiserie cintrée, et aucune teinte laquée n'est codée. Il n'y a pas de carbone (/coloris/coloris-perform.md).\n- **Portes d'entrée PERFORM** : blanc, ivoire, plaxés de la collection AUTHENTIQUE et laqués. Il n'y a pas de carbone non plus (/coloris/coloris-portes-entree.md).\n\nLe carbone noir est une **texture exclusive de la gamme TEXTURAL**, pour l'**intérieur uniquement**, avec une **parclose RAL 9005**. Il figure au nuancier des fenêtres TEXTURAL (catalogue de janvier 2026 et dépliant de juin 2023) (/coloris/coloris-textural.md) et à celui des portes d'entrée TEXTURAL (/coloris/coloris-portes-entree.md). Pour un intérieur carbone noir, il faut donc passer en TEXTURAL.",
+  "pages_citees": [
+    "/coloris/coloris-perform.md",
+    "/coloris/coloris-portes-entree.md",
+    "/coloris/coloris-textural.md"
+  ],
+  "appels": 3,
+  "trouve": "oui",
+  "navigation": "Première recherche « carbone noir coloris PERFORM » avec la facette gamme PERFORM : elle a livré la page des coloris de portes d'entrée (où le carbone noir apparaît en texture exclusive TEXTURAL, absent du bloc PERFORM), puis deux pages hors sujet (PROFERM commercial, poignées) ; le nuancier des fenêtres PERFORM n'est arrivé qu'en métadonnées, en avant-dernière ligne. Comme la question parle plus probablement de fenêtres, j'ai lu /coloris/coloris-perform.md pour établir l'absence, puis /coloris/coloris-textural.md pour dire où le carbone noir existe côté fenêtres (intérieur uniquement, parclose RAL 9005). Une réponse négative exige de lire le nuancier complet de la gamme : il aurait dû sortir en tête avec la facette gamme PERFORM et le mot « coloris », il est resté derrière des pages plus longues qui citent PERFORM. Aucune anomalie du bloc ne concernait la réponse."
+}

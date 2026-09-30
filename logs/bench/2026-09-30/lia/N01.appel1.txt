@@ -1,0 +1,2238 @@
+===== PAGE 1 : /procedures/mise-en-oeuvre-renovation-systeme-70-evo2008.md =====
+# Ce que fait cette procédure
+
+La pose en rénovation remplace une fenêtre sans démolir son ancien cadre : les vantaux (les
+parties ouvrantes) de l'ancienne fenêtre sont déposés, son dormant (le cadre fixe, scellé dans la
+maçonnerie) reste en place, et la nouvelle menuiserie PVC est posée et fixée sur ce dormant existant
+([glossaire](/reference/glossaire.md)).
+
+Le classeur KÖMMERLING « Système e.VOLUTION » d'août 2008 (système F 91, système 70 de profine)
+traite ce sujet dans son registre 7.2 « Mise en oeuvre rénovation », sous le titre « Référentiel de
+mise en oeuvre » avec la mention « \* source UFPVC » (le même organisme que le référentiel de pose
+en neuf, voir [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md)).
+Le registre est paginé à partir de 1 : sa page imprimée N est la page N + 373 du PDF (pages
+imprimées 1 à 20, PDF p. 374 à 393). Les dessins des pages imprimées 1 à 15 ne sont pas à
+l'échelle ; les coupes des pages imprimées 16 à 20 sont à l'échelle 1:2 [1 p. 374-393].
+
+Le système de fabrication des dormants rénovation (6102, 6105, 6106, 6107) est sur
+[Systèmes spéciaux du système 70, 2008](/procedures/systemes-speciaux-systeme-70-evo2008.md#rénovation-sur-dormant-existant-registre-61).
+
+# Conditions et interdictions
+
+Le texte de la planche encadre son propre usage : « Ce document volontairement simphfié (sic), ne se
+substitue pas aux travaux de référence réalisés sous l'égide du CSTB et auxquels il conviendra de se
+reporter pour toutes informations complémentaires. Les méthodes de pose figurant ci-dessous sont
+données à titre indicatif et ne peuvent engager la responsabilité de KÖMMERLING. » [1 p. 374]
+
+# Pose sur dormant bois existant de menuiseries PVC à frappe faisant l'objet d'un avis technique
+
+Une menuiserie à frappe est une fenêtre dont l'ouvrant vient battre contre le dormant (ouvrant à la
+française, oscillo-battant) ; l'avis technique est l'évaluation officielle du produit par le CSTB
+([glossaire](/reference/glossaire.md)) [1 p. 374].
+
+## Repère 1 : travaux préparatoires
+
+Le schéma du repère 1 montre les quatre côtés de l'ancien dormant bois en coupe (traverse haute en
+haut, montants à gauche et à droite, traverse basse en bas) et les deux cotes de passage à relever :
+L, la largeur libre entre les deux montants, et H, la hauteur libre entre les deux traverses.
+
+![Repère 1 : cotes de passage L et H du dormant bois existant](/assets/procedures/mise-en-oeuvre-evo2008/renovation-bois-repere-1-cotes-de-passage-l-h-evo2008.png)
+
+Les étapes, dans l'ordre de la planche [1 p. 374] :
+
+1. Vérifier avant le démontage des vantaux les côtes (sic) de passage L et H.
+2. Contrôler les dimensions de la nouvelle fenêtre afin de s'assurer qu'elle s'inscrive dans le
+   passage libre de la baie avec un jeu périphérique minimum de 5 mm.
+3. Déposer les anciens ouvrants.
+4. Vérifier l'état général ainsi que la bonne tenue au gros oeuvre du dormant existant et en cas
+   de défaut constaté, effectuer une remise en conformité.
+5. Oter les organes de rotation (paumelles) ainsi que les gâches haute et basse.
+6. Brosser le dormant existant afin d'éliminer la poussière et les parties non-adhérentes de sa
+   protection.
+7. Réaliser un cordon d'étanchéité entre la maçonnerie et le dormant existant et boucher les
+   trous d'évacuation d'eau.
+8. Mettre en place, une ou des fourrures en bois traité dans les feuillures du dormant existant
+   afin de créer une surface plane. Les fourrures seront maintenues en place au moyen de clous ou de
+   vis.
+
+Une fourrure est une pièce de bois rapportée qui comble la feuillure (le ressaut) de l'ancien
+dormant pour offrir une face plane à la nouvelle menuiserie. Deux coupes, où l'ancien dormant est en
+gris moyen, la fourrure en gris clair et la maçonnerie en noir, précisent où elle est exigée :
+
+- « Fourrure bois en feuillure, facultative sur montants et traverse haute selon type de dormant bois
+  et mode de fixation » ;
+- « Fourrure bois en feuillure, obligatoire en traverse basse sauf si arasement de la
+  contre-feuillure du dormant bois » (l'arasement est la coupe à ras de la partie saillante de
+  l'ancien dormant).
+
+![Fourrure bois en feuillure, facultative sur montants et traverse haute](/assets/procedures/mise-en-oeuvre-evo2008/renovation-bois-fourrure-montants-traverse-haute-evo2008.png)
+
+![Fourrure bois en feuillure, obligatoire en traverse basse sauf arasement de la contre-feuillure](/assets/procedures/mise-en-oeuvre-evo2008/renovation-bois-fourrure-traverse-basse-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 374)
+
+## Repère 2 : installation de la menuiserie PVC
+
+La perspective du repère 2 montre la nouvelle fenêtre présentée dans l'ancien dormant, les points
+de calage sous la traverse basse (flèches « Calage »), les deux modes de fixation A et B, et une
+cote « ≈ 100 mm » portée à l'angle haut. Les deux coupes, nouveau dormant PVC en trait noir épais
+posé sur l'ancien dormant et sa fourrure, repèrent les axes de fixation : A seul sur la première, A
+et B sur la seconde ; la planche ne décrit pas autrement les deux modes [1 p. 375].
+
+![Repère 2 : calage et points de fixation A et B, perspective](/assets/procedures/mise-en-oeuvre-evo2008/renovation-bois-repere-2-calage-perspective-evo2008.png)
+
+![Repère 2 : fixation A sur la traverse basse](/assets/procedures/mise-en-oeuvre-evo2008/renovation-bois-repere-2-fixation-a-evo2008.png)
+
+![Repère 2 : fixations A et B sur le montant](/assets/procedures/mise-en-oeuvre-evo2008/renovation-bois-repere-2-fixation-a-b-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 375)
+
+Les étapes communes [1 p. 375] :
+
+1. Positionner sur l'ancien dormant la fenêtre PVC ou son cadre dormant selon le mode de
+   fixation retenu (A ou B).
+2. Glisser des cales en bois traité de 5 mm d'épaisseur minimum entre les traverses basses. Les
+   positionner au droit des montants latéraux et intermédiaires si existants.
+
+Option 1 [1 p. 375] :
+
+1. Centrer la menuiserie à l'aide de vérins, ou de cales en prenant soin de ne pas déformer le
+   cadre dormant.
+2. Vérifier les diagonales, le niveau et l'aplomb du dormant.
+3. Fixer le dormant a (sic) l'aide de vis traitées de dimensions appropriées en respectant le
+   mode de fixation retenu (A ou B).
+
+Option 2 [1 p. 375] :
+
+1. Vérifier les diagonales, le niveau et l'aplomb du dormant.
+2. Fixer le dormant sans le déformer à l'aide de vis spéciales pour le PVC permettant d'éviter
+   la mise en place d'un calage définitif. (Se référer aux notices d'utilisation des fabricants).
+
+Puis, dans les deux cas [1 p. 375] :
+
+1. Contrôler l'alignement, le recouvrement sur dormant et le bon fonctionnement des vantaux. Si
+   nécessaire, procéder au réglage en agissant sur les excentriques de la ferrure (galets de
+   crémone).
+2. Inserer (sic) dans l'interstice périphérique entre les deux dormants un fond de joint en
+   mousse de section appropriée puis réaliser le cordon d'étancheité à l'aide d'un mastic élastomère
+   (section minimum 5 mm x 5 mm) ou plastique 1ère catégorie (largeur minimum 5 mm x profondeur
+   minimum 8 mm) ayant fait préalablement l'objet d'un essai d'adhésivité - cohésion. (Se référer à
+   l'Avis Technique de la fenêtre ou au procès verbal si le mastic n'est pas référencé à l'Avis
+   Technique).
+3. Serrer le mastic pour assurer son bon contact et sa continuité et parfaire l'esthétique du
+   cordon en le lissant à l'aide d'une spatule ou d'une pomme de terre tranchée et d'eau légèrement
+   savonneuse.
+
+| Grandeur | Valeur (mm) | Page PDF |
+| --- | --- | --- |
+| Jeu périphérique minimum entre la nouvelle fenêtre et le passage libre | 5 | 374 |
+| Épaisseur minimum des cales en bois traité sous la traverse basse | 5 | 375 |
+| Cote portée à l'angle haut de la perspective du repère 2 | ≈ 100 | 375 |
+| Section minimum du cordon de mastic élastomère | 5 × 5 | 375 |
+| Largeur × profondeur minimum du cordon de mastic plastique 1ère catégorie | 5 × 8 | 375 |
+
+## Repère 3 : ventilation de l'ancien dormant et finitions
+
+Le dormant bois conservé doit rester ventilé : l'air doit pouvoir circuler entre l'ancien dormant et
+les habillages extérieurs (les profilés de parement posés côté extérieur pour couvrir l'ancien
+dormant). La coupe de la traverse basse porte : « Passage d'air obligatoire pour la ventilation avec
+calage ponctuel si nécessaire » (sous la bavette d'habillage, au droit de l'appui) et, au cercle A,
+« Dans cette zone habillage selon principe arrêté au devis ». La coupe du montant porte, au cercle
+de l'axe B, « Dans cette zone habillage selon principe arrêté au devis », et la « Découpe de 50 mm²
+minimum » à l'extrémité de l'habillage. La perspective montre le trajet de l'air (flèches en
+tirets) : il entre sous la bavette de l'appui, remonte le long du montant par une « Découpe de
+50 mm² minimum » en bas et une autre en haut, et ressort en partie haute [1 p. 376].
+
+![Repère 3 : passage d'air obligatoire sous la bavette, traverse basse](/assets/procedures/mise-en-oeuvre-evo2008/renovation-bois-repere-3-passage-d-air-traverse-basse-evo2008.png)
+
+![Repère 3 : découpe de 50 mm² minimum au montant](/assets/procedures/mise-en-oeuvre-evo2008/renovation-bois-repere-3-montant-decoupe-50-mm2-evo2008.png)
+
+![Repère 3 : circulation de l'air derrière les habillages, perspective](/assets/procedures/mise-en-oeuvre-evo2008/renovation-bois-circulation-d-air-habillage-perspective-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 376)
+
+Finitions, dans l'ordre de la planche [1 p. 376] :
+
+1. Couper à dimension les profilés d'habillage extérieur en réalisant aux extrémités des pièces
+   horizontales les découpes de 50 mm² minimum permettant la circulation de l'air pour la
+   ventilation de l'ancien dormant.
+2. Mettre en place les habillages périphériques extérieurs en commençant par la bavette inférieure
+   avec interposition d'un calage ponctuel puis ensuite l'habillage supérieur et terminer
+   l'opération par les habillages latéraux.
+3. Réaliser, si nécessaire, des joints d'aspect entre les habillages extérieurs et la maçonnerie.
+
+### Variante : délignage du cochonnet
+
+La variante « Délignage du cochonnet » est dessinée sur le montant, avec les axes de fixation A et
+B : « Étanchéité à l'air » entre le nouveau dormant et l'ancien, « Découpe de 50 mm² minimum » à
+l'extrémité de l'habillage, et la consigne « Remonter verticalement sur chaque montant l'étanchéité
+en traverse basse sur 100 mm minimum. » Déligner, c'est recouper une pièce dans sa longueur ; le
+cochonnet n'est défini ni sur cette planche ni ailleurs dans le classeur [1 p. 376].
+
+![Variante : délignage du cochonnet, coupe du montant](/assets/procedures/mise-en-oeuvre-evo2008/renovation-bois-variante-delignage-du-cochonnet-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 376)
+
+### Variante : conservation des tapées de persiennes
+
+Les tapées de persiennes sont les pièces de bois de l'ancien dormant qui portent les persiennes
+(volets battants extérieurs) ; la variante les conserve. Les deux coupes portent : à la traverse
+basse, « Entaille de 50 mm² minimum aux extrémités de l'appui bois pour la ventilation » et, au
+cercle A, « Dans cette zone, remplissage ou habillage selon principe arrêté au devis » ; au montant,
+la même mention au cercle de l'axe B et « Boucher les encoches de passage du rejet d'eau de l'ouvrant
+se trouvant en bas des tapées. » [1 p. 377]
+
+![Variante tapées de persiennes : traverse basse et entaille de ventilation de l'appui bois](/assets/procedures/mise-en-oeuvre-evo2008/renovation-bois-variante-tapees-persiennes-traverse-basse-evo2008.png)
+
+![Variante tapées de persiennes : montant](/assets/procedures/mise-en-oeuvre-evo2008/renovation-bois-variante-tapees-persiennes-montant-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 377)
+
+Étapes de la variante, dans l'ordre de la planche [1 p. 377] :
+
+1. Exécuter le travail préparatoire comme dans le cas géneral (sic) en ajoutant au démontage des
+   organes de rotation celui de l'arrêt de crémone de la fermeture.
+2. Mettre en place des tasseaux en bois traité suffisamment larges pour créer un interstice de 5 mm
+   minimum entre les tapées et le cadre PVC.
+3. Positionner et fixer la fenêtre comme dans le cas général.
+4. Combler et/ou masquer l'interstice intérieur avec des produits et accessoires appropriés selon
+   principe arrêté au devis.
+5. Réaliser l'étanchéité périphérique extérieure en soignant particulièrement la jonction du cordon
+   en traverse basse avec les cordons verticaux des montants.
+
+Avant mise en place de l'habillage extérieur de l'appui :
+
+6. Exécuter deux entailles de 50 mm² minimum dans l'appui de l'ancien dormant pour permettre sa
+   ventilation.
+7. Mettre à longueur et effectuer les découpes nécessaires aux extrémités de l'habillage d'appui.
+8. Effectuer un joint d'aspect en solin aux jonctions de l'habillage d'appui avec les tapées.
+9. Remettre en place un arrêt de crémone en le fixant sur une partie stable.
+10. Recouper la crémone dc (sic) la fermeture selon besoin.
+
+## Repère 4 : nettoyage, réception et entretien
+
+Le dessin du repère 4 montre le poseur présentant la fenêtre posée à la cliente [1 p. 377].
+
+![Repère 4 : réception des travaux par le client](/assets/procedures/mise-en-oeuvre-evo2008/renovation-bois-repere-4-reception-evo2008.png)
+
+- Nettoyage : débarrasser la fenêtre des copeaux qui pourraient subsister et faire disparaître les
+  taches à l'aide d'eau savonneuse on (sic) de produits recommandés ; laisser les lieux dans l'état
+  de propreté où vous les avez trouvés.
+- Réception : faire réceptionner les travaux par le client et lui expliquer comment manoeuvrer
+  convenablement la fenêtre.
+- Entretien : informer le client sur l'entretien de la fenêtre (voir fiche d'entretien, sur
+  [Usage, nettoyage et entretien d'une menuiserie profine](/entretien/usage-nettoyage-entretien-menuiseries-profine.md)).
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 377)
+
+| Grandeur | Valeur | Page PDF |
+| --- | --- | --- |
+| Section minimum des découpes de ventilation aux extrémités des habillages (mm²) | 50 | 376 |
+| Remontée minimum de l'étanchéité de traverse basse sur chaque montant, variante délignage du cochonnet (mm) | 100 | 376 |
+| Interstice minimum entre tapées de persiennes et cadre PVC (mm) | 5 | 377 |
+| Section minimum des deux entailles de ventilation de l'appui de l'ancien dormant (mm²) | 50 | 377 |
+
+# Pose avec enlèvement du dormant existant de menuiseries PVC à frappe faisant l'objet d'un avis technique
+
+Dans cette pose, l'ancien dormant est retiré en entier et la menuiserie PVC est posée directement
+dans la baie maçonnée, sur le rejingot (le ressaut de l'appui maçonné qui arrête l'eau,
+[glossaire](/reference/glossaire.md)). La planche reprend le même avertissement que la pose sur
+dormant bois existant : « Ce document volontairement simplifié, ne se substitue pas aux travaux de
+référence réalisés sous l'égide du CSTB et auxquels il conviendra de se reporter pour toutes
+informations complémentaires. Les méthodes de pose figurant ci-dessous sont données à titre
+indicatif et ne peuvent engager la responsabilité de KÖMMERLING. » [1 p. 378]
+
+## Repère 1 : travaux préparatoires
+
+La perspective montre l'ancien dormant retiré de la baie (flèches) et, dessous, l'angle de la baie
+mise à nu avec sa feuillure et son rejingot [1 p. 378].
+
+![Repère 1 : enlèvement de l'ancien dormant et baie mise à nu, perspective](/assets/procedures/mise-en-oeuvre-evo2008/renovation-enlevement-repere-1-depose-dormant-perspective-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 378)
+
+1. Deposer (sic) le ou les ouvrants en place.
+2. Enlever l'ancien dormant a (sic) l'aide d'un outillage approprié (ex: disqueuse).
+3. Examiner l'état des feuillures et du rejingot et si besoin, effectuer les reprises et les
+   réparations nécessaires.
+
+## Repère 2 : installation de la menuiserie PVC, option 1
+
+La première coupe montre la traverse basse de la nouvelle fenêtre posée sur le rejingot, avec sa
+pièce d'appui côté extérieur. Elle porte « Fixation sur rejingot par brides en equerre » (une bride
+est une patte métallique vissée au dormant et au support), la cote « 15 mm minimum » portée dans le
+rejingot, au droit d'une zone grisée, et la cote « 40 mm minimum (Appui préfabriqué 35 mm minimum) »
+portée verticalement côté intérieur, du dessous du dormant jusqu'au niveau de cette zone grisée, et au cercle « Dans cette zone habillage selon
+principe arrêté au devis ». La deuxième coupe (« Cas n°1 ») montre le fond de joint posé sur le
+rejingot et le cordon de mastic devant lui, la flèche indiquant la menuiserie qui vient s'y asseoir.
+La troisième coupe (« Appui pierre Fixation par brides ») porte : « Réalisation d'un cordon de mastic
+sur fond de joint après pose de la fenêtre. » [1 p. 379]
+
+![Repère 2 : fixation sur rejingot par brides en équerre, 15 et 40 mm minimum](/assets/procedures/mise-en-oeuvre-evo2008/renovation-enlevement-repere-2-fixation-brides-rejingot-evo2008.png)
+
+![Cas n°1 : fond de joint et cordon de mastic sur le rejingot avant pose](/assets/procedures/mise-en-oeuvre-evo2008/renovation-enlevement-cas-1-fond-de-joint-rejingot-evo2008.png)
+
+![Appui pierre, fixation par brides : cordon de mastic sur fond de joint après pose](/assets/procedures/mise-en-oeuvre-evo2008/renovation-enlevement-appui-pierre-fixation-brides-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 379)
+
+Réaliser l'étanchéité en traverse basse avant pose de la fenêtre selon deux modes possibles
+[1 p. 379] :
+
+Cas n°1 (à privilégier) :
+
+1. Mettre en place un fond de joint adhésif sur la longueur du rejingot de section 15 x 15 mm.
+2. Extruder un cordon de mastic élastomère 1ère catégorie ou plastique 1ère catégorie de hauteur
+   minimum 14 mm devant le fond de joint.
+3. Placer des cales d'assises d'épaisseur minimum 5 mm avant mise en place de la menuiserie. Les
+   positionner au droit des montants latéraux et intermédiaires si existants.
+4. Asseoir la menuiserie sur le rejingot.
+
+Cas n° 2 :
+
+1. Mettre en place une bande de mousse précomprimée ou non imprégnée de butyl ou d'acrylique
+   (**bitume interdit**) en la retournant sur 100 mm sur la hauteur des tableaux.
+2. Asseoir la menuisene (sic) sur le rejingot.
+3. Contrôler que l'écrasement requis pour assurer une bonne étanchéité à l'air et à l'eau soit
+   conforme aux spécifications du fabricant de la mousse et que le taux de compression n'entraîne
+   pas une déformation de la pièce d'appui ou de la traverse basse de la fenêtre.
+
+| Grandeur | Valeur (mm) | Page PDF |
+| --- | --- | --- |
+| Cote « 15 mm minimum » portée dans le rejingot | 15 | 379 |
+| Cote verticale côté intérieur depuis le dessous du dormant, cas général | 40 | 379 |
+| Même cote, appui préfabriqué | 35 | 379 |
+| Section du fond de joint adhésif (cas n°1) | 15 × 15 | 379 |
+| Hauteur minimum du cordon de mastic devant le fond de joint (cas n°1) | 14 | 379 |
+| Épaisseur minimum des cales d'assise | 5 | 379 |
+| Retour de la bande de mousse sur la hauteur des tableaux (cas n°2) | 100 | 379 |
+
+## Repère 2 : installation de la menuiserie PVC, option 2
+
+Trois coupes montrent les fixations possibles du dormant au gros œuvre, chacune avec un cercle
+« Dans cette zone habillage (ou remplissage ou habillage) selon principe arrêté au devis » :
+« Ebrasement intérieur » (une longue vis traverse le dormant jusque dans la maçonnerie de l'ébrasement), « Fixation
+sur pièce de liaison » (la vis traverse le dormant et une pièce intermédiaire fixée au mur),
+« Fixation par pattes à scellement » (patte scellée dans la maçonnerie, avec une flèche « Angle
+intérieur de référence pour le positionnement des fixations »). L'élévation d'une fenêtre à deux
+vantaux place les fixations autour du dormant (trois par montant, une en haut et une en bas au
+milieu de la traverse, repérées « = » « = ») et la distance A de l'angle intérieur au premier point
+de fixation [1 p. 380].
+
+![Option 2 : fixation dans l'ébrasement intérieur](/assets/procedures/mise-en-oeuvre-evo2008/renovation-enlevement-fixation-ebrasement-interieur-evo2008.png)
+
+![Option 2 : fixation sur pièce de liaison](/assets/procedures/mise-en-oeuvre-evo2008/renovation-enlevement-fixation-piece-de-liaison-evo2008.png)
+
+![Option 2 : fixation par pattes à scellement, angle intérieur de référence](/assets/procedures/mise-en-oeuvre-evo2008/renovation-enlevement-fixation-pattes-a-scellement-evo2008.png)
+
+![Disposition des fixations et distance A, élévation d'une fenêtre à deux vantaux](/assets/procedures/mise-en-oeuvre-evo2008/renovation-enlevement-disposition-des-fixations-distance-a-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 380)
+
+Étapes de l'option 2 [1 p. 380] :
+
+1. Positionner la fenêtre PVC ou son cadre dormant selon le mode de fixation retenu. Nota : dans le
+   cas d'une fixation par pattes de scellement à queue de carpe ou de l'utilisation de vérins de
+   règlage (sic), ces accessoires devront être mis en place sur le dormant avant le positionnement.
+2. Interposer des cales d'assises d'épaisseur minimum 5 mm entre la traverse basse et l'appui du
+   mur. Les positionner au droit des montants latéraux et intermédiaires si existants.
+3. Centrer la fenêtre dans l'ouverture par un moyen ad hoc (calage, vérins).
+4. Maintenir la fenêtre en place par un moyen approprié (ex : 2 points de fixation en partie
+   supérieure de chaque montant).
+5. Vérifier les diagonales, le niveau et l'aplomb de la menuiserie.
+6. Fixer la menuiserie au gros oeuvre avec des accessoires de liaison de types et de formes
+   appropriés à l'environnement rencontré en respectant les principes suivants :
+   - disposition des fixations au voisinage des organes de rotation et des points de condamnation ;
+   - la distance A à respecter par rapport aux angles intérieurs du cadre dormant sera d'environ
+     100 mm et sera portée à environ 150 mm pour les menuiseries de couleur.
+
+Les distances des fixations aux angles et aux meneaux données ailleurs dans le classeur et dans les
+directives profine de 2023 sont comparées en **CTR-103**.
+
+## Contrôle, calfeutrement et finition (options 1 et 2)
+
+L'élévation montre le contrôle des diagonales (pointillés d'angle à angle) ; le petit détail
+« Recouvrement » cote le recouvrement entre les deux profilés dessinés, sans les nommer. La coupe du repère 3 montre le
+dormant posé sur l'appui, le cercle « Dans cette zone habillage selon principe arrêté au devis » et le
+pistolet qui extrude le cordon de mastic sous la traverse basse, côté extérieur [1 p. 381].
+
+![Contrôle des diagonales de la fenêtre posée](/assets/procedures/mise-en-oeuvre-evo2008/renovation-enlevement-controle-diagonales-evo2008.png)
+
+![Recouvrement de l'ouvrant sur le dormant](/assets/procedures/mise-en-oeuvre-evo2008/renovation-enlevement-recouvrement-evo2008.png)
+
+![Repère 3 : cordon de mastic extrudé au pistolet sous la traverse basse](/assets/procedures/mise-en-oeuvre-evo2008/renovation-enlevement-repere-3-cordon-mastic-appui-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 381)
+
+Étapes, dans l'ordre de la planche [1 p. 381] :
+
+1. Contrôler l'alignement, le recouvrement sur dormant et le bon fonctionnement des vantaux. Si
+   necessaire (sic), procéder au réglage en agissant sur les excentriques de la ferrure (galets de
+   crémone). Nota : les modalités de centrage, de fixation et de réglage de la fenêtres (sic) sont
+   communes aux deux options.
+2. Insérer dans l'interstice périphérique entre le gros oeuvre et la menuiserie un fond de joint en
+   mousse de section appropriée puis réaliser le cordon d'étanchéité à l'aide d'un mastic
+   élastomère (section minimum 5 mm x 5 mm) ou plastique 1ère catégorie (section minimum 5 mm x
+   8 mm) ayant fait préalablement l'objet d'un essai d'adhesivité cohésion. (Se référer à l'avis
+   technique de la fenêtre ou au procès verbal).
+3. Serrer le mastic pour assurer son bon contact et sa continuité et parfaire l'esthétique du cordon
+   en le lissant à l'aide d'une spatule ou d'une pomme de terre tranchée et d'eau légèrement
+   savonneuse. Nota : dans le cas de l'option 1, l'appui n'est pas concerné.
+4. Finition : réaliser les travaux de finition intérieure selon le principe arrêté au devis.
+
+## Repère 4 : nettoyage, réception et entretien
+
+Mêmes consignes que pour la pose sur dormant bois existant : débarasser (sic) la fenêtre des copeaux
+qui pourraient subsister et faire disparaître les taches à l'aide d'eau savonneuse ou de produits
+recommandés ; laisser les lieux dans l'état de propreté où vous les avez trouvés ; faire
+réceptionner les travaux par le client et lui expliquer comment manoeuvrer convenablement la
+fenêtre ; informer le client sur l'entretien de la fenêtre (voir fiche d'entretien) [1 p. 381].
+
+![Repère 4 : réception des travaux, pose avec enlèvement du dormant](/assets/procedures/mise-en-oeuvre-evo2008/renovation-enlevement-repere-4-reception-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 381)
+
+| Grandeur | Valeur (mm) | Page PDF |
+| --- | --- | --- |
+| Épaisseur minimum des cales d'assise entre traverse basse et appui (option 2) | 5 | 380 |
+| Distance A des fixations aux angles intérieurs du dormant, cas général | ≈ 100 | 380 |
+| Distance A des fixations aux angles intérieurs du dormant, menuiserie de couleur | ≈ 150 | 380 |
+| Section minimum du cordon de mastic élastomère | 5 × 5 | 381 |
+| Section minimum du cordon de mastic plastique 1ère catégorie | 5 × 8 | 381 |
+
+# Pose sur dormant acier existant de menuiseries PVC à frappe faisant l'objet d'un avis technique
+
+Même principe que la pose sur dormant bois existant : l'ancien dormant, ici en profilé d'acier (noir
+sur les coupes), reste scellé dans la maçonnerie, et la menuiserie PVC est posée et fixée dessus. La
+planche reprend l'avertissement : « Ce document volontairement simplifié ne se substitue pas aux
+travaux de référence réalisés sous l'égide du CSTB et auxquels il conviendra de se reporter pour
+toutes informations complémentaires. Les méthodes de pose figurant ci-dessous sont données à titre
+indicatif et ne peuvent engager la responsabilité de KÖMMERLING. » [1 p. 382]
+
+## Repère 1 : travaux préparatoires
+
+Le schéma montre les quatre côtés de l'ancien dormant acier en coupe et les cotes de passage L
+(largeur libre) et H (hauteur libre). Les deux coupes du bas montrent les fourrures en bois traité
+(hachurées de veines) logées dans les feuillures de l'ancien dormant acier, sur le montant et sur la
+traverse basse [1 p. 382].
+
+![Repère 1 : cotes de passage L et H du dormant acier existant](/assets/procedures/mise-en-oeuvre-evo2008/renovation-acier-repere-1-cotes-de-passage-l-h-evo2008.png)
+
+![Fourrures bois dans les feuillures du dormant acier, montant et traverse basse](/assets/procedures/mise-en-oeuvre-evo2008/renovation-acier-fourrures-montant-et-traverse-basse-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 382)
+
+1. Vérifier avant le démontage des vantaux les côtes (sic) de passage L et H.
+2. Contrôler les dimensions de la nouvelle fenêtre afin de s'assurer qu'elle s'inscrive dans le
+   passage libre de la baie avec un jeu périphérique minimum de 5 mm.
+3. Déposer les anciens ouvrants.
+4. Vérifier l'état général ainsi que la bonne tenue au gros oeuvre du dormant existant et en cas de
+   défaut constaté, effectuer une remise en conformité.
+5. Oter les organes de rotation (paumelles) ainsi que les gâches hautes et basses.
+6. Brosser le dormant existant afin d'éliminer la poussière et les parties non-adhérentes de sa
+   protection. (Dans le cas d'une découpe ou d'un sciage des organes de rotation, prévoir une
+   protection des surfaces mises à nu avec un produit approprié).
+7. Realiser (sic) un cordon d'étanchéité entre la maçonnerie et le dormant existant et boucher les
+   trous d'évacuation d'eau.
+8. Mettre en place, des fourrures en bois traité dans les feuillures du dormant existant afin de
+   créer une surface plane. Les fourrures seront maintenues en place au moyen de vis.
+
+## Repère 2 : installation de la menuiserie PVC
+
+La perspective montre les points de calage sous la traverse basse, les modes de fixation A et B et
+la cote « ≈ 100 mm » à l'angle haut, comme pour le dormant bois ; les deux coupes repèrent l'axe de
+fixation A sur la traverse basse, A et B sur le montant, le nouveau dormant PVC en trait noir épais
+posé sur la fourrure et l'ancien dormant acier [1 p. 383].
+
+![Repère 2 : calage et points de fixation A et B, dormant acier, perspective](/assets/procedures/mise-en-oeuvre-evo2008/renovation-acier-repere-2-calage-perspective-evo2008.png)
+
+![Repère 2 : fixation A sur la traverse basse, dormant acier](/assets/procedures/mise-en-oeuvre-evo2008/renovation-acier-repere-2-fixation-a-evo2008.png)
+
+![Repère 2 : fixations A et B sur le montant, dormant acier](/assets/procedures/mise-en-oeuvre-evo2008/renovation-acier-repere-2-fixation-a-b-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 383)
+
+1. Positionner sur l'ancien dormant la fenêtre PVC on (sic) son cadre dormant selon le mode de
+   fixation retenu (A ou B).
+2. Glisser des cales en bois traité de 5 mm d'épaisseur minimum entre les traverses basses. Les
+   positionner au droit des montants latéraux et intermédiaires si existants.
+3. Centrer définitivement la menuiserie à l'aide de vérins, de cales ou provisoirement si
+   utilisation de vis spéciales appropriées pour la fixation, en prenant soin de ne pas déformer le
+   cadre dormant.
+4. Vérifier les diagonales, le niveau et l'aplomb du dormant.
+5. Fixer le dormant à l'aide de vis traitées de dimensions appropriées en respectant le mode de
+   fixation retenu (A ou B).
+6. Contrôler l'alignement, le recouvrement sur dormant et le bon fonctionnement des vantaux. Si
+   nécessaire, procéder au réglage en agissant sur les excentriques de la ferrure (galets de
+   crémone).
+7. Insérer dans l'interstice périphérique entre les deux dormants un fond de joint en mousse de
+   section appropriée puis réaliser le cordon d'étanchéité à l'aide d'un mastic élastomère (section
+   minimum 5 mm x 5 mm) ou plastique l'ère (sic) catégorie (largeur minimum 5 mm x profondeur
+   minimum 8 mm) ayant fait préalablement l'objet d'un essai d'adhésivité - cohésion. (Se référer à
+   l'Avis Technique de la fenêtre ou au procés verbal si le mastic n'est pas referencé à l'Avis
+   Technique).
+8. Serrer le mastic pour assurer son bon contact et sa continuité et parfaire l'esthétique du cordon
+   en le lissant à l'aide d'une spatule ou d'une pomme de terre tranchée et d'eau légèrement
+   savonneuse.
+
+Les écarts avec la pose sur dormant bois : pas d'option 1 / option 2 (le centrage est « définitif »
+par vérins ou cales, ou « provisoire » avec des vis spéciales), protection des surfaces mises à nu
+après découpe ou sciage des organes de rotation, et fourrures tenues par des vis seulement
+[1 p. 382-383].
+
+| Grandeur | Valeur (mm) | Page PDF |
+| --- | --- | --- |
+| Jeu périphérique minimum entre la nouvelle fenêtre et le passage libre | 5 | 382 |
+| Épaisseur minimum des cales en bois traité entre les traverses basses | 5 | 383 |
+| Cote portée à l'angle haut de la perspective du repère 2 | ≈ 100 | 383 |
+| Section minimum du cordon de mastic élastomère | 5 × 5 | 383 |
+| Largeur × profondeur minimum du cordon de mastic plastique 1ère catégorie | 5 × 8 | 383 |
+
+## Repère 3 : ventilation de l'ancien dormant acier et finitions
+
+La coupe de la traverse basse porte : « Maintien de la pièce intercalaire par visserie non
+corrodable » (la pièce intercalaire est dessinée sous la bavette d'habillage),
+« Passage d'air obligatoire pour la ventilation » (sous la bavette) et, au cercle, « Dans cette zone
+habillage selon principe arrêté au devis ». La coupe du montant porte le même cercle, les axes de
+fixation A et B et la « Découpe de 50 mm² minimum » à l'extrémité de l'habillage. La perspective
+montre le trajet de l'air derrière les habillages, par une « Découpe de 50 mm² minimum » en bas et
+une autre en haut du montant [1 p. 384].
+
+![Repère 3 : pièce intercalaire et passage d'air, traverse basse sur dormant acier](/assets/procedures/mise-en-oeuvre-evo2008/renovation-acier-repere-3-passage-d-air-traverse-basse-evo2008.png)
+
+![Repère 3 : découpe de 50 mm² minimum au montant, dormant acier](/assets/procedures/mise-en-oeuvre-evo2008/renovation-acier-repere-3-montant-decoupe-50-mm2-evo2008.png)
+
+![Repère 3 : circulation de l'air derrière les habillages, dormant acier, perspective](/assets/procedures/mise-en-oeuvre-evo2008/renovation-acier-circulation-d-air-habillage-perspective-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 384)
+
+Finitions [1 p. 384] :
+
+1. Couper à dimension les profilés d'habillage extérieur en réalisant aux extrémités des pièces
+   horizontales les découpes de 50 mm² minimum permettant la circulation de l'air pour la
+   ventilation de l'ancien dormant.
+2. Mettre en place les habillages périphériques extérieurs en commençant par la bavette inférieure
+   avec interposition d'une pièce de maintien ponctuelle puis ensuite l'habillage supérieur et
+   terminer l'opération par les habillages latéraux.
+3. Réaliser, si nécessaire, des joints d'aspect entre les habillages extérieurs et la maçonnerie.
+
+Sur dormant bois, la bavette est posée « avec interposition d'un calage ponctuel » ; sur dormant
+acier, « d'une pièce de maintien ponctuelle » [1 p. 376, 384].
+
+### Variantes : profilés en tôle d'acier pliée ou formée
+
+Quand l'ancien dormant est un profilé en tôle d'acier pliée ou formée, la consigne est : « Exécuter le travail préparatoire, l'installation et les travaux de
+finition comme dans le cas précédant (sic). » Trois coupes : la traverse basse (« Maintien de la
+pièce intercalaire par visserie non corrodable », « Passage d'air obligatore (sic) pour la
+ventilation », cercle « Dans cette zone, habillage selon principe arrêté au devis ») ; le montant
+sur « PROFILE OUVERT » (cercle « Dans cette zone, remplissage ou habillage selon principe arrêté au
+devis », « Découpe de 50 mm² minimum ») ; le montant sur « PROFILE FERME » (cercle « Dans cette zone,
+habillage selon principe arrêté au devis. », « Découpe de 50 mm² minimum ») [1 p. 385].
+
+![Variante tôle d'acier pliée ou formée : traverse basse](/assets/procedures/mise-en-oeuvre-evo2008/renovation-acier-variante-tole-pliee-traverse-basse-evo2008.png)
+
+![Variante tôle d'acier pliée ou formée : montant sur profilé ouvert](/assets/procedures/mise-en-oeuvre-evo2008/renovation-acier-variante-tole-pliee-profile-ouvert-evo2008.png)
+
+![Variante tôle d'acier pliée ou formée : montant sur profilé fermé](/assets/procedures/mise-en-oeuvre-evo2008/renovation-acier-variante-tole-pliee-profile-ferme-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 385)
+
+## Repère 4 : nettoyage, réception et entretien (dormant acier)
+
+Débarrasser la fenêtre des copeaux qui pourraient subsister et faire disparaître les taches à l'aide
+d'eau savonneuse ou de produits recommandés ; laisser les lieux dans l'état de propreté où vous les
+avez trouvés ; faire réceptionner les travaux par le client et lui expliquer comment manoeuvrer
+convenablement la fenêtre ; informer le client sur l'entretien de la fenêtre (voir fiche
+d'entretien) [1 p. 385].
+
+![Repère 4 : réception des travaux, dormant acier](/assets/procedures/mise-en-oeuvre-evo2008/renovation-acier-repere-4-reception-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 385)
+
+# Récapitulatif des joints et étanchéités en rénovation
+
+En rénovation sur dormant existant, six joints sont repérés A à F autour du nouveau dormant ; « Au
+niveau de ces joints, il peut étre (sic) réalisé un calfeutrement ayant une fonction propre
+(étanchéité air et eau) ». Le calfeutrement est le remplissage étanche d'un joint (fond de joint et
+mastic, bande de mousse) ([glossaire](/reference/glossaire.md)) [1 p. 386-387].
+
+## Les six joints A à F
+
+Définitions de la planche, dans ses termes [1 p. 386] :
+
+| Joint | Définition et règle |
+| --- | --- |
+| A | Joint entre le support (dormant) et la menuiserie de remplacement. Joint entre pièce de reconstitution et ancien dormant, dans le cas où le calfeutrement de ces joints est effectué, celui-ci devra être continu. |
+| B | Joint entre le profil d'habillage et le gros oeuvre. La dimension du profilé d'habillage formant face du calfeutrement doit être de 5 mm minimum. Son calfeutrement est indispensable si le calfeutrement C ne peut être réalisé d'une façon convenable. Ce calfeutrement sera assuré sur les deux montants et sur la traverse haute (sauf dans le cas de VR existants). |
+| C | Joint permettant de mettre en place, si nécessaire, le calfeutrement entre le dormant et le gros oeuvre. Si ce calfeutrement peut être réalisé dans de bonnes conditions, la présence du calfeutrement B n'est pas obligatoire. Le calfeutrement C sera continu sur les deux montants et sur la traverse haute (sauf dans le cas de VR existants). Dans le cas où, en traverse basse, la liaison entre appui existant et rejingot n'est pas conforme aux DTU 36.1 ou 37.1, il y a lieu d'en assurer l'étanchéité par tout moyen approprié. |
+| D | Joint entre le dormant de la menuiserie de remplacement et l'habillage du dormant existant, ce joint peut ne pas être étanché. |
+| E | Joint entre l'aile de recouvrement du nouveau dormant et du dormant existant, ce joint n'a pas à être calfeutré si le calfeutrement A est effectué. |
+| F | Joint entre la menuiserie existante et maçonnerie. Ce joint ne doit pas être étanché lorsque l'étanchéité à l'air n'est pas assuré par le joint C ou les joints A ou B. |
+
+« Dans tous les cas, le poseur s'assurera que la nature du produit est référencée dans l'Avis
+Technique, ou est reconnu par le label SNJF. » (VR : volet roulant ; DTU 36.1 et 37.1 : documents
+techniques unifiés de mise en œuvre des menuiseries) [1 p. 386]
+
+Les quatre figures de la planche « Etanchéités » montrent, en coupe sur montant, le nouveau dormant
+PVC posé sur l'ancien dormant (bois veiné, figures 1 et 3 ; profilé tubulaire hachuré, figures 2
+et 4), avec ou sans fourrure (bois en croix, figures 3 et 4) ; chacune repère le joint C (entre
+ancien dormant et maçonnerie) et le joint E (sous l'aile de recouvrement). La coupe « Calfeutrement »
+repère les six joints sur un même montant : D contre l'habillage, deux A entre les dormants, B en
+tête de l'habillage contre le mur, C contre la maçonnerie, E et F en pied [1 p. 387].
+
+![Etanchéités, figure 1](/assets/procedures/mise-en-oeuvre-evo2008/renovation-etancheites-figure-1-evo2008.png)
+
+![Etanchéités, figure 2](/assets/procedures/mise-en-oeuvre-evo2008/renovation-etancheites-figure-2-evo2008.png)
+
+![Etanchéités, figure 3](/assets/procedures/mise-en-oeuvre-evo2008/renovation-etancheites-figure-3-evo2008.png)
+
+![Etanchéités, figure 4](/assets/procedures/mise-en-oeuvre-evo2008/renovation-etancheites-figure-4-evo2008.png)
+
+![Calfeutrement : les six joints A à F repérés sur un montant](/assets/procedures/mise-en-oeuvre-evo2008/renovation-etancheites-joints-a-a-f-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 387)
+
+## Types de calfeutrement par cas
+
+Le tableau croise les types de joints (lignes ; l'indice 1 ou 2 renvoie aux renvois « \*1 :
+étanchéité à l'air seulement » et « \*2 : étanchéité à l'air et à l'eau ») et six cas de
+calfeutrement (colonnes) ; un X marque un joint calfeutré dans ce cas. « Le cas 6 est particulier à
+la traverse basse. (Voir plans sur page 14 et 15) » — pages imprimées 14 et 15 du registre 7.2, PDF
+p. 387 et 388 [1 p. 386].
+
+<table>
+<thead>
+<tr><th rowspan="2">Type de joint</th><th colspan="6">Types de calfeutrement</th></tr>
+<tr><th>Cas 1</th><th>Cas 2</th><th>Cas 3</th><th>Cas 4</th><th>Cas 5</th><th>Cas 6</th></tr>
+</thead>
+<tbody>
+<tr><td>A1</td><td></td><td>X</td><td></td><td>X</td><td></td><td></td></tr>
+<tr><td>A2</td><td>X</td><td></td><td></td><td></td><td></td><td>X</td></tr>
+<tr><td>B2</td><td></td><td>X</td><td>X</td><td>X</td><td>X</td><td></td></tr>
+<tr><td>C1</td><td></td><td>X</td><td>X</td><td></td><td></td><td></td></tr>
+<tr><td>C2</td><td>X</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>D</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>E1</td><td></td><td></td><td>X</td><td></td><td>X</td><td></td></tr>
+<tr><td>F1</td><td></td><td></td><td></td><td>X</td><td>X</td><td>X</td></tr>
+</tbody>
+</table>
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 386)
+
+Les cinq coupes de la page suivante, titrées Cas 1 à Cas 5, repèrent chacune ses joints ; un
+repère « \* », non légendé, pointe sur les cas 1 à 4 le profilé en L dessiné devant l'ancien
+dormant. Les repères dessinés ne concordent pas avec les colonnes du tableau portant le même numéro
+(**INC-278**) [1 p. 388] :
+
+| Coupe (titre de la planche) | Repères dessinés |
+| --- | --- |
+| Cas 1 | A1, \*, B2, C1 |
+| Cas 2 | \*, B2, C1, E1 |
+| Cas 3 | D, \*, B2, C, E, F1 |
+| Cas 4 | \*, B2, F1 & E1 |
+| Cas 5 (traverse basse) | A2, F1 ; « Obturation de l'écoulement d'eau (étanchéité à l'air) », « Calage obligatoire », « Calage ponctuel » |
+
+![Etanchéités, cas 1](/assets/procedures/mise-en-oeuvre-evo2008/renovation-etancheites-cas-1-evo2008.png)
+
+![Etanchéités, cas 2](/assets/procedures/mise-en-oeuvre-evo2008/renovation-etancheites-cas-2-evo2008.png)
+
+![Etanchéités, cas 3](/assets/procedures/mise-en-oeuvre-evo2008/renovation-etancheites-cas-3-evo2008.png)
+
+![Etanchéités, cas 4](/assets/procedures/mise-en-oeuvre-evo2008/renovation-etancheites-cas-4-evo2008.png)
+
+![Etanchéités, cas 5 : traverse basse](/assets/procedures/mise-en-oeuvre-evo2008/renovation-etancheites-cas-5-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 388)
+
+## Sections de calfeutrement
+
+« Les sections de calfeutrement des joints seront conformes au tableau ci-dessous. » l est la
+largeur du joint, en mm ; la profondeur minimale doit dépasser la plus grande des deux valeurs de la
+case (une valeur fixe et une fraction de l) [1 p. 386].
+
+<table>
+<thead>
+<tr><th rowspan="3">Grandeur</th><th colspan="2">Elastomère</th><th colspan="2">Plastiques</th></tr>
+<tr><th colspan="2">Catégorie</th><th colspan="2">Catégorie</th></tr>
+<tr><th>1er</th><th>2eme</th><th>1er</th><th>2eme</th></tr>
+</thead>
+<tbody>
+<tr><td>Largeur minimale (mm) : l doit être &gt; à</td><td>5</td><td>5</td><td>5</td><td>10</td></tr>
+<tr><td>Largeur maximale (mm) : l doit être &lt;= à</td><td>20</td><td>20</td><td>20</td><td>20</td></tr>
+<tr><td>Profondeur mini. (mm) doit être &gt; la plus grande des 2 valeurs</td><td>5 ; 0,5 l</td><td>5 ; 0,5 l</td><td>8 ; 0,5 l</td><td>12 ; 1,3 l</td></tr>
+</tbody>
+</table>
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 386)
+
+# Coupes de principe en rénovation sur dormant bois
+
+Planche « Mise en oeuvre — Coupes de principe » du registre 7.2, à l'échelle 1:2 : la menuiserie
+PVC posée sur un ancien dormant bois (veiné), lui-même dans la maçonnerie en moellons [1 p. 389].
+
+Coupe sur appui : la traverse basse du nouveau dormant est posée sur l'ancien dormant bois avec
+« Calage » ; côté extérieur, une « Bavette PVC délignée » (bavette recoupée dans sa largeur) couvre
+l'ancien appui, tenue par un « Calage » ; entre le nouveau dormant et le bois, un « Fond de joint »
+et un « Joint élastomère 1ère catégorie SNJF ». Une cote de 2,5 mm est portée au droit du joint, sous
+la traverse basse du nouveau dormant ; la « HAUTEUR DE PASSAGE ENTRE BOIS » (la cote de passage H
+mesurée entre les bois de l'ancien dormant) est cotée jusqu'au trait supérieur de cette cote [1 p. 389].
+
+![Coupe de principe, rénovation sur dormant bois : coupe sur appui](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-renovation-sur-dormant-bois-appui-evo2008.png)
+
+Coupe sur montant : le nouveau dormant est posé contre l'ancien dormant bois ; une « Cornière PVC
+délignée » habille le tableau côté extérieur, avec un « Joint élastomère 1 ére (sic) catégorie SNJF »
+contre la maçonnerie et un autre entre la cornière et le dormant, et un « Fond de joint » entre le
+nouveau dormant et le bois [1 p. 389].
+
+![Coupe de principe, rénovation sur dormant bois : coupe sur montant](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-renovation-sur-dormant-bois-montant-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 389)
+
+## Cas particuliers
+
+Planches « Mise en oeuvre — Coupes de principe — Cas particuliers », à l'échelle 1:2 [1 p. 390-391].
+
+### Dépose de la traverse basse existante
+
+Coupe verticale : la traverse basse de l'ancien dormant est déposée ; le nouveau dormant repose sur
+un « Rejingot existant ou à créer (hauteur mini =15mm) », avec un « Joint comprimé » entre le dormant
+et la maçonnerie, et un « Appui PVC rapporté » clippé sous la traverse basse, côté extérieur. Cotes
+portées : 20 mm (hauteur de l'appui PVC rapporté), 127 mm (en largeur, du nez de l'appui jusqu'au
+rejingot) et 3,5 mm (sous l'appui, jusqu'à un trait de rappel plus bas) [1 p. 390].
+
+![Cas particulier : dépose de la traverse basse existante](/assets/procedures/mise-en-oeuvre-evo2008/cas-particulier-depose-traverse-basse-existante-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 390)
+
+### Tapées de persienne bois conservées
+
+Coupe horizontale sur montant : les tapées de persienne bois (pièces de bois qui portent les
+persiennes, conservées) restent contre la maçonnerie ; le nouveau dormant est posé derrière, avec
+un « Fond de joint » et un « Joint élastomère 1ère catégorie SNJF » entre la tapée et le dormant, et
+un « Profil de rattrapage reversible 12 ou 16 mm (6144) » clippé sur le dormant, côté extérieur ; une
+cote de 12 mm est portée au droit de ce profilé. Le 6144 est dessiné et coté sur
+[Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md)
+[1 p. 391].
+
+![Cas particulier : tapées de persienne bois conservées, profil de rattrapage 6144](/assets/procedures/mise-en-oeuvre-evo2008/cas-particulier-tapees-persienne-bois-conservees-evo2008.png)
+
+### Menuiserie ouverture extérieure (châssis à l'italienne)
+
+Coupe horizontale sur montant d'une menuiserie ouvrant vers l'extérieur (le châssis à l'italienne,
+nom de la planche ; paumelle dessinée côté extérieur) posée sur l'ancien dormant bois : « Joint
+élastomère 1ère catégorie SNJF » contre la maçonnerie, « Délignage de l'aile à réaliser sur
+chantier » (l'aile du dormant est recoupée sur place), et côté intérieur « Fond de joint », « Joint
+élastomère 1ère catégorie SNJF » et « Cornière PVC » [1 p. 391].
+
+![Cas particulier : menuiserie ouverture extérieure, châssis à l'italienne](/assets/procedures/mise-en-oeuvre-evo2008/cas-particulier-ouverture-exterieure-chassis-italienne-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 391)
+
+# Habillage intérieur mouluré 6145
+
+Le profilé 6145 est l'« Habillage intérieur mouluré » de la planche : un profilé PVC d'habillage
+(pièce de finition qui couvre une jonction, voir habillage au [glossaire](/reference/glossaire.md)). La planche, à l'échelle 1:2, le dessine seul avec ses cotes,
+puis posé en coupe sur montant [1 p. 392].
+
+| Référence | Largeur hors tout (mm) | Hauteur hors tout (mm) | Largeur de la partie gauche (mm) | Hauteur de la partie droite (mm) |
+| --- | --- | --- | --- | --- |
+| 6145 | 60 | 22,1 | 25,6 | 12 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 392)
+
+![Habillage intérieur mouluré 6145, cotes](/assets/procedures/mise-en-oeuvre-evo2008/habillage-interieur-moulure-6145-cotes-evo2008.png)
+
+Le 6145 figure aussi, avec les mêmes quatre valeurs relevées sur un dessin orienté autrement, dans
+les accessoires de dormants rénovation sur
+[Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md) [1 p. 7].
+
+Coupe sur montant : le nouveau dormant est posé contre l'ancien dormant bois, dans la maçonnerie en
+moellons ; une « Cornière PVC délignée » avec un « Joint élastomère 1 ére (sic)
+catégorie SNJF » contre la maçonnerie et un autre entre la cornière et le dormant, un « Fond de
+joint » entre le dormant et le bois ; un profilé non légendé, de même forme que le 6145, est dessiné
+sous l'ancien dormant bois, accroché à l'aile du nouveau dormant [1 p. 392].
+
+![Habillage intérieur mouluré 6145, coupe sur montant](/assets/procedures/mise-en-oeuvre-evo2008/habillage-interieur-moulure-6145-coupe-sur-montant-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 392)
+
+# Exemple de mise en œuvre en rénovation
+
+Planche « Mise en oeuvre rénovation — Exemples », à l'échelle 1:2, sans cote ni texte autre que
+« Extérieur » et « Intérieur » : coupe verticale complète d'une fenêtre posée sur l'ancien dormant
+bois conservé. En haut, sous la maçonnerie (béton), l'ancien dormant bois porte deux pièces de bois,
+une vis et un profilé d'habillage côté extérieur, avec deux joints contre la maçonnerie. En bas, le
+même assemblage bois et habillage repose sur un profilé tubulaire posé sur l'appui, avec une bavette
+cintrée côté extérieur [1 p. 393].
+
+![Exemple de mise en œuvre en rénovation, coupe verticale](/assets/procedures/mise-en-oeuvre-evo2008/exemple-renovation-coupe-verticale-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 393)
+
+# Ce que le document ne dit pas
+
+- Le « type de dormant bois » et le « mode de fixation » qui rendent la fourrure nécessaire sur les
+  montants et la traverse haute ne sont pas précisés.
+- Le cochonnet de la variante « Délignage du cochonnet » n'est pas défini.
+- Le repère « \* » des coupes d'étanchéité (cas 1 à 4) n'est pas légendé ; la correspondance entre ces coupes et les colonnes du tableau des types de calfeutrement est en **INC-278**.
+- Les deux modes de fixation A et B ne sont pas décrits autrement que par leur axe sur les coupes.
+
+# Citations
+
+[1] [Système e.VOLUTION, plan des profilés et manuel technique, système F 91, édition août 2008](raw/profine-plans-profiles-e-volution-2008-08.pdf)
+
+# Voir aussi
+
+- [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md)
+- [Systèmes spéciaux du système 70, 2008](/procedures/systemes-speciaux-systeme-70-evo2008.md)
+- [Plans des profilés e.VOLUTION, août 2008](/sources/plans-profiles-e-volution-2008.md)
+
+===== PAGE 2 : /certifications/at-cstb-6-16-2339-coffres-chrono.md =====
+# Nature, portée et validité réglementaire
+
+L'**Avis Technique n° 6/16-2339_V2** est l'évaluation technique officielle formulée par le Groupe Spécialisé n° 06 (*Composants de baies et vitrages*) de la Commission chargée de formuler les Avis Techniques (CCFAT) et publiée par le CSTB [1 p. 1-4] :
+* **Titulaire** : Société [SOPROFEN](/fournisseurs/soprofen.md) SAS (Mertzwiller) [1 p. 1, 10].
+* **Validité réglementaire** : du **22 février 2022 au 31 janvier 2027** [1 p. 1].
+* **Gamme visée** : coffres de volets roulants blocs-baies en PVC multi-parois rigide : **Chrono C**, **Chrono VX2**, **Chrono VRX2** (rénovation) et **Chrono ONE** [1 p. 1, 4, 10].
+* **Objet de l'évaluation** : aptitude à l'emploi des coffres montés en traverse haute de fenêtres extérieures. L'Avis Technique ne vise pas les tabliers et fermetures qui relèvent des normes NF EN 13659, NF EN 13125 et de la marque NF-Fermetures [1 p. 1, 4].
+
+---
+
+# Domaine d'emploi accepté
+
+L'Avis Technique autorise l'utilisation du procédé en France métropolitaine selon quatre configurations de mise en œuvre [1 p. 4] :
+1. **Applique intérieure et isolation par l'intérieur (ITI)** : posé derrière le linteau dans des parois maçonnées ou en béton [1 p. 4].
+2. **En tableau sous dalle** : avec isolation intérieure sous face de dalle dans des murs en maçonnerie ou béton [1 p. 4].
+3. **Rénovation sur dormant existant** : conservation de l'ancien bâti avec caisson Chrono VRX2 ou Chrono ONE [1 p. 4].
+4. **En tableau avec isolation thermique par l'extérieur (ITE)** : avec enduit sur isolant et/ou bardage, disposition **spécifiquement validée pour le coffre Chrono ONE** [1 p. 4].
+
+Le coffre n'est en aucun cas un élément porteur ; tous les ouvrages situés au-dessus doivent être autoportants [1 p. 16].
+
+---
+
+# Dimensions extérieures et diamètres d'enroulement
+
+Dimensions nominales extérieures et diamètres maximaux d'enroulement géométrique admis par le CSTB [1 p. 10] :
+
+| Modèle de coffre | Hauteur $\times$ Profondeur (mm) | Diamètre d'enroulement géométrique $\varnothing$ (mm) | Longueur maximale sans séparation (m) |
+| --- | --- | --- | --- |
+| Chrono VX2 ou Chrono C – type CX22 | $223 \times 240$ | 188 | 3,00 |
+| Chrono VX2 ou Chrono C – type CX18 | $188 \times 240$ | 162 | 3,00 |
+| Chrono VX2 ou Chrono C – type CX14 | $153 \times 187,2$ | 134 | 3,00 |
+| Chrono VX2 Réno – type CRX 18 | $218 \times 232$ (lambrequin 183) | 167 | 1,80 |
+| Chrono VX2 Réno – type CRX 14 | $183 \times 232$ (lambrequin 148) | 132 | 1,80 |
+| Chrono VX2 Réno – type CRX 18-70 | $218 \times 243$ (lambrequin 183) | 167 | 1,80 |
+| Chrono VX2 Réno – type CRX 14-70 | $183 \times 243$ (lambrequin 148) | 132 | 1,80 |
+| Chrono ONE – 200 mm | $200 \times 240$ | 165 | 3,00 |
+| Chrono ONE – 230 mm | $230 \times 240$ | 185 | 3,00 |
+
+(schéma: raw/moustiquaires/export_doc_135.zip, p. 10 et 14)
+
+*Note de portée* : pour le Chrono VRX2, la longueur maximale de 1,80 m passe à 3,00 m avec une console de séparation intermédiaire [1 p. 14].
+
+---
+
+# Performances thermo-aérauliques et acoustiques
+
+### Perméabilité à l'air (Norme NF P20-302 sous 4 Pa)
+
+Le classement d'étanchéité à l'air définit le débit de fuite maximal extrapolable [1 p. 5] :
+* **Classe C3** : $0,26\text{ m}^3/\text{h.m}$ (soit $1,3\text{ m}^3/\text{h.m}^2$ pour un coffre de 200 mm de hauteur) [1 p. 5].
+* **Classe C4 (Haute étanchéité)** : $0,08\text{ m}^3/\text{h.m}$ (soit $0,4\text{ m}^3/\text{h.m}^2$ pour un coffre de 200 mm de hauteur), répondant aux exigences strictes de la RT2012 et RE2020 [1 p. 5].
+
+### Isolation thermique ($U_c$ et $U_p$)
+
+Formules de calcul du coefficient surfacique moyen du coffre $U_c$ ou de la paroi intégrant le coffre $U_p$ en fonction de la longueur de coffre $L_c$ en mètres [1 p. 8] :
+
+| Coffre | Configuration de pose | Doublage / Isolant | Expression du coefficient thermique en $\text{W/(m}^2\text{.K)}$ |
+| --- | --- | --- | --- |
+| Chrono ONE 230 | Pose tunnel (avec isolant joue) | PSE graphité 17 kg/m³ | $U_c = 1,16 + 0,192 / L_c$ (sans renfort) |
+| Chrono ONE 230 | Pose tunnel (avec isolant joue) | PSE graphité 17 kg/m³ | $U_c = 1,17 + 0,192 / L_c$ (avec renfort MX20-2) |
+| Chrono ONE 230 | Applique ITI 100 mm | Adaptateur alu MX10/46 | $U_p = 1,08 + 0,166 / L_c$ |
+| Chrono ONE 230 | Applique ITI 120 mm | Adaptateur alu MX10/66 | $U_p = 1,01 + 0,122 / L_c$ |
+| Chrono ONE 230 | Applique ITI 140 mm | Adaptateur alu MX10/46 | $U_p = 0,936 + 0,080 / L_c$ |
+| Chrono ONE 230 | Applique ITI 160 mm | Adaptateur alu MX10/66 | $U_p = 0,920 + 0,042 / L_c$ |
+| Chrono ONE 200 | Pose tunnel (avec isolant joue) | Coquille M50-20 | $U_c = 0,942 + 0,140 / L_c$ |
+| Chrono ONE 200 | Applique ITI 100 mm | Adaptateur alu MX10/40 | $U_p = 0,931 + 0,140 / L_c$ |
+| Chrono ONE 200 | Applique ITI 120 mm | Adaptateur alu MX10/55F | $U_p = 0,835 + 0,107 / L_c$ |
+| Chrono ONE 200 | Applique ITI 140 mm | Adaptateur alu MX10/40 | $U_p = 0,736 + 0,027 / L_c$ |
+| Chrono ONE 200 | Applique ITI 160 mm | Adaptateur alu MX10/55F | $U_p = 0,661 + 0,027 / L_c$ |
+| Chrono ONE 230 | Tableau ITE 140 mm | Adaptateur alu MX10/35 | $U_p = 0,958 + 0,192 / L_c$ |
+
+(schéma: raw/moustiquaires/export_doc_135.zip, p. 8)
+
+*Exigences en rénovation* : le coefficient $U_c$ doit être $\le 2,5\text{ W/(m}^2\text{.K)}$ en RT élément par élément et $\le 3,0\text{ W/(m}^2\text{.K)}$ en RT globale [1 p. 5, 8].
+
+### Réaction au feu et acoustique
+
+* **Réaction au feu** : profilés PVC plaxés revêtus d'un film décoratif classés **M3** selon les procès-verbaux CREPIM DO-18-0432/A-R1 et DO-21-2677/A-R1 [1 p. 5].
+* **Affaiblissement acoustique** : caractérisé par l'indice d'isolement acoustique $D_{n,e,w} + C_{\text{tr}}$ dans le cadre de la certification Acotherm du bloc-baie [1 p. 5].
+
+---
+
+# Rigidité mécanique sous vent et renforts ($EI$)
+
+Le produit de rigidité flexionnelle $EI$ (en $\text{N.m}^2$) caractérise l'apport du coffre sous la pression du vent [1 p. 14] :
+
+| Famille de coffre | $EI$ sans renfort ($\text{N.m}^2$) | $EI$ avec renfort standard ($\text{N.m}^2$) | $EI$ avec renfort haute inertie MX20-2 ($\text{N.m}^2$) |
+| --- | --- | --- | --- |
+| CX18 et CX22 | 5 040 | 57 960 (renfort CX20) | - |
+| CRX14 et CRX18 | 6 510 | 53 760 (renfort VX23) | - |
+| CX14 | 3 150 | 28 350 (renfort VRX20) | - |
+| Chrono ONE | 8 400 | 46 830 (renfort MX20-1) | 62 160 |
+
+(schéma: raw/moustiquaires/export_doc_135.zip, p. 14)
+
+### Dispositions structurales obligatoires
+
+1. **Flèche maximale admissible** : l'ensemble traverse haute de dormant et sous-face de coffre doit présenter une rigidité telle que la flèche sous pression P1 reste **inférieure à $1/150\text{e}$ de la portée**, sans jamais dépasser **15 mm sous 800 Pa** [1 p. 7].
+2. **Brides de reprise au gros œuvre sur Chrono ONE** : pour toute largeur de coffre comprise entre **2 500 et 3 000 mm**, une bride métallique interne est obligatoire à mi-portée. Elle relie la traverse haute au travers de la sous-face et de la planche supérieure directement au gros œuvre (ou via l'équerre **MX-ETH** avec douille **MX-ENTH**) [1 p. 14, 71].
+3. **Tabliers multiples** : lorsqu'il n'y a pas de renfort continu, un renfort acier d'au moins 1,00 m est obligatoirement placé à cheval sur chaque plaque de séparation [1 p. 14, 53].
+
+---
+
+# Prescriptions d'atelier et règles de pose
+
+1. **Réversibilité de sous-face (gain d'isolation)** :
+   * La sous-face **CX01** (gammes Chrono VX2 et C) et la sous-face **MX01R** (gamme Chrono ONE) sont symétriques et réversibles : par simple retournement, elles permettent d'**augmenter l'épaisseur de doublage intérieur de 40 mm** (passant de 100/120 mm à 140/160 mm fini) sans changer de profilé adaptateur [1 p. 7, 13, 47, 55].
+2. **Fixation des adaptateurs de menuiserie** :
+   * Pas de vissage : tous les **40 cm** pour les adaptateurs en aluminium, et tous les **20 cm** pour les adaptateurs en PVC, avec une fixation impérative au plus près du pied de dormant [1 p. 13].
+3. **Coulisses et démontabilité SAV** :
+   * Sur Chrono ONE, le profilé PVC noir POC inséré dans les coulisses aluminium comporte des lumières oblongues ou est dessertissable pour permettre le coulissement et le démontage de la coulisse en intervention SAV sans dépose du bloc-baie [1 p. 6, 13].
+4. **Mastics d'étanchéité certifiés** :
+   * Les mastics ayant fait l'objet d'essais concluants d'adhésivité/cohésion selon NF EN ISO 8339 sur les profilés du système sont : Dow Corning 796, Rubson Acrylique Bâtiment, Henkel Pro A1 / FT101 / SP2, Sika Sikacryl PRO, et Tremco Illbruck FA101 / FS125 [1 p. 17].
+5. **Critère de clarté colorimétrique ($L^*$)** :
+   * Si la coordonnée colorimétrique $L^*$ est inférieure à 82 (teintes sombres et foncées), le lambrequin extérieur exposé au soleil doit être obligatoirement réalisé en aluminium extrudé. Les lambrequins PVC ne sont tolérés en teintes sombres que s'ils sont masqués derrière un linteau maçonné [1 p. 7, 15].
+
+---
+
+# Citations
+
+[1] [Avis Technique CSTB n° 6/16-2339_V2, coffres Chrono SOPROFEN](raw/moustiquaires/export_doc_135.zip), p. 1 à 72
+
+---
+
+# Voir aussi
+
+- [SOPROFEN](/fournisseurs/soprofen.md)
+- [Volets roulants](/equipements/volets-roulants.md)
+- [Montage en atelier du volet roulant bloc-baie Chrono One SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md)
+- [Montage en atelier du bloc-baie Chrono One sur dormant monobloc SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen.md)
+- [Avis Technique CSTB n° 6/16-2339_V2, coffres Chrono SOPROFEN (2022)](/sources/soprofen-at-cstb-coffres-chrono.md)
+
+===== PAGE 3 : /procedures/mise-en-oeuvre-systeme-70-evo2008.md =====
+# Ce que fait cette procédure
+
+La mise en œuvre (ou pose) est le montage de la menuiserie finie dans la baie du bâtiment : on
+la cale, on la fixe au gros œuvre (la maçonnerie, le béton, la structure du bâtiment), puis on
+ferme le joint de raccordement entre le dormant (le cadre fixe de la fenêtre) et la maçonnerie
+([glossaire](/reference/glossaire.md)).
+
+Le classeur KÖMMERLING « Système e.VOLUTION » d'août 2008 (système F 91, système 70 de profine)
+traite ce sujet dans son registre 7.1 « Mise en oeuvre ». Le registre est paginé à partir de 1 : sa
+page imprimée N est la page N + 328 du PDF [1 p. 329-334]. Les directives de montage des directives
+générales profine de 2023, communes aux systèmes 70 et 76, sont sur
+[Montage au bâtiment, directives générales profine](/procedures/montage-generaux-profine.md) ; les
+écarts entre les deux documents sont portés en anomalies (**CTR-100** à **CTR-103**), sans que l'un
+l'emporte sur l'autre.
+
+# Conditions et interdictions
+
+Remarque importante (encadré, page imprimée 4) : « Les directives de mise en oeuvre indiquées
+dans les registres 7.1 et 7.2 ne sont données qu'à titre indicatif et ne peuvent en aucun cas avoir
+une valeur contractuelle. Se reporter dans tous les cas aux documents officiels en vigueur et
+effectuer la pose en fonction de ces documents. » [1 p. 332]
+
+- **Il ne faut jamais remplir l'espace entre le dormant et le gros œuvre par du mortier** : ceci
+  établirait une liaison rigide entre la fenêtre et la maçonnerie, et le mortier se casserait suite
+  aux dilatations [1 p. 329].
+- **Ne pas employer des produits de scellement en bombe (mousse de polyuréthane)**, « car leur
+  neutralité dimensionnelle après pose est très aléatoire » [1 p. 331].
+- **Des produits bitumeux — les mastics à base d'huile minérales, les polychloroprènes plastifiés —
+  sont à proscrire.** Éviter les déformations du dormant [1 p. 331].
+- Attention ! Pour la réalisation de portes et fenêtres anti-effraction, poser des fourrures
+  (pièces rapportées entre le dormant et la maçonnerie) supplémentaires au niveau de tous les
+  points de verrouillage (« Directives de fabrication spéciales concernant la résistance à
+  l'effraction de fenêtres ouvrant à la française et oscillo-battantes ») [1 p. 331].
+- Tous les éléments sont à poser verticalement, « notre responsabilité ne pouvant être engagée dans
+  le cas du non-respect de cette règle ». Les cas particuliers devront faire l'objet d'un accord et
+  d'une étude préalable du fabricant [1 p. 330].
+
+# Étapes
+
+Le texte suit la numérotation du registre 7.1, « Généralités » (pages imprimées 1 à 3).
+
+## 1.0 Contraintes
+
+Les joints entre la fenêtre et le gros œuvre subissent des contraintes [1 p. 329] :
+
+- dues à la pluie battante ;
+- dues à la pression du vent ;
+- dues à l'utilisation ;
+- acoustiques ;
+- dues à la dilatation des éléments ;
+- dues aux chocs provoqués par une fermeture brutale (par exemple sous l'effet du vent).
+
+## 2.0 Types de joints / conception
+
+2.1 Jeu de pose. Ce jeu périphérique (l'espace laissé tout autour du dormant, entre lui et la
+maçonnerie) est nécessaire pour assurer une bonne incorporation de la fenêtre dans le gros œuvre
+[1 p. 329].
+
+2.2 Joints de dilatation. Ces joints sont exposés à toutes les contraintes mentionnées sous 1.
+Par conséquent, ils doivent répondre à des exigences élevées, ce qui requiert une pose soigneuse
+ainsi que des matériaux résistants pour éviter des dommages de construction. Des mastics
+d'étanchéité sont particulièrement bien adaptés pour l'étanchéité entre cadre dormant et
+maçonnerie : étant faciles à travailler, ils absorbent les tolérances en matière de construction et
+ils résistent d'une manière durable aux contraintes dues à l'action du vent, de la pluie battante et
+des dilatations. Des précadres (cadres de montage posés d'abord dans la baie, sur lesquels la
+fenêtre est ensuite fixée) sont également appropriés, mais ils ne peuvent pas être utilisés d'une
+manière universelle [1 p. 329].
+
+2.2.1 Sources d'erreur lors du calcul des joints [1 p. 329] :
+
+- a) Largeur / profondeur insuffisante.
+- b) Erreurs quant au sens des dilatations.
+- c) Surfaces d'adhésion trop faibles (éviter l'adhésion sur 3 côtés) ; les surfaces d'adhésion
+   doivent être résistantes et sèches.
+
+2.2.2 Sources d'erreur lors de la pose des joints [1 p. 329] :
+
+- a) Adhésion sur 3 côtés (le mastic collé au fond du joint en plus de ses deux flancs).
+- b) Surfaces d'adhésion humides.
+- c) Stabilité insuffisante des surfaces d'adhésion.
+- d) Limite de profondeur insuffisante ou manquante (joint torique à cellules fermées — le fond de
+   joint, cordon de mousse qui limite la profondeur du mastic).
+- e) Matériau inapproprié.
+- f) Non-respect des directives techniques données par les fabricants des mastics.
+
+2.2.3 Exigences particulières. Pour des exigences spécifiques acoustiques, l'espace entre le
+joint extérieur et intérieur, c'est-à-dire entre le cadre dormant et le gros œuvre, doit être rempli
+soigneusement de fibre minérale (fibre de verre / laine de roche), ce qui réduit considérablement la
+transmission phonique. La fibre minérale ne doit pas être trop bourrée afin d'éviter des liaisons
+rigides entre dormant et maçonnerie. Il ne faut jamais remplir cet espace par du mortier, car ceci
+établirait une liaison rigide entre la fenêtre et la maçonnerie ; le mortier se casserait suite aux
+dilatations [1 p. 329].
+
+La fermeture brutale de l'ouvrant (due au vent par exemple) sollicite considérablement les joints.
+Par conséquent, un raccord réalisé au moyen d'enduit ne peut pas assurer une étanchéité durable.
+L'enduit s'écaillant permet la pénétration d'eau et provoque ainsi des dommages de construction. Des
+mastics d'étanchéité à pouvoir absorbant restent par contre étanches [1 p. 329].
+
+Des profilés de reprise du crépi en PVC évitent le contact mastic / crépi et permettent une adhésion
+deux faces PVC / PVC, ce qui donne comme avantage une liaison parfaite même si le crépi est humide
+(s'assurer surtout d'avoir des surfaces d'adhésion rigides et stables). Lors du calcul des joints,
+il faut également tenir compte d'une déformation éventuelle des linteaux (consulter le calcul
+statique à ce sujet) [1 p. 329].
+
+## 3.0 Protection
+
+Pour des profilés protégés par un film, celui-ci est à enlever au plus tard trois mois après la
+mise en œuvre [1 p. 330]. Les directives de 2023 demandent de l'enlever immédiatement après la
+fixation (**CTR-100**).
+
+## 4.0 Stockage et transport
+
+Les supports de transport (par exemple palettes) doivent être stables et antidérapants. Tous les
+éléments sont à transporter debout. Éviter les causes de compression et de flexion des éléments.
+**L'emballage doit être conçu de telle façon qu'il évite absolument une accumulation de chaleur et
+d'eau de condensation** [1 p. 330].
+
+## 5.0 Mise en œuvre (voir DTU 36.1, article 4.3)
+
+5.1 Tolérances gros œuvre. Contrôler les dimensions du gros œuvre selon le tableau ci-dessous :
+une ligne par état du tableau de baie (le tableau est la face latérale de l'ouverture dans le
+mur), une colonne par dimension de la baie ; les cellules sont les tolérances dimensionnelles
+admises, en mm [1 p. 330].
+
+| Côtes en tableau | jusqu'à 2,5 m | de 2,5 m à 5 m | plus de 5 m |
+| --- | --- | --- | --- |
+| tableau brut (par exemple maçonnerie non enduite) | ± 10 | ± 15 | ± 20 |
+| tableau fini (par exemple maçonnerie enduite, en briques de parement, en béton) | ± 5 | ± 10 | ± 15 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 330)
+
+Ces tolérances sont les mêmes que celles des directives de 2023
+([§ 3.1.1](/procedures/montage-generaux-profine.md#3-montage--conditions-côté-bâtiment)).
+
+5.2 Niveau de référence. Le tracé d'un niveau de référence (1 m au-dessus du sol fini) incombe
+au maître d'œuvre. Ce niveau doit être donné à chaque étage (discontinuité du marquage maxi 10 m).
+Le tracé doit être contrôlé avant montage. En cas de désaccord, aviser immédiatement le maître
+d'œuvre [1 p. 330].
+
+5.3 Positionnement. Tous les éléments sont à poser verticalement ; la responsabilité du
+fabricant ne peut être engagée dans le cas du non-respect de cette règle. Les cas particuliers
+devront faire l'objet d'un accord et d'une étude préalable du fabricant [1 p. 330].
+
+## 6.0 Liaison au gros œuvre
+
+6.1 Éléments de fixation : chevilles, pattes d'ancrage, rails, précadres, etc. Ces éléments de
+fixation (chevilles, rails, etc.) sont à choisir de manière à ne pas empêcher ou affecter la
+dilatation des éléments au niveau du raccord au gros œuvre (employer des chevilles spéciales)
+[1 p. 330].
+
+6.2 Fixation [1 p. 331] :
+
+- 6.2.1 Réglage et ajustement au moyen de cales. Un calage diagonal — mais pas directement dans
+  les angles — est conseillé. Laisser un jeu gros œuvre / dormant de 10 mm au minimum de façon à
+  pouvoir effectuer par la suite un calfeutrement (le remplissage et l'étanchement du joint)
+  parfait.
+- 6.2.2 Les points de fixation sont à placer comme suit : au moins 10 cm des angles
+  intérieurs des dormants ; espacement maximal 70 cm ; respecter les directives de mise en
+  œuvre (planches des points de fixation ci-dessous).
+
+## 7.0 Joint entre dormant / gros œuvre
+
+7.1 Largeur. Prévoir aux raccords de tableau et au linteau, dans la mesure du possible, des
+joints d'épaisseur égale. Suivre les recommandations du tableau suivant en cas d'emploi de mastics
+d'étanchéité à base de silicone : une ligne par type de profilé, une colonne par dimension de
+l'élément de fenêtre ; les cellules donnent la largeur du joint, en mm [1 p. 331].
+
+| Élément de fenêtre | jusqu'à 1 m | de 1 à 2 m | de 2 à 3 m |
+| --- | --- | --- | --- |
+| profilés blancs | 10 | 10 | 15 |
+| profilés structure | 10 | 15 | 20 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 331)
+
+Les directives de 2023 donnent une autre table (colonnes de 1,5 à 4,5 m, pose entre mur et pose en
+applique, profilés blancs et non blancs) : **CTR-101**. Le tableau de 2008 est titré « Largeur du
+joint » au-dessus des colonnes de dimension ; « profilés structure » n'est pas défini sur la page.
+
+En cas de pose en feuillure (la fenêtre appuyée contre le ressaut, ou feuillure, taillé dans la
+maçonnerie), respecter la cote minimale de 10 mm entre le dormant et la feuillure [1 p. 331].
+
+7.2 Bourrage. Le joint dormant / gros œuvre est à remplir avec un matériau isolant thermique /
+phonique tel que fibre de verre ou laine de roche, suivant les exigences requises. **Ne pas employer
+des produits de scellement en bombe (mousse de polyuréthane)**, car leur neutralité dimensionnelle
+après pose est très aléatoire (les directives de 2023 les admettent sous condition : **CTR-102**).
+Des produits bitumeux — les mastics à base d'huile minérales, les polychloroprènes plastifiés — sont
+à proscrire. Éviter les déformations du dormant. L'étanchéité extérieure est à réaliser au moyen de
+produits d'élasticité permanente (Ködisil BA-W). Lors de leur utilisation, respecter les
+informations produits des mastics d'étanchéité KÖMMERLING [1 p. 331].
+
+## 8.0 Recommandations générales
+
+[1 p. 331]
+
+- Les efforts résultant des descentes de charges ou de la flexion des linteaux ne doivent pas avoir
+  de répercussions directes sur la fenêtre. Se renseigner auprès du bureau d'études pour le
+  dimensionnement du joint au niveau du linteau.
+- Des pressions résultant des dilatations du bâtiment ne doivent pas avoir de répercussions directes
+  sur la fenêtre.
+- Procéder à la réception des menuiseries avec le maître d'œuvre aussitôt après la mise en œuvre.
+- En cas d'appuis extérieurs maçonnés ou préfabriqués et de tablette intérieure, prévoir une
+  fourrure, tapée (profilé rapporté sur le dormant) ou réhausse de liaison entre l'allège et
+  l'appui (évite un pont thermique entre les deux éléments).
+
+# Points de fixation
+
+## Châssis fixe et à frappe
+
+La planche montre, vus de l'intérieur et non à l'échelle, cinq châssis : un fixe, un ouvrant à la
+française (avec paumelles), un oscillo-battant, une fenêtre à deux vantaux et un ensemble de trois
+châssis séparés par des meneaux. Chaque point noir est un point de fixation ; la lettre A marque
+l'entraxe entre deux fixations, la lettre E la distance entre une fixation et l'angle intérieur du
+dormant ou le milieu d'un meneau / traverse. Sur l'ouvrant à la française, la fixation du côté des
+paumelles porte la mention « Scellement à hauteur des paumelles ». Le petit croquis en bas à droite
+montre la cote E prise depuis l'angle intérieur du dormant [1 p. 333].
+
+![Points de fixation, châssis fixe et à frappe](/assets/procedures/mise-en-oeuvre-evo2008/points-de-fixation-chassis-fixe-et-a-frappe-evo2008.png)
+
+| Repère | Définition | Valeur (mm) |
+| --- | --- | --- |
+| E | cote mini de l'angle intérieur du dormant | 100 |
+| - | point de fixation à partir du milieu du profilé meneau / traverse | 200 |
+| A | entraxe des fixations, maximum | 700 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 333)
+
+La planche de 2023 donne env. 150 mm au coin intérieur (env. 250 mm pour les profilés non blancs) et
+env. 150 mm à partir de la face intérieure des meneaux et traverses (**CTR-103**).
+
+## Coulissant
+
+La planche montre, en vue intérieure et non à l'échelle, un coulissant à deux vantaux. Les cotes en
+mm sont portées sur le pourtour du dormant : les fixations sont à 200 mm des angles, à 200 mm de part
+et d'autre du milieu en traverse haute et basse, et l'écartement entre deux fixations des montants
+est inférieur à 600 mm (« < 600 ») ; les repères A marquent, sur chaque montant, les deux fixations
+placées en face des gâches (pièces du dormant où s'engage la fermeture) [1 p. 334].
+
+![Points de fixation d'un coulissant, vue intérieure](/assets/procedures/mise-en-oeuvre-evo2008/points-de-fixation-coulissant-evo2008.png)
+
+| Repère | Définition | Valeur (mm) |
+| --- | --- | --- |
+| - | fixation depuis chaque angle du dormant | 200 |
+| - | fixation de part et d'autre du milieu des traverses | 200 |
+| - | écartement maximal entre deux fixations | 600 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 334)
+
+- Les pattes sont placées aux endroits des points de roulement.
+- Attention A : une patte de fixation positionnée en face de chaque gâche devra retransmettre
+  l'effort à la maçonnerie.
+- Nota : les pattes de fixation doivent permettre une fixation correcte du dormant sans
+  entraîner de vrillage ni de surtension.
+
+[1 p. 334]
+
+# Calcul des jeux de dilatation
+
+Le PVC s'allonge quand il chauffe et se raccourcit quand il refroidit : le jeu de dilatation
+est l'espace laissé autour du châssis pour que ce mouvement ne force ni la fenêtre ni la maçonnerie.
+Pour ces calculs, prendre un coefficient de dilatation du PVC blanc de 0,1 mm par mètre de profilé
+et par degré de variation de température (valeur maximum). En blanc, une variation de
+température de 10 °C donne une dilatation de 1 mm par mètre de profilé (10 °C × 0,1) [1 p. 335].
+
+Le classeur donne d'autres coefficients de dilatation du PVC dans ses directives générales
+(**INC-273**).
+
+Formule à appliquer : dilatation (mm) = 0,1 × L × ΔT [1 p. 335].
+
+| Terme | Définition | Unité |
+| --- | --- | --- |
+| 0,1 | constante de dilatation par mètre et par °C | mm/(m·°C) |
+| L | longueur du châssis | m |
+| ΔT | écart de température entre l'été et l'hiver | °C |
+
+Exemple : un châssis de 3,0 m de largeur exposé à des températures moyennes de −10 °C en hiver et
+de +30 °C en été aura une dilatation globale de 0,1 × 3,0 × 40 = 12 mm [1 p. 335].
+
+Remarque concernant la pose : cette dilatation de 12 mm se répartit de chaque côté du châssis
+(6 mm de chaque côté) et correspond à une variation entre le mini l'hiver et le maxi l'été. Si le
+châssis est posé à une température ambiante d'environ 15 °C, la dilatation sera [1 p. 335] :
+
+| Saison | Écart de température (°C) | Calcul | Dilatation (mm) | Effet de chaque côté du châssis |
+| --- | --- | --- | --- | --- |
+| été | de 15 à 30 °C = 15 | 0,1 × 3,0 × 15 | 4,5 | « ce qui fera 2 mm de chaque côté » (allongement) |
+| hiver | de −10 °C à +15 °C = 25 | 0,1 × 3,0 × 25 | 7,5 | « réduction de la largeur du châssis d'environ 4,0 mm de chaque côté » |
+
+Les moitiés exactes seraient 2,25 et 3,75 mm (**INC-274**).
+
+Les variations dimensionnelles des profilés PVC ne sont donc pas négligeables, et il est très
+important de bien estimer ces variations afin de poser correctement les châssis PVC. Ces variations
+dimensionnelles s'adressent également aux profilés accessoires (pièce d'appui, cornière
+d'habillage, lame de volet roulant…). **Attention : laisser les jeux nécessaires pour garantir le bon
+fonctionnement** [1 p. 335].
+
+# Référentiel de mise en œuvre (source UFPVC)
+
+Les pages imprimées 8 et suivantes, intitulées « Référentiel de mise en oeuvre », sont marquées
+« * source UFPVC » (le registre 5.9 du même classeur nomme l'« UNION FENETRE PVC »). Leurs dessins ne sont pas à l'échelle
+[1 p. 336-338].
+
+## Pose en applique intérieure et en tunnel de menuiseries PVC à frappe faisant l'objet d'un avis technique
+
+La pose en applique intérieure fixe le dormant contre la face intérieure du mur, en recouvrant
+le bord de la baie ; la pose en tunnel place le dormant à l'intérieur de l'épaisseur de la baie,
+entre les tableaux ([glossaire](/reference/glossaire.md)).
+
+« Ce document volontairement simplifié ne se substitue pas aux travaux de référence réalisés sous
+l'égide du CSTB et auxquels il conviendra de se reporter pour toutes informations complémentaires.
+Les méthodes de pose figurant ci-dessous sont données à titre indicatif et ne peuvent engager la
+responsabilité de KÖMMERLING. » [1 p. 336]
+
+### Repère 1 : travaux préparatoires
+
+La perspective montre la baie vue de l'intérieur, avec ses deux flèches de mesure (hauteur et
+largeur), le niveau posé sur l'appui et les deux fils à plomb le long du tableau et du mur.
+
+![Baie : contrôle des dimensions, du niveau de l'appui et de l'aplomb](/assets/procedures/mise-en-oeuvre-evo2008/ufpvc-1-baie-controle-niveau-aplomb-evo2008.png)
+
+1. Vérifier les dimensions de la baie en hauteur et en largeur (respect des tolérances de
+   maçonnerie selon le DTU 36.1 / 37.1 de février 1985).
+2. Contrôler le niveau de l'appui ainsi que l'aplomb des tableaux et du mur.
+3. Installer, dans le cas d'un appui reconstitué, la lisse filante (profilé posé sur toute
+   la largeur de l'appui, qui reçoit le dormant — voir la variante ci-dessous).
+4. Mettre en place (si le joint d'appui est inaccessible après pose) une bande de mousse
+   précomprimée ou non, imprégnée de butyl ou d'acrylique (**bitume interdit**), en la retournant de
+   100 mm sur la hauteur des tableaux.
+
+[1 p. 336]
+
+La seconde perspective montre l'angle de l'appui et du tableau : la bande de mousse suit l'appui et
+remonte de 100 mm sur le tableau.
+
+![Bande de mousse sur l'appui, retournée de 100 mm sur le tableau](/assets/procedures/mise-en-oeuvre-evo2008/ufpvc-1-bande-mousse-appui-retour-100-mm-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 336)
+
+### Repère 2 : pose en applique intérieure
+
+Deux coupes : à gauche la coupe verticale sur l'appui (le dormant posé sur l'appui maçonné, la
+pièce d'appui et le rejet d'eau à l'extérieur), à droite la coupe horizontale sur le tableau (le
+dormant appliqué contre la face intérieure du mur). Les cercles repèrent les zones commentées. Les
+annotations de la planche [1 p. 337] :
+
+- « Etanchéité mise en place avant pose de la menuiserie » (sous le dormant, sur l'appui) ;
+- « Dans cette zone, habillage selon principe arrêté au devis » (côté intérieur, sur l'appui et sur
+  le tableau) ;
+- « Mastic sur fond de joint » (entre le dormant et le tableau) ;
+- « Cote d'appui minimum 13 mm », cotée sur la coupe du tableau entre le nu du tableau et le bord
+  du dormant.
+
+![Pose en applique intérieure : coupe sur appui et coupe sur tableau](/assets/procedures/mise-en-oeuvre-evo2008/ufpvc-2-pose-applique-interieure-evo2008.png)
+
+#### Variante : appui reconstitué
+
+Quand l'appui est reconstitué, le dormant repose sur une lisse filante. À gauche la coupe verticale,
+à droite la perspective de la lisse dans la baie. Les annotations de la planche [1 p. 337] :
+
+- « Mousse imprégnée ou mastic sur fond de joint » (entre la lisse et le dormant, et le long de la
+  lisse sur la perspective) ;
+- « Obturation de la rainure aux extrémités » ;
+- « Dans cette zone, habillage selon principe arrêté au devis » ;
+- pente de l'appui « ≥ 35 % » ; « Pour les angles inférieurs à 35 %, mettre en place une bavette de
+  recouvrement » (tôle ou profilé qui recouvre l'appui) ;
+- « Pénétration de la lisse derrière les tableaux. (Longueur lisse = Largeur fenêtre) » ;
+- « Lisse filante (si acier, galvanisation Z 275) ».
+
+![Variante appui reconstitué : coupe et lisse filante](/assets/procedures/mise-en-oeuvre-evo2008/ufpvc-2-variante-appui-reconstitue-lisse-filante-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 337)
+
+### Pose en tunnel et fixation (planche sans repère)
+
+Deux coupes : à gauche la coupe verticale sur l'appui (le dormant fixé par une vis dans l'appui), à
+droite la coupe horizontale sur le tableau (le dormant fixé latéralement dans le tableau). Les
+annotations de la planche [1 p. 338] :
+
+- « Etanchéité réalisé après pose de la menuiserie » (sur l'appui et sur le tableau) ;
+- « Dans cette zone, remplissage ou habillage selon principe arrêté au devis » ;
+- « Fixation par vis + cheville métallique ou vis spéciale sans cheville » ;
+- « Centrage par vérins ou calage temporaire ou définitif selon mode de fixation ».
+
+![Pose en tunnel : coupe sur appui et coupe sur tableau](/assets/procedures/mise-en-oeuvre-evo2008/ufpvc-3-pose-en-tunnel-evo2008.png)
+
+La vue de face montre une fenêtre à trois vantaux dans son dormant ; les petits rectangles autour
+du dormant sont les éléments de fixation ou de calage (pattes, vérins), placés au droit des axes de
+rotation et des points de condamnation.
+
+![Éléments de fixation et de calage autour du dormant](/assets/procedures/mise-en-oeuvre-evo2008/ufpvc-3-elements-de-fixation-et-calage-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 338)
+
+1. Mettre en place, si nécessaire, les éléments de fixation ou de calage (pattes, vérins) en
+   les positionnant au droit des axes de rotation et des points de condamnation (les points de
+   verrouillage), et en respectant une distance d'environ 100 mm par rapport à l'angle intérieur
+   des assemblages soudés ainsi que l'entraxe maximum de 800 mm entre deux fixations (**700 mm
+   admissible pour les dormants renforcés**).
+2. Placer la fenêtre dans la baie.
+3. Effectuer le calage pour la centrer et assurer le jeu minimum de 5 mm nécessaire à la
+   réalisation du cordon d'étanchéité. En traverse basse, les cales d'assise (cales sur
+   lesquelles repose le dormant) seront positionnées au droit des montants latéraux et
+   intermédiaires s'ils existent.
+4. Solidariser la fenêtre au gros œuvre à l'aide de fixations de dimensions et de nature
+   appropriées.
+5. Vérifier, comme stipulé au DTU 36.1, que les 2 mm de tolérance de pose sont respectés
+   horizontalement (3 mm au-delà de 1,5 m) et verticalement dans les deux plans.
+
+[1 p. 338]
+
+L'entraxe de 800 mm (700 mm pour les dormants renforcés) et le jeu de 5 mm ne sont pas ceux des
+généralités du même registre (70 cm, 10 mm au minimum) : **INC-275**.
+
+### Repère 3 : contrôle, calfeutrement, finition et nettoyage
+
+La vue de face montre la fenêtre à deux vantaux posée dans la baie, les éléments de fixation autour
+du dormant et, en pointillé, les diagonales qui servent à contrôler l'équerrage des vantaux.
+
+![Contrôle de l'alignement et du fonctionnement des vantaux](/assets/procedures/mise-en-oeuvre-evo2008/ufpvc-3-controle-alignement-vantaux-evo2008.png)
+
+1. Contrôler l'alignement, le recouvrement sur dormant (la hauteur dont l'ouvrant chevauche
+   le dormant, cotée sur le petit croquis ci-dessous) et le bon fonctionnement des vantaux.
+2. Si nécessaire, procéder au réglage en agissant sur les excentriques de la ferrure (galets de
+   crémone).
+
+![Recouvrement de l'ouvrant sur le dormant](/assets/procedures/mise-en-oeuvre-evo2008/ufpvc-3-recouvrement-sur-dormant-evo2008.png)
+
+3. Insérer dans l'interstice périphérique entre le gros œuvre et la menuiserie un fond de joint
+   en mousse de section appropriée, puis réaliser le cordon d'étanchéité à l'aide d'un mastic
+   élastomère (section minimum 5 mm × 5 mm) ou plastique 1ʳᵉ catégorie (section minimum
+   5 mm × 8 mm) ayant fait préalablement l'objet d'un essai d'adhésivité cohésion (se référer à
+   l'avis technique de la fenêtre ou au procès-verbal).
+4. Serrer le mastic pour assurer son bon contact et sa continuité, et parfaire l'esthétique du
+   cordon en le lissant à l'aide d'une spatule ou d'une pomme de terre tranchée et d'eau légèrement
+   savonneuse.
+
+La coupe horizontale sur le tableau montre le dormant et, dans le cercle, la zone où l'habillage
+intérieur est posé : « Dans cette zone, habillage selon principe arrêté au devis ».
+
+![Coupe sur tableau : zone d'habillage selon devis](/assets/procedures/mise-en-oeuvre-evo2008/ufpvc-3-coupe-tableau-habillage-evo2008.png)
+
+| Mastic du cordon d'étanchéité | Section minimum (mm) |
+| --- | --- |
+| élastomère | 5 × 5 |
+| plastique 1ʳᵉ catégorie | 5 × 8 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 339)
+
+Finition : réaliser les travaux de finition intérieure selon le principe arrêté au devis ;
+poser la bavette de recouvrement, si nécessaire, en cas d'appui reconstitué.
+
+Nettoyage : débarrasser la fenêtre des copeaux qui pourraient subsister et faire disparaître
+les taches à l'aide d'eau savonneuse ou de produits recommandés ; laisser les lieux dans l'état de
+propreté où on les a trouvés.
+
+[1 p. 339]
+
+### Repère 4 : réception et entretien
+
+Le dessin montre le poseur qui présente la fenêtre ouverte à la cliente.
+
+![Réception des travaux par le client](/assets/procedures/mise-en-oeuvre-evo2008/ufpvc-4-reception-evo2008.png)
+
+Réception : faire réceptionner les travaux par le client et lui expliquer comment manœuvrer
+convenablement la fenêtre.
+
+Entretien : informer le client sur l'entretien de la fenêtre (« Voir fiche d'entretien » ; les
+conseils d'entretien du classeur sont sur
+[Usage, nettoyage et entretien d'une menuiserie profine](/entretien/usage-nettoyage-entretien-menuiseries-profine.md)).
+[1 p. 339]
+
+# Symboles utilisés
+
+La planche « Mise en oeuvre neuf — Symboles utilisés » donne la légende des hachures des coupes de
+principe qui suivent : chaque rectangle est le motif dessiné dans les coupes pour le matériau nommé
+à côté [1 p. 340].
+
+![Symboles utilisés dans les coupes de mise en œuvre](/assets/procedures/mise-en-oeuvre-evo2008/symboles-utilises-evo2008.png)
+
+| Motif (tel que dessiné) | Matériau |
+| --- | --- |
+| rectangle blanc | PVC |
+| hachures obliques fines espacées | acier porteur |
+| lignes rayonnantes (cernes) | bois (coupe transversale) |
+| lignes ondulées (fil du bois) | bois (coupe longitudinale) |
+| noir plein | acier / profilés alu |
+| alvéoles rectangulaires | briques ou autres |
+| bande de carrés noirs et blancs | bande isolante |
+| quadrillage oblique | mastic d'étanchéité silicone |
+| semis de petites croix | fond de joint |
+| boucles serrées | isolation thermique |
+| hachures obliques doubles | revêtements |
+| cailloux et points | béton |
+| cailloux, points et ronds noirs | béton armé |
+| points serrés | crépis |
+| rectangle blanc | plâtre |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 340)
+
+Le PVC et le plâtre sont tous deux figurés par un rectangle blanc.
+
+# Instructions de pose (mise en œuvre neuf)
+
+Les pages « Mise en oeuvre neuf — Instructions de pose » décrivent, étape par étape, la pose d'une
+menuiserie neuve dans une baie maçonnée. Les dessins ne sont pas à l'échelle [1 p. 341-342].
+
+## 1. Dimensions tableaux
+
+1. Vérifier les cotes entre tableaux.
+2. Contrôler les dimensions hors tout de la menuiserie.
+
+La dimension tableau brut s'entend sans enduit, la dimension tableau fini avec enduit.
+Sur la perspective de la baie, LT est la largeur tableau (entre les deux tableaux) et HT la hauteur
+tableau (de l'appui au linteau) [1 p. 341].
+
+![Dimensions tableaux : largeur LT et hauteur HT](/assets/procedures/mise-en-oeuvre-evo2008/pose-neuf-1-dimensions-tableaux-lt-ht-evo2008.png)
+
+## 2. Aplomb et niveau
+
+1. Contrôler l'aplomb des murs et des tableaux (A), au fil à plomb.
+2. Vérifier la planimétrie (la planéité) et le niveau du rejingot (B), au niveau à bulle.
+   Le rejingot est le ressaut relevé de l'appui maçonné contre lequel vient la traverse basse du
+   dormant ([glossaire](/reference/glossaire.md)).
+
+[1 p. 341]
+
+![Contrôle de l'aplomb (A) et du niveau du rejingot (B)](/assets/procedures/mise-en-oeuvre-evo2008/pose-neuf-2-aplomb-niveau-rejingot-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 341)
+
+## 3. Joint sur rejingot et joint sur fond de joint
+
+Pose du joint (auto-adhésif) pour joint sur rejingot et fond de joint. Le joint peut être posé sur
+la maçonnerie ; il se pose plus facilement sur la menuiserie. Si le joint est posé directement sur
+la menuiserie, vérifier son positionnement par rapport au gros œuvre [1 p. 342].
+
+La perspective montre l'angle de l'appui et du tableau : le joint auto-adhésif court le long du
+rejingot et remonte de 200 mm sur le tableau, où il rejoint le joint élastomère vertical.
+
+![Joint sur rejingot, remontée de 200 mm sur le tableau](/assets/procedures/mise-en-oeuvre-evo2008/pose-neuf-3-joint-rejingot-remontee-200-evo2008.png)
+
+Le joint sur rejingot doit être posé sans interruption avec une remontée de 200 mm, les
+raccordements pouvant être exécutés sur les montants et la traverse haute. Les raccordements peuvent
+être exécutés soit par juxtaposition, soit par superposition [1 p. 342]. La remontée de la bande de
+mousse sur les tableaux est de 100 mm dans le référentiel UFPVC du même registre (**INC-276**).
+
+Joint à la pompe sur fond de joint. Le croquis montre le dormant en perspective et, à l'angle
+extérieur, le cordon de mastic posé sur son fond de joint ; L est la largeur du cordon, P sa
+profondeur. Cotes du joint courant, en mm [1 p. 342] :
+
+![Joint à la pompe sur fond de joint : largeur L et profondeur P](/assets/procedures/mise-en-oeuvre-evo2008/pose-neuf-3-joint-pompe-fond-de-joint-l-p-evo2008.png)
+
+| Cote du joint courant | Valeur courante (mm) | Minimum (mm) | Maximum (mm) |
+| --- | --- | --- | --- |
+| L (largeur) | 5 à 7 | 5 | 10 |
+| P (profondeur) | 7 à 8 | 5 | - |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 342)
+
+La profondeur P doit être supérieure à la largeur L (« P doit être > L »). Aucun maximum de P n'est
+donné.
+
+Raccord par superposition des extrémités. Les deux extrémités de la bande de joint se
+chevauchent sur 50 mm environ, la flèche indiquant la pression exercée pour les écraser l'une sur
+l'autre [1 p. 342].
+
+![Raccord par superposition des extrémités, 50 mm environ](/assets/procedures/mise-en-oeuvre-evo2008/pose-neuf-3-raccord-superposition-50-mm-evo2008.png)
+
+## 4. Équerres de fixation et contrôles
+
+1. Positionner et fixer les équerres (pattes de fixation en L) sur le pourtour de la
+   menuiserie. Nota : l'étanchéité verticale doit se marier sans interruption avec le joint
+   entre la pièce d'appui et le rejingot.
+- a) Vérifier que le joint d'étanchéité adhère de façon continue sur le PVC et le mur.
+- b) Régler les fiches ou les pivots sur les ouvrants si nécessaire (voir notice de réglage).
+
+[1 p. 342]
+
+## 5. Poser la menuiserie sur le rejingot
+
+La perspective montre la menuiserie, équerres de fixation déjà vissées sur son pourtour, présentée
+en biais devant la baie puis rabattue contre le rejingot. À droite, deux vues de face d'une fenêtre
+à deux vantaux : en « Mauvais règlage », les diagonales en pointillé des vantaux ne se rejoignent
+pas sur les axes et les vantaux sont décalés dans le dormant ; en « Bon règlage COCHONET », les
+vantaux sont d'équerre et alignés dans le dormant [1 p. 343].
+
+![Menuiserie posée sur le rejingot](/assets/procedures/mise-en-oeuvre-evo2008/pose-neuf-5-menuiserie-sur-rejingot-evo2008.png)
+
+![Mauvais réglage et bon réglage « cochonet » des vantaux](/assets/procedures/mise-en-oeuvre-evo2008/pose-neuf-5-mauvais-et-bon-reglage-evo2008.png)
+
+## 6. Contrôler l'aplomb et le niveau
+
+La vue de face montre la menuiserie dans la baie, contrôlée au fil à plomb sur le côté et au niveau
+à bulle sur la traverse haute ; les petits rectangles sont les équerres de fixation [1 p. 343].
+
+![Contrôle de l'aplomb et du niveau de la menuiserie](/assets/procedures/mise-en-oeuvre-evo2008/pose-neuf-6-aplomb-et-niveau-evo2008.png)
+
+Avant fixation des équerres [1 p. 343] :
+
+- a) Régler avec des cales fourchettes (cales en forme de fourche) la
+  profondeur, pour positionner la menuiserie par rapport au nu intérieur du mur (le plan de la face
+  intérieure du mur).
+- b) Joint entre le mur et la menuiserie de 5 mm mini (10 mm au minimum dans les généralités, **INC-275**).
+- c) Fixer les équerres.
+
+La perspective « Partie visible du dormant » montre l'angle du dormant contre le mur, la cote
+« Cochonet » portée entre le bord du mur et le dormant, le cordon d'étanchéité et, en dessous,
+l'équerre de fixation à trous oblongs vissée sur le dormant. La planche ne chiffre pas la cote
+« Cochonet » et ne la définit pas [1 p. 343].
+
+![Partie visible du dormant, cote « Cochonet » et équerre de fixation](/assets/procedures/mise-en-oeuvre-evo2008/pose-neuf-6-partie-visible-dormant-cochonet-equerre-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 343)
+
+# Gros œuvre : pose au nu intérieur sans feuillure
+
+La pose au nu intérieur place la menuiserie dans la baie, alignée sur le plan de la face
+intérieure du mur ; « sans feuillure » veut dire que la baie n'a pas de ressaut taillé pour
+recevoir le dormant ([glossaire](/reference/glossaire.md)). La perspective en coupe montre, de
+l'intérieur vers l'extérieur : l'enduit intérieur et l'isolant (doublage), le mur, l'enduit
+extérieur ; en partie basse, l'appui fini et son rejingot, l'isolant et le mur d'allège, le sol fini
+avec son revêtement sur la dalle brute. Le dormant est dessiné en haut, contre le mur [1 p. 344].
+
+![Gros œuvre, pose au nu intérieur sans feuillure](/assets/procedures/mise-en-oeuvre-evo2008/gros-oeuvre-pose-nu-interieur-sans-feuillure-evo2008.png)
+
+| Repère de la planche | Signification |
+| --- | --- |
+| (\*) | trait de niveau : marquage périphérique sur mur intérieur, normalisation à 1000 mm du sol fini |
+| Hauteur allège | hauteur cotée du sol fini au rejingot / appui (non chiffrée) |
+| Mur, Enduit intérieur, Enduit extérieur, Isolant | constitution du mur |
+| Rejingot, Appui fini | appui maçonné de la baie |
+| Sol fini, Revêtement, Dalle brute | constitution du plancher |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 344)
+
+Le trait de niveau à 1000 mm du sol fini est le niveau de référence du § 5.2 des généralités.
+
+# Gros œuvre : pose en ébrasement avec feuillure
+
+La pose en ébrasement place la menuiserie dans l'épaisseur du mur, contre une feuillure (le
+ressaut ménagé dans la maçonnerie qui reçoit le dormant) ; l'ébrasement intérieur est la face
+du mur, côté intérieur, qui retourne entre la menuiserie et le doublage
+([glossaire](/reference/glossaire.md)). La perspective en coupe montre, de l'intérieur vers
+l'extérieur : l'enduit intérieur, la brique plâtrière et l'isolant (doublage), l'ébrasement
+intérieur, le dormant contre la feuillure, le mur et l'enduit extérieur ; en partie basse l'appui
+fini et son rejingot, l'isolant, le mur d'allège, le sol fini, son revêtement et la dalle brute
+[1 p. 345].
+
+![Gros œuvre, pose en ébrasement avec feuillure](/assets/procedures/mise-en-oeuvre-evo2008/gros-oeuvre-pose-ebrasement-avec-feuillure-evo2008.png)
+
+| Repère de la planche | Signification |
+| --- | --- |
+| (\*) | trait de niveau : marquage périphérique sur mur intérieur, normalisation à 1000 mm du sol fini |
+| Hauteur allège | hauteur cotée du sol fini au rejingot / appui (non chiffrée) |
+| Ebrasementt intérieur (sic), Feuillure | réservation de la baie qui reçoit le dormant |
+| Brique plâtrière, Enduit intérieur, Isolant | doublage intérieur |
+| Mur, Enduit extérieur | mur porteur |
+| Rejingot, Appui fini | appui maçonné de la baie |
+| Sol fini, Revêtement, Dalle brute | constitution du plancher |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 345)
+
+# Gros œuvre : appui et rejingot
+
+## Appui / rejingot décalé
+
+Chaque cas est dessiné deux fois : à gauche en plan
+(l'angle de l'appui et du tableau, avec le retour de 40 mm et le décalage a), à droite en coupe
+verticale sur l'appui (l'appui en béton avec son rejingot de 25 mm de haut, puis l'isolant du
+doublage). Les cotes sont en mm [1 p. 346].
+
+Premier cas. La cote a est portée au-dessus de la coupe, les cotes d et e en dessous, sous
+l'isolant du doublage ; la planche ne les définit que par les deux règles suivantes.
+
+- « d < a pour éviter des infiltrations ou raccordement entre seuil et tableau » ;
+- « e ≥ a pour limiter les risques de condensations superficielles » ;
+- « Pour isolation : 60 à 90 mm béton préfabriqué, 80 à 100 mm béton coulé ».
+
+![Appui / rejingot décalé : plan et coupe, isolation de 60 à 100 mm](/assets/procedures/mise-en-oeuvre-evo2008/appui-rejingot-decale-isolation-60-100-evo2008.png)
+
+| Cote portée | Valeur (mm) |
+| --- | --- |
+| hauteur du rejingot | 25 |
+| retour en plan | 40 |
+| isolation, béton préfabriqué | 60 à 90 |
+| isolation, béton coulé | 80 à 100 |
+
+Second cas. Même coupe avec une isolation plus épaisse ; les cotes x et a sont portées côte à
+côte au-dessus de la coupe, d et e en dessous ; « e ≥ a pour limiter les risques de condensations
+superficielles ».
+
+![Appui / rejingot décalé : cote x selon l'isolation](/assets/procedures/mise-en-oeuvre-evo2008/appui-rejingot-decale-cote-x-evo2008.png)
+
+La table donne la cote X, en mm, selon l'épaisseur totale d'isolation (colle + isolant + parement,
+en mm) et la nature de l'appui : béton préfabriqué (a ≥ 30 mm) ou béton coulé (a ≥ 40 mm)
+[1 p. 346].
+
+| Isolation totale colle + isolant + parement (mm) | X, béton préfabriqué, a ≥ 30 mm (mm) | X, béton coulé, a ≥ 40 mm (mm) |
+| --- | --- | --- |
+| 100 – 110 | 30 | - |
+| 120 – 130 | 50 | 30 |
+| 140 – 150 | 70 | 50 |
+| 160 – 170 | 90 | 70 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 346)
+
+La case béton coulé de la ligne 100 – 110 porte un tiret sur la planche.
+
+## Rejingot reconstitué
+
+La coupe montre un appui reconstitué surmonté d'une bavette en aluminium : « Pente de 5° » ; « La
+pente est ramenée à 5° dans le cas de bavette aluminium reprenant l'épaisseur complète du mur. »
+[1 p. 346]
+
+![Rejingot reconstitué, pente de 5° sous bavette aluminium](/assets/procedures/mise-en-oeuvre-evo2008/rejingot-reconstitue-pente-5-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 346)
+
+## Appui / rejingot aligné et entre mur
+
+Trois cas dessinés chacun en plan (à gauche : l'angle de l'appui et du tableau, avec la cote a) et en
+coupe verticale sur l'appui (à droite : l'appui en béton avec son rejingot de 25 mm de haut et la
+cote a portée au-dessus). Cotes en mm [1 p. 347].
+
+Avec feuillure, premier dessin : le tableau porte une feuillure ; en coupe, le rejingot est au
+droit de la feuillure du mur.
+
+![Appui / rejingot aligné, avec feuillure (premier dessin)](/assets/procedures/mise-en-oeuvre-evo2008/appui-rejingot-aligne-avec-feuillure-1-evo2008.png)
+
+Avec feuillure, second dessin : même tableau à feuillure ; en coupe, le rejingot est dessiné du
+côté intérieur de l'appui, contre le nu intérieur du mur.
+
+![Appui / rejingot aligné, avec feuillure (second dessin)](/assets/procedures/mise-en-oeuvre-evo2008/appui-rejingot-aligne-avec-feuillure-2-evo2008.png)
+
+Sans feuillure : le tableau est droit ; en coupe, le rejingot est du côté intérieur de l'appui.
+« Isolation : 0 à 80 mm. »
+
+![Appui / rejingot aligné, sans feuillure, isolation 0 à 80 mm](/assets/procedures/mise-en-oeuvre-evo2008/appui-rejingot-aligne-sans-feuillure-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 347)
+
+La planche ne chiffre pas la cote a ; elle est chiffrée sur la planche suivante (≥ 40 mm en béton
+coulé, ≥ 30 mm en béton préfabriqué).
+
+## Linteau et appui : fenêtre et porte-fenêtre
+
+Deux colonnes, chacune en coupe verticale : en haut le linteau (la poutre au-dessus de la baie)
+sous le plancher de l'étage comble, en bas l'appui (fenêtre) ou le seuil au niveau du sol
+(porte-fenêtre) [1 p. 348].
+
+Fenêtre. Retombée de linteau conseillée : 250 à 300 mm. L'appui a une pente de 10 % et
+un rejingot de 25 mm de haut ; la hauteur d'allège est cotée du sol fini (revêtement sur dalle brute)
+au-dessus du rejingot. La cote a du rejingot vaut « ≥ 40 mm appui en béton coulé » et « ≥ 30 mm appui
+en béton préfabriqué ».
+
+![Fenêtre : retombée de linteau et appui à pente de 10 %](/assets/procedures/mise-en-oeuvre-evo2008/gros-oeuvre-fenetre-linteau-appui-evo2008.png)
+
+Porte-fenêtre. Retombée de linteau conseillée : 250 à 300 mm. Le trait de niveau est à
+1000 mm au-dessus du sol fini ; le seuil maçonné est dessiné au niveau du revêtement, sur la dalle
+brute.
+
+![Porte-fenêtre : retombée de linteau et trait de niveau à 1000 mm](/assets/procedures/mise-en-oeuvre-evo2008/gros-oeuvre-porte-fenetre-linteau-trait-de-niveau-evo2008.png)
+
+| Cote portée | Fenêtre | Porte-fenêtre |
+| --- | --- | --- |
+| retombée de linteau conseillée (mm) | 250 à 300 | 250 à 300 |
+| pente de l'appui (%) | 10 | - |
+| hauteur du rejingot (mm) | 25 | - |
+| cote a, appui en béton coulé (mm) | ≥ 40 | - |
+| cote a, appui en béton préfabriqué (mm) | ≥ 30 | - |
+| trait de niveau au-dessus du sol fini (mm) | - | 1000 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 348)
+
+## Appui pour porte-fenêtre
+
+Quatre coupes verticales sur le seuil d'une porte-fenêtre, toutes rapportées au trait de niveau
+(1000 mm au-dessus du sol fini) [1 p. 349].
+
+Dormant entièrement visible — le dormant repose sur un rejingot de 25 mm de haut, de largeur A
+(non chiffrée sur la planche) :
+
+- Pose traditionnelle : l'appui en béton avec son rejingot de 25 mm, le sol fini intérieur au
+  pied du rejingot, le trait de niveau à 1000 mm du sol fini.
+- Pose avec remontée d'étanchéité (« remonté d'étancheité » sur la planche) : même rejingot de
+  25 mm et largeur A, trait de niveau à 1000 mm du sol fini intérieur ; à l'extérieur, une « Dalle
+  sur plots ».
+
+![Appui pour porte-fenêtre, dormant entièrement visible](/assets/procedures/mise-en-oeuvre-evo2008/appui-porte-fenetre-dormant-entierement-visible-evo2008.png)
+
+Dormant encastré de 25 mm (« Dormant encastrer de 25 mm ») :
+
+- Pose sur dalle brute avec revêtement intérieur ≤ 25 mm : le trait de niveau est à 1000 mm du sol
+  fini, le revêtement sur la dalle brute a 25 mm au plus.
+- Pose avec revêtement intérieur > 25 mm : le trait de niveau est à 1000 mm du sol fini ; l'appui
+  est coté « Appui à 1025 mm » sous le trait de niveau.
+
+![Appui pour porte-fenêtre, dormant encastré de 25 mm](/assets/procedures/mise-en-oeuvre-evo2008/appui-porte-fenetre-dormant-encastre-25-mm-evo2008.png)
+
+| Cas | Distance trait de niveau → sol fini (mm) | Distance trait de niveau → appui (mm) | Rejingot (mm) | Revêtement intérieur (mm) |
+| --- | --- | --- | --- | --- |
+| dormant visible, pose traditionnelle | 1000 | - | 25 | - |
+| dormant visible, pose avec remontée d'étanchéité | 1000 | - | 25 | - |
+| dormant encastré de 25 mm, sur dalle brute | 1000 | - | - | ≤ 25 |
+| dormant encastré de 25 mm, revêtement épais | 1000 | 1025 | - | > 25 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 349)
+
+# Types de pose (coupes horizontales)
+
+Cinq coupes horizontales (vues de dessus) d'une fenêtre dans sa baie ; la maçonnerie est dessinée en
+moellons de part et d'autre, le dormant en PVC entre les deux. La « Cote tableau fini » est la largeur
+entre les tableaux finis ; la seconde flèche, sous chaque coupe, est la largeur hors tout du dormant
+(non chiffrée). Les dessins ne sont pas à l'échelle [1 p. 350].
+
+Pose en tunnel : le dormant est entre les deux tableaux, sa largeur hors tout est plus petite que
+la cote tableau fini.
+
+![Pose en tunnel, coupe horizontale](/assets/procedures/mise-en-oeuvre-evo2008/type-de-pose-tunnel-coupe-horizontale-evo2008.png)
+
+Pose en feuillure : le dormant est logé dans la feuillure des tableaux ; sa largeur hors tout
+dépasse la cote tableau fini.
+
+![Pose en feuillure, coupe horizontale](/assets/procedures/mise-en-oeuvre-evo2008/type-de-pose-feuillure-coupe-horizontale-evo2008.png)
+
+Pose en ébrasement : même logement en feuillure, avec des tableaux intérieurs évasés
+(ébrasement) ; la planche ne porte pas ici la mention « Cote tableau fini ».
+
+![Pose en ébrasement, coupe horizontale](/assets/procedures/mise-en-oeuvre-evo2008/type-de-pose-ebrasement-coupe-horizontale-evo2008.png)
+
+Pose en applique avec doublage : le dormant, à aile de recouvrement, est appliqué derrière la
+maçonnerie, au nu intérieur du mur ; la ligne horizontale est le nu du doublage intérieur.
+
+![Pose en applique avec doublage, coupe horizontale](/assets/procedures/mise-en-oeuvre-evo2008/type-de-pose-applique-avec-doublage-coupe-horizontale-evo2008.png)
+
+Pose en feuillure avec doublage : le dormant, à aile, est logé dans la feuillure des tableaux et
+son aile vient au nu du doublage intérieur.
+
+![Pose en feuillure avec doublage, coupe horizontale](/assets/procedures/mise-en-oeuvre-evo2008/type-de-pose-feuillure-avec-doublage-coupe-horizontale-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 350)
+
+# Réservations maçonnerie
+
+Une réservation est l'ouverture que le maçon doit laisser dans le mur pour recevoir la
+menuiserie : ses cotes se lisent en hauteur tableau fini et largeur tableau fini (les
+dimensions de la baie une fois les enduits faits). Chaque planche donne deux coupes verticales (à
+gauche la porte-fenêtre avec appui PVC, à droite la fenêtre) et une coupe horizontale. La
+maçonnerie est hachurée ; le doublage intérieur (isolant et parement) est désigné ISO, son épaisseur
+en mm ; la face dressée est la face du mur rendue plane pour recevoir le dormant. Les dessins ne
+sont pas à l'échelle ; cotes en mm [1 p. 351-355].
+
+## Pose en feuillure
+
+Coupes verticales : feuillure de 50 mm en partie haute (au linteau) et de 65 mm de profondeur ; en
+bas de la porte-fenêtre avec appui PVC, un ressaut de 25 mm entre le « Sol fini (ht maxi) » et le
+« Sol brut » ; en bas de la fenêtre, un appui maçonné avec rejingot de 25 mm. Coupe horizontale :
+feuillure de 65 mm de profondeur et de 50 mm de chaque côté de la largeur tableau fini [1 p. 351].
+
+![Réservation, pose en feuillure : coupe verticale de la porte-fenêtre](/assets/procedures/mise-en-oeuvre-evo2008/reservation-pose-feuillure-porte-fenetre-coupe-verticale-evo2008.png)
+
+![Réservation, pose en feuillure : coupe verticale de la fenêtre](/assets/procedures/mise-en-oeuvre-evo2008/reservation-pose-feuillure-fenetre-coupe-verticale-evo2008.png)
+
+![Réservation, pose en feuillure : coupe horizontale](/assets/procedures/mise-en-oeuvre-evo2008/reservation-pose-feuillure-coupe-horizontale-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 351)
+
+## Doublages de 60 mm, pose en applique intérieure
+
+Le dormant est appliqué contre la face dressée du mur, côté intérieur ; l'épaisseur du doublage ISO
+vaut 60 mm (tableau « ISO 60 » de la planche). Les coupes verticales portent la cote de 40 mm au droit
+du rejingot (porte-fenêtre et fenêtre) et le ressaut de 25 mm en bas ; la coupe horizontale porte
+40 mm entre le nu du mur et le « Nu intérieur fini », de part et d'autre de la largeur tableau fini
+[1 p. 352].
+
+![Réservation, doublage de 60 mm, applique intérieure : porte-fenêtre](/assets/procedures/mise-en-oeuvre-evo2008/reservation-doublage-60-applique-porte-fenetre-coupe-verticale-evo2008.png)
+
+![Réservation, doublage de 60 mm, applique intérieure : fenêtre](/assets/procedures/mise-en-oeuvre-evo2008/reservation-doublage-60-applique-fenetre-coupe-verticale-evo2008.png)
+
+![Réservation, doublage de 60 mm, applique intérieure : coupe horizontale](/assets/procedures/mise-en-oeuvre-evo2008/reservation-doublage-60-applique-coupe-horizontale-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 352)
+
+## Doublages de 100 à 160 mm, pose en applique intérieure
+
+Même principe, pour une porte-fenêtre et une fenêtre avec appui PVC : les coupes portent la cote X
+entre la face dressée et le dormant, la cote de 40 mm et l'épaisseur ISO du doublage ; la coupe
+horizontale porte X et 40 mm entre la face dressée et le nu intérieur fini. X dépend de l'épaisseur
+ISO selon la table de la planche [1 p. 353].
+
+| ISO - épaisseur du doublage (mm) | X (mm) |
+| --- | --- |
+| 100 | 0 |
+| 120 | 0 |
+| 140 | 20 |
+| 160 | 40 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 353)
+
+![Réservation, doublage de 100 à 160 mm, applique intérieure : porte-fenêtre](/assets/procedures/mise-en-oeuvre-evo2008/reservation-doublage-100-160-applique-porte-fenetre-coupe-verticale-evo2008.png)
+
+![Réservation, doublage de 100 à 160 mm, applique intérieure : fenêtre](/assets/procedures/mise-en-oeuvre-evo2008/reservation-doublage-100-160-applique-fenetre-coupe-verticale-evo2008.png)
+
+![Réservation, doublage de 100 à 160 mm, applique intérieure : coupe horizontale](/assets/procedures/mise-en-oeuvre-evo2008/reservation-doublage-100-160-applique-coupe-horizontale-evo2008.png)
+
+## Doublages de 100 à 160 mm, pose en applique intérieure et sous coffre tunnel
+
+Même réservation sous un coffre tunnel (coffre de volet roulant intégré dans l'épaisseur du mur,
+au-dessus de la baie, hachuré en croisillons sur la planche) : la hauteur tableau fini se mesure
+« dessus de rejingot à dessous de coffre ». La table ISO → X est la même que pour la pose en applique
+sans coffre (100 → 0, 120 → 0, 140 → 20, 160 → 40), avec les mêmes cotes de 40 et 25 mm [1 p. 354].
+
+| ISO - épaisseur du doublage (mm) | X (mm) |
+| --- | --- |
+| 100 | 0 |
+| 120 | 0 |
+| 140 | 20 |
+| 160 | 40 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 354)
+
+![Réservation sous coffre tunnel, doublage de 100 à 160 mm : porte-fenêtre](/assets/procedures/mise-en-oeuvre-evo2008/reservation-doublage-100-160-sous-coffre-tunnel-porte-fenetre-coupe-verticale-evo2008.png)
+
+![Réservation sous coffre tunnel, doublage de 100 à 160 mm : fenêtre](/assets/procedures/mise-en-oeuvre-evo2008/reservation-doublage-100-160-sous-coffre-tunnel-fenetre-coupe-verticale-evo2008.png)
+
+![Réservation sous coffre tunnel, doublage de 100 à 160 mm : coupe horizontale](/assets/procedures/mise-en-oeuvre-evo2008/reservation-doublage-100-160-sous-coffre-tunnel-coupe-horizontale-evo2008.png)
+
+## Doublages de 60 à 160 mm, pose en applique intérieure avec seuil alu (porte-fenêtre)
+
+Deux coupes verticales de porte-fenêtre à seuil aluminium : « Cas avec Rejingot » (ressaut de 25 mm
+entre le sol fini (ht maxi) et le sol brut) et « Cas sans Rejingot ». Sur les deux, le dormant est
+contre la face dressée, la cote de 55 mm est portée au pied, entre le mur et le doublage ISO. La
+coupe horizontale porte 55 mm entre la face dressée et le nu du doublage, 55 mm en largeur à côté du
+tableau, et l'épaisseur ISO ; les flèches « Faces dressées » désignent les deux tableaux [1 p. 355].
+
+![Réservation avec seuil alu, cas avec rejingot](/assets/procedures/mise-en-oeuvre-evo2008/reservation-seuil-alu-pf-avec-rejingot-coupe-verticale-evo2008.png)
+
+![Réservation avec seuil alu, cas sans rejingot](/assets/procedures/mise-en-oeuvre-evo2008/reservation-seuil-alu-pf-sans-rejingot-coupe-verticale-evo2008.png)
+
+![Réservation avec seuil alu : coupe horizontale](/assets/procedures/mise-en-oeuvre-evo2008/reservation-seuil-alu-pf-coupe-horizontale-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 355)
+
+| Réservation (titre de la planche) | Cotes portées (mm) | Page PDF |
+| --- | --- | --- |
+| Pose en feuillure | 50 (haut), 65 (profondeur de feuillure), 50 (de chaque côté), 25 (ressaut bas) | 351 |
+| Doublages de 60 mm, pose en applique intérieure | ISO 60, 40, 25 | 352 |
+| Doublages de 100 à 160 mm, pose en applique intérieure | ISO 100 à 160, X de 0 à 40, 40, 25 | 353 |
+| Doublages de 100 à 160 mm, applique intérieure et sous coffre tunnel | ISO 100 à 160, X de 0 à 40, 40, 25 | 354 |
+| Doublages de 60 à 160 mm, applique intérieure avec seuil alu (PF) | ISO, 55, 25 (cas avec rejingot) | 355 |
+
+# Coupes de principe
+
+Les coupes de principe dessinent, à l'échelle 1:2, la menuiserie du système 70 posée dans le mur :
+une coupe sur montant (coupe horizontale au droit du côté vertical du dormant, le cadre fixe) et une
+coupe sur appui (coupe verticale au droit de la traverse basse du dormant, posée sur l'appui de
+fenêtre). Sur ces planches, la maçonnerie est dessinée en moellons, l'isolant du doublage en ondes,
+le parement du doublage en traits fins parallèles ; la patte de fixation est la pièce métallique
+qui relie le dormant au mur. Deux joints ferment le raccordement entre le dormant et la
+maçonnerie : un « joint comprimé » (bande serrée entre dormant et mur, hachurée) et un « joint
+élastomère 1ère catégorie SNJF » (mastic extrudé devant le joint comprimé ; SNJF est un classement
+de mastics, sigle non développé dans le classeur) ([glossaire](/reference/glossaire.md)). La
+« largeur tableau fini » et la « hauteur tableau fini » sont les dimensions de la baie finie ; les
+cotes sont en mm [1 p. 356-359].
+
+## Pose en feuillure
+
+Le dormant est posé dans une feuillure de la maçonnerie (un décrochement du tableau), côté
+intérieur, et tenu par une patte de fixation scellée dans le mur (partie hachurée en arc sur la
+coupe). Coupe sur montant : la feuillure mesure « 50 minimum » en largeur, du nu du tableau fini au
+fond de la feuillure ; une cote de 35 mm est portée depuis le nu du tableau, au droit du joint comprimé et du
+joint élastomère placés entre le dormant et le mur. Coupe sur appui : le dormant repose sur l'appui
+maçonné par l'intermédiaire d'une pièce d'appui PVC, avec le joint comprimé dessous ; une cote de
+5 mm est portée au pied de la hauteur tableau fini ; le joint élastomère
+ferme le raccord du côté du doublage intérieur [1 p. 356].
+
+![Coupe de principe, pose en feuillure : coupe sur montant](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-pose-feuillure-montant-evo2008.png)
+
+![Coupe de principe, pose en feuillure : coupe sur appui](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-pose-feuillure-appui-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 356)
+
+## Doublages de 100, 120, 140 et 160 mm
+
+Quatre planches identiques dans leur principe dessinent la pose en applique intérieure derrière un
+doublage (isolant et parement collés contre la face intérieure du mur) de 100, 120, 140 et 160 mm : le
+dormant est appliqué contre la face intérieure de la maçonnerie, dans l'épaisseur du doublage, et
+la patte de fixation, pliée, le relie au mur. Coupe sur montant : l'épaisseur du doublage est cotée
+le long du dormant ; une cote horizontale est portée depuis le nu du tableau fini vers
+l'intérieur de la maçonnerie, au-dessus du dormant. Coupe sur appui : le dormant repose sur une
+pièce d'appui PVC posée sur l'appui maçonné, joint comprimé dessous ; une cote de 5 mm est portée
+au pied de la hauteur tableau fini ; deux cotes horizontales sont portées au pied, la première entre deux traits de
+rappel sous la maçonnerie, la seconde de là jusqu'au parement du doublage [1 p. 357-360].
+
+La table relève les cotes portées sur chaque planche, telles qu'elles sont écrites.
+
+| Planche | Épaisseur du doublage cotée sur le montant (mm) | Cote portée depuis le nu du tableau fini, coupe sur montant (mm) | Cotes au pied de la coupe sur appui, de l'extérieur vers l'intérieur (mm) | Page PDF |
+| --- | --- | --- | --- | --- |
+| Doublage de 100 mm | 100 | 39 | 40, 60 | 357 |
+| Doublage de 120 mm | 120 | 37 | 40, 80 | 358 |
+| Doublage de 140 mm | 140 | 36 | 20, 40 | 359 |
+| Doublage de 160 mm | 160 | 35 | 40, 40 | 360 |
+
+Sur la planche du doublage de 140 mm, les deux cotes du pied de l'appui (20 et 40) sont portées à
+un autre endroit que sur les planches de 100 et 120 mm : la cote de 20 mm part d'un trait de rappel
+situé sous l'appui maçonné, la cote de 40 mm s'arrête avant l'isolant ; le reste de l'épaisseur du
+doublage n'y est pas coté [1 p. 359].
+
+### Doublage de 100 mm
+
+![Coupe de principe, doublage de 100 mm : coupe sur montant](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-doublage-100-montant-evo2008.png)
+
+![Coupe de principe, doublage de 100 mm : coupe sur appui](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-doublage-100-appui-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 357)
+
+### Doublage de 120 mm
+
+![Coupe de principe, doublage de 120 mm : coupe sur montant](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-doublage-120-montant-evo2008.png)
+
+![Coupe de principe, doublage de 120 mm : coupe sur appui](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-doublage-120-appui-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 358)
+
+### Doublage de 140 mm
+
+![Coupe de principe, doublage de 140 mm : coupe sur montant](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-doublage-140-montant-evo2008.png)
+
+![Coupe de principe, doublage de 140 mm : coupe sur appui](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-doublage-140-appui-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 359)
+
+### Doublage de 160 mm
+
+![Coupe de principe, doublage de 160 mm : coupe sur montant](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-doublage-160-montant-evo2008.png)
+
+![Coupe de principe, doublage de 160 mm : coupe sur appui](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-doublage-160-appui-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 360)
+
+## Pose en feuillure avec dormant neuf
+
+Le dormant neuf est posé dans la feuillure de la maçonnerie, contre un « fond de feuillure dressé »
+(le fond de la feuillure rendu plan). Le raccord entre dormant et maçonnerie y est fait autrement
+que sur les planches précédentes : un fond de joint (cordon placé au fond du joint pour limiter la
+profondeur du mastic, dessiné en croisillons) et un « joint elastomère 1 ère catégorie » devant lui
+sur le montant ; un « joint compriband » (bande de mousse précomprimée, voir compribande au
+[glossaire](/reference/glossaire.md)) sous le dormant et un « joint élastomère 1ere cat SNJF » côté
+intérieur sur l'appui. Aucune patte de fixation n'est dessinée [1 p. 361].
+
+Coupe sur montant : la feuillure mesure 40 mm, du nu du tableau fini au fond de feuillure dressé, et
+une cote de 35 mm est portée depuis le nu du tableau jusqu'au dormant. Coupe sur appui : le dormant
+repose sur un « rejingot existant ou à créer » (le ressaut de l'appui maçonné contre lequel bute la
+menuiserie), avec le joint compriband dessous ; la hauteur tableau fini est cotée du côté intérieur ;
+une cote de 5 mm est portée sous la pièce d'appui PVC, côté extérieur, et une cote de 55 mm au pied,
+sous le rejingot [1 p. 361].
+
+![Coupe de principe, pose en feuillure avec dormant neuf : coupe sur montant](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-feuillure-dormant-neuf-montant-evo2008.png)
+
+![Coupe de principe, pose en feuillure avec dormant neuf : coupe sur appui](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-feuillure-dormant-neuf-appui-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 361)
+
+## Porte d'entrée, pose en feuillure intérieure
+
+Deux planches dessinent la porte d'entrée du système 70 posée en feuillure intérieure : l'une à
+ouverture à la française (le vantail s'ouvre vers l'intérieur), l'autre à ouverture à l'anglaise (le
+vantail s'ouvre vers l'extérieur ; la paumelle, la charnière de la porte, est alors dessinée côté
+extérieur). Chaque planche porte une coupe sur montant et une « Coupe sur seuil standard (H = 18 mm)
+– Porte d'entrée », où la porte repose sur un seuil aluminium bas, au niveau du « Sol fini » (le
+revêtement de sol, hachuré en croisillons au-dessus de sa chape) [1 p. 362-363].
+
+| Planche | Largeur de la feuillure, coupe sur montant (mm) | Cote portée depuis le nu du tableau, au droit des joints (mm) | Cotes portées sur la coupe sur seuil (mm) | Patte de fixation dessinée | Page PDF |
+| --- | --- | --- | --- | --- | --- |
+| Porte d'entrée, ouverture à la française | 50 minimum | 24 | 12 et 20, au-dessus du sol fini | oui, scellée dans le mur | 362 |
+| Porte d'entrée, ouverture à l'anglaise | 50 minimum | 20 | 20, au-dessus du sol fini | non | 363 |
+
+Sur les deux coupes sur montant, le joint comprimé et le joint élastomère 1ère catégorie SNJF
+ferment le raccord entre le dormant et le nu du tableau ; la hauteur tableau fini est cotée jusqu'au
+dessus de la maçonnerie sous le seuil. Le titre des deux coupes sur seuil annonce H = 18 mm, mais
+aucune cote de 18 mm n'est dessinée : les cotes portées au-dessus du sol fini sont 12 et 20 mm sur
+la porte à la française, 20 mm sur la porte à l'anglaise (**INC-277**) [1 p. 362-363].
+
+### Ouverture à la française
+
+![Porte d'entrée à la française, pose en feuillure intérieure : coupe sur montant](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-porte-francaise-feuillure-interieure-montant-evo2008.png)
+
+![Porte d'entrée à la française : coupe sur seuil standard](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-porte-francaise-seuil-standard-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 362)
+
+### Ouverture à l'anglaise
+
+![Porte d'entrée à l'anglaise, pose en feuillure intérieure : coupe sur montant](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-porte-anglaise-feuillure-interieure-montant-evo2008.png)
+
+![Porte d'entrée à l'anglaise : coupe sur seuil standard](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-porte-anglaise-seuil-standard-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 363)
+
+## Ouverture à l'anglaise, autres cas de pose
+
+La planche « Coupe de principe (autres cas) ouverture a l'anglaise » dessine trois coupes sur montant
+d'un ouvrant à l'anglaise (vantail ouvrant vers l'extérieur, paumelle dessinée côté extérieur),
+sans joints ni pattes nommés [1 p. 364] :
+
+- en tunnel : le dormant est posé entre les tableaux de la maçonnerie, son aile contre le nu du
+  tableau ; la largeur tableau fini part de ce nu ;
+- en feuillure extérieure : le dormant est posé dans une feuillure ouverte côté extérieur,
+  un profilé couvrant le raccord avec le parement extérieur ; une cote de 50 mm est portée entre le fond de
+  la feuillure et le nu du tableau fini, côté intérieur ;
+- en applique intérieure avec doublage : le dormant est fixé par une patte contre le doublage
+  intérieur, et une « Tapée de doublage rapportées » (profilé rapporté sur le dormant, voir tapée au
+  [glossaire](/reference/glossaire.md)) vient jusqu'au nu de
+  la maçonnerie, où la « largeur tableaux finis » est mesurée.
+
+![Ouverture à l'anglaise, pose en tunnel : coupe sur montant](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-anglaise-en-tunnel-evo2008.png)
+
+![Ouverture à l'anglaise, pose en feuillure extérieure : coupe sur montant](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-anglaise-feuillure-exterieure-evo2008.png)
+
+![Ouverture à l'anglaise, pose en applique intérieure avec doublage et tapée rapportée : coupe sur montant](/assets/procedures/mise-en-oeuvre-evo2008/coupe-principe-anglaise-applique-interieure-doublage-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 364)
+
+# Exemples de mise en œuvre neuf
+
+Les planches « Mise en oeuvre neuf — Exemples », à l'échelle 1:2, dessinent des cas de pose sans
+cote ni texte autre que les mentions « Extérieur » et « Intérieur » ; elles se lisent comme des
+dessins d'exemple.
+
+## Coffre de volet roulant au-dessus de la fenêtre, coupe verticale
+
+Un coffre de volet roulant (caisson qui loge le tablier enroulé du volet, dessiné avec son axe
+octogonal, le tablier enroulé et l'isolant en nid d'abeille côté intérieur) est posé contre la maçonnerie
+dessinée en béton (points et graviers, voir *Symboles utilisés*) ; la traverse haute du dormant de la fenêtre est dessinée
+sous le coffre. Deux joints sont dessinés entre le coffre et la maçonnerie, l'un contre le tableau côté
+extérieur, l'autre sous la maçonnerie côté intérieur [1 p. 365].
+
+![Exemple de mise en œuvre neuf : coffre de volet roulant au-dessus de la fenêtre, coupe verticale](/assets/procedures/mise-en-oeuvre-evo2008/exemple-neuf-coffre-volet-roulant-coupe-verticale-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 365)
+
+## Coffre de volet roulant, fenêtre posée côté intérieur, coupe verticale
+
+Même coffre de volet roulant, avec les deux mêmes joints contre la maçonnerie, mais la fenêtre est
+dessinée plus loin vers l'intérieur sous le coffre, avec un dormant d'aile plus haute ; côté
+extérieur, sous le coffre, des traits verticaux descendent jusqu'au bas de la planche [1 p. 366].
+
+![Exemple de mise en œuvre neuf : coffre de volet roulant, fenêtre posée côté intérieur, coupe verticale](/assets/procedures/mise-en-oeuvre-evo2008/exemple-neuf-coffre-volet-roulant-dormant-interieur-coupe-verticale-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 366)
+
+## Montants gauche et droit, coupe horizontale
+
+Coupe horizontale des deux montants d'une fenêtre : chaque dormant est posé côté intérieur, son
+aile contre la maçonnerie (béton) avec deux joints dessinés entre l'aile et le mur, et un doublage
+isolant contre sa face intérieure. Sur l'aile de chaque dormant, côté extérieur, est dessiné un
+profilé en U ouvert vers le centre de la baie, sans référence sur la planche ; le même dessin est
+repéré « ① Coulisse hors gamme Kö » sur l'exemple du coffre et de la coulisse hors gamme, plus bas [1 p. 367, 369].
+
+![Exemple de mise en œuvre neuf : montants gauche et droit, coupe horizontale](/assets/procedures/mise-en-oeuvre-evo2008/exemple-neuf-montants-coupe-horizontale-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 367)
+
+## Coffre maçonné isolé au-dessus de la fenêtre, coupe verticale
+
+Le tablier du volet roulant s'enroule dans une réservation de la maçonnerie (béton) dont le fond,
+le côté extérieur et le côté intérieur sont doublés d'isolant ; une planche isolée ferme le dessous
+côté intérieur. La traverse haute du dormant est dessinée sous l'ouverture de passage du tablier,
+côté extérieur [1 p. 368].
+
+![Exemple de mise en œuvre neuf : coffre maçonné isolé, coupe verticale](/assets/procedures/mise-en-oeuvre-evo2008/exemple-neuf-coffre-maconne-isole-coupe-verticale-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 368)
+
+## Coffre et coulisse hors gamme KÖMMERLING, coupes verticale et horizontale
+
+La planche assemble une coupe verticale (le coffre, isolé en nid d'abeille, dont le tablier descend
+entre deux guides vers la fenêtre, dessinée à droite côté intérieur) et une coupe horizontale du
+montant (en bas à gauche), où le dormant, posé côté intérieur contre un doublage isolant avec deux
+joints contre la maçonnerie, porte sur son aile côté extérieur le profilé repéré ①. La légende
+nomme ce repère : « ① Coulisse hors gamme Kö », c'est-à-dire une coulisse de volet roulant (le rail
+dans lequel glisse le tablier) qui n'appartient pas à la gamme KÖMMERLING [1 p. 369].
+
+![Exemple de mise en œuvre neuf : coffre et coulisse hors gamme KÖMMERLING, coupes](/assets/procedures/mise-en-oeuvre-evo2008/exemple-neuf-coffre-coulisse-hors-gamme-coupes-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 369)
+
+## Montants avec profilés rapportés sur l'aile du dormant, coupe horizontale
+
+Coupe horizontale des deux montants d'une fenêtre posée côté intérieur contre un doublage isolant :
+sur l'aile de chaque dormant est rapporté, côté extérieur, un profilé creux qui va jusqu'à la
+maçonnerie (béton), avec deux joints dessinés entre ce profilé et le mur. Le profilé rapporté du
+montant gauche est dessiné plus haut que celui du montant droit. Aucun profilé n'est référencé sur la planche [1 p. 372].
+
+![Exemple de mise en œuvre neuf : montants avec profilés rapportés, coupe horizontale](/assets/procedures/mise-en-oeuvre-evo2008/exemple-neuf-montants-tapees-coupe-horizontale-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 372)
+
+## Fenêtre en applique intérieure, coupe verticale complète
+
+Coupe verticale de la fenêtre entière, posée côté intérieur contre le doublage isolant. En haut, un
+profilé creux rapporté sur la traverse haute du dormant rejoint la sous-face de la maçonnerie, deux
+joints dessinés entre eux. En bas, la traverse basse du dormant porte une pièce d'appui PVC qui
+déborde côté extérieur au-dessus de l'appui maçonné ; sous la pièce d'appui, deux joints et une
+plaque hachurée posée sur l'isolant, et deux joints verticaux entre l'isolant et la maçonnerie
+d'allège. Aucune cote ni référence n'est portée sur la planche [1 p. 373].
+
+![Exemple de mise en œuvre neuf : fenêtre en applique intérieure, coupe verticale](/assets/procedures/mise-en-oeuvre-evo2008/exemple-neuf-applique-interieure-coupe-verticale-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 373)
+
+# Types de pose en neuf, avec volet roulant
+
+Les planches « Mise en oeuvre neuf — Types de pose » (dessins non à l'échelle) donnent pour chaque
+type de pose une coupe horizontale et une coupe verticale, et nomment les quatre dimensions de la
+baie à ne pas confondre : la largeur tableau (LT) et la hauteur tableau (HT), mesurées sur la
+maçonnerie, et la largeur finie et la hauteur finie, toutes deux notées « (DHT) » sur la planche,
+mesurées hors tout sur la menuiserie. La maçonnerie est dessinée en béton (points et triangles,
+voir *Symboles utilisés*) [1 p. 370-371].
+
+## Pose en ébrasement avec feuillure, traverse basse encastrée de 25 mm et V.R. traditionnel
+
+Coupe horizontale : le dormant est posé en ébrasement (dans l'épaisseur du mur) contre une
+feuillure de la maçonnerie, avec un joint dessiné entre l'aile du dormant et la feuillure ; côté
+intérieur, le doublage est constitué d'une « Isolation 80 mm » et d'un « Carreau de plâtre 70 mm ».
+La largeur tableau (LT) est prise entre les deux tableaux de la maçonnerie, côté extérieur, la
+largeur finie (DHT) hors tout des deux montants du dormant [1 p. 370].
+
+Coupe verticale : en partie haute, un volet roulant traditionnel (« V.R. », axe cannelé et tablier
+enroulé, fermé côté intérieur par un panneau vertical tenu entre deux pièces carrées barrées d'une
+croix) est logé dans la réservation de la maçonnerie au-dessus du dormant ; la traverse haute du
+dormant porte un joint contre le linteau. En partie basse, la traverse basse est encastrée de 25 mm
+(titre de la planche) et dessinée sous le niveau du « Sol fini », dont la planche détaille la
+constitution : « Revêtement » sur « Chape » sur « Dalle ». La hauteur tableau (HT) se mesure du
+dessous du linteau au sol fini, la hauteur finie (DHT) hors tout du dormant [1 p. 370].
+
+![Pose en ébrasement avec feuillure et V.R. traditionnel : coupe horizontale](/assets/procedures/mise-en-oeuvre-evo2008/type-de-pose-neuf-ebrasement-traverse-encastree-vr-traditionnel-coupe-horizontale-evo2008.png)
+
+![Pose en ébrasement avec feuillure, traverse basse encastrée de 25 mm et V.R. traditionnel : coupe verticale](/assets/procedures/mise-en-oeuvre-evo2008/type-de-pose-neuf-ebrasement-traverse-encastree-vr-traditionnel-coupe-verticale-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 370)
+
+## Pose au nu intérieur sans feuillure avec caisson tunnel
+
+Coupe horizontale : le dormant est posé au nu intérieur du mur (aligné sur sa face intérieure, sans
+feuillure), un joint dessiné entre l'aile du dormant et le mur de chaque côté ; le doublage est une
+« Isolation 120 mm ». La largeur tableau (LT) est prise entre les faces du mur, la largeur finie
+(DHT) hors tout des ailes du dormant [1 p. 371].
+
+Coupe verticale : un caisson tunnel (coffre de volet roulant isolé, posé dans l'épaisseur du mur au
+droit de la baie) est dessiné au-dessus de la fenêtre ; le dormant est posé côté intérieur, sous le
+caisson, et en bas sur un appui avec pièce d'appui PVC, contre l'isolant du doublage. La hauteur
+tableau (HT) se mesure du dessous du caisson au dessus de l'appui, la hauteur finie (DHT) hors tout
+du dormant. Consigne de la planche : « Vérifier que le maçon a bien posé les caissons de niveau »
+[1 p. 371].
+
+![Pose au nu intérieur sans feuillure avec caisson tunnel : coupe horizontale](/assets/procedures/mise-en-oeuvre-evo2008/type-de-pose-neuf-nu-interieur-caisson-tunnel-coupe-horizontale-evo2008.png)
+
+![Pose au nu intérieur sans feuillure avec caisson tunnel : coupe verticale](/assets/procedures/mise-en-oeuvre-evo2008/type-de-pose-neuf-nu-interieur-caisson-tunnel-coupe-verticale-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 371)
+
+Les perspectives du gros œuvre de ces deux mêmes poses, sans volet roulant, sont sous *Gros œuvre :
+pose au nu intérieur sans feuillure* et *Gros œuvre : pose en ébrasement avec feuillure*.
+
+# Ce que le document ne dit pas
+
+- La page imprimée 3 renvoie aux « Directives de fabrication spéciales concernant la résistance à
+  l'effraction de fenêtres ouvrant à la française et oscillo-battantes », qui ne figurent pas dans le
+  classeur.
+- Les « profilés structure » du tableau de largeur de joint ne sont pas définis.
+- Le sigle SNJF des joints élastomère « 1ère catégorie SNJF » n'est pas développé.
+- Les profilés rapportés sur l'aile du dormant dans les exemples de mise en œuvre neuf (pages imprimées 39, 44 et 45) ne portent pas de référence.
+
+# Citations
+
+[1] [Système e.VOLUTION, plan des profilés et manuel technique, système F 91, édition août 2008](raw/profine-plans-profiles-e-volution-2008-08.pdf)
+
+# Voir aussi
+
+- [Montage au bâtiment, directives générales profine](/procedures/montage-generaux-profine.md)
+- [Plans des profilés e.VOLUTION, août 2008](/sources/plans-profiles-e-volution-2008.md)
+- [Systèmes spéciaux du système 70, 2008](/procedures/systemes-speciaux-systeme-70-evo2008.md)
+- [Mise en œuvre en rénovation du système 70, 2008](/procedures/mise-en-oeuvre-renovation-systeme-70-evo2008.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /sources/technal-seuil-py1100.md | Document source | F.I.T N° 15 — Évolution Porte PY et Seuil PMR PY1100 Technal | technal, soleal, soleal-py, seuil-pmr, py1100, aev | Fiche d'Information Technique officielle Technal détaillant le seuil PMR à rupture de pont thermique PY1100, les pièces d'angle préformées et les procès-verbaux d'essais AEV (33 pages). | antaux en ouverture intérieure et extérieure avec coupes cotées, profilés PY1100, PY4000, PY2102, joints PY5000 et T710041 / à faire / [Seuil PMR PY11 |
+| /certifications/dta-6-16-2334.md | Certification | DTA n° 6/16-2334_V5, système 76 Advanced | dta, cstb, avis-technique, profine, systeme-76-advanced, pose | Document Technique d'Application CSTB du système PVC 76 Advanced de profine, valide jusqu'au 31 juillet 2028, avec son domaine d'emploi et ses dimensions maximales. | ose en tableau afin de garantir une surface de calfeutrement minimale de **10 mm** [1 p. 4]. # Prescriptions ## 1.2 Appréciation — 1.2.1 Aptitude à |
+| /sources/askey-frappe-65-oc-conception.md | Document source | Frappe 65 Ouvrant Caché ASKEY - Conception | aluminium, frappe, ouvrant-cache, askey, hydro, conception | Manuel technique de conception de la gamme frappe 65 à ouvrant caché ASKEY par Hydro Building Systems France. | 5 / Titre Performances AEV / à faire / - / / 6 / Procès-verbaux d'essais AEV FCBA/CSTB (OB, OF 1 vtl, 2 vtx, seuil PMR, HI, OC 32 mm) / à faire / [Ga |
+| /sources/askey-coulissant-65-nv-conception.md | Document source | Coulissant 65 NV ASKEY - Conception | aluminium, coulissant, askey, hydro, conception | Manuel technique de conception du système coulissant aluminium 65 NV ASKEY par Hydro Building Systems France. | -88 / Joints d'étanchéité, joints de vitrage portefeuille (EPDM/TPE) et joints brosse / à faire / [Quincaillerie Coulissant 65 NV](/quincaillerie/aske |
+| /sources/plans-profiles-e-volution-2008.md | Document source | Plans des profilés et manuel de fabrication e.VOLUTION, août 2008 | profine, kommerling, e-volution, systeme-70, plan, renfort | Classeur KÖMMERLING « Système e.VOLUTION » de 395 pages (système F 91, édition août 2008) — plans des profilés du système 70 dessinés un par un avec leur renfort et son inertie, combinaisons, cotes de débit, statique, directives de fabrication, systèmes spéciaux et mise en œuvre. | raction, module, Vicat, dilatation, conductivité, feu, teinte, vieillissement, résistances chimiques, acoustique, thermique) / transcrit / [Directives |
+| /sources/soprofen-at-cstb-coffres-chrono.md | Source | Avis Technique CSTB n° 6/16-2339_V2, coffres Chrono SOPROFEN | source, cstb, avis-technique, soprofen, bloc-baie, chrono-c | Avis Technique CSTB n° 6/16-2339_V2 (72 pages, valide jusqu'au 31/01/2027) pour les coffres de volets roulants blocs-baies PVC SOPROFEN — Chrono C, Chrono VX2, Chrono VRX2 réno et Chrono ONE (dimensions, thermique Uc/Up, AEV C3/C4, inerties EI, profilés et détails de mise en œuvre). | uf si la sous-face est renforcée. * Réaction au feu : profilés PVC revêtus d'un film classés **M3** (rapports CREPIM DO-18-0432/A-R1 et DO-21-2677/A |
+| /procedures/porte-d-entree-systeme-70.md | Procédure | Porte d'entrée du système 70 | systeme-70, e-volution, profine, porte-d-entree, 2415, 2416 | La fabrication de la porte d'entrée du système 70 Plateforme sur seuil aluminium — ouvrants 2415 et 2416 et leurs renforts, dimensions maximales d'ouvrant en teinté masse et en plaxé, inserts de soudure 9287 et outil T038, porte d'entrée avec fixe latéral sur élargisseur 0303, et porte d'entrée à ouverture extérieure, avec leurs coupes cotées. | − 5 mm) diffère de celui de la reconstitution de feuillure avec élargisseur 0303 de la page suivante (débit élargisseur − 10 mm) ; les deux sont écri |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/incoherences-internes.md :
+| INC-277 | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008 | PDF p. 362 et 363 (registre 7.1, pages imprimées 34 et 35), relue(s) en image à 200 dpi le 29/09/2026 | Titre des deux coupes : « Coupe sur seuil standard (**H = 18 mm**) – Porte d'entrée » ; cotes dessinées au-dessus du « Sol fini » : **12** et **20** (p. 362), **20** (p. 363) ; le seuil 9C42 est dessiné 70 × 20 mm au registre 5.8 (p. 292) | La hauteur H du seuil standard : 18 ou 20 mm, et ce que mesure la cote de 12 mm : à confirmer | La hauteur de ressaut du seuil de porte d'entrée (accessibilité, réservation du sol fini) n'est pas la même selon qu'on lit le titre ou la cote ; voir [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-100 | Délai d'enlèvement du film de protection des profilés après la pose | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008, PDF p. 330 (registre 7.1, page imprimée 2), relue(s) en image à 200 dpi le 29/09/2026 : « celui-ci est à enlever **au plus tard trois mois** après la mise en oeuvre » | Directives générales profine, version janvier 2023, d'après [Montage au bâtiment, directives générales profine](/procedures/montage-generaux-profine.md), PDF p. 103 : « il faut enlever la feuille protectrice **immédiatement après la fixation** au corps du bâtiment » | Aucune : chaque consigne reste avec son document et sa date ; à confirmer par profine | Un film laissé jusqu'à trois mois contre un enlèvement immédiat ; voir [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-101 | Largeur du joint dormant / maçonnerie en mastic silicone | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008, PDF p. 331 (registre 7.1, page imprimée 3), relue(s) en image à 200 dpi le 29/09/2026 : colonnes « jusqu'à 1 m / de 1 à 2 m / de 2 à 3 m », profilés blancs 10 / 10 / 15 mm, profilés structure 10 / 15 / 20 mm | Directives générales profine, version janvier 2023, d'après [Montage au bâtiment, directives générales profine](/procedures/montage-generaux-profine.md), PDF p. 105 : pose entre mur jusqu'à 1,5 / 2,5 / 3,5 / 4,5 m, blanc 10 / 15 / 20 / 25 mm, non blanc 15 / 20 / 25 / 30 mm ; pose en applique jusqu'à 2,5 / 3,5 / 4,5 m, blanc 10 / 10 / 15, non blanc 10 / 15 / 20 | Aucune : chaque table reste avec son document ; à confirmer par profine | Pour un élément de 2 à 2,5 m blanc posé entre mur, 10 mm (2008) contre 15 mm (2023) ; voir [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-102 | Mousse de polyuréthane en bombe dans le joint dormant / gros œuvre | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008, PDF p. 331 (registre 7.1, page imprimée 3), relue(s) en image à 200 dpi le 29/09/2026 : « **Ne pas employer** des produits de scellement en bombe (mousse de polyuréthane) de car leur neutralité dimensionnelle après pose est trés aléatoire » | Directives générales profine, version janvier 2023, d'après [Montage au bâtiment, directives générales profine](/procedures/montage-generaux-profine.md), PDF p. 105 : « N'utiliser des mousses de remplissage **que si** celles-ci ne présentent pas de réactions ultérieures et si elles sont compatibles avec le dormant en PVC et le matériau d'étanchéité » | Aucune : interdiction en 2008, admission sous condition en 2023 ; à confirmer par profine | Un bourrage à la mousse est interdit ou admis selon le document suivi ; voir [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-103 | Distance des points de fixation aux angles et aux meneaux | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008, PDF p. 331 et 333 (registre 7.1, pages imprimées 3 et 5), relue(s) en image à 200 dpi le 29/09/2026 : « au moins **10 cm** des angles intérieurs des dormants », « Côte mini E de l'angle intérieur du dormant: **100 mm** », « Point de fixation à **200 mm** du milieu profilé meneau/traverse » | Directives générales profine, version janvier 2023, d'après [Montage au bâtiment, directives générales profine](/procedures/montage-generaux-profine.md), PDF p. 102 et 104 : « 100 - 150 mm de distance par rapport aux coins intérieurs » ; planche : E « env. **150** » du coin intérieur, « env. 150 » pour meneaux et traverses **à partir de la face intérieure du profilé**, « env. **250** » pour profilés non blancs | Aucune : chaque cote reste avec son document ; à confirmer par profine | Fixation près des meneaux mesurée depuis le milieu (200 mm) ou depuis la face (150 mm) ; aucune distance propre aux profilés non blancs en 2008 ; voir [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) |
+/anomalies/incoherences-internes.md :
+| INC-273 | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008 | PDF p. 335 (registre 7.1, page imprimée 7), comparée aux p. 193 et 214 (registre 5.1), relue(s) en image à 200 dpi le 29/09/2026 | p. 335 : « un coefficient de dilatation du P.V.C. blanc de **0,1 mm/mètre de profilé et par degré** de variation de température (valeur maximum) », soit 100 × 10⁻⁶ ; p. 193 : 0,8 × 10⁻⁴ K⁻¹ ; p. 214 : 70 × 10⁻⁶ (voir **INC-232**) | Une seule valeur de coefficient pour le PVC blanc, ou le domaine d'emploi de chacune : à confirmer | Le jeu de dilatation calculé au chantier varie de 30 % selon la page suivie ; voir [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) |

@@ -1,0 +1,24 @@
+{
+ "id": "R19",
+ "reponse": "Sur la SOLEAL PY 55, le modèle limité à 130 kg par vantail est la paumelle en feuillure standard T910002 (2 lames, axe Ø 12 mm) ; elle intègre un réglage horizontal de ± 2 mm et une compression du joint par bagues excentriques (la T910003 3 lames « grand trafic » et la TPY3615 anti-effraction montent à 150 kg, la T910003 avec réglage 3D). Le wiki donne le réglage en hauteur sous charge, qui se fait sur chantier, porte fermée, sans dégonder, avec l'outil TWZ0002 : 1) positionner l'outil TWZ0002 dans la gorge du dormant sous la paumelle basse ; 2) bloquer les clameaux de l'outil ; 3) desserrer les vis de fixation dormantes des paumelles ; 4) ajuster la hauteur de la porte au millimètre près avec la broche filetée de l'outil ; 5) resserrer les vis de paumelles au couple de 10 à 15 N·m, puis retirer l'outil. Pour un vantail qui frotte en bas côté serrure, c'est ce réglage (relever la porte) que le wiki permet de faire. Le wiki ne décrit pas la manœuvre du réglage horizontal ± 2 mm ni des bagues excentriques, et ne nomme aucune clé (type, taille) : il parle d'un outil TWZ0002, pas de « clés ».",
+ "dans_le_wiki": "partiel",
+ "preuves": [
+  {"page": "/quincaillerie/soleal-py-serrures-et-paumelles.md", "extrait": "| **Paumelle standard** | **T910002** | 2 lames | Diamètre 12 mm | **130 kg** | Horizontal $\\pm 2\\text{ mm}$, compression joint par bagues excentriques |"},
+  {"page": "/quincaillerie/soleal-py-serrures-et-paumelles.md", "extrait": "Le réglage en hauteur sous charge s'effectue sur chantier porte fermée :\n1. Positionner l'outil de réglage **TWZ0002** dans la gorge du dormant sous la paumelle basse."},
+  {"page": "/quincaillerie/soleal-py-serrures-et-paumelles.md", "extrait": "4. Ajuster la hauteur de la porte au millimètre près à l'aide de la broche filetée de l'outil.\n5. Resserrer les vis de paumelles au couple de **10 à 15 N.m**, puis retirer l'outil."}
+ ],
+ "ambiguite": "« Paumelles à pivot » : la SOLEAL PY a des paumelles en feuillure (T910002 130 kg, T910003 et TPY3615 150 kg) et, à part, des pivots de sol TBN1370 (150 kg) et une crapaudine T920025 (130 kg, porte tube APD). La limite de 130 kg désigne la T910002 ou la crapaudine T920025 ; si c'est un pivot de sol, le wiki ne donne aucun réglage.",
+ "outils": 2,
+ "comment_trouve": "Lecture directe de /quincaillerie/soleal-py-serrures-et-paumelles.md (titre évident), section « Réglage en hauteur avec l'outil TWZ0002 ». Grep « réglage|pivot|130 kg|clé|TWZ0002 » sur les autres pages SOLEAL PY : rien de plus ; les pages sources des organes de rotation (conception p. 140-161, fabrication p. 90-116, « réglage 3D avec outil TWZ0002 ») sont en « à faire ».",
+ "formulations": [
+  "Comment relever sur chantier une porte SOLEAL PY qui frotte au seuil côté serrure, sans dégonder ?",
+  "réglage hauteur paumelle SOLEAL PY",
+  "Ma porte d'entrée alu frotte en bas côté serrure, comment régler les paumelles ?"
+ ],
+ "defauts_wiki": [
+  "Réglages incomplets : le réglage horizontal ± 2 mm et les bagues excentriques sont annoncés dans une cellule mais sans procédure ; le « réglage 3D » est cité dans le registre fabrication (p. 90-116) resté « à faire ».",
+  "Aucun des mots de la plainte (« frotte », « tombe », « affaissement », « côté serrure ») n'apparaît : une recherche par le symptôme ne mène pas à la section réglage.",
+  "La page porte « gamme: LUMINE » et « usage: atelier » alors que le réglage est un geste de SAV / pose ; la facette usage ne remonte pas la page pour une question SAV.",
+  "Le mot « pivot » renvoie aux pivots de sol TBN1370 (autre organe) : la question « paumelles à pivot » risque d'orienter vers la mauvaise ligne."
+ ]
+}

@@ -1,0 +1,41 @@
+{
+ "id": "R23",
+ "reponse": "Le wiki ne donne pas de formule « boîtier de crémone ↔ fond de feuillure » ; il donne les cotes de fraisage du boîtier et de perçage de la poignée, repérées sur l'axe de fouillot et la hauteur de poignée. Instructions de montage KSR (PDF p. 88) : pas de fraisage du boîtier en fouillot −6 ; en fouillot 8 ou 15, fraisage oblong d'au moins 65 mm de long, 12,3 mm de large, centré sur l'axe, avec 20 mm entre le bord du profilé et l'axe de fouillot et 28 mm de profondeur de fraisage minimale. Catalogue PVC 2023, qui les distingue : fouillot 8 mm → lumière oblongue ≥ 30 mm, profondeur de fraisage ≥ 20 mm (p. 212) ; fouillot 15 mm → lumière ≥ 65 mm, profondeur ≥ 28 mm (p. 214) ; largeur 12,3 mm dans les deux cas ; la lumière est centrée sur le milieu du boîtier de crémone [D]. En hauteur, le boîtier est à la hauteur de poignée [A] (centre du trou Ø 12), qui se lit dans le tableau de la crémone choisie par la HFF (fouillot 8, hauteur de poignée constante : 120 mm pour HFF 300-600, 170 pour 511-710, 263 pour 601-800, 413 pour 801-1000, 513 pour 1001-1200, 563 pour 1201-1800, 1000 pour les crémones à loqueteau 1601-2400). Perçage de la poignée : trois trous alignés, Ø 10 / Ø 12 (Ø 14 en fouillot −6) / Ø 10, entraxe des vis 43 mm, profondeur = hauteur de recouvrement + 16 mm (Ø 10 à 33 mm pour un recouvrement de 16 mm) ; vis à tête fraisée M5 (DIN 965 / DIN EN ISO 7046).",
+ "dans_le_wiki": "partiel",
+ "preuves": [
+  {
+   "page": "/procedures/percage-montage-roto-nx.md",
+   "extrait": "Pour les fouillots\n8 / 15, le fraisage est un oblong d'au moins **65** mm de long (min. 65), de **12,3** de large,\ncentré sur l'axe ; sur la coupe, **20** entre le bord du profilé et l'axe de fouillot 8 / 15, et\n**28** de profondeur de fraisage minimale [1 p. 88]."
+  },
+  {
+   "page": "/quincaillerie/roto-nx-cremones.md",
+   "extrait": "| [C] | Profondeur de fraisage minimale | 20 |"
+  },
+  {
+   "page": "/quincaillerie/roto-nx-cremones.md",
+   "extrait": "longueur minimale 65 mm, centrée sur le milieu du boîtier de crémone [D] [1 p. 214]."
+  },
+  {
+   "page": "/procedures/percage-montage-roto-nx.md",
+   "extrait": "| Trou central (carré de 7 mm), fouillot de 8 et 15 | Ø 12 mm | hauteur recouvrement + 16 mm |"
+  },
+  {
+   "page": "/quincaillerie/roto-nx-cremones.md",
+   "extrait": "| 771920 | 8 | 801 – 1000 | 890 | 200 | 413 | J | N | N | 1 / – | E / – | Roto Sil |"
+  }
+ ],
+ "ambiguite": "« Par rapport au fond de feuillure » peut viser la profondeur (axe de fouillot 8 ou 15 mm, profondeur de fraisage) ou la hauteur (hauteur de poignée depuis le bas du vantail). Il faut aussi l'axe de fouillot (−6, 8, 15, 25 à 50) et la HFF pour choisir la ligne.",
+ "outils": 6,
+ "comment_trouve": "Grep « boîtier » sur les pages Roto NX : le fraisage du boîtier est dans /procedures/percage-montage-roto-nx.md (KSR p. 88) et les schémas de perçage/fraisage par fouillot dans /quincaillerie/roto-nx-cremones.md (catalogue p. 212-214). Grep « fond de feuillure », « hauteur de poignée » et glossaire : aucune formule liant le boîtier au fond de feuillure, et la hauteur de poignée n'est pas définie (point de mesure non écrit).",
+ "formulations": [
+  "Quelles cotes de fraisage pour loger le boîtier de crémone Roto NX KSR dans l'ouvrant PVC (fouillot 15) ?",
+  "fraisage boîtier crémone Roto NX",
+  "À quelle hauteur et profondeur usiner la crémone d'une fenêtre oscillo-battante PVC ?"
+ ],
+ "defauts_wiki": [
+  "Contradiction non enregistrée : la procédure KSR (p. 88) donne pour les fouillots 8 ET 15 un oblong ≥ 65 mm et 28 mm de profondeur, le catalogue donne 30 mm / 20 mm pour le fouillot 8 et 65 / 28 pour le 15 ; aucune entrée CTR ne le signale.",
+  "Donnée répartie : fraisage dans /procedures/percage-montage-roto-nx.md (30 Ko), schémas par fouillot et hauteurs de poignée dans /quincaillerie/roto-nx-cremones.md (150 Ko, la plus grosse page Roto) — une page de 150 Ko livrée entière noie la ligne utile.",
+  "Le point de mesure de la hauteur de poignée et de l'axe de fouillot (depuis le fond de feuillure ? la têtière ?) n'est écrit nulle part, ni dans le glossaire.",
+  "Le repère [B] est transcrit « Fouillotss » (coquille de la source) : une recherche « axe de fouillot » ne rencontre la cote que dans la colonne Signification."
+ ]
+}

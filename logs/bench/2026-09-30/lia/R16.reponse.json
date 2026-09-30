@@ -1,0 +1,11 @@
+{
+ "id": "R16",
+ "reponse": "L'ouvrant galbé PERFORM76 fait **83 mm** d'épaisseur, contre 76 mm pour l'ouvrant droit : sa face arrondie déborde de 7 mm (/profiles/perform76-ouvrants-et-battements.md, /gammes/perform.md).\n\nIl existe en deux hauteurs de profil, cotes en mm :\n\n| Ouvrant | Profil | Épaisseur (mm) | Hauteurs (mm) |\n| --- | --- | --- | --- |\n| 76275 | galbé | 83 | 39 / 49 / 70 |\n| 76279 | galbé | 83 | 79 / 89 / 110 |\n\nLes deux sont à 6 chambres, avec renfort acier galvanisé de 2 mm, et se montent sur les cinq dormants PERFORM76. Source : cahier technique PERFORM76 (02/09/2026 CC03), p. 5, 14, 15, 18, 20 et 21.\n\nÀ noter : le cahier n'associe aucune chaîne de battement aux ouvrants galbés 76275 et 76279 (/profiles/perform76-ouvrants-et-battements.md).",
+ "pages_citees": [
+  "/profiles/perform76-ouvrants-et-battements.md",
+  "/gammes/perform.md"
+ ],
+ "appels": 1,
+ "trouve": "oui",
+ "navigation": "Une seule recherche « ouvrant galbé épaisseur » avec la facette gamme PERFORM. La première page livrée, /profiles/perform76-ouvrants-et-battements.md, donne directement le tableau des quatre ouvrants avec l'épaisseur 83 mm pour les galbés 76275 et 76279, et la deuxième (/gammes/perform.md) le confirme par le repère 5b des coupes. Les anomalies injectées (CTR-02, CTR-17, CTR-70, CTR-71, CTR-81, INC-101) portent sur les vitrages ou sur le système 70, aucune sur l'épaisseur de l'ouvrant galbé PERFORM76 : écartées. Aucune difficulté ; le mot « galbé » est discriminant dans le texte intégral."
+}

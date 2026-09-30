@@ -1,0 +1,816 @@
+===== PAGE 1 : /profiles/askey-profils-complementaires.md =====
+# Profilés complémentaires ASKEY
+
+Les profilés complémentaires ASKEY assurent l'adaptation au gros œuvre, la reprise d'isolation thermique (tapées et ITE), l'intégration de volets roulants, la finition intérieure/extérieure et les accouplements de châssis [1 p. 61, 2 p. 57].
+
+---
+
+# Cotes
+
+### 1. Bavettes d'appui
+
+Bavettes aluminium d'évacuation d'eau et de rejet d'appui, cotes en millimètres [1 p. 62-63, 2 p. 58-61] :
+
+| Référence | Application | Largeur avancée (mm) | Hauteur goutte (mm) | Ailette clip (mm) | Bouchon associé |
+| --- | --- | --- | --- | --- | --- |
+| **W3090161** | Bavette 40 mm rainure BTC | 40 | 20 | 15,5 | - |
+| **W3090162** | Bavette 100 mm rainure BTC | 100 | 20 | 15,5 | - |
+| **W4000169** | Bavette tubulaire doublage 100/120 mm | 80,2 | 24,5 | 15,5 | W4040455 |
+| **W4000170** | Bavette tubulaire doublage 140/160 mm | 119,3 | 24,5 | 15,5 | W4040456 |
+| **W4000206** | Bavette tubulaire doublage 180/200 mm | 160,1 | 24,5 | 15,5 | W4040668 |
+| **W3090142** | Bavette pliée rénovation 100x100 | 100 | 100 | - | - |
+
+(schéma: raw/askey1.pdf, p. 62, 63 et raw/askey3.pdf, p. 58, 59, 60)
+
+### 2. Tapées d'isolation standard et déportées
+
+Tapées pré-percées pour isolation intérieure sous doublage, hauteur d'ailette nominale 31,5 mm ou 40 mm [1 p. 66-68, 2 p. 64-66] :
+
+| Référence | Type de tapée | Doublage isolant (mm) | Largeur totale (mm) | Hauteur profil (mm) |
+| --- | --- | --- | --- | --- |
+| **W4000165** | Standard pré-percée | 100 | 47 (31,5 + 15,5) | 31,5 |
+| **W4000166** | Standard pré-percée | 120 | 67 (51,5 + 15,5) | 31,5 |
+| **W4000167** | Standard pré-percée | 140 | 87 (71,5 + 15,5) | 31,5 |
+| **W4000168** | Standard pré-percée | 160 | 107 (91,5 + 15,5) | 31,5 |
+| **W4000204** | Standard pré-percée | 180 | 127 (111,5 + 15,5) | 31,5 |
+| **W4000205** | Standard pré-percée | 200 | 147 (131,5 + 15,5) | 31,5 |
+| **W4000178** | Déportée pré-percée | Rénovation | 21,5 (6 + 15,5) | 31,5 |
+| **W4000179** | Déportée pré-percée | 100 | 47 (31,5 + 15,5) | 40 |
+| **W4000180** | Déportée pré-percée | 120 | 67 (51,5 + 15,5) | 40 |
+| **W4000181** | Déportée pré-percée | 140 | 87 (71,5 + 15,5) | 40 |
+| **W4000182** | Déportée pré-percée | 160 | 107 (91,5 + 15,5) | 40 |
+
+(schéma: raw/askey1.pdf, p. 66, 67, 68)
+
+### 3. Tapées pour volet roulant et dépose totale
+
+| Référence | Application | Doublage (mm) | Largeur (mm) | Hauteur (mm) |
+| --- | --- | --- | --- | --- |
+| **W3090210** | Tapée volet roulant | 120 | 41,4 | 18,5 |
+| **W3090211** | Tapée volet roulant | 140 | 61,4 | 18,5 |
+| **W3090212** | Tapée volet roulant | 160 | 81,4 | 18,5 |
+| **W3090213** | Tapée volet roulant | 180 | 101,4 | 18,5 |
+| **Y3790015** | Tapée tubulaire dépose totale | - | 24,4 | 22,5 |
+| **Y3790016** | Tapée tubulaire dépose totale | - | 44,4 | 22,5 |
+| **Y3790017** | Tapée tubulaire dépose totale | - | 64,4 | 22,5 |
+| **Y3790018** | Tapée tubulaire dépose totale | - | 84,4 | 22,5 |
+| **Y3790021** | Tapée tubulaire dépose totale | - | 104,4 | 22,5 |
+
+(schéma: raw/askey1.pdf, p. 69, 70)
+
+### 4. Couvre-joints intérieurs et rénovation
+
+| Référence | Type | Largeur clip (mm) | Hauteur ailette (mm) | Épaisseur (mm) |
+| --- | --- | --- | --- | --- |
+| **W3090121** | Couvre-joint droit plat | 15,5 | 29 | 2 |
+| **W3090122** | Couvre-joint droit plat | 15,5 | 49 | 2 |
+| **W3090221** | Couvre-joint droit plat | 15,5 | 69 | 2 |
+| **W3090123** | Couvre-joint droit plat | 15,5 | 84 | 2 |
+| **W3090160** | Couvre-joint profil en U | 15,5 | 29 | 2 |
+| **Y3790028** | Couvre-joint profil en U | 21,5 | 49 | 2 |
+| **W3090136** | Couvre-joint rénovation droit | 19,6 | 70 | 2 |
+| **W3090137** | Couvre-joint rénovation mouluré | 21 | 70 | 2 |
+
+(schéma: raw/askey1.pdf, p. 71 et raw/askey3.pdf, p. 67, 68)
+
+### 5. Profilés de liaison et poteaux d'angles
+
+| Référence | Désignation | Dimensions (mm) | Angle | Rôle technique |
+| --- | --- | --- | --- | --- |
+| **W1916244** | Profilé de liaison droit | 115 x 30 | 180° | Accouplement de 2 dormants 65 mm |
+| **W1916272** | Poteau d'angle à rupture thermique | 70,1 x 70,1 | 90° | Angle droit pour 2 châssis 65 mm |
+| **W1916273** | Poteau d'angle à rupture thermique | 65 x 35,9 | 135° | Angle à 135° à rupture thermique |
+| **W1010144** | Profil d'accouplement dormant | 66,8 x 26 | 180° | Raccordement direct dormant à dormant |
+| **W1010145** | Profil d'accouplement renforcé | 139,8 x 30 | 180° | Jonction renforcée avec tubulure |
+| **W001078L** | Plat tubulaire de renfort | 133 x 19 | 180° | Insert acier/alu dans profil W1010145 |
+| **W3112007** | Profilé de liaison en H | 11,7 x 8,5 | - | Liaison souple PVC |
+
+(schéma: raw/askey1.pdf, p. 73, 74, 75 et raw/askey3.pdf, p. 70, 71, 72)
+
+### 6. Profilés standards ULT (Ustensiles, Lames, Tubes)
+
+Nomenclature des profilés marchands en aluminium brut ou laqué, longueur standard de livraison 6 mètres (ou 6,5 m) [1 p. 80-82, 2 p. 79-80] :
+* **Plats aluminium (XF)** : `XF122` (12x2), `XF202` (20x2), `XF252` (25x2), `XF302` (30x2), `XF402` (40x2), `XF503` (50x3), `XF605` (60x5), `XF802` (80x2).
+* **Cornières aluminium (XL)** : `XL151515` (15x15x1.5), `XL202015` (20x20x1.5), `XL25252` (25x25x2), `XL30302` (30x30x2), `XL40402` (40x40x2), `XL50502` (50x50x2), `XL604015` (60x40x1.5), `XL80403` (80x40x3), `XL100202` (100x20x2), `XL101017` (100x100x1.7).
+* **Tubes carrés et rectangulaires (XR)** : `XR202015` (20x20x1.5), `XR30302` (30x30x2), `XR40202` (40x20x2), `XR40402` (40x40x2), `XR50302` (50x30x2), `XR50502` (50x50x2), `XR60602` (60x60x2), `XR80402` (80x40x2), `XR100502` (100x50x2), `XR150504` (150x50x4).
+* **Profilés en U (XU)** : `XU102015` (10x20x10x1.5), `XU151515` (15x15x15x1.5), `XU202015` (20x20x20x1.5), `XU25252` (25x25x25x2).
+* **Tôles aluminium (XS)** : `XS102015` (2000x1000x1.5 mm), `XS122515` (2500x1250x1.5 mm), `XS153015` (3000x1500x1.5 mm).
+
+---
+
+# Compatibilités
+
+* **Fixation des tapées et bavettes** : Les tapées et bavettes d'isolation se fixent sur le dos du dormant à l'aide de vis autoperceuses inox **W0198133** (4,2x11 mm tête bombée SR2), après dépose d'un cordon continu de mastic d'étanchéité [1 p. 89, 2 p. 86].
+* **Étanchéité d'aboutement de bavettes** : Les bavettes tubulaires reçoivent obligatoirement les embouts d'étanchéité injectés : `W4040455` (doublage 100/120 mm), `W4040456` (doublage 140/160 mm) et `W4040668` (doublage 180/200 mm) [1 p. 63, 2 p. 59].
+
+---
+
+# Ce que la source ne donne pas
+
+* La source ne précise pas la référence du joint d'étanchéité souple optionnel à insérer dans le nez des cornières de finition en tableau de rénovation.
+
+---
+
+# Citations
+
+[1] [Coulissant 65 NV ASKEY - Conception](raw/askey1.pdf), p. 61-82, 89
+[2] [Frappe 65 Ouvrant Caché ASKEY - Conception](raw/askey3.pdf), p. 57-82, 86
+
+---
+
+# Voir aussi
+
+- [Profilés dormants et ouvrants Coulissant 65 NV](/profiles/askey-coulissant-65-nv-dormants-et-ouvrants.md)
+- [Profilés dormants et ouvrants Frappe 65 OC](/profiles/askey-frappe-65-oc-dormants-et-ouvrants.md)
+- [Profilés dormants et ouvrants Frappe 65 OV](/profiles/askey-frappe-65-ov-dormants-et-ouvrants.md)
+- [Fabrication Coulissant 65 NV](/procedures/fabrication-coulissant-askey-65-nv.md)
+
+===== PAGE 2 : /profiles/perform76-tapees-et-isolation.md =====
+# Une tapée ne donne pas la même isolation selon le dormant
+
+Quand le mur est doublé d'un isolant à l'intérieur, la fenêtre doit arriver jusqu'au nu de cet
+isolant. La **tapée** est le profil PVC rapporté sur le dormant qui prolonge la menuiserie de
+l'épaisseur nécessaire : plus l'isolant est épais, plus la tapée est haute. Cette page donne, pour
+chaque dormant et chaque épaisseur d'isolation, la tapée, la patte de pose et l'appui à monter,
+avec les coupes du cahier technique.
+
+Montée sur un dormant **76171**, une tapée PERFORM76 donne **15 mm d'isolant de plus** que le même
+profil monté sur un 76177, un 76185 ou un 76180. L'épaisseur d'isolation se lit donc dans la
+colonne du dormant réellement employé.
+
+Trois familles de pièces se lisent dans les colonnes voisines d'un même tableau et ne se
+substituent pas :
+
+| Famille | Rôle | Références |
+| --- | --- | --- |
+| Tapée | donne l'épaisseur d'isolation | 6138 à 6142, 76772, 76769 |
+| Appui | reçoit le rejet d'eau sous le dormant | 6136, 6137, 76758, 76768 |
+| Patte de pose | fixe le dormant dans le gros œuvre | NT1939 à NT1953 |
+
+# Cotes des tapées par dormant
+
+Épaisseur d'isolation permise par chaque tapée PERFORM76, en mm, selon le dormant support.
+
+| Tapée | Cote propre (mm) | Iso sur 76177 et 76185 (mm) | Iso sur 76180 (mm) | Iso sur 76171 (mm) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| sans tapée | - | 65 | 65 | 80 | - |
+| 6138 | 15 | 80 | 80 | 95 | ![Tapée 6138](/assets/profiles/perform76/tapees/tapee-6138.png) |
+| 6139 | 35 | 100 | 100 | 115 | ![Tapée 6139](/assets/profiles/perform76/tapees/tapee-6139.png) |
+| 6140 | 55 | 120 | 120 | 135 | ![Tapée 6140](/assets/profiles/perform76/tapees/tapee-6140.png) |
+| 6141 | 75 | 140 | 140 | 155 | ![Tapée 6141](/assets/profiles/perform76/tapees/tapee-6141.png) |
+| 6142 | 95 | 160 | 160 | 175 | ![Tapée 6142](/assets/profiles/perform76/tapees/tapee-6142.png) |
+| 76772 | 115 | 180 | 180 | 195 | ![Tapée 76772](/assets/profiles/perform76/tapees/tapee-76772.png) |
+| 76769 | 135 | 200 | 200 | 215 | ![Tapée 76769](/assets/profiles/perform76/tapees/tapee-76769.png) |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 17, 19 et 24)
+
+**Sur un dormant 76171, les seules épaisseurs d'isolation qui existent sont 80, 95, 115, 135, 155,
+175, 195 et 215 mm.** Une demande à 140 mm sur ce dormant se traite en 135 ou en 155 mm : le
+140 mm appartient au 76180 et aux dormants rénovation.
+
+Dans le DTD et le DTA du système, quatre de ces tapées portent le suffixe **.1** et une épaisseur
+propre supérieure de 0,5 mm : 6139.1, 6140.1, 6141.1 et 6142.1 pour 35,5, 55,5, 75,5 et 95,5 mm,
+76772 et 76769 pour 115,5 et 135,5 mm, contre 35, 55, 75, 95, 115 et 135 mm au cahier technique
+[2 p. 4]. Les sept tapées y sont dessinées sous le nom de **fourrures d'épaisseur PVC** [3 p. 17] [2 p. 16].
+L'isolation obtenue par dormant est celle du tableau ci-dessus, relevée sur le cahier technique.
+
+# Correspondance avec les pièces d'appui
+
+Une **pièce d'appui** PVC se visse dans les alvéovis (logements de vis) du nez de la tapée ; ses
+chambres doivent correspondre au nez de la tapée, et toutes les tapées n'ont pas de
+correspondance avec les quatre pièces d'appui du système. Le tableau des correspondances des
+chambres des pièces d'appui avec les nez des fourrures d'épaisseur se lit par ligne : une tapée,
+son épaisseur, puis un `X` sous chaque pièce d'appui qui lui correspond ; une case vide (`-`)
+marque l'absence de correspondance.
+
+| Tapée | Épaisseur tapée (mm) | Pièce d'appui 6137 | Pièce d'appui 6136 | Pièce d'appui 76758 | Pièce d'appui 76768 |
+| --- | --- | --- | --- | --- | --- |
+| 6138 | 15 | X | X | X | X |
+| 6139.1 | 35,5 | X | X | X | X |
+| 6140.1 | 55,5 | X | X | X | X |
+| 6141.1 | 75,5 | X | - | X | X |
+| 6142.1 | 95,5 | X | - | - | X |
+| 76772 | 115,5 | - | - | - | X |
+| 76769 | 135,5 | - | - | - | X |
+
+(schéma: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 4)
+
+**Les tapées 76772 et 76769 ne correspondent qu'à la pièce d'appui 76768.** La 6141.1 ne
+correspond pas à la 6136 ; la 6142.1 ne correspond qu'aux 6137 et 76768 [2 p. 4].
+
+L'étanchéité pièce d'appui / tapée est assurée par la pièce M298 ou M613 comprimée lors du vissage
+de la pièce d'appui dans les alvéovis de la fourrure d'épaisseur ; les fourrures sont clippées et
+vissées avec un entraxe maximum de 300 mm (DTD § 2.2.3.1.3, sur
+[DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md)) [2 p. 4].
+
+# Embouts des pièces d'appui
+
+L'obturation des chambres de pièces d'appui, quelle que soit la correspondance entre les parois de
+la pièce d'appui et le nez de la fourrure d'épaisseur, est réalisée par des embouts ajustés en PVC
+expansé [2 p. 4]. Chaque embout est une cale pentée qui suit la pente de la pièce d'appui : il se
+glisse dans les chambres de la pièce d'appui, au droit du nez de la fourrure d'épaisseur. Une ligne
+par pièce d'embout, de gauche à droite sur la planche : sa largeur (cote horizontale), sa longueur
+de 60 mm (profondeur d'insertion), son épaisseur à chaque extrémité de la pente, et, sur les 9F55.1
+et 9F56.1, la feuillure de 4,5 × 9,5 mm taillée sous l'extrémité mince [2 p. 23].
+
+| Pièce d'appui | Embout | Nombre de pièces | Pièce | Largeur (mm) | Longueur (mm) | Épaisseur, extrémité mince (mm) | Épaisseur, extrémité épaisse (mm) | Feuillure (mm) | Coupe |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| 6136 | 9F55.1 | 1 | unique | 60,8 | 60 | 11,3 | 14,5 | 4,5 × 9,5 | ![Embout 9F55.1 pour 6136](/assets/profiles/systeme76/appuis/embout-9f55-1.png) |
+| 6137 | 9F56.1 | 2 | première | 46 | 60 | 9,7 | 12,1 | 4,5 × 9,5 | ![Embout 9F56.1 pour 6137](/assets/profiles/systeme76/appuis/embout-9f56-1.png) |
+| 6137 | 9F56.1 | 2 | seconde | 42,5 | 60 | 12,3 | 14,5 | - | ![Embout 9F56.1 pour 6137](/assets/profiles/systeme76/appuis/embout-9f56-1.png) |
+| 76758 | AC011 | 3 | première | 23 | 60 | 1,5 | 3,5 | - | ![Embout AC011 pour 76758](/assets/profiles/systeme76/appuis/embout-ac011.png) |
+| 76758 | AC011 | 3 | deuxième | 18,5 | 60 | 3,5 | 5,5 | - | ![Embout AC011 pour 76758](/assets/profiles/systeme76/appuis/embout-ac011.png) |
+| 76758 | AC011 | 3 | troisième | 18,5 | 60 | 5,5 | 7 | - | ![Embout AC011 pour 76758](/assets/profiles/systeme76/appuis/embout-ac011.png) |
+| 76768 | M780 | - | M780 | - | 60 | - | - | - | ![Embouts M780, M781, M782 pour 76768](/assets/profiles/systeme76/appuis/embouts-m780-m781-m782-76768.png) |
+| 76768 | M781 | - | M781 | - | 60 | - | - | - | ![Embouts M780, M781, M782 pour 76768](/assets/profiles/systeme76/appuis/embouts-m780-m781-m782-76768.png) |
+| 76768 | M782 | - | M782 | - | 60 | - | - | - | ![Embouts M780, M781, M782 pour 76768](/assets/profiles/systeme76/appuis/embouts-m780-m781-m782-76768.png) |
+
+(schéma: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 23)
+
+Chaque coupe montre à gauche le dormant, la pièce d'appui vissée sous lui et, hachurées dans ses
+chambres, les pièces d'embout ; à droite, chaque pièce d'embout de profil (la pente) puis de face
+(le rectangle de 60 mm). Les embouts M780, M781 et M782 de la pièce d'appui 76768 sont dessinés en
+trois références distinctes, en PVC expansé (hachure pointillée), avec leur seule longueur de
+60 mm : leur largeur et leurs épaisseurs ne sont pas cotées, et la planche ne porte pas de nombre
+de pièces pour eux. La planche est titrée « Embouts de pièces d'appui (PVC expansé) » ; les légendes
+sont « EMBOUT 9F55.1 POUR 6136 (1 PIECE) », « EMBOUT 9F56.1 POUR 6137 (2 PIECES) », « EMBOUT AC011
+POUR 76758 (3 PIECES) », « M780, M781, M782 EMBOUTS POUR 76768 » [2 p. 23]. Le texte du § 2.2.3.1.3
+ne cite que les 9F55.1, 9F56.1 et AC011 [2 p. 4]. La coupe « Assemblage fourrure et pièce d'appui PVC » écrit l'embout du 6137
+« 9F56 », sans suffixe — entrée **INC-25**.
+
+La cote propre est la hauteur de la tapée, constante quel que soit le dormant. Les cotes de
+montage varient : **35 / 16** sur les dormants rénovation, **35 / 39** sur le 76180, **35 / 45**
+sur le 76171, à l'exception de la tapée 76769 qui y est cotée 35 / 39.
+
+# La contrainte du 76171 au-delà de 155 mm
+
+Sur un dormant 76171, **au-delà de 155 mm d'isolant le dormant bas devient un 76180 à aile de
+20 mm**.
+
+| Iso sur 76171 (mm) | Appui | Dormant bas |
+| --- | --- | --- |
+| 80 | 76758 | 76171 |
+| 95 | 76758 | 76171 |
+| 115 | 76758 | 76171 |
+| 135 | 76758 | 76171 |
+| 155 | 76758 | 76171 |
+| 175 | 6137 | **76180, aile de 20 mm** |
+| 195 | 76768 | **76180, aile de 20 mm** |
+| 215 | 76768 | **76180, aile de 20 mm** |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 24)
+
+C'est une contrainte de conception : elle change la nomenclature du châssis, et se vérifie au
+chiffrage d'un projet en isolation renforcée.
+
+# Appuis sur dormants 76177 et 76185
+
+Sur les deux dormants rénovation, l'épaisseur d'isolation choisit la tapée et l'appui (le profil
+penté posé sous le dormant bas, qui rejette l'eau). Une ligne se lit : pour cette épaisseur
+d'isolation, monter cette tapée et cet appui.
+
+| Épaisseur d'isolation (mm) | Tapée | Appui |
+| --- | --- | --- |
+| 60 | - | 6136 |
+| 80 | 6138 | 6136 |
+| 100 | 6139 | 6136 |
+| 120 | 6140 | 6136 |
+| 140 | 6141 | 6137 |
+| 160 | 6142 | 6137 |
+| 180 | 76772 | 76768 |
+| 200 | 76769 | 76768 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 17)
+
+La colonne *Tapée* est relevée sur la planche des tapées de la même page, où chaque coupe porte
+son épaisseur d'isolation (« Iso de 80 » pour la 6138, et ainsi de suite).
+
+Aucune patte de pose n'est affectée à ces deux dormants rénovation : la fixation suit les
+principes de pose rénovation, décrits dans
+[Pose de la PERFORM76](/procedures/pose-perform76.md).
+
+Ce tableau part de 60 mm alors que la planche de tapées dessine « Iso de 65 » sans tapée — entrée
+**INC-06** du registre [Incohérences internes](/anomalies/incoherences-internes.md).
+
+## Coupes des tapées sur dormants 76177 et 76185
+
+Chaque coupe montre le dormant rénovation vu en tranche et la tapée posée au-dessus. Trois cotes
+sont portées : à gauche une hauteur verticale, en haut la tapée elle-même (35 de large et 16 de
+retour), à droite sa hauteur propre ; l'étiquette verticale « Iso de … » donne l'épaisseur
+d'isolation. Cotes en mm :
+
+| Tapée | Hauteur cotée à gauche (mm) | Largeur de la tapée / retour (mm) | Hauteur propre de la tapée (mm) | Iso de (mm) |
+| --- | --- | --- | --- | --- |
+| sans tapée | 60 | largeur de dormant 51 | - | 65 |
+| 6138 | 75 | 35 / 16 | 15 | 80 |
+| 6139 | 95 | 35 / 16 | 35 | 100 |
+| 6140 | 115 | 35 / 16 | 55 | 120 |
+| 6141 | 135 | 35 / 16 | 75 | 140 |
+| 6142 | 155 | 35 / 16 | 95 | 160 |
+| 76772 | 175 | 35 / 16 | 115 | 180 |
+| 76769 | 195 | 35 / 16 | 135 | 200 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 17)
+
+### Isolation 65 mm, sans tapée
+
+![Isolation 65 mm, sans tapée](/assets/profiles/perform76/isolation/76177-76185-sans-tapee.png)
+
+Tapée : sans tapée ; épaisseur d'isolation : 65 mm.
+
+### Isolation 80 mm, tapée 6138
+
+![Isolation 80 mm, tapée 6138](/assets/profiles/perform76/isolation/76177-76185-6138.png)
+
+Tapée : 6138 ; épaisseur d'isolation : 80 mm.
+
+### Isolation 100 mm, tapée 6139
+
+![Isolation 100 mm, tapée 6139](/assets/profiles/perform76/isolation/76177-76185-6139.png)
+
+Tapée : 6139 ; épaisseur d'isolation : 100 mm.
+
+### Isolation 120 mm, tapée 6140
+
+![Isolation 120 mm, tapée 6140](/assets/profiles/perform76/isolation/76177-76185-6140.png)
+
+Tapée : 6140 ; épaisseur d'isolation : 120 mm.
+
+### Isolation 140 mm, tapée 6141
+
+![Isolation 140 mm, tapée 6141](/assets/profiles/perform76/isolation/76177-76185-6141.png)
+
+Tapée : 6141 ; épaisseur d'isolation : 140 mm.
+
+### Isolation 160 mm, tapée 6142
+
+![Isolation 160 mm, tapée 6142](/assets/profiles/perform76/isolation/76177-76185-6142.png)
+
+Tapée : 6142 ; épaisseur d'isolation : 160 mm.
+
+### Isolation 180 mm, tapée 76772
+
+![Isolation 180 mm, tapée 76772](/assets/profiles/perform76/isolation/76177-76185-76772.png)
+
+Tapée : 76772 ; épaisseur d'isolation : 180 mm.
+
+### Isolation 200 mm, tapée 76769
+
+![Isolation 200 mm, tapée 76769](/assets/profiles/perform76/isolation/76177-76185-76769.png)
+
+Tapée : 76769 ; épaisseur d'isolation : 200 mm.
+
+# Appuis et pattes de pose sur dormant 76180
+
+Sur le dormant neuf 76180, l'épaisseur d'isolation choisit la tapée, la **patte de pose** (la
+pièce métallique qui fixe le dormant au mur à travers l'isolant) et l'appui. La patte s'accroche
+au dormant par le clameau réf. **CP14GGOM0012**, **sans cale**.
+
+| Épaisseur d'isolation (mm) | Tapée | Patte de pose | Appui |
+| --- | --- | --- | --- |
+| 60 | - | NT1939 | 6136 |
+| 80 | 6138 | NT1939 | 6136 |
+| 100 | 6139 | NT1943 | 6136 |
+| 120 | 6140 | NT1945 | 6136 |
+| 140 | 6141 | NT1947 | 6137 |
+| 160 | 6142 | NT1949 | 6137 |
+| 180 | 76772 | NT1951 | 76768 |
+| 200 | 76769 | NT1953 | 76768 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 19)
+
+Comme pour les dormants rénovation, le tableau part de 60 mm alors que la coupe sans tapée porte
+« Iso de 65 » (**INC-06**).
+
+## Coupes des tapées et pattes sur dormant 76180
+
+Chaque coupe montre le dormant 76180, la tapée au-dessus et la patte de pose en gris, qui part
+vers la gauche le long de l'isolant ; la patte porte sa référence gravée. En haut, les cotes
+horizontales : la patte, puis la tapée (35), puis le dormant (39, ou 74 sans tapée). À gauche,
+la hauteur, égale à l'épaisseur d'isolation. Cotes en mm :
+
+| Épaisseur d'isolation (mm) | Tapée | Cotes horizontales en haut (mm) | Hauteur propre de la tapée (mm) |
+| --- | --- | --- | --- |
+| 65 | sans tapée | 70 / 74 | - |
+| 80 | 6138 | 55 / 35 / 39 | 15 |
+| 100 | 6139 | 80 / 35 / 39 | 35 |
+| 120 | 6140 | 80 / 35 / 39 | 55 |
+| 140 | 6141 | 80 / 35 / 39 | 75 |
+| 160 | 6142 | 80 / 35 / 39 | 95 |
+| 180 | 76772 | 80 / 35 / 39 | 115 |
+| 200 | 76769 | 80 / 35 / 39 | 135 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 19)
+
+### Isolation 65 mm, sans tapée
+
+![Isolation 65 mm, sans tapée](/assets/profiles/perform76/isolation/76180-sans-tapee.png)
+
+Tapée : sans tapée ; épaisseur d'isolation : 65 mm ; cotes en haut : 70 / 74 mm.
+
+### Isolation 80 mm, tapée 6138
+
+![Isolation 80 mm, tapée 6138](/assets/profiles/perform76/isolation/76180-6138.png)
+
+Tapée : 6138 ; épaisseur d'isolation : 80 mm ; cotes en haut : 55 / 35 / 39 mm.
+
+### Isolation 100 mm, tapée 6139
+
+![Isolation 100 mm, tapée 6139](/assets/profiles/perform76/isolation/76180-6139.png)
+
+Tapée : 6139 ; épaisseur d'isolation : 100 mm ; cotes en haut : 80 / 35 / 39 mm.
+
+### Isolation 120 mm, tapée 6140
+
+![Isolation 120 mm, tapée 6140](/assets/profiles/perform76/isolation/76180-6140.png)
+
+Tapée : 6140 ; épaisseur d'isolation : 120 mm ; cotes en haut : 80 / 35 / 39 mm.
+
+### Isolation 140 mm, tapée 6141
+
+![Isolation 140 mm, tapée 6141](/assets/profiles/perform76/isolation/76180-6141.png)
+
+Tapée : 6141 ; épaisseur d'isolation : 140 mm ; cotes en haut : 80 / 35 / 39 mm.
+
+### Isolation 160 mm, tapée 6142
+
+![Isolation 160 mm, tapée 6142](/assets/profiles/perform76/isolation/76180-6142.png)
+
+Tapée : 6142 ; épaisseur d'isolation : 160 mm ; cotes en haut : 80 / 35 / 39 mm.
+
+### Isolation 180 mm, tapée 76772
+
+![Isolation 180 mm, tapée 76772](/assets/profiles/perform76/isolation/76180-76772.png)
+
+Tapée : 76772 ; épaisseur d'isolation : 180 mm ; cotes en haut : 80 / 35 / 39 mm.
+
+### Isolation 200 mm, tapée 76769
+
+![Isolation 200 mm, tapée 76769](/assets/profiles/perform76/isolation/76180-76769.png)
+
+Tapée : 76769 ; épaisseur d'isolation : 200 mm ; cotes en haut : 80 / 35 / 39 mm.
+
+# Appuis et pattes de pose sur dormant 76171
+
+Sur le dormant neuf sans aile 76171, même principe, avec en plus une **cale** réf.
+**CTHNT0030**, sauf à 80 mm d'isolation. Clameau réf. **CP14GGOM0012**.
+
+| Épaisseur d'isolation (mm) | Tapée | Patte de pose | Appui | Cale |
+| --- | --- | --- | --- | --- |
+| 80 | - | NT1939 | 76758 | **sans cale** |
+| 95 | 6138 | NT1939 | 76758 | CTHNT0030 |
+| 115 | 6139 | NT1943 | 76758 | CTHNT0030 |
+| 135 | 6140 | NT1945 | 76758 | CTHNT0030 |
+| 155 | 6141 | NT1947 | 76758 | CTHNT0030 |
+| 175 | 6142 | NT1949 | 6137 | CTHNT0030 |
+| 195 | 76772 | NT1951 | 76768 | CTHNT0030 |
+| 215 | 76769 | NT1953 | 76768 | CTHNT0030 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 24)
+
+Le cas à 80 mm est le seul **sans cale** du tableau. Les trois dernières lignes imposent le
+dormant bas 76180 (astérisque de la planche : « Dormant en partie basse 76180 aile de 20 mm »).
+
+## Coupes des tapées et pattes sur dormant 76171
+
+Mêmes coupes que sur le 76180, avec la cote du dormant à 45 mm au lieu de 39 (74 sans tapée), et
+une cote rouge de **6 mm** au pied de la patte sur toutes les coupes sauf celle sans tapée — qui
+est aussi la seule configuration sans cale. Cotes en mm :
+
+| Épaisseur d'isolation (mm) | Tapée | Cotes horizontales en haut (mm) | Hauteur propre de la tapée (mm) | Cote rouge au pied (mm) |
+| --- | --- | --- | --- | --- |
+| 80 | sans tapée | 70 / 74 | - | - |
+| 95 | 6138 | 55 / 35 / 45 | 15 | 6 |
+| 115 | 6139 | 80 / 35 / 45 | 35 | 6 |
+| 135 | 6140 | 80 / 35 / 45 | 55 | 6 |
+| 155 | 6141 | 80 / 35 / 45 | 75 | 6 |
+| 175 | 6142 | 80 / 35 / 45 | 95 | 6 |
+| 195 | 76772 | 80 / 35 / 45 | 115 | 6 |
+| 215 | 76769 | 80 / 35 / 39 | 135 | 6 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 24)
+
+### Isolation 80 mm, sans tapée
+
+![Isolation 80 mm, sans tapée](/assets/profiles/perform76/isolation/76171-sans-tapee.png)
+
+Tapée : sans tapée ; épaisseur d'isolation : 80 mm ; cotes en haut : 70 / 74 mm.
+
+### Isolation 95 mm, tapée 6138
+
+![Isolation 95 mm, tapée 6138](/assets/profiles/perform76/isolation/76171-6138.png)
+
+Tapée : 6138 ; épaisseur d'isolation : 95 mm ; cotes en haut : 55 / 35 / 45 mm.
+
+### Isolation 115 mm, tapée 6139
+
+![Isolation 115 mm, tapée 6139](/assets/profiles/perform76/isolation/76171-6139.png)
+
+Tapée : 6139 ; épaisseur d'isolation : 115 mm ; cotes en haut : 80 / 35 / 45 mm.
+
+### Isolation 135 mm, tapée 6140
+
+![Isolation 135 mm, tapée 6140](/assets/profiles/perform76/isolation/76171-6140.png)
+
+Tapée : 6140 ; épaisseur d'isolation : 135 mm ; cotes en haut : 80 / 35 / 45 mm.
+
+### Isolation 155 mm, tapée 6141
+
+![Isolation 155 mm, tapée 6141](/assets/profiles/perform76/isolation/76171-6141.png)
+
+Tapée : 6141 ; épaisseur d'isolation : 155 mm ; cotes en haut : 80 / 35 / 45 mm.
+
+### Isolation 175 mm, tapée 6142
+
+![Isolation 175 mm, tapée 6142](/assets/profiles/perform76/isolation/76171-6142.png)
+
+Tapée : 6142 ; épaisseur d'isolation : 175 mm ; cotes en haut : 80 / 35 / 45 mm.
+
+### Isolation 195 mm, tapée 76772
+
+![Isolation 195 mm, tapée 76772](/assets/profiles/perform76/isolation/76171-76772.png)
+
+Tapée : 76772 ; épaisseur d'isolation : 195 mm ; cotes en haut : 80 / 35 / 45 mm.
+
+### Isolation 215 mm, tapée 76769
+
+![Isolation 215 mm, tapée 76769](/assets/profiles/perform76/isolation/76171-76769.png)
+
+Tapée : 76769 ; épaisseur d'isolation : 215 mm ; cotes en haut : 80 / 35 / 39 mm.
+
+# Compatibilités des pattes de pose
+
+Une ligne par couple patte et dormant : une même patte dessert les deux dormants neufs à des
+épaisseurs d'isolation différentes.
+
+| Patte | Dormant | Épaisseur d'isolation (mm) |
+| --- | --- | --- |
+| NT1939 | 76180 | 60 |
+| NT1939 | 76180 | 80 |
+| NT1939 | 76171 | 80 |
+| NT1939 | 76171 | 95 |
+| NT1943 | 76180 | 100 |
+| NT1943 | 76171 | 115 |
+| NT1945 | 76180 | 120 |
+| NT1945 | 76171 | 135 |
+| NT1947 | 76180 | 140 |
+| NT1947 | 76171 | 155 |
+| NT1949 | 76180 | 160 |
+| NT1949 | 76171 | 175 |
+| NT1951 | 76180 | 180 |
+| NT1951 | 76171 | 195 |
+| NT1953 | 76180 | 200 |
+| NT1953 | 76171 | 215 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 19 et 24)
+
+**Aucune épaisseur intermédiaire n'existe** : les valeurs de ce tableau sont les seules
+documentées.
+
+# Tapées aluminium sur dormant capoté
+
+Un dormant habillé d'un capot aluminium (variante AluClip) reçoit des tapées **aluminium** A469 à
+A473, et non les tapées PVC ci-dessus. Leurs cotes sont dans
+[Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md#pièces-dappui-et-tapées-aluminium),
+leur mise en œuvre et leurs cotes de débit dans
+[Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md#tapées-et-appuis-aluminium-sur-dormant-capoté).
+
+# Ce que la source ne donne pas
+
+- Aucune **planche de tapées pour le dormant 76172**.
+- Le **nom des cotes** portées sur les coupes (hauteur de gauche, cote de la patte, cote rouge
+  de 6 mm) : elles sont relevées sans légende.
+- Aucune patte de pose pour les dormants rénovation 76177 et 76185.
+
+# Citations
+
+[1] Cahier technique PERFORM76, version 02/09/2026 CC03 —
+`raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, pages du PDF 17, 19 et 24
+
+[2] DTD n° DBV-25-6/16-2334_V5, système 76 Advanced —
+`raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf`, p. 4, 16 et 23
+
+[3] [DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED](raw/dta-trocal-76-advanced-6-16-2334-v5.pdf)
+
+# Voir aussi
+
+- [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md)
+- [Dormants PERFORM76](/profiles/perform76-dormants.md)
+- [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md)
+- [Pose de la PERFORM76](/procedures/pose-perform76.md)
+- [Cahier technique PERFORM76](/sources/cahier-technique-perform76.md)
+- [DTD n° DBV-25-6/16-2334_V5](/sources/dtd-6-16-2334.md)
+
+===== PAGE 3 : /equipements/volet-roulant-bloc-lx-demi-linteau.md =====
+# Présentation générale du système BLOC LX
+
+Le volet roulant **BLOC LX** de [SOPROFEN](/fournisseurs/soprofen.md) est un système conçu pour l'intégration invisible sous coffre demi-linteau en construction neuve [1 p. 110]. Il est assemblé en atelier directement sur la traverse haute de la menuiserie extérieure (PVC ou aluminium), son axe étant disposé à l'horizontale et ses coulisses fixées verticalement entre les tapées d'isolation [1 p. 110, 2 p. 1].
+
+### Périmètre des fournitures
+
+* **Prestations SOPROFEN incluses** : tablier complet, coulisses pré-percées d'usine, consoles support d'axe, axe d'enroulement, manœuvre (manuelle ou motorisée), et demi-coffre (tiroir) avec ses embouts latéraux d'étanchéité [1 p. 110].
+* **Prestations hors fourniture SOPROFEN** : coffre demi-linteau maçonné ou terre cuite, menuiserie extérieure, tapées d'isolation et trappe intérieure de visite [1 p. 110].
+
+---
+
+# Cotes de fabrication et règles d'encombrement
+
+Les dimensions d'exécution d'un volet BLOC LX sont déterminées par deux cotes fondamentales exprimées en millimètres [1 p. 111] :
+
+* **Largeur de fabrication $L$** : correspond à la **largeur de dos à dos des coulisses** [1 p. 111].
+  * Largeur maximale admissible pour un tablier d'un seul tenant : **3 500 mm** en lames aluminium LA50 [1 p. 111].
+  * Encombrement hors-tout du tiroir demi-coffre : $\text{Largeur demi-coffre} = L + 270\text{ mm}$ (débordement symétrique de $135\text{ mm}$ de chaque côté de la menuiserie, avec l'axe de coulisse positionné à $70\text{ mm}$ du bord extérieur de la console) [1 p. 111].
+* **Hauteur de fabrication $H$** : correspond à la hauteur mesurée du **bas des coulisses au-dessus de la feuillure de la menuiserie**, alignée rigoureusement avec le dessus de la trappe du coffre [1 p. 111].
+* **Contrainte d'alignement** : l'alignement entre le dessus de la trappe de visite et la feuillure du dormant est impératif afin de garantir que le tablier s'enroule librement sans frotter contre la partie supérieure du demi-linteau ni contre la sous-face [1 p. 111].
+* **Réservation gros œuvre** : hauteur standard de réservation demi-linteau $H_{\text{demi-linteau}} = 292,5\text{ mm}$, offrant un passage vertical libre de 216 mm minimum sans profilé de renfort [1 p. 111, 124, 125].
+
+---
+
+# Compatibilité et cotes d'intégration selon les coffres demi-linteaux
+
+L'encombrement du volet BLOC LX s'adapte aux coffres préfabriqués des principaux industriels du gros œuvre (brique terre cuite ou béton). Les cotes fonctionnelles d'intégration varient selon le fabricant et le type de manœuvre retenu (cotes en millimètres pour une isolation de 120 mm) [1 p. 124, 125] :
+
+| Fabricant de coffre demi-linteau | Type de manœuvre | Déport support $Sd$ (mm) | Axe tige $DC$ (mm) | Débord intérieur $Ti$ (mm) | Débord extérieur $Te$ (mm) | Diamètre d'enroulement $\varnothing C$ (mm) | Débord console $A$ (mm) | Axe coulisse console $B$ (mm) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| TERREAL | Treuil | 148,5 | 15 | 50 | 150 | 190 | 135 | 70 |
+| TERREAL | Moteur | - | - | 55 | 80 | 180 | 135 | 70 |
+| GENOVA | Treuil | 148,5 | 15 | 50 | 150 | 190 | 135 | 70 |
+| GENOVA | Moteur | - | - | 50 | 150 | 190 | 135 | 70 |
+| PREFATEC | Treuil | 148,5 | 15 | 70 | 210 | 180 | 135 | 70 |
+| PREFATEC | Moteur | - | - | 70 | 210 | 180 | 135 | 70 |
+| IMERYS | Treuil | 148,5 | 15 | 55 | 80 | 180 | 135 | 70 |
+| IMERYS | Moteur | - | - | 50 | 55 | 180 | 135 | 70 |
+| STRADAL | Moteur uniquement | - | - | 100 | 100 | 165 | 135 | 70 |
+
+(schéma: raw/moustiquaires/export_doc_133.zip, p. 124 et 125)
+
+> [!IMPORTANT]
+> **Incompatibilité formelle du coffre STRADAL avec la manœuvre par treuil** : le demi-linteau STRADAL ne disposant d'aucune réservation latérale pour le passage du déport de cardan, la manœuvre manuelle par treuil y est strictement impossible. Les volets sous coffre STRADAL doivent obligatoirement être motorisés [1 p. 114, 120, 124, 125].
+
+---
+
+# Tabliers, lames et limites dimensionnelles
+
+Le BLOC LX accepte des tabliers en lames de PVC extrudé ou en aluminium profilé double paroi avec mousse polyuréthane standard ou haute densité (HD) [1 p. 112].
+
+### Caractéristiques mécaniques des lames
+
+| Référence de lame | Matériau | Pas de lame (mm) | Épaisseur nominale (mm) | Largeur max 1 tablier (mm) | Poids tablier (kg/m²) | Hauteur max $H$ coffre Stradal (mm) | Hauteur max $H$ autres coffres (mm) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| L 37 | PVC | 37 | 8 | 1 500 | 3,2 | 2 750 | 3 000 |
+| L 50 | PVC | 50 | 12 | 2 000 | 3,5 | 1 850 | 2 150 |
+| LATH 37 | Alu thermique | 37 | 8 | 2 500 | 2,7 | 2 750 | 3 000 |
+| LA 37 | Alu standard | 37 | 8 | 2 500 | 2,7 | 2 750 | 3 000 |
+| LAHD 37 | Alu haute densité | 37 | 8 | 2 500 | 2,7 | 2 750 | 3 000 |
+| LATH 50 | Alu thermique | 50 | 13 | 3 500 | 2,8 | 1 950 | 2 250 |
+| LA 50 | Alu standard | 50 | 13 | 3 500 | 2,8 | 1 950 | 2 250 |
+| LAHD 50 | Alu haute densité | 50 | 13 | 3 500 | 3,3 | 1 950 | 2 250 |
+
+(schéma: raw/moustiquaires/export_doc_133.zip, p. 112)
+
+*Majoration de poids* : ajouter **1,1 kg par mètre linéaire** pour la lame finale en aluminium [1 p. 112].
+*Note de hauteur* : les « autres coffres » regroupent TERREAL, GENOVA, PREFATEC, IMERYS et EVENO (Ligne A du barème Soprofen) [1 p. 112].
+
+---
+
+# Coulisses et lames finales
+
+### Typologie des coulisses
+
+Les coulisses sont livrées en standard avec un pré-perçage étagé d'usine $\varnothing 5\text{ mm}$ et $\varnothing 10\text{ mm}$ à entraxe régulier de 500 mm pour fixation directe entre tapées [1 p. 110] :
+* **CTA 09** : section $41,5 \times 29\text{ mm}$, réservée aux tabliers en lames de 37 mm [1 p. 110].
+* **CTA 13 E** : section $41,5 \times 29\text{ mm}$, pour tabliers en lames de 50 mm jusqu'à 3 000 mm de largeur [1 p. 110].
+* **CTA 13** : ancienne coulisse grande section $54,7 \times 29\text{ mm}$, maintenue pour harmonisation SAV et **obligatoire pour toutes les largeurs supérieures à 3 000 mm** [1 p. 110].
+
+### Lames finales
+
+* **LF40 (Standard)** : profilé aluminium extrudé de 34 mm de hauteur pour lames de 37 et 50 mm, équipée de butoirs d'arrêt cachés escamotables **BLF3-V1** et lestée selon les dimensions du tablier [1 p. 113].
+* **Variantes optionnelles** :
+  * Butoirs apparents **KZ 12/60** (coloris blanc, gris ou brun) : leur présence impose d'avoir posé la trappe intérieure de visite avant toute manœuvre du volet [1 p. 113].
+  * Lame finale **LF40 sans joint**.
+  * Lame finale compacte **LF30** (limitée aux teintes Blanc, Beige 1015, Gris 7016 et Brun) [1 p. 110, 113].
+
+---
+
+# Motorisations et manœuvres
+
+Le volet BLOC LX intègre des motorisations [SOMFY](/fournisseurs/somfy.md) ou SOPROFEN M-Soft², ainsi que des manœuvres manuelles par treuil [1 p. 113-117].
+
+### Synthèse des motorisations et largeurs minimales ($L_{\min}$)
+
+| Protocole | Modèle de motorisation | Code commande | Manœuvre de secours | Largeur mini $L_{\min}$ (mm) | Largeur max moteur court (mm) |
+| --- | --- | --- | --- | --- | --- |
+| Radio RTS | Oximo court RTS | R1 | Non | 500 | 799 |
+| Radio RTS | Oximo RTS standard | R1 | Non | 750 | - |
+| Radio RTS | Oximo court RTS + secours | R1S | Oui | 600 | 944 |
+| Radio RTS | Oximo RTS + secours | R1S | Oui | 850 | - |
+| Radio IO | Oximo court IO | IO1 | Non | 500 | 659 |
+| Radio IO | S&SO RS100 IO standard | IO1 | Non | 610 | - |
+| Radio IO | Oximo court IO + secours | IO1S | Oui | 600 | 804 |
+| Radio IO | S&SO RS100 IO + secours | IO1S | Oui | 710 | - |
+| Radio M-SOFT 2 | M-Soft² MVM court | R11 | Non | 530 | 659 |
+| Radio M-SOFT 2 | M-Soft² MVM standard | R11 | Non | 610 | - |
+| Filaire WT | Ilmo court | M | Non | 500 | 699 |
+| Filaire WT | Ilmo standard | M | Non | 650 | - |
+| Filaire WT | Ilmo court + secours | MS | Oui | 600 | 844 |
+| Filaire WT | Ilmo standard + secours | MS | Oui | 750 | - |
+| Filaire WT | Ilmo 12 tours (couple réduit) | M1 | Non | 650 | - |
+| Filaire WT | Ilmo 12 tours + secours | M1S | Oui | 750 | - |
+| Filaire M-SOFT 2 | M-Soft² MVEC 06/23 | M11 | Non | 530 | - |
+| Filaire M-SOFT 2 | M-Soft² MVE standard | M11 | Non | 610 | - |
+| Hybride filaire/radio | S&SO RS100 IO Hybrid | IOH | Non | 610 | - |
+| Hybride filaire/radio | S&SO RS100 IO Hybrid + secours | IOHS | Oui | 710 | - |
+
+(schéma: raw/moustiquaires/export_doc_133.zip, p. 113)
+
+> [!WARNING]
+> **Incompatibilité des protocoles radio** : les technologies radio Somfy RTS, Somfy IO et Soprofen M-Soft 2 sont strictement incompatibles entre elles et ne peuvent être appairées sur les mêmes points de commande [1 p. 115, 118].
+
+### Manœuvres manuelles par treuil
+
+* **Treuil TX13/5-7 (Code T)** : treuil sans fin de course équipé de série d'un verrouillage automatique TLX, d'un cardan double CS20/12-7 (tige hexagonale 7 mm de 500 mm) et d'une tige oscillante $\varnothing 12\text{ mm}$ en acier revêtu polyester [1 p. 114].
+* **Treuil TX13/5-7FC (Code T10)** : treuil à fin de course avec attaches souples de tablier [1 p. 114].
+* **Déport latéral par barrettes BTD** : permet d'ajuster l'écartement de la tige oscillante pour ne pas heurter l'ouvrant de la fenêtre [1 p. 120] :
+  * **Position A** (7 barrettes BTD) : distance axe tige au dos coulisse $DC = 15\text{ mm}$ (réservation coffre $R = 50\text{ mm}$).
+  * **Position B** (9 barrettes BTD) : $DC = 25\text{ mm}$ ($R = 60\text{ mm}$).
+  * **Position C** (11 barrettes BTD) : $DC = 35\text{ mm}$ ($R = 70\text{ mm}$).
+
+---
+
+# Projection à l'italienne (Manuelle)
+
+Le volet BLOC LX propose en option un mécanisme de projection vers l'extérieur pour tamiser le rayonnement direct [1 p. 121] :
+* **Bras de projection** : compas de longueur 300 mm (hauteur minimale de fenêtre $H_{\min} = 920\text{ mm}$) ou 470 mm ($H_{\min} = 1 260\text{ mm}$), avec traverse basse de solidarisation EP25 [1 p. 121].
+* **Obligations techniques** : tablier d'un seul tenant en lames LA37 ou LA50 (largeur max 1 500 mm), butoirs apparents KZ 12/60, tapée d'au moins 60 mm et espace libre minimum de 30 mm entre la coulisse et la menuiserie pour le débattement des bras [1 p. 121].
+* **Interdiction absolue** : la projection est **strictement interdite en manœuvre motorisée** ; elle ne peut être mise en œuvre qu'avec une manœuvre manuelle par treuil [1 p. 121].
+
+---
+
+# Profilés acier de renfort d'inertie
+
+Afin de contrer la poussée du vent sur les ensembles composés et les grandes largeurs, un renfort acier tubulaire plié ($49,7 \times 32\text{ mm}$, épaisseur 2,5 mm) de longueur $L$ peut être vissé sur la traverse haute de menuiserie [1 p. 122, 2 p. 2] :
+
+| Code renfort | Destination doublage | Dimensions section (mm) | Épaisseur acier (mm) | Inertie axiale $I_{xx'}$ (cm⁴) | Inertie principale $I_{yy'}$ (cm⁴) |
+| --- | --- | --- | --- | --- | --- |
+| Renfort code 1 | ISO 100 et ISO 120 | $49,7 \times 32$ | 2,5 | 2,60 | 5,56 |
+| Renfort code 2 | ISO 140 et ISO 160 | $49,7 \times 32$ | 2,5 | 3,15 | 18,70 |
+
+(schéma: raw/moustiquaires/export_doc_133.zip, p. 122)
+
+---
+
+# Options et accessoires d'atelier
+
+1. **Trappe de visite VX03/18** : sous-face aluminium laquée avec recouvrement réglable de 35 à 55 mm, clipsée sur supports DL-SFI (intérieur), DL-SFE (extérieur) et équerres d'extrémité DL-ESF [1 p. 122].
+2. **Pattes déformables VX26** : brides de fixation d'angle assurant la triangulation rigide entre les joues du coffre et le dormant de menuiserie (vis 15/3-9/9-5) [1 p. 121, 2 p. 2].
+3. **Mortaises d'entrée d'air VMC** : usinage d'atelier en partie haute sans fourniture de grille [1 p. 123] :
+   * **Type A** : entaille unique de $250 \times 15\text{ mm}$.
+   * **Type B** : double fente de $2 \times (172 \times 12\text{ mm})$ espacée par un pontet matière de 5 mm.
+4. **Isolation thermique** : tiroir équipé en standard du bouclier isolant DL52 (possibilité d'option sans isolant) [1 p. 123].
+
+---
+
+# Citations
+
+[1] [Guide technique volet roulant demi-linteau Bloc LX SOPROFEN](raw/moustiquaires/export_doc_133.zip), p. 110 à 125
+[2] [Guide de pose Bloc LX coffre demi-linteau SOPROFEN, réf. NO-BB-T-BLX-00-FR-202111](raw/moustiquaires/export_doc_136(1).zip), p. 1 à 3
+
+---
+
+# Voir aussi
+
+- [SOPROFEN](/fournisseurs/soprofen.md)
+- [SOMFY](/fournisseurs/somfy.md)
+- [Volets roulants](/equipements/volets-roulants.md)
+- [Assemblage et pose du coffre demi-linteau Bloc LX SOPROFEN](/procedures/pose-bloc-lx-demi-linteau-soprofen.md)
+- [Guide technique volet roulant demi-linteau Bloc LX SOPROFEN](/sources/soprofen-guide-technique-bloc-lx.md)
+- [Guide de pose Bloc LX coffre demi-linteau SOPROFEN (2021)](/sources/soprofen-guide-pose-bloc-lx-demi-linteau.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /profiles/soleal-fy-dormants-et-ouvrants.md | Profilé | Dormants et ouvrants SOLEAL FY | technal, soleal, soleal-fy, frappe, aluminium, dormant | Profilés de fenêtres et portes-fenêtres à frappe aluminium TECHNAL SOLEAL FY 55 et FY 65, ouvrants apparents (OA), minimaux (OM) et minimaux chant clippable, avec leurs caractéristiques géométriques et leurs moments d'inertie Ix et Iy. | aux / / --- / :---: / --- / :---: / --- / / **T215180** / 55 mm / Ouvrant apparent Contemporain / 28,5 / Fenêtre et porte-fenêtre standard 1 et 2 vant |
+| /procedures/fabrication-systeme-70.md | Procédure | Fabrication et assemblage du système 70 | systeme-70, e-volution, profine, assemblage, soudure, seuil | Les schémas d'atelier et les plans de mise en œuvre du DTD du système 70 de profine (e.XCLUSIVE, e.MOTION, e.VOLUTION) — assemblages de meneau et traverse, soudure à plat du 6127, élargisseurs et rehausseurs, seuils, capotage aluminium, tapées et appuis alu, drainages, couleurs sombres, coupes et plans de pose. | 5 / 200 / 69 / 62 / / 6121 + meneau 2425 + 6121 / 180 / 45 / 90 / / 6112C + meneau 6127 + 6112C / 170 / 45 / 80 / / 6121 + meneau 2427 + 6121 / 205 / |
+| /sources/soprofen-guide-technique-blocs-baies-2022.md | Source | Guide technique Blocs-baies SOPROFEN 2022 | source, soprofen, bloc-baie, chrono-one, chrono-pse2, mono-vi | Guide technique officiel et catalogue de commande des blocs-baies SOPROFEN (réf. DOC86505 09/2022, 148 pages) — Chrono ONE, Chrono CX14/CRX14/CRX18, Bloc LX, Chrono PSE² (volet et BSO), Mono VI (volet inversé) et classification de résistance au vent NF EN 13659 / DTU 34-2. | le intérieur/extérieur ; enroulement $\varnothing 180\text{ mm}$ ; prémonté en usine sur menuiserie. * **Chrono PSE² (p. 4, 86-123)** : système combin |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/incoherences-internes.md :
+| INC-45 | Mise en œuvre Système 76 Advanced | registre 2.1.3, p. 7 et 9 imprimées (PDF p. 45 et 47) | Deux planches titrent une cote que leur dessin ne porte pas : « 6137 Pièce d'appui de **157 mm** », coupe cotée **156,5** ; « 6141 Tapée de **75 mm** », coupe cotée **75,5**. Relu en image le 25/09/2026 | Le titre arrondit la cote, ou la coupe dessinée est celle d'une variante (la tapée de 75,5 mm est la 6141.1 dans [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md)) : à faire préciser par profine | Débit ou saillie d'appui calculé sur 157 au lieu de 156,5 mm ; tapée 6141 commandée pour une épaisseur qui est celle de la 6141.1 |
+/anomalies/contradictions-entre-sources.md :
+| CTR-67 | Longueurs des crémones OB KSR fouillot 15 mm à hauteur de poignée fixe, galet E | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 82 (imprimée 80), relue en image le 29/09/2026, « Crémone OB KSR, hauteur poignée fixe — Galet E » : 601–800 → **580** mm, 619591 ; 801–1000 → 780, 619592 ; 1001–1200 → 980, 619593 ; 1201–1400 → 1180, 619594 ; 1401–1600 → 1380, 619595 ; 1601–1800 → 1580, 619596 ; 1601–1800 HP 1000 → 1580, **794636** ; 1801–2000 → 1780, 794637 ; 2001–2200 → 1980, 795280 ; 2201–2400 → 2180, 795282 | Catalogue Roto NX pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 215 (page imprimée 215 : la pagination du catalogue est celle du PDF), **relue en image à 150 dpi le 29/09/2026** (tranche 1 du retraitement du catalogue, contrôle ponctuel ; la planche elle-même reste à transcrire) : mêmes numéros sur les mêmes plages de HFF avec des longueurs de **690**, 890, 1090, 1290, 1490, 1690, 1890, 2090 et 2290 mm, soit 110 mm de plus à chaque ligne ; sur 1601–1800 à HP 1000, galet E, le catalogue donne 838345 au lieu de 794636 ; la relecture en image confirme ces longueurs, ce numéro, et la zone de recoupe de 200 mm sur toutes les lignes ; **complété le 29/09/2026 (tranche 5, planche transcrite, relue à 220 dpi)** : même écart pour le galet V, manuel p. 82 « Galet V » (580 à 2180 mm pour 619591, 626542 à 626576, 794640 à 794643 ; **794640** sur 1601–1800 à HP 1000) contre catalogue p. 216, 4.1.2.3 « Hauteur de poignée fixe - sécurité » (690 à 2290 mm ; **838324** sur 1601–1800 à HP 1000) ; et **795282** (2201–2400) porte « 3 E » au manuel p. 82, « 2 / – » galets au catalogue p. 215, où c'est 794639 qui porte « 3 / – » ; même écart de 110 mm en fouillot 8 mm, **CTR-115** | Aucune : demander à ROTO laquelle des deux longueurs est celle de la pièce | Une crémone commandée sur la longueur lue dans le mauvais document ne correspond pas à la pièce livrée ; recoupe et choix de plage faussés |
+/anomalies/contradictions-entre-sources.md :
+| CTR-104 | Noms et codes RAL des couleurs Roto R04.3, R04.4, R01.3, R06.2 | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 13 (section 1.1.3 « Couleurs »), relue en image le 29/09/2026 : R01.3 « – » « Titane » ; R04.3 « – » « Brun-olive » ; R04.4 « RAL 8022 » « Brun-noir » ; R06.2 « RAL 9005 » « Noir intense » | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 85, tables « Caches selon couleur », d'après [Finitions Roto NX](/quincaillerie/roto-nx-finitions.md) : R01.3 « titane mat F9 » ; R04.3 « brun olive (**RAL 8008**) » ; R04.4 « **brun foncé** (RAL 8022) » ; R06.2 « noir » | Le code Roto (R04.3, R04.4…) : c'est lui qui se commande ; ne pas convertir R04.3 en RAL 8008 avant confirmation par ROTO | Une teinte commandée ou annoncée au client par son RAL ou son nom peut ne pas correspondre au code Roto livré (brun olive annoncé RAL 8008 sans que le catalogue le confirme ; R04.4 nommé « brun foncé » ou « brun-noir ») |
+/anomalies/contradictions-entre-sources.md :
+| CTR-105 | Objet de la directive VHBH du Groupement Qualité Serrures et Ferrures | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 6, d'après [Roto NX KSR — conventions et consignes](/procedures/roto-nx-ksr-consignes-generales.md) : « prescriptions et recommandations pour le maniement des ferrures en cas de traitement ultérieur » | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 21, relue en image le 29/09/2026 : « Ferrures pour fenêtres et portes-fenêtres – Prescriptions et recommandations **pour le produit et pour la prise de responsabilité** » (pages de garde des directives reproduites en allemand, illisibles) | Aucune : les deux objets sont portés, chacun avec sa source ; le titre allemand de la directive (hors corpus) tranche | Un renvoi à la VHBH pour une question de traitement ultérieur (peinture, lasure) ou de responsabilité produit peut viser la mauvaise directive |
+/anomalies/contradictions-entre-sources.md :
+| CTR-106 | Courbe des 80 kg/m² du diagramme d'application Roto NX, côté paumelles P, oscillo-battant rectangulaire, version 150 kg | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 24 (imprimée 22), relue en image le 29/09/2026 : quatre courbes « 80 kg/m² », « 60 kg/m² », « 50 kg/m² », « 40 kg/m² » ; la courbe des 80 kg/m² devient verticale vers 1 170 mm de LFF | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 36 (section 2.2.1.2 « 150 kg »), relue en image à 600 dpi le 29/09/2026 : trois courbes seulement, « 60 kg/m² », « 50 kg/m² », « 40 kg/m² », aux mêmes positions que celles du manuel ; aucune courbe des 80 kg/m² | La courbe des 80 kg/m² du manuel, seule source qui borne ce poids de vitrage, en attendant l'arbitrage ; l'absence au catalogue ne vaut pas autorisation | Un vantail de 150 kg à vitrage de 80 kg/m² (32 mm de verre) n'a de limite de format que dans le manuel : lu sur le seul catalogue, il paraît borné par la courbe des 60 kg/m² ou pas du tout ; voir [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-107 | Note [B] de la planche des positions de compas de la ferrure soufflet Roto NX, côté paumelles P | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 27 (imprimée 25), relue en image le 29/09/2026 : « [B] au-delà de 621 mm, compas **pêne demi-tour** en haut possible avec crémone dans le chant et crémone OB » | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 43 (section 2.2.4), relue en image à 500 dpi le 29/09/2026 : « [B] au-delà de 621 mm, compas **soufflet** en haut possible avec crémone dans le chant et crémone OB » ; les notes [A], [C], [D], [E] sont les mêmes dans les deux documents, le compas y étant « compas d'arrêt » (manuel) ou « compas soufflet » (catalogue) | Aucune : les deux désignations sont conservées, la page cite les deux | La pièce autorisée en haut d'un vantail soufflet de plus de 621 mm de LFF avec crémone dans le chant n'est pas la même selon le document ; voir [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |

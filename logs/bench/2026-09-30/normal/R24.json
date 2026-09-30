@@ -1,0 +1,25 @@
+{
+ "id": "R24",
+ "reponse": "Dormant 6106 (système 70 profine / KÖMMERLING, dormant de rénovation à aile, désignation F91-01- 6106), cotes en mm : épaisseur 70 ; hauteur hors tout 95 = 55 (du haut du dormant jusque sous le corps) + 40 (aile de rénovation qui descend sous le corps et recouvre l'ancien bâti) ; décomposition verticale à droite 20 (part haute, commune dormants/ouvrants) + 75 (part basse) ; cote horizontale de l'aile 10. Renforts admis : V600 (1,5 mm d'acier, IG 0,5 cm⁴, IW 2,1 cm⁴ — Iz 2,10 cm⁴ au plan 2008) ou V543 (1,25 mm, IG 0,1, IW 1,5). Mêmes cotes sur le poster des profilés principaux, la planche du manuel de mise en œuvre (PDF p. 14), le DTD 6/16-2335 (p. 15 : 70 / 55 / 20 + 75 / aile 40) et le plan e.VOLUTION 2008 (p. 6). À noter : le sommaire du manuel l'appelle « Dormant de 95 mm » et sa planche « 6106 Dormant 75 mm » (INC-12) ; capots : aucun au manuel et au DTD, A109 (21 × 44,4) + demi-capot A474 (21 × 41) sur le poster (CTR-37 / VER-38). Les cotes de débit du 6106 sont sur /profiles/systeme-70-cotes-de-debit.md.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/profiles/systeme-70-profiles-et-renforts.md", "extrait": "| 6106 | 70 | 55 + 40 | 20 | 75 | 10 | V600, V543 | ![Dormant 6106](/assets/profiles/systeme70/dormants/dormant-6106.png) |"},
+  {"page": "/profiles/systeme-70-profiles-et-renforts.md", "extrait": "| 6106 | F91-01- 6106 | 70 | 95 = 55 + 40 | 20 + 75 | - | V600 | 2,10 | 6 |"},
+  {"page": "/profiles/systeme-70-profiles-et-renforts.md", "extrait": "| 6106 | Dormant de 95 mm | 6106 Dormant 75 mm | 70 en haut ; à gauche 55 + 40 ; à droite 20 + 75 ; 10 en horizontale sur l'aile | 14 |"},
+  {"page": "/profiles/systeme-70-profiles-et-renforts.md", "extrait": "| 6106 | V600 | Renfort 1,5 mm | 1,5 | 0,5 | 2,1 | - |"}
+ ],
+ "ambiguite": "« Cotes » peut vouloir dire les cotes du profilé (réponse ci-dessus) ou les cotes de débit (déductions par rapport à la cote de baie) : les secondes sont dans /profiles/systeme-70-cotes-de-debit.md.",
+ "outils": 5,
+ "comment_trouve": "Grep « 6106 » (25 pages, 31 occurrences dans les plans de combinaison) ; la bonne page est /profiles/systeme-70-profiles-et-renforts.md, section « Cotes des dormants ». Lecture des quatre tableaux (poster, manuel, DTD, plans 2008) et du tableau des renforts : valeurs concordantes.",
+ "formulations": [
+  "Quelles sont les dimensions du dormant de rénovation 6106 du système 70 ?",
+  "cotes 6106",
+  "Quelle hauteur et quelle aile pour le dormant rénovation de 95 mm en Kömmerling 70 ?"
+ ],
+ "defauts_wiki": [
+  "Page très longue : /profiles/systeme-70-profiles-et-renforts.md fait 104 Ko ; la même cote y est répétée dans quatre tableaux (poster, manuel, DTD, 2008) aux en-têtes différents.",
+  "La référence 6106 apparaît dans 25 pages ; /profiles/systeme-70-plans-de-combinaison.md (132 Ko, 31 occurrences) risque de passer devant la page des cotes en BM25.",
+  "Le mot « dormants » (pluriel de la question) et « cotes » sont partout : seule la référence discrimine.",
+  "Désignations contradictoires (« Dormant de 95 mm » / « Dormant 75 mm », INC-12) : une question qui cite « dormant de 75 » ou « de 95 » peut tomber sur l'une ou l'autre."
+ ]
+}

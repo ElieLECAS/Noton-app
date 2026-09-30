@@ -1,0 +1,23 @@
+{
+ "id": "S04",
+ "reponse": "En ouvrant minimal (SOLEAL FY 55, FYm / OM, gamme LUMINE), il n'y a pas de parclose intérieure en aluminium : le vitrage se pose depuis l'extérieur sur un fond de feuillure en polyamide. Pour un vitrage de 24 mm :\n- Profilé d'ouvrant masqué : TFY1338 (ligne Contemporain) ou TFY1235 (ligne Classique), qui admettent 24 et 26 mm ;\n- Parclose extérieure TPE : TFY4002 (noir) ou TFY4003 (gris) ;\n- Joint de vitrage intérieur : T710034 (jeu 6,5 mm) ;\n- Support de cale de vitrage : TFY3679 (module 55 ; TFY3677 en module 65).\nÀ comparer : en 26 mm, le joint intérieur devient le T410010 (jeu 4,5 mm). Pour poser un vitrage de 24 ou 26 mm dans un ouvrant prévu pour 30/32 mm, il existe l'adaptateur de réduction de feuillure TFY2508 (avec le joint clip TFY5010). Ouvrant de plus de 1 200 mm de haut : ajouter une cale de 4 mm (sans support TFY3679) au droit de la poignée et du point de condamnation intermédiaire côté paumelles (OB et semi-fixe). Source : /profiles/soleal-fy-parcloses-et-vitrage.md (section « Vitrage de l'Ouvrant Minimal »), /profiles/soleal-fy-dormants-et-ouvrants.md.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/profiles/soleal-fy-parcloses-et-vitrage.md", "extrait": "| **24 mm** | TFY1338 (ou TFY1235) | TFY4002 (noir) ou TFY4003 (gris) | T710034 (jeu 6,5 mm) | TFY3679 (55) / TFY3677 (65) |"},
+  {"page": "/profiles/soleal-fy-parcloses-et-vitrage.md", "extrait": "L'ouvrant masqué ne comporte pas de parclose intérieure en aluminium. Le vitrage est posé depuis l'extérieur sur un fond de feuillure ouvrant en polyamide Technoform et calé contre l'ouvrant aluminium"},
+  {"page": "/profiles/soleal-fy-dormants-et-ouvrants.md", "extrait": "| **TFY1338** | 55 mm | Contemporain | 24 et 26 mm | Nulle (masqué derrière le dormant) |"}
+ ],
+ "ambiguite": "Ligne de style non précisée : TFY1338 (Contemporain) ou TFY1235 (Classique) ; ouvrant minimal PMR : TFY1250 ou TFY1258 (24 et 26 mm), dont le wiki ne donne pas la composition de vitrage.",
+ "outils": 4,
+ "comment_trouve": "Lecture de soleal-fy-parcloses-et-vitrage.md (12 ko, page citée dans l'historique) : section « Vitrage de l'Ouvrant Minimal », ligne 24 mm. Grep TFY1338 / TFY4002 / T710034 pour recouper la ligne de style dans soleal-fy-dormants-et-ouvrants.md.",
+ "formulations": [
+  "en ouvrant caché LUMINE55, quel joint et quelle parclose TPE pour un double vitrage de 24 ?",
+  "ouvrant minimal 24 mm joint",
+  "et si c'est un ouvrant masqué SOLEAL FY, qu'est-ce qui change pour le vitrage ?"
+ ],
+ "defauts_wiki": [
+  "Le mot « minimal » est partagé par l'ouvrant minimal et le titre des catalogues TECHNAL (« Conception Ouvrant Minimal et Apparent ») : une recherche sur « ouvrant minimal » remonte aussi des pages sans le tableau de vitrage.",
+  "Relance sans gamme ni épaisseur (« en ouvrant minimal ? ») : la recherche doit reprendre LUMINE55 et 24 mm de l'historique ; le mot LUMINE55 est écrit sur gammes/lumine.md et soleal-fy-dormants-et-ouvrants.md mais pas sur la page des parcloses (qui porte gamme: LUMINE et SOLEAL FY 55).",
+  "Le tableau de l'ouvrant minimal n'a pas de locator [1 p. N] par ligne et mélange FY 55 et FY 65 dans les mêmes cellules (« TFY3679 (55) / TFY3677 (65) »), deux contextes dans une cellule."
+ ]
+}

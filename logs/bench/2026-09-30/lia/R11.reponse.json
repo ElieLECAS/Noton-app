@@ -1,0 +1,12 @@
+{
+  "id": "R11",
+  "reponse": "L'**A491** est une **pièce d'appui aluminium** de **57 mm** de large, posée en traverse basse d'un dormant capoté (AluClip) et fermée en bout par l'embout **M643**. Elle existe au système 70 comme au système 76 Advanced. Le wiki en a trois coupes.\n\n**Système 70, manuel de mise en œuvre** (57 de large ; 19,7 de haut) :\n\n![A491 Pièce d'appui alu 57 mm](/assets/profiles/systeme70/appuis/appui-a491-moe.png)\n\n**Système 70, poster Kömmerling Gamme 70** (saillie 57 ; nez de 20 de haut) :\n\n![Pièce d'appui A491](/assets/profiles/systeme70/appuis/appui-alu-a491.png)\n\n**Système 76 Advanced, planche du DTA** (57 mm) :\n\n![Appui A491](/assets/profiles/systeme76/tapees-alu/appui-a491.png)\n\nÀ noter : la hauteur n'est pas la même selon le document, **19,7 mm** au manuel et **20 mm** au poster. L'écart n'est pas arbitré (entrée **VER-72**).\n\nSources : (/profiles/systeme-70-profiles-complementaires.md), (/procedures/capotage-aluclip-systeme-70.md), (/profiles/perform76-appuis-et-seuils.md)",
+  "pages_citees": [
+    "/profiles/systeme-70-profiles-complementaires.md",
+    "/procedures/capotage-aluclip-systeme-70.md",
+    "/profiles/perform76-appuis-et-seuils.md"
+  ],
+  "appels": 3,
+  "trouve": "oui",
+  "navigation": "Première requête « A491 appui » sans facette : les trois pages livrées en entier (capotage AluClip 70, appuis et seuils PERFORM76, capotage AluClip 76) portaient toutes une ligne A491 avec une cellule Coupe (une image système 70, une image système 76). Les métadonnées signalaient aussi /profiles/systeme-70-profiles-complementaires.md avec une troisième image (poster) : je l'ai lue avec lire_page pour avoir la ligne complète, et elle donnait deux jeux de cotes (19,7 au manuel, 20 au poster) avec un renvoi à VER-72. VER-72 ne faisait pas partie des entrées injectées : je l'ai chargée avec lire_anomalie pour confirmer que l'écart de hauteur des appuis alu y est bien consigné. La référence seule a suffi. La difficulté venait de la surabondance, avec trois pages complètes très longues (plus de 110 000 caractères) où l'A491 n'occupe que quelques lignes, et du fait que VER-72 n'a pas été injecté automatiquement alors qu'il porte sur la cote de la pièce demandée."
+}

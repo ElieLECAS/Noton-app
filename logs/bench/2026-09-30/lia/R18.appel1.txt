@@ -1,0 +1,415 @@
+===== PAGE 1 : /profiles/askey-coulissant-65-nv-cotes-de-debit.md =====
+# Cotes de débit ASKEY Coulissant 65 NV
+
+Les cotes de débit du **Coulissant 65 NV ASKEY** définissent les longueurs de coupe des profilés d'ossature, des rails, des profilés d'ouvrants, des vitrages et des joints pour les différentes configurations 2 et 4 vantaux [1 p. 145].
+
+Toutes les dimensions hors-tout châssis sont notées $L$ (largeur) et $H$ (hauteur) en millimètres. Les coupes d'extrémité sont à angle droit (90°-90°).
+
+---
+
+# Cotes
+
+### 1. Coulissant 2 vantaux - Seuil réduit RPT 23 mm (W1040050)
+
+Application ouvrant 32 mm, double vitrage 28 mm [1 p. 147] :
+
+| Élément | Référence | Désignation | Qté | Longueur de débit (mm) | Coupe |
+| --- | --- | --- | --- | --- | --- |
+| Dormant bas | **W1040050** | Seuil réduit RPT 23 mm | 1 | $L - 39$ | 90°-90° |
+| Dormant haut | **W1041280** | Traverse haute coupe droite | 1 | $L - 39$ | 90°-90° |
+| Dormant montant | **W1041284** | Montant dormant coupe droite | 2 | $H - 4{,}5$ | 90°-90° |
+| Ouvrant montant | **W1041270** | Montant latéral 32 mm | 2 | $H - 58{,}4$ | 90°-90° |
+| Ouvrant traverse | **W1041274** | Traverse d'ouvrant 32 mm | 4 | $L/2 - 79{,}5$ | 90°-90° |
+| Ouvrant central | **W3041250** | Montant central simple 32 mm | 2 | $H - 58{,}4$ | 90°-90° |
+| Chicane PVC | **W4030243** | Chicane centrale 32 mm | 2 | $H - 58{,}4$ | 90°-90° |
+| Bouclier montant | **W4030241** | Bouclier montant coupe droite | 2 | $H - 50{,}5$ | 90°-90° |
+| Rejet d'eau | **W3041282** | Rejet d'eau rapporté | 1 | $L - 13$ | 90°-90° |
+| Clip rejet d'eau | **W3041281** | Clip support rejet d'eau | 1 | $L - 13$ | 90°-90° |
+| Lisse de seuil | **W8020007** | Support de seuil avec fond de joint | 1 | $L - 8$ | 90°-90° |
+| Double vitrage | Remplissage | Double vitrage 28 mm | 2 | $H - 162 \times L/2 - 89{,}5$ | Rectangulaire |
+
+(schéma: raw/askey1.pdf, p. 147)
+
+### 2. Coulissant 2 vantaux - Seuil PMR rapporté (W3090163)
+
+Application dormant 2 rails coupe droite 65 mm, ouvrant 32 mm, vitrage 28 mm [1 p. 149] :
+
+| Élément | Référence | Désignation | Qté | Longueur de débit (mm) | Coupe |
+| --- | --- | --- | --- | --- | --- |
+| Dormant bas | **W1041279** | Traverse basse CD avec rejet d'eau | 1 | $L - 39$ | 90°-90° |
+| Dormant haut | **W1041280** | Traverse haute coupe droite | 1 | $L - 39$ | 90°-90° |
+| Dormant montant | **W1041284** | Montant dormant coupe droite | 2 | $H - 9$ | 90°-90° |
+| Rails rapportés | **W3041224** | Rail aluminium anodisé | 2 | $L - 39$ | 90°-90° |
+| Seuil PMR | **W3090163** | Seuil PMR rapporté | 1 | $L - 15$ | 90°-90° |
+| Capot seuil PMR | **W3090175** | Capot profilé seuil PMR | 2 | $L - 15$ | 90°-90° |
+| Boucliers traverse | **W4030239** | Bouclier drainé bas | 2 | $L/2 - 47$ | 90°-90° |
+| Capots traverse | **W4030240** | Capot entre-rail | 2 | $L/2 - 47$ | 90°-90° |
+| Ouvrant montant | **W1041270** | Montant latéral 32 mm | 2 | $H - 93$ | 90°-90° |
+| Ouvrant traverse | **W1041274** | Traverse d'ouvrant 32 mm | 4 | $L/2 - 79{,}5$ | 90°-90° |
+| Ouvrant central 1 | **W3041250** | Montant central simple 32 mm | 1 | $H - 93$ | 90°-90° |
+| Ouvrant central 2 | **W3041251** | Montant central renforcé carré | 1 | $H - 93$ | 90°-90° |
+| Chicane PVC | **W4030243** | Chicane centrale 32 mm | 2 | $H - 93$ | 90°-90° |
+| Bouclier montant | **W4030241** | Bouclier montant coupe droite | 2 | $H - 85$ | 90°-90° |
+| Double vitrage | Remplissage | Double vitrage 28 mm | 2 | $H - 197{,}5 \times L/2 - 90$ | Rectangulaire |
+
+(schéma: raw/askey1.pdf, p. 149)
+
+### 3. Coulissant 4 vantaux - Percussion centrale (Dormant CD65)
+
+Application dormant CD65 2 rails, ouvrant 32 mm, vitrage 28 mm [1 p. 155] :
+
+| Élément | Référence | Désignation | Qté | Longueur de débit (mm) | Coupe |
+| --- | --- | --- | --- | --- | --- |
+| Dormant bas | **W1041279** | Traverse basse CD 65 | 1 | $L - 39$ | 90°-90° |
+| Dormant haut | **W1041280** | Traverse haute CD 65 | 1 | $L - 39$ | 90°-90° |
+| Dormant montant | **W1041284** | Montant dormant CD 65 | 2 | $H - 9$ | 90°-90° |
+| Rails rapportés | **W3041224** | Rail aluminium anodisé | 2 | $L - 39$ | 90°-90° |
+| Ouvrant montant lat | **W1041270** | Montant latéral 32 mm | 2 | $H - 93$ | 90°-90° |
+| Ouvrant montant renf | **W1041272** | Montant latéral renforcé 3/4 | 2 | $H - 93$ | 90°-90° |
+| Ouvrant traverse | **W1041274** | Traverse d'ouvrant 32 mm | 8 | $L/4 - 68{,}2$ | 90°-90° |
+| Ouvrant central 1 | **W3041250** | Montant central simple 32 mm | 2 | $H - 93$ | 90°-90° |
+| Ouvrant central 2 | **Y3740020** | Montant central renforcé réduit | 2 | $H - 93$ | 90°-90° |
+| Jonction en ligne | **W3041249** | Profilé jonction centrale en ligne | 1 | $H - 195$ | 90°-90° |
+| Chicane PVC | **W4030243** | Chicane centrale 32 mm | 2 | $H - 93$ | 90°-90° |
+| Bouclier central bas | **W4030239** | Bouclier drainé traverse centrale | 1 | $L/2 - 73{,}5$ | 90°-90° |
+| Bouclier latéral bas | **W4030239** | Bouclier drainé traverse latérale | 2 | $L/4 - 35{,}7$ | 90°-90° |
+| Double vitrage | Remplissage | Double vitrage 28 mm | 4 | $H - 197{,}5 \times L/4 - 78$ | Rectangulaire |
+
+(schéma: raw/askey1.pdf, p. 155)
+
+### 4. Coulissant 4 vantaux - Percussion centrale réduite
+
+Application 4 vantaux avec montants centraux ultra-étroits `Y1740040` et `Y1740041`, vitrage 28 mm [1 p. 169] :
+
+| Élément | Référence | Désignation | Qté | Longueur de débit (mm) | Coupe |
+| --- | --- | --- | --- | --- | --- |
+| Ouvrant montant lat | **W1041270** | Montant latéral 32 mm | 2 | $H - 83$ | 90°-90° |
+| Ouvrant traverse | **W1041274** | Traverse d'ouvrant 32 mm | 8 | $L/4 - 54$ | 90°-90° |
+| Montant central SF | **Y1740040** | Montant central réduit semi-fixe | 1 | $H - 83$ | 90°-90° |
+| Montant central Princ | **Y1740041** | Montant central principal réduit | 1 | $H - 83$ | 90°-90° |
+| Jonction centrale | **Y3740022** | Profilé jonction centrale rapporté | 1 | $H - 185$ | 90°-90° |
+| Chicane PVC | **W4030243** | Chicane centrale 32 mm | 4 | $H - 83$ | 90°-90° |
+| Bouclier central bas | **W4030239** | Bouclier drainé traverse centrale | 1 | $L/2 - 101$ | 90°-90° |
+| Bouclier latéral bas | **W4030239** | Bouclier drainé traverse latérale | 2 | $L/4 - 20{,}5$ | 90°-90° |
+| Double vitrage | Remplissage | Double vitrage 28 mm | 4 | $H - 187 \times L/4 - 64$ | Rectangulaire |
+
+(schéma: raw/askey1.pdf, p. 169)
+
+### 5. Coulissant 2 vantaux - Module 24 mm avec volet roulant intégré
+
+Application dormant CD doublage 120 mm, ouvrant 24 mm, vitrage 24 mm [1 p. 159] :
+
+| Élément | Référence | Désignation | Qté | Longueur de débit (mm) | Coupe |
+| --- | --- | --- | --- | --- | --- |
+| Dormant montant | **Y1740019** | Montant CD doublage 120 mm | 2 | $H$ | 90°-90° |
+| Dormant bas | **Y1740023** | Traverse basse CD doublage 120 mm | 1 | $L - 38$ | 90°-90° |
+| Dormant haut | **Y1740027** | Traverse haute coupe droite | 1 | $L - 38$ | 90°-90° |
+| Rails rapportés | **W3041224** | Rail aluminium anodisé | 2 | $L - 38$ | 90°-90° |
+| Ouvrant montant lat | **W1041260** | Montant latéral 24 mm | 2 | $H - 83$ | 90°-90° |
+| Ouvrant traverse | **W1041264** | Traverse d'ouvrant 24 mm | 4 | $L/2 - 79$ | 90°-90° |
+| Chicane alu simple | **W3041240** | Chicane simple 24 mm | 1 | $H - 83$ | 90°-90° |
+| Chicane alu renf | **Y3740019** | Chicane renforcée 24 mm | 1 | $H - 83$ | 90°-90° |
+| Chicane PVC | **W4030242** | Chicane PVC 24 mm | 2 | $H - 83$ | 90°-90° |
+| Tapée VR | **Y3790015** | Tapée pour VR iso 120 mm | 1 | $L - 38$ | 90°-90° |
+| Double vitrage | Remplissage | Double vitrage 24 mm | 2 | $H - 187 \times L/2 - 89$ | Rectangulaire |
+
+(schéma: raw/askey1.pdf, p. 159)
+
+---
+
+# Compatibilités et règles d'atelier
+
+* **Jeu de battement central standard** : L'entraxe de croisement des montants centraux 32 mm standards est de **38 mm** [1 p. 146, 148].
+* **Jeu de battement central réduit** : L'entraxe de percussion centrale réduite avec montants Y1740040 et Y1740041 est réduit à **20,6 mm**, ce qui augmente le clair de vitrage de 30 mm au centre de la baie [1 p. 70, 168].
+* **Débit des joints de vitrage** : Les joints portefeuille de vitrage (Y4710001, Y4710009, Y4710010, Y4710011) se débitent au périmètre d'ouvrant à la longueur $2L + 4H$, sans coupe d'angle, en tournant d'une seule pièce dans les 4 angles après entaille du solin [1 p. 10, 147, 159].
+
+---
+
+# Ce que la source ne donne pas
+
+* La source ne formule pas de règle de débit automatique pour les impostes ou allèges fixes intégrées en coulissant ; ces configurations imposent un assemblage par traverse intermédiaire W1041265 ou W1041275 avec usinage à façon.
+
+---
+
+# Citations
+
+[1] [Coulissant 65 NV ASKEY - Conception](raw/askey1.pdf), p. 10, 70, 145-171
+
+---
+
+# Voir aussi
+
+- [Profilés dormants et ouvrants Coulissant 65 NV](/profiles/askey-coulissant-65-nv-dormants-et-ouvrants.md)
+- [Gamme Coulissant 65 NV](/gammes/askey-coulissant-65-nv.md)
+- [Quincaillerie Coulissant 65 NV](/quincaillerie/askey-coulissant-65-nv-quincaillerie.md)
+- [Fabrication Coulissant 65 NV](/procedures/fabrication-coulissant-askey-65-nv.md)
+
+===== PAGE 2 : /quincaillerie/soleal-gy-roulements-et-fermetures.md =====
+# Chariots de roulement et calage
+
+Les chariots SOLEAL GY 55 sont logés dans la traverse basse d'ouvrant (T141015 ou T141021). Leur corps en matériau isolant conserve la continuité de la rupture thermique de la traverse basse.
+
+### 1. Tableau de choix des roulettes et charges admissibles
+
+| Type de chariot | Référence | Réglage | Galets / Bandage | Poids maxi par vantail | Compatible Rail Alu T341000 | Compatible Rail Inox TGY4007 |
+| --- | --- | --- | --- | --- | --- | --- |
+| **Simple fixe** | **T401011** | Non réglable | Polyamide sur roulements à aiguilles | **100 kg** | Oui | Oui |
+| **Double fixe** | **T401012** | Non réglable | Polyamide sur roulements à aiguilles | **200 kg** | Oui | Oui |
+| **Double fixe Inox** | **TGY3873** | Non réglable | Galets 100% Inox | **200 kg** | **NON (Incompatible)** | **OUI** |
+| **Simple réglable** | **T441003** | Réglable en hauteur | Polyamide sur aiguilles | **100 kg** | Oui | Oui |
+| **Double réglable** | **T441004** | Réglable en hauteur | Polyamide sur aiguilles | **200 kg** | Oui | Oui |
+| **Double réglable Inox** | **TGY3872** | Réglable en hauteur | Galets 100% Inox | **200 kg** | **NON (Incompatible)** | **OUI** |
+
+> [!WARNING]
+> **Interdiction absolue** d'associer des chariots à roulettes inox (**TGY3872** / **TGY3873**) sur le chemin de roulement en aluminium **T341000**. L'inox détruirait par écrouissage le rail aluminium sous forte charge. L'utilisation du rail rapporté en acier inoxydable **TGY4007** est impérative avec les galets inox.
+
+### 2. Prescription de calage sous traverse : Cale TGA3817
+Pour transmettre directement la charge du vitrage vers les roulettes sans solliciter la rupture thermique des traverses :
+- **Prise de vitrage 29-32 mm (profilé T141021)** : Cale **TGA3817** obligatoire au droit de chaque roulette de manière systématique.
+- **Prise de vitrage 24-28 mm (profilé T141015)** : Cale **TGA3817** (zone sécable raccourcie) obligatoire si la largeur du vantail dépasse **1,50 m** OU si le poids du vantail dépasse **120 kg**.
+- La cale se fixe sur la traverse avec un point de colle avant vitrage.
+
+### 3. Réglage en hauteur des roulettes réglables
+- Les chariots réglables (T441003, T441004, TGY3872) sont ajustables en hauteur **sans dégonder le vantail** au moyen d'une clé Allen introduite par le chant latéral du montant d'ouvrant à travers l'orifice prévu à **25 mm** de hauteur.
+- Lors du réglage, il est obligatoire de soulager le vantail à l'aide de ventouses de vitrier pour éviter d'endommager la vis micrométrique de réglage sous la charge.
+
+---
+
+# Systèmes de fermeture et verrouillage
+
+La condamnation s'effectue par des mécanismes encastrés à têtière filante en acier inox (grade 3 anticorrosion NF EN 1670) :
+
+### 1. Gamme de crémones encastrées
+
+| Référence | Points de fermeture | Condamnation clé | Hauteur min. châssis | Hauteur min. poignée $Hp$ | Fixation |
+| --- | --- | --- | --- | --- | --- |
+| **TGY3700** | 1 point simple | Non | 395 mm | 219 mm | 2 vis TGY3723 |
+| **TGY3701** | 1 point à clé | Oui (cylindre) | 525 mm | 346 mm | 4 vis TGY3723 |
+| **TGY3702** | 3 points | Non | 1 292 mm | 721 mm | 6 vis TGY3723 |
+| **TGY3703** | 3 points à clé | Oui (cylindre) | 1 292 mm | 721 mm | 8 vis TGY3723 |
+| **TGY3704** | Rallonge 4ème point | Raccordée à TGY3702/03 | Pour très grandes hauteurs | — | 2 vis TGY3723 |
+| **TKG025** | Fermeture 1 point coquille | Non | 395 mm | 219 mm | Encastrée + pêne déporté TGY6006 |
+
+### 2. Cylindres et barillets européens
+- Montants latéraux standard TGY1202 et TGY1303 : Cylindre européen **30 x 30 mm** (Réf. **T1040**).
+- Montants latéraux à renfort tube TGY1301 et TGY1302 : Cylindre européen décentré **40 x 30 mm** (Réf. **T1044**).
+- Rosettes inox de protection de cylindre : Réf. **T960013** ou **TPY6003**.
+
+### 3. Fermeture pompier (Établissements Recevant du Public - ERP)
+Conforme à l'Arrêté du 25 juin 1980 et à l'article CO3 modifié du 28 avril 2016 :
+- Référence : **TGY3731** (avec vis de fixation T770059).
+- Compatible uniquement avec les montants simples **TGY1202** et **TGY1300**.
+- Permet l'ouverture d'urgence depuis l'extérieur à l'aide d'une clé spéciale pompier.
+- Exigence dimensionnelle réglementaire : passage libre minimum de **$H = 1\,800\text{ mm} \times L = 900\text{ mm}$**.
+
+### 4. Verrou central à clé TGY3622
+- Placé à la croisée centrale des vantaux en partie basse.
+- Montage sur cale **TGY3640** avec perçage Ø7 mm et écrou à sertir taraudé M5.
+- Vis de fixation CHc M5x16 et M5x25.
+- En cas d'utilisation du verrou central, les roulettes doivent être décalées à **62 mm** et les cales de vitrage à **71 mm** du chant du montant pour ne pas entrer en conflit avec le perçage Ø11 mm de la pièce de blocage.
+
+---
+
+# Organes de manœuvre et poignées
+
+### 1. Tableau de compatibilité des poignées selon les montants
+
+| Organe de manœuvre | Type | Réf. Laquée | Réf. Anodisée | Compatible Montant Standard (TGY1202/1300) | Compatible Montant Tube (TGY1301/1302) | Compatible Montant Lame (TGY1200/1201) | Compatible Montant Bilame (TGY1220) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **Cuvette encastrée** | Intérieure | **TGY3712** | **TGY3719** | Oui (OS / SF) | Oui (OS / SF) | Non | Oui |
+| **Bouton sur plaque** | Intérieure | **TGY3713** | **TGY3714** | Non | Non | **Oui (OS / SF)** | Oui |
+| **Poignée tirage Technal** | Intérieure | **TGY3717** | — | **Oui (OS / SF\*)** | **Oui (OS / SF\*)** | Non | Non |
+| **Poignée tirage extérieure**| Extérieure | **TGY3718** | — | Oui (OS / SF) | Oui (OS / SF) | Non | Non |
+| **Poignée fixe de tirage** | Int/Ext | **TGY3732 / TGY3733** | — | Oui (avec TGY3716) | Oui (avec TGY3716) | Oui | Oui |
+| **Poignée design droit** | Intérieure | **TGY3606** | — | Oui (OS) | Oui (OS) | Non | Non |
+| **Poignée anse galbée** | Intérieure | **TGY6004** | — | Oui (OS / SF) | Non | Non | Non |
+| **Cuvette à levier** | Intérieure | **TGY6003** | — | Oui (OS / SF) | Non | Non | Non |
+| **Béquille à carré de 7 mm**| Intérieure | **T960030 / TCZ61051**| — | Oui (avec kit TGY3721) | Non | Non | Non |
+
+*\*Note : Pour croiser les vantaux sans heurt avec la poignée TGY3717 sur semi-fixe, prévoir la butée TCG021.*
+
+### 2. Réversibilité de la poignée Design Droit TGY3606
+La poignée TGY3606 est réversible pour vantail de service à gauche ou à droite :
+1. Présenter la poignée en position ouverte.
+2. Retirer les 4 vis d'assemblage du corps arrière.
+3. Retirer la butée et le corps de fixation.
+4. Tourner le bras de manœuvre à 180°.
+5. Remonter la butée et visser.
+6. Retourner le corps arrière de 180° (les 2 logements de vis doivent être orientés côté serrure pour fixation par vis TGY3723).
+7. Revisser l'ensemble.
+
+---
+
+# Gâches, centreurs et accessoires de guidage
+
+### 1. Gâches de condamnation
+- **Gâche dormant périphérique TGY3705** : Se visse directement dans la gorge du dormant aluminium sans fraisage ni découpe du profilé à l'aide de vis Torx TGY3723.
+- **Gâche pour percussion centrale TGY3711** : Se visse en applique sur le profilé de percussion centrale TGY1204 ou de percussion d'angle TGY1206.
+- **Gâche renforcée anti-effraction TGY3742** : Équipée de vis de pré-positionnement et d'un contre-clameau en aluminium pour retard à l'effraction sur dormant 55 mm.
+- **Réglage micrométrique de la gâche** : La serrure Technal intègre un gabarit plastique réversible. En position horizontale, il sert de pige d'épaisseur pour aligner la gâche à exactement **6 mm** du boîtier de fermeture avant serrage définitif des vis.
+
+### 2. Centreurs d'ouvrants et guidage
+- **Centreur d'ouvrant TGY3832** : Se clipse par rotation au milieu du montant d'ouvrant. Garantit l'alignement parfait des vantaux en position fermée et le plaquage des joints brosses contre le vent.
+  - *Règle bilame :* Dans le cas d'une menuiserie soumise aux risques de bilame, poser obligatoirement **2 centreurs TGY3832** répartis sur la hauteur.
+- **Compensateur de centreur TGY3833** : Se monte face au centreur TGY3832 sur le profilé de percussion TGY1204 à l'aide d'une vis TGY3723.
+- **Guides de montants centraux TGY3883** : Se clipsent en tête et pied de chaque montant central après gondage des vantaux. Verrouillage par rotation des flèches à l'aide d'une clé Allen de 4 mm. Mousse d'étanchéité positionnée à fleur de profilé.
+- **Pièces anti-dégondage TGY3885** : Se montent sur chaque montant latéral après réglage des roulettes pour empêcher le soulèvement frauduleux de l'ouvrant.
+
+---
+
+# Voir aussi
+
+- [Profilés dormants et rails SOLEAL GY 55](/profiles/soleal-gy-dormants-et-rails.md)
+- [Cotes de débit SOLEAL GY 55](/profiles/soleal-gy-cotes-de-debit.md)
+- [Pose et galandage SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md)
+- [Fournisseur Technal](/fournisseurs/technal.md)
+
+===== PAGE 3 : /procedures/fabrication-coulissant-askey-65-nv.md =====
+# Ce que fait cette procédure
+
+Cette procédure décrit l'ensemble des opérations d'atelier pour la confection des menuiseries coulissantes **ASKEY Coulissant 65 NV** : débit, poinçonnage pneumatique sur table, usinages de drainage caché, assemblage des dormants en coupe droite, pose du seuil réduit RPT W1040050 ou du seuil PMR W3090163, et ferrage des vantaux [1 p. 5, 25, 65].
+
+---
+
+# Conditions et interdictions
+
+* **Obligation chicane PVC avant poinçonnage** : Le montage des chicanes centrales PVC W4030242 (ouvrant 24 mm) ou W4030243 (ouvrant 32 mm) est **obligatoire** avant tout passage du profilé dans l'outil de poinçonnage Y5740007 [1 p. 30, 31].
+* **Interdiction de perçage traversant en façade de rail** : Tous les drainages de traverse basse doivent déboucher dans la chambre de décompression sous le rail ; aucun trou n'est toléré en vue directe sur le rail bas [1 p. 58].
+* **Sécurité outillage** : Les poinçonneuses pneumatiques doivent être alimentées à une pression nominale de 6 à 7 bars avec commande bi-manuelle ou pédale protégée [1 p. 6, 8, 12].
+* **Masticage obligatoire des tubulures de seuil** : Sur seuil réduit W1040050, il est impératif d'injecter du mastic colle dans les tubulures par le dernier trou de drainage n°1 pour bloquer les échanges air/eau [1 p. 84].
+
+---
+
+# Étapes
+
+### 1. Débit des profilés
+* Couper l'ensemble des profilés d'ossature (dormants, ouvrants, chicanes, couvre-joints, tapées) à coupe droite à angle droit ($90^\circ - 90^\circ$) selon les formules de la fiche [Cotes de débit Coulissant 65 NV](/profiles/askey-coulissant-65-nv-cotes-de-debit.md) [1 p. 25].
+
+### 2. Poinçonnage et usinages d'atelier
+* **Montants dormants CD 65 (W1041284)** :
+  * Découpe des traverses sur poinçonneuse W5040370 (postes 1G et 1D, découpe de 50 mm) [1 p. 7].
+  * Perçage des passages de vis Ø5 mm et trous Ø10 mm sur poinçonneuse W5040371 (poste 3, entraxes 43,3 mm et 10,85 mm) [1 p. 9].
+* **Montants d'ouvrants (24 et 32 mm)** :
+  * Clipper la chicane PVC sur le profilé aluminium [1 p. 30].
+  * Passer dans l'outil Y5740007 :
+    * Poste 1 (ouvrants 28-32 mm) ou Poste 5 (ouvrants 24 mm) : délardage des ailettes sur 64 mm aux extrémités [1 p. 15].
+    * Postes 2, 3 et 4 : poinçonnage du passage de rail aux extrémités (lumière de 22 mm de hauteur, découpe à 28 mm et 39 mm) [1 p. 15, 31].
+* **Traverses d'ouvrants** :
+  * Réaliser les perçages de drainage et d'équilibrage de pression Ø8 mm sur perceuse à colonne :
+    * Traverses hautes et basses : 1 trou Ø8 mm à 140 mm de chaque extrémité [1 p. 36].
+    * Traverses intermédiaires : 1 trou Ø8 mm à 5 mm de chaque extrémité [1 p. 36].
+* **Traverses basses dormants (drainage caché)** :
+  * Sur outil Y5740008 (poste 1) : découper les lumières oblongues de 6x25 mm (2 fentes séparées de 8 mm) [1 p. 17, 58].
+  * Espacement : 1 double trou à 85 mm de chaque extrémité, puis répartir des trous intermédiaires au pas maximal de 300 mm [1 p. 59-62].
+
+### 3. Montage des dormants coupe droite
+1. **Pose des rails rapportés** : Emboîter le rail de roulement aluminium W3041224 ou inox W4000158 dans la gorge du profilé bas, et le sertir par frappe douce à l'aide d'une cale martyr en bois [1 p. 66].
+2. **Équipements de traverse haute** : Glisser le joint brosse W4010503 dans la rainure centrale de traverse haute, en laissant un retrait de 3 mm aux extrémités [1 p. 67].
+3. **Mise en place de l'étanchéité** :
+   * Positionner les busettes de drainage caché W4040615 au droit des découpes [1 p. 69].
+   * Poser le talon d'étanchéité W4040540 au centre du croisement des rails, injecter du mastic colle SNJF neutre bas module sur les marteaux de sertissage [1 p. 70].
+   * Appliquer les flasques mousse adhésives Y4720013 / Y4720014 ou les flasques TPE Y4720004 / Y4720005 sur le bout du profilé [1 p. 74-79].
+4. **Assemblage mécanique du cadre** :
+   * Rapprocher les montants et traverses en coupe droite.
+   * Visser les vis à tôle inox CBLX ST4.8x32 T25 W4070050 dans les alvéoles de vissage (couple de serrage contrôlé) [1 p. 74-78].
+5. **Finition thermique** : Clipper les boucliers thermiques PVC W4030239 (drainé en traverse basse), W4030240 (entre-rail) et W4030241 (montant) à l'aide de la roulette de montage W5040218 [1 p. 80].
+
+### 4. Usinage et montage du seuil réduit W1040050
+1. Réaliser les grugeages d'extrémité sur le seuil réduit à la fraiseuse [1 p. 84].
+2. Usiner les drainages du seuil :
+   * Usinage n°1 (vantail principal) : oblong 15x5 mm sans clapet.
+   * Usinage n°2 (vantail secondaire) : oblong 26x5 mm avec busette à clapet W4040625.
+   * Usinage n°3 : évacuation du recueil d'eaux.
+3. Injecter un cordon de mastic d'étanchéité dans les tubulures par le dernier trou n°1 [1 p. 84].
+4. Positionner la flasque mousse de seuil réduit Y4720012, clipser le pontet d'étanchéité W4040802 au droit du croisement central et visser la lisse de pose W8020007 sous le seuil [1 p. 88, 91, 95].
+
+### 5. Assemblage des ouvrants
+1. **Pose du vitrage** : Dérouler le joint portefeuille de vitrage (Y4710001, Y4710009 ou Y4710010) autour du double vitrage. Couper le solin dans les angles et rabattre le joint en continu [1 p. 98].
+2. **Pose des roulettes** :
+   * Ouvrants 24 mm : insérer les roulettes simples W6050151 ou doubles W6050153 dans les montants latéraux et centraux [1 p. 99].
+   * Ouvrants 32 mm : clipser la cale d'adaptation W6050149, puis insérer la roulette [1 p. 100, 101].
+3. **Assemblage du cadre d'ouvrant** :
+   * Emboîter les traverses hautes et basses W1041264 ou W1041274 sur les montants.
+   * Visser les vis inox Torx ST4.8x41 W0198125 à travers les montants dans les alvéoles de traverses [1 p. 102, 103].
+   * Poser les embouts plastiques d'ouvrants W4040500 / W4040501 faisant office d'antidégondage [1 p. 102].
+4. **Montage des ferrures et poignées** :
+   * Glisser la crémone 1, 2 ou 3 points (W6050100 à 104) dans la gorge du montant latéral.
+   * Poser les rivets taraudés et visser la poignée W6050120 ou W6050125 avec le carré de 7 mm correspondant [1 p. 109, 110].
+   * Placer le centreur de vantail W4040622 immédiatement au-dessus du système anti-fausse manœuvre [1 p. 128].
+
+### 6. Percussion centrale réduite (option 4 vantaux)
+* Usiner les passages de rails sur les montants réduits Y1740040 (semi-fixe) et Y1740041 (principal) [1 p. 116].
+* Fixer le profilé de jonction centrale rapportée Y3740022 à l'aide de vis TF ST3.5x16 au pas de 300 mm (couple maxi 20 Nm) [1 p. 54, 117].
+* Poser les embouts spécifiques de percussion centrale réduite Y4740038 et Y4740039 [1 p. 118].
+
+---
+
+# Cotes
+
+Positionnement des usinages et des outillages [1 p. 7, 9, 31, 38] :
+
+| Opération | Outil d'atelier | Cote relevée (mm) | Tolérance |
+| --- | --- | --- | --- |
+| Découpe montants CD65 | W5040370 | Découpe 50 mm sur ailette | $\pm 0{,}5\text{ mm}$ |
+| Perçages passage vis montant | W5040371 | Entraxes 10,85 mm et 43,3 mm | $\pm 0{,}2\text{ mm}$ |
+| Délardage ailettes ouvrants | Y5740007 | Longueur 64 mm | $\pm 0{,}5\text{ mm}$ |
+| Passage de rail ouvrant | Y5740007 | Hauteur 22 mm, retraits 28 et 39 mm | $\pm 0{,}2\text{ mm}$ |
+| Lumière drainage dormant | Y5740008 | 2 fentes 6 x 25 mm, entre-axe 8 mm | $\pm 0{,}5\text{ mm}$ |
+| Trous drainage traverses ouvrant | Perceuse | Ø8 mm à 140 mm des extrémités | $\pm 2\text{ mm}$ |
+| Fixation poignée sur montant | Gabarit | Entraxe 43 mm, carrés 7 mm | $\pm 0{,}2\text{ mm}$ |
+
+(schéma: raw/askey5.pdf, p. 7, 9, 15, 17, 31, 38)
+
+---
+
+# Ce que le document ne dit pas
+
+* Le temps de polymérisation complet du mastic colle SNJF avant manipulation du cadre n'est pas spécifié (se conformer à la fiche technique du fabricant de mastic, typiquement 24 h à 20°C).
+
+---
+
+# Citations
+
+[1] [Coulissant 65 NV ASKEY - Fabrication](raw/askey5.pdf), p. 5-20, 25-56, 57-64, 65-82, 83-96, 97-118
+
+---
+
+# Voir aussi
+
+- [Gamme Coulissant 65 NV](/gammes/askey-coulissant-65-nv.md)
+- [Profilés dormants et ouvrants Coulissant 65 NV](/profiles/askey-coulissant-65-nv-dormants-et-ouvrants.md)
+- [Cotes de débit Coulissant 65 NV](/profiles/askey-coulissant-65-nv-cotes-de-debit.md)
+- [Quincaillerie Coulissant 65 NV](/quincaillerie/askey-coulissant-65-nv-quincaillerie.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /sources/technal-lumeal-ga-fabrication.md | Document source | Catalogues de fabrication et notices de pose Technal LUMEAL GA | technal, lumeal, lumeal-ga, coulissant, fabrication, atelier | Guide technique officiel d'atelier et catalogue de fabrication Technal (Réf. 5074.007 - 01/2021, 214 pages) et notice officielle de pose chantier (Réf. 5850.002 - 07/2018, 18 pages) pour le coulissant minimal LUMEAL GA. | rication-et-pose-lumeal-ga.md) / / 9-11 / Pose et gondage des vantaux ouvrants : ordre de pose (semi-fixe extérieur puis service intérieur), obligatio |
+| /profiles/lumeal-ga-cotes-de-debit.md | Profilé | Cotes de débit Technal LUMEAL GA | technal, lumeal, lumeal-ga, coulissant, debit, atelier | Formules de coupe d'atelier, cotes de débit des profilés aluminium, boucliers thermiques et calcul des dimensions de vitrage du coulissant minimal LUMEAL GA de Technal. | ofilé PVC thermoplastique / / **Montants centraux chicanes**/ T141037 / T141038 / 2 / $H - 105$ / Chicane fine ou renforcée / / **Montants latéraux ou |
+| /quincaillerie/lumeal-ga-roulements-et-fermetures.md | Quincaillerie | Roulements et fermetures Technal LUMEAL GA | technal, lumeal, lumeal-ga, coulissant, roulettes, ferrures | Chariots de roulement simples, doubles et triples jusqu'à 300 kg, ferrures de verrouillage 1 à 3 points, poignées de tirage et équipements de retard à l'effraction classe RC3 du coulissant minimal LUMEAL GA de Technal. | 003 [2 p. 197, 200]. 4. **Guide et butée anti-dégondage TGA3613** : vissés sur rail haut [2 p. 193, 205]. 5. **Bouchons renforcés TGA3617** : pour |
+| /profiles/lumeal-ga-dormants-et-ouvrants.md | Profilé | Profilés dormants et ouvrants Technal LUMEAL GA | technal, lumeal, lumeal-ga, coulissant, ouvrant-cache, dormants | Architecture technique, cotes de section et moments d'inertie des profilés aluminium à rupture de pont thermique et ouvrant caché du système de coulissant minimal LUMEAL GA de Technal. | e la fermeture) / / **T141037** / Montant central chicane fine / 46,7 / 37,8 / Vitrage 24 à 28 mm / / **T141038** / Montant central renforcé / 77,3 / |
+| /reference/terminologie-et-legendes-profine.md | Référence | Terminologie, légendes et calcul d'une cote d'élément, directives profine | profine, terminologie, legende, reperes, dht, ccd | Les planches de terminologie des directives générales profine (repères A à R, DHT, CCD, CCO, CCV, détails X, Y, Z) pour les fenêtres à joint de frappe et à joint central et pour les coulissants, la règle qui transforme une cote extérieure d'ouvrant maximale en cote d'élément, et les tailles d'ouvrants minimales en oscillo-battant et en soufflet. | 01.pdf, p. 13) ## Coulissant : partie centrale à chicane et pièce d'étanchéité médiane Coupe de la partie centrale d'un coulissant, là où les deux o |
+| /procedures/fabrication-et-pose-lumeal-ga.md | Procédure | Fabrication en atelier et pose sur chantier Technal LUMEAL GA | technal, lumeal, lumeal-ga, coulissant, fabrication, atelier | Règles de fabrication en atelier, plans de drainage, injection d'étanchéité Butyl/élastomère, vitrage en portefeuille et mise en œuvre chantier selon le NF DTU 36.5 du coulissant minimal LUMEAL GA de Technal. | ales ($\Delta \le 2\text{ mm}$) [2 p. 5]. ### 5. Gondage et réglages des vantaux 1. **Ordre de gondage strict** : - Insérer d'abord le vantail se |
+| /profiles/soleal-gy-dormants-et-rails.md | Profilé | Profilés dormants, rails et ouvrants Technal SOLEAL GY 55 | technal, soleal, soleal-gy, coulissant, galandage, profilés | Architecture technique complète du système coulissant à rupture de pont thermique SOLEAL GY 55 de TECHNAL (dormants 2, 3 et 4 rails, ouvrants 24-28 mm et 29-32 mm, chemins de roulement alu et inox, boucliers thermiques et inerties mécaniques). | extrudé par REHAU) clippés entre les rails. - Des chicanes serties en polyamide Tecatherm 66 ESP (Ensinger) sur les montants centraux. --- # Profilé |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/contradictions-entre-sources.md :
+| CTR-08 | Classement AEV du LUMÉAL | Dépliant LUMÉAL, avril 2026, p. 2 (p. 1 avant le 25/09/2026, erreur de locator) : A\*4 / E\*7A / V\*B3, sur 2 vantaux H 2,5 × L 3 m ; même classement et même dimension d'essai au dépliant de juin 2023, p. 2 | Catalogue général, p. 17 : A\*4 / E\*6A / V\*B2 pour tous les coulissants | **A\*4 / E\*7A / V\*B3**, source la plus récente et seule à donner la dimension d'essai | LUMÉAL disqualifié à tort sur chantier exposé |
+/anomalies/contradictions-entre-sources.md :
+| CTR-70 | Épaisseur des ouvrants élégance 6121 à 6124 et décomposition de la face des ouvrants 6112 et 6121 du système 70 | Système e.VOLUTION, plan des profilés, système F 91, août 2008, PDF p. 16-17 (« Ouvrants élégance »), relues en image à 200 dpi le 29/09/2026 : les quatre ouvrants 6121, 6122, 6123, 6124 cotés **70** mm en haut ; PDF p. 9 et 16 : hauteur de face gauche du 6112 et du 6121, 73 mm, décomposée **51,5 + 21,5** | Mise en œuvre Système 70 Plateforme, septembre 2023, PDF p. 27-28 : 6121 à 6124 cotés **78** en haut ; 6112 et 6121 : à gauche **53 + 20** ; la planche des caractéristiques (PDF p. 2) écrit « les ouvrants Elégance semi affleurants de 78 mm ». Poster Kömmerling Gamme 70, profilés principaux, mars 2025, p. 1, et DTD n° DBV-24-6/16-2335_V5, p. 17 : 6121 à 6124 à **78** mm ; poster : 6112 et 6121 à gauche 53 + 20 | 78 mm pour les ouvrants élégance de la documentation actuelle (trois documents concordants, dont le DTD) ; la valeur de 2008 est portée telle quelle. À vérifier auprès de profine : les ouvrants élégance de 2008 avaient-ils une autre géométrie, ou la cote de 70 est-elle une erreur de la planche ? | Une épaisseur d'ouvrant fausse fausse la profondeur totale, le choix de la parclose et les cotes de débit ; l'écart de 1,5 mm entre les deux décompositions de face déplace un repère pris sur la face |
+/anomalies/contradictions-entre-sources.md :
+| CTR-82 | Diagrammes (abaques) de renforcement d'ouvrant du système 70 : classeur de 2008 contre manuel de 2023 | Système e.VOLUTION, plan des profilés, système F 91, août 2008, PDF p. 121 (registre 4.1, page imprimée 2, « OF 1 Vantail », « Classement VA2 »), relue en image à 200 et 400 dpi le 29/09/2026 : renfort unique **V058** (« Iy = 0.47 », « Iz = 3.19 »), aucune référence d'ouvrant, aucune zone grisée ; repère **B** = un trait épais sur la traverse basse, **D** = traverse basse et montant ; D6 dans la colonne 900-1 000 mm **jusqu'à 2 300 mm** ; colonne 1 000-1 100 mm renseignée **de 1 600 à 1 700 mm** seulement ; complément du 29/09/2026, PDF p. 122-136 (registre 4.1, pages imprimées 3 à 17), relues en image à 200 et 400 dpi : seize diagrammes, aucun ne nomme d'ouvrant ; renforts dessinés V058 (p. 121, 123, 125, 127, 129, 130, 132, 134, 136), V057 « Iz = 3.77 », « Iy = 4.55 » (p. 122, 124, 126, 128), V057 **et V059** « Iz = 4.50 », « Iy = 4.64 » (p. 131, 133, 135) ; aucune zone grisée, aucun abaque « autre possibilité » ; légendes : B = traverse basse seule, D = montant(s) + traverse basse, F = traverse basse + montant central, G = F + **un** trait entre les vantaux, carrés de traverse des repères 3, 5, 7 (2 vantaux OF/OB) sur le seul vantail OB ; les planches 2 vantaux OF/OB (p. 125-126) reprennent case par case les quadrillages OB 1 vantail (p. 123-124), jusqu'à **1 400 et 1 600 mm** de largeur ; VA3 : zone C3/D3/D4 (C4/D4/D5 en OB) à partir de **1 400 mm** de hauteur ; la planche VA3 avec repère G (p. 136) est identique à la planche VA2 (p. 129) | Mise en œuvre Système 70 Plateforme, septembre 2023, PDF p. 129 (registre 2.3.3, p. 2, « Classement VA2 6112/6121/6117/6150 ») : renforts **V158** (Ig 0,5, Iw 3,2) et **V258** (Ig 0,4, Iw 2,2), zone grisée « ZONE D'UTILISATION V258 » ; repère B = traverses haute et basse, D = deux traverses et montant ; D6 dans la colonne 900-1 000 mm jusqu'à 2 000 mm ; colonne 1 000-1 100 mm renseignée de 1 600 à 1 800 mm ; toutes les autres cases identiques ; planches correspondantes, PDF p. 130-146 : V057 « Ig 4,8 », « Iw 3,8 » ; B, D, F avec traverses haute et basse, G avec deux traits ; 2 vantaux OF/OB limités à 1 000 et 1 100 mm de largeur ; VA3 : zone C/D à partir de 1 200 mm (1 100 mm à deux vantaux OF) ; limites de réalisation différentes planche par planche (détail sur la page des abaques de 2008) | Pas de valeur retenue seule : chaque édition pour les menuiseries dimensionnées d'après elle. Entrée complétée le 29/09/2026 pour les seize diagrammes du registre 4.1 (PDF p. 121-136) ; comparaison case par case sur [Abaques de renforcement du système 70, plans e.VOLUTION de 2008](/profiles/systeme-70-abaques-evo2008.md). À vérifier auprès de profine : le V058 et les V158 / V258 sont-ils interchangeables, et le repère B renforce-t-il une ou deux traverses ? À vérifier aussi : l'Iz du V057 (3,77 en 2008, 3,8 en 2023) et le rôle du V059 dessiné sans zone en 2008. | Un ouvrant de 950 × 2 200 mm est réalisable d'après 2008 et hors abaque d'après 2023 ; une traverse haute laissée sans renfort (lecture 2008) ou renforcée (lecture 2023) ; un ouvrant 2 vantaux OF/OB de 1 300 × 1 500 mm (V057) est réalisable d'après 2008 et hors abaque d'après 2023 |
+/anomalies/contradictions-entre-sources.md :
+| CTR-118 | Angle d'ouverture et repère [C] de la tolérance de châssis fixe côté paumelles P, poids d'ouvrant 150 kg | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 36 (3.6.1 « Côté paumelles P »), relue en image à 110 dpi le 29/09/2026 : tableau « Côté paumelles P », 130 kg et 150 kg, angle d'ouverture « env. 180° [2] » imprimé une fois pour les deux lignes, tolérance 21,0 / 26,5 mm, hauteur de recouvrement mini. 16 mm, colonnes « En haut [C] » 1,0 mm et « En bas [D] » 8 mm | Catalogue Roto NX pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 278 (6.1.1), relu en image à 110-300 dpi le 29/09/2026 : 130 kg « env. 180° [3] », **150 kg « env. 150° [4] »** (notes : selon l'embrasure, l'angle peut être inférieur à 180° / 150°), tolérance ≥ 21,0 / ≥ 26,5 mm, recouvrement ≥ 16 mm, **« Espace extérieur [C] » 100 mm** ; p. 279, vues de face : cote 8 mm sous le vantail, « ≥ 10* » au-dessus de la pièce haute | Non arbitré : chaque valeur reste dans sa source | Vantail de 150 kg posé en prévoyant une ouverture à 180° qui n'est pas garantie ; [C] lu comme un jeu de 1 mm ou comme un espace de 100 mm selon le document ; voir [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md), [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-121 | Désignation des pièces du loqueteau Roto NX | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 389-393 (11.1.1 loqueteau standard, 11.1.2 aimant), relues en image à 200 dpi le 29/09/2026 : section « Têtière » : **788378 « Loqueteau pour crémone de semi-fixe »** (à visser), **788507 « Loqueteau pour rainure de ferrure opposée »** ; section « Pièces d'ouvrant » : **788363 « Loqueteau pièce d'ouvrant »**, **794997 « Support loqueteau pièce d'ouvrant (rainure de ferrure haut/bas horizontale) »** ; loqueteau aimant, pièces d'ouvrant : **244517 « Loqueteau magnétique pièce d'ouvrant »** (axe 13) ; la cale 622589 n'apparaît pas au chapitre 11 | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 84, telles que transcrites sur [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md) (non relues en image dans cette tranche) : 1 « Loqueteau à visser sur crémone de semi-fixe » 788363 ; 2 « Loqueteau à visser sur rainure de 16 mm » 788363 + cale 794997 ; 3 « Gâche loqueteau sur crémone de semi-fixe » 788378 ; 4 « Gâche en rainure de 16 mm » 788507 ; 5 « Equerre pour loqueteau magnétique » 244517 ; 6 « Cale pour équerre en rainure de 16 mm » 622589 | Non arbitré : les numéros sont les mêmes, les désignations diffèrent (788363 loqueteau « à visser sur crémone de semi-fixe » au manuel, « pièce d'ouvrant » au catalogue ; 788378 et 788507 « gâches » au manuel, « loqueteaux » de têtière au catalogue ; 244517 « équerre » au manuel, loqueteau magnétique au catalogue) ; la 622589 est à confirmer par ROTO | Pièce commandée pour le mauvais élément (vantail principal ou semi-fixe, dormant ou ouvrant) si l'on se fie à la seule désignation ; voir [Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md) |
+/anomalies/incoherences-internes.md :
+| INC-53 | Mise en œuvre Système 76 Advanced | registre 2.3.3, p. 12 à 18 imprimées (PDF p. 109 à 115) | Sur les quatorze abaques à deux vantaux, l'axe des hauteurs est légendé « Hauteur ouvrant **max. 235 cm** » et l'axe des largeurs « Largeur ouvrant **max. 130 cm** », alors que la limite blanc tracée atteint **250 cm** de haut (ouvrants 76271 avec V307.Z et V308, 76272 / 76279 avec V326.Z et V314.Z) et **135 cm** de large (ouvrants 76271, 76272 / 76279). Relu en image à 400 dpi le 25/09/2026 | Légende d'axe reprise de l'abaque de l'ouvrant 76281 (V266.Z, 235 × 130 cm) sur les autres pages, sans certitude : à faire confirmer par profine | Deux vantaux refusés au-delà de 235 × 130 cm alors que le tracé les admet, ou l'inverse si c'est la légende qui est juste |

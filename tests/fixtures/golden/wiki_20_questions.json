@@ -1,0 +1,470 @@
+{
+  "version": 1,
+  "kind": "generation_golden",
+  "created": "2026-09-30",
+  "description": "20 questions techniques sur tout le wiki (références, pièges de gamme et de fournisseur, coupes, notices, faisabilité, anomalies, absences). Chaque réponse attendue est vérifiée ligne à ligne dans le wiki du 30/09 ; les faisabilités PERFORM76 sont celles que calcule app/services/faisabilite.py. Le champ pages nomme les pages de preuve.",
+  "entries": [
+    {
+      "id": "w20_01",
+      "tags": [
+        "piege-fournisseur",
+        "reference",
+        "technal"
+      ],
+      "difficulte": "complexe",
+      "question": "pour un coulissant, il y a une crémone 3 point ref TGY3702, je cherche la référence de la crémone 4 points pour coulissant.",
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "TGY3704"
+        ],
+        "mode": "tous",
+        "interdits": [
+          "771923"
+        ]
+      },
+      "verite": "SOLEAL GY 55 (TECHNAL) : pas de crémone 4 points d'un seul tenant ; rallonge 4ème point TGY3704, raccordée à la TGY3702 ou à la TGY3703 (3 points à clé), 2 vis TGY3723, « pour très grandes hauteurs » sans cote. Piège : Roto NX (771923) ou ASKEY.",
+      "pages": [
+        "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+      ]
+    },
+    {
+      "id": "w20_02",
+      "tags": [
+        "piege-gamme",
+        "technal",
+        "vitrage"
+      ],
+      "difficulte": "complexe",
+      "question": "Sur un châssis alu LUMINE55 en ouvrant apparent, j'ai un vitrage de 24 mm : quelle parclose et quel joint intérieur ?",
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "TAS0017"
+        ],
+        "mode": "tous",
+        "regex_any": [
+          "t591005|tfy2412"
+        ],
+        "interdits": [
+          "76507",
+          "2452"
+        ]
+      },
+      "verite": "LUMINE55 = TECHNAL SOLEAL FY 55. Parclose T591005 (droite) ou TFY2412 (arrondie), hauteur C 15 mm, joint intérieur vert TAS0017 (24 mm dans la prise de volume recommandée 24 à 26 mm), joint extérieur T410010. Piège : parcloses PVC PERFORM76.",
+      "pages": [
+        "/profiles/soleal-fy-parcloses-et-vitrage.md"
+      ]
+    },
+    {
+      "id": "w20_03",
+      "tags": [
+        "piege-contexte",
+        "perform76",
+        "pose"
+      ],
+      "difficulte": "simple",
+      "question": "Patte de pose NT1947 sur un dormant 76180, ça correspond à quelle épaisseur d'isolation ?",
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "140"
+        ],
+        "mode": "tous"
+      },
+      "verite": "140 mm sur le 76180 (tapée 6141, appui 6137). La même NT1947 donne 155 mm sur le 76171 : piège de la ligne voisine.",
+      "pages": [
+        "/profiles/perform76-tapees-et-isolation.md"
+      ]
+    },
+    {
+      "id": "w20_04",
+      "tags": [
+        "piege-systeme",
+        "systeme-70",
+        "vitrage"
+      ],
+      "difficulte": "complexe",
+      "question": "Sur le système 70 profine, avec une feuillure de 54 mm, la parclose 2452 prend quelle épaisseur de vitrage ?",
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "8"
+        ],
+        "mode": "tous",
+        "regex_any": [
+          "8 ?mm"
+        ]
+      },
+      "verite": "Système 70, feuillure 54 mm : 8 mm (7,5 à 9 admis). Avec l'élargisseur 93025 (feuillure 70) : 24 mm. Piège : 16 mm est la valeur PERFORM76.",
+      "pages": [
+        "/profiles/systeme-70-tableau-de-vitrage.md"
+      ]
+    },
+    {
+      "id": "w20_05",
+      "tags": [
+        "anomalie",
+        "garantie",
+        "lumine"
+      ],
+      "difficulte": "complexe",
+      "question": "Quelle est la garantie sur la structure d'une LUMINE 65 ?",
+      "attendu": {
+        "type": "liste",
+        "elements": [
+          "20",
+          "15",
+          "CTR-03"
+        ],
+        "min": 3
+      },
+      "verite": "20 ans selon la grille de la LUMINE65 (brochure février 2025) contre 15 ans selon la grille générale du catalogue 2026 : contradiction CTR-03, non arbitrée. La réponse doit donner les deux et l'identifiant.",
+      "pages": [
+        "/garanties/garanties-par-composant.md"
+      ]
+    },
+    {
+      "id": "w20_06",
+      "tags": [
+        "piege-nom-proferm",
+        "technal",
+        "quincaillerie"
+      ],
+      "difficulte": "complexe",
+      "question": "Pour un coulissant SOLÉAL55 avec des vantaux lourds, quel poids maxi par vantail avec des chariots doubles, et quelles références ?",
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "200"
+        ],
+        "mode": "tous",
+        "regex_any": [
+          "t401012|t441004"
+        ]
+      },
+      "verite": "SOLÉAL55 = TECHNAL SOLEAL GY 55. Chariots doubles T401012 (fixe) et T441004 (réglable) : 200 kg par vantail. Versions inox TGY3873 / TGY3872 : 200 kg, interdites sur le rail alu T341000 (rail inox TGY4007 seulement).",
+      "pages": [
+        "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+      ]
+    },
+    {
+      "id": "w20_07",
+      "tags": [
+        "reference",
+        "askey"
+      ],
+      "difficulte": "simple",
+      "question": "Le carré de manœuvre W4070495, il fait quelle longueur et il va sur quel coulissant ?",
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "56"
+        ],
+        "mode": "tous",
+        "regex_any": [
+          "askey|65 nv"
+        ]
+      },
+      "verite": "ASKEY Coulissant 65 NV : carré de 7 mm, L = 56 mm, pour vantail 24 mm renforcé W1041261, poignées sur une ou deux faces. Voisin W4070496 : 53 mm.",
+      "pages": [
+        "/quincaillerie/askey-coulissant-65-nv-quincaillerie.md"
+      ]
+    },
+    {
+      "id": "w20_08",
+      "tags": [
+        "equipement",
+        "volet-roulant",
+        "soprofen"
+      ],
+      "difficulte": "simple",
+      "question": "Tablier en lames LA 37 : quelle largeur maxi entre coulisses en zone de vent V*4, pour une hauteur jusqu'à 2,25 m ?",
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "1800"
+        ],
+        "mode": "tous"
+      },
+      "verite": "LA 37 aluminium, classe V*4 : 1 800 mm pour H ≤ 2 250 mm (2 100 mm pour H ≤ 1 400 mm) ; non admissible en V*6.",
+      "pages": [
+        "/reference/resistance-au-vent-volets-soprofen.md"
+      ]
+    },
+    {
+      "id": "w20_09",
+      "tags": [
+        "vitrage",
+        "performance"
+      ],
+      "difficulte": "simple",
+      "question": "Quel double vitrage PROFERM propose pour une façade très exposée au bruit, près d'une autoroute, et avec quel affaiblissement acoustique ?",
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "40"
+        ],
+        "mode": "tous",
+        "regex_any": [
+          "44[.,]6 ?/ ?14 ?/ ?10"
+        ]
+      },
+      "verite": "44.6/14/10 (warm edge faible émissivité, gaz argon) : 40 dB, pour zones très bruyantes (aéroport, autoroute). Le 10/14/4 (33 dB) est pour les routes à fort trafic.",
+      "pages": [
+        "/vitrages/performances-vitrages.md"
+      ]
+    },
+    {
+      "id": "w20_10",
+      "tags": [
+        "image",
+        "perform76",
+        "parclose"
+      ],
+      "difficulte": "simple",
+      "question": "Montre-moi la coupe de la parclose 76576.",
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "/assets/profiles/perform76/parcloses/parclose-76576.png"
+        ],
+        "mode": "tous"
+      },
+      "verite": "Parclose de dormant PERFORM76 pour un vitrage de 42 mm, parclose de 16 mm ; se monte sur les dormants, jamais sur un ouvrant. Image parclose-76576.png.",
+      "pages": [
+        "/profiles/perform76-parcloses.md"
+      ]
+    },
+    {
+      "id": "w20_11",
+      "tags": [
+        "image",
+        "perform76",
+        "dormant"
+      ],
+      "difficulte": "simple",
+      "question": "Tu peux m'afficher le dessin du dormant 76177 ?",
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "/assets/profiles/perform76/dormants/dormant-76177.png"
+        ],
+        "mode": "tous"
+      },
+      "verite": "Dormant de rénovation PERFORM76 à aile de 40 mm. Image dormant-76177.png.",
+      "pages": [
+        "/profiles/perform76-dormants.md"
+      ]
+    },
+    {
+      "id": "w20_12",
+      "tags": [
+        "image",
+        "systeme-70",
+        "dormant"
+      ],
+      "difficulte": "complexe",
+      "question": "Montre-moi la coupe du dormant 6106 du système 70 et donne ses cotes.",
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "95",
+          "/assets/profiles/systeme70/dormants/dormant-6106"
+        ],
+        "mode": "tous",
+        "regex_any": [
+          "hauteur[^\n]{0,40}95|95[^\n]{0,40}hauteur"
+        ]
+      },
+      "verite": "Dormant de rénovation à aile du système 70 : épaisseur 70, hauteur 95 = 55 + 40 (aile), 20 + 75 à droite ; INC-12 (hauteur 75 ou 95 selon la page du manuel). Image dormant-6106.png (ou version manuel / 2008).",
+      "pages": [
+        "/profiles/systeme-70-profiles-et-renforts.md"
+      ]
+    },
+    {
+      "id": "w20_13",
+      "tags": [
+        "notice",
+        "roto-nx",
+        "sav"
+      ],
+      "difficulte": "complexe",
+      "question": "Comment transformer un ouvrant à la française en oscillo-battant avec la ferrure Roto NX ? Donne les étapes.",
+      "attendu": {
+        "type": "liste",
+        "elements": [
+          "equerre de compas",
+          "tetiere",
+          "compas OB",
+          "140"
+        ],
+        "min": 3
+      },
+      "verite": "Procédure PROFERM PRO-PVC-OFOB-01 en 5 étapes : démonter l'équerre de compas et le compas OF ; poser la têtière fournie à dimension ; poser le compas OB (ouverture à soufflet de 140 mm) ; puis les étapes 4 et 5 de la procédure.",
+      "pages": [
+        "/procedures/transformation-of-en-ob-roto-nx.md"
+      ]
+    },
+    {
+      "id": "w20_14",
+      "tags": [
+        "notice",
+        "roto-nx",
+        "atelier"
+      ],
+      "difficulte": "complexe",
+      "question": "Je pose un report de charge NT Designo II sur le palier d'angle : dans quel ordre, et qu'est-ce qu'il ne faut pas oublier avant de visser la pièce dormant ?",
+      "attendu": {
+        "type": "texte",
+        "regex_any": [
+          "vis haute"
+        ]
+      },
+      "verite": "Visser le report de charge d'ouvrant en butée sur le pivot d'angle, RETIRER LA VIS HAUTE DU PALIER D'ANGLE, puis visser la pièce dormant sur le palier d'angle.",
+      "pages": [
+        "/procedures/report-de-charge-roto-nx.md"
+      ]
+    },
+    {
+      "id": "w20_15",
+      "tags": [
+        "notice",
+        "technal",
+        "sav"
+      ],
+      "difficulte": "simple",
+      "question": "Porte d'entrée SOLEAL PY : comment régler la hauteur du vantail sur les paumelles sans dégonder ?",
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "TWZ0002"
+        ],
+        "mode": "tous"
+      },
+      "verite": "Réglage en hauteur porte fermée, sans dégonder, avec l'outil TWZ0002 positionné dans la gorge du dormant sous la paumelle basse (paumelle T910002, 130 kg).",
+      "pages": [
+        "/quincaillerie/soleal-py-serrures-et-paumelles.md"
+      ]
+    },
+    {
+      "id": "w20_16",
+      "tags": [
+        "faisabilite",
+        "perform76",
+        "dta"
+      ],
+      "difficulte": "complexe",
+      "question": "Une fenêtre PERFORM76 1 vantail à la française de 1 300 mm de large sur 2 400 mm de haut, c'est faisable ?",
+      "attendu": {
+        "type": "liste",
+        "elements": [
+          "2,15",
+          "2150",
+          "1,00",
+          "1000"
+        ],
+        "min": 2
+      },
+      "verite": "Non : 2,40 × 1,30 m (H × L) dépasse le maximum du DTA pour un 1 vantail OF, 2,15 × 1,00 m ; au-delà seul un Certificat de Qualification peut l'admettre. L'abaque d'ouvrant bloque aussi (153 cm de haut admis à cette largeur). Calculé par app/services/faisabilite.py.",
+      "pages": [
+        "/certifications/dta-6-16-2334.md",
+        "/profiles/systeme-76-abaques-dimensionnels.md"
+      ]
+    },
+    {
+      "id": "w20_17",
+      "tags": [
+        "faisabilite",
+        "perform76",
+        "dta"
+      ],
+      "difficulte": "complexe",
+      "question": "Oscillo-battant PERFORM76 un vantail en 1 200 de large sur 1 600 de haut, ça passe ?",
+      "attendu": {
+        "type": "liste",
+        "elements": [
+          "1,50",
+          "1500",
+          "1,40",
+          "1400"
+        ],
+        "min": 2
+      },
+      "verite": "Non : 1,60 × 1,20 m (H × L) dépasse les maxima du DTA pour un 1 vantail OB, 1,50 × 1,40 m ou 2,15 × 1,00 m. Calculé par app/services/faisabilite.py.",
+      "pages": [
+        "/certifications/dta-6-16-2334.md"
+      ]
+    },
+    {
+      "id": "w20_18",
+      "tags": [
+        "faisabilite",
+        "innoslide",
+        "option"
+      ],
+      "difficulte": "simple",
+      "question": "Un INNOSLIDE de 1 800 mm de large, j'aurai le SoftOpen ?",
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "1970"
+        ],
+        "mode": "tous",
+        "regex_any": [
+          "\\bnon\\b|pas de softopen|n'aura pas|ne sera pas|n'est pas (present|disponible)"
+        ]
+      },
+      "verite": "Non : le SoftOpen n'est présent qu'à partir de 1 970 mm de largeur ; le SoftClose, lui, oui.",
+      "pages": [
+        "/gammes/innoslide.md"
+      ]
+    },
+    {
+      "id": "w20_19",
+      "tags": [
+        "abstention",
+        "fausse-premisse",
+        "perform"
+      ],
+      "difficulte": "complexe",
+      "question": "Parle-moi de la parclose 3702 de la gamme PERFORM.",
+      "attendu": {
+        "type": "abstention",
+        "regex_any": [
+          "aucune parclose 3702|pas de parclose 3702|n'existe pas|ne figure (pas|nulle part|sur aucune)|introuvable|ne connai(s|t) (pas|aucune)|n'apparait (pas|sur aucune|dans aucune)"
+        ]
+      },
+      "verite": "Aucune parclose 3702 dans le wiki, ni en PERFORM76 ni en système 70. TGY3702 est une crémone TECHNAL SOLEAL GY, TPY3702 une pièce SOLEAL PY. La réponse doit le dire, sans inventer d'épaisseur.",
+      "pages": [
+        "/profiles/perform76-parcloses.md"
+      ]
+    },
+    {
+      "id": "w20_20",
+      "tags": [
+        "abstention",
+        "technal",
+        "quincaillerie"
+      ],
+      "difficulte": "simple",
+      "question": "Quelle référence de clé pompier dois-je commander avec la fermeture TGY3731 ?",
+      "attendu": {
+        "type": "abstention",
+        "regex_any": [
+          "ne donne pas|pas de reference|aucune reference|n'est pas reference|ne precise pas|ne figure pas|sans reference|n'indique pas|ne reference pas|ne cite pas",
+          "pas indiquee|n'est pas donnee|n'est pas mentionnee|n'est pas referencee|n'est pas precisee"
+        ],
+        "interdits": [
+          "livree avec",
+          "fournie avec la fermeture",
+          "livree avec la fermeture"
+        ]
+      },
+      "verite": "Le wiki dit seulement « clé spéciale pompier », sans référence ; la TGY3731 est fournie avec les vis T770059, compatible seulement avec les montants TGY1202 et TGY1300.",
+      "pages": [
+        "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+      ]
+    }
+  ]
+}

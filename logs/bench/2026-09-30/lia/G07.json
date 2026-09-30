@@ -1,0 +1,30 @@
+{
+  "question": "Jusqu'à quel poids de vantail va la PSK200 Portal ?",
+  "pages_lues": [
+    "/quincaillerie/siegenia.md",
+    "/quincaillerie/ferco.md",
+    "/certifications/dtd-6-16-2335.md"
+  ],
+  "anomalies": [
+    "CTR-106",
+    "CTR-110",
+    "CTR-114",
+    "CTR-18",
+    "CTR-82",
+    "VER-20"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "PSK200 Portal poids vantail"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/siegenia.md",
+        "/quincaillerie/ferco.md",
+        "/certifications/dtd-6-16-2335.md"
+      ],
+      "caracteres": 64888
+    }
+  ]
+}

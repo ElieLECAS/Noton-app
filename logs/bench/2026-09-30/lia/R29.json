@@ -1,0 +1,65 @@
+{
+  "question": "Quelle est la performance acoustique maximale de la gamme LUMINE 55 en dB ?",
+  "pages_lues": [
+    "/gammes/lumine.md",
+    "/commercial/lumine.md",
+    "/gammes/coulissants-aluminium.md",
+    "/profiles/soleal-fy-dormants-et-ouvrants.md",
+    "/profiles/soleal-fy-cotes-de-debit.md",
+    "/procedures/fabrication-soleal-fy.md",
+    "/sources/technal-soleal-fy-conception.md"
+  ],
+  "anomalies": [
+    "INC-31",
+    "VER-50",
+    "VER-52"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "LUMINE 55 performance acoustique affaiblissement dB Rw",
+        "gamme": "LUMINE"
+      },
+      "pages_nouvelles": [
+        "/gammes/lumine.md",
+        "/commercial/lumine.md",
+        "/gammes/coulissants-aluminium.md"
+      ],
+      "caracteres": 45876
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "acoustique affaiblissement dB Rw Rw+Ctr SOLEAL FY 55",
+        "systeme": "SOLEAL FY"
+      },
+      "pages_nouvelles": [
+        "/profiles/soleal-fy-dormants-et-ouvrants.md"
+      ],
+      "caracteres": 41231
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "Soleal 55 FYa FYm acoustique essais affaiblissement Rw décibels",
+        "type": "Document source"
+      },
+      "pages_nouvelles": [
+        "/profiles/soleal-fy-cotes-de-debit.md",
+        "/procedures/fabrication-soleal-fy.md"
+      ],
+      "caracteres": 40618
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/sources/technal-soleal-fy-conception.md"
+      },
+      "pages_nouvelles": [
+        "/sources/technal-soleal-fy-conception.md"
+      ],
+      "caracteres": 6367
+    }
+  ]
+}

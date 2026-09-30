@@ -1,0 +1,25 @@
+{
+ "id": "R04",
+ "reponse": "La LUMINE55 est fabriquée sur le système TECHNAL SOLEAL FY 55. Pour un remplissage de 24 mm sur ouvrant apparent ou châssis fixe FY 55 :\n- parclose **T591005** (droite) ou **TFY2412** (arrondie), hauteur de parclose C = 15 mm ;\n- joint intérieur **vert TAS0017** (B = 7 mm) ;\n- joint extérieur, toujours le **T410010**.\n24 mm est dans la prise de volume recommandée de ces parcloses (24 à 26 mm). Aucune autre combinaison de la matrice ne donne 24 mm. Pour des profilés anodisés, clip anti-désaffleurement TAT0049 obligatoire (1 par extrémité de parclose) ; en laqué, pièce T197112 optionnelle pour le transport.\n\nSi la LUMINE55 est en **ouvrant minimal** (FYm, pas de parclose intérieure) : 24 mm = profilé d'ouvrant masqué TFY1338 (ou TFY1235), parclose extérieure TPE TFY4002 (noir) ou TFY4003 (gris), joint de vitrage intérieur T710034 (jeu 6,5 mm), support de cale TFY3679. L'adaptateur TFY2508 (avec joint clip TFY5010) permet de mettre un 24 ou 26 mm dans un profil prévu pour 30/32 mm.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/profiles/soleal-fy-parcloses-et-vitrage.md", "extrait": "Exemple : un remplissage de 24 mm se monte avec la parclose T591005 (droite) ou TFY2412 (arrondie), hauteur C = 15 mm, et le joint intérieur vert TAS0017 (B = 7 mm)."},
+  {"page": "/profiles/soleal-fy-parcloses-et-vitrage.md", "extrait": "<tr><td>T591005</td><td>droite</td><td>15</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>29</td><td>24 à 26</td></tr>"},
+  {"page": "/profiles/soleal-fy-parcloses-et-vitrage.md", "extrait": "| **24 mm** | TFY1338 (ou TFY1235) | TFY4002 (noir) ou TFY4003 (gris) | T710034 (jeu 6,5 mm) | TFY3679 (55) / TFY3677 (65) |"},
+  {"page": "/fournisseurs/technal.md", "extrait": "| Fenêtre et porte-fenêtre battante [LUMINE55](/gammes/lumine.md) | **SOLEAL FY 55** (Apparent et Minimal) |"}
+ ],
+ "ambiguite": "Type d'ouvrant de la LUMINE55 non précisé : ouvrant apparent / fixe (parclose T591005 ou TFY2412 + joint vert TAS0017) ou ouvrant minimal (pas de parclose intérieure : TFY1338 + parclose TPE TFY4002/4003 + joint T710034). Forme de parclose droite ou arrondie au choix.",
+ "outils": 3,
+ "comment_trouve": "Page soleal-fy-parcloses-et-vitrage.md déjà lue pour R01 ; l'exemple de la page donne exactement 24 mm. Vérification de la cellule dans la matrice HTML et du lien LUMINE55 → SOLEAL FY 55 par grep dans fournisseurs/technal.md.",
+ "formulations": [
+  "Sur une fenêtre alu LUMINE55, pour un double vitrage de 24 mm, quelle parclose et quel joint intérieur ?",
+  "parclose joint 24 mm lumine55",
+  "En SOLEAL FY 55, quel joint de vitrage pour un vitrage de 24 ?"
+ ],
+ "defauts_wiki": [
+  "La page porte gamme: LUMINE mais son titre et sa description ne nomment que SOLEAL FY : la requête « lumine55 » (et a fortiori « lumine 55 ») ne matche pas le texte de la page ; le mot LUMINE55 n'y figure pas.",
+  "La matrice est en HTML (lignes <tr><td>) : le « 24 » est dans une cellule dont le joint n'est donné que par l'en-tête de colonne à trois niveaux ; lecture risquée sans la phrase d'exemple.",
+  "Question avec « remplissage » : le mot est présent (bon), mais « chassis alu » oriente vers d'autres pages alu (ASKEY).",
+  "Les ouvrants minimal et apparent sont dans la même page mais dans des tableaux différents, sans que la LUMINE55 dise lequel est « standard »."
+ ]
+}

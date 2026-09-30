@@ -1,0 +1,385 @@
+===== PAGE 1 : /quincaillerie/soleal-py-serrures-et-paumelles.md =====
+# Paumelles en feuillure et articulation
+
+Les paumelles SOLEAL PY 55 se montent directement en feuillure dans les gorges d'ouvrant et de dormant au moyen de contreplaques à clamer, sans aucun usinage ni affaiblissement des profilés aluminium.
+
+### 1. Caractéristiques des paumelles en feuillure
+
+| Modèle | Référence | Lames | Axe de rotation | Charge maximale par vantail | Réglages intégrés |
+| --- | --- | --- | --- | --- | --- |
+| **Paumelle standard** | **T910002** | 2 lames | Diamètre 12 mm | **130 kg** | Horizontal $\pm 2\text{ mm}$, compression joint par bagues excentriques |
+| **Paumelle grand trafic** | **T910003** | 3 lames | Diamètre 12 mm | **150 kg** | Réglage 3D micrométrique en feuillure |
+| **Paumelle retard effraction**| **TPY3615** | 3 lames | Axe 100% Inox | **150 kg** | Résistance certifiée RC2 / RC3 (norme BS EN 1627) |
+
+### 2. Répartition et règles d'implantation des paumelles
+- **Hauteur vantail $Hv \le 2\,200\text{ mm}$ (Cas A)** : 2 paumelles (1 en haut à $Y = 200\text{ mm}$, 1 en bas à $Y = 200\text{ mm}$).
+- **Hauteur vantail $Hv > 2\,200\text{ mm}$ (Cas B)** : 3 paumelles (1 en haut à 200 mm, 1 en bas à 200 mm, 1 médiane à mi-hauteur $H/2$).
+- **Porte équipée d'un ferme-porte en applique (Cas C et D)** :
+  - $Hv \le 2\,200\text{ mm}$ (Cas C) : 3 paumelles (2 paumelles rapprochées en haut espacées de $X = 150\text{ mm}$, 1 en bas à 200 mm).
+  - $Hv > 2\,200\text{ mm}$ (Cas D) : 4 paumelles (2 rapprochées en haut espacées de 150 mm, 1 médiane, 1 en bas).
+
+### 3. Réglage en hauteur avec l'outil TWZ0002
+Le réglage en hauteur sous charge s'effectue sur chantier porte fermée :
+1. Positionner l'outil de réglage **TWZ0002** dans la gorge du dormant sous la paumelle basse.
+2. Bloquer les clameaux de l'outil.
+3. Desserrer les vis de fixation dormantes des paumelles.
+4. Ajuster la hauteur de la porte au millimètre près à l'aide de la broche filetée de l'outil.
+5. Resserrer les vis de paumelles au couple de **10 à 15 N.m**, puis retirer l'outil.
+
+---
+
+# Ferme-Porte Intégré (FPI) et pivots de sol
+
+### 1. Ferme-porte invisible encastré FPI T920019
+Le ferme-porte hydraulique invisible **T920019** est dissimulé dans la traverse haute tubulaire **T225205** :
+- **Force variable 3 à 6** : réglable selon le poids et la largeur du vantail.
+- **Conformité accessibilité handicapés (PMR)** : Conforme au décret n° 2006-555 imposant un effort d'ouverture **inférieur à 50 N** :
+  - Largeur de passage 900 mm : réglage mini.
+  - Largeur de passage 1 000 mm : réglage mini + 4 tours sens (+).
+  - Largeur de passage 1 100 mm : réglage mini + 8 tours sens (+).
+- **Bras de liaison et glissières** :
+  - Porte simple action ouverture extérieure : bras **T920021** (Droite en Poussant) ou **T920022** (Gauche en Poussant).
+  - Porte va-et-vient (VV) et porte tube : bras symétrique **T920020**.
+  - Glissière intégrée dans la traverse haute d'ouvrant **T700048 / T700049** ou **T700050**.
+
+### 2. Pivots freins de sol (TBN1370)
+Pour portes Va-et-Vient (double action) et portes d'entrée à usage intensif sans ferme-porte haut :
+- Pivot de sol à freinage hydraulique **TBN1370** : arrêt d'ouverture à 90°, force 2 à 4 pour vantaux jusqu'à **150 kg** :
+  - Force 2 : baies jusqu'à $2\,200 \times 850\text{ mm}$ (couple de fermeture 18 N.m).
+  - Force 3 : baies jusqu'à $2\,300 \times 900\text{ mm}$ (couple 24 N.m).
+  - Force 4 : baies jusqu'à $2\,400 \times 1\,200\text{ mm}$ (couple 29 N.m).
+- Crapaudine de sol **T920025** avec socle **T700072** pour porte tube APD (charge max 130 kg).
+
+---
+
+# Serrures et condamnations
+
+### 1. Tableau de synthèse des serrures encastrées
+
+| Référence | Type de mécanisme | Pênes et verrouillage | Sens / Application |
+| --- | --- | --- | --- |
+| **T920001** | Serrure 1 point | Pêne 1/2 tour réversible | Porte simple action de service |
+| **T920002** | Serrure 1 point à rouleau | Rouleau nylon réglable pour va-et-vient | Porte battante va-et-vient ou libre passage |
+| **T920003** | Serrure 2 points à cylindre | Renvoi haut et bas par barillet | Porte de service ou issue |
+| **T920004** | Serrure 2 points à fouillot | Renvoi haut et bas par relevage de béquille | Vantail semi-fixe |
+| **T920005** | Serrure 3 points à relevage | Pêne 1/2 tour + 2 pênes basculants ou verticaux | Porte de service à relevage de béquille |
+| **T920006** | Serrure 3 points sans relevage| Pêne 1/2 tour + 2 pênes commandés par clé | Porte d'entrée tertiaire automatique |
+| **T920007** | Serrure 3 points à rouleau | Pêne à rouleau + 2 pênes basculants | Porte grand passage va-et-vient |
+| **T920010** | Kit serrure 3 points à relevage| Livré complet avec tringles isolantes rigides débitées | Pose rapide en atelier sans usinage tringle |
+| **T920011** | Kit serrure 3 points sans rel. | Livré complet avec tringles rigides | Verrouillage direct à la clé |
+
+### 2. Dispositif de retard à l'effraction certifié RC2 / RC3
+Pour répondre aux classes de résistance à l'effraction **RC2** et **RC3** (norme NF EN 1627-30 et PAS 24:2012) :
+- Serrure 3 points renforcée **TPY3716** avec pênes basculants renforcés **TPY3712** et pênes verticaux **T920009**.
+- Plaque de protection anti-perçage en acier trempé **TPY3610** insérée dans la cage extérieure d'ouvrant en face du coffre de serrure.
+- Cornières anti-dégondage de vitrage **TPY3614** (12 pièces vissées par panneau verrier).
+- Tremplins anti-intrusion **TPY3815** (4 pièces par vantail).
+- Gâche renforcée haute **TPY3620** et gâches intermédiaires **TPY3612 / TPY3613**.
+
+---
+
+# Contrôle d'accès et gâches électriques
+
+### 1. Gâches électriques encastrées (Sans délardage du profilé)
+- **24 V Continu (Bâtiment neuf)** :
+  - À rupture : **TPY3700** (Droite en Poussant DEP) / **TPY3701** (Gauche en Poussant GEP).
+  - À contact stationnaire : **TPY3704** (DEP) / **TPY3705** (GEP).
+- **12 V Continu (Rénovation)** :
+  - À rupture : **TPY3702** (DEP) / **TPY3703** (GEP).
+- **10-24 V Multi-tension** :
+  - À émission : **TPY3706** (DEP) / **TPY3707** (GEP).
+
+### 2. Ventouses électromagnétiques 300 kg en applique
+Pour les accès sécurisés à haute fréquentation :
+- **T1430** (Alimentation 12 V continu) ou **TKP024** (Alimentation 24 V continu).
+- Résistance mécanique à l'arrachement : **300 kg (3 000 N)**.
+- Montage sur profilés d'habillage aluminium **T8230** (porte-ventouse) et **T5240** (capot de finition clippable), débités à la hauteur totale d'ouvrant $\mathbf{Hv}$.
+- Raccordement avec bouton-poussoir de sortie **TCP113** (plaque inox $60 \times 26\text{ mm}$), diode de roue libre obligatoire 1N4004/4007 et temporisation Crouzet.
+
+---
+
+# Voir aussi
+
+- [Profilés dormants et ouvrants SOLEAL PY 55](/portes/soleal-py-dormants-et-ouvrants.md)
+- [Cotes de débit des portes SOLEAL PY 55](/portes/soleal-py-cotes-de-debit.md)
+- [Mise en œuvre du seuil PMR PY1100](/procedures/technal-seuil-pmr-py1100.md)
+- [Fournisseur Technal](/fournisseurs/technal.md)
+
+===== PAGE 2 : /portes/soleal-py-dormants-et-ouvrants.md =====
+# Présentation générale
+
+Le système de porte **SOLEAL PY 55** de **TECHNAL** est un concept de porte lourde à rupture thermique totale, développé en **module de 55 mm** pour le dormant et l'ouvrant. Conforme à la norme européenne produit **NF EN 14351-1** (marquage CE), il répond aux exigences sévères des bâtiments tertiaires, établissements recevant du public (ERP), logements collectifs et maisons individuelles.
+
+La rupture thermique centrée est obtenue par :
+- Une double barrette tubulaire ou plate sertie de **20 mm** en polyamide 6.6 chargé à 25 % de fibres de verre.
+- Une cage d'équerre modulaire commune de **38 mm** ou **15 mm**.
+- Une conception symétrique à 3 chambres permettant la bi-coloration intégrale (teintes intérieures et extérieures distinctes).
+
+---
+
+# Profilés dormants
+
+Les dormants SOLEAL PY 55 se déclinent en deux familles de fixation (lisse sans rainure ou avec rainure BTC pour clippage des tapées et habillages) et en deux épaisseurs de toile d'aluminium (standard et renforcée 3 mm pour trafic intense) :
+
+| Référence | Cage d'équerre | Type de dormant | Toile alu | Utilisation et caractéristiques | Équerre d'angle |
+| --- | --- | --- | --- | --- | --- |
+| **TPY1102** | 15 mm | Sans rainure BTC | Standard | Face vue 52 mm, aile de recouvrement 25 mm, pour pose en tableau ou tunnel | T750201 |
+| **T225011** | 15 mm | Avec rainure BTC | Standard | Face vue 52 mm, permet le clippage des tapées 100 à 160 mm et couvre-joints | T750201 |
+| **T225004** | 38 mm | Sans rainure BTC | Standard | Face vue 75 mm, aile 25 mm, dormant large traditionnel | T750213 |
+| **T225014** | 38 mm | Avec rainure BTC | Standard | Face vue 75 mm, double rainure pour tôle 15/10e et tapées | T750214 |
+| **T225024** | 38 mm | Avec rainure BTC | **Renforcée (3 mm)** | Toile intérieure et extérieure de 3 mm pour portes lourdes jusqu'à $H = 2,60\text{ m}$ | T750214 |
+| **T225034** | 38 mm | Sans rainure, sans battue | Standard | Pour porte double action va-et-vient (VV) sur pivot de sol | T750213 |
+| **T225205** | 60x13,7 mm | Traverse haute FPI | Standard | Profilé tubulaire pour intégration invisible du ferme-porte encastré T920019 | T760201 (embouts) |
+| **T220511** | 15 mm | Sans rainure | Standard | Pour intégration directe dans la structure de mur-rideau GEODE | T750201 |
+| **TPY1105** | 15 mm | Sans rainure (module 65) | Standard | Dormant élargi à 65 mm pour alignement avec fenêtres SOLEAL 65 | T750201 |
+| **TPY1103** | 15 mm | Avec rainure (module 65) | Standard | Dormant élargi à 65 mm avec double rainure BTC | T750201 |
+
+---
+
+# Profilés ouvrants
+
+La gamme permet la réalisation d'ouvrants 3 côtés (avec plinthe basse) ou 4 côtés (ouvrant périphérique avec joint d'étanchéité ou seuil), ainsi que les versions anti-pince doigts :
+
+### 1. Ouvrants battants simple action (Ouverture Intérieure et Extérieure)
+
+| Profilé | Forme | Battue | Toile alu | Rôle et cinématique | Équerre d'angle |
+| --- | --- | --- | --- | --- | --- |
+| **T225114** | Forme en T | Extérieure | Standard | Montant/traverse d'ouvrant battant ouverture extérieure (face vue 100 mm) | T750213 |
+| **T225134** | Forme en T | Extérieure | **Renforcée (3 mm)** | Ouvrant renforcé pour très haute résistance et portes de $H \le 2,60\text{ m}$ | T750213 |
+| **T225104** | Forme en Z | Intérieure | Standard | Montant/traverse d'ouvrant battant ouverture intérieure (face vue 75 mm) | T750213 |
+| **T225124** | Forme en Z | Intérieure | **Renforcée (3 mm)** | Ouvrant renforcé ouverture intérieure pour site exposé ou grand trafic | T750213 |
+| **T700049** | Forme en T | Extérieure | Standard | Traverse haute d'ouvrant intégrant la glissière du ferme-porte intégré FPI | T750237 |
+| **T700110** | Forme en T | Extérieure | **Renforcée (3 mm)** | Traverse haute d'ouvrant FPI renforcée | T750237 |
+| **T700048** | Forme en Z | Intérieure | Standard | Traverse haute d'ouvrant FPI ouverture intérieure | T750237 |
+| **T700109** | Forme en Z | Intérieure | **Renforcée (3 mm)** | Traverse haute d'ouvrant FPI ouverture intérieure renforcée | T750237 |
+
+### 2. Ouvrants Va-et-Vient et Anti-Pince Doigts (APD)
+
+| Profilé | Désignation | Écartement | Caractéristiques techniques |
+| --- | --- | --- | --- |
+| **T225144** | Ouvrant Va-et-Vient (VV) | 23 mm | Profilé tubulaire symétrique sans battue, recevant le joint T710012 ou joint brosse T2883 |
+| **T700050** | Traverse haute VV FPI | 23 mm | Traverse haute symétrique avec glissière pour ferme-porte encastré T920019 |
+| **T225107** | Montant Tube APD | — | Montant tubulaire cylindrique à RPT assurant la rotation sans aucun pincement de doigt |
+| **TPY2505** | Profilé battement APD | 23 mm | Profilé support de joint anti-pince doigts côté paumelle/rotation |
+
+---
+
+# Plinthes, traverses et profilés de renfort
+
+### 1. Plinthes d'ouvrants et traverses basses
+- **T700047** : Plinthe tubulaire basse de **120 mm** de hauteur, assemblée en coupe droite entre montants à l'aide de doubles embouts **T760008** et goupilles **TAY0002**.
+- **T225105** : Plinthe tubulaire basse symétrique de **120 mm** avec double rainure pour porte va-et-vient.
+- **T525051** : Profilé porte-brosse aluminium clippé en sous-face de la plinthe T700047 ou T225105 pour recevoir le joint brosse d'étanchéité basse.
+
+### 2. Traverses intermédiaires
+Assemblées en coupe droite à 90° entre montants avec embouts **T760003** à **T760012** :
+- **T215202** : Traverse intermédiaire de 77 mm ($I_x = 9,07\text{ cm}^4$).
+- **T215204** : Traverse intermédiaire de 90 mm ($I_x = 10,26\text{ cm}^4$).
+- **T215205** : Traverse intermédiaire de 100 mm ($I_x = 11,04\text{ cm}^4$).
+- **T215207** : Traverse intermédiaire de 120 mm ($I_x = 12,45\text{ cm}^4$).
+- **T215208** : Traverse intermédiaire de 130 mm ($I_x = 13,09\text{ cm}^4$).
+- **T215211** : Traverse intermédiaire de 160 mm ($I_x = 15,17\text{ cm}^4$).
+
+### 3. Poteaux et meneaux d'inertie renforcée
+- **T215252** : Meneau renforcé avec chambre recevant un plat acier de **$10 \times 45\text{ mm}$** ($I_x = 63,19\text{ cm}^4$).
+- **T215261** : Poteau d'angle/meneau recevant un tube acier de **$60 \times 40 \times 3\text{ mm}$** ($I_x = 162,57\text{ cm}^4$).
+- **T215268** : Grand poteau de structure recevant un tube acier de **$60 \times 60 \times 3\text{ mm}$** ($I_x = 207,03\text{ cm}^4$).
+
+---
+
+# Moments d'inertie des profilés SOLEAL PY 55 (NF EN 14024)
+
+| Profilé | $I_x$ à $1\,200\text{ mm}$ | $I_x$ à $1\,600\text{ mm}$ | $I_x$ à $2\,000\text{ mm}$ | $I_x$ à $2\,250\text{ mm}$ | $I_x$ à $2\,500\text{ mm}$ | $I_x$ à $3\,000\text{ mm}$ | $I_y$ (axe fixe) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **T225004** (Dormant 38) | 10,67 | 13,52 | 15,75 | 16,85 | 17,77 | 19,16 | 24,81 |
+| **T225005** (Dormant 38) | 10,76 | 13,76 | 16,15 | 17,35 | 18,35 | 19,89 | 33,85 |
+| **T225011** (Dormant BTC 15)| 8,48 | 10,57 | 12,10 | 12,83 | 13,41 | 14,28 | 7,29 |
+| **T225014** (Dormant BTC 38)| 10,55 | 13,41 | 15,65 | 16,76 | 17,68 | 19,09 | 25,34 |
+| **T225024** (Dorm. Renf. 3mm)| 13,75 | 17,79 | 21,10 | 22,80 | 24,23 | 26,48 | 29,83 |
+| **T225034** (Dormant VV) | 10,94 | 13,92 | 16,27 | 17,44 | 18,41 | 19,90 | 24,09 |
+| **T225104** (Ouvrant en Z) | 11,83 | 15,13 | 17,77 | 19,10 | 20,21 | 21,92 | 33,54 |
+| **T225114** (Ouvrant en T) | 11,51 | 14,69 | 17,21 | 18,47 | 19,53 | 21,15 | 36,01 |
+| **T225124** (Ouvr. Z Renf. 3mm)| 15,50 | 20,29 | 24,34 | 26,45 | 28,26 | 31,14 | 42,00 |
+| **T225134** (Ouvr. T Renf. 3mm)| 15,01 | 19,56 | 23,37 | 25,35 | 27,04 | 29,70 | 46,64 |
+| **T225144** (Ouvrant VV) | 11,90 | 15,27 | 17,97 | 19,33 | 20,47 | 22,24 | 34,18 |
+| **T215252** (+ plat acier) | 46,17 | 52,18 | 56,66 | 58,81 | 60,56 | 63,19 | 14,62 |
+| **T215261** (+ tube 60x40x3) | 123,20 | 135,77 | 146,03 | 151,26 | 155,68 | 162,57 | 50,37 |
+| **T215268** (+ tube 60x60x3) | 153,10 | 168,84 | 182,67 | 190,08 | 196,55 | 207,03 | 139,71 |
+
+---
+
+# Voir aussi
+
+- [Cotes de débit des portes SOLEAL PY 55](/portes/soleal-py-cotes-de-debit.md)
+- [Serrures et paumelles SOLEAL PY 55](/quincaillerie/soleal-py-serrures-et-paumelles.md)
+- [Mise en œuvre du seuil PMR PY1100](/procedures/technal-seuil-pmr-py1100.md)
+- [Ouvrants de porte](/portes/ouvrants-de-porte.md)
+- [Fournisseur Technal](/fournisseurs/technal.md)
+
+===== PAGE 3 : /portes/soleal-py-cotes-de-debit.md =====
+# Formules de débit des cadres dormants
+
+### 1. Cadre dormant 3 côtés (sans traverse basse en aluminium)
+Utilisé avec seuil rapporté en applique ou encastré (seuil PMR PY1100, seuil bâtiment T525060, seuil plat T525053) :
+- **Montants verticaux (2 unités)** :
+  $$\mathbf{H_{\text{dormant}} = H - 6\text{ mm}} \quad (\text{coupe d'onglet 45° en haut, coupe droite 90° en bas})$$
+  *(Pour seuil résidentiel TPY1102 / TPY2107 : débit $= \mathbf{H - 12\text{ mm}}$).*
+  *(Pour seuil TPY2104 sur dormant sans rainure TPY1102 : débit $= \mathbf{H - 7\text{ mm}}$).*
+- **Traverse haute (1 unité)** :
+  $$\mathbf{L_{\text{dormant}} = L} \quad (\text{coupe d'onglet 45° aux 2 extrémités})$$
+
+### 2. Cadre dormant 4 côtés (périphérique)
+- **Montants verticaux (2 unités)** : débit $= \mathbf{H}$ à 45°/45°.
+- **Traverses haute et basse (2 unités)** : débit $= \mathbf{L}$ à 45°/45°.
+
+### 3. Cadre avec Ferme-Porte Intégré (FPI)
+- **Traverse haute FPI (Réf. T225205)** : débit $= \mathbf{L - 54\text{ mm}}$ (coupe droite 90°/90°).
+- **Montants verticaux multi-usage (Réf. T215056)** : débit $= \mathbf{H}$ ou $\mathbf{H - 7\text{ mm}}$.
+- **Profilés de battée et composition** :
+  - Profilé battée dormant T525054 : 2x $(H - 75)$ et 1x $(L - 79)$.
+  - Profilé composition symétrique T525055 : 2x $(H - 75)$ et 1x $(L - 104)$.
+  - Profilé cache-rainure PVC T525057 : 2x $(H - 137,5)$ et 1x $(L - 79)$.
+
+---
+
+# Formules de débit des profilés ouvrants
+
+### 1. Porte 1 vantail Simple Action — Ouvrant 3 côtés avec plinthe 120 mm
+Configuration classique ouverture extérieure (T225114) ou intérieure (T225104) avec seuil PMR bâtiment T525060 ou PY1100 :
+- **Montants d'ouvrant verticaux (2 unités)** :
+  $$\mathbf{H_{\text{ouvrant}} = H - 50,5\text{ mm}} \quad (\text{coupe 90° en bas, coupe 45° en haut})$$
+  *(En version seuil TPY2104 / T525053 : débit $= \mathbf{H - 57,5\text{ mm}}$).*
+  *(En version FPI traverse haute : débit $= \mathbf{H - 98,5\text{ mm}}$).*
+- **Traverse haute d'ouvrant (1 unité)** :
+  $$\mathbf{L_{\text{ouvrant}} = L - 70\text{ mm}} \quad (\text{coupe d'onglet 45°/45°})$$
+- **Plinthe basse 120 mm (Réf. T700047)** :
+  $$\mathbf{L_{\text{plinthe}} = L - 220\text{ mm}} \quad (\text{coupe droite 90°/90°})$$
+- **Profilé porte-brosse (Réf. T525051)** : débit $= \mathbf{L - 220\text{ mm}}$.
+- **Profilé rejet d'eau clippé (Réf. T525052)** : débit $= \mathbf{L - 72\text{ mm}}$.
+- **Seuil PMR (Réf. T525060 ou PY1100)** : débit $= \mathbf{L - 120\text{ mm}}$.
+- **Barre de seuil d'écartement (Réf. PY4000)** : débit $= \mathbf{L - 180\text{ mm}}$.
+
+### 2. Porte 1 vantail Simple Action — Ouvrant 4 côtés (périphérique)
+Configuration avec ouvrant en Z (T225104) et seuil PMR RPT PY1100 :
+- **Montants d'ouvrant verticaux (2 unités)** :
+  $$\mathbf{H_{\text{ouvrant}} = H - 52,5\text{ mm}} \quad (\text{coupe 45°/45°})$$
+  *(En version seuil résidentiel TPY2107 : débit $= \mathbf{H - 48\text{ mm}}$).*
+- **Traverses haute et basse d'ouvrant (2 unités)** :
+  $$\mathbf{L_{\text{ouvrant}} = L - 70\text{ mm}} \quad (\text{coupe 45°/45°})$$
+- **Rejet d'eau ouvrant (Réf. TPY2102)** : débit $= \mathbf{L - 120\text{ mm}}$.
+- **Joint d'ouvrant pour seuil PMR (Réf. TPY5000)** : débit $= \mathbf{L - 95\text{ mm}}$.
+
+### 3. Porte 2 vantaux Simple Action (Vantail de service + Vantail semi-fixe)
+- **Montants d'ouvrant verticaux (4 unités)** :
+  $$\mathbf{H_{\text{ouvrant}} = H - 50,5\text{ mm}} \quad (\text{avec plinthe})$$
+  $$\mathbf{H_{\text{ouvrant}} = H - 52,5\text{ mm}} \quad (\text{ouvrant périphérique 4 côtés})$$
+- **Traverses d'ouvrants hautes (2 unités)** :
+  $$\mathbf{L_{\text{ouvrant}} = L/2 - 26,5\text{ mm}} \quad (\text{coupe 45°/45°})$$
+- **Plinthes basses T700047 et porte-brosse T525051 (2 unités)** :
+  $$\mathbf{L_{\text{plinthe}} = L/2 - 176,5\text{ mm}} \quad (\text{coupe droite 90°/90°})$$
+- **Rejet d'eau clippé T525052** :
+  - Vantail de service : débit $= \mathbf{L/2 - 28,5\text{ mm}}$.
+  - Vantail semi-fixe : débit $= \mathbf{L/2 - 53,5\text{ mm}}$.
+- **Parcloses de plinthe basse T591005 (4 unités)** : débit $= \mathbf{L/2 - 176,5\text{ mm}}$.
+
+### 4. Porte Tube Anti-Pince Doigts (APD) avec FPI
+- **Montant tube cylindrique côté rotation (Réf. T225107)** : débit $= \mathbf{H - 118\text{ mm}}$.
+- **Montant ouvrant va-et-vient côté fermeture (Réf. T225144)** : débit $= \mathbf{H - 118\text{ mm}}$.
+- **Traverse haute d'ouvrant va-et-vient (Réf. T700050)** :
+  - 1 vantail : débit $= \mathbf{L - 171,5\text{ mm}}$.
+  - 2 vantaux : débit $= \mathbf{L/2 - 120,5\text{ mm}}$.
+- **Plinthe basse T700047 (1 vtl)** : débit $= \mathbf{L - 234\text{ mm}}$ ; (2 vtx) : débit $= \mathbf{L/2 - 183\text{ mm}}$.
+- **Profilés anti-pince doigts rapportés (Réf. TPY2505)** : débit $= \mathbf{H - 95\text{ mm}}$.
+
+### 5. Porte Va-et-Vient (VV) sur Crapaudine et Seuil Plat
+- **Montants d'ouvrant T225144** : débit $= \mathbf{H - 112\text{ mm}}$ à 45°/45°.
+- **Traverses d'ouvrant T225144 (1 vtl)** : débit $= \mathbf{L - 95\text{ mm}}$ ; (2 vtx) : débit $= \mathbf{L/2 - 51,5\text{ mm}}$.
+
+---
+
+# Cotes de dimensionnement des vitrages
+
+Le jeu de fond de feuillure standard est de **19 mm** en haut et sur les montants verticaux.
+
+### 1. Tableau récapitulatif des dimensions de vitrage
+
+| Typologie de porte | Hauteur de vitrage $H_v$ | Largeur de vitrage $L_v$ |
+| --- | --- | --- |
+| **Porte SA 1 vtl avec plinthe (seuil bâtiment)** | $\mathbf{H - 233\text{ mm}}$ | $\mathbf{L - 232\text{ mm}}$ |
+| **Porte SA 1 vtl avec plinthe (seuil PMR PY1100)** | $\mathbf{H - 214,5\text{ mm}}$ | $\mathbf{L - 232\text{ mm}}$ |
+| **Porte SA 1 vtl avec plinthe et seuil TPY2104** | $\mathbf{H - 240\text{ mm}}$ | $\mathbf{L - 232\text{ mm}}$ |
+| **Porte SA 1 vtl ouvrant périphérique (seuil PMR)**| $\mathbf{H - 215\text{ mm}}$ | $\mathbf{L - 232\text{ mm}}$ |
+| **Porte SA 1 vtl avec seuil résidentiel TPY2107** | $\mathbf{H - 210\text{ mm}}$ | $\mathbf{L - 232\text{ mm}}$ |
+| **Porte SA 2 vtx avec plinthe (seuil bâtiment/PMR)**| $\mathbf{H - 233\text{ mm}}$ | $\mathbf{L/2 - 189\text{ mm}}$ |
+| **Porte SA 2 vtx avec plinthe et seuil TPY2104** | $\mathbf{H - 240\text{ mm}}$ | $\mathbf{L/2 - 189\text{ mm}}$ |
+| **Porte SA 2 vtx ouvrant périphérique (seuil PMR)**| $\mathbf{H - 215\text{ mm}}$ | $\mathbf{L/2 - 189\text{ mm}}$ |
+| **Porte SA 1 vtl avec FPI et plinthe** | $\mathbf{H - 281\text{ mm}}$ | $\mathbf{L - 232\text{ mm}}$ |
+| **Porte SA 2 vtx avec FPI et plinthe** | $\mathbf{H - 281\text{ mm}}$ | $\mathbf{L/2 - 189\text{ mm}}$ |
+| **Porte Tube APD 1 vantail avec FPI** | $\mathbf{H - 288\text{ mm}}$ | $\mathbf{L - 246\text{ mm}}$ |
+| **Porte Tube APD 2 vantaux avec FPI** | $\mathbf{H - 288\text{ mm}}$ | $\mathbf{L/2 - 195\text{ mm}}$ |
+| **Porte Va-et-Vient (VV) 1 vantail avec FPI** | $\mathbf{H - 249\text{ mm}}$ | $\mathbf{L - 232\text{ mm}}$ |
+| **Porte Va-et-Vient (VV) 2 vantaux avec FPI** | $\mathbf{H - 249\text{ mm}}$ | $\mathbf{L/2 - 189\text{ mm}}$ |
+
+> [!CAUTION]
+> **Règle impérative pour parcloses à clippage de face (T591221 / T591222 / T591223)** :
+> Lors de l'utilisation de parcloses à pose de face avec clips **T770070**, il faut obligatoirement **diminuer la hauteur et la largeur du vitrage de 4 mm supplémentaires** par rapport aux cotes du tableau ci-dessus (pour compenser l'encombrement des nez de clips).
+
+---
+
+# Formules de débit des tringles de crémone (T525058)
+
+Les tringles plates en aluminium **T525058** actionnent les pênes hauts et bas à partir du fouillot ou du barillet :
+
+| Type de serrure | Configuration d'étanchéité basse | Tringle basse $T_1$ | Tringle haute $T_2$ |
+| --- | --- | --- | --- |
+| **Serrure 2 points à fouillot (T920004)** | Simple Action standard | $\mathbf{T_1 = Hp - 261\text{ mm}}$ | $\mathbf{T_2 = Hv - Hp - 210\text{ mm}}$ |
+| **Serrure 2 points à cylindre (T920003)** | Avec gâche seuil PMR **TPY6000** | $\mathbf{T_1 = Hp - 276\text{ mm}}$ | $\mathbf{T_2 = Hv - Hp - 210\text{ mm}}$ |
+| **Serrure 2 points** | Double Action (PSA / PDA) | $\mathbf{T_1 = Hp - 261\text{ mm}}$ | $\mathbf{T_2 = Hv - Hp - 197\text{ mm}}$ |
+| **Serrure 3 points pênes verticaux (T920005/06)**| Simple Action standard | $\mathbf{T_1 = Hp - 261\text{ mm}}$ | $\mathbf{T_2 = Hv - Hp - 210\text{ mm}}$ |
+| **Serrure 3 points pênes verticaux** | Avec gâche seuil PMR **TPY6000** | $\mathbf{T_1 = Hp - 276\text{ mm}}$ | $\mathbf{T_2 = Hv - Hp - 210\text{ mm}}$ |
+| **Serrure 3 points modulaire (T920008)** | Pêne basculant à renvoi | $\mathbf{T_1 = Hp - 621\text{ mm}}$ | $\mathbf{T_2 = Hv - Hp - 554\text{ mm}}$ |
+| **Serrure multipoints modulaire (grande hauteur)**| Renvoi haut/bas additionnel | $\mathbf{Tx_1 = \text{variable}}$ | $\mathbf{Ty_2 = 100\text{ mm mini}}$ |
+
+*Où $Hp$ est la hauteur d'axe de la béquille/poignée par rapport au bas de l'ouvrant ($Hp_{\text{sol}} = Hp + \text{jeu} = 1\,050\text{ mm}$), et $Hv$ est la hauteur totale du vantail d'ouvrant.*
+
+---
+
+# Voir aussi
+
+- [Profilés dormants et ouvrants SOLEAL PY 55](/portes/soleal-py-dormants-et-ouvrants.md)
+- [Serrures et paumelles SOLEAL PY 55](/quincaillerie/soleal-py-serrures-et-paumelles.md)
+- [Mise en œuvre du seuil PMR PY1100](/procedures/technal-seuil-pmr-py1100.md)
+- [Fournisseur Technal](/fournisseurs/technal.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /sources/technal-soleal-py-fabrication.md | Document source | Catalogue de fabrication Technal SOLEAL PY 55 | technal, soleal, soleal-py, porte, fabrication, atelier | Guide technique officiel d'atelier et catalogue de fabrication Technal pour les portes à rupture de pont thermique SOLEAL PY 55 (Réf. 4899.007 - 09/2018, 222 pages). | mbre 2018, 222 pages) / / Système visé / **SOLEAL PY 55** (Porte à rupture de pont thermique module 55 mm) / / Domaines / Usinages, poinçonnage et gou |
+| /sources/technal-soleal-py-conception.md | Document source | Catalogue de conception Technal SOLEAL PY 55 | technal, soleal, soleal-py, porte, conception, profilés | Catalogue technique officiel de conception système Technal pour la gamme de portes battantes et va-et-vient SOLEAL PY 55 (Réf. 4944.006 - 09/2018, 210 pages). | tiques ($U_w$, $S_w$, $T_{Lw}$), dimensions maxi (130 kg en 2 lames, 150 kg en 3 lames, $H \le 2,60\text{ m}$ en version renforcée 3 mm), étanchéité A |
+| /procedures/technal-seuil-pmr-py1100.md | Procédure | Fabrication et mise en œuvre du seuil PMR Technal PY1100 | technal, soleal, soleal-py, porte, seuil-pmr, py1100 | Procédure d'atelier et de chantier pour le seuil à rupture de pont thermique pour personnes à mobilité réduite (PMR) PY1100 de TECHNAL (portes battantes SOLEAL PY 55, gabarit EK7020, pièces d'angle 720028/29, gâche basse PY6000 et règles NF DTU 36.5). | # Présentation du seuil PMR PY1100 Le **seuil PMR PY1100** est un procédé d'étanchéité basse à rupture de pont thermique certifié par le CSTB pour le |
+| /quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md | Quincaillerie | Quincaillerie visible et cachée SOLEAL FY | technal, soleal, soleal-fy, quincaillerie, paumelle, ferrure | Systèmes de ferrures, paumelles apparentes 2 et 3 lames, paumelles sur pivot, quincaillerie cachée (QC 180°), crémones, serrures et organes de verrouillage pour menuiseries aluminium TECHNAL SOLEAL FY 55 et FY 65. | / / **T940023** / Paumelle sur pivot réglable / **130 kg** / 1 600 mm / 1 ensemble haut + bas.<br>Pièce de renfort **T940022 obligatoire** entre 100 e |
+| /sources/technal-seuil-py1100.md | Document source | F.I.T N° 15 — Évolution Porte PY et Seuil PMR PY1100 Technal | technal, soleal, soleal-py, seuil-pmr, py1100, aev | Fiche d'Information Technique officielle Technal détaillant le seuil PMR à rupture de pont thermique PY1100, les pièces d'angle préformées et les procès-verbaux d'essais AEV (33 pages). | re 2012, 33 pages) / / Système visé / **Seuil PMR PY1100** pour portes SOLEAL PY 55 / / Domaines / Conception, fabrication, usinages et performances A |
+| /quincaillerie/roto-nx-pivots-et-paliers-angle.md | Quincaillerie | Pivots et paliers d'angle Roto NX | roto, roto-nx, pivot-d-angle, palier-d-angle, designo, report-de-charge | Les références de commande du chapitre 8 « Pivots d'angle / palier d'angle » du catalogue Roto NX PVC — pivots d'angle P 6/150 et Designo, paliers d'angle P 3/130, P 6/130, P 6/150 et Designo par système de profil, report de charge Designo, caches et bouchon — avec leurs schémas de montage et de perçage. | leins : ici la version du pivot ou du palier, P 3/130, P 6/130, P 6/150), poids d'ouvrant, ergot et perçage ergot (plot carré sur une base hachurée, s |
+| /quincaillerie/perform76-poignee-et-pivot.md | Quincaillerie | Poignée et pivot PERFORM76 | perform76, poignee, pivot, charge, reglage, quincaillerie | Positions de poignée par hauteur d'ouvrant sur PERFORM76, position et réglage du pivot bas par dormant, et charge admissible par ouvrant. | ouvrant** [1 p. 6]. Le catalogue général annonce 130 kg pour « le poids d'une fenêtre ». Les deux énoncés ne portent peut-être pas sur le même objet, |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/contradictions-entre-sources.md :
+| CTR-82 | Diagrammes (abaques) de renforcement d'ouvrant du système 70 : classeur de 2008 contre manuel de 2023 | Système e.VOLUTION, plan des profilés, système F 91, août 2008, PDF p. 121 (registre 4.1, page imprimée 2, « OF 1 Vantail », « Classement VA2 »), relue en image à 200 et 400 dpi le 29/09/2026 : renfort unique **V058** (« Iy = 0.47 », « Iz = 3.19 »), aucune référence d'ouvrant, aucune zone grisée ; repère **B** = un trait épais sur la traverse basse, **D** = traverse basse et montant ; D6 dans la colonne 900-1 000 mm **jusqu'à 2 300 mm** ; colonne 1 000-1 100 mm renseignée **de 1 600 à 1 700 mm** seulement ; complément du 29/09/2026, PDF p. 122-136 (registre 4.1, pages imprimées 3 à 17), relues en image à 200 et 400 dpi : seize diagrammes, aucun ne nomme d'ouvrant ; renforts dessinés V058 (p. 121, 123, 125, 127, 129, 130, 132, 134, 136), V057 « Iz = 3.77 », « Iy = 4.55 » (p. 122, 124, 126, 128), V057 **et V059** « Iz = 4.50 », « Iy = 4.64 » (p. 131, 133, 135) ; aucune zone grisée, aucun abaque « autre possibilité » ; légendes : B = traverse basse seule, D = montant(s) + traverse basse, F = traverse basse + montant central, G = F + **un** trait entre les vantaux, carrés de traverse des repères 3, 5, 7 (2 vantaux OF/OB) sur le seul vantail OB ; les planches 2 vantaux OF/OB (p. 125-126) reprennent case par case les quadrillages OB 1 vantail (p. 123-124), jusqu'à **1 400 et 1 600 mm** de largeur ; VA3 : zone C3/D3/D4 (C4/D4/D5 en OB) à partir de **1 400 mm** de hauteur ; la planche VA3 avec repère G (p. 136) est identique à la planche VA2 (p. 129) | Mise en œuvre Système 70 Plateforme, septembre 2023, PDF p. 129 (registre 2.3.3, p. 2, « Classement VA2 6112/6121/6117/6150 ») : renforts **V158** (Ig 0,5, Iw 3,2) et **V258** (Ig 0,4, Iw 2,2), zone grisée « ZONE D'UTILISATION V258 » ; repère B = traverses haute et basse, D = deux traverses et montant ; D6 dans la colonne 900-1 000 mm jusqu'à 2 000 mm ; colonne 1 000-1 100 mm renseignée de 1 600 à 1 800 mm ; toutes les autres cases identiques ; planches correspondantes, PDF p. 130-146 : V057 « Ig 4,8 », « Iw 3,8 » ; B, D, F avec traverses haute et basse, G avec deux traits ; 2 vantaux OF/OB limités à 1 000 et 1 100 mm de largeur ; VA3 : zone C/D à partir de 1 200 mm (1 100 mm à deux vantaux OF) ; limites de réalisation différentes planche par planche (détail sur la page des abaques de 2008) | Pas de valeur retenue seule : chaque édition pour les menuiseries dimensionnées d'après elle. Entrée complétée le 29/09/2026 pour les seize diagrammes du registre 4.1 (PDF p. 121-136) ; comparaison case par case sur [Abaques de renforcement du système 70, plans e.VOLUTION de 2008](/profiles/systeme-70-abaques-evo2008.md). À vérifier auprès de profine : le V058 et les V158 / V258 sont-ils interchangeables, et le repère B renforce-t-il une ou deux traverses ? À vérifier aussi : l'Iz du V057 (3,77 en 2008, 3,8 en 2023) et le rôle du V059 dessiné sans zone en 2008. | Un ouvrant de 950 × 2 200 mm est réalisable d'après 2008 et hors abaque d'après 2023 ; une traverse haute laissée sans renfort (lecture 2008) ou renforcée (lecture 2023) ; un ouvrant 2 vantaux OF/OB de 1 300 × 1 500 mm (V057) est réalisable d'après 2008 et hors abaque d'après 2023 |
+/anomalies/contradictions-entre-sources.md :
+| CTR-110 | Hauteur fond de feuillure minimale et poids, Roto NX côté paumelles P, oscillo-battant et ouvrant à la française, hauteur de poignée fixe, sécurité de base | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 38 (OF un vantail), 42 (OB un vantail), 44 (OB deux vantaux), relue en image à 150 dpi le 29/09/2026 (p. 42) : « Hauteur en feuillure du vantail 300 – 2800 mm », « Poids du vantail max. 130 ou 150 kg » ; le diagramme du même manuel (p. 23-24) donne 290 mm (**CTR-18**) | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 57, 73, 75, 81 (chapitre 3), relues en image à 110 dpi le 29/09/2026 : « Hauteur fond de feuillure d'ouvrant (HFF) 280 – 2 800 mm », « Poids d'ouvrant (PO) max. 150 kg » ; le chapitre 2 (p. 35-36) donne aussi 280 mm | Aucune : les valeurs sont citées | Vantail de 280 à 299 mm de HFF admis ou refusé selon le document ; voir [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md) et [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-113 | Champ d'application de l'oscillo-battant à deux vantaux à poignée centrée, Roto NX côté paumelles P, sécurité de base | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 46 (« Oscillo-battant à deux vantaux, poignée centrée », crémones fouillot -6 mm) : largeur en feuillure 290 – 1 400 mm, hauteur 435 – 2 800 mm, max. 130 ou 150 kg | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 123 (« Ferrure de battement - Standard », crémone OB hauteur de poignée milieu/variable, relue en image à 110 dpi le 29/09/2026) : LFF 290 – 1 600 mm, HFF 370 – 2 800 mm, max. 150 kg ; battement Plus : HFF 420 – 2 800 mm (p. 131) | Aucune : les valeurs sont citées ; que les deux pages décrivent la même configuration reste à confirmer | LFF de 1 401 à 1 600 mm et HFF de 370 à 434 mm admises par le seul catalogue ; voir [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md) et [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-118 | Angle d'ouverture et repère [C] de la tolérance de châssis fixe côté paumelles P, poids d'ouvrant 150 kg | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 36 (3.6.1 « Côté paumelles P »), relue en image à 110 dpi le 29/09/2026 : tableau « Côté paumelles P », 130 kg et 150 kg, angle d'ouverture « env. 180° [2] » imprimé une fois pour les deux lignes, tolérance 21,0 / 26,5 mm, hauteur de recouvrement mini. 16 mm, colonnes « En haut [C] » 1,0 mm et « En bas [D] » 8 mm | Catalogue Roto NX pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 278 (6.1.1), relu en image à 110-300 dpi le 29/09/2026 : 130 kg « env. 180° [3] », **150 kg « env. 150° [4] »** (notes : selon l'embrasure, l'angle peut être inférieur à 180° / 150°), tolérance ≥ 21,0 / ≥ 26,5 mm, recouvrement ≥ 16 mm, **« Espace extérieur [C] » 100 mm** ; p. 279, vues de face : cote 8 mm sous le vantail, « ≥ 10* » au-dessus de la pièce haute | Non arbitré : chaque valeur reste dans sa source | Vantail de 150 kg posé en prévoyant une ouverture à 180° qui n'est pas garantie ; [C] lu comme un jeu de 1 mm ou comme un espace de 100 mm selon le document ; voir [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md), [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
+/anomalies/incoherences-internes.md :
+| INC-280 | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023 | PDF p. 61, 65, 79, 89, 99, 107, 111, 119, 129, 135 (chapitre 3) contre p. 35 et 36 (chapitre 2), pagination identique, relues en image à 110 dpi le 29/09/2026 | Hauteur fond de feuillure d'ouvrant minimale en **CDR 2 / CDR 2 N** : « 600 – 2 800 mm » aux champs d'application des ferrures OB, OF et de battement à hauteur de poignée fixe et TiltSafe (p. 61, 65, 79, 89, 99) ; « 490 – 2 800 mm » (OB, OF à poignée centrée / variable, p. 107, 119), « 520 – 2 800 mm » (battement à poignée centrée / variable, p. 129, 135), « 490 – 2 800 mm » (TiltSafe à poignée centrée, p. 111) ; les tableaux « Champ d'application » des diagrammes OB 130 kg et 150 kg donnent **510 mm** en CDR 2 et CDR 2 N (p. 35, 36) | Indéterminée : les bornes du chapitre 3 dépendent de la crémone (fixe ou centrée / variable) et du type de ferrure, le chapitre 2 n'en donne qu'une ; à arbitrer par ROTO | Un vantail CDR 2 de 510 à 599 mm de HFF est admis par le chapitre 2 et refusé par les pages de configuration à poignée fixe ; voir [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md) |
+/anomalies/incoherences-internes.md :
+| INC-281 | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023 | PDF p. 63 et 109 contre p. 35 et 36, relues en image à 110 dpi le 29/09/2026 | Champ d'application **CDR 3** : « 490 – 1 400 mm » de LFF, « 600 – 2 800 mm » de HFF, « max. 150 kg » (OB poignée fixe, p. 63) et « 490 – 1 400 mm », « 490 – 2 800 mm », « max. 150 kg » (OB poignée centrée / variable, p. 109) ; au chapitre 2 : version 130 kg 490 – 1 400 mm / 600 mm de HFF mini, version 150 kg **320 – 1 400 mm / 510 mm** de HFF mini (p. 35, 36) | Indéterminée : soit les bornes 150 kg du chapitre 2 sont fausses, soit celles des pages de configuration ne valent que pour 130 kg | Un vantail CDR 3 de 150 kg entre 320 et 489 mm de LFF, ou entre 510 et 599 mm de HFF, est admis ou refusé selon la page lue ; voir [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md) |

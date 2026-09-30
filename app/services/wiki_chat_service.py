@@ -1,16 +1,16 @@
 """Le tour de chat : une question, quelques pages, une réponse streamée, ses citations vérifiées.
 
 Navigation outillée et non CAG : le wiki (198 pages) ne tient dans aucune fenêtre de contexte.
-Le prompt permanent ne porte que les consignes, un vocabulaire et l'index des anomalies ; les
-pages arrivent par trois outils — ``chercher`` (qui livre directement le contenu entier des
+Le prompt permanent ne porte que les consignes et un vocabulaire ; les pages arrivent par
+trois outils — ``chercher`` (qui livre directement le contenu entier des
 premières pages trouvées), ``lire_page`` et ``lire_anomalie``.
 
 Deux garde-fous ne dépendent pas de la discipline du modèle :
 
 * **les anomalies sont injectées par le serveur.** La règle 2 des consignes — donner la valeur
   *et* signaler la contradiction — est trop importante pour reposer sur la bonne volonté d'un
-  petit modèle : les entrées rapprochées de la question et des pages chargées sont poussées dans
-  le contexte à chaque tour ;
+  petit modèle : les entrées rapprochées des pages chargées sont poussées dans le contexte
+  après chaque recherche — jamais avant : on pose une question, il cherche dans le wiki ;
 * **les coupes sont vérifiées sur disque.** Le modèle a sous les yeux une colonne de chemins
   d'images qui ne diffèrent que par la référence ; en fabriquer un lui coûte peu. Seule l'image
   réellement présente, et réellement rattachée à la référence demandée, passe.
@@ -137,7 +137,7 @@ TOOLS: List[Dict[str, Any]] = [
             "name": "lire_anomalie",
             "description": (
                 "Renvoie le détail d'une entrée d'anomalie à partir de son identifiant "
-                "(INC-01, CTR-03, VER-07), tel qu'il figure dans l'index des anomalies."
+                "(INC-01, CTR-03, VER-07), tel qu'il est écrit dans une page lue."
             ),
             "parameters": {
                 "type": "object",
@@ -543,10 +543,6 @@ class WikiAnswer:
         # cache d'un seul appel à la somme des prompts divisait le taux par le nombre d'appels.
         cumul = {"prompt_tokens": 0, "completion_tokens": 0, "cached_tokens": 0, "appels": 0}
         think_parts: List[str] = []
-
-        # Injecté avant le premier appel : le modèle peut répondre sans outil, et la règle 2
-        # doit tenir même dans ce cas.
-        self._injecter_anomalies(working, pages_lues, deja_injectees)
 
         for _ in range(MAX_TOOL_ROUNDS):
             text_parts: List[str] = []

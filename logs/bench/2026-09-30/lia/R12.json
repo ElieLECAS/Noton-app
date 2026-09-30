@@ -1,0 +1,58 @@
+{
+  "question": "liste moi les dormants compatibles avec l'Appui 6136",
+  "pages_lues": [
+    "/profiles/perform76-tapees-et-isolation.md",
+    "/profiles/perform76-appuis-et-seuils.md",
+    "/profiles/systeme-70-profiles-complementaires.md",
+    "/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md",
+    "/procedures/drainage-decompression-ventilation-systeme-70.md",
+    "/profiles/systeme-70-accessoires-par-profile.md",
+    "/profiles/systeme-70-profiles-et-renforts.md"
+  ],
+  "anomalies": [
+    "CTR-24",
+    "CTR-40",
+    "CTR-63",
+    "CTR-64",
+    "CTR-65",
+    "CTR-68",
+    "INC-25"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "appui 6136 dormants compatibles"
+      },
+      "pages_nouvelles": [
+        "/profiles/perform76-tapees-et-isolation.md",
+        "/profiles/perform76-appuis-et-seuils.md",
+        "/profiles/systeme-70-profiles-complementaires.md"
+      ],
+      "caracteres": 160435
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md"
+      },
+      "pages_nouvelles": [
+        "/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md"
+      ],
+      "caracteres": 33775
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "pièce d'appui 6136 dormant rénovation 6107 6105 6102",
+        "systeme": "70"
+      },
+      "pages_nouvelles": [
+        "/procedures/drainage-decompression-ventilation-systeme-70.md",
+        "/profiles/systeme-70-accessoires-par-profile.md",
+        "/profiles/systeme-70-profiles-et-renforts.md"
+      ],
+      "caracteres": 216737
+    }
+  ]
+}

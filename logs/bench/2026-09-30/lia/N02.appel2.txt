@@ -1,0 +1,335 @@
+===== PAGE 1 : /equipements/volets-roulants.md =====
+# Définition et principe d'intégration
+
+Le volet roulant intégré est assemblé à la menuiserie ; il s'adapte sur toutes les menuiseries PROFERM ([PERFORM](/gammes/perform.md), [HYBRIDE](/gammes/hybride.md), [LUMINE](/gammes/lumine.md), [TEXTURAL](/gammes/textural.md)) [1 p. 28]. Ce qui en est annoncé (« LA solution idéale en terme d'isolation thermique et de rapidité de pose ») est sur [Arguments de la marque PROFERM](/commercial/proferm.md).
+
+L'assemblage en usine sur le dormant repose sur le système bloc-baie **Chrono One** conçu par [SOPROFEN](/fournisseurs/soprofen.md), intégrant un adaptateur haut clippé/vissé avec joint de finition adhésif, un emboîtement par basculement verrouillé par vis FPZ-3.9-28-ST, et des coulisses encollées (2 cordons PVC/silicone) clippées sur vis plots VC4/10T (voir [Montage en atelier du volet roulant bloc-baie Chrono One SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md)).
+
+# Caractéristiques techniques du coffre
+
+Le coffre est la boîte qui loge le tablier enroulé au-dessus de la menuiserie. Hauteurs et finitions du coffre du volet roulant intégré ; une ligne par paramètre [1 p. 28].
+
+| Paramètre | Valeur | Condition |
+| --- | --- | --- |
+| Hauteur de coffre | 200 mm | selon la dimension de la menuiserie |
+| Hauteur de coffre | 230 mm | selon la dimension de la menuiserie |
+| Teinte du coffre | toutes les teintes RAL | - |
+| Plaxage du coffre | tous les films proposés dans les gammes de fenêtres | - |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 28)
+
+## Technologie brevetée GoodNight
+
+L'occultation est obtenue par la technologie brevetée **GoodNight** : intégration dans la coulisse (le rail vertical où glisse le tablier) d'un profilé d'insertion de coloris noir, d'un joint co-extrudé et d'un joint brosse [1 p. 28].
+
+## Coffres demi-linteau Bloc LX
+
+En construction neuve avec réservation demi-linteau en maçonnerie, la fermeture est réalisée au moyen du système **Bloc LX** de [SOPROFEN](/fournisseurs/soprofen.md), intégrant une fixation solidaire sur dormant, des profilés de renfort d'inertie (DL-R10 ou DL-R12) et un calfeutrement étanche à l'air (voir [Volet roulant coffre demi-linteau BLOC LX](/equipements/volet-roulant-bloc-lx-demi-linteau.md) et la procédure d'[Assemblage et pose du coffre demi-linteau Bloc LX SOPROFEN](/procedures/pose-bloc-lx-demi-linteau-soprofen.md)).
+
+## Blocs-baies Chrono One
+
+Évalué et certifié par le CSTB sous l'[Avis Technique n° 6/16-2339_V2](/certifications/at-cstb-6-16-2339-coffres-chrono.md), le coffre bloc-baie **Chrono One** de [SOPROFEN](/fournisseurs/soprofen.md) est disponible en hauteurs 200 mm ($\varnothing_{\text{enroulement}} = 165\text{ mm}$) et 230 mm ($\varnothing_{\text{enroulement}} = 185\text{ mm}$), avec une étanchéité à l'air de classe C3 ou C4 sous 4 Pa ($0,08\text{ m}^3/\text{h.m}$) et une rigidité flexionnelle $EI$ au vent atteignant $62\,160\text{ N.m}^2$ avec renfort MX20-2. Sa sous-face réversible MX01R permet d'augmenter l'épaisseur de doublage intérieur de 40 mm (de 120 à 160 mm) sans changer d'adaptateur. Il se décline selon deux méthodes de montage en atelier :
+* **Sur dormant standard** : montage avec pose préalable de l'adaptateur PVC et du joint adhésif de traverse haute, clippage du coffre par basculement et verrouillage latéral FPZ-3.9-28-ST, puis clippage frontal des coulisses sur pions VC4/10T avec double cordon de mastic PVC/silicone (voir [Montage en atelier du volet roulant bloc-baie Chrono One SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md)).
+* **Sur dormant monobloc** : vissage préalable des coulisses sur les montants de châssis (écartement max 400 mm, vis plots obligatoires pour coulisse centrale), emboîtement vertical du coffre dans la zone d'indexage sommitale des coulisses, relevage de la lame finale et vissage frontal traversant de l'adaptateur sur au moins 2 cloisons du profil dormant (voir [Montage en atelier du bloc-baie Chrono One sur dormant monobloc SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen.md)).
+* **Reprise de charge d'angle** : dans les deux configurations, des pattes métalliques déformables **VX26** (vis 15/3-9/9-5) assurent la liaison rigide et inclinable entre les joues du coffre et le dormant.
+
+## Blocs-baies haute performance CHRONO PSE² et inversé MONO VI
+
+La gamme de blocs-baies SOPROFEN s'étend à des architectures spécifiques :
+* **[Volet roulant et BSO bloc-baie CHRONO PSE²](/equipements/volets-roulants-chrono-pse2.md)** : corps isolant en polystyrène expansé haute densité ($U_c$ jusqu'à $0,3\text{ W/m}^2\text{K}$), caissons de 300 et 360 mm, accès intérieur ou extérieur, et compatibilité avec tabliers volets roulants ou Brise-Soleil Orientables (BSO).
+* **[Volet roulant inversé bloc-baie MONO VI](/equipements/volets-roulants-mono-vi.md)** : volet bloc-baie à enroulement extérieur et trappe d'accès affleurante intérieure, coffre ultra-compact de 140 mm maximisant le clair de jour sous linteau, idéal en rénovation et ITE ($U_c = 0,9 + 0,11/L_c$).
+
+## Résistance au vent des tabliers (NF EN 13659 et DTU 34-2)
+
+La tenue sous pression de vent des lames PVC (L37, L50) et aluminium (LA37, LA50) fait l'objet d'essais en usine selon les classes V\*2 à V\*6, en fonction de la zone géographique de vent (1 à 4), de la catégorie de terrain (IV urbain à 0 littoral) et de la hauteur de la baie (voir [Résistance au vent des volets roulants SOPROFEN](/reference/resistance-au-vent-volets-soprofen.md)).
+
+# Motorisations et commandes SOMFY
+
+L'équipement des volets fait appel aux solutions motorisées du fabricant [SOMFY](/fournisseurs/somfy.md) [1 p. 28] :
+
+| Motorisation | Description | Image |
+| --- | --- | ---: |
+| Moteur SOMFY® IO RS100 | Mouvement maîtrisé : démarrage et arrêt en douceur en fins de courses ; moteur bi-vitesse pour adapter le mouvement des volets. Nouveau confort acoustique : en « mode discret » le volet roulant devient silencieux ; confort acoustique inégalé. Mouvement protecteur : détection d'obstacles et arrêt immédiat ; équipé d'une détection du gel, ce qui évite la détérioration du matériel | ![Moteur SOMFY IO RS100](/assets/equipements/volets-roulants/moteur-somfy-io-rs100.png) |
+| Radio IO solaire | Plus besoin de câblage électrique : un capteur solaire est installé sur le coffre (en rénovation) ou au-dessus de la menuiserie (pour le neuf). Compatible avec toute la gamme des commandes RTS et TaHoma | ![Radio IO solaire](/assets/equipements/volets-roulants/radio-io-solaire.png) |
+| Moteur SOMFY® filaire | Solution plus économique ; la commande filaire permet de contrôler les volets roulants et de gérer leur ouverture et leur fermeture. Le système filaire permet de commander un seul volet | ![Moteur SOMFY filaire](/assets/equipements/volets-roulants/moteur-somfy-filaire.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 28)
+
+## Implantation du capteur solaire
+
+Le capteur solaire de la motorisation radio IO solaire est installé sur le coffre en rénovation, et au-dessus de la menuiserie pour le neuf [1 p. 28].
+
+## Domotique et gestion centralisée
+
+La technologie RADIO IO HOMECONTROL permet de piloter l'ensemble des équipements depuis un smartphone grâce au boîtier TaHoma. L'ensemble des volets roulants proposés par PROFERM sont compatibles avec cette technologie [1 p. 28].
+
+![Points de commande : boîtier TaHoma, télécommande, commande murale](/assets/equipements/volets-roulants/points-de-commande.png)
+
+# Manœuvres manuelles sans domotique
+
+Trois organes de manœuvre manuelle non motorisée sont disponibles [1 p. 28] :
+
+| Mécanisme manuel | Restriction d'emploi |
+| --- | --- |
+| Tirage direct | - |
+| Sangle | **non disponible en rénovation** |
+| Tringle oscillante | - |
+
+![Mécanismes manuels sans domotique : tirage direct, sangle, tringle oscillante](/assets/equipements/volets-roulants/mecanismes-manuels.png)
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 28)
+
+Sur les volets à tirage direct équipés d'une lame finale à serrure, la réalisation des lumières de verrouillage en fond de coulisses fait l'objet d'une méthodologie spécifique selon le profil de cylindre (voir [Perçage des coulisses pour lame à serrure sur volet à tirage direct](/procedures/percage-coulisses-lame-serrure-soprofen.md)).
+
+# Garanties
+
+Durées de garantie applicables aux volets roulants et motorisations [1 p. 35] :
+* **Composants du volet roulant** : garantie 5 ans.
+* **Motorisation (Somfy filaire, RS100 io, moteur solaire)** : garantie 7 ans.
+* **Garantie « bord de mer » contre la corrosion des parties laquées (en option)** :
+  * Distance de 0 à 10 km du littoral : garantie 5 ans.
+  * Distance supérieure à 10 km du littoral : garantie 7 ans.
+
+# Citations
+
+[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 28 et 35
+
+# Voir aussi
+
+- [SOMFY](/fournisseurs/somfy.md)
+- [SOPROFEN](/fournisseurs/soprofen.md)
+- [Volet roulant traditionnel TRADI PRÉMONTÉ](/equipements/volets-roulants-tradi-premonte.md)
+- [Volet roulant traditionnel TRADI NON PRÉMONTÉ](/equipements/volets-roulants-tradi-non-premonte.md)
+- [Volet roulant traditionnel TRADI pour COFFRE TUNNEL et TRADI VTR](/equipements/volets-roulants-tradi-tunnel-vtr.md)
+- [Volet roulant coffre demi-linteau BLOC LX](/equipements/volet-roulant-bloc-lx-demi-linteau.md)
+- [Volet roulant et BSO bloc-baie CHRONO PSE²](/equipements/volets-roulants-chrono-pse2.md)
+- [Volet roulant inversé bloc-baie MONO VI](/equipements/volets-roulants-mono-vi.md)
+- [Résistance au vent des volets roulants SOPROFEN](/reference/resistance-au-vent-volets-soprofen.md)
+- [Montage en atelier du volet roulant bloc-baie Chrono One SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md)
+- [Montage en atelier du bloc-baie Chrono One sur dormant monobloc SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen.md)
+- [Avis Technique CSTB n° 6/16-2339_V2, coffres Chrono SOPROFEN](/certifications/at-cstb-6-16-2339-coffres-chrono.md)
+- [Assemblage et pose du coffre demi-linteau Bloc LX SOPROFEN](/procedures/pose-bloc-lx-demi-linteau-soprofen.md)
+- [Perçage des coulisses pour lame à serrure sur volet à tirage direct](/procedures/percage-coulisses-lame-serrure-soprofen.md)
+- [Screen extérieur SCREENAMAX](/equipements/screen-exterieur-screenamax.md)
+- [Moustiquaires enroulables verticales](/equipements/moustiquaires-enroulables-verticales.md)
+- [Garanties par composant](/garanties/garanties-par-composant.md)
+- [Guide technique Blocs-baies SOPROFEN 2022](/sources/soprofen-guide-technique-blocs-baies-2022.md)
+- [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md)
+
+===== PAGE 2 : /equipements/volets-roulants-chrono-pse2.md =====
+# Présentation du système CHRONO PSE²
+
+Le **CHRONO PSE²** de [SOPROFEN](/fournisseurs/soprofen.md) est un système hybride combinant la rapidité de pose en atelier d'un bloc-baie monté sur menuiserie et les qualités thermiques d'un coffre tunnel de maçonnerie [1 p. 4, 86].
+* **Corps isolant en PSE haute densité** : caisson moulé en polystyrène expansé graphité garantissant une isolation thermique continue [1 p. 4, 86].
+* **Performances thermiques certifiées** : coefficient de transmission surfacique $U_c$ descendant jusqu'à **$0,3\text{ W/(m}^2\text{.K)}$** (selon modélisations logiciel Bisco), surpassant les exigences standard des bâtiments passifs et de la RE2020 [1 p. 4].
+* **Affaiblissement acoustique** : isolation phonique renforcée atteignant $D_{n,e,\text{tr}} = 47\text{ dB}$ grâce à l'adjonction de l'isolant phonique lourd PSX58 [1 p. 4, 101].
+* **Polyvalence fonctionnelle** : le caisson accueille au choix un tablier de **volet roulant** traditionnel ou un tablier de **Brise-Soleil Orientable (BSO)** à lames aluminium réglables [1 p. 4, 86, 115].
+
+---
+
+# Dimensions de coffre et modes de visite
+
+Le coffre CHRONO PSE² est décliné en deux profondeurs de maçonnerie (300 et 360 mm) et deux sens de trappe d'accès [1 p. 90, 117] :
+
+| Code coffre | Sens de visite | Profondeur maçonnerie $P$ (mm) | Hauteur $h$ caisson + adaptateur (mm) | Largeur max $L_{\max}$ (mm) | Hauteur max $H_{\max}$ (mm) | Revêtement de finition |
+| --- | --- | --- | --- | --- | --- | --- |
+| AI30 | Accès Intérieur | 300 | 312 | 3 000 | 3 500 | Polystyrène brut pour enduit intérieur |
+| AE30 | Accès Extérieur | 300 | 312 | 3 000 | 3 500 | Polystyrène brut pour enduit extérieur |
+| AI36 | Accès Intérieur | 360 | 312 | 3 000 | 3 500 | Polystyrène brut pour enduit intérieur |
+| AE36 | Accès Extérieur | 360 | 312 | 3 000 | 3 500 | Polystyrène brut pour enduit extérieur |
+| AIP30 | Accès Intérieur | 283 | 312 | 3 000 | 3 500 | Plaque fibrociment pour ossature bois |
+| AEP30 | Accès Extérieur | 283 | 312 | 3 000 | 3 500 | Plaque fibrociment pour ossature bois |
+| AIP36 | Accès Intérieur | 343 | 312 | 3 000 | 3 500 | Plaque fibrociment pour ossature bois |
+| AEP36 | Accès Extérieur | 343 | 312 | 3 000 | 3 500 | Plaque fibrociment pour ossature bois |
+
+(schéma: raw/moustiquaires/export_doc_132.zip, p. 90 et 117)
+
+*Règle de largeur* : la largeur de commande $L$ correspond à la largeur hors-tout du coffre, liée à la largeur entre tapées $L_t$ par la relation : $L = L_t + DG + DD$ (avec débord standard gauche/droite $DG = DD = 30\text{ mm}$, maxi 60 mm) [1 p. 89].
+
+---
+
+# Déclinaison Volet Roulant
+
+En version volet roulant, le CHRONO PSE² intègre des tabliers PVC ou aluminium à haute résistance [1 p. 86, 90] :
+
+| Type de lame | Matériau | Pas (mm) | Largeur max (mm) | Hauteur max coffre 300 (mm) | Hauteur max coffre 360 (mm) | Poids tablier (kg/m²) |
+| --- | --- | --- | --- | --- | --- | --- |
+| LA 37 | Aluminium | 37 | 2 500 | 3 500 | 3 500 | 2,70 |
+| LA 50 | Aluminium | 50 | 3 000 | 2 700 | 2 700 | 2,85 |
+| L 50 | PVC | 50 | 2 000 | 2 700 | 2 700 | 3,50 |
+
+(schéma: raw/moustiquaires/export_doc_132.zip, p. 86 et 90)
+
+*Majoration lame finale* : ajouter **1,1 kg/ml** pour la lame finale en aluminium extrudé [1 p. 86].
+
+### Coulisses aluminium avec tapée intégrée
+
+* **AT1** : coulisse aluminium pour caisson à **accès intérieur** (déport de tapée 49 mm, cote totale 86 mm) [1 p. 91].
+* **AT2** : coulisse aluminium pour caisson à **accès extérieur** (déport de tapée 99 mm, cote totale 136 mm) [1 p. 91].
+
+---
+
+# Déclinaison Brise-Soleil Orientable (BSO)
+
+Le coffre CHRONO PSE² en version BSO permet une régulation précise des apports solaires d'été tout en maximisant la lumière naturelle d'hiver [1 p. 115] :
+
+| Profil de lame BSO | Largeur de lame (mm) | Épaisseur (mm) | Spécificité technique | Largeur max $L_{\max}$ (mm) | Hauteur max $H_{\max}$ (mm) |
+| --- | --- | --- | --- | --- | --- |
+| Lames Ourlées | 80 | 0,45 | Bords ourlés double face, œillets polyamide noir | 4 000 | 2 800 |
+| Lames Plates | 80 | 0,45 | Faible hauteur de paquet, grande souplesse | 4 000 | 4 000 |
+| Lames en Z | 73 | 0,45 | Joint d'étanchéité PVC souple, obscurcissement et insonorisation renforcés | 4 000 | 2 500 |
+
+(schéma: raw/moustiquaires/export_doc_132.zip, p. 115, 117)
+
+> [!WARNING]
+> **Guidage anti-vent pour BSO** : pour garantir la tenue mécanique face aux rafales de vent, un câble de guidage supplémentaire intermédiaire est obligatoire pour les largeurs supérieures à **2,40 m** en lames plates, et supérieures à **3,00 m** en lames ourlées [1 p. 118].
+
+---
+
+# Motorisations et commandes
+
+Le CHRONO PSE² bénéficie des technologies filaires et radio [SOMFY](/fournisseurs/somfy.md) et SOPROFEN [1 p. 95-100, 117-118] :
+
+* **Version Volet Roulant** :
+  * Radio RTS Somfy : Oximo RTS, Oximo court S RTS, Oximo 40 WF solaire autonome avec panneau déporté A35 [1 p. 95-96].
+  * Radio IO Somfy : Oximo IO, S&SO RS100 IO (classe 2), Oximo 40 WF IO solaire autonome A45 [1 p. 95-96].
+  * Radio M-Soft² Soprofen : M-Soft² MVM court (code R11) et MVM standard [1 p. 95-96].
+  * Filaire : Somfy WT Ilmo (12 et 17 tours), M-Soft² filaire (MVEC, MVE) [1 p. 95, 97].
+  * Manuelle : treuil sortie basse TB, sortie façade TF, ou tirage direct TGD avec ressort compensateur CR50G [1 p. 93-94].
+* **Version BSO** :
+  * Moteurs spécifiques BSO à couple et vitesse régulés avec commande de variation d'orientation des lames par molette : Somfy RTS Variation, Somfy Situo 1 IO Variation, et Soprofen Monotel M-Soft 2 [1 p. 117-118].
+
+---
+
+# Compatibilité de pose selon les types de parois
+
+Le CHRONO PSE² dispose de plans de calepinage d'atelier détaillés pour tous les modes constructifs modernes [1 p. 105-114, 119-123] :
+1. **Isolation Thermique par l'Extérieur (ITE)** : caisson 300 mm en accès intérieur (p. 105) ou accès extérieur (p. 106).
+2. **Isolation Thermique par l'Intérieur (ITI)** : caisson 300 mm en doublage intérieur (p. 107-108).
+3. **Ossature Bois (MOB)** : caisson 300 mm avec plaque fibrociment rapportée en face supérieure (p. 109-110).
+4. **Double mur (brique de parement extérieure)** : caisson avec plaque fibrociment (p. 111-112).
+5. **Monomur (brique terre cuite ou béton cellulaire isolant)** : caisson grande profondeur de 360 mm assurant l'alignement parfait des faces brutes à enduire (p. 113-114).
+
+---
+
+# Citations
+
+[1] [Guide technique Blocs-baies SOPROFEN 2022, réf. DOC86505](raw/moustiquaires/export_doc_132.zip), p. 4, 86 à 123
+
+---
+
+# Voir aussi
+
+- [SOPROFEN](/fournisseurs/soprofen.md)
+- [SOMFY](/fournisseurs/somfy.md)
+- [Volets roulants](/equipements/volets-roulants.md)
+- [Volet roulant inversé MONO VI](/equipements/volets-roulants-mono-vi.md)
+- [Volet roulant coffre demi-linteau BLOC LX](/equipements/volet-roulant-bloc-lx-demi-linteau.md)
+- [Guide technique Blocs-baies SOPROFEN 2022](/sources/soprofen-guide-technique-blocs-baies-2022.md)
+
+===== PAGE 3 : /equipements/volets-roulants-tradi-premonte.md =====
+# Définition et principe d'intégration
+
+Le volet roulant traditionnel **TRADI PRÉMONTÉ** de [SOPROFEN](/fournisseurs/soprofen.md) est un système sans coffre extérieur visible destiné aux poses en coffre menuisé existant, en réservation linteau, dans les constructions à ossature bois (MOB) et sur chéneaux de vérandas [1 p. 1]. Les consoles de fixation et le tablier sont livrés **intégralement prémontés et solidaires de l'axe**, constituant un ensemble autoportant sans déport en version motorisée pour une installation rapide et directe sur chantier [1 p. 1].
+
+# Cotes et limites dimensionnelles
+
+Limites dimensionnelles maximales d'exécution selon la nature et le profil de la lame, cotes en millimètres, relevées sur la fiche produit DOC83117 [1 p. 2] :
+
+| Profil de lame | Matière du tablier | Largeur maximale (mm) | Hauteur maximale (mm) | Spécificités d'emploi |
+| --- | --- | --- | --- | --- |
+| Lame 37 (LA 37) | Aluminium double paroi | 2500 | 3550 | Enroulement compact, baies étroites et moyennes |
+| Lame 50 (LA 50) | Aluminium double paroi | 3500 | 3000 | Grandes baies vitrées de plain-pied |
+| Lame 50 (L 50) | PVC standard | 2000 | 2950 | Solution économique standard |
+| Lame 37 (L 37) | PVC | - | - | Cotes non chiffrées au tableau de synthèse |
+
+(schéma: raw/moustiquaires/Fiche produit volet traditionnel TRADI PREMONTE 2025 SOPROFEN.pdf, p. 2)
+
+Pour équiper les très grandes baies jusqu'à **4 500 mm de largeur**, le système intègre un profilé de séparation central exclusif et discret utilisable jusqu'à 3,50 m de large par travée [1 p. 1].
+
+# Technologie d'occultation brevetée Goodnight
+
+Le volet TRADI PRÉMONTÉ intègre la technologie brevetée **Goodnight** pour éliminer les fuites lumineuses et atteindre un niveau d'obscurité complet [1 p. 1] :
+* **Dans la coulisse de guidage** : profilé d'insertion de coloris noir combinant un joint co-extrudé étanche à l'air et un joint brosse latéral [1 p. 1].
+* **En partie haute** : joint d'occultation spécifique appliqué sur la première lame du tablier pour obturer la fente du coffre [1 p. 1].
+* **En partie basse** : joint spécifique sur la lame finale, avec possibilité d'ajouter un joint brosse souple pour épouser les irrégularités de la pièce d'appui maçonnerie [1 p. 1].
+* **Plage dimensionnelle Goodnight** : applicable jusqu'à **3 000 mm de largeur** en lames aluminium LA 37 et LA 50 [1 p. 1].
+
+# Performances thermiques et isolation phonique
+
+* **Lames aluminium thermiques (LATH 37 et LATH 50)** : face intérieure traitée avec un revêtement spécifique piégeant le rayonnement infrarouge. Le réchauffement de la lame d'air stabilisée entre le volet et le vitrage apporte une résistance thermique additionnelle certifiée **$\Delta R = 0,24\text{ m}^2\text{K/W}$** [1 p. 1].
+* **Isolation de coffre menuisé Isoflex** : kit d'isolation breveté pour coffre bois ou maçonné intérieur réduisant jusqu'à **66 % des déperditions thermiques** et atténuant les bruits extérieurs de **6 dB** [1 p. 1].
+
+# Sécurité et tenue mécanique
+
+* **Axe d'enroulement AXIS 50** : compacité d'enroulement optimisant le diamètre total et prolongeant la durée de vie des tabliers [1 p. 1].
+* **Verrous automatiques anti-soulèvement** : montés de série sur l'axe, résistant à un effort de relevage forcé vertical de **25 kg** en versions motorisée et treuil [1 p. 1].
+* **Lame finale sécurisée** : butées d'arrêt invisibles dissimulées dans les embouts de la lame finale [1 p. 1].
+
+# Motorisations et organes de commande
+
+L'équipement motorisé fait appel aux technologies [SOMFY](/fournisseurs/somfy.md) et aux automatismes propres SOPROFEN [1 p. 2] :
+
+| Motorisation | Technologie / Type | Indice de réparabilité Actibaie |
+| --- | --- | --- |
+| Radio [SOMFY](/fournisseurs/somfy.md) IO S&SO RS100 IO | Réseau 230 V, bi-vitesse, accostage doux, protection gel | 7,5 / 10 |
+| Radio [SOMFY](/fournisseurs/somfy.md) Oximo IO | Réseau 230 V, protocole io-homecontrol | 7,5 / 10 |
+| Radio [SOMFY](/fournisseurs/somfy.md) RTS | Réseau 230 V, protocole radio RTS | 7,5 / 10 |
+| Filaire [SOMFY](/fournisseurs/somfy.md) | Réseau 230 V filaire standard | 7,8 / 10 |
+| Radio solaire [SOMFY](/fournisseurs/somfy.md) | Panneau photovoltaïque + batterie déportée | 7,8 / 10 |
+| Radio SOPROFEN M-Soft² | Réseau 230 V, protocole propre Soprofen | 7,5 / 10 |
+| Filaire SOPROFEN M-Soft² | Réseau 230 V filaire propre Soprofen | 7,8 / 10 |
+| Radio solaire SOPROFEN M-Soft² | Panneau solaire + batterie déportée Soprofen | 7,8 / 10 |
+
+(schéma: raw/moustiquaires/Fiche produit volet traditionnel TRADI PREMONTE 2025 SOPROFEN.pdf, p. 2)
+
+Organes de manœuvre manuelle disponibles : treuil avec manivelle oscillante, sangle avec enrouleur en applique, et chaînette [1 p. 2].
+
+# Nuancier tablier et encadrement
+
+* **Tablier aluminium LA 37/50** : 24 teintes standards lisses, métallisées et sablées (Blanc, Beige, Beige 1015, Brun, Gris 7012, Gris 7016, Gris 7022, Gris 7035, Gris 7038, Gris 7039, Gris 9007, Noir 9005, Noir 9011, Blanc 9001, Bleu canon, Bleu 5024, Rouge 3004, Vert 6005, Vert 6021, Mars 2525, Chêne doré, Chêne irlandais, Gris sablé 2900, Noir sablé 2100) [1 p. 2].
+* **Lames thermiques LATH** : bicoloration avec intérieur gris réfléchissant (Gris 7016 ext. / Gris int., Chêne doré ext. / Gris int., Blanc ext. / Gris int.) [1 p. 2].
+* **Tablier PVC L 37/50** : Blanc, Gris, Beige [1 p. 2].
+* **Encadrement (coulisses et lame finale)** :
+  * Standards aspect lisse-satiné : Blanc, Beige, Beige 1015, Brun, Gris métal, Gris 7016 [1 p. 2].
+  * Aspect structuré mat : Gris 7016, Gris 9007, Noir 9005, Gris sablé 2900, Noir sablé 2100 [1 p. 2].
+  * Ton Bois : Chêne doré [1 p. 2].
+  * Niveau 1 (14 teintes RAL en lisse-satiné ou structuré-mat) et Niveau 2 (toutes teintes RAL avec laquage Haute Résistance Bord de mer) [1 p. 2].
+
+# Options complémentaires
+
+* Système de projection à l'italienne du tablier [1 p. 2].
+* Lame finale rehaussée et butées rondes apparentes [1 p. 2].
+* Kit de fixation universel et déport de manœuvre supplémentaire [1 p. 2].
+* Traitement Haute Résistance Bord de mer (zones 0 à 10 km et au-delà de 10 km) avec thermolaquage anti-corrosion du coffre, des coulisses et de la lame finale [1 p. 2].
+
+# Normes et certifications
+
+* Fabrication française avec marquage CE [1 p. 2].
+* Conformité aux normes **NF EN 13241** et **NF EN 13659** [1 p. 2].
+* Garanties tabliers, moteurs et automatismes appliquées selon le Carnet d'Assistance et Garanties SOPROFEN [1 p. 2].
+
+# Citations
+
+[1] [Fiche produit volet traditionnel TRADI PRÉMONTÉ SOPROFEN, réf. DOC83117 - Version 07/2025](raw/moustiquaires/Fiche%20produit%20volet%20traditionnel%20TRADI%20PREMONTE%202025%20SOPROFEN.pdf), p. 1 et 2
+
+# Voir aussi
+
+- [SOPROFEN](/fournisseurs/soprofen.md)
+- [Volets roulants](/equipements/volets-roulants.md)
+- [SOMFY](/fournisseurs/somfy.md)
+- [Garanties par composant](/garanties/garanties-par-composant.md)
+- [Fiche produit volet traditionnel TRADI PRÉMONTÉ SOPROFEN 2025](/sources/soprofen-volet-tradi-premonte-2025.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /sources/soprofen-guide-technique-blocs-baies-2022.md | Source | Guide technique Blocs-baies SOPROFEN 2022 | source, soprofen, bloc-baie, chrono-one, chrono-pse2, mono-vi | Guide technique officiel et catalogue de commande des blocs-baies SOPROFEN (réf. DOC86505 09/2022, 148 pages) — Chrono ONE, Chrono CX14/CRX14/CRX18, Bloc LX, Chrono PSE² (volet et BSO), Mono VI (volet inversé) et classification de résistance au vent NF EN 13659 / DTU 34-2. | commande sous coffre $H$ ; largeur maximale multi-tabliers = 4 000 mm. * **Tailles et tabliers (p. 8)** : Coffre 200 mm ($\varnothing 165$, $H_{\max} |
+| /sources/soprofen-at-cstb-coffres-chrono.md | Source | Avis Technique CSTB n° 6/16-2339_V2, coffres Chrono SOPROFEN | source, cstb, avis-technique, soprofen, bloc-baie, chrono-c | Avis Technique CSTB n° 6/16-2339_V2 (72 pages, valide jusqu'au 31/01/2027) pour les coffres de volets roulants blocs-baies PVC SOPROFEN — Chrono C, Chrono VX2, Chrono VRX2 réno et Chrono ONE (dimensions, thermique Uc/Up, AEV C3/C4, inerties EI, profilés et détails de mise en œuvre). | Fixation d'extrémité de coffre : patte acier pour tablier $> 10\text{ kg}$ ; vissage direct dans alvéovis d'adaptateur pour tablier $\le 10\text{ kg}$ |
+| /equipements/volets-roulants-tradi-non-premonte.md | Équipement | Volet roulant traditionnel TRADI NON PRÉMONTÉ | volet-roulant, tradi, tradi-non-premonte, soprofen, la546, goodnight | Volet roulant traditionnel SOPROFEN pour coffres existants avec déport ajustable, lame grand format LA 546 jusqu'à 4500 mm et isolation Isoflex. | l'ajustement précis de l'axe d'enroulement et du tablier aux contraintes volumétriques de la réservation, en neuf comme en réhabilitation [1 p. 1]. E |
+| /equipements/volets-roulants-tradi-tunnel-vtr.md | Équipement | Volet roulant traditionnel TRADI pour COFFRE TUNNEL et TRADI VTR | volet-roulant, tradi, coffre-tunnel, vtr, soprofen, renovation | Volet roulant traditionnel SOPROFEN pour coffres tunnel préfabriqués avec kit de fixation fond de joue et version VTR sur coulisses existantes. | ovation sans dépose de coulisses, le volet et son tablier venant s'insérer directement dans les coulisses de guidage existantes conservées sur le bâti |
+| /coloris/coloris-stores.md | Coloris | Coloris des stores intégrés | coloris, nuancier, store, venitien, plisse, lame | Nuancier des stores intégrés PROFERM — 56 coloris de lames aluminium 16 mm pour le store vénitien et 29 tissus en quatre collections pour le store plissé, avec opacité, effet et classe NF EN 14501. | ir le [glossaire](/reference/glossaire.md)) ; son tablier est fait de lames en aluminium de 16 mm de largeur. « Optez pour l'un de nos nombreux colori |
+| /equipements/stores-integres.md | Équipement | Stores intégrés | store, venitien, plisse, protection-solaire, nf-en-14501, parclose | Stores vénitiens 16 mm et plissés 20 mm intégrés entre les parcloses de la menuiserie PROFERM, avec leur nomenclature, leurs limites dimensionnelles, encombrements, prise de mesures, conditions d'utilisation et classes de protection solaire. | ranties/garanties-par-composant.md). / Famille / Tablier (partie qui descend devant le vitrage) / Ce qu'annonce la source / / --- / --- / --- / / Sto |
+| /reference/classification-resistance-au-vent.md | Référence | Classification de la résistance au vent, essai EN 12211 | norme, en-12211, en-12210, vent, fleche, classification | Les classes de pression de vent (P1, P2, P3) et de flèche relative normale d'une fenêtre ou d'une porte essayée selon l'EN 12211, les exigences sous P1, P2 et P3, et leur combinaison en une classification globale de résistance au vent (A1 à C5, ou Exxxx). | ès essai réalisé selon l'EN 12211 [1 p. 85]. Les classes à préconiser selon le site (région, terrain, hauteur) sont sur [Classification A\*E\*V\* par |

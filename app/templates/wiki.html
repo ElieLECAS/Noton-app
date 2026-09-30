@@ -7,7 +7,7 @@
 <style>
 {% raw %}
   /* ==== jetons de la coquille ============================================
-     Palette calquee sur Notion pour la barre laterale. Le rendu
+     Palette calquee sur Notion. Le rendu
      des pages (typographie, tableaux, chips) vient de wiki-doc.css, partage
      avec le chat. Le theme est celui de l'application : la classe `dark`
      posee sur <html> par base.html. */
@@ -90,92 +90,18 @@
     transition:background .12s,color .12s,border-color .12s}
   #wiki-shell .tbtn:hover{background:var(--bg-hover);color:var(--tx)}
   #wiki-shell .tbtn.on{background:var(--accent-soft);color:var(--accent);border-color:transparent}
-  #wiki-shell .ibtn:focus-visible,#search:focus-visible,
-  #wiki-shell .pg:focus-visible,#wiki-shell .grp-head:focus-visible,#wiki-shell .card:focus-visible{
+  #wiki-shell .ibtn:focus-visible,#wiki-shell .card:focus-visible{
     outline:2px solid var(--accent);outline-offset:1px}
 
-  /* ==== barre laterale du wiki ============================================ */
-  #wiki-sidebar{width:264px;flex:none;background:var(--bg-side);border-right:1px solid var(--line);
-    display:flex;flex-direction:column;min-height:0;
-    transition:width .18s cubic-bezier(.2,.7,.3,1),opacity .14s}
-  #wiki-shell.side-off #wiki-sidebar{width:0;opacity:0;pointer-events:none;overflow:hidden;border-right:0}
-
-  #wiki-side-head{display:flex;align-items:center;gap:2px;padding:10px 8px 9px 12px;flex:none}
-  #wiki-shell .ws{display:flex;align-items:center;gap:8px;min-width:0;flex:1;border:0;background:none;
-    padding:0;cursor:pointer;text-align:left;color:var(--tx)}
-  #wiki-shell .ws-mark{width:20px;height:20px;border-radius:5px;background:var(--accent);color:#fff;
-    font-size:11px;font-weight:800;display:grid;place-items:center;flex:none}
-  #wiki-shell .ws-name{font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;
-    text-overflow:ellipsis}
-
-  /* ---- recherche ---- */
-  #search-wrap{position:relative;padding:0 8px 8px;flex:none}
-  #search-box{display:flex;align-items:center;gap:7px;background:var(--bg-sunken);
-    border:1px solid transparent;border-radius:8px;padding:0 9px;height:32px;
-    transition:border-color .12s,background .12s}
-  #search-box:focus-within{background:var(--bg);border-color:var(--accent)}
-  #search-box .ico{color:var(--tx-faint)}
-  #search{flex:1;min-width:0;background:none;border:0;outline:none;color:var(--tx);
-    font:inherit;font-size:13.5px;padding:0;box-shadow:none}
-  #search:focus{outline:none;box-shadow:none}
-  #search::placeholder{color:var(--tx-faint);opacity:1}
-  #search::-webkit-search-cancel-button{display:none}
   #wiki-shell kbd{font:inherit;font-size:10.5px;color:var(--tx-faint);background:var(--bg-hover);
     border-radius:4px;padding:1px 5px;white-space:nowrap}
-  #search-box:focus-within kbd{display:none}
-
-  #results{position:absolute;left:8px;right:8px;top:38px;z-index:30;background:var(--bg);
-    border:1px solid var(--line-strong);border-radius:10px;box-shadow:var(--shadow-lg);
-    padding:4px;max-height:52vh;overflow:auto}
-  #results[hidden]{display:none}
-  #wiki-shell .res{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;
-    padding:6px 8px;border-radius:6px;cursor:pointer;text-align:left}
-  #wiki-shell .res:hover,#wiki-shell .res.on{background:var(--bg-hover)}
-  #wiki-shell .res .dot{width:7px;height:7px;border-radius:50%;flex:none}
-  #wiki-shell .res .rt{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  #wiki-shell .res .rd{font-size:11.5px;color:var(--tx-faint);margin-left:auto;padding-left:8px;
-    white-space:nowrap;flex:none}
-  #wiki-shell .res-empty{padding:10px 9px;font-size:12.5px;color:var(--tx-faint)}
-
-  /* ---- arbre des pages ---- */
-  #tree{flex:1;min-height:0;overflow:auto;padding:2px 8px 8px}
-  #wiki-shell .sec-lab{font-size:11px;font-weight:700;color:var(--tx-faint);letter-spacing:.06em;
-    text-transform:uppercase;padding:8px 6px 4px}
-  #wiki-shell .grp{margin-bottom:1px}
-  #wiki-shell .grp-head{display:flex;align-items:center;gap:6px;width:100%;border:0;background:none;
-    padding:4px 6px;border-radius:6px;cursor:pointer;text-align:left;color:var(--tx-dim)}
-  #wiki-shell .grp-head:hover{background:var(--bg-hover);color:var(--tx)}
   #wiki-shell .tw{width:14px;height:14px;flex:none;display:grid;place-items:center;
     color:var(--tx-faint);transition:transform .13s}
-  #wiki-shell .grp.open .tw{transform:rotate(90deg)}
-  #wiki-shell .grp-head .dot{width:8px;height:8px;border-radius:50%;flex:none}
-  #wiki-shell .grp-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;
-    text-overflow:ellipsis}
-  #wiki-shell .grp-n{margin-left:auto;font-size:11px;color:var(--tx-faint);
-    font-variant-numeric:tabular-nums}
-  #wiki-shell .grp-list{display:none;padding:1px 0 3px 12px;margin-left:12px;
-    border-left:1px solid var(--line)}
-  #wiki-shell .grp.open .grp-list{display:block}
-  #wiki-shell .pg{display:flex;align-items:center;gap:6px;width:100%;border:0;background:none;
-    padding:3px 8px;border-radius:6px;cursor:pointer;text-align:left;color:var(--tx-dim);
-    font-size:12.5px}
-  #wiki-shell .pg:hover{background:var(--bg-hover);color:var(--tx)}
-  #wiki-shell .pg.cur{background:var(--accent-soft);color:var(--accent);font-weight:600}
-  #wiki-shell .pg.ghost .pg-t{font-style:italic;color:var(--tx-faint)}
-  #wiki-shell .pg-t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  #wiki-shell .pg-flag{width:5px;height:5px;border-radius:50%;background:var(--danger);flex:none;
-    margin-left:auto}
-
-  #wiki-side-foot{flex:none;display:flex;gap:11px;flex-wrap:wrap;padding:8px 14px 10px;
-    border-top:1px solid var(--line);font-size:11.5px;color:var(--tx-faint)}
-  #wiki-side-foot b{color:var(--tx-dim);font-weight:600;font-variant-numeric:tabular-nums}
 
   /* ==== zone principale : barre d'en-tete + vues ========================== */
   #wiki-main{position:relative;flex:1;min-width:0;min-height:0;display:flex;flex-direction:column}
   #wiki-topbar{flex:none;display:flex;align-items:center;gap:4px;padding:8px 12px;
     border-bottom:1px solid var(--line);background:var(--bg)}
-  #topbar-side{display:none}
-  #wiki-shell.side-off #topbar-side{display:inline-flex}
   #crumb{flex:1;min-width:0;display:flex;align-items:center;gap:6px;font-size:13px;
     color:var(--tx-faint);padding:0 6px;white-space:nowrap;overflow:hidden}
   #crumb .cr-t{color:var(--tx);font-weight:600;overflow:hidden;text-overflow:ellipsis}
@@ -265,12 +191,6 @@
 
   /* ---- navigation par produit et par metier ---- */
   #wiki-shell.view-hub #view-hub{display:block;overflow:auto}
-  #tree-mode{display:flex;gap:2px;margin:0 8px 6px;padding:2px;border-radius:8px;background:var(--bg-sunken);flex:none}
-  #tree-mode button{flex:1;border:0;background:none;border-radius:6px;padding:4px 6px;font-size:12px;
-    font-weight:600;color:var(--tx-dim);cursor:pointer}
-  #tree-mode button.on{background:var(--bg);color:var(--tx);box-shadow:var(--shadow)}
-  #wiki-shell .grp-sub{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-    color:var(--tx-faint);padding:6px 8px 2px}
   #crumb .cr-l{border:0;background:none;padding:0;font:inherit;cursor:pointer;color:var(--tx-dim);
     white-space:nowrap}
   #crumb .cr-l:hover{color:var(--accent);text-decoration:underline}
@@ -330,7 +250,6 @@
 
   @media(max-width:900px){
     #wiki-shell .hub-row{grid-template-columns:1fr;gap:.35rem}
-    #wiki-sidebar{position:absolute;inset:0 auto 0 0;z-index:25;box-shadow:var(--shadow-lg)}
     #wiki-shell .home{padding:1.6rem 1.2rem 5rem}
     #wiki-shell .home-head h1{font-size:1.6rem}
     #wiki-shell .wd-page{padding:1.6rem 1.2rem 5rem}
@@ -342,40 +261,8 @@
 {% block content %}
 <div id="wiki-shell" class="flex-1 min-h-0 view-home">
 
-  <aside id="wiki-sidebar">
-    <header id="wiki-side-head">
-      <button class="ws" id="wiki-home-btn" title="Accueil du wiki">
-        <span class="ws-mark">P</span><span class="ws-name">Wiki PROFERM</span>
-      </button>
-      <button class="ibtn" id="wiki-btn-side" title="Masquer le panneau (Ctrl+\)"></button>
-    </header>
-
-    <div id="search-wrap">
-      <div id="search-box">
-        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="search" type="search" placeholder="Rechercher une page…" autocomplete="off">
-        <kbd>Ctrl K</kbd>
-      </div>
-      <div id="results" hidden></div>
-    </div>
-
-    <div id="tree-mode" role="tablist" aria-label="Classement des pages">
-      <button data-mode="produit" role="tab">Par produit</button>
-      <button data-mode="type" role="tab">Par type</button>
-    </div>
-    <nav id="tree"></nav>
-
-    <footer id="wiki-side-foot">
-      <span><b id="s-nodes">0</b> pages</span>
-      <span><b id="s-links">0</b> liens</span>
-      <span><b id="s-stale">0</b> périmées</span>
-    </footer>
-  </aside>
-
   <div id="wiki-main">
     <header id="wiki-topbar">
-      <button class="ibtn" id="topbar-side" title="Afficher le panneau (Ctrl+\)"></button>
       <button class="ibtn" id="nav-back" title="Précédent" disabled>
         <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
           stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
@@ -457,16 +344,12 @@ const ICO = {
   chev:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"'+
       ' stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px">'+
       '<path d="m9 6 6 6-6 6"/></svg>',
-  panel:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"'+
-      ' stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/>'+
-      '<path d="M9.5 4v16"/></svg>',
   search:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"'+
       ' stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>'
 };
 
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c =>
   ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const cssEsc = s => window.CSS && CSS.escape ? CSS.escape(s) : String(s).replace(/"/g, '\\"');
 const groupBy = (items, key) => {
   const m = new Map();
   items.forEach(x => { const k = key(x); if(!m.has(k)) m.set(k, []); m.get(k).push(x); });
@@ -485,7 +368,6 @@ function applyTheme(t){
   THEME = t;
   COLORS = PALETTES[t];
   if(DATA){
-    paintTree();
     if(homeSections) renderHome();
     if(view === "page" && sel) renderPage(sel);
   }
@@ -542,7 +424,6 @@ wikiFetch("/api/wiki/graph")
     nodeById = new Map(DATA.nodes.map(n => [n.id, n]));
     computeStats();
     buildNav();
-    buildTree();
     route();
   })
   .catch(err => {
@@ -552,7 +433,7 @@ wikiFetch("/api/wiki/graph")
     notice("Impossible de charger le wiki.");
   });
 
-// Chiffres de l'accueil et du pied de barre : pages concept (ni index/log,
+// Chiffres de l'accueil : pages concept (ni index/log,
 // ni fantomes) et liens entre elles.
 function computeStats(){
   const concept = DATA.nodes.filter(n => !n.reserved && !n.missing);
@@ -560,171 +441,7 @@ function computeStats(){
   stats.pages = concept.length;
   stats.links = DATA.links.filter(l => keep.has(l.source) && keep.has(l.target)).length;
   stats.stale = concept.filter(n => n.stale).length;
-  $("s-nodes").textContent = stats.pages;
-  $("s-links").textContent = stats.links;
-  $("s-stale").textContent = stats.stale;
 }
-
-/* ==== arbre de navigation ===============================================
-   Deux classements : par produit (gamme, puis systeme ou fournisseur, puis
-   hors gamme) et par type. */
-let treeMode = "produit";
-try { if(localStorage.getItem("wiki-tree-mode") === "type") treeMode = "type"; } catch(e){}
-
-function buildTree(){
-  $("tree-mode").querySelectorAll("button").forEach(b => {
-    b.classList.toggle("on", b.dataset.mode === treeMode);
-    b.setAttribute("aria-selected", b.dataset.mode === treeMode);
-  });
-  if(treeMode === "produit") buildProductTree();
-  else buildTypeTree();
-}
-
-$("tree-mode").addEventListener("click", e => {
-  const b = e.target.closest("button[data-mode]");
-  if(!b || b.dataset.mode === treeMode) return;
-  treeMode = b.dataset.mode;
-  try { localStorage.setItem("wiki-tree-mode", treeMode); } catch(e){}
-  buildTree();
-  if(sel) revealInTree(sel);
-});
-
-function buildProductTree(){
-  $("tree").innerHTML = productGroups().map(g =>
-    (g.sub ? '<div class="grp-sub">' + esc(g.sub) + '</div>' : "") +
-    '<section class="grp">' +
-      '<div class="grp-head" role="button" tabindex="0">' +
-        '<span class="tw">' + ICO.chev + '</span>' +
-        '<span class="grp-name">' + esc(g.label) + '</span>' +
-        '<span class="grp-n">' + g.nodes.length + '</span>' +
-      '</div>' +
-      '<div class="grp-list">' + g.nodes.map(pageRow).join("") + '</div>' +
-    '</section>').join("");
-}
-
-function buildTypeTree(){
-  const byType = groupBy(DATA.nodes, d => d.type);
-  const types = sortTypes([...byType.keys()]);
-  $("tree").innerHTML = '<div class="sec-lab">Pages par type</div>' + types.map(t => {
-    const list = byType.get(t).slice().sort(byTitle);
-    return '<section class="grp" data-type="' + esc(t) + '">' +
-      '<div class="grp-head" role="button" tabindex="0">' +
-        '<span class="tw">' + ICO.chev + '</span>' +
-        '<span class="dot"></span>' +
-        '<span class="grp-name">' + esc(t) + '</span>' +
-        '<span class="grp-n">' + list.length + '</span>' +
-      '</div>' +
-      '<div class="grp-list">' + list.map(pageRow).join("") + '</div>' +
-    '</section>';
-  }).join("");
-  paintTree();
-}
-
-function paintTree(){
-  $("tree").querySelectorAll(".grp[data-type] .dot").forEach(dot => {
-    dot.style.background = color(dot.closest(".grp").dataset.type);
-  });
-}
-
-const pageRow = n =>
-  '<button class="pg' + (n.missing ? " ghost" : "") + '" data-id="' + esc(n.id) + '"' +
-  ' title="' + esc(n.description || n.title) + '">' +
-  '<span class="pg-t">' + esc(n.title) + '</span>' +
-  (n.stale ? '<span class="pg-flag" title="Périmée"></span>' : "") + '</button>';
-
-$("tree").addEventListener("click", e => {
-  const pg = e.target.closest(".pg");
-  if(pg){ openPage(pg.dataset.id); return; }
-  const head = e.target.closest(".grp-head");
-  if(head) head.closest(".grp").classList.toggle("open");
-});
-$("tree").addEventListener("keydown", e => {
-  if((e.key === "Enter" || e.key === " ") && e.target.classList.contains("grp-head")){
-    e.preventDefault();
-    e.target.closest(".grp").classList.toggle("open");
-  }
-});
-
-function revealInTree(id){
-  const tree = $("tree");
-  tree.querySelectorAll(".pg.cur").forEach(el => el.classList.remove("cur"));
-  const el = tree.querySelector('.pg[data-id="' + cssEsc(id) + '"]');
-  if(!el) return;
-  el.classList.add("cur");
-  el.closest(".grp").classList.add("open");
-  el.scrollIntoView({block:"nearest"});
-}
-
-/* ==== recherche (barre laterale) ======================================== */
-let hits = [], hitPos = -1;
-
-function searchHits(q){
-  if(!q) return [];
-  const score = n => {
-    const t = n.title.toLowerCase();
-    if(t === q) return 0;
-    if(t.startsWith(q)) return 1;
-    if(t.includes(q)) return 2;
-    if((n.description || "").toLowerCase().includes(q)) return 3;
-    if((n.tags || []).join(" ").toLowerCase().includes(q)) return 4;
-    if(n.id.toLowerCase().includes(q)) return 5;
-    return 99;
-  };
-  return DATA.nodes.map(n => ({n, s: score(n)})).filter(h => h.s < 99)
-    .sort((a,b) => a.s - b.s || byTitle(a.n, b.n))
-    .slice(0, 12).map(h => h.n);
-}
-
-function renderResults(){
-  const box = $("results");
-  const q = $("search").value.trim();
-  if(!q || !DATA){ box.hidden = true; box.innerHTML = ""; hits = []; hitPos = -1; return; }
-  hits = searchHits(q.toLowerCase());
-  hitPos = hits.length ? 0 : -1;
-  box.hidden = false;
-  box.innerHTML = hits.length
-    ? hits.map((n,i) =>
-        '<button class="res' + (i === 0 ? " on" : "") + '" data-id="' + esc(n.id) + '">' +
-        '<span class="dot" style="background:' + color(n.type) + '"></span>' +
-        '<span class="rt">' + esc(n.title) + '</span>' +
-        '<span class="rd">' + esc(n.type) + '</span></button>').join("")
-    : '<div class="res-empty">Aucune page pour « ' + esc(q) + ' »</div>';
-}
-
-function moveHit(step){
-  if(!hits.length) return;
-  hitPos = (hitPos + step + hits.length) % hits.length;
-  const els = $("results").querySelectorAll(".res");
-  els.forEach((el,i) => el.classList.toggle("on", i === hitPos));
-  if(els[hitPos]) els[hitPos].scrollIntoView({block:"nearest"});
-}
-
-function closeResults(){ $("results").hidden = true; hits = []; hitPos = -1; }
-
-$("results").addEventListener("mousedown", e => {
-  const b = e.target.closest(".res");
-  if(!b) return;
-  e.preventDefault();
-  openPage(b.dataset.id);
-  closeResults();
-});
-
-$("search").addEventListener("input", renderResults);
-$("search").addEventListener("focus", () => { if($("search").value.trim()) renderResults(); });
-$("search").addEventListener("blur", () => setTimeout(closeResults, 120));
-$("search").addEventListener("keydown", e => {
-  if(e.key === "ArrowDown"){ e.preventDefault(); moveHit(1); }
-  else if(e.key === "ArrowUp"){ e.preventDefault(); moveHit(-1); }
-  else if(e.key === "Enter" && hitPos >= 0){
-    e.preventDefault();
-    openPage(hits[hitPos].id);
-    closeResults();
-    $("search").blur();
-  } else if(e.key === "Escape"){
-    if(!$("results").hidden){ closeResults(); }
-    else { $("search").value = ""; $("search").blur(); }
-  }
-});
 
 /* ==== vues et routage ===================================================
    Sans hash : accueil. #/dossier/page.md : la page en lecture. #hub/... : une
@@ -741,8 +458,6 @@ function setView(v){
 function goHome(){
   sel = null;
   curHub = null;
-  $("tree").querySelectorAll(".pg.cur").forEach(el => el.classList.remove("cur"));
-  if(sideAuto){ shell.classList.remove("side-off"); sideAuto = false; }
   setView("home");
   ensureHome();
   writeHash("");
@@ -1142,30 +857,6 @@ function productOf(n){
 }
 const RANG_PRODUIT = {gamme: 0, systeme: 1, fournisseur: 2};
 
-function productGroups(){
-  const groups = new Map();
-  const add = (k, label, sub, n, rank) => {
-    if(!groups.has(k)) groups.set(k, {label, sub: null, subLabel: sub, rank, nodes: []});
-    groups.get(k).nodes.push(n);
-  };
-  NAV.concept.filter(n => !isSource(n) && n.type !== "Anomalie").forEach(n => {
-    const gs = list(n, "gamme").filter(g => NAV.gammePage.has(g));
-    if(gs.length){ gs.forEach(g => add("g:" + g, g, "Gammes", n, 0)); return; }
-    const p = productOf(n);
-    if(p) add(p[0] + ":" + p[1], hubLabel(p[0], p[1]), p[0] === "systeme" ? "Systèmes" : "Fournisseurs", n, RANG_PRODUIT[p[0]]);
-    else add("t:" + n.type, TYPE_PLURIEL[n.type] || n.type, "Hors gamme", n, 3);
-  });
-  const out = [...groups.values()].sort((a, b) => a.rank - b.rank || byLabel(a.label, b.label));
-  let last = null;
-  out.forEach(g => {
-    g.nodes.sort(byTitle);
-    if(g.subLabel !== last){ g.sub = g.subLabel; last = g.subLabel; }
-  });
-  const anomalies = NAV.concept.filter(n => n.type === "Anomalie").sort(byTitle);
-  if(anomalies.length) out.unshift({label: "Registres d’anomalies", sub: null, nodes: anomalies});
-  return out;
-}
-
 /* ---- rendu des entrees ---- */
 // Dans une tuile (deja un lien), l'entree est un span : un <a> ne s'imbrique pas.
 function hubTag(kind, key, inCard){
@@ -1280,7 +971,6 @@ function openHub(kind, key, fromHistory){
   const nodes = hubMembers(kind, key);
   curHub = {kind, key};
   sel = null;
-  $("tree").querySelectorAll(".pg.cur").forEach(el => el.classList.remove("cur"));
   const entry = "hub/" + kind + "/" + key;
   if(!fromHistory) pushHist(entry);
   const pages = nodes.filter(n => !isSource(n));
@@ -1389,11 +1079,6 @@ function openPage(id, fromHistory, terms){
   if(rec && rec.error && rec.retry) pageCache.delete(id);
   setView("page");
   renderPage(id);
-  revealInTree(id);
-  if(innerWidth <= 900 && !shell.classList.contains("side-off")){
-    shell.classList.add("side-off");
-    sideAuto = true;
-  }
   $("view-page").scrollTop = 0;
   updateNav();
   writeHash("#" + id);
@@ -1418,7 +1103,6 @@ function pushHist(entry){
 }
 $("nav-back").onclick = () => { if(hpos > 0){ hpos--; openEntry(hist[hpos]); } };
 $("nav-fwd").onclick  = () => { if(hpos < hist.length - 1){ hpos++; openEntry(hist[hpos]); } };
-$("wiki-home-btn").onclick = goHome;
 $("crumb").addEventListener("click", e => {
   if(e.target.closest(".cr-home")){ goHome(); return; }
   navClick(e);
@@ -1718,26 +1402,20 @@ function notice(msg){
   noticeTimer = setTimeout(() => el.classList.remove("show"), 2600);
 }
 
-/* ==== chrome ============================================================ */
-let sideAuto = false;
-function toggleSide(){ shell.classList.toggle("side-off"); sideAuto = false; }
-$("wiki-btn-side").onclick = toggleSide;
-$("topbar-side").onclick = toggleSide;
-$("wiki-btn-side").innerHTML = ICO.panel;
-$("topbar-side").innerHTML = ICO.panel;
-
-// Ctrl+K recherche (celle de l'accueil quand on y est), Ctrl+\ replie la
-// barre du wiki, Echap revient a l'accueil.
+/* ==== raccourcis ======================================================== */
+// Ctrl+K : la recherche de l'accueil (on y revient depuis une page), Echap
+// revient a l'accueil.
 document.addEventListener("keydown", e => {
   const mod = e.ctrlKey || e.metaKey;
   if(mod && e.key.toLowerCase() === "k"){
     e.preventDefault();
-    const target = (view === "home" && $("home-search")) || $("search");
-    target.focus(); target.select();
+    if(!DATA) return;
+    if(view !== "home") goHome();
+    const target = $("home-search");
+    if(target){ target.focus(); target.select(); }
   }
-  else if(mod && e.key === "\\"){ e.preventDefault(); toggleSide(); }
-  else if(e.key === "Escape" && document.activeElement !== $("search") &&
-          document.activeElement !== $("home-search") && DATA && view !== "home") goHome();
+  else if(e.key === "Escape" && document.activeElement !== $("home-search") &&
+          DATA && view !== "home") goHome();
 });
 
 renderCrumb();

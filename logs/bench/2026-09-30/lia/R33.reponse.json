@@ -1,0 +1,10 @@
+{
+  "id": "R33",
+  "reponse": "La TGY3702 est la crémone encastrée 3 points du coulissant Technal SOLEAL GY 55. Le wiki ne donne pas de crémone 4 points d'un seul tenant. Le 4ᵉ point s'obtient avec la **rallonge TGY3704**, qui se raccorde à la TGY3702 (ou à la TGY3703, sa version 3 points à clé).\n\n| Référence | Points de fermeture | Hauteur min. châssis | Hauteur min. poignée Hp | Fixation |\n| --- | --- | --- | --- | --- |\n| TGY3702 | 3 points, sans clé | 1 292 mm | 721 mm | 6 vis TGY3723 |\n| TGY3703 | 3 points à clé (cylindre) | 1 292 mm | 721 mm | 8 vis TGY3723 |\n| **TGY3704** | rallonge 4ᵉ point, raccordée à TGY3702/03 | « pour très grandes hauteurs » | — | 2 vis TGY3723 |\n\nLe wiki ne chiffre pas la hauteur de châssis à partir de laquelle la rallonge est nécessaire. Il écrit seulement « pour très grandes hauteurs ».\n\nSource : (/quincaillerie/soleal-gy-roulements-et-fermetures.md)",
+  "pages_citees": [
+    "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+  ],
+  "appels": 1,
+  "trouve": "oui",
+  "navigation": "Recherche directe sur la référence (« TGY3702 crémone coulissant 3 points 4 points ») : la page SOLEAL GY 55 roulements et fermetures est arrivée en tête, avec le tableau des crémones encastrées où la TGY3704 est écrite « Rallonge 4ème point, raccordée à TGY3702/03 ». Les deux autres pages livrées (ferrures approuvées profine, quincaillerie ASKEY 65 NV) étaient hors sujet ; l'ASKEY a une 3 points W6050103 mais pas de 4 points, ce qui ne change rien puisque la question part d'une référence Technal. Le piège était de répondre par une « crémone 4 points » alors que le wiki donne une rallonge à ajouter à la 3 points : la réponse le dit. Aucune anomalie du bloc ne portait sur cette valeur. Il manque la hauteur de châssis à partir de laquelle la rallonge s'impose (« très grandes hauteurs » seulement), et la page ne porte pas de citation de page source."
+}

@@ -1,0 +1,394 @@
+===== PAGE 1 : /profiles/lumeal-ga-dormants-et-ouvrants.md =====
+# Définition
+
+Le système **LUMEAL GA** de **TECHNAL** est un coulissant à rupture de pont thermique caractérisé par un **ouvrant caché** (masqué dans le cadre dormant), offrant une finesse maximale des masses d'aluminium vues et un gain de clair de vitrage de 8 à 14 % par rapport à un coulissant traditionnel [1 p. 4].
+
+La rupture de pont thermique est réalisée par une barrette tubulaire ou multi-chambres en polyamide 6.6 armé de fibres de verre de **33 mm** sur les profilés dormants et de **22 mm** sur les profilés ouvrants, avec traverse haute d'ouvrant isolante en matériau thermoplastique [1 p. 4].
+
+---
+
+# Cotes
+
+### 1. Profilés dormants 2 rails (Module 100 mm) et monorail
+
+Profilés tubulaires multi-chambres en alliage d'aluminium 6060 T6, cotes en mm relevées sur les catalogues de conception et de fabrication.
+
+| Référence | Désignation | Face vue (mm) | Largeur / Profondeur (mm) | Spécificité d'assemblage |
+| --- | --- | --- | --- | --- |
+| **T141000** | Rail bas 2 rails | 50,5 | 100,0 | Double rainure BTC pour clippage des tapées |
+| **T141001** | Rail bas 2 rails | 50,5 | 100,0 | Lisse sans rainure BTC (pose tunnel ou ossature bois) |
+| **T141004** | Rail bas 2 rails à aile | 70,5 | 100,0 | Intègre une aile de recouvrement de 20 mm |
+| **T141012** | Traverse haute 2 rails à aile | 87,8 | 100,0 | Intègre un couvre-joint de 20 mm |
+| **T141017** | Traverse haute 2 rails | 67,8 | 100,0 | Lisse sans rainure BTC |
+| **T141019** | Traverse haute 2 rails | 67,8 | 100,0 | Double rainure BTC pour clippage des tapées |
+| **T141030** | Montant dormant 2 rails | 77,0 | 106,0 | Double rainure BTC pour tapées de doublage |
+| **T141031** | Montant dormant 2 rails | 77,0 | 106,0 | Lisse sans rainure BTC |
+| **T141007** | Montant dormant 2 rails à aile | 97,0 | 106,0 | Intègre un couvre-joint de 20 mm |
+| **T141025** | Rail bas monorail | 50,5 | 100,0 | Double rainure BTC pour 1 vantail + fixe |
+| **T141026** | Rail bas monorail | 50,5 | 100,0 | Lisse sans rainure BTC pour 1 vantail + fixe |
+| **T141029** | Rail bas monorail à aile | 70,5 | 100,0 | Aile de 20 mm pour 1 vantail + fixe |
+| **T141014** | Seuil PMR bas 2 rails | 32,7 | 100,0 | Seuil surbaissé recevant la rampe T401028 |
+| **T141013** | Seuil PMR bas monorail | 32,7 | 100,0 | Seuil surbaissé monorail recevant T401028 |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 64-70)
+
+---
+
+### 2. Profilés dormants 3 rails (Module 151 mm)
+
+Profilés multi-chambres pour coulissants à 3 et 6 vantaux sur 3 rails de roulement indépendants.
+
+| Référence | Désignation | Face vue (mm) | Largeur / Profondeur (mm) | Rôle technique |
+| --- | --- | --- | --- | --- |
+| **TGA1101** | Rail bas 3 rails | 50,5 | 151,2 | Reçoit 3 chemins de roulement T341000 |
+| **TGA1100** | Traverse haute 3 rails | 67,8 | 151,2 | Triple gorge de guidage supérieur |
+| **TGA1102** | Montant dormant 3 rails | 77,0 | 157,2 | Montant latéral avec rainure BTC |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 69)
+
+---
+
+### 3. Profilés ouvrants (ouvrant caché)
+
+Profilés intégrés dissimulés en feuillure de dormant lors de la fermeture du châssis.
+
+| Référence | Rôle et cinématique | Face vue (mm) | Largeur (mm) | Épaisseur vitrage admissible |
+| --- | --- | --- | --- | --- |
+| **T141015** | Traverse basse ouvrant | 65,0 | 36,0 | Vitrage 24 à 28 mm |
+| **T141018** | Traverse intermédiaire | 65,0 | 36,0 | Vitrage 24 à 28 mm |
+| **T141021** | Traverse basse ouvrant | 65,0 | 40,4 | Vitrage 29 à 32 mm |
+| **T141009** | Traverse intermédiaire | 65,0 | 40,2 | Vitrage 29 à 32 mm |
+| **T141039** | Montant latéral ouvrant | 41,2 | 48,0 | Vitrage 24 à 28 mm (porte la fermeture) |
+| **T141040** | Montant latéral ouvrant | 41,2 | 48,0 | Vitrage 29 à 32 mm (porte la fermeture) |
+| **T141037** | Montant central chicane fine | 46,7 | 37,8 | Vitrage 24 à 28 mm |
+| **T141038** | Montant central renforcé | 77,3 | 37,8 | Vitrage 24 à 28 mm |
+| **T141024** | Montant central haute inertie | 97,9 | 37,8 | Vitrage 24 à 28 mm |
+| **T141041** | Montant central chicane fine | 46,7 | 37,8 | Vitrage 29 à 32 mm |
+| **T141043** | Montant central renforcé | 77,3 | 37,8 | Vitrage 29 à 32 mm |
+| **T141042** | Montant central haute inertie | 97,9 | 37,8 | Vitrage 29 à 32 mm |
+| **T141033** | Montant percussion centrale | 80,8 | 31,0 | Montant battement pour 4 et 6 vantaux |
+| **T141034** | Montant percussion renforcé | 80,8 | 31,0 | Montant battement renforcé |
+| **T821004** | Traverse haute ouvrant PVC | 27,0 | 43,0 | Profilé thermoplastique 24 à 28 mm |
+| **T821005** | Traverse haute ouvrant PVC | 27,0 | 43,0 | Profilé thermoplastique 29 à 32 mm |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 71-75)
+
+---
+
+# Moments d'inertie (NF EN 14024)
+
+Moments d'inertie $I_x$ en flexion sous vent (axe XX') calculés selon l'annexe C de la norme NF EN 14024 par portée d'élément, et inertie fixe $I_y$ (axe YY') en $\text{cm}^4$ :
+
+| Référence profilé | $I_x$ à $1\,200\text{ mm}$ | $I_x$ à $1\,600\text{ mm}$ | $I_x$ à $2\,000\text{ mm}$ | $I_x$ à $2\,250\text{ mm}$ | $I_x$ à $2\,500\text{ mm}$ | $I_x$ à $3\,000\text{ mm}$ | $I_y$ (cm⁴) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **T141000** (Dormant 2R) | 26,68 | 35,86 | 43,77 | 47,95 | 51,58 | 57,38 | 16,51 |
+| **T141001** (Dormant 2R) | 27,02 | 36,16 | 44,01 | 48,15 | 51,73 | 57,46 | 16,25 |
+| **T141004** (Dormant 2R aile) | 28,57 | 38,39 | 46,92 | 51,46 | 55,41 | 61,77 | 20,83 |
+| **T141012** (Traverse H. aile) | 36,87 | 49,06 | 59,19 | 64,41 | 68,86 | 75,85 | 24,10 |
+| **T141017** (Traverse H. 2R) | 35,19 | 46,54 | 55,85 | 60,60 | 64,64 | 70,93 | 20,36 |
+| **T141019** (Traverse H. BTC) | 35,12 | 46,55 | 55,94 | 60,75 | 64,83 | 71,21 | 20,56 |
+| **T141030** (Montant 2R BTC) | 15,42 | 15,42 | 15,42 | 15,42 | 15,42 | 15,42 | 46,84 |
+| **T141031** (Montant 2R lisse) | 15,53 | 15,53 | 15,53 | 15,53 | 15,53 | 15,53 | 46,29 |
+| **T141007** (Montant 2R aile) | 17,53 | 17,53 | 17,53 | 17,53 | 17,53 | 17,53 | 62,84 |
+| **T141025** (Rail monorail BTC)| 28,43 | 37,36 | 44,66 | 48,37 | 51,51 | 56,41 | 10,57 |
+| **T141026** (Rail monorail) | 28,32 | 37,06 | 44,14 | 47,73 | 50,77 | 55,47 | 10,40 |
+| **T141029** (Rail monorail aile)| 30,30 | 39,81 | 47,64 | 51,64 | 55,04 | 60,35 | 14,85 |
+| **TGA1100** (Traverse H. 3R) | 103,68 | 128,70 | 150,87 | 162,83 | 173,33 | 190,41 | 31,30 |
+| **TGA1101** (Rail bas 3R) | 95,31 | 117,40 | 137,68 | 148,91 | 158,94 | 175,61 | 22,60 |
+| **TGA1102** (Montant 3R BTC) | 81,71 | 81,71 | 81,71 | 81,71 | 81,71 | 81,71 | 70,11 |
+| **T141014** (Seuil PMR 2R) | 26,19 | 33,41 | 38,97 | 41,69 | 43,93 | 47,33 | 4,32 |
+| **T141013** (Seuil PMR monorail)| 28,82 | 36,45 | 42,24 | 45,04 | 47,34 | 50,79 | 3,98 |
+| **T141015** (Ouvrant bas 24-28)| 4,61 | 5,91 | 6,80 | 7,20 | 7,53 | 8,00 | 10,35 |
+| **T141021** (Ouvrant bas 29-32)| 5,01 | 6,43 | 7,42 | 7,86 | 8,22 | 8,74 | 10,50 |
+| **T141037 / T141041** (Chicane)| — | — | — | — | — | — | 3,21 |
+| **T141038 / T141043** (Chicane)| — | — | — | — | — | — | 7,49 |
+| **T141024 / T141042** (Chicane)| — | — | — | — | — | — | 9,96 |
+| **T141039** (Montant latéral) | — | — | — | — | — | — | 4,54 |
+| **T141040** (Montant latéral) | — | — | — | — | — | — | 4,14 |
+| **T141033** (Percussion) | — | — | — | — | — | — | 4,62 |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 15-17)
+
+---
+
+# Compatibilités et prises de volume
+
+Le montage du vitrage s'effectue au moyen d'un joint portefeuille continu en EPDM à solin réduit, tournant dans les 4 angles :
+
+| Épaisseur vitrage (mm) | Référence joint ouvrant | Couleur de repère | Profilé ouvrant associé | Joint fixe (côté central) | Joint fixe (côté extérieur) |
+| --- | --- | --- | --- | --- | --- |
+| **24 mm** | **T411005** | Rouge | T141015 / T141037 / T141039 | T411005 (rouge) | TAS0016 (rouge, 6 mm) |
+| **25 mm** | **TGY5009** | Marron | T141015 / T141037 / T141039 | TGY5009 (marron) | TAS0016 (rouge, 6 mm) |
+| **26 mm** | **T411006** | Bleu | T141015 / T141037 / T141039 | T411006 (bleu) | TAS0015 (bleu, 5 mm) |
+| **27 mm** | **TGY5010** | Orange | T141015 / T141037 / T141039 | TGY5010 (orange) | TAS0015 (bleu, 5 mm) |
+| **28 mm** | **T411007** | Vert | T141015 / T141037 / T141039 | T411007 (vert) | T710004 (jaune, 4 mm) |
+| **29 mm** | **TGY5011** | Violet | T141021 / T141041 / T141040 | TGY5011 (violet) | T710004 (jaune, 4 mm) |
+| **30 mm** | **T411008** | Blanc | T141021 / T141041 / T141040 | T411008 (blanc) | T710003 (violet, 3 mm) |
+| **31 mm** | **TGY5012** | Jaune | T141021 / T141041 / T141040 | TGY5012 (jaune) | T710003 (violet, 3 mm) |
+| **32 mm** | **T411009** | Rose | T141021 / T141041 / T141040 | T411009 (rose) | T710002 (marron, 2 mm) |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 18-20)
+
+---
+
+# Ce que la source ne donne pas
+
+- Le document ne prévoit pas de mise en œuvre directe sur dormant bois existant (mise en œuvre sur gros œuvre maçonnerie, ITE ou monomur uniquement).
+- Les profilés latéraux d'ouvrants 141039 et 141040 sont dépourvus de barrette polyamide transversale : le DTA signale qu'ils peuvent être le siège de légères condensations passagères en période de grand froid [2 p. 4].
+
+---
+
+# Citations
+
+[1] LUMEAL GA — Catalogue de conception Le Coulissant Minimal (Réf. 5156.007 - 01/2021) — `raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf`
+[2] DTA n° 6/14-2166_V2, procédé LUMEAL Minimal Ga (27/05/2024) — `raw/DTA Lumeal GA 6-14-2166-v2.pdf`
+
+---
+
+# Voir aussi
+
+- [Cotes de débit LUMEAL GA](/profiles/lumeal-ga-cotes-de-debit.md)
+- [Roulements et fermetures LUMEAL GA](/quincaillerie/lumeal-ga-roulements-et-fermetures.md)
+- [Fabrication et pose LUMEAL GA](/procedures/fabrication-et-pose-lumeal-ga.md)
+- [Coulissants aluminium](/gammes/coulissants-aluminium.md)
+- [TECHNAL](/fournisseurs/technal.md)
+
+===== PAGE 2 : /quincaillerie/soleal-py-serrures-et-paumelles.md =====
+# Paumelles en feuillure et articulation
+
+Les paumelles SOLEAL PY 55 se montent directement en feuillure dans les gorges d'ouvrant et de dormant au moyen de contreplaques à clamer, sans aucun usinage ni affaiblissement des profilés aluminium.
+
+### 1. Caractéristiques des paumelles en feuillure
+
+| Modèle | Référence | Lames | Axe de rotation | Charge maximale par vantail | Réglages intégrés |
+| --- | --- | --- | --- | --- | --- |
+| **Paumelle standard** | **T910002** | 2 lames | Diamètre 12 mm | **130 kg** | Horizontal $\pm 2\text{ mm}$, compression joint par bagues excentriques |
+| **Paumelle grand trafic** | **T910003** | 3 lames | Diamètre 12 mm | **150 kg** | Réglage 3D micrométrique en feuillure |
+| **Paumelle retard effraction**| **TPY3615** | 3 lames | Axe 100% Inox | **150 kg** | Résistance certifiée RC2 / RC3 (norme BS EN 1627) |
+
+### 2. Répartition et règles d'implantation des paumelles
+- **Hauteur vantail $Hv \le 2\,200\text{ mm}$ (Cas A)** : 2 paumelles (1 en haut à $Y = 200\text{ mm}$, 1 en bas à $Y = 200\text{ mm}$).
+- **Hauteur vantail $Hv > 2\,200\text{ mm}$ (Cas B)** : 3 paumelles (1 en haut à 200 mm, 1 en bas à 200 mm, 1 médiane à mi-hauteur $H/2$).
+- **Porte équipée d'un ferme-porte en applique (Cas C et D)** :
+  - $Hv \le 2\,200\text{ mm}$ (Cas C) : 3 paumelles (2 paumelles rapprochées en haut espacées de $X = 150\text{ mm}$, 1 en bas à 200 mm).
+  - $Hv > 2\,200\text{ mm}$ (Cas D) : 4 paumelles (2 rapprochées en haut espacées de 150 mm, 1 médiane, 1 en bas).
+
+### 3. Réglage en hauteur avec l'outil TWZ0002
+Le réglage en hauteur sous charge s'effectue sur chantier porte fermée :
+1. Positionner l'outil de réglage **TWZ0002** dans la gorge du dormant sous la paumelle basse.
+2. Bloquer les clameaux de l'outil.
+3. Desserrer les vis de fixation dormantes des paumelles.
+4. Ajuster la hauteur de la porte au millimètre près à l'aide de la broche filetée de l'outil.
+5. Resserrer les vis de paumelles au couple de **10 à 15 N.m**, puis retirer l'outil.
+
+---
+
+# Ferme-Porte Intégré (FPI) et pivots de sol
+
+### 1. Ferme-porte invisible encastré FPI T920019
+Le ferme-porte hydraulique invisible **T920019** est dissimulé dans la traverse haute tubulaire **T225205** :
+- **Force variable 3 à 6** : réglable selon le poids et la largeur du vantail.
+- **Conformité accessibilité handicapés (PMR)** : Conforme au décret n° 2006-555 imposant un effort d'ouverture **inférieur à 50 N** :
+  - Largeur de passage 900 mm : réglage mini.
+  - Largeur de passage 1 000 mm : réglage mini + 4 tours sens (+).
+  - Largeur de passage 1 100 mm : réglage mini + 8 tours sens (+).
+- **Bras de liaison et glissières** :
+  - Porte simple action ouverture extérieure : bras **T920021** (Droite en Poussant) ou **T920022** (Gauche en Poussant).
+  - Porte va-et-vient (VV) et porte tube : bras symétrique **T920020**.
+  - Glissière intégrée dans la traverse haute d'ouvrant **T700048 / T700049** ou **T700050**.
+
+### 2. Pivots freins de sol (TBN1370)
+Pour portes Va-et-Vient (double action) et portes d'entrée à usage intensif sans ferme-porte haut :
+- Pivot de sol à freinage hydraulique **TBN1370** : arrêt d'ouverture à 90°, force 2 à 4 pour vantaux jusqu'à **150 kg** :
+  - Force 2 : baies jusqu'à $2\,200 \times 850\text{ mm}$ (couple de fermeture 18 N.m).
+  - Force 3 : baies jusqu'à $2\,300 \times 900\text{ mm}$ (couple 24 N.m).
+  - Force 4 : baies jusqu'à $2\,400 \times 1\,200\text{ mm}$ (couple 29 N.m).
+- Crapaudine de sol **T920025** avec socle **T700072** pour porte tube APD (charge max 130 kg).
+
+---
+
+# Serrures et condamnations
+
+### 1. Tableau de synthèse des serrures encastrées
+
+| Référence | Type de mécanisme | Pênes et verrouillage | Sens / Application |
+| --- | --- | --- | --- |
+| **T920001** | Serrure 1 point | Pêne 1/2 tour réversible | Porte simple action de service |
+| **T920002** | Serrure 1 point à rouleau | Rouleau nylon réglable pour va-et-vient | Porte battante va-et-vient ou libre passage |
+| **T920003** | Serrure 2 points à cylindre | Renvoi haut et bas par barillet | Porte de service ou issue |
+| **T920004** | Serrure 2 points à fouillot | Renvoi haut et bas par relevage de béquille | Vantail semi-fixe |
+| **T920005** | Serrure 3 points à relevage | Pêne 1/2 tour + 2 pênes basculants ou verticaux | Porte de service à relevage de béquille |
+| **T920006** | Serrure 3 points sans relevage| Pêne 1/2 tour + 2 pênes commandés par clé | Porte d'entrée tertiaire automatique |
+| **T920007** | Serrure 3 points à rouleau | Pêne à rouleau + 2 pênes basculants | Porte grand passage va-et-vient |
+| **T920010** | Kit serrure 3 points à relevage| Livré complet avec tringles isolantes rigides débitées | Pose rapide en atelier sans usinage tringle |
+| **T920011** | Kit serrure 3 points sans rel. | Livré complet avec tringles rigides | Verrouillage direct à la clé |
+
+### 2. Dispositif de retard à l'effraction certifié RC2 / RC3
+Pour répondre aux classes de résistance à l'effraction **RC2** et **RC3** (norme NF EN 1627-30 et PAS 24:2012) :
+- Serrure 3 points renforcée **TPY3716** avec pênes basculants renforcés **TPY3712** et pênes verticaux **T920009**.
+- Plaque de protection anti-perçage en acier trempé **TPY3610** insérée dans la cage extérieure d'ouvrant en face du coffre de serrure.
+- Cornières anti-dégondage de vitrage **TPY3614** (12 pièces vissées par panneau verrier).
+- Tremplins anti-intrusion **TPY3815** (4 pièces par vantail).
+- Gâche renforcée haute **TPY3620** et gâches intermédiaires **TPY3612 / TPY3613**.
+
+---
+
+# Contrôle d'accès et gâches électriques
+
+### 1. Gâches électriques encastrées (Sans délardage du profilé)
+- **24 V Continu (Bâtiment neuf)** :
+  - À rupture : **TPY3700** (Droite en Poussant DEP) / **TPY3701** (Gauche en Poussant GEP).
+  - À contact stationnaire : **TPY3704** (DEP) / **TPY3705** (GEP).
+- **12 V Continu (Rénovation)** :
+  - À rupture : **TPY3702** (DEP) / **TPY3703** (GEP).
+- **10-24 V Multi-tension** :
+  - À émission : **TPY3706** (DEP) / **TPY3707** (GEP).
+
+### 2. Ventouses électromagnétiques 300 kg en applique
+Pour les accès sécurisés à haute fréquentation :
+- **T1430** (Alimentation 12 V continu) ou **TKP024** (Alimentation 24 V continu).
+- Résistance mécanique à l'arrachement : **300 kg (3 000 N)**.
+- Montage sur profilés d'habillage aluminium **T8230** (porte-ventouse) et **T5240** (capot de finition clippable), débités à la hauteur totale d'ouvrant $\mathbf{Hv}$.
+- Raccordement avec bouton-poussoir de sortie **TCP113** (plaque inox $60 \times 26\text{ mm}$), diode de roue libre obligatoire 1N4004/4007 et temporisation Crouzet.
+
+---
+
+# Voir aussi
+
+- [Profilés dormants et ouvrants SOLEAL PY 55](/portes/soleal-py-dormants-et-ouvrants.md)
+- [Cotes de débit des portes SOLEAL PY 55](/portes/soleal-py-cotes-de-debit.md)
+- [Mise en œuvre du seuil PMR PY1100](/procedures/technal-seuil-pmr-py1100.md)
+- [Fournisseur Technal](/fournisseurs/technal.md)
+
+===== PAGE 3 : /quincaillerie/soleal-gy-roulements-et-fermetures.md =====
+# Chariots de roulement et calage
+
+Les chariots SOLEAL GY 55 sont logés dans la traverse basse d'ouvrant (T141015 ou T141021). Leur corps en matériau isolant conserve la continuité de la rupture thermique de la traverse basse.
+
+### 1. Tableau de choix des roulettes et charges admissibles
+
+| Type de chariot | Référence | Réglage | Galets / Bandage | Poids maxi par vantail | Compatible Rail Alu T341000 | Compatible Rail Inox TGY4007 |
+| --- | --- | --- | --- | --- | --- | --- |
+| **Simple fixe** | **T401011** | Non réglable | Polyamide sur roulements à aiguilles | **100 kg** | Oui | Oui |
+| **Double fixe** | **T401012** | Non réglable | Polyamide sur roulements à aiguilles | **200 kg** | Oui | Oui |
+| **Double fixe Inox** | **TGY3873** | Non réglable | Galets 100% Inox | **200 kg** | **NON (Incompatible)** | **OUI** |
+| **Simple réglable** | **T441003** | Réglable en hauteur | Polyamide sur aiguilles | **100 kg** | Oui | Oui |
+| **Double réglable** | **T441004** | Réglable en hauteur | Polyamide sur aiguilles | **200 kg** | Oui | Oui |
+| **Double réglable Inox** | **TGY3872** | Réglable en hauteur | Galets 100% Inox | **200 kg** | **NON (Incompatible)** | **OUI** |
+
+> [!WARNING]
+> **Interdiction absolue** d'associer des chariots à roulettes inox (**TGY3872** / **TGY3873**) sur le chemin de roulement en aluminium **T341000**. L'inox détruirait par écrouissage le rail aluminium sous forte charge. L'utilisation du rail rapporté en acier inoxydable **TGY4007** est impérative avec les galets inox.
+
+### 2. Prescription de calage sous traverse : Cale TGA3817
+Pour transmettre directement la charge du vitrage vers les roulettes sans solliciter la rupture thermique des traverses :
+- **Prise de vitrage 29-32 mm (profilé T141021)** : Cale **TGA3817** obligatoire au droit de chaque roulette de manière systématique.
+- **Prise de vitrage 24-28 mm (profilé T141015)** : Cale **TGA3817** (zone sécable raccourcie) obligatoire si la largeur du vantail dépasse **1,50 m** OU si le poids du vantail dépasse **120 kg**.
+- La cale se fixe sur la traverse avec un point de colle avant vitrage.
+
+### 3. Réglage en hauteur des roulettes réglables
+- Les chariots réglables (T441003, T441004, TGY3872) sont ajustables en hauteur **sans dégonder le vantail** au moyen d'une clé Allen introduite par le chant latéral du montant d'ouvrant à travers l'orifice prévu à **25 mm** de hauteur.
+- Lors du réglage, il est obligatoire de soulager le vantail à l'aide de ventouses de vitrier pour éviter d'endommager la vis micrométrique de réglage sous la charge.
+
+---
+
+# Systèmes de fermeture et verrouillage
+
+La condamnation s'effectue par des mécanismes encastrés à têtière filante en acier inox (grade 3 anticorrosion NF EN 1670) :
+
+### 1. Gamme de crémones encastrées
+
+| Référence | Points de fermeture | Condamnation clé | Hauteur min. châssis | Hauteur min. poignée $Hp$ | Fixation |
+| --- | --- | --- | --- | --- | --- |
+| **TGY3700** | 1 point simple | Non | 395 mm | 219 mm | 2 vis TGY3723 |
+| **TGY3701** | 1 point à clé | Oui (cylindre) | 525 mm | 346 mm | 4 vis TGY3723 |
+| **TGY3702** | 3 points | Non | 1 292 mm | 721 mm | 6 vis TGY3723 |
+| **TGY3703** | 3 points à clé | Oui (cylindre) | 1 292 mm | 721 mm | 8 vis TGY3723 |
+| **TGY3704** | Rallonge 4ème point | Raccordée à TGY3702/03 | Pour très grandes hauteurs | — | 2 vis TGY3723 |
+| **TKG025** | Fermeture 1 point coquille | Non | 395 mm | 219 mm | Encastrée + pêne déporté TGY6006 |
+
+### 2. Cylindres et barillets européens
+- Montants latéraux standard TGY1202 et TGY1303 : Cylindre européen **30 x 30 mm** (Réf. **T1040**).
+- Montants latéraux à renfort tube TGY1301 et TGY1302 : Cylindre européen décentré **40 x 30 mm** (Réf. **T1044**).
+- Rosettes inox de protection de cylindre : Réf. **T960013** ou **TPY6003**.
+
+### 3. Fermeture pompier (Établissements Recevant du Public - ERP)
+Conforme à l'Arrêté du 25 juin 1980 et à l'article CO3 modifié du 28 avril 2016 :
+- Référence : **TGY3731** (avec vis de fixation T770059).
+- Compatible uniquement avec les montants simples **TGY1202** et **TGY1300**.
+- Permet l'ouverture d'urgence depuis l'extérieur à l'aide d'une clé spéciale pompier.
+- Exigence dimensionnelle réglementaire : passage libre minimum de **$H = 1\,800\text{ mm} \times L = 900\text{ mm}$**.
+
+### 4. Verrou central à clé TGY3622
+- Placé à la croisée centrale des vantaux en partie basse.
+- Montage sur cale **TGY3640** avec perçage Ø7 mm et écrou à sertir taraudé M5.
+- Vis de fixation CHc M5x16 et M5x25.
+- En cas d'utilisation du verrou central, les roulettes doivent être décalées à **62 mm** et les cales de vitrage à **71 mm** du chant du montant pour ne pas entrer en conflit avec le perçage Ø11 mm de la pièce de blocage.
+
+---
+
+# Organes de manœuvre et poignées
+
+### 1. Tableau de compatibilité des poignées selon les montants
+
+| Organe de manœuvre | Type | Réf. Laquée | Réf. Anodisée | Compatible Montant Standard (TGY1202/1300) | Compatible Montant Tube (TGY1301/1302) | Compatible Montant Lame (TGY1200/1201) | Compatible Montant Bilame (TGY1220) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **Cuvette encastrée** | Intérieure | **TGY3712** | **TGY3719** | Oui (OS / SF) | Oui (OS / SF) | Non | Oui |
+| **Bouton sur plaque** | Intérieure | **TGY3713** | **TGY3714** | Non | Non | **Oui (OS / SF)** | Oui |
+| **Poignée tirage Technal** | Intérieure | **TGY3717** | — | **Oui (OS / SF\*)** | **Oui (OS / SF\*)** | Non | Non |
+| **Poignée tirage extérieure**| Extérieure | **TGY3718** | — | Oui (OS / SF) | Oui (OS / SF) | Non | Non |
+| **Poignée fixe de tirage** | Int/Ext | **TGY3732 / TGY3733** | — | Oui (avec TGY3716) | Oui (avec TGY3716) | Oui | Oui |
+| **Poignée design droit** | Intérieure | **TGY3606** | — | Oui (OS) | Oui (OS) | Non | Non |
+| **Poignée anse galbée** | Intérieure | **TGY6004** | — | Oui (OS / SF) | Non | Non | Non |
+| **Cuvette à levier** | Intérieure | **TGY6003** | — | Oui (OS / SF) | Non | Non | Non |
+| **Béquille à carré de 7 mm**| Intérieure | **T960030 / TCZ61051**| — | Oui (avec kit TGY3721) | Non | Non | Non |
+
+*\*Note : Pour croiser les vantaux sans heurt avec la poignée TGY3717 sur semi-fixe, prévoir la butée TCG021.*
+
+### 2. Réversibilité de la poignée Design Droit TGY3606
+La poignée TGY3606 est réversible pour vantail de service à gauche ou à droite :
+1. Présenter la poignée en position ouverte.
+2. Retirer les 4 vis d'assemblage du corps arrière.
+3. Retirer la butée et le corps de fixation.
+4. Tourner le bras de manœuvre à 180°.
+5. Remonter la butée et visser.
+6. Retourner le corps arrière de 180° (les 2 logements de vis doivent être orientés côté serrure pour fixation par vis TGY3723).
+7. Revisser l'ensemble.
+
+---
+
+# Gâches, centreurs et accessoires de guidage
+
+### 1. Gâches de condamnation
+- **Gâche dormant périphérique TGY3705** : Se visse directement dans la gorge du dormant aluminium sans fraisage ni découpe du profilé à l'aide de vis Torx TGY3723.
+- **Gâche pour percussion centrale TGY3711** : Se visse en applique sur le profilé de percussion centrale TGY1204 ou de percussion d'angle TGY1206.
+- **Gâche renforcée anti-effraction TGY3742** : Équipée de vis de pré-positionnement et d'un contre-clameau en aluminium pour retard à l'effraction sur dormant 55 mm.
+- **Réglage micrométrique de la gâche** : La serrure Technal intègre un gabarit plastique réversible. En position horizontale, il sert de pige d'épaisseur pour aligner la gâche à exactement **6 mm** du boîtier de fermeture avant serrage définitif des vis.
+
+### 2. Centreurs d'ouvrants et guidage
+- **Centreur d'ouvrant TGY3832** : Se clipse par rotation au milieu du montant d'ouvrant. Garantit l'alignement parfait des vantaux en position fermée et le plaquage des joints brosses contre le vent.
+  - *Règle bilame :* Dans le cas d'une menuiserie soumise aux risques de bilame, poser obligatoirement **2 centreurs TGY3832** répartis sur la hauteur.
+- **Compensateur de centreur TGY3833** : Se monte face au centreur TGY3832 sur le profilé de percussion TGY1204 à l'aide d'une vis TGY3723.
+- **Guides de montants centraux TGY3883** : Se clipsent en tête et pied de chaque montant central après gondage des vantaux. Verrouillage par rotation des flèches à l'aide d'une clé Allen de 4 mm. Mousse d'étanchéité positionnée à fleur de profilé.
+- **Pièces anti-dégondage TGY3885** : Se montent sur chaque montant latéral après réglage des roulettes pour empêcher le soulèvement frauduleux de l'ouvrant.
+
+---
+
+# Voir aussi
+
+- [Profilés dormants et rails SOLEAL GY 55](/profiles/soleal-gy-dormants-et-rails.md)
+- [Cotes de débit SOLEAL GY 55](/profiles/soleal-gy-cotes-de-debit.md)
+- [Pose et galandage SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md)
+- [Fournisseur Technal](/fournisseurs/technal.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /sources/technal-dta-lumeal-ga.md | Document source | DTA n° 6/14-2166_V2, procédé LUMEAL Minimal Ga | technal, lumeal, lumeal-ga, coulissant, ouvrant-cache, dta | Document Technique d'Application CSTB de 36 pages pour le coulissant aluminium à rupture de pont thermique et ouvrant caché LUMEAL Minimal Ga de Technal (valide jusqu'au 31 juillet 2029). | Groupe Spécialisé : domaine d'emploi (neuf, ITE, monomur, exclusion dormant existant), étanchéité air/eau, perméabilité classe A*4 ($0,35\text{ m}^3/ |
+| /sources/technal-dta-soleal-gy.md | Document source | DTA n° 6/15-2261_V3 et V1, procédé Soleal GY | technal, soleal, soleal-gy, coulissant, dta, cstb | Document Technique d'Application CSTB du système de fenêtres et portes-fenêtres coulissantes en aluminium à rupture de pont thermique SOLEAL GY de TECHNAL (validité jusqu'au 31 juillet 2029). | seuil PMR sur doublage 120 mm, pose en tableau et monomur, pose applique extérieure avec ITE (T401022, TAZ0318, TGY3725) / à faire / [Pose et galandag |
+| /sources/technal-dta-soleal-fy.md | Document source | DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm | technal, soleal, soleal-fy, frappe, dta, cstb | Document Technique d'Application CSTB de 48 pages du système de fenêtres et portes-fenêtres aluminium à frappe SOLEAL 55 de TECHNAL, valide jusqu'au 31 octobre 2026. | s, fourrures, tapées, pose en tableau, ITE et mur monomur / à faire / [Fabrication et usinage SOLEAL FY](/procedures/fabrication-soleal-fy.md), [Dorma |
+| /procedures/fabrication-systeme-76-advanced.md | Procédure | Fabrication et assemblage du système 76 Advanced | systeme-76-advanced, profine, assemblage, seuil, capot, aluclip | Les schémas d'atelier et les plans de pose du système 76 Advanced de profine — assemblages de fourrure, d'appui, de seuil et de traverse, capotage aluminium, tapées et appuis alu, drainages et décompressions, couleurs sombres, coupes de principe et onze poses types. | on par l'extérieur. Repères : « Retombée latérale membrane d'étanchéité » de **100 mm** en tête ; en pied, l'appui PVC avec sa goutte d'eau, un « Plat |
+| /profiles/soleal-gy-dormants-et-rails.md | Profilé | Profilés dormants, rails et ouvrants Technal SOLEAL GY 55 | technal, soleal, soleal-gy, coulissant, galandage, profilés | Architecture technique complète du système coulissant à rupture de pont thermique SOLEAL GY 55 de TECHNAL (dormants 2, 3 et 4 rails, ouvrants 24-28 mm et 29-32 mm, chemins de roulement alu et inox, boucliers thermiques et inerties mécaniques). | e **SOLEAL GY 55** (Le Coulissant Universel) de **TECHNAL** est conçu autour d'un module de base de **55 mm de profondeur** pour les profilés 2 rails |
+| /portes/soleal-py-cotes-de-debit.md | Porte d'entrée | Cotes de débit et formules de calcul des portes Technal SOLEAL PY 55 | technal, soleal, soleal-py, porte, debit, formules | Recueil exhaustif des formules de débit, déductions de profilés (dormants, ouvrants en T/Z, plinthes, traverses FPI, seuils PMR PY1100), dimensionnement des vitrages et formules de coupe des tringles de crémone pour la porte SOLEAL PY 55 de TECHNAL. | - [Mise en œuvre du seuil PMR PY1100](/procedures/technal-seuil-pmr-py1100.md) - [Fournisseur Technal](/fournisseurs/technal.md) |
+| /sources/technal-seuil-py1100.md | Document source | F.I.T N° 15 — Évolution Porte PY et Seuil PMR PY1100 Technal | technal, soleal, soleal-py, seuil-pmr, py1100, aev | Fiche d'Information Technique officielle Technal détaillant le seuil PMR à rupture de pont thermique PY1100, les pièces d'angle préformées et les procès-verbaux d'essais AEV (33 pages). | / Élément / Valeur / / --- / --- / / Fabricant / Technal (Hydro Building Systems France) / / Document / **Fiche d'Information Technique F.I.T N° 15** |

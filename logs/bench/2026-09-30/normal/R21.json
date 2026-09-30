@@ -1,0 +1,36 @@
+{
+ "id": "R21",
+ "reponse": "Pour le palier de compas d'un châssis PVC cintré ou trapézoïdal en Roto NX KSR, on place le gabarit de perçage sur le dormant à 45 mm du début du cintre : la cote de 45 mm va du début du cintre (début de l'arc, « repère pour le montage du palier de compas ») au milieu du palier de compas. Le dessin porte aussi la cote 24 mm (repère [B], compas 12/20-13) ; les trous du palier sont espacés de 16, 48 et 80 mm, avec 12 mm en bas. Gabarits : 2002405 (palier réglable plot de 3 mm, P 3/100 : perçage Ø 3 mm, 4 mm de profondeur) et 2002406 (plot de 6 mm, P 6/100 : perçage Ø 6 mm, 9 mm de profondeur). Côté ouvrant, la même cote de 45 mm sépare l'encoche du compas cintré (placée à hauteur du début du cintre) et le palier. Réglage du palier : clé six pans de 4 mm (plage −3 / +2 sur le dessin). Source : instructions de montage Roto NX KSR IMO_180, PDF p. 102-103.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {
+   "page": "/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md",
+   "extrait": "« Placer le gabarit de perçage [1] sur le dormant à 45 mm du début du cintre [3]. [2] = support de\nserrage ; [4] = milieu du palier de compas. » Le dessin porte aussi la cote **24** [1 p. 103]."
+  },
+  {
+   "page": "/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md",
+   "extrait": "de compas : **45** entre le début du cintre et le milieu du palier, **16**, **48** et **80** entre les\ntrous, **12** en bas ; celui de droite, le palier réglable (flèche **-3.0** / **+2.0**) [1 p. 102]."
+  },
+  {
+   "page": "/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md",
+   "extrait": "| Gabarit palier réglable plot de 3mm | 2002405 |"
+  },
+  {
+   "page": "/quincaillerie/roto-nx-accessoires-et-gabarits.md",
+   "extrait": "| 2002405 | 12.1.2 Palier de compas réglable | Palier de compas réglable - plein-cintre | P 3/100 |"
+  }
+ ],
+ "ambiguite": "",
+ "outils": 3,
+ "comment_trouve": "Grep « gabarit|palier|début|arc|cote » sur /quincaillerie/roto-nx-ksr-cintre-trapezoidal.md (identifiée par le nom de fichier et la description qui cite « gabarit de perçage du palier de compas »), lecture des sections p. 102-103. Contrôle croisé des n° de gabarit dans /quincaillerie/roto-nx-accessoires-et-gabarits.md : cohérent.",
+ "formulations": [
+  "À quelle distance du début de l'arc placer le gabarit de perçage du palier de compas sur un dormant plein cintre Roto NX ?",
+  "cote gabarit palier compas cintré",
+  "Où positionner le palier de compas sur une fenêtre PVC en arc ?"
+ ],
+ "defauts_wiki": [
+  "La question dit « arche » / « arrondi » / « début de l'arc arrondi » ; la page dit « cintre », « plein cintre », « arc surbaissé » : « arche » n'apparaît nulle part (pas de synonyme dans le glossaire).",
+  "La cote 45 est portée deux fois dans des sections différentes (dormant p. 102, ouvrant p. 103) avec des mots différents (« début du cintre » / « début de l'arc ») : un lecteur peut croire à deux cotes distinctes.",
+  "La cellule « [B] | 24 mm | 12/20-13 » est ambiguë : la page ne dit pas ce que mesure la cote 24."
+ ]
+}

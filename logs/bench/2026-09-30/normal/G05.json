@@ -1,0 +1,23 @@
+{
+ "id": "G05",
+ "reponse": "Le 0729T (désignation complète F00-62- 0729T) est un profilé plat du système 70, dessiné sur les plans des profilés e.VOLUTION d'août 2008 (planche « Profilés complémentaires », p. 36) : largeur 40 mm, épaisseur 7 mm. Il fait partie de la série 0727T à 0731T (20, 30, 40, 50, 60 mm de large, tous 7 mm d'épaisseur), profilés à une ou deux chambres, avec une bande hachurée sans légende sous la face. Le poster 2025 dessine un profilé plat de même format sous une autre référence (91032 T : 40 × 7 mm), mais le wiki ne dit pas explicitement que l'un remplace l'autre.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/profiles/systeme-70-profiles-complementaires.md", "extrait": "| 0729T | F00-62- 0729T | 40 | 7 | ![Profilé 0729T](/assets/profiles/systeme70/profils-plats/profil-0729t-evo2008.png) |"},
+  {"page": "/profiles/systeme-70-profiles-complementaires.md", "extrait": "| Profilé | Désignation complète | Largeur (mm) | Épaisseur (mm) | Coupe |"}
+ ],
+ "ambiguite": "",
+ "outils": 4,
+ "comment_trouve": "Grep « 0729T|0729 T|729T » insensible à la casse : une seule ligne, section « Profilés plats des plans de 2008 » de la page Profilés complémentaires du système 70 (ligne 1397 sur 1704). Lecture de la section et du tableau « Profilés plats » du poster 2025 pour voir s'il existe un équivalent : 91032 T, même format, sous une autre référence.",
+ "formulations": [
+  "Profilé plat 0729T système 70, largeur et épaisseur ?",
+  "0729T cotes ?",
+  "Quelles dimensions pour le profilé plat de 40 mm à chambres du système 70 ?"
+ ],
+ "defauts_wiki": [
+  "Page très longue : systeme-70-profiles-complementaires.md fait 117 ko et 1 704 lignes ; la ligne utile est à la ligne 1397. Livrée entière parmi trois pages, elle sature le contexte.",
+  "Deux tableaux « Profilés plats » sur la même page (poster 2025, références 910xx ; plans 2008, références 07xxT) avec des formats identiques sous des références différentes : risque de confondre 0729T et 91032 T, aucune table de correspondance.",
+  "La référence est écrite de trois façons dans le corpus (« 0729T », « F00-62- 0729T », suffixes « .T » ou « T » selon les lignes) : une recherche sur « 0729 T » ou « 0729.T » dépend de la tokenisation.",
+  "status: draft sur la page."
+ ]
+}

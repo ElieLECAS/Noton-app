@@ -1,0 +1,23 @@
+{
+ "id": "R15",
+ "reponse": "Le meneau d'ouvrant (traverse d'ouvrant) **76301** (PERFORM76 / système 76 Advanced) fait **84 mm de large**, décomposés en **21 / 42 / 21 mm** (aile, clair intérieur, aile), pour une épaisseur de profilé de 76 mm. Il est apparié au meneau de dormant 76372 (98 mm, même clair de 42 mm). Il se monte sur les ouvrants uniquement, **jamais sur un dormant**. Capot alu A069 (et A046 en porte d'entrée), renfort V320.Z (1,5 mm) en porte d'entrée.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/profiles/perform76-meneaux.md", "extrait": "| 76301 | ouvrant | 84 | 21 / 42 / 21 | ![Meneau 76301](/assets/profiles/perform76/meneaux/meneau-76301.png) |"},
+  {"page": "/profiles/systeme-76-profiles-principaux.md", "extrait": "| 76301 | 76 | 84 | 21 + 42 + 21 | A069 | ![Traverse 76301](/assets/profiles/systeme76/meneaux/traverse-76301.png) |"},
+  {"page": "/profiles/perform76-meneaux.md", "extrait": "| 76301 | les ouvrants uniquement | **tout dormant** |"}
+ ],
+ "ambiguite": "",
+ "outils": 3,
+ "comment_trouve": "Grep « 76301 » ; la ligne du tableau # Cotes de profiles/perform76-meneaux.md donne la largeur, confirmée par systeme-76-profiles-principaux.md (poster profine) et par le sommaire du manuel (« Meneau de 84 mm, Traverse »).",
+ "formulations": [
+  "Quelle largeur fait la traverse d'ouvrant 76301 ?",
+  "largeur 76301",
+  "Combien mesure le meneau d'ouvrant PERFORM76 à clair de 42 mm ?"
+ ],
+ "defauts_wiki": [
+  "Double désignation « meneau d'ouvrant » / « traverse d'ouvrant » selon la page (VER-47 ouverte sur la famille du profilé) : une requête « traverse » trouve systeme-76-profiles-principaux, une requête « meneau » perform76-meneaux.",
+  "« 76301 » apparaît sur une douzaine de pages dont des pages longues (assemblage-meneau-traverse-systeme-76 de ~40 Ko, porte d'entrée 32 Ko, registres) qui peuvent passer devant la page de cotes ; systeme-76-cotes-de-debit.md porte « 76301 | 41,4 » (une déduction de débit, pas la largeur), risque de confusion.",
+  "La largeur est dans la colonne « Largeur (mm) » sans autre mot : une recherche sur « largeur » est très peu discriminante."
+ ]
+}

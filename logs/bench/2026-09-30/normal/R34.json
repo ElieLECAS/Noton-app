@@ -1,0 +1,23 @@
+{
+ "id": "R34",
+ "reponse": "Non, pas en PERFORM d'après le wiki. Le nuancier PERFORM (PERFORM70 et PERFORM76, catalogue général janvier 2026 p. 8) ne propose que : Blanc 9016 teinté masse (1 ou 2 faces), Ivoire 607 Kömmerling proche 9001 (2 faces uniquement), les plaxés Acajou (1 face extérieure, design), Chêne irlandais (1 ou 2 faces, design), Chêne doré (1 ou 2 faces), Chêne naturel (2 faces, droit), Siena (1 ou 2 faces, design), 7016 lisse grainé (1 ou 2 faces, droit), et les laqués — laquage possible en PERFORM70 seulement si ouverture extérieure ou menuiserie cintrée, sans teinte codée. Aucune texture carbone. En porte d'entrée PERFORM, même chose : blanc, ivoire, plaxés (collection AUTHENTIQUE seulement) et laqués.\n\nLe Carbone noir est une texture EXCLUSIVE de la gamme TEXTURAL (base PVC KÖMMERLING sertie d'aluminium, TEXTURAL70 / TEXTURAL 76) : intérieur uniquement, parclose RAL 9005 (catalogue 2026 p. 24 ; déjà présent au dépliant de juin 2023). Elle existe aussi sur les portes d'entrée TEXTURAL (parclose RAL 9005). Pour du carbone noir, il faut donc passer en TEXTURAL, et seulement côté intérieur. Sources : /coloris/coloris-perform.md, /coloris/coloris-textural.md, /coloris/coloris-portes-entree.md.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/coloris/coloris-textural.md", "extrait": "| - | Carbone noir | texture exclusive | intérieur uniquement | - | parclose RAL 9005 | ![Carbone noir](/assets/coloris/textural/exclusive-carbone-noir.png) |"},
+  {"page": "/coloris/coloris-perform.md", "extrait": "Les menuiseries PVC [PERFORM](/gammes/perform.md) (PERFORM70 et PERFORM76) se font en blanc, en ivoire, plaxées ou laquées [1 p. 8]."},
+  {"page": "/coloris/coloris-perform.md", "extrait": "| - | Les laqués | laqué | - | - | laquage possible en PERFORM70 si ouverture extérieure ou si menuiserie cintrée | ![Les laqués](/assets/coloris/perform/laques.png) |"}
+ ],
+ "ambiguite": "« Faire du carbone noir » : texture exclusive TEXTURAL (intérieur) ; aucun laquage ni plaxé carbone en PERFORM. Si l'intention est un noir uni (RAL 9005), seul un laquage pourrait s'en approcher, possible en PERFORM70 uniquement en ouverture extérieure ou menuiserie cintrée, et le wiki ne cite aucune teinte laquée PERFORM. Menuiserie ou porte d'entrée : non précisé, la réponse est la même.",
+ "outils": 6,
+ "comment_trouve": "Grep « carbone » (insensible à la casse) : bruit de l'« aluminium bas carbone » TECHNAL, mais les lignes « Carbone noir » ne sont que dans coloris-textural.md et coloris-portes-entree.md (bloc TEXTURAL). Lecture de coloris-perform.md pour confirmer l'absence, puis des sections PERFORM et TEXTURAL de coloris-portes-entree.md.",
+ "formulations": [
+  "la texture carbone noir est-elle dispo en PVC PERFORM ?",
+  "carbone noir perform",
+  "peut-on avoir une finition effet carbone sur une fenêtre PERFORM76 ?"
+ ],
+ "defauts_wiki": [
+  "La réponse est une absence : aucune page ne dit « le carbone n'existe pas en PERFORM ». Il faut croiser coloris-perform.md (qui ne cite pas le mot carbone) et coloris-textural.md ; un BM25 sur « carbone perform » risque de remonter commercial/proferm.md ou les pages LUMINE (aluminium bas carbone) plutôt que le nuancier PERFORM.",
+  "« carbone » est surtout employé au sens environnemental (aluminium bas carbone TECHNAL, une dizaine de pages) : bruit lexical fort sur le mot clé de la question.",
+  "La description de coloris-textural.md ne nomme pas les textures exclusives (carbone, cuir…) : le mot n'est que dans le corps."
+ ]
+}

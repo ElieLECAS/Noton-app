@@ -1,0 +1,73 @@
+{
+  "question": "pour un soleal de 2000 x 2150",
+  "pages_lues": [
+    "/profiles/soleal-gy-dormants-et-rails.md",
+    "/profiles/soleal-fy-dormants-et-ouvrants.md",
+    "/profiles/lumeal-ga-dormants-et-ouvrants.md",
+    "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+    "/gammes/coulissants-aluminium.md",
+    "/sources/technal-soleal-gy-conception.md",
+    "/profiles/soleal-fy-cotes-de-debit.md",
+    "/profiles/systeme-76-abaques-dimensionnels.md"
+  ],
+  "anomalies": [
+    "CTR-115",
+    "CTR-117",
+    "CTR-67",
+    "CTR-81",
+    "INC-197",
+    "INC-198",
+    "VER-52"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "chicane SOLEAL choix inertie dimensions hauteur largeur",
+        "tags": [
+          "inertie"
+        ]
+      },
+      "pages_nouvelles": [
+        "/profiles/soleal-gy-dormants-et-rails.md",
+        "/profiles/soleal-fy-dormants-et-ouvrants.md",
+        "/profiles/lumeal-ga-dormants-et-ouvrants.md"
+      ],
+      "caracteres": 48190
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "abaque choix chicane montant central pression vent hauteur largeur vantail combinaison",
+        "systeme": "SOLEAL GY"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+        "/gammes/coulissants-aluminium.md"
+      ],
+      "caracteres": 42104
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/sources/technal-soleal-gy-conception.md"
+      },
+      "pages_nouvelles": [
+        "/sources/technal-soleal-gy-conception.md"
+      ],
+      "caracteres": 6311
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "dimensions maximales porte-fenêtre 2 vantaux battement central hauteur largeur abaque vent",
+        "systeme": "SOLEAL FY"
+      },
+      "pages_nouvelles": [
+        "/profiles/soleal-fy-cotes-de-debit.md",
+        "/profiles/systeme-76-abaques-dimensionnels.md"
+      ],
+      "caracteres": 74253
+    }
+  ]
+}

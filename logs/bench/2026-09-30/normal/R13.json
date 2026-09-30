@@ -1,0 +1,23 @@
+{
+ "id": "R13",
+ "reponse": "Le levier pour M335 est la référence **T038** (système 76 Advanced, porte d'entrée). Il figure dans la nomenclature des ouvrants de porte **76206** et **76207** (126 mm), sous la désignation « Levier pour M335 » ; le **M335** est l'insert de soudure (« Insert de coin soudé » sur la planche du 76207). Le T038 est dessiné en photo : un outil à manche en bois. Ailleurs dans le système 76 (ouvrants 76272, 76279, 76283), le même T038 est désigné « Outil de serrage pour insert » ; au système 70, « Outil de serrage » de l'insert 9287 des ouvrants de porte 2415 / 2416 (on enfonce l'insert jusqu'à la butée dans le renfort, on place l'outil T038 et on le bascule pour arracher la languette de serrage).\n\nImage du T038 : ![T038](/assets/profiles/systeme76/ouvrants/piece-t038.png) — ce n'est pas une coupe de profilé mais le dessin (photo) de l'outil ; aucune cote n'est donnée. Image du M335 : ![M335](/assets/profiles/systeme76/autres/embout-m335.png).",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/portes/systeme-76-advanced-porte-d-entree.md", "extrait": "| 76206 | T038 | Levier pour M335 | ![T038](/assets/profiles/systeme76/ouvrants/piece-t038.png) |"},
+  {"page": "/portes/systeme-76-advanced-porte-d-entree.md", "extrait": "| 76207 | T038 | Levier pour M335 | ![T038](/assets/profiles/systeme76/ouvrants/piece-t038.png) |"},
+  {"page": "/profiles/systeme-76-accessoires-par-profile.md", "extrait": "Le T038 est dessiné en photo, outil à manche en bois ; il est désigné « Levier pour M335 » sur les planches de la porte d'entrée."}
+ ],
+ "ambiguite": "« Sa coupe » : le T038 est un outil, le wiki n'en a qu'une photo/dessin (pas de coupe cotée). L'utilisateur peut aussi vouloir la coupe du M335 (insert), elle aussi dessinée sans cote.",
+ "outils": 4,
+ "comment_trouve": "Grep « M335 » : la désignation « Levier pour M335 » est dans le tableau des ouvrants de porte 76206 / 76207 de portes/systeme-76-advanced-porte-d-entree.md ; grep « T038 » pour les autres désignations (outil de serrage) ; image vérifiée à l'œil (label T038).",
+ "formulations": [
+  "Quel est l'outil pour poser l'insert de soudure M335 de la porte d'entrée 76 ?",
+  "levier M335",
+  "Quelle référence pour l'outil de serrage des inserts de coin des ouvrants de porte ?"
+ ],
+ "defauts_wiki": [
+  "Même pièce, trois désignations (« Levier pour M335 », « Outil de serrage pour insert », « Outil de serrage ») sur des pages différentes : une recherche sur « outil » ou sur « levier » ne trouve qu'une partie.",
+  "La réponse est dans une page de type Porte d'entrée (portes/systeme-76-advanced-porte-d-entree.md, 32 Ko) et non dans une page de profilés ou d'accessoires : le titre ne nomme ni M335 ni T038.",
+  "Le M335 est aussi désigné « Insert de soudure » / « Insert de coin soudé » selon la planche, sans cote."
+ ]
+}

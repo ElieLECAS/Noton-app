@@ -1,0 +1,52 @@
+{
+  "question": "Combien de temps laisser polymériser le mastic Illbruck SP350 avant de manipuler le vantail ?",
+  "pages_lues": [
+    "/procedures/fabrication-et-pose-lumeal-ga.md",
+    "/quincaillerie/lumeal-ga-roulements-et-fermetures.md",
+    "/procedures/fabrication-coulissant-askey-65-nv.md",
+    "/sources/technal-lumeal-ga-fabrication.md",
+    "/procedures/livraison-et-stockage-semi-produits-profine.md",
+    "/procedures/surfaces-collage-nettoyage-profine.md"
+  ],
+  "anomalies": [
+    "INC-230",
+    "INC-83"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "Illbruck SP350 mastic collage vitrage temps de polymérisation séchage manipulation vantail"
+      },
+      "pages_nouvelles": [
+        "/procedures/fabrication-et-pose-lumeal-ga.md",
+        "/quincaillerie/lumeal-ga-roulements-et-fermetures.md",
+        "/procedures/fabrication-coulissant-askey-65-nv.md"
+      ],
+      "caracteres": 31751
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "SP350",
+        "limite": 10
+      },
+      "pages_nouvelles": [
+        "/sources/technal-lumeal-ga-fabrication.md"
+      ],
+      "caracteres": 25671
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "collage vitrage polymérisation délai avant manutention",
+        "systeme": "LUMEAL GA"
+      },
+      "pages_nouvelles": [
+        "/procedures/livraison-et-stockage-semi-produits-profine.md",
+        "/procedures/surfaces-collage-nettoyage-profine.md"
+      ],
+      "caracteres": 42632
+    }
+  ]
+}

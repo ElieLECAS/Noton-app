@@ -1,0 +1,12 @@
+{
+  "id": "R31",
+  "reponse": "La parclose 2452 existe sur plusieurs systèmes profine, avec une épaisseur de vitrage différente pour chacun. Le système n'est pas précisé, voici donc les trois :\n\n| Système | Emploi | Épaisseur de vitrage |\n| --- | --- | --- |\n| PERFORM76 | parclose d'ouvrant, feuillure de 62 mm | **16 mm** (parclose de 41,5 mm d'épaisseur) |\n| 76 Advanced (manuel profine) | ouvrant, et dormant/meneau avec compensateur 76570 | **16 mm** avec le joint A de 4 mm, **18 mm** avec le joint B de 2 mm, tolérance +1,0 / −0,5 mm |\n| Système 70 Plateforme (2023) | feuillure de 54 mm | **8 mm** (7,5 à 9 mm admis) |\n| Système 70 Plateforme (2023) | feuillure de 70 mm avec l'élargisseur 93025 | **24 mm** (23,5 à 25 mm admis) |\n\nSur le 70, la 76523 est donnée pour la même épaisseur, en petits caractères sous la 2452. La 2452 est la plus petite parclose du tableau du 70 : aucune parclose n'est donnée pour un vitrage de 5 à 7 mm, alors que le manuel annonce 5 à 42 mm (**VER-86**).\n\nSources : (/profiles/perform76-parcloses.md), (/profiles/systeme-76-tableau-de-vitrage.md), (/profiles/systeme-70-tableau-de-vitrage.md).",
+  "pages_citees": [
+    "/profiles/perform76-parcloses.md",
+    "/profiles/systeme-76-tableau-de-vitrage.md",
+    "/profiles/systeme-70-tableau-de-vitrage.md"
+  ],
+  "appels": 1,
+  "trouve": "oui",
+  "navigation": "Une seule recherche, « parclose 2452 épaisseur vitrage », sans facette : la référence est dans le texte intégral. Les trois pages livrées en entier étaient exactement les trois tableaux où figure la 2452 (système 70, système 76 Advanced, PERFORM76), ce qui a permis d'appliquer la règle des familles jumelles en donnant les trois systèmes au lieu d'en choisir un. Le piège était la valeur : 8 mm sur le 70 contre 16 mm sur le 76, avec une variante joint A / joint B sur le 76 et une variante élargisseur sur le 70. Le bloc d'anomalies a apporté VER-86, pertinent parce que la 2452 borne le bas du tableau du 70. Les tableaux 2008 e.VOLUTION (autres feuillures et joint 9044.1) étaient dans la page mais laissés de côté pour rester concis ; une question précisant le système aurait suffi à trancher."
+}

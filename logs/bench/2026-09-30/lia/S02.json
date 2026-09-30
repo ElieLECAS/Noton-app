@@ -1,0 +1,68 @@
+{
+  "question": "et la rallonge TGY3710, elle se monte pareil ?",
+  "pages_lues": [
+    "/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md",
+    "/quincaillerie/roto-nx-ksr-confort-designo.md",
+    "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+    "/reference/glossaire.md",
+    "/sources/technal-soleal-gy-fabrication.md"
+  ],
+  "anomalies": [
+    "CTR-111",
+    "CTR-114",
+    "CTR-119",
+    "VER-123"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "TGY3710 rallonge"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md",
+        "/quincaillerie/roto-nx-ksr-confort-designo.md",
+        "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+      ],
+      "caracteres": 83867
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "TGY3710",
+        "systeme": "SOLEAL GY"
+      },
+      "pages_nouvelles": [],
+      "caracteres": 98
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "connexion rallonge tringle fermeture 3 points gabarit réglage crochet haut support de guidage"
+      },
+      "pages_nouvelles": [
+        "/reference/glossaire.md"
+      ],
+      "caracteres": 117758
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "montage rallonge crémone fermeture 3 points TGY3704 fabrication",
+        "systeme": "SOLEAL GY"
+      },
+      "pages_nouvelles": [],
+      "caracteres": 80441
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/sources/technal-soleal-gy-fabrication.md"
+      },
+      "pages_nouvelles": [
+        "/sources/technal-soleal-gy-fabrication.md"
+      ],
+      "caracteres": 6425
+    }
+  ]
+}

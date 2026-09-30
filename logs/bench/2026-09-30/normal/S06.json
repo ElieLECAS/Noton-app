@@ -1,0 +1,24 @@
+{
+ "id": "S06",
+ "reponse": "Oui. En gamme PERFORM, l'acajou existe en plaxé 1 face extérieure (l'autre face reste blanche), associé à la finition de profil DESIGN : catalogue général janvier 2026 p. 8, déjà au dépliant de juin 2023 (« finition design uniquement »). En porte d'entrée PERFORM : acajou plaxé 1 face extérieure uniquement, collection AUTHENTIQUE seulement, finition design uniquement (catalogue portes d'entrée mars 2024 p. 10). Point d'attention : la finition DESIGN est disponible en PERFORM70 ; en PERFORM76 elle est annoncée « disponible à compter du 2ème trimestre 2026 » (VER-01, échéance à confirmer) — un acajou 1 face en PERFORM76 dépend donc de cette disponibilité. Sources : /coloris/coloris-perform.md, /coloris/coloris-portes-entree.md, /gammes/perform.md.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/coloris/coloris-perform.md", "extrait": "| - | Acajou | plaxé | 1 face extérieure | design | - | ![Acajou](/assets/coloris/perform/acajou.png) |"},
+  {"page": "/coloris/coloris-perform.md", "extrait": "| - | Acajou | plaxé | 1 face extérieure | design | finition design uniquement | ![Acajou](/assets/coloris/perform/2023-acajou.png) |"},
+  {"page": "/coloris/coloris-portes-entree.md", "extrait": "| - | Acajou | plaxé | 1 face extérieure uniquement | collection AUTHENTIQUE ; finition design uniquement | ![Acajou, 1 face extérieure uniquement](/assets/coloris/portes-entree/perform-acajou.png) |"},
+  {"page": "/gammes/perform.md", "extrait": "| PERFORM76 | design | disponible à compter du 2ème trimestre 2026 (**VER-01**) | - |"}
+ ],
+ "ambiguite": "Fenêtre ou porte d'entrée : même réponse (1 face extérieure, design), la porte ajoutant « collection AUTHENTIQUE ». PERFORM70 ou PERFORM76 : la finition design du 76 est annoncée pour le 2e trimestre 2026 (VER-01).",
+ "outils": 2,
+ "comment_trouve": "Nuanciers déjà lus pour R34 (coloris-perform.md et section PERFORM de coloris-portes-entree.md) : ligne Acajou. Lecture de la section finitions DROIT / DESIGN de gammes/perform.md et de VER-01 pour la disponibilité du design en PERFORM76.",
+ "formulations": [
+  "le plaxé acajou une face extérieure est-il possible en PVC PERFORM ?",
+  "acajou 1 face perform",
+  "peut-on avoir l'extérieur en acajou et l'intérieur blanc sur une fenêtre PERFORM76 ?"
+ ],
+ "defauts_wiki": [
+  "La contrainte « finition design » est dans la colonne Finition du nuancier (catalogue 2026) sans le mot « uniquement », qui n'est que sur l'édition 2023 : la restriction peut échapper à la lecture de la seule table 2026.",
+  "La disponibilité du design en PERFORM76 est sur une autre page (gammes/perform.md) : la réponse complète demande deux pages.",
+  "L'historique affirmait que l'acajou n'existe pas en teinté masse et renvoyait à HYBRIDE/TEXTURAL pour le 2 faces : ces données sont sur d'autres nuanciers ; la relance ne porte que sur PERFORM, mais une recherche lexicale sur « acajou » remonte aussi les pages HYBRIDE, TEXTURAL et portes."
+ ]
+}

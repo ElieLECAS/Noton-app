@@ -1,0 +1,30 @@
+{
+  "question": "donne moi l'epaisseur de vitrage pour une parclose 2452",
+  "pages_lues": [
+    "/profiles/systeme-70-tableau-de-vitrage.md",
+    "/profiles/systeme-76-tableau-de-vitrage.md",
+    "/profiles/perform76-parcloses.md"
+  ],
+  "anomalies": [
+    "CTR-02",
+    "CTR-17",
+    "CTR-19",
+    "CTR-92",
+    "INC-242",
+    "VER-86"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "parclose 2452 épaisseur vitrage"
+      },
+      "pages_nouvelles": [
+        "/profiles/systeme-70-tableau-de-vitrage.md",
+        "/profiles/systeme-76-tableau-de-vitrage.md",
+        "/profiles/perform76-parcloses.md"
+      ],
+      "caracteres": 90340
+    }
+  ]
+}

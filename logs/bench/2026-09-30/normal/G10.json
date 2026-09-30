@@ -1,0 +1,25 @@
+{
+ "id": "G10",
+ "reponse": "Le coffre AIP36 est le caisson CHRONO PSE² (bloc-baie SOPROFEN) à accès intérieur, revêtu d'une plaque fibrociment pour ossature bois, dans la série 360. Profondeur de maçonnerie P : 343 mm (hauteur h caisson + adaptateur 312 mm ; largeur max 3 000 mm, hauteur max 3 500 mm). Pour comparaison : AI36 (polystyrène brut) = 360 mm, AIP30 = 283 mm. Attention, contradiction dans le wiki : la fiche source du guide SOPROFEN écrit au contraire « P = 360 mm (H = 312 mm ou 343 mm avec plaque) », c'est-à-dire 343 mm comme hauteur avec plaque et non comme profondeur. La page équipement (tableau par code de coffre) donne 343 mm en profondeur ; à confirmer sur le guide technique Blocs-baies SOPROFEN 2022, p. 90 et 117.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/equipements/volets-roulants-chrono-pse2.md", "extrait": "| AIP36 | Accès Intérieur | 343 | 312 | 3 000 | 3 500 | Plaque fibrociment pour ossature bois |"},
+  {"page": "/equipements/volets-roulants-chrono-pse2.md", "extrait": "| Code coffre | Sens de visite | Profondeur maçonnerie $P$ (mm) | Hauteur $h$ caisson + adaptateur (mm) | Largeur max $L_{\\max}$ (mm) | Hauteur max $H_{\\max}$ (mm) | Revêtement de finition |"},
+  {"page": "/sources/soprofen-guide-technique-blocs-baies-2022.md", "extrait": "Profondeurs de coffre disponibles : P = 260 mm ($H = 275\\text{ mm}$), P = 300 mm ($H = 312\\text{ mm}$ ou 283 mm avec plaque fibrociment), P = 360 mm ($H = 312\\text{ mm}$ ou 343 mm avec plaque)."}
+ ],
+ "ambiguite": "Deux lectures de la valeur 343 mm dans le wiki : profondeur de maçonnerie P du coffre AIP36 (page équipement), ou hauteur H du coffre de 360 mm avec plaque (fiche source). La page équipement est cohérente avec elle-même (300 → 283 et 360 → 343, soit −17 mm dans les deux cas avec plaque) ; la fiche source ne l'est pas (312 → 283 et 312 → 343). Par ailleurs, la fiche source cite une profondeur P = 260 mm absente du tableau de la page équipement.",
+ "outils": 4,
+ "comment_trouve": "Grep « AIP ?36|AIP » : ligne du tableau « Dimensions de coffre et modes de visite » de la page CHRONO PSE², plus la fiche source du guide SOPROFEN. Lecture de la page, puis grep « 343 » dans equipements/ et la fiche source : la fiche source attribue 343 à la hauteur avec plaque, d'où la contradiction.",
+ "formulations": [
+  "Quelle profondeur de tableau pour un coffre CHRONO PSE² 360 accès intérieur avec plaque fibrociment ?",
+  "AIP36 profondeur ?",
+  "Coffre PSE Soprofen pour ossature bois en 360, il fait combien de profondeur ?"
+ ],
+ "defauts_wiki": [
+  "Contradiction entre deux pages du wiki sur le sens de 343 mm (profondeur P pour la page équipement, hauteur H avec plaque pour la fiche source) ; aucune entrée d'anomalie ne la trace.",
+  "La fiche source (sources/) porte des données techniques en prose (profondeurs, hauteurs, lames, motorisations) alors qu'une fiche source ne devrait porter que l'identité et le registre : doublon qui dérive de la page propriétaire.",
+  "La profondeur P = 260 mm (H = 275 mm) n'apparaît que dans la fiche source, pas dans le tableau par code.",
+  "La fiche source n'a pas de registre de couverture page par page (« État de transcription : Transcrit » par chapitre, forme de l'ancien protocole).",
+  "La question dit « profondeur de maçonnerie » : l'en-tête l'écrit bien, mais le code AIP36 n'est défini nulle part (A = accès, I = intérieur, P = plaque, 36 = 360) ; une recherche sans le code (« coffre ossature bois 360 ») dépend du texte « Plaque fibrociment pour ossature bois »."
+ ]
+}

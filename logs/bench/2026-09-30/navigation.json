@@ -1,0 +1,651 @@
+[
+  {
+    "id": "R01",
+    "appels": 2,
+    "caracteres": 102233,
+    "requetes": [
+      "parclose vitrage 44 mm épaisseur",
+      "/profiles/soleal-fy-parcloses-et-vitrage.md"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R02",
+    "appels": 2,
+    "caracteres": 72947,
+    "requetes": [
+      "transformation ouvrant à la française OF en oscillo-battant OB ferrure",
+      "VER-31"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R03",
+    "appels": 2,
+    "caracteres": 55911,
+    "requetes": [
+      "garantie structure LUMINE 65",
+      "/garanties/garanties-par-composant.md"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R04",
+    "appels": 1,
+    "caracteres": 194632,
+    "requetes": [
+      "parclose joint remplissage 24 mm"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R05",
+    "appels": 5,
+    "caracteres": 475442,
+    "requetes": [
+      "oeil de boeuf rond diamètre maximum PVC châssis circulaire",
+      "œil de bœuf formes spéciales rond cintre dimensions maximales",
+      "œil de bœuf",
+      "châssis cintré plein cintre diamètre rayon dimension maximale fixe",
+      "/quincaillerie/roto-nx-champs-application.md"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "partiel"
+  },
+  {
+    "id": "R06",
+    "appels": 3,
+    "caracteres": 216447,
+    "requetes": [
+      "poignée Shangai",
+      "SHANGHAI poignée coulissant SOLEAL galandage",
+      "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R07",
+    "appels": 2,
+    "caracteres": 116223,
+    "requetes": [
+      "effet bilame",
+      "bilame TGY1220 TGY2516 centreur TGY3832"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R08",
+    "appels": 3,
+    "caracteres": 61315,
+    "requetes": [
+      "poignée galandage",
+      "/procedures/pose-soleal-gy-galandage.md",
+      "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R09",
+    "appels": 4,
+    "caracteres": 194610,
+    "requetes": [
+      "parclose 3702",
+      "3702",
+      "parclose PERFORM70 référence épaisseur de vitrage",
+      "/profiles/systeme-70-profiles-complementaires.md"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "non"
+  },
+  {
+    "id": "R10",
+    "appels": 4,
+    "caracteres": 116262,
+    "requetes": [
+      "chicane LUMINE55",
+      "chicane montant central coulissant SOLEAL 55",
+      "/profiles/lumeal-ga-dormants-et-ouvrants.md",
+      "/profiles/soleal-fy-dormants-et-ouvrants.md"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R11",
+    "appels": 3,
+    "caracteres": 230612,
+    "requetes": [
+      "A491 appui",
+      "/profiles/systeme-70-profiles-complementaires.md",
+      "VER-72"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R12",
+    "appels": 3,
+    "caracteres": 410947,
+    "requetes": [
+      "appui 6136 dormants compatibles",
+      "/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md",
+      "pièce d'appui 6136 dormant rénovation 6107 6105 6102"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R13",
+    "appels": 1,
+    "caracteres": 130670,
+    "requetes": [
+      "M335 levier"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R14",
+    "appels": 1,
+    "caracteres": 98317,
+    "requetes": [
+      "76576"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R15",
+    "appels": 1,
+    "caracteres": 86498,
+    "requetes": [
+      "76301 meneau ouvrant largeur"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R16",
+    "appels": 1,
+    "caracteres": 37809,
+    "requetes": [
+      "ouvrant galbé épaisseur"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R17",
+    "appels": 5,
+    "caracteres": 114549,
+    "requetes": [
+      "abaque masse vitrage coulissant angle sans poteau vantail poids kg/m²",
+      "SOLEAL GY abaque masse vitrage kg/m² angle 90° sans poteau hauteur largeur vantail",
+      "/profiles/soleal-gy-dormants-et-rails.md",
+      "/procedures/pose-soleal-gy-galandage.md",
+      "/sources/technal-soleal-gy-conception.md"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "non"
+  },
+  {
+    "id": "R18",
+    "appels": 5,
+    "caracteres": 121215,
+    "requetes": [
+      "coulissant 4 vantaux percussion centrale pièce d'étanchéité montant central haut bas collée vissée avant gondage chicane",
+      "bouchon embout percussion centrale 4 vantaux coller visser haut bas étanchéité air",
+      "/quincaillerie/lumeal-ga-roulements-et-fermetures.md",
+      "avant gondage montant de percussion embout d'étanchéité haut et bas collé vissé 4 vantaux percussion",
+      "/procedures/fabrication-et-pose-lumeal-ga.md"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "partiel"
+  },
+  {
+    "id": "R19",
+    "appels": 3,
+    "caracteres": 177249,
+    "requetes": [
+      "porte SOLEAL PY paumelle pivot 130 kg réglage vantail frotte hauteur clé sans dégonder",
+      "/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md",
+      "réglage paumelle sur pivot T940023 clé Allen hauteur latéral compression porte frotte seuil"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "partiel"
+  },
+  {
+    "id": "R20",
+    "appels": 2,
+    "caracteres": 112694,
+    "requetes": [
+      "report de charge Designo II palier d'angle pièce dormant vissage vis montage",
+      "/quincaillerie/roto-nx-pivots-et-paliers-angle.md"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R21",
+    "appels": 2,
+    "caracteres": 308910,
+    "requetes": [
+      "palier compas cintré arc gabarit perçage dormant positionnement",
+      "gabarit palier de compas réglable plein-cintre 2002405 2002406"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R22",
+    "appels": 3,
+    "caracteres": 325928,
+    "requetes": [
+      "487206 limiteur d'ouverture 80 mm Designo",
+      "domotique Wi-Fi smartphone application connexion platine motorisation ouverture fenêtre",
+      "/procedures/percage-montage-roto-nx.md"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R23",
+    "appels": 3,
+    "caracteres": 392281,
+    "requetes": [
+      "fraisage boîtier de crémone axe fouillot fond de feuillure cote usinage",
+      "hauteur de poignée distance bas du vantail en feuillure axe de la poignée crémone OB KSR",
+      "CTR-115"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R24",
+    "appels": 1,
+    "caracteres": 264370,
+    "requetes": [
+      "6106 dormant cotes"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R25",
+    "appels": 3,
+    "caracteres": 179993,
+    "requetes": [
+      "6101 seuil dormant embout set d'assemblage",
+      "/profiles/systeme-70-assemblages.md",
+      "seuil 9C42 dormant 6101 débit 2008"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R26",
+    "appels": 3,
+    "caracteres": 95877,
+    "requetes": [
+      "763392563",
+      "76339",
+      "763 392 563"
+    ],
+    "page_attendue_lue": null,
+    "trouve": "partiel"
+  },
+  {
+    "id": "R27",
+    "appels": 4,
+    "caracteres": 170730,
+    "requetes": [
+      "ralentisseur amortisseur frein fermeture vantail coulissant",
+      "coulissant PVC amortisseur freinage fin de course vantail ralentit",
+      "/quincaillerie/roto-patio-inowa.md",
+      "/gammes/innoslide.md"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R28",
+    "appels": 2,
+    "caracteres": 169733,
+    "requetes": [
+      "embout embouts dormant standard compatibles",
+      "/profiles/systeme-70-accessoires-par-profile.md"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R29",
+    "appels": 4,
+    "caracteres": 134092,
+    "requetes": [
+      "LUMINE 55 performance acoustique affaiblissement dB Rw",
+      "acoustique affaiblissement dB Rw Rw+Ctr SOLEAL FY 55",
+      "Soleal 55 FYa FYm acoustique essais affaiblissement Rw décibels",
+      "/sources/technal-soleal-fy-conception.md"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "non"
+  },
+  {
+    "id": "R30",
+    "appels": 3,
+    "caracteres": 238541,
+    "requetes": [
+      "tapée isolation 180 mm doublage épaisseur isolant",
+      "/profiles/soleal-fy-dormants-et-ouvrants.md",
+      "tapée isolation 180 mm 76772 doublage"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R31",
+    "appels": 1,
+    "caracteres": 90340,
+    "requetes": [
+      "parclose 2452 épaisseur vitrage"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R32",
+    "appels": 1,
+    "caracteres": 94166,
+    "requetes": [
+      "Eneo CC raccordement électrique tension alimentation fils câble carte électronique"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R33",
+    "appels": 1,
+    "caracteres": 37668,
+    "requetes": [
+      "TGY3702 crémone coulissant 3 points 4 points"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R34",
+    "appels": 3,
+    "caracteres": 73321,
+    "requetes": [
+      "carbone noir coloris PERFORM",
+      "/coloris/coloris-perform.md",
+      "/coloris/coloris-textural.md"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "R35",
+    "appels": 4,
+    "caracteres": 345037,
+    "requetes": [
+      "zone sismique séisme sismicité fenêtre",
+      "sismicité parasismique sismique Eurocode 8 bâtiment catégorie d'importance",
+      "/certifications/dta-6-16-2334.md",
+      "pose en zones sismiques éléments de remplissage 4 m² guide de dimensionnement parasismique éléments non structuraux"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "partiel"
+  },
+  {
+    "id": "R36",
+    "appels": 3,
+    "caracteres": 284023,
+    "requetes": [
+      "retombée membrane applique extérieure monomur pose",
+      "membrane d'étanchéité retombée ITE applique extérieure",
+      "membrane monomur applique extérieure technal aluminium"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "S01",
+    "appels": 2,
+    "caracteres": 79830,
+    "requetes": [
+      "crémone 4 points coulissant TGY3702 TGY3704 rallonge",
+      "/quincaillerie/lumeal-ga-roulements-et-fermetures.md"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "S02",
+    "appels": 5,
+    "caracteres": 288589,
+    "requetes": [
+      "TGY3710 rallonge",
+      "TGY3710",
+      "connexion rallonge tringle fermeture 3 points gabarit réglage crochet haut support de guidage",
+      "montage rallonge crémone fermeture 3 points TGY3704 fabrication",
+      "/sources/technal-soleal-gy-fabrication.md"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "non"
+  },
+  {
+    "id": "S03",
+    "appels": 1,
+    "caracteres": 65537,
+    "requetes": [
+      "TGY3704 rallonge 4ème point crémone compatible TGY3702 TGY3703"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "S04",
+    "appels": 1,
+    "caracteres": 40530,
+    "requetes": [
+      "ouvrant minimal parclose joint vitrage 24 mm"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "S05",
+    "appels": 2,
+    "caracteres": 212310,
+    "requetes": [
+      "763392 crémone",
+      "763392"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "non"
+  },
+  {
+    "id": "S06",
+    "appels": 1,
+    "caracteres": 58038,
+    "requetes": [
+      "acajou 1 face plaxé coloris"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "S07",
+    "appels": 4,
+    "caracteres": 170858,
+    "requetes": [
+      "chicane SOLEAL choix inertie dimensions hauteur largeur",
+      "abaque choix chicane montant central pression vent hauteur largeur vantail combinaison",
+      "/sources/technal-soleal-gy-conception.md",
+      "dimensions maximales porte-fenêtre 2 vantaux battement central hauteur largeur abaque vent"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "partiel"
+  },
+  {
+    "id": "G01",
+    "appels": 1,
+    "caracteres": 35152,
+    "requetes": [
+      "TGY3701 hauteur minimale châssis"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "G02",
+    "appels": 2,
+    "caracteres": 181303,
+    "requetes": [
+      "T940023 charge maxi",
+      "T940023 T940022 paumelle sur pivot"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "G03",
+    "appels": 2,
+    "caracteres": 58804,
+    "requetes": [
+      "W4070495 carré longueur",
+      "W4070495 W1041261 carré de manœuvre poignée"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "G04",
+    "appels": 1,
+    "caracteres": 200677,
+    "requetes": [
+      "787347 LFF"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "G05",
+    "appels": 1,
+    "caracteres": 190052,
+    "requetes": [
+      "0729T largeur épaisseur"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "G06",
+    "appels": 1,
+    "caracteres": 100741,
+    "requetes": [
+      "NT1947 patte 76171 épaisseur isolant"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "G07",
+    "appels": 1,
+    "caracteres": 64888,
+    "requetes": [
+      "PSK200 Portal poids vantail"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "G08",
+    "appels": 1,
+    "caracteres": 25580,
+    "requetes": [
+      "10/14/4 affaiblissement acoustique dB vitrage Rw"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "G09",
+    "appels": 1,
+    "caracteres": 166222,
+    "requetes": [
+      "PPU01PROF DIN gauche droite"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "G10",
+    "appels": 1,
+    "caracteres": 105424,
+    "requetes": [
+      "AIP36 coffre profondeur maçonnerie"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "oui"
+  },
+  {
+    "id": "N01",
+    "appels": 4,
+    "caracteres": 458587,
+    "requetes": [
+      "porte d'entrée aluminium coupe-feu EI30 procès-verbal",
+      "coupe-feu EI30 EI 30 résistance au feu",
+      "porte coupe-feu pare-flammes EI30 PV feu",
+      "EI30 coupe-feu"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "non"
+  },
+  {
+    "id": "N02",
+    "appels": 4,
+    "caracteres": 98265,
+    "requetes": [
+      "LA 37 lame tablier volet roulant résistance grêle classe",
+      "grêle résistance à la grêle classe tablier",
+      "/reference/resistance-au-vent-volets-soprofen.md",
+      "grele grêlons LA37"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "non"
+  },
+  {
+    "id": "N03",
+    "appels": 3,
+    "caracteres": 70588,
+    "requetes": [
+      "TGY3731 clé pompier fermeture",
+      "TGY3731",
+      "clé pompier ouverture d'urgence ERP"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "partiel"
+  },
+  {
+    "id": "N04",
+    "appels": 3,
+    "caracteres": 100054,
+    "requetes": [
+      "Illbruck SP350 mastic collage vitrage temps de polymérisation séchage manipulation vantail",
+      "SP350",
+      "collage vitrage polymérisation délai avant manutention"
+    ],
+    "page_attendue_lue": true,
+    "trouve": "non"
+  }
+]

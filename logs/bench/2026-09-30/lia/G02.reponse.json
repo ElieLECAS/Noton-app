@@ -1,0 +1,8 @@
+{
+  "id": "G02",
+  "reponse": "La **T940023** est la **paumelle sur pivot réglable** de la quincaillerie visible SOLEAL FY (Technal). Sa **charge maximale est de 130 kg par vantail**, pour une largeur de vantail Lv maxi de **1 600 mm**, avec 1 ensemble haut + bas.\n\nDeux conditions :\n- **entre 100 et 130 kg, la pièce de renfort T940022 est obligatoire** ;\n- les paumelles sur pivot (T940035 et T940023) sont **strictement incompatibles avec le seuil PMR**.\n\nPour comparaison : la version non réglable, T940035, s'arrête à 100 kg (Lv maxi 1 600 mm).\n\nSource : (/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md)",
+  "pages_citees": ["/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md"],
+  "appels": 2,
+  "trouve": "oui",
+  "navigation": "Première requête : la référence seule avec « charge maxi ». La page SOLEAL FY quincaillerie visible et cachée est arrivée en tête ; son tableau des paumelles donne la ligne T940023 (paumelle sur pivot réglable, 130 kg, Lv 1 600 mm, renfort T940022 entre 100 et 130 kg) et un encadré sur l'incompatibilité avec le seuil PMR. Les deux autres pages livrées (abaques du système 76, champs d'application Roto NX) étaient du bruit lexical sur « charge » et « kg », très longues (126 000 caractères à lire). Seconde requête avec la facette systeme SOLEAL FY et la pièce de renfort T940022, pour vérifier qu'aucune autre page (DTA, fabrication) ne donnait une valeur divergente : rien d'autre sur la T940023, et les anomalies injectées portaient toutes sur Roto NX. Une recherche d'une référence exacte qui ne livrerait que les pages contenant cette référence aurait évité la lecture de deux pages hors sujet."
+}

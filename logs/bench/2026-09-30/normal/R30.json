@@ -1,0 +1,45 @@
+{
+ "id": "R30",
+ "reponse": "Gamme non précisée ; en PVC PERFORM76 (système 76), pour 180 mm d'isolation : tapée 76772 (cote propre 115 mm) sur les dormants rénovation 76177 et 76185 et sur le dormant neuf 76180, avec la pièce d'appui 76768 (la seule qui corresponde au nez de la 76772) ; sur le 76180, patte de pose NT1951 (clameau CP14GGOM0012, sans cale). Sur le dormant neuf sans aile 76171, 180 mm n'existe pas : une tapée y donne 15 mm de plus, donc 175 mm (tapée 6142, appui 6137, patte NT1949, cale CTHNT0030) ou 195 mm (tapée 76772, appui 76768, patte NT1951, cale CTHNT0030), et au-delà de 155 mm le dormant bas devient un 76180 à aile de 20 mm. Au DTD/DTA la 76772 est cotée 115,5 mm (« fourrure d'épaisseur »). Autres gammes : système 70 capoté, tapée alu A473 « de 110 pour doublage de 180 mm » (les tapées PVC 6138-76769 sont les mêmes au 70) ; LUMINE55 / SOLEAL FY 55, tapée TGY2111 (121 mm) + patte TFY3745 ; LUMEAL GA, tapée TGA2117 + patte TFY3745 (appui aligné) ou TGY3729 (appui décalé 40 mm), cale isolante T440074 ; ASKEY, tapée volet roulant W3090213 (doublage 180, 101,4 × 18,5 mm) et bavette tubulaire W4000206 (180/200) avec embout W4040668.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {
+   "page": "/profiles/perform76-tapees-et-isolation.md",
+   "extrait": "| 76772 | 115 | 180 | 180 | 195 | ![Tapée 76772](/assets/profiles/perform76/tapees/tapee-76772.png) |"
+  },
+  {
+   "page": "/profiles/perform76-tapees-et-isolation.md",
+   "extrait": "| 180 | 76772 | NT1951 | 76768 |"
+  },
+  {
+   "page": "/profiles/perform76-tapees-et-isolation.md",
+   "extrait": "**Sur un dormant 76171, les seules épaisseurs d'isolation qui existent sont 80, 95, 115, 135, 155,\n175, 195 et 215 mm.**"
+  },
+  {
+   "page": "/profiles/systeme-70-profiles-complementaires.md",
+   "extrait": "| A473 | A473 Tapée alu de 110 pour doublage de 180 mm | 110 de large ; 35 de haut | 55 |"
+  },
+  {
+   "page": "/profiles/soleal-fy-dormants-et-ouvrants.md",
+   "extrait": "  * Doublage 180 mm : tapée **TGY2111** (121 mm) + patte TFY3745"
+  },
+  {
+   "page": "/procedures/fabrication-et-pose-lumeal-ga.md",
+   "extrait": "| **180 mm** | TGA2117 | TFY3745 | TGY3729 | T440074 |"
+  }
+ ],
+ "ambiguite": "Gamme et dormant non précisés. En PERFORM76, la réponse dépend du dormant : 76177 / 76185 / 76180 → 76772 ; 76171 → pas de 180 mm (175 ou 195). Autres gammes : système 70 (A473 alu), SOLEAL FY / LUMINE55 (TGY2111), LUMEAL GA (TGA2117), ASKEY (W3090213). Demander la gamme et le dormant.",
+ "outils": 7,
+ "comment_trouve": "Grep « 180 » dans /profiles/perform76-tapees-et-isolation.md (page évidente) : tableaux par dormant (76177/76185, 76180, 76171). Grep « 180 mm » sur tout le wiki pour les autres gammes : système 70 (A473), SOLEAL FY (TGY2111), LUMEAL GA (TGA2117), ASKEY (W3090213). Les pages TECHNAL et ASKEY parlent de « doublage », pas d'« isolation ».",
+ "formulations": [
+  "Quelle tapée et quel appui pour un doublage de 180 mm en PERFORM76 ?",
+  "tapée 180",
+  "Pour un isolant de 18 cm côté intérieur, quelle fourrure d'épaisseur monter sur le dormant ?"
+ ],
+ "defauts_wiki": [
+  "Vocabulaire variable selon la gamme : « isolation » / « Iso de » (PERFORM76), « doublage » (système 70, TECHNAL, ASKEY), « fourrure d'épaisseur » (DTD/DTA) ; une recherche « isolation 180 » rate les pages TECHNAL et ASKEY.",
+  "Même tapée sous trois cotes (115 au cahier et au poster, 115,5 au DTD) et donnée répartie entre /profiles/perform76-tapees-et-isolation.md (23 Ko) et /profiles/systeme-70-profiles-complementaires.md (117 Ko).",
+  "Le tableau principal a une colonne par dormant (« Iso sur 76177 et 76185 », « Iso sur 76180 », « Iso sur 76171 ») : la valeur 180 est sur la même ligne que 195 (76171), ce qui peut induire une réponse fausse pour le 76171.",
+  "Le nombre « 180 » est très fréquent (dimensions, angles, largeurs de 180 cm) : il discrimine mal en BM25."
+ ]
+}

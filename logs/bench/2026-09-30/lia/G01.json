@@ -1,0 +1,29 @@
+{
+  "question": "Hauteur mini de châssis pour monter une TGY3701 ?",
+  "pages_lues": [
+    "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+    "/quincaillerie/lumeal-ga-roulements-et-fermetures.md",
+    "/quincaillerie/askey-coulissant-65-nv-quincaillerie.md"
+  ],
+  "anomalies": [
+    "CTR-112",
+    "CTR-118",
+    "CTR-119",
+    "CTR-98",
+    "INC-204"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "TGY3701 hauteur minimale châssis"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+        "/quincaillerie/lumeal-ga-roulements-et-fermetures.md",
+        "/quincaillerie/askey-coulissant-65-nv-quincaillerie.md"
+      ],
+      "caracteres": 35152
+    }
+  ]
+}

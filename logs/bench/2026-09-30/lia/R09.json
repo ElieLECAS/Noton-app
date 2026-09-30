@@ -1,0 +1,65 @@
+{
+  "question": "parle moi de la parclose 3702 de perform",
+  "pages_lues": [
+    "/profiles/perform76-parcloses.md",
+    "/gammes/perform.md",
+    "/coloris/coloris-portes-entree.md",
+    "/coloris/coloris-perform.md",
+    "/commercial/perform.md",
+    "/profiles/systeme-70-profiles-complementaires.md"
+  ],
+  "anomalies": [
+    "CTR-02",
+    "CTR-40",
+    "CTR-63",
+    "CTR-64",
+    "CTR-68",
+    "INC-22",
+    "INC-36"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "parclose 3702",
+        "gamme": "PERFORM"
+      },
+      "pages_nouvelles": [
+        "/profiles/perform76-parcloses.md",
+        "/gammes/perform.md",
+        "/coloris/coloris-portes-entree.md"
+      ],
+      "caracteres": 47537
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "3702"
+      },
+      "pages_nouvelles": [],
+      "caracteres": 98
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "parclose PERFORM70 référence épaisseur de vitrage",
+        "systeme": "70"
+      },
+      "pages_nouvelles": [
+        "/coloris/coloris-perform.md",
+        "/commercial/perform.md"
+      ],
+      "caracteres": 27338
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/profiles/systeme-70-profiles-complementaires.md"
+      },
+      "pages_nouvelles": [
+        "/profiles/systeme-70-profiles-complementaires.md"
+      ],
+      "caracteres": 119637
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "question": "et acajou 1 face sur perform ?",
+  "pages_lues": [
+    "/coloris/coloris-perform.md",
+    "/coloris/coloris-portes-entree.md",
+    "/portes/collection-contemporain.md"
+  ],
+  "anomalies": [
+    "INC-36",
+    "VER-55"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "acajou 1 face plaxé coloris",
+        "gamme": "PERFORM"
+      },
+      "pages_nouvelles": [
+        "/coloris/coloris-perform.md",
+        "/coloris/coloris-portes-entree.md",
+        "/portes/collection-contemporain.md"
+      ],
+      "caracteres": 58038
+    }
+  ]
+}

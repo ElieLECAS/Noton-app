@@ -1,0 +1,23 @@
+{
+ "id": "G06",
+ "reponse": "Sur le dormant neuf sans aile 76171 (PERFORM76), la patte de pose NT1947 correspond à une épaisseur d'isolation de 155 mm. Configuration complète de cette ligne : tapée 6141, patte NT1947, appui 76758, cale CTHNT0030, clameau CP14GGOM0012. Attention à ne pas confondre avec le dormant 76180, où la même patte NT1947 sert pour 140 mm d'isolation (tapée 6141, appui 6137, sans cale). Aucune épaisseur intermédiaire n'est documentée.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/profiles/perform76-tapees-et-isolation.md", "extrait": "| 155 | 6141 | NT1947 | 76758 | CTHNT0030 |"},
+  {"page": "/profiles/perform76-tapees-et-isolation.md", "extrait": "| NT1947 | 76171 | 155 |"},
+  {"page": "/profiles/perform76-tapees-et-isolation.md", "extrait": "Sur le dormant neuf sans aile 76171, même principe, avec en plus une **cale** réf.\n**CTHNT0030**, sauf à 80 mm d'isolation. Clameau réf. **CP14GGOM0012**."}
+ ],
+ "ambiguite": "La même patte NT1947 vaut 140 mm d'isolation sur le dormant 76180 et 155 mm sur le 76171 : la réponse dépend du dormant, ici précisé (76171 → 155 mm).",
+ "outils": 5,
+ "comment_trouve": "Grep « NT1947 » : quatre lignes, toutes dans la page Tapées et isolation PERFORM76 (tableau 76180, tableau 76171, tableau de compatibilités patte × dormant). Lecture des trois tableaux ; grep dans les anomalies (76171, NT19, 6141) : aucune anomalie ne touche cette ligne (INC-45 et INC-106 concernent la cote de la tapée 6141 dans les manuels profine, pas l'épaisseur d'isolation).",
+ "formulations": [
+  "Quelle épaisseur d'isolant pour la patte de pose NT1947 sur un dormant sans aile 76171 ?",
+  "NT1947 76171 isolation ?",
+  "Sur un dormant PERFORM76 sans aile, avec une tapée de 75, quelle épaisseur d'isolant et quelle patte ?"
+ ],
+ "defauts_wiki": [
+  "Aucun défaut bloquant : le tableau de compatibilités « une ligne par couple patte et dormant » répond exactement, avec la référence dans la première colonne.",
+  "La même valeur est portée trois fois sur la page (tableau 76171, tableau de compatibilités, et coupes) : redondance interne, sans contradiction.",
+  "Page de 22,9 ko, longue mais homogène ; le mot « isolant » de la question est écrit « isolation » dans les tableaux (la racine commune aide une recherche lexicale avec racinisation, pas sans)."
+ ]
+}

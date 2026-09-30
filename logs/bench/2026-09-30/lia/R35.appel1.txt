@@ -1,0 +1,1570 @@
+===== PAGE 1 : /reference/choix-des-fenetres-exposition-au-vent-2008.md =====
+# Domaine d'application
+
+Ce texte guide le choix des classes A\*E\*V\* d'une fenêtre (A\* perméabilité à l'air, E\*
+étanchéité à l'eau, V\* résistance au vent — voir le [glossaire](/reference/glossaire.md)) selon
+l'endroit où elle est posée. Il ouvre le registre 4.2 « Statique » du classeur e.VOLUTION
+d'août 2008 et repose sur les zones de vent des règles NV 65. La méthode actuelle, par région
+climatique et catégorie de terrain, est sur [Classification A\*E\*V\* à préconiser par
+site](/reference/classification-aev-par-site.md) ; les deux ne donnent pas les mêmes pressions
+(**CTR-83**).
+
+L'objet de ce document est de donner aux maîtres d'oeuvre des indications permettant de les
+guider dans le choix des classes à préconiser, compte tenu de la situation de la fenêtre ou de la
+porte extérieure et principalement leur exposition au vent [1 p. 138].
+
+Le présent document s'applique à toutes les fenêtres, portes-fenêtres, fenêtres composées,
+ensembles menuisés avec ou sans coffre de volet roulant intégré, fenêtres de toit et portes
+participant à l'enveloppe extérieure d'un bâtiment d'usage courant tel que les logements, les
+bâtiments scolaires et les immeubles de bureaux et de forme courante. Ce document s'applique
+quelle que soit la pente des fenêtres [1 p. 138].
+
+NOTE — Ce document ne peut donner que des recommandations à caractère général. Il appartient aux
+maîtres d'oeuvre de vérifier que d'une part les conditions climatiques locales et d'autre part la
+forme du bâtiment et sa situation par rapport aux autres bâtiments (en particulier dans le cas de
+hauteur supérieure à 50 m) ne sont pas susceptibles de créer, sur tout ou partie des façades, des
+conditions nécessitant l'emploi de fenêtres de performances différentes de celles indiquées
+ci-après [1 p. 138].
+
+Son domaine est celui de la construction neuve ainsi que de la réhabilitation, en France
+européenne et dans les DOM. La hauteur de la fenêtre au-dessus du sol telle que définie en 3.3
+est limitée à 100 m [1 p. 138].
+
+Le présent document s'appuie sur les normes européennes de classification et d'essai des
+fenêtres et portes extérieures selon leurs performances vis-à-vis de la perméabilité à l'air, de
+l'étanchéité à l'eau et de la résistance au vent [1 p. 138].
+
+# Éléments pris en compte dans la définition de l'exposition
+
+Le document précisant actuellement pour la France les effets du vent sur les façades des
+bâtiments sont les Règles NV 65 — DTU P 06-002 avec ses annexes. Cependant il existe aussi une
+norme expérimentale XP ENV 1991-2-4, traitant du même sujet, reproduisant l'ENV 1991-2-4 dit
+Eurocode 1 Partie 2-4 et spécifiant les adaptations nationales réunies sous le terme DAN
+(Document d'Application Nationale) [1 p. 138].
+
+Ces documents établis essentiellement pour le calcul de la stabilité des ouvrages, ne sont pas
+directement adaptés aux problèmes des fenêtres et portes traitées dans ce mémento. Les effets du
+vent à prendre en considération sont fonction de la nature du problème traité et de l'exigence
+formulée, ainsi par exemple les pressions de vent à considérer pour les problèmes d'étanchéité à
+l'eau ou de perméabilité à l'air ne sont pas forcément exactement les mêmes que celles qui
+doivent être prises en compte pour les problèmes de résistance. On est donc amené pour chacun des
+problèmes traités à proposer une approche spécifique reposant cependant essentiellement sur les
+deux documents initialement cités. Les éléments communs à ces approches spécifiques sont définis
+ci-après [1 p. 138].
+
+## Zones
+
+Les cinq zones à prendre en compte sont celles définies dans le modificatif n° 2 des règles
+NV 65 (référence DTU P 06-002). Ce sont les mêmes zones que dans la XP ENV 1991-2-4. Les
+définitions des cinq zones ainsi que la carte, extraites de la norme DTU P 06-002 sont données en
+annexe A [1 p. 138] — voir *Zones de vent par département* plus bas.
+
+## La situation d'environnement de la construction
+
+De ce point de vue, on distingue quatre situations d'environnement de la construction
+[1 p. 138-139] :
+
+| Situation | Définition |
+| --- | --- |
+| a | à l'intérieur des grands centres urbains (zone urbaine où les bâtiments occupent au moins 15 % de la surface et ont une hauteur moyenne supérieure à 15 m) |
+| b | dans les villes petites et moyennes ou à la périphérie des grands centres urbains ; dans les zones industrielles ; dans les zones forestières |
+| c | en rase campagne |
+| d | en bord de lacs ou plans d'eau pouvant être parcourus par le vent sur une distance d'au moins 5 km ou en bord de mer, lorsque la construction étudiée est à une distance du rivage inférieure à 20 fois la hauteur de cette construction |
+
+La définition b est imprimée « ans les villes petites et moyennes » [1 p. 139].
+
+Dans certains cas, en bord de mer, les vents forts viennent de l'intérieur des terres ; c'est
+par exemple le cas général du littoral méditerranéen situé en zone 3 et 4 (hors Corse), dans ce
+cas, les fenêtres dont la situation correspond à la définition précédente sont considérées comme
+en situation c vis-à-vis des effets du vent [1 p. 139].
+
+## La hauteur de la fenêtre au-dessus du sol : H
+
+On distingue de ce point de vue les fenêtres dont la partie haute est située à une hauteur H
+au-dessus du sol telle que : H ≤ 6 m ; 6 m < H ≤ 18 m ; 18 m < H ≤ 28 m ; 28 m < H ≤ 50 m ;
+50 m < H ≤ 100 m [1 p. 139].
+
+Lorsque la construction est située au-dessus d'une dénivellation de pente moyenne supérieure à 1
+(angle > 45°), la hauteur au-dessus du sol doit être comptée à partir du pied de la
+dénivellation, sauf si la construction est située à une distance de celle-ci supérieure à deux
+fois la hauteur de cette dénivellation [1 p. 139].
+
+La figure 1 montre deux bâtiments posés sur un plateau qui domine une pente : la bande hachurée
+de chaque bâtiment est la fenêtre étudiée, H' sa hauteur au-dessus du plateau, Z la hauteur de
+la pente (dénivellation), α l'angle de la pente, d et d' la distance horizontale entre le pied de
+la pente et chaque bâtiment.
+
+![Figure 1 — Hauteur de la fenêtre au-dessus d'une dénivellation](/assets/reference/plans-e-volution-2008/hauteur-fenetre-denivellation-evo2008.png)
+
+La figure se lit avec ces trois règles, imprimées sous elle, Z étant la hauteur de la
+dénivellation [1 p. 139] :
+
+| Condition | Hauteur H à retenir |
+| --- | --- |
+| tg(α) ≤ 1 (pente de 45° au plus) | Z = 0 |
+| d < 2Z (bâtiment proche de la pente) | H = Z + H' |
+| d' > 2Z (bâtiment éloigné de la pente) | H = H' |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 139)
+
+# Résistance au vent
+
+La pression de vent est la force que le vent exerce sur chaque mètre carré de la fenêtre,
+exprimée en pascals (Pa) ; une pression « nette » est la différence entre l'extérieur et
+l'intérieur. La flèche est le déplacement, sous cette pression, du milieu d'un élément de la
+menuiserie par rapport à ses appuis ; la flèche relative est cette flèche divisée par la
+longueur (portée) de l'élément — voir le [glossaire](/reference/glossaire.md).
+
+## Exigence de sécurité
+
+Quelle que soit sa destination, la fenêtre ne doit pas présenter un comportement dangereux pour
+l'usager sous une pression nette de vent, calculée selon la XP ENV 1991-2-4 (DAN), avec une
+vitesse de référence du vent correspondant à une probabilité annuelle de dépassement égale à
+0,033 (événement de période de retour égale à 30 ans). Cette pression nette de vent est appelée
+P3. À défaut de valeurs calculées, le Tableau 1 propose des valeurs prédéterminées en fonction
+des paramètres de l'exposition définis à l'article 3 [1 p. 140].
+
+## Exigence de service
+
+L'exigence de service se décompose en exigence de rigidité et exigence de résistance à la
+pression répétée [1 p. 140].
+
+## Exigence de rigidité
+
+### Généralités
+
+La fenêtre doit posséder une rigidité telle que sous une pression nette de vent P1 représentant
+les 2/3 de la pression nette P3, la flèche relative de l'élément menuisé le plus sollicité
+(hormis le remplissage lui-même), reste inférieure à une certaine valeur, sans que les fonctions
+de la fenêtre soient dégradées. Cependant, une rigidité minimale du 1/150e sous 800 Pa est
+requise. Le Tableau 2 propose des valeurs prédéterminées de P1. Ces valeurs étant arrondies, le
+rapport 2/3 n'est pas toujours strictement respecté [1 p. 140].
+
+### Exigences de flèche
+
+La norme NF EN 12210 définit trois classes de rigidité [1 p. 140] :
+
+| Classe de rigidité | Flèche relative maximale |
+| --- | --- |
+| A | ne dépassant pas 1/150e de la portée |
+| B | ne dépassant pas 1/200e de la portée |
+| C | ne dépassant pas 1/300e de la portée |
+
+Le présent document ne prend en compte que les classes A et C [1 p. 140].
+
+De façon générale, la flèche de l'élément menuisé, le plus sollicité sous la pression P1 telle
+que définie ci-dessus, doit rester inférieure au 1/150e de sa portée (classe A), sans pour autant
+dépasser 15 mm sous 800 Pa [1 p. 140].
+
+Si la fenêtre, ou l'un de ses éléments, occupe une situation telle que définie dans la P 08-302
+nécessitant de résister aux chocs intérieurs ou extérieurs de sécurité, la flèche de l'élément
+menuisé le plus sollicité sous cette pression P1, limitée à 1 200 Pa, doit rester inférieure au
+1/300e de sa portée (classe C). Une rigidité minimale de 1/300e sous 800 Pa est requise
+[1 p. 140].
+
+## Résistance à la pression répétée
+
+La fenêtre doit aussi conserver ses fonctions après répétitions de pressions nettes positive et
+négative P2 représentant 1/3 de la pression nette P3 [1 p. 141].
+
+NOTE — La conservation de performances, se vérifie par un contrôle de la variation de la
+perméabilité à l'air [1 p. 141].
+
+## Tableau 1 : pressions P3
+
+Valeurs des pressions (et dépressions) P3 en pascals à appliquer lors de l'essai : une ligne par
+zone de vent et par situation d'environnement, une colonne par classe de hauteur H de la fenêtre
+au-dessus du sol. Les signes de comparaison des en-têtes ne sont pas imprimés (« H 6 »,
+« 6 H 18 »…) ; les cinq colonnes sont les cinq classes de hauteur définies plus haut, dans le même
+ordre [1 p. 141].
+
+<table>
+<thead>
+<tr><th rowspan="2">Zone</th><th rowspan="2">Situation</th><th colspan="5">Hauteur H (m) de la fenêtre au-dessus du sol — P3 (Pa)</th></tr>
+<tr><th>H ≤ 6</th><th>6 &lt; H ≤ 18</th><th>18 &lt; H ≤ 28</th><th>28 &lt; H ≤ 50</th><th>50 &lt; H ≤ 100</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>a</td><td>1200</td><td>1200</td><td>1200</td><td>1200</td><td>1200</td></tr>
+<tr><td>1</td><td>b</td><td>1200</td><td>1200</td><td>1200</td><td>1200</td><td>1200</td></tr>
+<tr><td>1</td><td>c</td><td>1200</td><td>1200</td><td>1200</td><td>1200</td><td>1300</td></tr>
+<tr><td>1</td><td>d</td><td>1200</td><td>1200</td><td>1200</td><td>1250</td><td>1400</td></tr>
+<tr><td>2</td><td>a</td><td>1200</td><td>1200</td><td>1200</td><td>1200</td><td>1200</td></tr>
+<tr><td>2</td><td>b</td><td>1200</td><td>1200</td><td>1200</td><td>1200</td><td>1200</td></tr>
+<tr><td>2</td><td>c</td><td>1200</td><td>1200</td><td>1200</td><td>1350</td><td>1550</td></tr>
+<tr><td>2</td><td>d</td><td>1200</td><td>1200</td><td>1300</td><td>1450</td><td>1650</td></tr>
+<tr><td>3</td><td>a</td><td>1200</td><td>1200</td><td>1200</td><td>1200</td><td>1200</td></tr>
+<tr><td>3</td><td>b</td><td>1200</td><td>1200</td><td>1200</td><td>1200</td><td>1300</td></tr>
+<tr><td>3</td><td>c</td><td>1200</td><td>1200</td><td>1350</td><td>1550</td><td>1800</td></tr>
+<tr><td>3</td><td>d *)</td><td>1200</td><td>1400</td><td>1550</td><td>1700</td><td>1900</td></tr>
+<tr><td>4</td><td>a</td><td>1200</td><td>1200</td><td>1200</td><td>1200</td><td>1200</td></tr>
+<tr><td>4</td><td>b</td><td>1200</td><td>1200</td><td>1200</td><td>1200</td><td>1500</td></tr>
+<tr><td>4</td><td>c</td><td>1200</td><td>1400</td><td>1550</td><td>1750</td><td>2050</td></tr>
+<tr><td>4</td><td>d *)</td><td>1300</td><td>1600</td><td>1750</td><td>1950</td><td>2200</td></tr>
+<tr><td>5</td><td>a</td><td>1200</td><td>1200</td><td>1200</td><td>1200</td><td>1550</td></tr>
+<tr><td>5</td><td>b</td><td>1200</td><td>1200</td><td>1250</td><td>1550</td><td>1900</td></tr>
+<tr><td>5</td><td>c</td><td>1350</td><td>1800</td><td>2000</td><td>2250</td><td>2650</td></tr>
+<tr><td>5</td><td>d</td><td>1700</td><td>2100</td><td>2250</td><td>2500</td><td>2800</td></tr>
+</tbody>
+</table>
+
+\*) Sur le littoral méditerranéen, hors Corse, les fenêtres en situation d, des zones 3 et 4 sont
+considérées comme en situation c [1 p. 141].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 141)
+
+## Tableau 2 : pressions P1
+
+Valeurs des pressions (et dépressions) P1 à appliquer pour la mesure des déformations, en
+pascals, même disposition que le Tableau 1 (en-têtes de hauteur imprimés sans signes de
+comparaison) [1 p. 142].
+
+<table>
+<thead>
+<tr><th rowspan="2">Zone</th><th rowspan="2">Situation</th><th colspan="5">Hauteur H (m) de la fenêtre au-dessus du sol — P1 (Pa)</th></tr>
+<tr><th>H ≤ 6</th><th>6 &lt; H ≤ 18</th><th>18 &lt; H ≤ 28</th><th>28 &lt; H ≤ 50</th><th>50 &lt; H ≤ 100</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>a</td><td>800</td><td>800</td><td>800</td><td>800</td><td>800</td></tr>
+<tr><td>1</td><td>b</td><td>800</td><td>800</td><td>800</td><td>800</td><td>800</td></tr>
+<tr><td>1</td><td>c</td><td>800</td><td>800</td><td>800</td><td>800</td><td>850</td></tr>
+<tr><td>1</td><td>d</td><td>800</td><td>800</td><td>800</td><td>850</td><td>950</td></tr>
+<tr><td>2</td><td>a</td><td>800</td><td>800</td><td>800</td><td>800</td><td>800</td></tr>
+<tr><td>2</td><td>b</td><td>800</td><td>800</td><td>800</td><td>800</td><td>800</td></tr>
+<tr><td>2</td><td>c</td><td>800</td><td>800</td><td>800</td><td>900</td><td>1000</td></tr>
+<tr><td>2</td><td>d</td><td>800</td><td>800</td><td>900</td><td>1000</td><td>1100</td></tr>
+<tr><td>3</td><td>a</td><td>800</td><td>800</td><td>800</td><td>800</td><td>800</td></tr>
+<tr><td>3</td><td>b</td><td>800</td><td>800</td><td>800</td><td>800</td><td>850</td></tr>
+<tr><td>3</td><td>c</td><td>800</td><td>800</td><td>900</td><td>1050</td><td>1200</td></tr>
+<tr><td>3</td><td>d *)</td><td>800</td><td>950</td><td>1050</td><td>1150</td><td>1300</td></tr>
+<tr><td>4</td><td>a</td><td>800</td><td>800</td><td>800</td><td>800</td><td>800</td></tr>
+<tr><td>4</td><td>b</td><td>800</td><td>800</td><td>800</td><td>800</td><td>1000</td></tr>
+<tr><td>4</td><td>c</td><td>800</td><td>950</td><td>1050</td><td>1200</td><td>1350</td></tr>
+<tr><td>4</td><td>d *)</td><td>850</td><td>1100</td><td>1150</td><td>1300</td><td>1500</td></tr>
+<tr><td>5</td><td>a</td><td>800</td><td>800</td><td>800</td><td>800</td><td>1050</td></tr>
+<tr><td>5</td><td>b</td><td>800</td><td>800</td><td>850</td><td>1050</td><td>1300</td></tr>
+<tr><td>5</td><td>c</td><td>900</td><td>1200</td><td>1350</td><td>1500</td><td>1750</td></tr>
+<tr><td>5</td><td>d</td><td>1100</td><td>1400</td><td>1500</td><td>1650</td><td>1850</td></tr>
+</tbody>
+</table>
+
+\*) Sur le littoral méditerranéen, hors Corse, les fenêtres en situation d, des zones 3 et 4 sont
+considérées comme en situation c [1 p. 142].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 142)
+
+## Choix des classes de résistance au vent
+
+Les exigences énoncées plus haut sont satisfaites si les classes 2 à 5 de résistance au vent des
+fenêtres définies dans la norme NF EN 12210 sont choisies conformément aux indications portées
+dans le Tableau 3 en tenant compte des classes de rigidité A ou C. Des classes supérieures à
+celles indiquées peuvent être utilisées [1 p. 142].
+
+NOTE — Compte tenu de l'exigence minimale de rigidité, la classe minimale retenue est V\*A2 ou
+V\*C2 [1 p. 142].
+
+## Tableau 3 : classes de résistance au vent
+
+Classes de résistance au vent des fenêtres (chiffre 2 à 5 de la classe V\* de la NF EN 12210) :
+une ligne par zone et par situation, une colonne par classe de hauteur, même disposition que les
+Tableaux 1 et 2 (en-têtes imprimés sans signes de comparaison) [1 p. 143].
+
+<table>
+<thead>
+<tr><th rowspan="2">Zone</th><th rowspan="2">Situation</th><th colspan="5">Hauteur H (m) de la fenêtre au-dessus du sol — classe de résistance au vent</th></tr>
+<tr><th>H ≤ 6</th><th>6 &lt; H ≤ 18</th><th>18 &lt; H ≤ 28</th><th>28 &lt; H ≤ 50</th><th>50 &lt; H ≤ 100</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>a</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+<tr><td>1</td><td>b</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+<tr><td>1</td><td>c</td><td>2</td><td>2</td><td>2</td><td>2</td><td>3</td></tr>
+<tr><td>1</td><td>d</td><td>2</td><td>2</td><td>2</td><td>3</td><td>3</td></tr>
+<tr><td>2</td><td>a</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+<tr><td>2</td><td>b</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+<tr><td>2</td><td>c</td><td>2</td><td>2</td><td>2</td><td>3</td><td>3</td></tr>
+<tr><td>2</td><td>d</td><td>2</td><td>2</td><td>3</td><td>3</td><td>3</td></tr>
+<tr><td>3</td><td>a</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+<tr><td>3</td><td>b</td><td>2</td><td>2</td><td>2</td><td>2</td><td>3</td></tr>
+<tr><td>3</td><td>c</td><td>2</td><td>2</td><td>3</td><td>3</td><td>3</td></tr>
+<tr><td>3</td><td>d *)</td><td>2</td><td>3</td><td>3</td><td>3</td><td>4</td></tr>
+<tr><td>4</td><td>a</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+<tr><td>4</td><td>b</td><td>2</td><td>2</td><td>2</td><td>2</td><td>3</td></tr>
+<tr><td>4</td><td>c</td><td>2</td><td>3</td><td>3</td><td>3</td><td>4</td></tr>
+<tr><td>4</td><td>d *)</td><td>3</td><td>3</td><td>3</td><td>4</td><td>4</td></tr>
+<tr><td>5</td><td>a</td><td>2</td><td>2</td><td>2</td><td>2</td><td>3</td></tr>
+<tr><td>5</td><td>b</td><td>2</td><td>2</td><td>3</td><td>3</td><td>4</td></tr>
+<tr><td>5</td><td>c</td><td>3</td><td>3</td><td>4</td><td>4</td><td>5</td></tr>
+<tr><td>5</td><td>d</td><td>3</td><td>4</td><td>4</td><td>5</td><td>5</td></tr>
+</tbody>
+</table>
+
+\*) Sur le littoral méditerranéen, hors Corse, les fenêtres en situation d des zones 3 et 4 sont
+considérées comme en situation c [1 p. 143].
+
+Les classes étant celles définies dans la NF EN 12210. De façon générale, les classes indiquées
+sont les classes V\*A2 à V\*A5 avec le critère du 1/150e. Si le critère est celui du 1/300e selon
+l'exigence indiquée en 6.1.2.1.2 ces classes sont les classes V\*C2 ou V\*C3 (limite supérieure de
+rigidité) [1 p. 143].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 143)
+
+## Cas particulier des fenêtres de destination connue
+
+Dans le cas où la destination de la fenêtre est connue il est possible de choisir la classe de
+résistance au vent mais il est aussi possible de répondre à l'exigence de la résistance au vent
+en appliquant l'essai de la norme NF EN 12211 [1 p. 144].
+
+Dans ce cas, la pression et la dépression P3 à appliquer lors des essais sont choisies soit égales
+aux valeurs du Tableau 1 soit égales à la valeur calculée de l'action résultante correspondant au
+vent normal du site selon les règles NV en vigueur ou l'Eurocode 1. Les pressions et dépressions
+P1 et P2 à appliquer lors des essais sont déterminées selon les formules suivantes, en conformité
+avec la NF EN 12211 : P1 = P3 / 1,5 ; P2 = P3 / 3,0, arrondis aux 50 Pa les plus près [1 p. 144].
+
+# Perméabilité à l'air
+
+La perméabilité à l'air est la quantité d'air qui passe à travers une fenêtre fermée, par ses
+joints, sous une différence de pression ; plus la classe A\* est élevée, moins la fenêtre laisse
+passer d'air.
+
+## Rappel de l'exigence
+
+Les recommandations ci-après sont établies en vue [1 p. 144] :
+
+- de diminuer les déperditions thermiques afin de limiter la puissance de l'installation de
+  chauffage et les consommations annuelles ;
+- d'éviter les courants d'air froid et le déséquilibre de chauffage et de la ventilation.
+
+## Choix des classes de perméabilité à l'air
+
+L'on considère que les exigences énoncées, ci-dessus sont satisfaites pour les locaux chauffés,
+si les classes 2 ou 3 de perméabilité à l'air des fenêtres telles que définies dans la norme
+NF EN 12207 en pression et en dépression, sont choisies conformément aux indications portées dans
+le Tableau 4, ci-après. Une classe supérieure à celle indiquée peut être utilisée [1 p. 144].
+
+NOTE 1 — Lors des essais selon la norme NF EN 1026 pour les fenêtres à frappe intérieure telles
+les fenêtres à la française, OB ou à soufflet, généralement les seuls essais en pression
+permettent de classer, car les essais en dépression sont plus favorables. De même, pour les
+fenêtres à frappe extérieure telles les fenêtres à l'italienne, généralement les seuls essais en
+dépression permettent de classer car les essais en pression sont plus favorables. Pour les autres
+types de fenêtres ou en cas de doute, les essais doivent être conduits tant en pression qu'en
+dépression et le classement définitif est le plus faible obtenu [1 p. 144].
+
+Pour les locaux non chauffés on peut choisir une classe directement inférieure [1 p. 144].
+
+Sauf spécifications particulières, aucune exigence vis-à-vis de la perméabilité à l'air n'est
+demandée pour les portes des bâtiments industriels, de magasins, de parties communes, ou de halls
+d'entrée. Cependant pour les portes extérieures des bâtiments concernés par la réglementation
+thermique vis-à-vis des économies d'énergie, la classe minimale vis-à-vis de la perméabilité à
+l'air est la classe A\*1. Il est aussi possible, hors habitat, dans le cas où la porte extérieure
+ne comporte ni seuil, ni système d'étanchéité spécifique, d'indiquer la valeur du débit de fuite
+du produit déterminé sous 4 Pa [1 p. 144].
+
+Pour les locaux climatisés en France métropolitaine ou dans les DOM, il est recommandé de choisir
+des fenêtres dont la classe est au moins de A\*3. Cette spécification ne s'applique pas aux portes
+[1 p. 144].
+
+NOTE 2 — La satisfaction des exigences de confort thermique et acoustique en particulier
+nécessite des conditions autres que celles relatives à la perméabilité à l'air des seules
+fenêtres ou portes. Il y a lieu en particulier d'assurer l'étanchéité à l'air des ouvrages
+adjacents tels que coffre de volet roulant, joint avec les murs, etc. [1 p. 144]
+
+Particulièrement dans les DOM il peut être utilisé des fenêtres n'ayant aucune exigence vis-à-vis
+de la perméabilité à l'air, par exemple les jalousies [1 p. 144].
+
+## Tableau 4 : classes de perméabilité à l'air
+
+Classe de perméabilité à l'air des fenêtres (chiffre de la classe A\* de la NF EN 12207) : une
+ligne par zone et par situation, une colonne par classe de hauteur, même disposition que les
+tableaux précédents (en-têtes imprimés sans signes de comparaison) [1 p. 145].
+
+<table>
+<thead>
+<tr><th rowspan="2">Zone</th><th rowspan="2">Situation</th><th colspan="5">Hauteur H (m) de la fenêtre au-dessus du sol — classe de perméabilité à l'air</th></tr>
+<tr><th>H ≤ 6</th><th>6 &lt; H ≤ 18</th><th>18 &lt; H ≤ 28</th><th>28 &lt; H ≤ 50</th><th>50 &lt; H ≤ 100</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>a</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+<tr><td>1</td><td>b</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+<tr><td>1</td><td>c</td><td>2</td><td>2</td><td>2</td><td>2</td><td>3</td></tr>
+<tr><td>1</td><td>d</td><td>2</td><td>2</td><td>2</td><td>3</td><td>3</td></tr>
+<tr><td>2</td><td>a</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+<tr><td>2</td><td>b</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+<tr><td>2</td><td>c</td><td>2</td><td>2</td><td>2</td><td>3</td><td>3</td></tr>
+<tr><td>2</td><td>d</td><td>2</td><td>2</td><td>3</td><td>3</td><td>3</td></tr>
+<tr><td>3</td><td>a</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+<tr><td>3</td><td>b</td><td>2</td><td>2</td><td>2</td><td>2</td><td>3</td></tr>
+<tr><td>3</td><td>c</td><td>2</td><td>2</td><td>3</td><td>3</td><td>3</td></tr>
+<tr><td>3</td><td>d *)</td><td>2</td><td>3</td><td>3</td><td>3</td><td>3</td></tr>
+<tr><td>4</td><td>a</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+<tr><td>4</td><td>b</td><td>2</td><td>2</td><td>2</td><td>2</td><td>3</td></tr>
+<tr><td>4</td><td>c</td><td>2</td><td>3</td><td>3</td><td>3</td><td>3</td></tr>
+<tr><td>4</td><td>d *)</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td></tr>
+<tr><td>5</td><td>a</td><td>2</td><td>2</td><td>2</td><td>2</td><td>3</td></tr>
+<tr><td>5</td><td>b</td><td>2</td><td>2</td><td>3</td><td>3</td><td>3</td></tr>
+<tr><td>5</td><td>c</td><td>2</td><td>3</td><td>3</td><td>3</td><td>3</td></tr>
+<tr><td>5</td><td>d</td><td>2</td><td>3</td><td>3</td><td>3</td><td>3</td></tr>
+</tbody>
+</table>
+
+\*) Sur le littoral méditerranéen, hors Corse, les fenêtres en situation d des zones 3 et 4 sont
+considérées comme en situation c [1 p. 145].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 145)
+
+## Coffres de volets roulants
+
+Tout coffre de volet roulant doit avoir une perméabilité maximale de 12,5 m3/h.m. sous 100 Pa
+lorsque mesurée selon la méthode décrite dans la norme NF P 20-501. Les coffres ne participant pas
+à la perméabilité à l'air de l'enveloppe du bâtiment ne sont pas concernés [1 p. 145].
+
+# Étanchéité à l'eau
+
+L'étanchéité à l'eau est l'aptitude de la fenêtre fermée à ne pas laisser entrer la pluie
+poussée par le vent (pluie battante) ; elle se classe par la lettre E\* de la NF EN 12208.
+
+## Rappel de l'exigence
+
+Les fenêtres doivent rester étanches sous l'action combinée de la pluie et du vent (pluie
+battante) dans des conditions susceptibles de se reproduire une fois tous les trois ans en
+moyenne [1 p. 146].
+
+NOTE — En règle générale, une fenêtre choisie conformément à 8.5 ne doit pas donner lieu à des
+pénétrations d'eau importantes dans des conditions susceptibles de se reproduire tous les 10 ans
+en moyenne [1 p. 146].
+
+## Définition des classes d'exposition à la pluie battante
+
+Les classes d'exposition à la pluie battante des fenêtres sont définies essentiellement en
+fonction des éléments suivants : la situation ; la hauteur au-dessus du sol ; la protection
+partielle ou totale à la pluie des fenêtres [1 p. 146].
+
+Compte tenu des connaissances actuelles sur la pluie battante (concomitance de la pluie et du
+vent) il est à noter que [1 p. 146] :
+
+- le mistral et la tramontane sont des vents rarement accompagnés de pluie ;
+- la durée de la pluie, variable d'une région à une autre, est un facteur secondaire pour la
+  pénétration de la pluie dans les joints de fenêtres ;
+- la fréquence des pluies, également variable d'une région à une autre, n'intervient que pour
+  modifier, dans des limites réduites, la fréquence des conditions pouvant produire des
+  infiltrations.
+
+## Ouvrage partiellement protégé de la pluie
+
+On considère qu'une fenêtre est un ouvrage partiellement protégé de la pluie si le joint ouvrant
+supérieur ou le joint de remplissage supérieur pour les parties fixes est protégé par tout
+dispositif continu de la façade susceptible de constituer un auvent ou parapluie vis-à-vis de ce
+joint et de la partie de la fenêtre située au-dessus de celui-ci [1 p. 146].
+
+Pour former un auvent ou parapluie, l'extrémité la plus extérieure de ce dispositif continu, doit
+[1 p. 146] :
+
+- être à une distance L d'au moins 0,15 m ;
+- respecter un facteur de protection L/C, tel que défini sur la Figure 2, égal ou supérieur à 3.
+
+NOTE — Par exemple, une fenêtre ou une porte posée en applique intérieure d'un mur peut très
+généralement être considérée comme partiellement protégée de la pluie [1 p. 146].
+
+## Ouvrage protégé de la pluie
+
+On considère qu'une fenêtre est un ouvrage protégé de la pluie si le facteur de protection L/H
+(H étant la hauteur totale de la fenêtre) tel que défini sur la Figure 3 a) est égal ou supérieur
+à 0,4. Cependant pour être protégée, la fenêtre doit aussi latéralement être protégée
+[1 p. 146] :
+
+- soit par un prolongement de part et d'autre de la fenêtre de la protection supérieure sur une
+  longueur au moins égale à L ;
+- soit par une protection latérale verticale au moins égale à celle représentée sur la
+  Figure 3 b).
+
+NOTE — Cette notion d'ouvrage protégé de la pluie, peut s'appliquer particulièrement aux portes
+d'entrée [1 p. 146].
+
+Les Figures 2 et 3 a) et 3 b), auxquelles ces deux définitions renvoient pour L, C et H, ne
+figurent sur aucune page du registre 4.2 (**INC-221**).
+
+## Choix des classes d'étanchéité à l'eau
+
+Pour les fenêtres exposées à la pluie, l'on considère que l'exigence est satisfaite si les classes
+2 à 9 d'étanchéité à l'eau telles que définies dans la norme NF EN 12208 sont choisies
+conformément aux indications portées sur le Tableau 5. Une classe supérieure à celle indiquée peut
+être utilisée [1 p. 147].
+
+Pour les fenêtres de toit, la classe d'étanchéité à l'eau minimale est E\*8A. Pour les portes
+extérieures, le niveau d'exigence est abaissé de deux classes [1 p. 147].
+
+Sauf spécifications particulières, aucune exigence vis-à-vis de l'étanchéité à l'eau n'est
+demandée pour les portes des bâtiments industriels, de magasins, de parties communes, de halls
+d'entrée ou les portes de service donnant dans un local non chauffé, par exemple garage
+[1 p. 147].
+
+Pour les fenêtres pouvant être considérées comme partiellement protégées de la pluie selon 8.3,
+les classes indiquées sont celles d'indice B jusqu'à la classe 7 (donc 2 B à 7 B). Dans ce cas,
+une classe d'indice A peut aussi être utilisée. Par contre pour les classes 8 ou supérieures,
+seules des classes d'indice A doivent être utilisées même dans le cas d'ouvrage partiellement
+protégé de la pluie [1 p. 147].
+
+Pour les fenêtres, et particulièrement pour les portes, pouvant être considérées comme protégées,
+les classes du Tableau 5 sont modifiées selon le Tableau 6 ci-après, la classe ne pouvant être
+inférieure à E\*1 pour les fenêtres et E\*0 pour les portes extérieures [1 p. 147].
+
+## Tableau 5 : classes d'étanchéité à l'eau
+
+Classes d'étanchéité à l'eau des fenêtres selon la NF EN 12208 (chiffre de la classe E\*) : une
+ligne par zone et par situation, une colonne par classe de hauteur (en-têtes imprimés sans signes
+de comparaison) [1 p. 147].
+
+<table>
+<thead>
+<tr><th rowspan="2">Zone</th><th rowspan="2">Situation</th><th colspan="5">Hauteur H (m) de la fenêtre au-dessus du sol — classe d'étanchéité à l'eau</th></tr>
+<tr><th>H ≤ 6</th><th>6 &lt; H ≤ 18</th><th>18 &lt; H ≤ 28</th><th>28 &lt; H ≤ 50</th><th>50 &lt; H ≤ 100</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>a</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td></tr>
+<tr><td>1</td><td>b</td><td>4</td><td>4</td><td>4</td><td>4</td><td>5</td></tr>
+<tr><td>1</td><td>c</td><td>4</td><td>4</td><td>5</td><td>5</td><td>6</td></tr>
+<tr><td>1</td><td>d</td><td>4</td><td>5</td><td>5</td><td>6</td><td>6</td></tr>
+<tr><td>2</td><td>a</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td></tr>
+<tr><td>2</td><td>b</td><td>4</td><td>4</td><td>4</td><td>4</td><td>5</td></tr>
+<tr><td>2</td><td>c</td><td>4</td><td>5</td><td>5</td><td>6</td><td>7</td></tr>
+<tr><td>2</td><td>d</td><td>5</td><td>5</td><td>6</td><td>6</td><td>7</td></tr>
+<tr><td>3</td><td>a</td><td>4</td><td>4</td><td>4</td><td>4</td><td>5</td></tr>
+<tr><td>3</td><td>b</td><td>4</td><td>4</td><td>4</td><td>5</td><td>6</td></tr>
+<tr><td>3</td><td>c</td><td>4</td><td>5</td><td>6</td><td>7</td><td>7</td></tr>
+<tr><td>3</td><td>d *)</td><td>5</td><td>6</td><td>7</td><td>7</td><td>8</td></tr>
+<tr><td>4</td><td>a</td><td>4</td><td>4</td><td>4</td><td>5</td><td>5</td></tr>
+<tr><td>4</td><td>b</td><td>4</td><td>4</td><td>5</td><td>5</td><td>6</td></tr>
+<tr><td>4</td><td>c</td><td>5</td><td>6</td><td>7</td><td>7</td><td>8</td></tr>
+<tr><td>4</td><td>d *)</td><td>6</td><td>7</td><td>7</td><td>8</td><td>8</td></tr>
+<tr><td>5</td><td>a</td><td>4</td><td>4</td><td>4</td><td>5</td><td>7</td></tr>
+<tr><td>5</td><td>b</td><td>4</td><td>4</td><td>6</td><td>7</td><td>8</td></tr>
+<tr><td>5</td><td>c</td><td>4</td><td>4</td><td>8</td><td>8</td><td>8</td></tr>
+<tr><td>5</td><td>d</td><td>4</td><td>4</td><td>8</td><td>8</td><td>9</td></tr>
+</tbody>
+</table>
+
+\*) Sur le littoral méditerranéen, hors Corse, les fenêtres en situation d des zones 3 et 4 sont
+considérées comme en situation c [1 p. 147].
+
+En zone 5, situations c et d, la classe imprimée pour H ≤ 6 m et 6 < H ≤ 18 m est 4, quand les
+zones 3 et 4 portent 4 à 7 dans les mêmes situations et aux mêmes hauteurs, puis passe à 8 dès
+18 m ; la page ne le commente pas (**VER-115**).
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 147)
+
+## Tableau 6 : modification des classes pour les ouvrages protégés
+
+Tableau de modification des classes d'étanchéité à l'eau, selon la méthode B, indiquée au
+Tableau 5 pour les ouvrages protégés, en fonction de L/H : E\*n est la classe lue au Tableau 5,
+diminuée du nombre indiqué [1 p. 148].
+
+| L/H (facteur de protection) | Classe E\* à retenir |
+| --- | --- |
+| 0,40 | E\*n-1 |
+| 0,60 | E\*n-2 |
+| 0,70 | E\*n-3 |
+| 0,80 | E\*n-4 |
+| 0,90 | E\*n-5 |
+| 1,00 | E\*n-6 |
+
+La classe d'étanchéité à l'eau ne pouvant être inférieure à E\*1 pour les fenêtres et à E\*0 pour
+les portes extérieures [1 p. 148].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 148)
+
+# Tableau récapitulatif
+
+Le Tableau 7 rassemble en fonction des différentes expositions, les classes de perméabilité à
+l'air, d'étanchéité à l'eau et de résistance au vent qu'il convient de choisir [1 p. 148] :
+
+- les expositions sont définies en fonction des éléments de l'article 3 ;
+- les classes de fenêtres sont celles définies dans la norme NF P 20-302 à partir des normes
+  européennes NF EN 12207, NF EN 12208 et NF EN 12210, les essais ayant été réalisés selon la
+  norme NF P 20-501 à partir des normes européennes NF EN 1026, NF EN 1027 et NF EN 12211.
+
+## Rappel des principales règles complémentaires
+
+Dans les termes de la page [1 p. 148] :
+
+- dans le cas de fenêtres de destination connue pour la résistance au vent, il est possible
+  d'utiliser les spécifications indiquées ;
+- en perméabilité à l'air pour les locaux non chauffés, la classe de fenêtre à préconiser peut
+  être celle indiquée dans le Tableau 7. Cependant il est aussi possible de choisir une classe
+  directement inférieure ;
+- sauf spécifications particulières, aucune exigence vis-à-vis de la perméabilité à l'air n'est
+  demandée pour les portes des bâtiments industriels, de magasins, de parties communes, ou de
+  halls d'entrée. Cependant pour les portes extérieures des bâtiments concernés par la
+  réglementation thermique vis-à-vis des économies d'énergie, la classe minimale vis-à-vis de la
+  perméabilité à l'air est la classe A\*1. Il est aussi possible, hors habitat, dans le cas où la
+  porte extérieure ne comporte ni seuil, ni système d'étanchéité spécifique, d'indiquer la valeur
+  du débit de fuite du produit déterminé sous 4 Pa ;
+- pour les locaux climatisés en France métropolitaine ou dans les DOM il est recommandé de choisir
+  une fenêtre dont la classe de perméabilité à l'air est au moins de A\*3. Cette spécification ne
+  s'applique pas aux portes ;
+- particulièrement dans les DOM, il peut être utilisé des fenêtres n'ayant aucune exigence
+  vis-à-vis de la perméabilité à l'air, par exemple les jalousies ;
+- pour les portes extérieures, le niveau d'exigence indiqué dans le Tableau 7, en étanchéité à
+  l'eau, est abaissé de deux classes ;
+- sauf spécifications particulières, aucune exigence vis-à-vis de l'étanchéité à l'eau n'est
+  demandée pour les portes des bâtiments industriels, de magasins, de parties communes, de halls
+  d'entrée, ou les portes de service donnant dans un local non chauffé, par exemple garage ;
+- pour les fenêtres de toit, la classe d'étanchéité à l'eau minimale est E\*8A.
+
+## Tableau 7 : tableau récapitulatif
+
+Chaque case donne les trois classes à choisir pour une zone, une situation et une classe de
+hauteur : A\* (perméabilité à l'air), E\* (étanchéité à l'eau), V\* (résistance au vent, lettre
+de rigidité et chiffre de pression). Les en-têtes de hauteur sont imprimés sans signes de
+comparaison, comme aux Tableaux 1 à 5 [1 p. 149].
+
+<table>
+<thead>
+<tr><th rowspan="2">Zone</th><th rowspan="2">Situation</th><th colspan="5">Hauteur H (m) de la fenêtre au-dessus du sol — classes A* E* V*</th></tr>
+<tr><th>H ≤ 6</th><th>6 &lt; H ≤ 18</th><th>18 &lt; H ≤ 28</th><th>28 &lt; H ≤ 50</th><th>50 &lt; H ≤ 100</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>a</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td></tr>
+<tr><td>1</td><td>b</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*5 V*A2</td></tr>
+<tr><td>1</td><td>c</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*5 V*A2</td><td>A*2 E*5 V*A2</td><td>A*3 E*6 V*A3</td></tr>
+<tr><td>1</td><td>d</td><td>A*2 E*4 V*A2</td><td>A*2 E*5 V*A2</td><td>A*2 E*5 V*A2</td><td>A*3 E*6 V*A3</td><td>A*3 E*6 V*A3</td></tr>
+<tr><td>2</td><td>a</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td></tr>
+<tr><td>2</td><td>b</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*5 V*A2</td></tr>
+<tr><td>2</td><td>c</td><td>A*2 E*4 V*A2</td><td>A*2 E*5 V*A2</td><td>A*2 E*5 V*A2</td><td>A*3 E*6 V*A3</td><td>A*3 E*7 V*A3</td></tr>
+<tr><td>2</td><td>d</td><td>A*2 E*5 V*A2</td><td>A*2 E*5 V*A2</td><td>A*3 E*6 V*A3</td><td>A*3 E*6 V*A3</td><td>A*3 E*7 V*A3</td></tr>
+<tr><td>3</td><td>a</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*5 V*A2</td></tr>
+<tr><td>3</td><td>b</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*5 V*A2</td><td>A*3 E*6 V*A3</td></tr>
+<tr><td>3</td><td>c</td><td>A*2 E*4 V*A2</td><td>A*2 E*5 V*A2</td><td>A*3 E*6 V*A3</td><td>A*3 E*7 V*A3</td><td>A*3 E*7 V*A3</td></tr>
+<tr><td>3</td><td>d *)</td><td>A*2 E*5 V*A2</td><td>A*3 E*6 V*A3</td><td>A*3 E*7 V*A3</td><td>A*3 E*7 V*A3</td><td>A*3 E*8 V*A4</td></tr>
+<tr><td>4</td><td>a</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*5 V*A2</td><td>A*2 E*5 V*A2</td></tr>
+<tr><td>4</td><td>b</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*5 V*A2</td><td>A*2 E*5 V*A2</td><td>A*3 E*6 V*A3</td></tr>
+<tr><td>4</td><td>c</td><td>A*2 E*5 V*A2</td><td>A*3 E*6 V*A3</td><td>A*3 E*7 V*A3</td><td>A*3 E*7 V*A3</td><td>A*3 E*8 V*A4</td></tr>
+<tr><td>4</td><td>d *)</td><td>A*3 E*6 V*A3</td><td>A*3 E*7 V*A3</td><td>A*3 E*7 V*A3</td><td>A*3 E*8 V*A4</td><td>A*3 E*8 V*A4</td></tr>
+<tr><td>5</td><td>a</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*2 E*5 V*A2</td><td>A*3 E*7 V*A3</td></tr>
+<tr><td>5</td><td>b</td><td>A*2 E*4 V*A2</td><td>A*2 E*4 V*A2</td><td>A*3 E*6 V*A3</td><td>A*3 E*7 V*A3</td><td>A*3 E*8 V*A4</td></tr>
+<tr><td>5</td><td>c</td><td>A*2 E*4 V*A3</td><td>A*3 E*4 V*A3</td><td>A*3 E*8 V*A4</td><td>A*3 E*8 V*A4</td><td>A*3 E*8 V*A5</td></tr>
+<tr><td>5</td><td>d</td><td>A*2 E*4 V*A3</td><td>A*3 E*4 V*A4</td><td>A*3 E*8 V*A4</td><td>A*3 E*8 V*A5</td><td>A*3 E*9 V*A5</td></tr>
+</tbody>
+</table>
+
+\*) Sur le littoral méditerranéen, hors Corse, les fenêtres en situation d des zones 3 et 4 sont
+considérées comme en situation c [1 p. 149].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 149)
+
+Sous le tableau, dans les termes de la page [1 p. 149] :
+
+- pour les classes de résistance au vent V\* : de façon générale, les classes indiquées sont les
+  classes V\*A2 à V\*A5 avec le critère du 1/150e ; si le critère est celui du 1/300e, selon
+  l'exigence indiquée en 6.1.2.1.2, ces classes sont les classes V\*C2 ou V\*C3 (limite supérieure
+  de rigidité) ;
+- pour les classes d'étanchéité à l'eau E\* : de façon générale, les classes indiquées sont les
+  classes E\*4A à E\*9A ; si l'ouvrage est partiellement protégé de la pluie, selon 8.3, les
+  classes indiquées sont les classes E\*4B à E\*7B puis E\*8A et E\*9A ; si l'ouvrage est
+  totalement protégé de la pluie, selon 8.4, les classes indiquées doivent être modifiées selon le
+  Tableau 6.
+
+# Zones de vent par département
+
+Annexe A (informative), définitions des cinq zones. Les cinq zones à prendre en compte sont
+celles définies dans le modificatif n° 2 des règles NV 65. Les définitions de ces cinq zones sont
+rappelées ci-après (reprise du DTU Règles N.V 65 : zones par départements, carte et liste des
+cantons) [1 p. 150].
+
+## Tableau A.1 : définitions des zones, par départements
+
+Un astérisque \*) signale un département dont une partie seulement est dans la zone ; un tel
+département figure donc dans plusieurs zones, et la liste de ses cantons dit laquelle s'applique
+[1 p. 150].
+
+| Zone | Départements |
+| --- | --- |
+| 1 | Côte d'Or \*), Doubs, Jura, Loire, Bas-Rhin \*), Haut-Rhin, Rhône, Haute-Saône, Saône-et-Loire, Vosges, Belfort (Territoire) ; Guyane |
+| 2 | Ain, Aisne, Allier, Alpes-de-Haute-Provence, Hautes-Alpes, Alpes-maritimes, Ardèche, Ardennes, Ariège, Aube, Aude \*), Aveyron, Cantal, Charente, Charente-Maritime, Cher, Corrèze, Côte d'Or \*), Creuse, Dordogne, Drôme, Eure \*), Eure-et-Loir, Gard, Haute-Garonne, Gers, Gironde, Hérault \*), Ille-et-Vilaine \*), Indre, Indre-et-Loire, Isère, Landes, Loir-et-Cher, Haute-Loire, Loire-Atlantique \*), Loiret, Lot, Lot-et-Garonne, Lozère, Maine-et-Loire, Marne, Haute-Marne, Mayenne, Meurthe-et-Moselle, Meuse, Moselle, Nièvre, Nord \*), Oise, Orne, Pas-de-Calais \*), Puy-de-Dôme, Pyrénées-Atlantiques, Hautes-Pyrénées, Pyrénées Orientales \*), Bas-Rhin \*), Sarthe, Savoie, Haute-Savoie, Seine-Maritime \*), Deux-Sèvres, Somme \*), Tarn, Tarn-et-Garonne, Var \*), Vaucluse \*), Vendée \*), Vienne, Haute-Vienne, Yonne ; Région Ile-de-France, Ville de Paris, Seine-et-Marne, Yvelines, Essonne, Hauts-de-Seine, Seine-Saint-Denis, Val-de-Marne, Val-d'Oise |
+| 3 | Aude \*), Bouches-du-Rhône \*), Calvados, Corse-du-Sud \*), Haute-Corse \*), Côtes-d'Armor \*), Eure \*), Hérault \*), Ille-et-Vilaine \*), Loire-Atlantique \*), Manche \*), Morbihan \*), Nord \*), Pas-de-Calais \*), Pyrénées-Orientales \*), Seine-Maritime \*), Somme \*), Var \*), Vaucluse \*), Vendée \*) |
+| 4 | Aude \*), Bouches-du-Rhône \*), Corse-du-Sud \*), Haute-Corse \*), Côtes-d'Armor \*), Finistère, Manche \*), Morbihan \*), Pyrénées-Orientales \*), Var \*), Vaucluse \*) ; Saint-Pierre-et-Miquelon |
+| 5 | Guadeloupe, Martinique, Réunion, Mayotte |
+
+\*) Pour une partie du département [1 p. 150].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 150)
+
+## Tableau A.2 : départements appartenant à plusieurs zones, découpage selon les cantons
+
+Pour un département marqué \*) au Tableau A.1, la zone dépend du canton : une ligne par
+département et par zone, « autres cantons » désignant tous les cantons du département non
+nommés sur ses autres lignes. Le découpage suit le découpage administratif de la France au
+1er janvier 1999 — INSEE — Code officiel géographique 1999, 13e édition [1 p. 151-153].
+
+| Département | Zone | Cantons |
+| --- | --- | --- |
+| Aude | 4 | Coursan, Durban-Corbières, Ginestas, Lézignan-Corbières, Narbonne (tous cantons), Sigean |
+| Aude | 3 | Capendu, Lagrasse, Mouthoumet, Peyriac-Minervois, Tuchan |
+| Aude | 2 | autres cantons |
+| Bouches-du-Rhône | 3 | Arles (tous cantons), Châteaurenard, Peyrolles-en-Provence, Saintes-Maries-de-la-Mer, Saint-Rémy-de-Provence, Tarascon |
+| Bouches-du-Rhône | 4 | autres cantons |
+| Corse-du-Sud | 4 | Bonifacio, Figari, Levie, Port-Vecchio |
+| Corse-du-Sud | 3 | autres cantons |
+| Haute-Corse | 3 | Belgodère, Calenzana, Calvi, Castifao-Morosaglia, Corte, L'Ile-Rousse, Niolu-Omessa, Venaco |
+| Haute-Corse | 4 | autres cantons |
+| Côte-d'Or | 2 | Aignay-le-Duc, Baigneux-les-Juifs, Châtillon-sur-Seine, Laignes, Montbard, Montigny-sur-Aube, Précy-sous-Thil, Recey-sur-Ource, Saulieu, Semur-en-Auxois, Venarey-les-Laumes, Vitteaux |
+| Côte-d'Or | 1 | autres cantons |
+| Côtes-d'Armor | 4 | Bégard, Belle-Isle-en-Terre, Bourbriac, Callac, Gouarec, Guingamp, Lannion, Lanvollon, Lézardrieux, Maël-Carhaix, Paimpol, Perros-Guirec, Plestin-les-Grèves, Plouagat, Plouaret, Plouha, Pontrieux, La Roche-Derrien, Rostrenen, Saint-Nicolas-du-Pélern, Tréguier |
+| Côtes-d'Armor | 3 | autres cantons |
+| Eure | 3 | Beuzeville, Cormeilles, Pont-Audemer, Quillebeuf-sur-Seine, Saint-Georges-du-Vièvre, Thiberville |
+| Eure | 2 | autres cantons |
+| Hérault | 3 | Béziers (tous cantons), Capestang, Olonzac, Saint-Chinian, Saint-Pons-de-Thomières |
+| Hérault | 2 | autres cantons |
+| Ille-et-Vilaine | 2 | Argentré-du-Plessis, Bain-de-Bretagne, Châteaubourg, Grand-Fougeray, La Guerche-de-Bretagne, Janzé, Retiers, Le Sel-de-Bretagne, Vitré (tous cantons) |
+| Ille-et-Vilaine | 3 | autres cantons |
+| Loire-Atlantique | 2 | Aigrefeuille-sur-Maine, Ancenis, Châteaubriant, Clisson, Derval, Ligné, Moisdon-la-Rivière, Nort-sur-Erdre, Nozay, Riaillé, Rougé, Saint-Julien-de-Vouvantes, Saint-Mars-la-Jaille, Vallet, Varades |
+| Loire-Atlantique | 3 | autres cantons |
+| Manche | 4 | Barneville-Carteret, Beaumont-Hague, Bricquebec, Cherbourg (tous cantons), Équeurdreville-Hainneville, Montebourg, Octeville, Les Pieux, Quettehou, Sainte-Mère-Eglise, Saint-Pierre-Église, Saint-Sauveur-le-Viconte, Tourlaville, Valognes |
+| Manche | 3 | autres cantons |
+| Morbihan | 4 | Le Faouët, Gourin, Guémené-sur-Scorff |
+| Morbihan | 3 | autres cantons |
+| Nord | 3 | Bergues, Bourbourg, Couderkerque-Branche, Dunkerque (tous cantons), Grande-Synthe, Gravelines, Hondschoote, Wormhout |
+| Nord | 2 | autres cantons |
+| Pas-de-Calais | 3 | Ardres, Audruicq, Berck, Boulogne-sur-Mer (tous cantons), Calais (tous cantons), Campagne-lès-Hesdin, Desvres, Étaples, Guines, Hucquellers, Marquise, Montreuil, Outreau, Le Portel, Samer |
+| Pas-de-Calais | 2 | autres cantons |
+| Pyrénées-Orientales | 2 | Mont-Louis, Olette, Sallagousse |
+| Pyrénées-Orientales | 3 | Arles-sur-Tech, Céret, Prades, Prats-de-Mollo-la-Preste, Saint-Paul-de-Fenouillet, Sournia, Vinça |
+| Pyrénées-Orientales | 4 | autres cantons |
+| Bas-Rhin | 2 | Bischwiller, Bouxwiller, Drulingen, Haguenau, Lauterbourg, Marmoutier, Niederbronn-les-Bains, La Petite-Pierre, Sarre-Union, Saverne, Seitz, Soutz-sous-Forêts, Wissembourg, Woerth |
+| Bas-Rhin | 1 | autres cantons |
+| Seine-Maritime | 3 | Bacqueville-en-Caux, Bellencombre, Blangy-sur-Bresle, Bolbec, Cany-Barville, Caudebec-en-Caux, Criquetot-l'Esneval, Dieppe (tous cantons), Doudeville, Envermeu, Eu, Fauville-en-Caux, Fécamp, Fontaine-le-Dun, Goderville, Gonfreville-l'Orcher, Le Havre (tous cantons), Lillebonne, Londinières, Longueville-sur-Scie, Montivilliers, Offranville, Ourville-en-Caux, Pavilly, Saint-Romain-de-Colbosc, Saint-Valery-en-Caux, Tôtes, Valmont, Yerville, Yvetot |
+| Seine-Maritime | 2 | autres cantons |
+| Somme | 3 | Abbeville (tous cantons), Ailly-le-Haut-Clocher, Ault, Crécy-en-Ponthieu, Friville-Escarbotin, Gamaches, Hellencourt, Moyenneville, Nouvion, Rue, Saint-Valery-sur-Somme |
+| Somme | 2 | autres cantons |
+| Var | 2 | Aups, Callas, Comps-sur-Artuby, Draguignan, Fayence, Fréjus, Le Muy, Saint-Raphaël, Salernes, Tavernes |
+| Var | 3 | Barjols, Besse-sur-Issole, Brignoles, Collobrières, Cotignac, Cuers, Grimaud, Lorgues, Le Luc, Rians, La Roquebrussanne, Saint-Tropez |
+| Var | 4 | autres cantons |
+| Vaucluse | 2 | Bollène, Valréas |
+| Vaucluse | 4 | Bonnieux, Cadenet, Cavaillon, L'Isle-sur-la-Sorgue, Pernes-les-Fontaines |
+| Vaucluse | 3 | autres cantons |
+| Vendée | 3 | Beauvoir-sur-Mer, Challans, L'Ile-d'Yeu, Noirmoutier-en-l'Ile, Palluau, Saint-Gilles-Croix-de-Vie, Saint-Jean-de-Monts |
+| Vendée | 2 | autres cantons |
+
+Les noms de cantons sont recopiés tels qu'imprimés (« Couderkerque-Branche »,
+« Saint-Sauveur-le-Viconte », « Soutz-sous-Forêts », « Hucquellers », « Sallagousse »)
+[1 p. 151-153].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 151-153)
+
+## Figure A.1 : carte des zones de vent de la France métropolitaine
+
+La carte montre la France métropolitaine découpée en départements (traits pointillés) et colorée
+selon la zone de vent, légende sous la carte : blanc pour la zone 1 (dans l'est), pointillé pour
+la zone 2 (la plus grande partie du territoire), noir pour la zone 3 (la bande littorale de la
+Manche et de l'Atlantique nord, une partie du littoral méditerranéen et l'ouest de la Corse),
+hachuré horizontal pour la zone 4 (pointe de la Bretagne, nord du Cotentin, parties du littoral
+méditerranéen, est de la Corse). La zone 5 (départements d'outre-mer) n'a pas de légende sur la
+carte [1 p. 154].
+
+![Figure A.1 — France métropolitaine : carte des zones de vent](/assets/reference/plans-e-volution-2008/carte-zones-de-vent-nv65-evo2008.png)
+
+Le détail canton par canton des départements partagés est au Tableau A.2 ci-dessus.
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 154)
+
+NOTA — Le document contractuel ayant servi pour établir ce dossier est la norme FDP 20 -201
+[1 p. 154].
+
+# Classification de la résistance au vent (NF EN 12210)
+
+Le registre 4.2 se poursuit, PDF p. 155 et 156, par la classification des résultats d'essai de
+résistance au vent de la NF EN 12210 (classes de pression 1 à 5 et Exxxx, flèches A, B, C,
+exigences sous P1, P2 et P3, classification globale A1 à C5). Elle est transcrite, avec ses
+écarts, sur [Classification de la résistance au vent](/reference/classification-resistance-au-vent.md).
+
+# Citations
+
+[1] [Système e.VOLUTION, plan des profilés et manuel technique, système F 91, édition août 2008](raw/profine-plans-profiles-e-volution-2008-08.pdf), registre 4.2 « Statique », PDF p. 138 à 154 (pages imprimées 1 à 17)
+
+# Voir aussi
+
+- [Classification A\*E\*V\* à préconiser par site](/reference/classification-aev-par-site.md)
+- [Classification de la résistance au vent, essai EN 12211](/reference/classification-resistance-au-vent.md)
+- [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md)
+- [Plans des profilés e.VOLUTION, août 2008](/sources/plans-profiles-e-volution-2008.md)
+- [Contradictions entre sources](/anomalies/contradictions-entre-sources.md)
+
+===== PAGE 2 : /quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md =====
+# Renvois d'angle Roto NX
+
+Le **renvoi d'angle** est la pièce d'angle de la ferrure : dessinée en équerre, elle transmet le
+verrouillage d'un côté de l'ouvrant à l'autre (voir le [glossaire](/reference/glossaire.md)). Le
+chapitre 5 « Renvois d'angle » du catalogue Roto NX PVC les range en standard (5.1), court (5.2),
+têtière (5.3 : standard et seuil), seuil (5.4), compas (5.5) et solutions particulières (5.6 :
+cintré, fenêtre inclinée, aération, gâche et sortie de tringle) [1 p. 265].
+
+Chaque tableau a des pictogrammes en en-tête de colonne, définis dans la légende du catalogue
+(voir [Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md)) :
+désignation (bulle), longueur, nombre de galets, type de goujon de verrouillage (galets E, P, V,
+voir [Roto NX](/quincaillerie/roto-nx.md)), position (carré entouré de quatre flèches : haut,
+bas), traitement de surface, N° de matériel, et selon le tableau information (« i »), jeu, axe de
+ferrure, profondeur de feuillure, DIN gauche / droite, sortie de tringle, nombre de gâches
+soudées [1 p. 10-11, 266-272]. Conventions de transcription :
+
+- la **longueur** est imprimée en paire « a / b » (110 / 110, 110 / 10, 180 / 0, 110 / 0) ; le sens
+  des deux nombres n'est pas défini, la paire est reportée telle quelle ;
+- une désignation ou une longueur imprimée une seule fois pour plusieurs lignes (cellule
+  fusionnée) est répétée sur chaque ligne ;
+- une position imprimée « Haut / Bas » sur deux lignes d'une même cellule est reportée
+  « Haut, Bas » ;
+- au-dessus de chaque tableau, le catalogue dessine le ou les renvois d'angle sans relier chaque
+  dessin à un N° de matériel : les dessins sont donc montrés ensemble, au-dessus de leur tableau ;
+- les types d'ouverture sont nommés d'après les pictogrammes de la légende [1 p. 12].
+
+Pour les références de renvois d'angle appelées par les nomenclatures de montage KSR, voir
+[Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md).
+
+## Renvoi d'angle standard
+
+![Renvois d'angle standard](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-standard.png)
+
+Section 5.1 « Standard » : quatre dessins ; types d'ouverture : fenêtre oscillo-battante, fenêtre
+ouvrant à la française, fenêtre basculante, fenêtre à la française / oscillo-battante à ouvrant
+semi-fixe [1 p. 266].
+
+| N° de matériel | Désignation | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Position | Traitement de surface |
+| --- | --- | --- | :---: | :---: | --- | --- |
+| 339785 | Renvoi d'angle standard | 110 / 110 | – | – | Haut | Roto Sil |
+| 260275 | Renvoi d'angle standard | 110 / 110 | 1 | E | Haut | Roto Sil |
+| 260277 | Renvoi d'angle standard | 110 / 110 | 1 | P | Haut, Bas | Roto Sil |
+| 260272 | Renvoi d'angle standard | 110 / 110 | 1 | V | Haut, Bas | Roto Sil |
+| 260274 | Renvoi d'angle standard | 110 / 110 | 2 | V | Haut, Bas | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 266)
+
+## Renvoi d'angle spécial court
+
+![Renvois d'angle spéciaux courts](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-special-court.png)
+
+Section 5.2 « Court » : deux dessins ; types d'ouverture : fenêtre oscillo-battante, fenêtre
+ouvrant à la française, fenêtre à la française / oscillo-battante à ouvrant semi-fixe. C'est le
+« renvoi d'angle spécial court → à partir de la page 267 » des tableaux de combinaisons des
+crémones de semi-fixe, voir [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) [1 p. 249, 267].
+
+| N° de matériel | Désignation | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Position | Traitement de surface |
+| --- | --- | --- | :---: | :---: | --- | --- |
+| 260280 | Renvoi d'angle spécial court | 110 / 10 | 1 | E | Haut | Roto Sil |
+| 260282 | Renvoi d'angle spécial court | 110 / 10 | 1 | P | Haut, Bas | Roto Sil |
+| 281288 | Renvoi d'angle spécial court | 110 / 10 | 1 | V | Haut, Bas | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 267)
+
+## Renvoi d'angle de têtière, standard
+
+![Renvoi d'angle de têtière, standard](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-tetiere-standard.png)
+
+Section 5.3.1 « Standard » du renvoi d'angle de têtière, pour l'ouvrant secondaire ; type
+d'ouverture : fenêtre à la française / oscillo-battante à ouvrant semi-fixe. La colonne
+« information » précise l'usage [1 p. 268].
+
+| N° de matériel | Désignation | Longueur (mm) | Information | Nombre de gâches soudées | Nombre de galets | Type de goujon de verrouillage | Position | Traitement de surface |
+| --- | --- | --- | --- | :---: | :---: | :---: | --- | --- |
+| 313538 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire | 1 | 1 | V | Haut | Roto Sil |
+| 367227 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire | 1 | 1 | V | Bas | Roto Sil |
+| 839223 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire / protection contre les déplacements | 1 | 1 | V | Haut | Roto Sil |
+| 839224 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire / protection contre les déplacements | 1 | 1 | V | Bas | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 268)
+
+## Renvoi d'angle de têtière, seuil
+
+![Renvoi d'angle de têtière, seuil](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-tetiere-seuil.png)
+
+Section 5.3.2 « Seuil » du renvoi d'angle de têtière, dessiné en angle bas ; type d'ouverture :
+fenêtre à la française / oscillo-battante à ouvrant semi-fixe ; la colonne « jeu » (deux profils
+emboîtés, cote fléchée en bas) porte 7 ou 10 mm [1 p. 11, 268].
+
+| N° de matériel | Désignation | Longueur (mm) | Information | Jeu (mm) | Nombre de gâches soudées | Nombre de galets | Type de goujon de verrouillage | Position | Traitement de surface |
+| --- | --- | --- | --- | ---: | :---: | :---: | :---: | --- | --- |
+| 823316 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire / gâche soudée | 7 | 1 | 1 | V | Bas | Roto Sil |
+| 794779 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire / gâche soudée | 10 | 1 | 1 | V | Bas | Roto Sil |
+| 858513 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire / système anti-coulissant intégré | 7 | 1 | 1 | V | Bas | Roto Sil |
+| 858515 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire / gâche soudée | 10 | 1 | 1 | V | Bas | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 268)
+
+## Renvoi d'angle de seuil
+
+![Renvois d'angle de seuil](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-seuil.png)
+
+Section 5.4 « Seuil » : deux dessins en angle bas ; types d'ouverture : fenêtre oscillo-battante,
+fenêtre ouvrant à la française, fenêtre à la française / oscillo-battante à ouvrant semi-fixe,
+fenêtre plein cintre oscillo-battante, fenêtre inclinée oscillo-battante ; pas de colonne
+position [1 p. 269].
+
+| N° de matériel | Désignation | Longueur (mm) | Information | Jeu (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | --- | --- | ---: | :---: | :---: | --- |
+| 642264 | Renvoi d'angle seuil | 110 / 110 | Renvoi d'angle standard, galet rallongé | 7 | 1 | V | Roto Sil |
+| 823317 | Renvoi d'angle seuil | 110 / 110 | Renvoi d'angle standard, galet rallongé | 7 | 2 | V | Roto Sil |
+| 614456 | Renvoi d'angle seuil | 110 / 110 | Renvoi d'angle standard, galet rallongé | 10 | 1 | V | Roto Sil |
+| 794778 | Renvoi d'angle seuil | 110 / 110 | Renvoi d'angle standard, galet rallongé | 10 | 2 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 269)
+
+INFO, « Raccordement des seuils » : une description détaillée du raccordement des seuils au
+système de ferrures Roto NX se trouve dans le document **IMO_347**, auquel renvoie un QR code
+imprimé [1 p. 269]. Ce document n'est pas dans le corpus.
+
+## Compas de renvoi d'angle
+
+![Compas de renvoi d'angle](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-compas.png)
+
+Section 5.5 « Compas » : deux dessins, la pièce montée verticalement avec un retour court en
+haut ; types d'ouverture : fenêtre oscillo-battante, fenêtre à la française / oscillo-battante à
+ouvrant semi-fixe [1 p. 270].
+
+| N° de matériel | Désignation | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | --- | :---: | :---: | --- |
+| 293521 | Compas de renvoi d'angle | 180 / 0 | – | – | Roto Sil |
+| 260286 | Compas de renvoi d'angle | 180 / 0 | 1 | P | Roto Sil |
+| 260284 | Compas de renvoi d'angle | 180 / 0 | 1 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 270)
+
+## Renvoi d'angle cintré
+
+![Renvoi d'angle cintré](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-cintre.png)
+
+Section 5.6.1 « Cintré » (solutions particulières) ; types d'ouverture : fenêtre plein cintre
+oscillo-battante, fenêtre inclinée oscillo-battante [1 p. 271].
+
+| N° de matériel | Désignation | Longueur (mm) | Information | Traitement de surface |
+| --- | --- | --- | --- | --- |
+| 255273 | Renvoi d'angle cintré | 110 / 0 | Standard | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 271)
+
+## Renvoi d'angle de fenêtre inclinée
+
+![Renvois d'angle de fenêtre inclinée](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-fenetre-inclinee.png)
+
+Section 5.6.2 « Fenêtre inclinée » : deux dessins, la branche horizontale montante ; types
+d'ouverture : fenêtre inclinée oscillo-battante, fenêtre triangulaire oscillo-battante
+[1 p. 271].
+
+| N° de matériel | Désignation | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | --- | :---: | :---: | --- |
+| 260279 | Renvoi d'angle fenêtre inclinée | 110 / 110 | 1 | E | Roto Sil |
+| 260278 | Renvoi d'angle fenêtre inclinée | 110 / 110 | 1 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 271)
+
+## Renvoi d'angle aération
+
+![Renvoi d'angle aération](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-aeration.png)
+
+Section 5.6.3 « Aération » ; type d'ouverture : fenêtre oscillo-battante. Colonnes « axe de
+ferrure » (deux profils emboîtés, trait d'axe mixte), « profondeur de feuillure » (angle de
+feuillure, flèche oblique) et « DIN gauche/droite » (deux vantaux) [1 p. 11, 272].
+
+| N° de matériel | Désignation | Longueur (mm) | Axe de ferrure (mm) | Profondeur de feuillure (mm) | Nombre de galets | Type de goujon de verrouillage | DIN gauche / droite | Traitement de surface |
+| --- | --- | --- | ---: | ---: | :---: | :---: | --- | --- |
+| 389819 | Renvoi d'angle aération | 110 / 110 | 9 | 20 | 1 | P | Gauche | Roto Sil |
+| 389818 | Renvoi d'angle aération | 110 / 110 | 9 | 20 | 1 | P | Droite | Roto Sil |
+| 389817 | Renvoi d'angle aération | 110 / 110 | 13 | 30 | 1 | P | Gauche | Roto Sil |
+| 389816 | Renvoi d'angle aération | 110 / 110 | 13 | 30 | 1 | P | Droite | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 272)
+
+INFO : **éléments non utilisables en combinaison avec le côté paumelles P et le côté paumelles
+T** [1 p. 272]. Le « côté paumelles T » n'est défini nulle part dans le catalogue (entrée
+**VER-123**).
+
+## Renvoi d'angle gâche et sortie de tringle
+
+![Renvoi d'angle gâche et sortie de tringle](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-gache-et-sortie-de-tringle.png)
+
+Section 5.6.4 « Gâche et sortie de tringle » ; type d'ouverture : fenêtre à la française /
+oscillo-battante à ouvrant semi-fixe ; colonnes « sortie de tringle » (deux tringles décalées,
+cote fléchée) et « nombre de gâches soudées » [1 p. 11, 272].
+
+| N° de matériel | Désignation | Longueur (mm) | Sortie de tringle (mm) | Nombre de gâches soudées | Traitement de surface |
+| --- | --- | --- | --- | :---: | --- |
+| 484686 | Renvoi d'angle gâche et sortie de tringle | 110 / 10 | – | 1 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 272)
+
+# Verrouilleurs Roto NX
+
+Le **verrouilleur** (VM dans les abréviations du catalogue) est une ferrure dessinée en tringle
+plate, qui porte selon la référence aucun, un ou deux galets de verrouillage, une gâche soudée ou un
+crochet (voir le [glossaire](/reference/glossaire.md)) [1 p. 13, 318-328]. Le chapitre 7
+« Verrouilleurs » du catalogue Roto NX PVC les range
+en plusieurs pièces (7.1 : standard, sécurité, seuils, recoupable, crémone), têtière (7.2), opposé
+(7.3), crochet (7.4), plein cintre (7.5 : standard, élément cintré horizontal, élément cintré
+vertical) et confort (7.6) [1 p. 317].
+
+Les tableaux suivent la même légende de pictogrammes que ceux des renvois d'angle (voir
+[Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md)) :
+**raccordable** (deux barres crantées emboîtées : la pièce s'accouple à une autre, « J » pour oui,
+« N » pour non, **INC-288**), longueur, nombre de galets, type de goujon de verrouillage (galets E,
+P, V, voir [Roto NX](/quincaillerie/roto-nx.md)), information (« i »), traitement de surface, N° de
+matériel ; selon le tableau, jeu, zone de recoupe, position, nombre de gâches soudées, renvoi
+d'angle intégré, largeur (LFF) ou hauteur (HFF) fond de feuillure d'ouvrant [1 p. 10-12, 318-328].
+Conventions de transcription :
+
+- une valeur imprimée une seule fois pour plusieurs lignes (cellule fusionnée) est répétée sur chaque ligne ;
+- les paires « a / b » des verrouilleurs plein cintre (« 2 / – », « E / – », « 1 / 1 », « V / E ») sont
+  reportées telles quelles : le catalogue ne dit pas à quoi correspond chaque membre de la paire ;
+- chaque section dessine le verrouilleur au-dessus de son tableau sans relier le dessin à un N° de
+  matériel : un dessin par section, au-dessus du tableau ;
+- les types d'ouverture sont nommés d'après les pictogrammes de la légende [1 p. 12].
+
+Les mêmes pièces portent d'autres noms dans les nomenclatures du manuel de montage KSR (« allonge »,
+« allonge de semi-fixe », « allonge médian pour châssis cintré », « verrouilleur médian pour châssis
+cintré ») : voir [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md) et
+[Configurations Roto NX KSR — châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md).
+
+## Verrouilleur en plusieurs pièces, standard
+
+Section 7.1.1 « Standard », deux tableaux : raccordable sur un côté et raccordable des deux côtés ;
+types d'ouverture : fenêtre oscillo-battante, fenêtre ouvrant à la française, fenêtre basculante, fenêtre à la française / oscillo-battante à ouvrant semi-fixe, fenêtre inclinée oscillo-battante [1 p. 318].
+
+### Raccordable sur un côté, standard
+
+![Verrouilleur standard raccordable sur un côté](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-standard-raccordable-un-cote.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- | --- |
+| 255280 | N | 400 | 1 | E | – | Roto Sil |
+| 593607 | N | 400 | 1 | E | Position de broche -4 mm | Roto Sil |
+| 255281 | N | 600 | 1 | E | – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 318)
+
+### Raccordable des deux côtés, standard
+
+![Verrouilleur standard raccordable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-standard-raccordable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- | --- |
+| 308267 | J | 200 | – | – | – | Roto Sil |
+| 767639 | J | 200 | – | – | Réception AFM | Roto Sil |
+| 450821 | J | 200 | 1 | E | – | Roto Sil |
+| 297858 | J | 400 | – | – | – | Roto Sil |
+| 280346 | J | 400 | 1 | E | – | Roto Sil |
+| 255282 | J | 600 | 1 | E | – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 318)
+
+AFM : anti-fausse manœuvre, voir le [glossaire](/reference/glossaire.md) [1 p. 13].
+
+## Verrouilleur en plusieurs pièces, sécurité
+
+Section 7.1.2 « Sécurité », deux tableaux ; types d'ouverture : fenêtre oscillo-battante, fenêtre ouvrant à la française, fenêtre basculante, fenêtre à la française / oscillo-battante à ouvrant semi-fixe [1 p. 319].
+
+### Raccordable sur un côté, sécurité
+
+![Verrouilleur sécurité raccordable sur un côté](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-securite-raccordable-un-cote.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- | --- |
+| 255284 | N | 200 | 1 | P | – | Roto Sil |
+| 296853 | N | 200 | 1 | V | – | Roto Sil |
+| 255285 | N | 400 | 1 | P | – | Roto Sil |
+| 593611 | N | 400 | 1 | P | Position de broche -4 mm | Roto Sil |
+| 296854 | N | 400 | 1 | V | – | Roto Sil |
+| 593612 | N | 400 | 1 | V | Position de broche -4 mm | Roto Sil |
+| 255286 | N | 600 | 1 | P | – | Roto Sil |
+| 296855 | N | 600 | 1 | V | – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 319)
+
+### Raccordable des deux côtés, sécurité
+
+![Verrouilleur sécurité raccordable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-securite-raccordable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- | --- |
+| 567456 | J | 130 | 1 | V | – | Roto Sil |
+| 622880 | J | 200 | 1 | P | – | Roto Sil |
+| 337708 | J | 200 | 1 | V | Emballage spécial | Roto Sil |
+| 622881 | J | 400 | 1 | P | – | Roto Sil |
+| 337710 | J | 400 | 1 | V | Emballage spécial | Roto Sil |
+| 622882 | J | 600 | 1 | P | – | Roto Sil |
+| 296852 | J | 600 | 1 | V | – | Roto Sil |
+| 337711 | J | 600 | 1 | V | Emballage spécial | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 319)
+
+## Verrouilleur en plusieurs pièces, seuils
+
+Section 7.1.3 « Seuils », deux tableaux ; types d'ouverture : fenêtre oscillo-battante, fenêtre ouvrant à la française, fenêtre à la française / oscillo-battante à ouvrant semi-fixe. La colonne « jeu »
+(deux profils emboîtés, cote fléchée en bas) porte 7, 10 ou 12 mm ; toutes les pièces ont un galet
+V et l'information « Galet rallongé » [1 p. 10, 320].
+
+### Raccordable sur un côté, seuils
+
+![Verrouilleur de seuil raccordable sur un côté](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-seuil-raccordable-un-cote.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Jeu (mm) | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | ---: | --- | --- |
+| 625214 | N | 200 | 1 | V | 7 | Galet rallongé | Roto Sil |
+| 625225 | N | 400 | 1 | V | 7 | Galet rallongé | Roto Sil |
+| 566651 | N | 400 | 1 | V | 10 | Galet rallongé | Roto Sil |
+| 625226 | N | 600 | 1 | V | 7 | Galet rallongé | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 320)
+
+### Raccordable des deux côtés, seuils
+
+![Verrouilleur de seuil raccordable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-seuil-raccordable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Jeu (mm) | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | ---: | --- | --- |
+| 618552 | J | 200 | 1 | V | 10 | Galet rallongé | Roto Sil |
+| 618554 | J | 400 | 1 | V | 10 | Galet rallongé | Roto Sil |
+| 741408 | J | 400 | 1 | V | 12 | Galet rallongé | Roto Sil |
+| 625227 | J | 600 | 1 | V | 7 | Galet rallongé | Roto Sil |
+| 618553 | J | 600 | 1 | V | 10 | Galet rallongé | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 320)
+
+INFO, « Raccordement des seuils », imprimé sous chacun des deux tableaux : « Vous trouverez dans le
+document suivant une description détaillée du raccordement des seuils au système de ferrures Roto
+NX. » Le document est l'**IMO_347**, auquel renvoie un QR code [1 p. 320].
+
+## Verrouilleur en plusieurs pièces, recoupable
+
+Section 7.1.4 « Recoupable » : la colonne « zone de recoupe » (scie au-dessus d'une barre) donne la
+longueur dont la pièce peut être raccourcie (voir le [glossaire](/reference/glossaire.md)). Deux
+tableaux, recoupable sur un côté et recoupable des deux côtés ; types d'ouverture : fenêtre oscillo-battante, fenêtre ouvrant à la française, fenêtre basculante,
+fenêtre à la française / oscillo-battante à ouvrant semi-fixe [1 p. 10, 321].
+
+### Recoupable sur un côté
+
+![Verrouilleur recoupable sur un côté](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-recoupable-un-cote.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Zone de recoupe (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | ---: | :---: | :---: | --- |
+| 489993 | J | 330 | 200 | – | – | Roto Sil |
+| 861349 | J | 330 | 200 | 1 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 321)
+
+### Recoupable des deux côtés
+
+![Verrouilleur recoupable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-recoupable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Zone de recoupe (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | ---: | :---: | :---: | --- |
+| 610174 | J | 980 | 200 / 200 | 1 | P | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 321)
+
+La zone de recoupe du 610174 est imprimée « 200 / 200 », sans dire à quel bout correspond chaque valeur [1 p. 321].
+
+## Verrouilleur en plusieurs pièces, crémone
+
+Section 7.1.5 « Crémone », deux tableaux : raccordable des deux côtés (types d'ouverture : fenêtre oscillo-battante, fenêtre ouvrant à la française,
+fenêtre à la française / oscillo-battante à ouvrant semi-fixe) et ouvrant secondaire (fenêtre à la française / oscillo-battante à ouvrant semi-fixe) ; ce second tableau a une colonne « nombre de gâches soudées »
+(gâche, signe « # ») au lieu des colonnes de galets [1 p. 11, 321].
+
+### Raccordable des deux côtés, crémone
+
+![Verrouilleur de crémone raccordable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-cremone-raccordable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- | --- |
+| 260193 | J | 400 | 1 | E | – | Roto Sil |
+| 257598 | J | 400 | 1 | V | – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 321)
+
+### Ouvrant secondaire, crémone
+
+![Verrouilleur de crémone d'ouvrant secondaire](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-cremone-ouvrant-secondaire.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de gâches soudées | Information | Traitement de surface |
+| --- | --- | ---: | :---: | --- | --- |
+| 260195 | J | 400 | 1 | Ouvrant secondaire | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 321)
+
+## Verrouilleur de têtière
+
+Section 7.2 « Têtière » : un tableau, par longueur et par position (carré entouré de quatre flèches :
+haut, bas), toutes les pièces raccordables (« J ») avec une gâche soudée ; type d'ouverture : fenêtre à la française / oscillo-battante à ouvrant semi-fixe
+[1 p. 11, 322]. Les mêmes numéros sont les « allonges de semi-fixe en partie haute / basse, sur
+crémone de semi-fixe » du manuel KSR, voir [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md).
+
+![Verrouilleur de têtière](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-tetiere.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Position | Nombre de gâches soudées | Traitement de surface |
+| --- | --- | ---: | --- | :---: | --- |
+| 280342 | J | 200 | Bas | 1 | Roto Sil |
+| 450822 | J | 200 | Haut | 1 | Roto Sil |
+| 280343 | J | 400 | Bas | 1 | Roto Sil |
+| 280345 | J | 400 | Haut | 1 | Roto Sil |
+| 609059 | J | 600 | Bas | 1 | Roto Sil |
+| 280331 | J | 600 | Haut | 1 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 322)
+
+## Verrouilleur opposé
+
+Section 7.3 « Opposé », deux tableaux, chaque pièce à deux galets P ; type d'ouverture : fenêtre oscillo-battante. La
+colonne « information » dit où se pose la cale [1 p. 323].
+
+### Raccordable sur un côté, opposé
+
+![Verrouilleur opposé raccordable sur un côté](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-oppose-raccordable-un-cote.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Information | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | --- | :---: | :---: | --- |
+| 330079 | N | 400 | Cale : horizontal en bas | 2 | P | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 323)
+
+### Raccordable des deux côtés, opposé
+
+![Verrouilleur opposé raccordable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-oppose-raccordable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Information | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | --- | :---: | :---: | --- |
+| 373968 | J | 400 | Cale : horizontal en bas, au-dessus de la hauteur de poignée | 2 | P | Roto Sil |
+| 377263 | J | 400 | Cale : horizontal en haut, sous la hauteur de poignée, côté paumelles | 2 | P | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 323)
+
+## Verrouilleur à crochet
+
+Section 7.4 « Crochet » : verrouilleur dessiné avec un boîtier d'où sort un crochet, en deux
+hauteurs de crochet, 17 mm et 21 mm ; type d'ouverture : fenêtre oscillo-battante ; deux dessins par hauteur, sans
+lien avec les N° de matériel. La colonne « information » dit où se pose la pièce [1 p. 324-325].
+
+### Hauteur du crochet 17 mm
+
+![Verrouilleurs à crochet, hauteur du crochet 17 mm](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-crochet-17-mm.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Information | Traitement de surface |
+| --- | --- | ---: | --- | --- |
+| 821929 | J | 200 | Hauteur de crochet 17 mm ; en bas horizontalement | Roto Sil |
+| 821995 | J | 400 | Hauteur de crochet 17 mm ; en bas horizontalement | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 324)
+
+### Hauteur du crochet 21 mm
+
+![Verrouilleurs à crochet, hauteur du crochet 21 mm](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-crochet-21-mm.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Information | Traitement de surface |
+| --- | --- | ---: | --- | --- |
+| 365299 | J | 200 | Hauteur du crochet 21 mm ; côté crémone en haut verticalement, en bas horizontalement | Roto Sil |
+| 365300 | J | 400 | Hauteur du crochet 21 mm ; côté crémone en bas verticalement, côté paumelles verticalement | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 325)
+
+Sous chacun des deux tableaux du crochet est imprimé le même encadré INFO « Raccordement des
+seuils » que sous les verrouilleurs de seuil (document **IMO_347**, QR code) [1 p. 324-325].
+
+## Verrouilleur plein cintre, standard
+
+Section 7.5.1 « Standard » du verrouilleur plein cintre : pièce cintrée, deux tableaux ; type
+d'ouverture : fenêtre plein cintre oscillo-battante. Nombre de galets et type de goujon sont imprimés en paires « a / b »
+[1 p. 326]. Les numéros 245735 et 245733 sont l'« allonge médian pour châssis cintré » du manuel
+KSR, voir [châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md).
+
+### Raccordable sur un côté, plein cintre
+
+![Verrouilleur plein cintre raccordable sur un côté](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-plein-cintre-raccordable-un-cote.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- |
+| 245736 | N | 750 | 2 / – | E / – | Roto Sil |
+| 245735 | N | 750 | 1 / 1 | V / E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 326)
+
+### Raccordable des deux côtés, plein cintre
+
+![Verrouilleur plein cintre raccordable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-plein-cintre-raccordable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- |
+| 245734 | J | 590 | 2 / – | E / – | Roto Sil |
+| 245733 | J | 590 | 1 / 1 | V / E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 326)
+
+## Élément cintré horizontal
+
+Section 7.5.2 « Élément cintré -horizontal » : pièce droite, choisie par la largeur fond de
+feuillure d'ouvrant (LFF, double flèche horizontale) ; zone de recoupe 200 mm pour toutes ; types
+d'ouverture : fenêtre plein cintre oscillo-battante, fenêtre inclinée oscillo-battante [1 p. 327]. Le 812595 figure aussi, avec la même longueur, dans le
+tableau du verrouilleur confort (section *Verrouilleur confort* ci-dessous) [1 p. 328].
+
+![Élément cintré horizontal](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-element-cintre-horizontal.png)
+
+| N° de matériel | LFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | ---: | :---: | :---: | --- |
+| 812595 | 400 – 500 | 380 | 200 | – | – | Roto Sil |
+| 245729 | 501 – 700 | 480 | 200 | – | – | Roto Sil |
+| 245730 | 701 – 900 | 680 | 200 | 1 | E | Roto Sil |
+| 245731 | 901 – 1100 | 880 | 200 | 1 | E | Roto Sil |
+| 245732 | 1101 – 1300 | 1080 | 200 | 1 | E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 327)
+
+## Élément cintré vertical
+
+Section 7.5.3 « Élément cintré - vertical » : pièce droite, choisie par la hauteur fond de feuillure
+d'ouvrant (HFF, double flèche verticale) ; zone de recoupe 200 mm ; colonne « renvoi d'angle intégré »
+(équerre en L), « J » pour la seule 245715 ; nombre de galets et type de goujon en paires « a / b » ;
+types d'ouverture : fenêtre plein cintre oscillo-battante, fenêtre inclinée oscillo-battante [1 p. 10, 327]. Chaque plage de HFF à partir de 701 mm porte deux
+pièces, l'une imprimée « E / – », l'autre « V / E ».
+
+![Élément cintré vertical](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-element-cintre-vertical.png)
+
+| N° de matériel | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Renvoi d'angle intégré | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | ---: | --- | :---: | :---: | --- |
+| 245715 | 500 – 700 | 420 | 200 | J | – / – | – / – | Roto Sil |
+| 245717 | 701 – 900 | 620 | 200 | N | 1 / – | E / – | Roto Sil |
+| 245716 | 701 – 900 | 620 | 200 | N | 1 / 1 | V / E | Roto Sil |
+| 245719 | 901 – 1100 | 820 | 200 | N | 1 / – | E / – | Roto Sil |
+| 245718 | 901 – 1100 | 820 | 200 | N | 1 / 1 | V / E | Roto Sil |
+| 245721 | 1101 – 1300 | 1020 | 200 | N | 1 / – | E / – | Roto Sil |
+| 245720 | 1101 – 1300 | 1020 | 200 | N | 1 / 1 | V / E | Roto Sil |
+| 245723 | 1301 – 1500 | 1220 | 200 | N | 2 / – | E / – | Roto Sil |
+| 245722 | 1301 – 1500 | 1220 | 200 | N | 1 / 1 | V / E | Roto Sil |
+| 245725 | 1501 – 1700 | 1420 | 200 | N | 2 / – | E / – | Roto Sil |
+| 245724 | 1501 – 1700 | 1420 | 200 | N | 1 / 2 | V / E | Roto Sil |
+| 245727 | 1701 – 1900 | 1620 | 200 | N | 2 / – | E / – | Roto Sil |
+| 245726 | 1701 – 1900 | 1620 | 200 | N | 1 / 2 | V / E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 327)
+
+## Verrouilleur confort
+
+Section 7.6 « Confort » : pièce droite, choisie par la hauteur fond de feuillure d'ouvrant (HFF) ;
+zone de recoupe 200 mm ; type d'ouverture : fenêtre à la française / oscillo-battante à ouvrant semi-fixe [1 p. 328]. Pour l'oscillo-battant Confort, le
+manuel KSR prescrit d'autres numéros (245715 à 245726, « verrouilleur médian pour châssis cintré »),
+**CTR-119**.
+
+![Verrouilleur confort](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-confort.png)
+
+| N° de matériel | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | ---: | :---: | :---: | --- |
+| 812595 | 530 – 600 | 380 | 200 | – | – | Roto Sil |
+| 774165 | 601 – 800 | 690 | 200 | – | – | Roto Sil |
+| 774174 | 801 – 1000 | 890 | 200 | 1 | E | Roto Sil |
+| 774175 | 1001 – 1200 | 1090 | 200 | 1 | E | Roto Sil |
+| 774176 | 1201 – 1400 | 1290 | 200 | 1 | E | Roto Sil |
+| 774177 | 1401 – 1600 | 1490 | 200 | 2 | E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 328)
+
+# Citations
+
+[1] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 — `raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 10 à 13, 249, 265 à 272 et 317 à 328
+
+# Voir aussi
+
+- [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)
+- [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md)
+- [Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md)
+- [Compas et paliers Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md)
+- [Pièces de fermeture et gâches Roto NX](/quincaillerie/roto-nx-pieces-fermeture-gaches.md)
+- [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md)
+- [Roto NX](/quincaillerie/roto-nx.md)
+- [Catalogue Roto NX pour profils PVC](/sources/roto-nx-catalogue-pvc.md)
+
+===== PAGE 3 : /quincaillerie/roto-nx-legende-catalogue.md =====
+# Ce que porte cette légende
+
+Les tableaux de commande du catalogue Roto NX pour profils PVC (juin 2023) n'ont presque pas de
+texte en en-tête : chaque colonne est désignée par un **pictogramme**, un petit dessin normalisé
+(une poignée avec une flèche pour la hauteur de poignée, « N° » pour le numéro de commande…). Les
+tables ci-dessous donnent le sens de chacun, dans les termes du catalogue, avec le dessin découpé
+de la page. Une ligne se lit ainsi : la signification, une description du dessin en mots, puis le
+pictogramme lui-même. Toutes les dimensions du catalogue sont indiquées en millimètres ; les autres
+valeurs portent leur unité [1 p. 10].
+
+Le manuel de montage Roto NX KSR emploie ses propres pictogrammes, en partie différents : voir
+[Roto NX KSR — conventions et consignes](/procedures/roto-nx-ksr-consignes-generales.md). Les
+termes du métier (fouillot, galet, gâche, loqueteau, renvoi d'angle, feuillure) sont expliqués
+dans le [glossaire](/reference/glossaire.md).
+
+# Pictogrammes des caractéristiques de production
+
+Le catalogue les appelle « caractéristiques de production » (section 1.1.1). La table est
+imprimée sur trois pages ; elle est reprise ici page par page, dans l'ordre de la source.
+
+## Page 10
+
+| Signification | Dessin du pictogramme | Pictogramme |
+| --- | --- | ---: |
+| Zone de recoupe | scie au-dessus d'une barre, cote fléchée en bout | ![Zone de recoupe](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/zone-de-recoupe.png) |
+| Sortie de tringle | deux tringles verticales décalées, cote fléchée | ![Sortie de tringle](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/sortie-de-tringle.png) |
+| Axe de ferrure | deux profils emboîtés, trait d'axe mixte | ![Axe de ferrure](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/axe-de-ferrure.png) |
+| Désignation | bulle de dialogue | ![Désignation](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/designation.png) |
+| Sol | contour de pièce à deux trous vissés | ![Sol](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/sol.png) |
+| Ergot | plot carré sur une base hachurée | ![Ergot](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ergot.png) |
+| Perçage ergot | plot carré dans une base hachurée, diamètre coté | ![Perçage ergot](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/percage-ergot.png) |
+| DIN gauche/droite | deux vantaux, repères au milieu | ![DIN gauche/droite](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/din-gauche-droite.png) |
+| Fouillot | boîtier de crémone à deux trous, cote fléchée depuis le chant | ![Fouillot](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/fouillot.png) |
+| Renvoi d'angle intégré | équerre en L | ![Renvoi d'angle intégré](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/renvoi-d-angle-integre.png) |
+| Jeu | deux profils emboîtés, cote fléchée en bas | ![Jeu](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/jeu.png) |
+| Profondeur de feuillure | angle de feuillure, flèche oblique | ![Profondeur de feuillure](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/profondeur-de-feuillure.png) |
+| Couleur | pinceau | ![Couleur](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/couleur.png) |
+| Code couleur | palette de peintre | ![Code couleur](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/code-couleur.png) |
+| Largeur fond de feuillure d'ouvrant | double flèche horizontale entre deux butées | ![Largeur fond de feuillure d'ouvrant](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/largeur-fond-de-feuillure-d-ouvrant.png) |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 10)
+
+## Page 11
+
+| Signification | Dessin du pictogramme | Pictogramme |
+| --- | --- | ---: |
+| Hauteur fond de feuillure d'ouvrant | double flèche verticale entre deux butées | ![Hauteur fond de feuillure d'ouvrant](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/hauteur-fond-de-feuillure-d-ouvrant.png) |
+| Poids d'ouvrant | poids | ![Poids d'ouvrant](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/poids-d-ouvrant.png) |
+| Taille | carré plein agrandi en carré pointillé, flèche oblique | ![Taille](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/taille.png) |
+| Hauteur de la poignée constante | poignée, flèche vers le bas | ![Hauteur de la poignée constante](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/hauteur-de-poignee-constante.png) |
+| Hauteur de poignée milieu/variable | poignée, flèche vers le haut et vers le bas | ![Hauteur de poignée milieu/variable](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/hauteur-de-poignee-milieu-variable.png) |
+| Information | « i » encadré | ![Information](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/information.png) |
+| Hauteur de levier fixe | levier sur un montant, flèche vers le haut | ![Hauteur de levier fixe](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/hauteur-de-levier-fixe.png) |
+| Hauteur de levier milieu/variable | levier sur un montant, flèche vers le haut et vers le bas | ![Hauteur de levier milieu/variable](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/hauteur-de-levier-milieu-variable.png) |
+| Raccordable | deux barres crantées emboîtées | ![Raccordable](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/raccordable.png) |
+| Longueur | barre, cote fléchée sur toute la longueur | ![Longueur](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/longueur.png) |
+| Position du ventilateur | coupe de profil avec aérateur, cote fléchée depuis le bas | ![Position du ventilateur](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/position-du-ventilateur.png) |
+| N° de matériel | « N° » | ![N° de matériel](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/numero-de-materiel.png) |
+| Type de montage | vis et outil | ![Type de montage](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/type-de-montage.png) |
+| Anti-fausse manœuvre | levier articulé sur un montant | ![Anti-fausse manœuvre](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/anti-fausse-manoeuvre.png) |
+| Rainure | profil en U | ![Rainure](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/rainure.png) |
+| Traitement de surface | couches empilées sous une flèche | ![Traitement de surface](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/traitement-de-surface.png) |
+| Position | carré entouré de quatre flèches | ![Position](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/position.png) |
+| Système de profil | profil en perspective | ![Système de profil](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/systeme-de-profil.png) |
+| Nombre de gâches soudées | gâche, signe « # » | ![Nombre de gâches soudées](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/nombre-de-gaches-soudees.png) |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 11)
+
+## Page 12
+
+| Signification | Dessin du pictogramme | Pictogramme |
+| --- | --- | ---: |
+| Nombre de galets | galet, signe « # » | ![Nombre de galets](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/nombre-de-galets.png) |
+| Type de goujon de verrouillage | galet sans signe | ![Type de goujon de verrouillage](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/type-de-goujon-de-verrouillage.png) |
+| Loqueteau | vantail entrouvert et loqueteau | ![Loqueteau](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/loqueteau.png) |
+| Classe de sécurité | document avec cadenas | ![Classe de sécurité](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/classe-de-securite.png) |
+| Aération intégrée | cadre entouré de flèches d'air | ![Aération intégrée](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/aeration-integree.png) |
+| Blocage | montant avec pièce de blocage | ![Blocage](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/blocage.png) |
+| Système | quatre carrés pleins | ![Système](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/systeme.png) |
+| Réglage | étoile de six flèches | ![Réglage](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/reglage.png) |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 12)
+
+Quelques termes de la légende : la *zone de recoupe* est la longueur dont une pièce (crémone,
+tringle) peut être raccourcie à la scie ; le *fouillot* est le carré de la crémone qui reçoit la
+tige de la poignée ; le *goujon de verrouillage* (ou galet) est le téton porté par la crémone qui
+s'engage dans la gâche du dormant ; *raccordable* se dit d'une pièce qui s'accouple à une autre
+(prolongateur, verrouilleur). Voir le [glossaire](/reference/glossaire.md).
+
+# Pictogrammes des types d'ouverture
+
+Section 1.1.2 du catalogue : le pictogramme du type de fenêtre auquel un tableau s'applique. Les
+dessins sont reproduits ci-dessous tels qu'ils sont imprimés [1 p. 12, 13].
+
+| Type d'ouverture | Page | Pictogramme |
+| --- | --- | ---: |
+| Fenêtre ouvrant à la française | 12 | ![Fenêtre ouvrant à la française](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-francaise.png) |
+| Fenêtre basculante | 12 | ![Fenêtre basculante](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-basculante.png) |
+| Fenêtre oscillo-battante | 12 | ![Fenêtre oscillo-battante](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-oscillo-battante.png) |
+| Fenêtre plein cintre oscillo-battante | 12 | ![Fenêtre plein cintre oscillo-battante](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-plein-cintre-oscillo-battante.png) |
+| Fenêtre inclinée oscillo-battante | 12 | ![Fenêtre inclinée oscillo-battante](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-inclinee-oscillo-battante.png) |
+| Fenêtre triangulaire oscillo-battante | 12 | ![Fenêtre triangulaire oscillo-battante](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-triangulaire-oscillo-battante.png) |
+| Fenêtre ouvrant à la française à ouvrant semi-fixe | 12 | ![Fenêtre ouvrant à la française à ouvrant semi-fixe](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-francaise-semi-fixe.png) |
+| Fenêtre à la française / oscillo-battante à ouvrant semi-fixe | 12 | ![Fenêtre à la française / oscillo-battante à ouvrant semi-fixe](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-francaise-oscillo-battante-semi-fixe.png) |
+| Fenêtre à la française / oscillo-battante à ouvrant semi-fixe avec plein cintre | 12 | ![Fenêtre à la française / oscillo-battante à ouvrant semi-fixe avec plein cintre](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-francaise-oscillo-battante-semi-fixe-plein-cintre.png) |
+| Fenêtre à trois vantaux | 13 | ![Fenêtre à trois vantaux](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-trois-vantaux.png) |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 12-13)
+
+# Abréviations
+
+Section 1.1.4 du catalogue, dans l'ordre de la source [1 p. 13, 14].
+
+| Abréviation | Signification |
+| --- | --- |
+| AF | Axe de ferrure |
+| DIN G / D | DIN gauche / droite |
+| OB | Ferrure OB |
+| LFF | Largeur fond de feuillure d'ouvrant |
+| HFF | Hauteur fond de feuillure d'ouvrant |
+| PO | Poids d'ouvrant |
+| SDB | Sécurité de base |
+| O | Oui |
+| KSR | Basculement vertical |
+| Raccordable | Raccordable |
+| VM | Verrouilleur |
+| N | Non |
+| AFM | Anti-fausse manœuvre |
+| cf. ill. | sans illustration |
+| CDR | Classe de résistance |
+| SEC | Sécurité |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 13-14)
+
+**INC-279** : « cf. ill. » est expliqué par « sans illustration » [1 p. 14] ; « cf. » signifie
+« voir » (« se reporter à l'illustration »). La mention se lit donc de deux façons opposées tant
+qu'elle n'est pas confirmée par ROTO.
+
+VM est écrit « Verrouilleur » dans ce catalogue, « Verrouilleur médian » dans le manuel de montage
+KSR ; OB y est « Ferrure OB », « Oscillo-battant » dans le manuel.
+
+# Système PVC et droit de propriété intellectuelle
+
+La section 1.1.5 « Système – PVC » donne les six systèmes d'axe de ferrure (12/18-9 à 12/22-13),
+avec leur jeu de feuillure [A], leur largeur de recouvrement [B] et leur axe de ferrure [C] : la
+table et le dessin sont sur
+[Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md), section *Cotes de dimensionnement des profilés*,
+[1 p. 14].
+
+« Les contenus de ce document sont protégés par la loi relative à la propriété intellectuelle.
+Leur utilisation est autorisée dans le cadre de la mise en œuvre des ferrures. Toute utilisation
+complémentaire est interdite sans l'autorisation écrite du fabricant. » [1 p. 14]
+
+# Citations
+
+[1] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 —
+`raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 10 à 14 (numérotation du PDF, identique à la numérotation imprimée)
+
+# Voir aussi
+
+- [Catalogue Roto NX pour profils PVC](/sources/roto-nx-catalogue-pvc.md)
+- [Roto NX](/quincaillerie/roto-nx.md)
+- [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)
+- [Roto NX KSR — conventions et consignes](/procedures/roto-nx-ksr-consignes-generales.md)
+- [Glossaire](/reference/glossaire.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /quincaillerie/roto-nx-champs-application.md | Quincaillerie | Champs d'application Roto NX | roto, roto-nx, abaque, champ-application, poids-vantail, cdr | Les largeurs, hauteurs et poids de vantail admissibles de la ferrure Roto NX selon le type d'ouverture et la classe de sécurité — tableaux, diagrammes d'application relevés courbe par courbe (rectangulaire, inclinée, cintrée, soufflet, paumelles à soufflet pour recouvrement d'ouvrant, confort, Designo), positions des compas d'arrêt de la ferrure soufflet, forces de traction TBDK — avec la règle qui convertit l'épaisseur de vitrage en poids. | l en cas de différentes épaisseurs de vitre ». La zone blanche quadrillée est le **champ d'application non autorisé** ; la zone gris foncé signale qu' |
+| /procedures/mise-en-oeuvre-renovation-systeme-70-evo2008.md | Procédure | Mise en œuvre en rénovation du système 70, classeur e.VOLUTION de 2008 | profine, kommerling, e-volution, systeme-70, mise-en-oeuvre, renovation | Le registre 7.2 « Mise en oeuvre rénovation » du classeur KÖMMERLING e.VOLUTION d'août 2008 (système 70, système F 91), pages imprimées 1 à 20 : référentiel UFPVC de pose de menuiseries PVC à frappe sur dormant bois existant, avec enlèvement du dormant existant et sur dormant acier existant (préparation, fourrures, calage, fixation, ventilation de l'ancien dormant, habillages, variantes), récapitulatif des joints A à F et sections de calfeutrement, coupes de principe, cas particuliers, habillage intérieur mouluré 6145 et exemple. | u droit de l'appui) et, au cercle A, « Dans cette zone habillage selon principe arrêté au devis ». La coupe du montant porte, au cercle de l'axe B, « |
+| /procedures/pose-soleal-gy-galandage.md | Procédure | Fabrication, pose et étanchéité du galandage Technal SOLEAL GY 55 | technal, soleal, soleal-gy, galandage, pose, fabrication | Procédure complète d'atelier et de chantier pour les coulissants à galandage et traditionnels SOLEAL GY 55 de TECHNAL (1 à 4 vantaux, caissons de refoulement, chicanes fixes, drainages étagés, talons injectés, seuil PMR et règles NF DTU 36.5). | **TGY2525** / Cache horizontal en traverse basse (zone passage) / $H - 62\text{ mm}$ / $L - 49$ / — / / **Couvre-joint reprise** / **TGY3612** / Finit |
+| /procedures/roto-nx-ksr-consignes-generales.md | Procédure | Roto NX KSR — conventions, documents applicables et consignes de sécurité du manuel de montage | roto, roto-nx, ksr, ferrure, montage, securite | Ce qui encadre tout ferrage Roto NX KSR sur fenêtre et porte-fenêtre PVC : documents et directives applicables, repères de couleur, symboles, pictogrammes et abréviations des dessins, groupes cibles et leurs obligations d'instruction, responsabilité, protection des surfaces, consignes de sécurité et utilisation conforme. | , aldéhyde, chlore, acide tannique, etc.) dans la zone de l'élément. - N'utiliser aucun matériau d'étanchéité à base d'acide acétique ou contenant des |
+| /quincaillerie/roto-nx-cremones.md | Quincaillerie | Crémones Roto NX | roto, roto-nx, cremone, quincaillerie, reference, pictogramme | Les références de commande des crémones Roto NX — crémones OB KSR à hauteur de poignée fixe et crémones OB à hauteur de poignée centrée / variable par fouillot (8, 15, 25 à 50 mm, têtières et boîtiers), crémone adaptée OB, crémone OB Confort, crémones verrou, raccords de crémone, crémones de semi-fixe standard, Plus et à levier séparé avec leurs tableaux de combinaisons, verrous d'arête, schémas de perçage et de fraisage — et les nomenclatures des instructions de montage KSR (fouillot -6, sortie de tringle, EasyMix, serrures H100). | lure d'ouvrant (HFF, plage en mm), longueur (mm), zone de recoupe (mm, longueur dont la crémone peut être raccourcie), hauteur de la poignée constante |
+| /quincaillerie/roto-nx-compas-et-paliers.md | Quincaillerie | Compas, paliers et pivots Roto NX | roto, roto-nx, compas, palier, pivot, designo | Les références de commande du chapitre « Compas » du catalogue Roto NX PVC — tolérance de châssis fixe, têtières de compas, bras de compas (P et Designo par système de profil), compas articulé confort, équerres de compas OF, bras de compas en feuillure, charnière en feuillure, paumelle de recouvrement, paliers compas, broche, caches par code couleur — et les longueurs de palier P3 / P6 du manuel KSR ; les pivots et paliers d'angle ont leur propre page. | feuillure d'ouvrant, plage en mm), longueur (mm), zone de recoupe (mm, longueur dont la pièce peut être raccourcie), taille (taille de compas, nombre |
+| /procedures/fabrication-profiles-pvc.md | Procédure | Fabrication des profilés PVC, directives profine | profine, fabrication, debit, fraisage, percage, renfort | Les règles communes aux systèmes profine pour le débit, le fraisage et le perçage, le renforcement acier et son vissage, le soudage et l'ébavurage (paramètres standard et à inserts, joints soudables, profilés plaxés), les assemblages de meneaux et traverses, la pose des joints et la fixation des profilés complémentaires et des petits bois collés, avec le contrôle intermédiaire et final (check-list de 35 points) et le stockage et le transport des menuiseries finies. | la matière que la soudeuse fond en soudant (la **zone de fonte**). **Attention — si la découpe n'est pas adaptée à la zone de fonte, les cotes de dor |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/contradictions-entre-sources.md :
+| CTR-83 | Méthode de choix des classes A\*E\*V\* selon le site : plans e.VOLUTION de 2008 contre directives générales de 2023 | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008, PDF p. 138-154 (registre 4.2, pages imprimées 1 à 17), relues en image à 200 et 300 dpi le 29/09/2026 : cinq zones de vent « définies dans le modificatif n° 2 des règles NV 65 », quatre situations a (grands centres urbains), b, c (rase campagne), d (bord de mer ou de lac), cinq classes de hauteur jusqu'à 100 m ; P3 = 1 200 Pa pour H ≤ 6 m en zones 1 à 4 quelle que soit la situation, sauf zone 4 d (1 300) ; « NOTA : Le document contractuel ayant servi pour établir ce dossier est la norme FDP 20 -201 » | Directives générales profine, janvier 2023, registre 1.3.3, PDF p. 63-76 : régions climatiques et catégories de terrain d'environnement, tableaux 1 à 8 propres (voir [Classification A\*E\*V\* à préconiser par site](/reference/classification-aev-par-site.md)) | Aucune tant que l'arbitrage n'est pas fait : les deux méthodes restent transcrites, chacune avec sa source | Deux méthodes et deux jeux de tableaux pour le même choix de classes ; selon la méthode lue, une même fenêtre peut recevoir une classe V\* ou E\* différente ([Choix des fenêtres en fonction de leur exposition, 2008](/reference/choix-des-fenetres-exposition-au-vent-2008.md)) |
+/anomalies/informations-a-verifier.md :
+| VER-115 | Classes d'étanchéité à l'eau de la zone 5 en situations c et d, jusqu'à 18 m | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008, PDF p. 147 (Tableau 5) et p. 149 (Tableau 7), relues en image à 300 dpi le 29/09/2026 : zone 5, situations c et d, classe **4** pour H ≤ 6 m et 6 < H ≤ 18 m, puis 8, 8, 8 (c) et 8, 8, 9 (d) ; zones 3 et 4 dans les mêmes situations et hauteurs : 4 à 7 (4 seulement en zone 3 c jusqu'à 6 m). Les deux tableaux concordent ; aucun texte n'explique cette baisse dans la zone la plus exposée | Service technique profine, ou texte de la FD P 20-201 reproduit ([Choix des fenêtres en fonction de leur exposition, 2008](/reference/choix-des-fenetres-exposition-au-vent-2008.md)) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-119 | Verrouilleur de l'oscillo-battant Confort Roto NX | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 66 (imprimée 64, « Oscillo-battant Confort, sécurité de base »), relue en image à 110 dpi le 29/09/2026 : repère 6 « Verrouilleur médian pour châssis cintré », par hauteur HVFF côté fermeture / côté paumelle, 530 – 600 (côté paumelle) → 420, **245715** ²⁾ (« avec renvoi d'angle intégré ») ; 601 – 800 → 620 1 V + 1 E, **245716** ; puis 820, 1020, 1220, 1420, 1620 mm, 245718, 245720, 245722, 245724, 245726 | Catalogue Roto NX pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 328 (7.6 « Confort »), relu en image à 110-200 dpi le 29/09/2026 : par HFF, pictogramme « fenêtre à la française / oscillo-battante à ouvrant semi-fixe », 530 – 600 → 380, **812595** ; 601 – 800 → 690, **774165** ; 801 – 1000 → 890, 1 E, 774174 ; 1001 – 1200 → 1090, 774175 ; 1201 – 1400 → 1290, 774176 ; 1401 – 1600 → 1490, 2 E, 774177 ; zone de recoupe 200. Les numéros 245715 à 245726 du manuel sont, au catalogue, l'« Élément cintré - vertical » (7.5.3, p. 327 : 500 – 700 → 420, 245715, renvoi d'angle intégré « J » ; 701 – 900 → 620, 245716, « 1 / 1 », « V / E » …) | Non arbitré : chaque valeur reste dans sa source ; que la section 7.6 « Confort » du catalogue vise l'oscillo-battant Confort du manuel reste à confirmer (pictogramme à deux vantaux au catalogue) | Verrouilleur d'un vantail Confort commandé sous l'un ou l'autre jeu de références, de longueurs différentes (380 / 690 / 890 … contre 420 / 620 / 820 …) ; voir [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md) et [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md) |
+/anomalies/incoherences-internes.md :
+| INC-221 | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008 | PDF p. 146 (registre 4.2, page imprimée 9), relue en image à 300 dpi le 29/09/2026 ; registre 4.2 parcouru jusqu'à la p. 156 | « respecter un facteur de protection L/C, tel que défini sur la Figure 2 » ; « le facteur de protection L/H […] tel que défini sur la Figure 3 a) » ; « une protection latérale verticale au moins égale à celle représentée sur la Figure 3 b) ». Aucune Figure 2 ni Figure 3 n'est imprimée dans le registre 4.2 (seules la Figure 1, p. 139, et la Figure A.1, p. 154) | Ajouter les Figures 2, 3 a) et 3 b) du mémento FD P 20-201 dont le texte est repris | L, C et H des facteurs de protection L/C et L/H ne sont pas définis sur le document : on ne peut pas décider si une fenêtre est partiellement protégée ou protégée de la pluie, donc ni appliquer les classes d'indice B ni le Tableau 6 ([Choix des fenêtres en fonction de leur exposition, 2008](/reference/choix-des-fenetres-exposition-au-vent-2008.md)) |
+/anomalies/informations-a-verifier.md :
+| VER-123 | Sens de « côté paumelles T » dans l'encadré INFO du renvoi d'angle aération (389816 à 389819) : « Éléments non utilisables en combinaison avec le côté paumelles P et le côté paumelles T » | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 272 (5.6.3), relu en image à 250 dpi le 29/09/2026 : le catalogue ne traite que le côté paumelles P et le côté paumelles Designo (BA 13) (sommaires p. 53 et 277) ; « côté paumelles T » n'apparaît dans aucune liste d'abréviations ni aucun chapitre lu ; complément du 29/09/2026 (tranche 6) : PDF p. 299 (6.5.1), l'équerre de compas OF 331488 est désignée « Équerre de compas OF côté paumelles P / T / A16 » — deuxième emploi de « T » comme côté paumelles, toujours sans définition ; complément du 29/09/2026 (tranche 8) : PDF p. 380 (10.6 compas d'aération), même encadré « Éléments non utilisables en combinaison avec le côté paumelles P et le côté paumelles T. » ; PDF p. 374 (10.3 limiteur d'ouverture à blocage indexé), tableaux « Côté paumelles P / K / A / A16 » et « Côté paumelles Designo (BA 13), côté paumelles A16 Designo » — côtés K, A, A16 et A16 Designo, eux aussi sans définition (le manuel KSR p. 78 écrit « Côté paumelle K, E5, A », **CTR-120**) ; complément du 29/09/2026 (tranche 9) : PDF p. 397 (11.2.2 aération à plusieurs niveaux), même encadré « Éléments non utilisables en combinaison avec le côté paumelles P et le côté paumelles T. » | ROTO : quel côté paumelles est désigné par « T », et avec quel côté paumelles ces renvois d'angle aération s'emploient ; voir [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md) |

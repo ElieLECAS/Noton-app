@@ -1,0 +1,11 @@
+{
+ "id": "R27",
+ "reponse": "Sur le coulissant PVC INNOSLIDE, ce sont les fonctions d'amortissement **SoftClose** et **SoftOpen** (/gammes/innoslide.md) :\n\n| Fonction | Ce qu'elle fait | Condition |\n| --- | --- | --- |\n| SoftClose | freine doucement l'ouvrant à la fermeture et l'amène en position finale | - |\n| SoftOpen | freine l'ouvrant brièvement après l'ouverture et l'amène en position finale ouverte | seulement à partir de 1 970 mm de largeur |\n\nSous 1 970 mm de largeur, pas de SoftOpen. Le wiki ne donne aucune référence de commande pour ces deux fonctions, et il ne les rattache pas à la quincaillerie Roto Patio Inowa du coulissant, qui est présentée à part (/quincaillerie/roto-patio-inowa.md).",
+ "pages_citees": [
+  "/gammes/innoslide.md",
+  "/quincaillerie/roto-patio-inowa.md"
+ ],
+ "appels": 4,
+ "trouve": "oui",
+ "navigation": "Première recherche avec des synonymes (ralentisseur, amortisseur, frein) et le tag coulissant : elle a livré les moustiquaires Soprofen (bloqueur/ralentisseur de moustiquaire, hors sujet) et deux coulissants aluminium (ASKEY, LUMEAL GA), sans rien sur le PVC. Deuxième recherche avec la facette système Roto Patio Inowa : les trois pages livrées étaient des accessoires Roto NX de fenêtre (limiteurs avec frein) et des pages Technal, mais la page Roto Patio Inowa est remontée en métadonnées. En la lisant, j'ai trouvé un renvoi vers les fonctions SoftClose et SoftOpen de la page INNOSLIDE, que j'ai lue ensuite : c'est là que se trouve la réponse. Ce qui aurait aidé : que « SoftClose / SoftOpen » ou « amortissement » soit indexé avec des synonymes comme « ralentir » ou « frein », ou que la page INNOSLIDE remonte directement sur « coulissant PVC »."
+}

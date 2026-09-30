@@ -1,0 +1,36 @@
+{
+ "id": "R16",
+ "reponse": "L'ouvrant galbé PERFORM76 fait 83 mm d'épaisseur (contre 76 mm pour l'ouvrant droit) : sa face arrondie déborde de 7 mm. Deux ouvrants galbés existent dans la gamme : le 76275 (paire basse, hauteurs 39 / 49 / 70 mm) et le 76279 (paire haute, hauteurs 79 / 89 / 110 mm), tous deux à 6 chambres, joint de feuillure sous vitrage et renfort acier galvanisé de 2 mm. Ils se montent sur les cinq dormants PERFORM76. Aucun battement n'est associé aux ouvrants galbés dans le cahier technique. Source : cahier technique PERFORM76 CC03, p. 4, 14, 15, 18, 20, 21 ; page /profiles/perform76-ouvrants-et-battements.md.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {
+   "page": "/profiles/perform76-ouvrants-et-battements.md",
+   "extrait": "| 76275 | galbé | 83 | 39 | 49 | 70 | ![Ouvrant 76275](/assets/profiles/perform76/ouvrants/ouvrant-76275.png) |"
+  },
+  {
+   "page": "/profiles/perform76-ouvrants-et-battements.md",
+   "extrait": "| 76279 | galbé | 83 | 79 | 89 | 110 | ![Ouvrant 76279](/assets/profiles/perform76/ouvrants/ouvrant-76279.png) |"
+  },
+  {
+   "page": "/profiles/perform76-ouvrants-et-battements.md",
+   "extrait": "l'épaisseur est la cote horizontale du bas (76 mm pour un ouvrant droit, 83 mm pour un\ngalbé, dont la face arrondie déborde de 7 mm)"
+  },
+  {
+   "page": "/reference/glossaire.md",
+   "extrait": "| Ouvrant droit, ouvrant galbé | ouvrant à face plane ou à face arrondie ; sur la PERFORM76, 76 mm et 83 mm d'épaisseur |"
+  }
+ ],
+ "ambiguite": "Aucune sur l'épaisseur (83 mm pour les deux galbés). Si « épaisseur » voulait dire la hauteur du profil (cote propre), il faut préciser 76275 (70 mm) ou 76279 (110 mm).",
+ "outils": 4,
+ "comment_trouve": "Grep « galb » sur tout le wiki (26 fichiers) ; la page /profiles/perform76-ouvrants-et-battements.md était l'évidence (titre + tag galbe). Lecture de la page : tableau # Cotes, colonne Épaisseur. Contrôle croisé par grep dans gammes/perform.md, systeme-76-profiles-principaux.md et glossaire : tous donnent 83 mm, aucune contradiction.",
+ "formulations": [
+  "Quelle est l'épaisseur de l'ouvrant à face arrondie PERFORM76 ?",
+  "épaisseur ouvrant galbé 76",
+  "Combien fait l'ouvrant galbé en épaisseur par rapport à l'ouvrant droit sur la PERFORM ?"
+ ],
+ "defauts_wiki": [
+  "Donnée présente en double : /profiles/perform76-ouvrants-et-battements.md (9 Ko) et /profiles/systeme-76-profiles-principaux.md (50 Ko, qui classe aussi le 76276 comme galbé alors que la page PERFORM76 l'appelle « ouvrant réduit, variante Design »).",
+  "La question écrit « Perform 76 » en deux mots ; les pages écrivent « PERFORM76 » collé : un tokeniseur qui ne sépare pas lettres/chiffres ne rapproche pas « perform » + « 76 » de « perform76 ».",
+  "Le mot « épaisseur » est ambigu dans le tableau : colonne « Épaisseur » = 83, mais la page 76 Advanced appelle « cote propre » la hauteur (70 / 110) ; un lecteur peut confondre."
+ ]
+}

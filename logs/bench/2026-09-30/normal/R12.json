@@ -1,0 +1,25 @@
+{
+ "id": "R12",
+ "reponse": "**PERFORM76** : l'appui PVC **6136** (largeur 67, longueur 127, épaisseur 14, retombée 3,5 mm, penté à 3°, nez d'appui 4319 possible) se monte sur les dormants **76177** (rénovation, aile 40 mm), **76180** (neuf, aile 20 mm) et **76185** (rénovation, aile 60 mm). Il **ne se monte pas** sur les dormants neufs sans aile **76171** et **76172**, qui prennent les appuis 76751, 76752, 76753 ou 76758 + 76719. Hauteur d'about du 6136 selon le dormant : 26 mm sur 76177, 46 mm sur 76185, 6 mm sur 76180.\nLe 6136 est l'appui des épaisseurs d'isolation de 60 à 120 mm (60 sans tapée, 80 tapée 6138, 100 tapée 6139, 120 tapée 6140) sur 76177 / 76185, et sur 76180 (avec pattes NT1939, NT1939, NT1943, NT1945) ; au-delà, 6137 (140-160) puis 76768 (180-200).\n\n**Système 70 (profine)** : le 6136 est une pièce d'appui pour **dormant rénovation** (vis PVC 4,3 × 25 ou autoforeuse 3,9 × 19, à 50 mm des extrémités, entraxe 400 mm), sans liste de références de dormant.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/profiles/perform76-appuis-et-seuils.md", "extrait": "| Appui 6136 | non | non | oui | oui | oui |"},
+  {"page": "/profiles/perform76-appuis-et-seuils.md", "extrait": "| Rénovation et neuf avec aile | 6136, 6137, 76768 | 76177, 76180, 76185 |"},
+  {"page": "/profiles/perform76-dormants.md", "extrait": "| Appuis 6136, 6137, 76768 | non | non | oui | oui | oui |"},
+  {"page": "/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md", "extrait": "| 6136 | rénovation | 4,3 × 25 | 3,9 × 19 | 50 | 400 |"}
+ ],
+ "ambiguite": "Gamme non précisée : réponse PERFORM76 (76177, 76180, 76185) ; au système 70, le 6136 est seulement « pour dormant rénovation » sans liste de dormants. Cas particulier : sur un 76171 à partir de 175 mm d'isolant, le dormant bas devient un 76180 (mais l'appui y est alors le 6137 ou le 76768).",
+ "outils": 4,
+ "comment_trouve": "Page perform76-appuis-et-seuils.md : tableau « Compatibilités » (colonnes = 5 dormants) et tableau « Deux familles d'appuis ». Grep « 6136 » pour vérifier les autres pages (perform76-dormants, perform76-tapees-et-isolation, système 70).",
+ "formulations": [
+  "Sur quels dormants PERFORM76 je peux mettre la pièce d'appui 6136 ?",
+  "appui 6136 dormant",
+  "Quel appui 127 mm va avec un dormant rénovation 76 ?"
+ ],
+ "defauts_wiki": [
+  "Tableau de compatibilités en matrice (colonnes = références de dormant, cellules oui/non) : une recherche lexicale trouve la ligne « Appui 6136 » mais la réponse est dans les en-têtes ; le modèle doit croiser ligne et en-tête.",
+  "Deux pages portent la même compatibilité (perform76-appuis-et-seuils et perform76-dormants) : doublon de donnée.",
+  "« 6136 » apparaît sur une dizaine de pages (système 70 : 117 Ko de profiles-complementaires, drainage, fabrication 76) ; le système 70 n'a pas de matrice de compatibilité dormant ↔ appui.",
+  "Le 6136 est écrit « 127 mm » (largeur hors tout) en système 70 et « 67 » (largeur) en PERFORM76 : deux cotes pour la même pièce selon la page."
+ ]
+}

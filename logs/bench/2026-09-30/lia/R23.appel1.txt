@@ -1,0 +1,3104 @@
+===== PAGE 1 : /quincaillerie/roto-nx-cremones.md =====
+# Lire les tableaux de crémones du catalogue
+
+La **crémone** est la ferrure de l'ouvrant que manœuvre la poignée : elle entraîne les galets de
+verrouillage, qui s'engagent dans les gâches fixées sur le dormant (voir le
+[glossaire](/reference/glossaire.md)). Le catalogue Roto NX PVC range
+ses crémones par famille (crémone OB KSR à hauteur de poignée fixe, crémone OB à hauteur de
+poignée centrée / variable, crémone verrou, crémone de semi-fixe…) puis par **axe de fouillot**,
+la cote [B] du schéma de perçage : 8 mm, 15 mm, ou 25 à 50 mm [1 p. 211-212].
+
+Les tableaux de commande ont des **pictogrammes en en-tête de colonne**, définis dans la légende
+du catalogue et reproduits sur
+[Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md)
+[1 p. 10-12]. Sur les tableaux des crémones OB KSR à hauteur de poignée fixe, douze colonnes
+reviennent, dans cet ordre : fouillot (axe, en mm), hauteur fond de feuillure d'ouvrant (HFF, plage
+en mm), longueur (mm), zone de recoupe (mm, longueur dont la crémone peut être raccourcie),
+hauteur de la poignée constante (mm), anti-fausse manœuvre, loqueteau, renvoi d'angle intégré,
+nombre de galets, type de goujon de verrouillage, traitement de surface, N° de matériel
+(référence de commande) [1 p. 213].
+
+Les tables de cette page reprennent ces colonnes, la référence en premier. Deux conventions sont
+reportées telles qu'imprimées :
+
+- les colonnes anti-fausse manœuvre, loqueteau et renvoi d'angle intégré portent **J** ou **N**.
+  La liste des abréviations du catalogue définit N (non) et O (oui), pas J (entrée **INC-288**) ;
+- les colonnes « nombre de galets » et « type de goujon de verrouillage » portent une paire
+  « a / b » (« – / 1 », « 2 / – », « E / – », « – / P ») ; le sens des deux positions de la paire
+  n'est pas défini. Les lettres E, P et V sont les galets du concept de fermeture
+  universel, voir [Roto NX](/quincaillerie/roto-nx.md) [1 p. 18].
+
+Dans le catalogue, une plage de HFF et sa longueur sont imprimées une seule fois pour un groupe
+de lignes (cellule fusionnée) ; elles sont répétées ici sur chaque ligne du groupe.
+
+Au-dessus de chaque tableau, le catalogue dessine la crémone et les pictogrammes des types
+d'ouverture auxquels elle s'applique. Sur toutes les planches de crémone OB KSR à hauteur de
+poignée fixe (p. 213, 215, 216), les six pictogrammes sont : fenêtre oscillo-battante, fenêtre
+ouvrant à la française, fenêtre basculante, fenêtre à la française / oscillo-battante à ouvrant
+semi-fixe, fenêtre plein cintre oscillo-battante, fenêtre inclinée oscillo-battante [1 p. 12, 213].
+
+# Crémone OB KSR, hauteur de poignée fixe, axe de fouillot 8 mm
+
+## Schéma de perçage et de fraisage, fouillot 8 mm
+
+Le schéma de perçage et de fraisage donne les perçages de la face de l'ouvrant et la lumière à
+fraiser dans la rainure, repérés par rapport à la hauteur de poignée [A] et au milieu du boîtier
+de crémone [D] [1 p. 212].
+
+![Crémone OB KSR fouillot 8 mm, schéma de perçage et de fraisage](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f8-schema-percage-fraisage.png)
+
+À gauche, la face intérieure de l'ouvrant : trois trous alignés sur l'axe du fouillot, Ø 10, Ø 12
+(au centre, à la hauteur de poignée [A]) et Ø 10, sur 43 mm, axe de fouillot [B] de 8 mm.
+Au centre, la coupe du profilé d'ouvrant, l'usinage dessiné en rouge : [B] = 8 mm, profondeur
+de fraisage minimale [C] = 20 mm ; la cote 12,3 mm est portée sur la coupe et sur la vue de
+droite. À droite, la vue de la rainure : la lumière oblongue, de longueur minimale 30 mm, est
+centrée sur le milieu du boîtier de crémone [D] [1 p. 212].
+
+| Repère | Signification | Cote (mm) |
+| --- | --- | --- |
+| [A] | Hauteur de poignée | - |
+| [B] | « Fouillotss » (axe de fouillot) | 8 |
+| [C] | Profondeur de fraisage minimale | 20 |
+| [D] | Milieu du boîtier de crémone | - |
+| Ø trous | Ø 10, Ø 12, Ø 10, sur 43 mm | 10 / 12 / 10 |
+| Lumière | longueur minimale | 30 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 212)
+
+Le repère [B] est imprimé « Fouillotss » dans la légende de la p. 212 comme dans celle de la
+p. 214. Le Ø 10 se perce à une profondeur de 33 mm (pour un recouvrement de 16 mm), pour des vis à
+tête fraisée M 5 x … DIN EN ISO 7046 [1 p. 212].
+
+## Hauteur de poignée constante, fouillot 8 mm
+
+![Crémone OB KSR hauteur de poignée constante, fouillot 8 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f8-constante.png)
+
+Crémones OB KSR à hauteur de poignée constante, axe de fouillot 8 mm, une ligne par référence,
+cotes en mm [1 p. 213] :
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de poignée (mm) | Anti-fausse manœuvre | Loqueteau | Renvoi d'angle intégré | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | ---: | --- | ---: | ---: | ---: | :---: | :---: | :---: | :---: | :---: | --- |
+| 734530 | 8 | 300 – 600 | 490 | 200 | 120 | N | N | J | – / 1 | – / P | Roto Sil |
+| 795325 | 8 | 511 – 710 | 600 | 200 | 170 | J | N | J | – / 1 | – / P | Roto Sil |
+| 771919 | 8 | 601 – 800 | 690 | 200 | 263 | N | N | N | – / – | – / – | Roto Sil |
+| 893471 | 8 | 601 – 800 | 690 | 200 | 263 | N | N | N | 1 / – | E / – | Roto Sil |
+| 771920 | 8 | 801 – 1000 | 890 | 200 | 413 | J | N | N | 1 / – | E / – | Roto Sil |
+| 771921 | 8 | 1001 – 1200 | 1090 | 200 | 513 | J | N | N | 1 / – | E / – | Roto Sil |
+| 771922 | 8 | 1201 – 1400 | 1290 | 200 | 563 | J | N | N | 1 / – | E / – | Roto Sil |
+| 771923 | 8 | 1401 – 1600 | 1490 | 200 | 563 | J | N | N | 2 / – | E / – | Roto Sil |
+| 771924 | 8 | 1601 – 1800 | 1690 | 200 | 563 | J | N | N | 2 / – | E / – | Roto Sil |
+| 795269 | 8 | 1601 – 1800 | 1690 | 200 | 1000 | J | J | N | 2 / – | E / – | Roto Sil |
+| 795271 | 8 | 1801 – 2000 | 1890 | 200 | 1000 | J | J | N | 2 / – | E / – | Roto Sil |
+| 795273 | 8 | 2001 – 2200 | 2090 | 200 | 1000 | J | J | N | 2 / – | E / – | Roto Sil |
+| 795275 | 8 | 2201 – 2400 | 2290 | 200 | 1000 | J | J | N | 3 / – | E / – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 213)
+
+**Pour les HFF au-delà de 2 401 mm, un verrouilleur médian est nécessaire** [1 p. 213].
+
+## Hauteur de poignée constante, sécurité, fouillot 8 mm
+
+![Crémone OB KSR hauteur de poignée constante sécurité, fouillot 8 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f8-constante-securite.png)
+
+Crémones OB KSR à hauteur de poignée constante, version sécurité (goujons V), axe de fouillot
+8 mm, cotes en mm [1 p. 213] :
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de poignée (mm) | Anti-fausse manœuvre | Loqueteau | Renvoi d'angle intégré | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | ---: | --- | ---: | ---: | ---: | :---: | :---: | :---: | :---: | :---: | --- |
+| 771919 | 8 | 601 – 800 | 690 | 200 | 263 | N | N | N | – / – | – / – | Roto Sil |
+| 771940 | 8 | 801 – 1000 | 890 | 200 | 413 | J | N | N | 1 / – | V / – | Roto Sil |
+| 771941 | 8 | 1001 – 1200 | 1090 | 200 | 513 | J | N | N | 1 / – | V / – | Roto Sil |
+| 771942 | 8 | 1201 – 1400 | 1290 | 200 | 563 | J | N | N | 1 / – | V / – | Roto Sil |
+| 771943 | 8 | 1401 – 1600 | 1490 | 200 | 563 | J | N | N | 2 / – | V / – | Roto Sil |
+| 771944 | 8 | 1601 – 1800 | 1690 | 200 | 563 | J | N | N | 2 / – | V / – | Roto Sil |
+| 795270 | 8 | 1601 – 1800 | 1690 | 200 | 1000 | J | J | N | 2 / – | V / – | Roto Sil |
+| 795272 | 8 | 1801 – 2000 | 1890 | 200 | 1000 | J | J | N | 2 / – | V / – | Roto Sil |
+| 795274 | 8 | 2001 – 2200 | 2090 | 200 | 1000 | J | J | N | 3 / – | V / – | Roto Sil |
+| 795276 | 8 | 2201 – 2400 | 2290 | 200 | 1000 | J | J | N | 3 / – | V / – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 213)
+
+**Pour les HFF au-delà de 2 401 mm, un verrouilleur médian est nécessaire** [1 p. 213].
+
+Les nomenclatures des instructions de montage KSR donnent les mêmes références 771920 à 771924,
+795269 à 795276 et 771940 à 771944 sur les mêmes plages avec des longueurs inférieures de 110 mm
+(780 au lieu de 890 mm, etc.), et 795274 avec 2 galets V au lieu de 3 (entrée **CTR-115**) ; leurs
+tables sont plus bas, section *Crémones OB KSR, fouillot 8 mm, hauteur de poignée fixe*.
+
+# Crémone OB KSR, hauteur de poignée fixe, axe de fouillot 15 mm
+
+## Schéma de perçage et de fraisage, fouillot 15 mm
+
+Même schéma que pour le fouillot 8 mm, avec d'autres cotes [1 p. 214].
+
+![Crémone OB KSR fouillot 15 mm, schéma de perçage et de fraisage](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f15-schema-percage-fraisage.png)
+
+Trois trous Ø 10, Ø 12, Ø 10 sur 43 mm, axe de fouillot [B] de 15 mm ; profondeur de fraisage
+minimale 28 mm [C] ; cote 12,3 mm sur la coupe et sur la vue de la rainure ; lumière oblongue de
+longueur minimale 65 mm, centrée sur le milieu du boîtier de crémone [D] [1 p. 214].
+
+| Repère | Signification | Cote (mm) |
+| --- | --- | --- |
+| [A] | Hauteur de poignée | - |
+| [B] | « Fouillotss » (axe de fouillot) | 15 |
+| [C] | Profondeur de fraisage minimale | 28 |
+| [D] | Milieu du boîtier de crémone | - |
+| Ø trous | Ø 10, Ø 12, Ø 10, sur 43 mm | 10 / 12 / 10 |
+| Lumière | longueur minimale | 65 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 214)
+
+Le Ø 10 se perce à une profondeur de 33 mm (pour un recouvrement de 16 mm), pour des vis à tête
+fraisée M 5 x … DIN EN ISO 7046 [1 p. 214].
+
+## Hauteur de poignée constante, fouillot 15 mm
+
+![Crémone OB KSR hauteur de poignée constante, fouillot 15 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f15-constante.png)
+
+Crémones OB KSR à hauteur de poignée constante, axe de fouillot 15 mm, cotes en mm [1 p. 215] :
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de poignée (mm) | Anti-fausse manœuvre | Loqueteau | Renvoi d'angle intégré | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | ---: | --- | ---: | ---: | ---: | :---: | :---: | :---: | :---: | :---: | --- |
+| 742199 | 15 | 280 – 570 | 460 | 200 | 120 | N | N | J | – / 1 | – / P | Roto Sil |
+| 795324 | 15 | 511 – 710 | 600 | 200 | 170 | J | N | J | – / 1 | – / P | Roto Sil |
+| 795277 | 15 | 511 – 710 | 600 | 200 | 170 | J | N | N | 1 / – | P / – | Roto Sil |
+| 619591 | 15 | 601 – 800 | 690 | 200 | 263 | J | N | N | – / – | – / – | Roto Sil |
+| 893472 | 15 | 601 – 800 | 690 | 200 | 263 | N | N | N | 1 / – | E / – | Roto Sil |
+| 774233 | 15 | 801 – 1000 | 890 | 200 | 413 | J | N | N | – / – | – / – | Roto Sil |
+| 619592 | 15 | 801 – 1000 | 890 | 200 | 413 | J | N | N | 1 / – | E / – | Roto Sil |
+| 891693 | 15 | 1001 – 1200 | 1090 | 200 | 513 | J | N | N | – / – | – / – | Roto Sil |
+| 619593 | 15 | 1001 – 1200 | 1090 | 200 | 513 | J | N | N | 1 / – | E / – | Roto Sil |
+| 891694 | 15 | 1201 – 1400 | 1290 | 200 | 563 | J | N | N | – / – | – / – | Roto Sil |
+| 619594 | 15 | 1201 – 1400 | 1290 | 200 | 563 | J | N | N | 1 / – | E / – | Roto Sil |
+| 891700 | 15 | 1401 – 1600 | 1490 | 200 | 563 | J | N | N | – / – | – / – | Roto Sil |
+| 619595 | 15 | 1401 – 1600 | 1490 | 200 | 563 | J | N | N | 2 / – | E / – | Roto Sil |
+| 891701 | 15 | 1601 – 1800 | 1690 | 200 | 563 | J | N | N | – / – | – / – | Roto Sil |
+| 619596 | 15 | 1601 – 1800 | 1690 | 200 | 563 | J | N | N | 2 / – | E / – | Roto Sil |
+| 891702 | 15 | 1601 – 1800 | 1690 | 200 | 1000 | J | J | N | – / – | – / – | Roto Sil |
+| 838345 | 15 | 1601 – 1800 | 1690 | 200 | 1000 | J | J | N | 2 / – | E / – | Roto Sil |
+| 891703 | 15 | 1801 – 2000 | 1890 | 200 | 1000 | J | J | N | – / – | – / – | Roto Sil |
+| 794637 | 15 | 1801 – 2000 | 1890 | 200 | 1000 | J | J | N | 2 / – | E / – | Roto Sil |
+| 891704 | 15 | 2001 – 2200 | 2090 | 200 | 1000 | J | J | N | – / – | – / – | Roto Sil |
+| 795280 | 15 | 2001 – 2200 | 2090 | 200 | 1000 | J | J | N | 2 / – | E / – | Roto Sil |
+| 794638 | 15 | 2001 – 2200 | 2090 | 200 | 1000 | J | J | N | 3 / – | E / – | Roto Sil |
+| 891705 | 15 | 2201 – 2400 | 2290 | 200 | 1000 | J | J | N | – / – | – / – | Roto Sil |
+| 795282 | 15 | 2201 – 2400 | 2290 | 200 | 1000 | J | J | N | 2 / – | E / – | Roto Sil |
+| 794639 | 15 | 2201 – 2400 | 2290 | 200 | 1000 | J | J | N | 3 / – | E / – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 215)
+
+**Pour les HFF au-delà de 2 401 mm, un verrouilleur médian est nécessaire** [1 p. 215].
+
+## Hauteur de poignée fixe, sécurité, fouillot 15 mm
+
+![Crémone OB KSR hauteur de poignée fixe sécurité, fouillot 15 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f15-securite.png)
+
+Crémones OB KSR à hauteur de poignée fixe, version sécurité (goujons V), axe de fouillot 15 mm,
+cotes en mm [1 p. 216] :
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de poignée (mm) | Anti-fausse manœuvre | Loqueteau | Renvoi d'angle intégré | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | ---: | --- | ---: | ---: | ---: | :---: | :---: | :---: | :---: | :---: | --- |
+| 619591 | 15 | 601 – 800 | 690 | 200 | 263 | J | N | N | – / – | – / – | Roto Sil |
+| 626542 | 15 | 801 – 1000 | 890 | 200 | 413 | J | N | N | 1 / – | V / – | Roto Sil |
+| 626543 | 15 | 1001 – 1200 | 1090 | 200 | 513 | J | N | N | 1 / – | V / – | Roto Sil |
+| 626544 | 15 | 1201 – 1400 | 1290 | 200 | 563 | J | N | N | 1 / – | V / – | Roto Sil |
+| 626575 | 15 | 1401 – 1600 | 1490 | 200 | 563 | J | N | N | 2 / – | V / – | Roto Sil |
+| 626576 | 15 | 1601 – 1800 | 1690 | 200 | 563 | J | N | N | 2 / – | V / – | Roto Sil |
+| 838324 | 15 | 1601 – 1800 | 1690 | 200 | 1000 | J | J | N | 2 / – | V / – | Roto Sil |
+| 794641 | 15 | 1801 – 2000 | 1890 | 200 | 1000 | J | J | N | 2 / – | V / – | Roto Sil |
+| 794642 | 15 | 2001 – 2200 | 2090 | 200 | 1000 | J | J | N | 3 / – | V / – | Roto Sil |
+| 794643 | 15 | 2201 – 2400 | 2290 | 200 | 1000 | J | J | N | 3 / – | V / – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 216)
+
+**Pour les HFF au-delà de 2 401 mm, un verrouilleur médian est nécessaire** [1 p. 216].
+
+Les instructions de montage KSR donnent les mêmes références en fouillot 15 mm, galets E et V,
+avec des longueurs inférieures de 110 mm, et 794636 (galet E) et 794640 (galet V) là où le
+catalogue porte 838345 et 838324 sur la plage 1 601 – 1 800 à hauteur de poignée 1 000 mm, et
+795282 avec 3 galets E au lieu de « 2 / – » (entrée **CTR-67**) ; leurs tables sont plus bas, section *Crémones OB KSR, fouillot 15 mm, hauteur de
+poignée fixe, galets E et V*.
+
+# Crémone OB KSR, hauteur de poignée fixe, fouillots de 25, 30, 35, 40, 45, 50 mm
+
+Pour les fouillots de 25 à 50 mm, la crémone se compose d'une **têtière de crémone** à hauteur de
+poignée fixe, choisie par la HFF, dans laquelle se monte un **boîtier** choisi par l'axe de
+fouillot : boîtier de crémone, ou boîtier de serrure à cylindre profilé ou rond [1 p. 219].
+
+## Schéma de perçage et de fraisage, non verrouillable
+
+Version non verrouillable ; la coupe s'applique aux fenêtres et aux portes ouvertes vers
+l'extérieur [1 p. 217].
+
+![Crémone OB KSR fouillots 25 à 50 mm, schéma de perçage et de fraisage non verrouillable](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f25-50-schema-non-verrouillable.png)
+
+À gauche, la face de l'ouvrant : trois trous Ø 10, Ø 12 et Ø 10 sur 43 mm, alignés sur l'axe de
+fouillot [A] (cote ≥ 12,5 mm portée à côté) ; la hauteur de poignée [B] est au niveau du Ø 12, et
+une cote (50) entre parenthèses va de ce niveau au bas de la lumière. Au milieu, la vue de la
+rainure : lumière (en rouge) de 12,3 mm de large et de longueur ≥ 100 mm. À droite, la coupe de
+l'ouvrant avec la poignée : cote 12,5 mm en haut, 12,3 mm sur la rainure, [A] axe de fouillot
+[1 p. 217].
+
+| Repère | Signification | Cote (mm) |
+| --- | --- | --- |
+| [A] | « Fouillotss » (axe de fouillot) | 25 à 50 selon le boîtier |
+| [B] | Hauteur de poignée | - |
+| Ø trous | Ø 10, Ø 12, Ø 10, sur 43 mm | 10 / 12 / 10 |
+| Lumière dans la rainure | largeur ; longueur | 12,3 ; ≥ 100 |
+| Cote portée à côté de [A] | - | ≥ 12,5 |
+| Cote portée sous la hauteur de poignée | entre parenthèses | (50) |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 217)
+
+## Schéma de perçage et de fraisage, verrouillable
+
+Version verrouillable ; la coupe s'applique aux portes ouvertes vers l'intérieur [1 p. 218].
+
+![Crémone OB KSR fouillots 25 à 50 mm, schéma de perçage et de fraisage verrouillable](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f25-50-schema-verrouillable.png)
+
+La face de l'ouvrant porte deux groupes de perçages sur l'axe de fouillot [A]. En haut : Ø 10,
+Ø 12, Ø 10 sur 43 mm, une cote 50 et une lumière de ≥ 100 mm dans la rainure. En bas : Ø 10,
+Ø 20 (25), Ø 20, Ø 10, avec les cotes 16, 31,5 (29,5) et 63 mm et une lumière de ≥ 86 mm dans la
+rainure. La hauteur de poignée [B] est cotée 145 (147) mm, au-dessus d'une cote de 43 (41) mm.
+Les cotes entre parenthèses sont imprimées à côté des premières sans que la planche dise dans
+quel cas elles s'appliquent. En haut, cote ≥ 12,5 mm à côté de [A] ; en bas, ≥ 17 mm ; rainure de
+12,3 mm. La coupe de droite, avec la poignée, porte ≥ 17 mm, 12,3 mm et, en cas de volet roulant
+[C], ≥ 45 mm [1 p. 218].
+
+| Repère | Signification | Cote (mm) |
+| --- | --- | --- |
+| [A] | « Fouillotss » (axe de fouillot) | 25 à 50 selon le boîtier |
+| [B] | Hauteur de poignée | 145 (147) |
+| [C] | En cas de volet roulant | ≥ 45 |
+| Groupe du haut | Ø 10, Ø 12, Ø 10 sur 43 mm ; cote ; lumière | 10 / 12 / 10 ; 50 ; ≥ 100 |
+| Groupe du bas | Ø 10, Ø 20 (25), Ø 20, Ø 10 ; cotes ; lumière | 10 / 20 (25) / 20 / 10 ; 16, 31,5 (29,5), 63 ; ≥ 86 |
+| Cote sous [B] | - | 43 (41) |
+| Cotes portées à côté de [A] | en haut ; en bas | ≥ 12,5 ; ≥ 17 |
+| Rainure | largeur | 12,3 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 218)
+
+## Configuration, fouillots 25 à 50 mm
+
+![Crémone OB KSR fouillots 25 à 50 mm, configuration têtière et boîtiers](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f25-50-configuration.png)
+
+Le dessin montre la têtière [1] sur toute sa hauteur et, en loupe, les deux boîtiers qui s'y
+montent (flèche) : [A] le boîtier de crémone [2], [B] le boîtier de serrure [3] [1 p. 219].
+
+| Repère | Signification | Page du catalogue |
+| --- | --- | --- |
+| [1] | Têtière de crémone - Hauteur de poignée fixe | à partir de la p. 220 |
+| [2] | Boîtier de crémone | à partir de la p. 220 |
+| [3] | Boîtier de serrure - Cylindre profilé ; Boîtier de serrure - Cylindre rond (imprimé « Ill. ci-dessus) ») | à partir de la p. 221 |
+| [A] | Boîtier de crémone montable dans têtière de crémone | - |
+| [B] | Boîtier de serrure montable dans têtière de crémone | - |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 219)
+
+**Le boîtier de serrure nécessite une têtière de crémone avec la caractéristique produit
+Loqueteau « J »** [1 p. 219, 220].
+
+## Têtière de crémone, hauteur de poignée fixe
+
+![Têtière de crémone hauteur de poignée fixe, fouillots 25 à 50 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/tetiere-cremone-hp-fixe-f25-50.png)
+
+Têtières de crémone à hauteur de poignée fixe, une ligne par référence, cotes en mm. La première
+colonne est ici la classe de sécurité (sécurité de base ou sécurité), le tableau n'a pas de
+colonne renvoi d'angle, et le nombre de galets comme le type de goujon sont imprimés en une seule
+valeur. Types d'ouverture : les six pictogrammes des crémones OB KSR (oscillo-battante,
+française, basculante, française / oscillo-battante à ouvrant semi-fixe, plein cintre, inclinée)
+[1 p. 220] :
+
+| N° de matériel | Classe de sécurité | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de poignée (mm) | Anti-fausse manœuvre | Loqueteau | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | --- | ---: | ---: | ---: | :---: | :---: | :---: | :---: | --- |
+| 788302 | Sécurité de base | 601 – 800 | 690 | 200 | 263 | J | N | – | – | Roto Sil |
+| 788303 | Sécurité de base | 801 – 1000 | 890 | 200 | 413 | J | N | 1 | E | Roto Sil |
+| 788304 | Sécurité de base | 1001 – 1200 | 1090 | 200 | 513 | J | N | 1 | E | Roto Sil |
+| 788305 | Sécurité de base | 1201 – 1400 | 1290 | 200 | 563 | J | N | 1 | E | Roto Sil |
+| 788306 | Sécurité de base | 1401 – 1600 | 1490 | 200 | 563 | J | N | 2 | E | Roto Sil |
+| 788307 | Sécurité de base | 1601 – 1800 | 1690 | 200 | 563 | J | N | 2 | E | Roto Sil |
+| 788308 | Sécurité de base | 1601 – 1800 | 1690 | 200 | 1000 | J | J | 2 | E | Roto Sil |
+| 788309 | Sécurité de base | 1801 – 2000 | 1890 | 200 | 1000 | J | J | 2 | E | Roto Sil |
+| 788310 | Sécurité de base | 2001 – 2200 | 2090 | 200 | 1000 | J | J | 3 | E | Roto Sil |
+| 788311 | Sécurité de base | 2201 – 2400 | 2290 | 200 | 1000 | J | J | 3 | E | Roto Sil |
+| 795284 | Sécurité | 801 – 1000 | 890 | 200 | 413 | J | N | 1 | V | Roto Sil |
+| 795285 | Sécurité | 1001 – 1200 | 1090 | 200 | 513 | J | N | 1 | V | Roto Sil |
+| 795286 | Sécurité | 1201 – 1400 | 1290 | 200 | 563 | J | N | 1 | V | Roto Sil |
+| 795287 | Sécurité | 1401 – 1600 | 1490 | 200 | 563 | J | N | 2 | V | Roto Sil |
+| 795288 | Sécurité | 1601 – 1800 | 1690 | 200 | 563 | J | N | 2 | V | Roto Sil |
+| 788312 | Sécurité | 1601 – 1800 | 1690 | 200 | 1000 | J | J | 2 | V | Roto Sil |
+| 788313 | Sécurité | 1801 – 2000 | 1890 | 200 | 1000 | J | J | 2 | V | Roto Sil |
+| 788314 | Sécurité | 2001 – 2200 | 2090 | 200 | 1000 | J | J | 3 | V | Roto Sil |
+| 788315 | Sécurité | 2201 – 2400 | 2290 | 200 | 1000 | J | J | 3 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 220)
+
+**Pour les HFF au-delà de 2 401 mm, un verrouilleur médian est nécessaire** [1 p. 220].
+
+Les nomenclatures de montage KSR nomment ces références « Crémone OB EasyMix, hauteur poignée
+fixe » (galet E) et « … sécurité » (galet V), avec les mêmes longueurs, hauteurs de poignée et
+galets : section *Crémones OB EasyMix, hauteur de poignée fixe* plus bas [2 p. 83].
+
+## Boîtier de crémone, fouillots 25 à 50 mm
+
+![Boîtier de crémone, fouillots 25 à 50 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/boitier-de-cremone-f25-50.png)
+
+Boîtiers de crémone, un par axe de fouillot, à monter dans la têtière ; types d'ouverture : les
+six pictogrammes des crémones OB KSR [1 p. 220-221] :
+
+| N° de matériel | Axe de fouillot (mm) | Traitement de surface |
+| --- | ---: | --- |
+| 787675 | 25 | Roto Sil |
+| 787677 | 30 | Roto Sil |
+| 787678 | 35 | Roto Sil |
+| 787679 | 40 | Roto Sil |
+| 787680 | 45 | Roto Sil |
+| 787681 | 50 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 220-221)
+
+## Boîtier de serrure, cylindre profilé et cylindre rond
+
+Boîtiers de serrure à monter dans la têtière, pour cylindre profilé ou cylindre rond. Types
+d'ouverture : fenêtre oscillo-battante, fenêtre ouvrant à la française, fenêtre à la française /
+oscillo-battante à ouvrant semi-fixe [1 p. 221].
+
+![Boîtier de serrure, cylindre profilé](/assets/quincaillerie/roto-nx-catalogue/cremones/boitier-de-serrure-cylindre-profile.png)
+
+![Boîtier de serrure, cylindre rond](/assets/quincaillerie/roto-nx-catalogue/cremones/boitier-de-serrure-cylindre-rond.png)
+
+| N° de matériel | Cylindre | Axe de fouillot (mm) | Traitement de surface |
+| --- | --- | ---: | --- |
+| 787656 | profilé | 25 | Roto Sil |
+| 787658 | profilé | 30 | Roto Sil |
+| 787659 | profilé | 35 | Roto Sil |
+| 787660 | profilé | 40 | Roto Sil |
+| 787661 | profilé | 45 | Roto Sil |
+| 787663 | profilé | 50 | Roto Sil |
+| 788164 | rond | 25 | Roto Sil |
+| 788275 | rond | 30 | Roto Sil |
+| 788276 | rond | 35 | Roto Sil |
+| 788277 | rond | 40 | Roto Sil |
+| 788278 | rond | 45 | Roto Sil |
+| 788279 | rond | 50 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 221)
+
+Les boîtiers de crémone 787675 à 787681 et les boîtiers à cylindre profilé 787656 à 787663 sont
+aussi sur la planche EasyMix des nomenclatures de montage KSR (« boîtier carré », « boîtier
+cylindre ») ; les boîtiers à cylindre rond 788164 et 788275 à 788279 n'y sont pas [2 p. 83].
+
+# Crémone OB, hauteur de poignée centrée / variable, axe de fouillot 8 mm
+
+Sur une crémone à **hauteur de poignée centrée / variable**, la hauteur de poignée n'est pas une
+cote unique mais une plage, imprimée pour chaque plage de HFF ; la zone de recoupe est imprimée
+en paire « a / b » (« 100 / 100 », « 200 / 200 », « 90 / 90 ») dont le sens des deux valeurs
+n'est pas défini. Les tableaux n'ont pas de colonne renvoi d'angle, et le nombre de
+galets comme le type de goujon sont imprimés en une seule valeur. Types d'ouverture des
+crémones OB à hauteur de poignée centrée / variable, fouillots 8 et 15 mm : les six pictogrammes
+des crémones OB KSR, plus la fenêtre triangulaire oscillo-battante [1 p. 222-224].
+
+## Schéma de perçage et de fraisage, fouillot 8 mm
+
+Même schéma et mêmes cotes que la crémone OB KSR à hauteur de poignée fixe fouillot 8 mm
+(Ø 10 / Ø 12 / Ø 10 sur 43 mm, [B] 8 mm, [C] 20 mm, cote 12,3 mm, lumière de 30 mm minimum ; Ø 10
+percé à 33 mm pour un recouvrement de 16 mm, vis M 5 x … DIN EN ISO 7046) [1 p. 222].
+
+![Crémone OB fouillot 8 mm, schéma de perçage et de fraisage](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f8-schema-percage-fraisage.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 222)
+
+## Poignée milieu / variable, fouillot 8 mm
+
+![Crémone OB hauteur de poignée milieu / variable, fouillot 8 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-hp-variable-f8.png)
+
+Crémones OB « poignée milieu / variable », axe de fouillot 8 mm, cotes en mm [1 p. 222] :
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de poignée (mm) | Anti-fausse manœuvre | Loqueteau | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | ---: | --- | ---: | ---: | --- | :---: | :---: | :---: | :---: | --- |
+| 259764 | 8 | 380 – 620 | 500 | 100 / 100 | 190 – 260 | N | N | – | – | Roto Sil |
+| 840794 | 8 | 621 – 1020 | 800 | 200 / 200 | 311 – 510 | J | N | 1 | E | Roto Sil |
+| 623646 | 8 | 801 – 1200 | 980 | 200 / 200 | 401 – 600 | J | N | 1 | E | Roto Sil |
+| 259768 | 8 | 1201 – 1600 | 1380 | 200 / 200 | 601 – 800 | J | N | 2 | E | Roto Sil |
+| 795374 | 8 | 1601 – 2000 | 1780 | 200 / 200 | 801 – 1000 | J | J | 2 | E | Roto Sil |
+| 795376 | 8 | 2001 – 2400 | 2180 | 200 / 200 | 1001 – 1200 | J | J | 4 | E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 222)
+
+**Pour les HFF au-delà de 2 401 mm, un verrouilleur médian est nécessaire** [1 p. 222].
+
+## Hauteur de poignée milieu / variable, sécurité, fouillot 8 mm
+
+![Crémone OB hauteur de poignée milieu / variable sécurité, fouillot 8 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-hp-variable-f8-securite.png)
+
+Crémones OB à hauteur de poignée milieu / variable, version sécurité (goujon V), axe de
+fouillot 8 mm, cotes en mm [1 p. 223] :
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de poignée (mm) | Anti-fausse manœuvre | Loqueteau | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | ---: | --- | ---: | ---: | --- | :---: | :---: | :---: | :---: | --- |
+| 840812 | 8 | 621 – 1020 | 800 | 200 / 200 | 311 – 510 | J | N | 1 | V | Roto Sil |
+| 502075 | 8 | 801 – 1200 | 980 | 200 / 200 | 401 – 600 | J | N | 1 | V | Roto Sil |
+| 502076 | 8 | 1201 – 1600 | 1380 | 200 / 200 | 601 – 800 | J | N | 2 | V | Roto Sil |
+| 795375 | 8 | 1601 – 2000 | 1780 | 200 / 200 | 801 – 1000 | J | J | 2 | V | Roto Sil |
+| 795377 | 8 | 2001 – 2400 | 2180 | 200 / 200 | 1001 – 1200 | J | J | 4 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 223)
+
+**Pour les HFF au-delà de 2 401 mm, un verrouilleur médian est nécessaire** [1 p. 223].
+
+Les nomenclatures de montage KSR donnent à 259764 d'autres plages de HFF (430 – 520, 451 – 520 ou
+380 – 520 mm selon la nomenclature, contre 380 – 620 mm ici), listent 259765 (521 – 620 mm, 400 mm)
+que ce tableau n'a pas, et 502024 (621 – 800 mm, 580 mm, 1 galet V) là où ce tableau porte 840812
+(621 – 1 020 mm, 800 mm) : entrée **CTR-116**. Leurs tables sont plus bas, section *Crémones OB,
+fouillot 8 mm, hauteur de poignée variable*, et sur
+[Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md).
+
+# Crémone OB, hauteur de poignée centrée / variable, axe de fouillot 15 mm
+
+## Schéma de perçage et de fraisage, fouillot 15 mm
+
+Même schéma et mêmes cotes que la crémone OB KSR à hauteur de poignée fixe fouillot 15 mm
+(Ø 10 / Ø 12 / Ø 10 sur 43 mm, [B] 15 mm, [C] 28 mm, cote 12,3 mm, lumière de 65 mm minimum ; Ø 10
+percé à 33 mm pour un recouvrement de 16 mm, vis M 5 x … DIN EN ISO 7046) [1 p. 223].
+
+![Crémone OB fouillot 15 mm, schéma de perçage et de fraisage](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f15-schema-percage-fraisage.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 223)
+
+## Hauteur de poignée centrale / variable, fouillot 15 mm
+
+![Crémone OB hauteur de poignée centrale / variable, fouillot 15 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-hp-variable-f15.png)
+
+Crémones OB à hauteur de poignée centrale / variable, axe de fouillot 15 mm, cotes en mm ; la
+longueur 1 180 mm n'est imprimée que pour 796459 (1 001 – 1 400 mm) [1 p. 224] :
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de poignée (mm) | Anti-fausse manœuvre | Loqueteau | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | ---: | --- | ---: | ---: | --- | :---: | :---: | :---: | :---: | --- |
+| 259717 | 15 | 310 – 620 | 430 | 100 / 100 | 155 – 225 | N | N | – | – | Roto Sil |
+| 742202 | 15 | 310 – 850 | 630 | 200 / 200 | 155 – 425 | N | N | – | – | Roto Sil |
+| 289862 | 15 | 621 – 800 | 580 | 90 / 90 | 311 – 400 | J | N | – | – | Roto Sil |
+| 259719 | 15 | 621 – 800 | 580 | 90 / 90 | 311 – 400 | J | N | 1 | E | Roto Sil |
+| 289863 | 15 | 801 – 1200 | 980 | 200 / 200 | 401 – 600 | J | N | – | – | Roto Sil |
+| 259720 | 15 | 801 – 1200 | 980 | 200 / 200 | 401 – 600 | J | N | 1 | E | Roto Sil |
+| 796459 | 15 | 1001 – 1400 | 1180 | 200 / 200 | 501 – 700 | J | N | 2 | E | Roto Sil |
+| 289864 | 15 | 1201 – 1600 | 1380 | 200 / 200 | 601 – 800 | J | N | – | – | Roto Sil |
+| 259721 | 15 | 1201 – 1600 | 1380 | 200 / 200 | 601 – 800 | J | N | 2 | E | Roto Sil |
+| 289865 | 15 | 1601 – 2000 | 1780 | 200 / 200 | 801 – 1000 | J | J | – | – | Roto Sil |
+| 795389 | 15 | 1601 – 2000 | 1780 | 200 / 200 | 801 – 1000 | J | J | 2 | E | Roto Sil |
+| 289866 | 15 | 2001 – 2400 | 2180 | 200 / 200 | 1001 – 1200 | J | J | – | – | Roto Sil |
+| 795392 | 15 | 2001 – 2400 | 2180 | 200 / 200 | 1001 – 1200 | J | J | 4 | E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 224)
+
+**Pour les HFF au-delà de 2 401 mm, un verrouilleur médian est nécessaire** [1 p. 224].
+
+## Hauteur de poignée milieu / variable, sécurité, fouillot 15 mm
+
+![Crémone OB hauteur de poignée milieu / variable sécurité, fouillot 15 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-hp-variable-f15-securite.png)
+
+Crémones OB à hauteur de poignée milieu / variable, version sécurité, axe de fouillot 15 mm ;
+259717, sans galet, est dans les deux tableaux [1 p. 224] :
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de poignée (mm) | Anti-fausse manœuvre | Loqueteau | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | ---: | --- | ---: | ---: | --- | :---: | :---: | :---: | :---: | --- |
+| 259717 | 15 | 310 – 620 | 430 | 100 / 100 | 155 – 225 | N | N | – | – | Roto Sil |
+| 355743 | 15 | 621 – 800 | 580 | 90 / 90 | 311 – 400 | J | N | 1 | V | Roto Sil |
+| 355744 | 15 | 801 – 1200 | 980 | 200 / 200 | 401 – 600 | J | N | 1 | V | Roto Sil |
+| 355745 | 15 | 1201 – 1600 | 1380 | 200 / 200 | 601 – 800 | J | N | 2 | V | Roto Sil |
+| 795390 | 15 | 1601 – 2000 | 1780 | 200 / 200 | 801 – 1000 | J | J | 2 | V | Roto Sil |
+| 795393 | 15 | 2001 – 2400 | 2180 | 200 / 200 | 1001 – 1200 | J | J | 4 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 224)
+
+**Pour les HFF au-delà de 2 401 mm, un verrouilleur médian est nécessaire** [1 p. 224].
+
+Les nomenclatures de montage KSR donnent à 259717 la plage 310 – 450 mm (contre 310 – 620 mm ici),
+et listent 259718 (451 – 620 mm, 400 mm) et 566500 (540 – 620 mm, 515 mm, 1 galet V) que ces
+tableaux n'ont pas : entrée **CTR-116**. Leurs tables sont plus bas, section *Crémones OB, fouillot
+15 mm, hauteur de poignée variable*.
+
+# Crémone OB, hauteur de poignée centrée / variable, fouillots de 25, 30, 35, 40, 45, 50 mm
+
+Comme pour la hauteur de poignée fixe, la crémone se compose d'une têtière de crémone dans
+laquelle se monte un boîtier de crémone ou un boîtier de serrure choisi par l'axe de fouillot
+[1 p. 227].
+
+## Schémas de perçage et de fraisage, fouillots 25 à 50 mm
+
+Les schémas non verrouillable (fenêtres et portes ouvertes vers l'extérieur) et verrouillable
+(portes ouvertes vers l'intérieur) sont les mêmes, avec les mêmes cotes, que ceux de la crémone
+OB KSR à hauteur de poignée fixe, fouillots 25 à 50 mm, plus haut [1 p. 225-226].
+
+![Crémone OB fouillots 25 à 50 mm, schéma de perçage et de fraisage non verrouillable](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f25-50-schema-non-verrouillable.png)
+
+![Crémone OB fouillots 25 à 50 mm, schéma de perçage et de fraisage verrouillable](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f25-50-schema-verrouillable.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 225-226)
+
+## Configuration, poignée centrée / variable
+
+Même dessin qu'à la hauteur de poignée fixe : têtière [1], boîtier de crémone [2] monté en [A],
+boîtier de serrure [3] monté en [B] [1 p. 227].
+
+![Crémone OB fouillots 25 à 50 mm, configuration têtière et boîtiers](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f25-50-configuration.png)
+
+| Repère | Signification | Page du catalogue |
+| --- | --- | --- |
+| [1] | Têtière de crémone - Poignée centrée/variable | à partir de la p. 227 |
+| [2] | Boîtier de crémone | à partir de la p. 229 |
+| [3] | Boîtier de serrure - Cylindre profilé ; Boîtier de serrure - Cylindre rond (non représenté) | à partir de la p. 230 |
+| [A] | Boîtier de crémone montable dans têtière de crémone | - |
+| [B] | Boîtier de serrure montable dans têtière de crémone | - |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 227)
+
+**Le boîtier de serrure nécessite une têtière de crémone avec la caractéristique produit
+Loqueteau « J »** [1 p. 227, 228].
+
+## Têtière de crémone, poignée centrée / variable
+
+![Têtière de crémone poignée centrée / variable, fouillots 25 à 50 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/tetiere-cremone-hp-variable-f25-50.png)
+
+Têtières de crémone à poignée centrée / variable, une ligne par référence, cotes en mm ; la
+première colonne est la classe de sécurité. Types d'ouverture : les six pictogrammes des crémones
+OB KSR (sans la fenêtre triangulaire) [1 p. 227-228] :
+
+| N° de matériel | Classe de sécurité | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de poignée (mm) | Anti-fausse manœuvre | Loqueteau | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | --- | ---: | ---: | --- | :---: | :---: | :---: | :---: | --- |
+| 840759 | Sécurité de base | 430 – 920 | 700 | 200 / 200 | 215 – 460 | N | N | – | – | Roto Sil |
+| 788318 | Sécurité de base | 621 – 800 | 580 | 90 / 90 | 311 – 400 | J | N | 1 | E | Roto Sil |
+| 788320 | Sécurité de base | 801 – 1200 | 980 | 200 / 200 | 401 – 600 | J | N | 1 | E | Roto Sil |
+| 788322 | Sécurité de base | 1201 – 1600 | 1380 | 200 / 200 | 601 – 800 | J | N | 2 | E | Roto Sil |
+| 788324 | Sécurité de base | 1601 – 2000 | 1780 | 200 / 200 | 801 – 1000 | J | J | 2 | E | Roto Sil |
+| 788326 | Sécurité de base | 2001 – 2400 | 2180 | 200 / 200 | 1001 – 1200 | J | J | 4 | E | Roto Sil |
+| 833746 | Sécurité | 621 – 800 | 580 | 90 / 90 | 311 – 400 | J | N | 1 | V | Roto Sil |
+| 833747 | Sécurité | 801 – 1200 | 980 | 200 / 200 | 401 – 600 | J | N | 1 | V | Roto Sil |
+| 833748 | Sécurité | 1201 – 1600 | 1380 | 200 / 200 | 601 – 800 | J | N | 2 | V | Roto Sil |
+| 795365 | Sécurité | 1601 – 2000 | 1780 | 200 / 200 | 801 – 1000 | J | J | 2 | V | Roto Sil |
+| 795367 | Sécurité | 2001 – 2400 | 2180 | 200 / 200 | 1001 – 1200 | J | J | 4 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 227-228)
+
+Boîtier de crémone adapté : à partir de la p. 229 ; boîtier de serrure adapté : à partir de la
+p. 230. **Pour les HFF au-delà de 2 401 mm, un verrouilleur médian est nécessaire** [1 p. 228].
+
+## Têtière de crémone, poignée centrée / variable, ouvrant secondaire
+
+![Têtière de crémone poignée centrée / variable, ouvrant secondaire](/assets/quincaillerie/roto-nx-catalogue/cremones/tetiere-cremone-hp-variable-f25-50-ouvrant-secondaire.png)
+
+Têtière du vantail secondaire (ouvrant semi-fixe) d'une fenêtre à deux vantaux ; un seul
+pictogramme de type d'ouverture, fenêtre à la française / oscillo-battante à ouvrant semi-fixe.
+Les colonnes sont différentes : pas d'anti-fausse manœuvre ni de galets, mais une colonne
+**nombre de gâches soudées** (pictogramme de la légende, p. 11). **La butée pour anti-fausse
+manœuvre est intégrée** [1 p. 11, 228].
+
+| N° de matériel | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de poignée (mm) | Loqueteau | Nombre de gâches soudées | Traitement de surface |
+| --- | --- | ---: | ---: | --- | :---: | :---: | --- |
+| 788319 | 801 – 1200 | 980 | 200 / 200 | 401 – 600 | N | 1 | Roto Sil |
+| 788321 | 1201 – 1600 | 1380 | 200 / 200 | 601 – 800 | N | 2 | Roto Sil |
+| 788323 | 1601 – 2000 | 1780 | 200 / 200 | 801 – 1000 | J | 2 | Roto Sil |
+| 788325 | 2001 – 2400 | 2180 | 200 / 200 | 1001 – 1200 | J | 4 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 228)
+
+Boîtier de crémone adapté : à partir de la p. 229 ; boîtier de serrure adapté : à partir de la
+p. 230 ; le boîtier de serrure nécessite une têtière avec Loqueteau « J ». **Pour les HFF
+au-delà de 2 401 mm, un verrouilleur médian est nécessaire** [1 p. 228].
+
+## Boîtier de crémone et boîtier de serrure, poignée centrée / variable
+
+Les boîtiers des têtières à poignée centrée / variable sont les mêmes références que ceux de la
+hauteur de poignée fixe, avec les mêmes dessins : boîtiers de crémone 787675 (25 mm), 787677
+(30), 787678 (35), 787679 (40), 787680 (45), 787681 (50), types d'ouverture des crémones OB KSR
+[1 p. 229] ; boîtiers de serrure à « cylindre de profil » 787656, 787658, 787659, 787660, 787661,
+787663 et à cylindre rond 788164, 788275, 788276, 788277, 788278, 788279 (25 à 50 mm, Roto Sil),
+types d'ouverture oscillo-battante, française, française / oscillo-battante à ouvrant semi-fixe
+[1 p. 230]. Les tables sont dans la section *Crémone OB KSR, hauteur de poignée fixe, fouillots
+de 25, 30, 35, 40, 45, 50 mm*.
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 229-230)
+
+# Crémone adaptée OB (solution spéciale)
+
+La crémone adaptée OB est la première des « solutions spéciales » de crémone OB. Elle se compose,
+comme les crémones à fouillot de 25 à 50 mm, d'une têtière de crémone dans laquelle se monte un
+boîtier de crémone ou un boîtier de serrure [1 p. 233].
+
+## Schémas de perçage et de fraisage, crémone adaptée OB
+
+Les schémas non verrouillable (fenêtres et portes ouvertes vers l'extérieur) et verrouillable
+(portes ouvertes vers l'intérieur) sont les mêmes, avec les mêmes cotes, que ceux de la crémone
+OB KSR à hauteur de poignée fixe, fouillots 25 à 50 mm : [A] fouillot, [B] hauteur de poignée,
+[C] en cas de volet roulant [1 p. 231-232].
+
+![Crémone adaptée OB, schéma de perçage et de fraisage non verrouillable](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f25-50-schema-non-verrouillable.png)
+
+![Crémone adaptée OB, schéma de perçage et de fraisage verrouillable](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f25-50-schema-verrouillable.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 231-232)
+
+## Configuration, crémone adaptée OB
+
+Même dessin que pour les fouillots 25 à 50 mm [1 p. 233].
+
+![Crémone adaptée OB, configuration têtière et boîtiers](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f25-50-configuration.png)
+
+| Repère | Signification | Page du catalogue |
+| --- | --- | --- |
+| [1] | têtière de crémone - Poignée centrale /variable | à partir de la p. 233 |
+| [2] | Boîtier de crémone | à partir de la p. 234 |
+| [3] | Boîtier de serrure - Cylindre profilé ; Boîtier de serrure - Cylindre rond (imprimé « Ill. ci-dessus) ») | à partir de la p. 235 |
+| [A] | Boîtier de crémone montable dans têtière de crémone | - |
+| [B] | Boîtier de serrure montable dans têtière de crémone | - |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 233)
+
+## Têtière de crémone, poignée milieu / variable, crémone adaptée OB
+
+![Têtière de crémone adaptée OB, poignée milieu / variable](/assets/quincaillerie/roto-nx-catalogue/cremones/tetiere-cremone-adaptee-ob.png)
+
+Une seule référence, pour les six types d'ouverture des crémones OB KSR ; la HFF va de 690 à
+2 400 mm, cotes en mm [1 p. 233] :
+
+| N° de matériel | Classe de sécurité | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Anti-fausse manœuvre | Traitement de surface |
+| --- | --- | --- | ---: | ---: | :---: | --- |
+| 799011 | Sécurité de base | 690 – 2400 | 680 | 200 | J | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 233)
+
+Boîtier de crémone adapté : à partir de la p. 234 ; boîtier de serrure adapté : à partir de la
+p. 235. La têtière 799011 s'emploie en association avec le verrouilleur raccordable (à partir de
+la p. 318) et le verrouilleur crémone (à partir de la p. 321) [1 p. 233].
+
+Les boîtiers de la crémone adaptée OB sont les mêmes références, avec les mêmes dessins et types
+d'ouverture, que ceux des fouillots 25 à 50 mm (section *Crémone OB KSR, hauteur de poignée fixe,
+fouillots de 25, 30, 35, 40, 45, 50 mm*) : boîtiers de crémone 787675, 787677, 787678, 787679,
+787680, 787681 (25 à 50 mm) [1 p. 234] ; boîtiers de serrure à cylindre profilé 787656, 787658,
+787659, 787660, 787661, 787663 et à cylindre rond 788164, 788275, 788276, 788277, 788278, 788279
+[1 p. 235].
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 234-235)
+
+# Crémone OB Confort (solution spéciale), axe de fouillot 15 mm
+
+La crémone OB Confort se choisit par la **largeur** fond de feuillure d'ouvrant (LFF), non par la
+hauteur ; un seul type d'ouverture, la fenêtre oscillo-battante. La fenêtre confort et sa
+ferrure sont décrites sur [Configurations Roto NX KSR — Confort et NT Designo
+II](/quincaillerie/roto-nx-ksr-confort-designo.md) [1 p. 236].
+
+## Schéma de perçage et de fraisage, crémone OB Confort
+
+Même schéma et mêmes cotes que la crémone OB KSR fouillot 15 mm (Ø 10 / Ø 12 / Ø 10 sur 43 mm,
+[B] 15 mm, [C] 28 mm, cote 12,3 mm, lumière de 65 mm minimum ; Ø 10 percé à 33 mm pour un
+recouvrement de 16 mm, vis M 5 x … DIN EN ISO 7046) [1 p. 236].
+
+![Crémone OB Confort, schéma de perçage et de fraisage](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f15-schema-percage-fraisage.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 236)
+
+## Axe de fouillot 15 mm, crémone OB Confort
+
+![Crémone OB Confort, fouillot 15 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-confort-f15.png)
+
+Crémones OB Confort, axe de fouillot 15 mm, cotes en mm [1 p. 236] :
+
+| N° de matériel | Axe de fouillot (mm) | LFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | ---: | --- | ---: | ---: | :---: | :---: | --- |
+| 307029 | 15 | 520 – 700 | 490 | 180 | – | – | Roto Sil |
+| 307030 | 15 | 701 – 900 | 690 | 200 | 1 | E | Roto Sil |
+| 309399 | 15 | 701 – 900 | 690 | 200 | 1 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 236)
+
+« Entre HFF 901 – 1400 mm avec allonge de crémone » : la note est imprimée en HFF alors que la
+colonne du tableau est la largeur ; la nomenclature de montage de l'OB Confort porte la plage
+901 – 1 400 mm en largeur en feuillure, 307030 avec rallonges (entrée **INC-289**). Rehausse adaptée avec blocage de commutation : à partir de la p. 415
+[1 p. 236].
+
+# Crémone verrou, axe de fouillot 8 mm
+
+La **crémone verrou** est une famille à part du chapitre des crémones, pour les types
+d'ouverture fenêtre ouvrant à la française (hauteur de poignée constante) et fenêtre ouvrant à la
+française ou basculante (hauteur de poignée centrale / variable) : ses tableaux de crémones et de
+têtières ne portent pas le
+pictogramme de la fenêtre oscillo-battante [1 p. 238-243].
+
+## Schéma de perçage et de fraisage, crémone verrou fouillot 8 mm
+
+Même schéma et mêmes cotes que la crémone OB KSR fouillot 8 mm (Ø 10 / Ø 12 / Ø 10 sur 43 mm,
+[B] 8 mm, [C] 20 mm, cote 12,3 mm, lumière de 30 mm minimum ; Ø 10 percé à 33 mm pour un
+recouvrement de 16 mm, vis M 5 x … DIN EN ISO 7046) [1 p. 237].
+
+![Crémone verrou fouillot 8 mm, schéma de perçage et de fraisage](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f8-schema-percage-fraisage.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 237)
+
+## Hauteur de poignée constante, crémone verrou fouillot 8 mm
+
+![Crémone verrou hauteur de poignée constante, fouillot 8 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-verrou-f8-hp-constante.png)
+
+Crémones verrou à hauteur de poignée constante, fouillot 8 mm, fenêtre ouvrant à la française,
+cotes en mm. Une colonne supplémentaire suit la hauteur de poignée ; son pictogramme est celui
+de la « position du ventilateur » de la légende (coupe de profil avec aérateur, cote fléchée
+depuis le bas, p. 11), et les valeurs (371, 180, 815 mm, « – » pour les deux premières lignes)
+sont transcrites sous cet intitulé sans que la planche dise ce qu'elles mesurent (entrée
+**VER-122**) [1 p. 11, 238] :
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de poignée (mm) | Colonne « position du ventilateur » (mm) | Anti-fausse manœuvre | Loqueteau | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | ---: | --- | ---: | ---: | ---: | ---: | :---: | :---: | :---: | :---: | --- |
+| 609213 | 8 | 400 – 500 | 500 | 100 | 170 | – | N | N | 2 | P | Roto Sil |
+| 609214 | 8 | 501 – 600 | 600 | 100 | 170 | – | N | N | 2 | P | Roto Sil |
+| 609235 | 8 | 601 – 700 | 700 | 100 | 263 | 371 | N | N | 2 | P | Roto Sil |
+| 609236 | 8 | 701 – 800 | 800 | 100 | 263 | 371 | N | N | 2 | P | Roto Sil |
+| 609237 | 8 | 801 – 900 | 900 | 100 | 413 | 180 | N | N | 2 | P | Roto Sil |
+| 609238 | 8 | 801 – 900 | 900 | 100 | 413 | 180 | N | N | 3 | P | Roto Sil |
+| 609239 | 8 | 901 – 1000 | 1000 | 100 | 413 | 180 | N | N | 2 | P | Roto Sil |
+| 609240 | 8 | 901 – 1000 | 1000 | 100 | 413 | 180 | N | N | 3 | P | Roto Sil |
+| 609241 | 8 | 1001 – 1100 | 1100 | 100 | 513 | 180 | N | N | 3 | P | Roto Sil |
+| 609242 | 8 | 1101 – 1200 | 1200 | 100 | 513 | 815 | N | N | 3 | P | Roto Sil |
+| 609243 | 8 | 1201 – 1300 | 1300 | 100 | 563 | 815 | N | N | 3 | P | Roto Sil |
+| 609244 | 8 | 1301 – 1400 | 1400 | 100 | 563 | 815 | N | N | 3 | P | Roto Sil |
+| 609245 | 8 | 1401 – 1500 | 1500 | 100 | 563 | 815 | N | N | 3 | P | Roto Sil |
+| 609246 | 8 | 1501 – 1600 | 1600 | 100 | 563 | 815 | N | N | 3 | P | Roto Sil |
+| 609247 | 8 | 1601 – 1700 | 1700 | 100 | 563 | 815 | N | N | 3 | P | Roto Sil |
+| 609248 | 8 | 1701 – 1850 | 1850 | 100 | 563 | 815 | N | N | 4 | P | Roto Sil |
+| 795439 | 8 | 1851 – 2050 | 2050 | 100 | 1000 | 815 | N | J | 4 | P | Roto Sil |
+| 795440 | 8 | 2051 – 2250 | 2250 | 100 | 1000 | 815 | N | J | 4 | P | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 238)
+
+**Pour les crémones avec hauteur de poignée de 170 mm, il n'est pas possible d'accoster
+en-dessous un renvoi d'angle** [1 p. 238].
+
+## Hauteur de poignée centrale / variable, crémone verrou fouillot 8 mm
+
+![Crémone verrou hauteur de poignée centrale / variable, fouillot 8 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-verrou-f8-hp-variable.png)
+
+Crémones verrou à hauteur de poignée centrale / variable, fouillot 8 mm ; types d'ouverture
+fenêtre ouvrant à la française et fenêtre basculante ; cotes en mm [1 p. 238] :
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de poignée (mm) | Anti-fausse manœuvre | Loqueteau | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | ---: | --- | ---: | ---: | --- | :---: | :---: | :---: | :---: | --- |
+| 260136 | 8 | 238 – 390 | 238 | 0 / 0 | 88 – 119 | N | N | 1 | E | Roto Sil |
+| 260137 | 8 | 391 – 500 | 500 | 55 / 55 | 125 – 250 | N | N | 1 | E | Roto Sil |
+| 260138 | 8 | 501 – 800 | 800 | 150 / 150 | 251 – 400 | N | N | 2 | E | Roto Sil |
+| 260139 | 8 | 801 – 1100 | 1100 | 150 / 150 | 401 – 550 | N | N | 3 | E | Roto Sil |
+| 260140 | 8 | 1101 – 1400 | 1400 | 150 / 150 | 551 – 700 | N | N | 3 | E | Roto Sil |
+| 795425 | 8 | 1401 – 1800 | 1800 | 200 / 200 | 701 – 900 | N | J | 4 | E | Roto Sil |
+| 795427 | 8 | 1801 – 2400 | 2400 | 300 / 300 | 901 – 1200 | N | J | 4 | E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 238)
+
+Les nomenclatures de l'ouvrant à soufflet donnent pour 260136 la hauteur de poignée « min. 88 »
+au lieu de la plage 88 – 119 mm, voir
+[Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md).
+
+# Crémone verrou, axe de fouillot 15 mm
+
+## Schéma de perçage et de fraisage, crémone verrou fouillot 15 mm
+
+Même schéma et mêmes cotes que la crémone OB KSR fouillot 15 mm (Ø 10 / Ø 12 / Ø 10 sur 43 mm,
+[B] 15 mm, [C] 28 mm, cote 12,3 mm, lumière de 65 mm minimum ; Ø 10 percé à 33 mm pour un
+recouvrement de 16 mm, vis M 5 x … DIN EN ISO 7046) [1 p. 239].
+
+![Crémone verrou fouillot 15 mm, schéma de perçage et de fraisage](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f15-schema-percage-fraisage.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 239)
+
+## Hauteur de poignée constante, crémone verrou fouillot 15 mm
+
+![Crémone verrou hauteur de poignée constante, fouillot 15 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-verrou-f15-hp-constante.png)
+
+Crémones verrou à hauteur de poignée constante, fouillot 15 mm, fenêtre ouvrant à la française,
+cotes en mm ; même colonne « position du ventilateur » que pour le fouillot 8 mm (**VER-122**). Le
+tableau de la planche est un seul tableau de 32 lignes ; il est scindé ici selon le type de
+goujon, E puis P [1 p. 240].
+
+**Goujon E :**
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de poignée (mm) | Colonne « position du ventilateur » (mm) | Anti-fausse manœuvre | Loqueteau | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | ---: | --- | ---: | ---: | ---: | ---: | :---: | :---: | :---: | :---: | --- |
+| 600789 | 15 | 400 – 500 | 500 | 100 | 170 | – | N | N | 2 | E | Roto Sil |
+| 600790 | 15 | 501 – 600 | 600 | 100 | 170 | 308 | N | N | 2 | E | Roto Sil |
+| 600791 | 15 | 601 – 700 | 700 | 100 | 263 | 371 | N | N | 2 | E | Roto Sil |
+| 600792 | 15 | 701 – 800 | 800 | 100 | 263 | 371 | N | N | 2 | E | Roto Sil |
+| 600793 | 15 | 801 – 900 | 900 | 100 | 413 | 180 | N | N | 2 | E | Roto Sil |
+| 600794 | 15 | 901 – 1000 | 1000 | 100 | 413 | 180 | N | N | 2 | E | Roto Sil |
+| 600815 | 15 | 1001 – 1100 | 1100 | 100 | 513 | 180 | N | N | 3 | E | Roto Sil |
+| 600816 | 15 | 1101 – 1200 | 1200 | 100 | 513 | 815 | N | N | 3 | E | Roto Sil |
+| 600817 | 15 | 1201 – 1300 | 1300 | 100 | 563 | 815 | N | N | 3 | E | Roto Sil |
+| 600818 | 15 | 1301 – 1400 | 1400 | 100 | 563 | 815 | N | N | 3 | E | Roto Sil |
+| 600819 | 15 | 1401 – 1500 | 1500 | 100 | 563 | 815 | N | N | 3 | E | Roto Sil |
+| 600820 | 15 | 1501 – 1600 | 1600 | 100 | 563 | 815 | N | N | 3 | E | Roto Sil |
+| 600821 | 15 | 1601 – 1700 | 1700 | 100 | 563 | 815 | N | N | 3 | E | Roto Sil |
+| 600822 | 15 | 1701 – 1850 | 1850 | 100 | 563 | 815 | N | N | 4 | E | Roto Sil |
+
+**Goujon P :**
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de poignée (mm) | Colonne « position du ventilateur » (mm) | Anti-fausse manœuvre | Loqueteau | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | ---: | --- | ---: | ---: | ---: | ---: | :---: | :---: | :---: | :---: | --- |
+| 487230 | 15 | 400 – 500 | 500 | 100 | 170 | – | N | N | 2 | P | Roto Sil |
+| 487231 | 15 | 501 – 600 | 600 | 100 | 170 | 308 | N | N | 2 | P | Roto Sil |
+| 487232 | 15 | 601 – 700 | 700 | 100 | 263 | 371 | N | N | 2 | P | Roto Sil |
+| 487233 | 15 | 701 – 800 | 800 | 100 | 263 | 371 | N | N | 2 | P | Roto Sil |
+| 487234 | 15 | 801 – 900 | 900 | 100 | 413 | 180 | N | N | 2 | P | Roto Sil |
+| 487245 | 15 | 801 – 900 | 900 | 100 | 413 | 180 | N | N | 3 | P | Roto Sil |
+| 487246 | 15 | 901 – 1000 | 1000 | 100 | 413 | 180 | N | N | 2 | P | Roto Sil |
+| 487247 | 15 | 901 – 1000 | 1000 | 100 | 413 | 180 | N | N | 3 | P | Roto Sil |
+| 487248 | 15 | 1001 – 1100 | 1100 | 100 | 513 | 180 | N | N | 3 | P | Roto Sil |
+| 487249 | 15 | 1101 – 1200 | 1200 | 100 | 513 | 815 | N | N | 3 | P | Roto Sil |
+| 487250 | 15 | 1201 – 1300 | 1300 | 100 | 563 | 815 | N | N | 3 | P | Roto Sil |
+| 487251 | 15 | 1301 – 1400 | 1400 | 100 | 563 | 815 | N | N | 3 | P | Roto Sil |
+| 487252 | 15 | 1401 – 1500 | 1500 | 100 | 563 | 815 | N | N | 3 | P | Roto Sil |
+| 487253 | 15 | 1501 – 1600 | 1600 | 100 | 563 | 815 | N | N | 3 | P | Roto Sil |
+| 487254 | 15 | 1601 – 1700 | 1700 | 100 | 563 | 815 | N | N | 3 | P | Roto Sil |
+| 487255 | 15 | 1701 – 1850 | 1850 | 100 | 563 | 815 | N | N | 4 | P | Roto Sil |
+| 795436 | 15 | 1851 – 2050 | 2050 | 100 | 1000 | 815 | N | J | 4 | P | Roto Sil |
+| 795438 | 15 | 2051 – 2250 | 2250 | 100 | 1000 | 815 | N | J | 4 | P | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 240)
+
+## Hauteur de poignée centrale / variable, crémone verrou fouillot 15 mm
+
+![Crémone verrou hauteur de poignée centrale / variable, fouillot 15 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-verrou-f15-hp-variable.png)
+
+Crémones verrou à hauteur de poignée centrale / variable, fouillot 15 mm ; types d'ouverture
+fenêtre ouvrant à la française et fenêtre basculante ; cotes en mm [1 p. 241] :
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de poignée (mm) | Anti-fausse manœuvre | Loqueteau | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | ---: | --- | ---: | ---: | --- | :---: | :---: | :---: | :---: | --- |
+| 260129 | 15 | 180 – 250 | 180 | 0 / 0 | 90 – 125 | N | N | 1 | E | Roto Sil |
+| 288093 | 15 | 180 – 250 | 180 | 0 / 0 | 90 – 125 | N | N | 1 | P | Roto Sil |
+| 260130 | 15 | 251 – 500 | 500 | 125 / 125 | 126 – 250 | N | N | 1 | E | Roto Sil |
+| 288094 | 15 | 251 – 500 | 500 | 125 / 125 | 126 – 250 | N | N | 1 | P | Roto Sil |
+| 260131 | 15 | 501 – 800 | 800 | 150 / 150 | 251 – 400 | N | N | 2 | E | Roto Sil |
+| 288095 | 15 | 501 – 800 | 800 | 150 / 150 | 251 – 400 | N | N | 2 | P | Roto Sil |
+| 260132 | 15 | 801 – 1100 | 1100 | 150 / 150 | 401 – 550 | N | N | 3 | E | Roto Sil |
+| 288096 | 15 | 801 – 1100 | 1100 | 150 / 150 | 401 – 550 | N | N | 3 | P | Roto Sil |
+| 260133 | 15 | 1101 – 1400 | 1400 | 150 / 150 | 551 – 700 | N | N | 3 | E | Roto Sil |
+| 288097 | 15 | 1101 – 1400 | 1400 | 150 / 150 | 551 – 700 | N | N | 3 | P | Roto Sil |
+| 795413 | 15 | 1401 – 1800 | 1800 | 200 / 200 | 701 – 900 | N | J | 4 | E | Roto Sil |
+| 795414 | 15 | 1401 – 1800 | 1800 | 200 / 200 | 701 – 900 | N | J | 4 | P | Roto Sil |
+| 795415 | 15 | 1801 – 2400 | 2400 | 300 / 300 | 901 – 1200 | N | J | 4 | E | Roto Sil |
+| 795416 | 15 | 1801 – 2400 | 2400 | 300 / 300 | 901 – 1200 | N | J | 4 | P | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 241)
+
+## Hauteur de poignée en bas, crémone verrou fouillot 15 mm
+
+![Crémone verrou hauteur de poignée en bas, fouillot 15 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-verrou-f15-hp-en-bas.png)
+
+Une seule référence, dessinée en équerre (montant et traverse basse, le boîtier sur la
+traverse) ; fenêtre ouvrant à la française ; cotes en mm [1 p. 241] :
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de poignée (mm) | Anti-fausse manœuvre | Loqueteau | Renvoi d'angle intégré | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | ---: | --- | ---: | ---: | ---: | :---: | :---: | :---: | :---: | :---: | --- |
+| 610176 | 15 | 230 – 800 | 230 | 0 / 0 | 120 | N | N | J | 1 / 1 | P / P | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 241)
+
+# Crémone verrou, fouillots de 25, 30, 35, 40, 45, 50 mm
+
+Le titre de la section est imprimé « Fouillotss de 25, 30, 35, 40, 45, 50 mm » [1 p. 242].
+
+## Schéma de perçage et de fraisage, crémone verrou fouillots 25 à 50 mm
+
+Un seul schéma, non verrouillable (fenêtres et portes ouvertes vers l'extérieur), identique à
+celui de la crémone OB KSR fouillots 25 à 50 mm : [A] fouillot, [B] hauteur de poignée
+[1 p. 242].
+
+![Crémone verrou fouillots 25 à 50 mm, schéma de perçage et de fraisage](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-ob-ksr-hp-fixe-f25-50-schema-non-verrouillable.png)
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 242)
+
+## Configuration, crémone verrou fouillots 25 à 50 mm
+
+La crémone verrou à fouillot de 25 à 50 mm n'a que le boîtier de crémone : la loupe montre le
+boîtier de crémone [2] monté dans la têtière [1] en [A], sans boîtier de serrure [1 p. 243].
+
+![Crémone verrou fouillots 25 à 50 mm, configuration](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-verrou-f25-50-configuration.png)
+
+| Repère | Signification | Page du catalogue |
+| --- | --- | --- |
+| [1] | Têtière de crémone - Poignée centrée/variable | à partir de la p. 243 |
+| [2] | Boîtier de crémone | à partir de la p. 244 |
+| [A] | Boîtier de crémone montable dans têtière de crémone | - |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 243)
+
+## Têtière de crémone verrou, poignée centrée / variable
+
+![Têtière de crémone verrou poignée centrée / variable, fouillots 25 à 50 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/tetiere-cremone-verrou-hp-variable-f25-50.png)
+
+Têtières de crémone verrou à poignée centrée / variable ; types d'ouverture fenêtre ouvrant à la
+française et fenêtre basculante ; cotes en mm. Boîtier de crémone adapté : à partir de la p. 244
+[1 p. 243] :
+
+| N° de matériel | Classe de sécurité | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de poignée (mm) | Anti-fausse manœuvre | Loqueteau | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | --- | ---: | ---: | --- | :---: | :---: | :---: | :---: | --- |
+| 788328 | Sécurité de base | 350 – 500 | 500 | 75 / 75 | 175 – 250 | N | N | 1 | E | Roto Sil |
+| 788329 | Sécurité de base | 501 – 800 | 800 | 150 / 150 | 251 – 400 | N | N | 2 | E | Roto Sil |
+| 788330 | Sécurité de base | 801 – 1100 | 1100 | 150 / 150 | 401 – 550 | N | N | 3 | E | Roto Sil |
+| 788331 | Sécurité de base | 1101 – 1400 | 1400 | 150 / 150 | 551 – 700 | N | N | 3 | E | Roto Sil |
+| 788332 | Sécurité de base | 1401 – 1800 | 1800 | 200 / 200 | 701 – 900 | N | N | 4 | E | Roto Sil |
+| 788333 | Sécurité de base | 1801 – 2400 | 2400 | 300 / 300 | 901 – 1200 | N | N | 4 | E | Roto Sil |
+| 795398 | Sécurité | 1401 – 1800 | 1800 | 200 / 200 | 701 – 900 | N | N | 4 | P | Roto Sil |
+| 795399 | Sécurité | 1801 – 2400 | 2400 | 300 / 300 | 901 – 1200 | N | N | 4 | P | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 243)
+
+## Boîtier de crémone, crémone verrou
+
+Mêmes références et même dessin que les boîtiers de crémone des fouillots 25 à 50 mm (787675,
+787677, 787678, 787679, 787680, 787681 pour 25 à 50 mm, Roto Sil), avec les six types
+d'ouverture des crémones OB KSR [1 p. 244].
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 244)
+
+# Raccords de crémone
+
+Le **raccord de crémone** est une pièce courte (110 mm quand la longueur est imprimée) listée par
+type de fenêtre : KSR, sortie de tringle, ouvrant basculant, oscillo-battant latéral, plein
+cintre, ouvrant semi-fixe. La première colonne de chaque tableau porte le pictogramme
+« Désignation » (bulle), avec le nom de la pièce en clair ; la colonne à pictogramme « Sortie de
+tringle » (deux tringles décalées, cote fléchée) porte une cote en mm (11, 14 ou 18) ; la colonne
+à gâche et « # » est le nombre de gâches soudées [1 p. 10-11, 245-247].
+
+Dans les nomenclatures de montage KSR, plusieurs de ces références sont appelées « Prolongateur
+de 110 mm » (794225, 382716, 245688), voir
+[Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md).
+
+## Raccord de crémone KSR
+
+![Raccord de crémone KSR avec sortie de tringle](/assets/quincaillerie/roto-nx-catalogue/cremones/raccord-cremone-ksr-avec-sortie-de-tringle.png)
+
+![Raccord de crémone KSR sans sortie de tringle](/assets/quincaillerie/roto-nx-catalogue/cremones/raccord-cremone-ksr-sans-sortie-de-tringle.png)
+
+Types d'ouverture : fenêtre oscillo-battante et fenêtre à la française / oscillo-battante à
+ouvrant semi-fixe. Le premier dessin est en équerre (retour vertical à gauche), le second droit
+[1 p. 245].
+
+| N° de matériel | Désignation | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- |
+| 628290 | Raccord de crémone KSR avec sortie de tringle | 110 | 1 | P | Roto Sil |
+| 794225 | Raccord de crémone KSR sans sortie de tringle | 110 | 1 | E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 245)
+
+## Raccord de crémone, sortie de tringle
+
+![Raccord de crémone avec sortie de tringle et inverseur](/assets/quincaillerie/roto-nx-catalogue/cremones/raccord-cremone-sortie-de-tringle-avec-inverseur.png)
+
+![Raccord de crémone avec sortie de tringle sans inverseur](/assets/quincaillerie/roto-nx-catalogue/cremones/raccord-cremone-sortie-de-tringle-sans-inverseur.png)
+
+Avec inverseur : type d'ouverture fenêtre ouvrant à la française. Sans inverseur : fenêtre
+ouvrant à la française et fenêtre à la française / oscillo-battante à ouvrant semi-fixe
+[1 p. 245].
+
+| N° de matériel | Désignation | Longueur (mm) | Sortie de tringle (mm) | Traitement de surface |
+| --- | --- | ---: | ---: | --- |
+| 312032 | Raccord de crémone avec sortie de tringle et inverseur | 110 | 11 | Roto Sil |
+| 312033 | Raccord de crémone avec sortie de tringle et inverseur | 110 | 18 | Roto Sil |
+| 457626 | Raccord de crémone avec sortie de tringle sans inverseur | 110 | 11 | Roto Sil |
+| 349187 | Raccord de crémone avec sortie de tringle sans inverseur | 110 | 14 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 245)
+
+## Raccord de crémone, ouvrant basculant
+
+![Raccord de crémone d'ouvrant soufflet](/assets/quincaillerie/roto-nx-catalogue/cremones/raccord-cremone-ouvrant-soufflet.png)
+
+Section « Ouvrant basculant » ; la pièce est désignée « Raccord de crémone d'ouvrant soufflet ».
+Types d'ouverture : fenêtre ouvrant à la française et fenêtre basculante [1 p. 246].
+
+| N° de matériel | Désignation | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | :---: | :---: | --- |
+| 382716 | Raccord de crémone d'ouvrant soufflet | 1 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 246)
+
+## Raccord de crémone, oscillo-battant latéral
+
+![Raccord de crémone pour oscillo-battant latéral](/assets/quincaillerie/roto-nx-catalogue/cremones/raccord-cremone-oscillo-battant-lateral.png)
+
+Un seul pictogramme de type d'ouverture, dessiné comme celui de la fenêtre oscillo-battante. La
+colonne à pictogramme « Position » (carré entouré de quatre flèches) donne la position de la
+pièce, haut ou bas [1 p. 11, 246].
+
+| N° de matériel | Désignation | Position | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | --- | :---: | :---: | --- |
+| 735563 | Raccord de crémone pour oscillo-battant latéral | Haut | 1 | E | Roto Sil |
+| 735562 | Raccord de crémone pour oscillo-battant latéral | Bas | 1 | E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 246)
+
+## Raccord de crémone, plein cintre
+
+![Raccord de crémone cintré](/assets/quincaillerie/roto-nx-catalogue/cremones/raccord-cremone-cintre.png)
+
+Type d'ouverture : fenêtre plein cintre oscillo-battante [1 p. 246].
+
+| N° de matériel | Désignation | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | :---: | :---: | --- |
+| 245688 | Raccord de crémone cintré | 1 | E | Roto Sil |
+| 245687 | Raccord de crémone cintré | 1 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 246)
+
+## Raccord de crémone, ouvrant semi-fixe
+
+![Raccord de crémone semi-fixe pour raccord de crémone KSR avec sortie](/assets/quincaillerie/roto-nx-catalogue/cremones/raccord-cremone-semi-fixe-ksr-avec-sortie.png)
+
+![Raccord de crémone semi-fixe pour raccord de crémone KSR sans sortie de tringle](/assets/quincaillerie/roto-nx-catalogue/cremones/raccord-cremone-semi-fixe-ksr-sans-sortie-de-tringle.png)
+
+Raccords du vantail semi-fixe ; type d'ouverture : fenêtre à la française / oscillo-battante à
+ouvrant semi-fixe [1 p. 247].
+
+| N° de matériel | Désignation | Longueur (mm) | Sortie de tringle (mm) | Nombre de gâches soudées | Traitement de surface |
+| --- | --- | ---: | ---: | :---: | --- |
+| 628701 | Raccord de crémone Semi-fixe pour raccord de crémone KSR avec sortie | 110 | 11 | 1 | Roto Sil |
+| 630573 | Raccord de crémone Semi-fixe pour raccord de crémone KSR sans sortie de tringle | 110 | 11 | 1 | Roto Sil |
+| 630572 | Raccord de crémone Semi-fixe pour raccord de crémone KSR sans sortie de tringle | 110 | 18 | 1 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 247)
+
+**Ces trois raccords sont utilisables uniquement en association avec une crémone de semi-fixe
+standard** [1 p. 247].
+
+# Crémone de semi-fixe standard
+
+La **crémone de semi-fixe** est la crémone du vantail secondaire d'une fenêtre à deux vantaux,
+manœuvrée par un levier ; le vantail **semi-fixe** est celui qui ne s'ouvre qu'après l'ouvrant
+principal (voir le [glossaire](/reference/glossaire.md)). Le catalogue en donne trois familles :
+standard (section 4.6.1), Plus (4.6.2) et à levier séparé (4.6.3). La crémone de semi-fixe se
+choisit avec la crémone OB de l'ouvrant principal et les renvois d'angle des deux vantaux, dans
+des tableaux de « possibilités de combinaisons » [1 p. 211, 248].
+
+La **hauteur du levier** est, pour la crémone de semi-fixe, ce qu'est la hauteur de poignée pour
+la crémone OB. Son pictogramme d'en-tête est « hauteur de levier fixe » (levier sur un montant,
+flèche vers le haut) ou « hauteur de levier milieu/variable » (flèche vers le haut et vers le
+bas), voir [Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md)
+[1 p. 11, 250, 253].
+
+## Crémone de semi-fixe standard KSR, hauteur de poignée fixe : possibilités de combinaisons
+
+La vue ci-dessous montre les pièces d'une fenêtre à deux vantaux équipée d'une crémone de
+semi-fixe standard KSR : à gauche le vantail semi-fixe et sa crémone [1], à droite l'ouvrant
+principal et sa crémone OB KSR à hauteur de poignée fixe [3], chacun avec en haut un verrouilleur
+([2], [4]), et dans les angles le renvoi d'angle standard [5] ou le renvoi d'angle
+spécial court [6] [1 p. 248].
+
+![Crémone de semi-fixe standard KSR, hauteur de poignée fixe, possibilités de combinaisons](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-semi-fixe-standard-hp-fixe-combinaisons.png)
+
+Les numéros encadrés de la vue renvoient à cette légende [1 p. 248] :
+
+| Repère | Signification |
+| --- | --- |
+| [1] | Crémone de semi-fixe standard KSR |
+| [2] | Verrouilleur de têtière |
+| [3] | Crémone OB KSR – hauteur de poignée fixe |
+| [4] | Verrouilleur standard |
+| [5] | Renvoi d'angle standard |
+| [6] | Renvoi d'angle spécial court |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 248)
+
+**Détermination de la crémone** [1 p. 248] :
+
+1. Déterminer la hauteur fond de feuillure d'ouvrant (HFF) de l'élément. INFO : consulter les
+   possibilités de combinaison et le renvoi d'angle requis [5] + [6] dans les tableaux
+   ci-dessous.
+2. Sélectionner la crémone de semi-fixe standard KSR [1] à l'aide de la hauteur fond de feuillure
+   d'ouvrant (HFF) et de la longueur de l'élément. En option : déterminer le verrouilleur de
+   têtière [2], à partir de la p. 322.
+3. Sélectionner la crémone OB KSR - hauteur de poignée fixe [3] à l'aide de la longueur de
+   l'élément : fouillot 8 mm, fouillot 15 mm ou fouillots 25, 30, 35, 40, 45, 50 mm, à partir de
+   la p. 212 (sections *Crémone OB KSR, hauteur de poignée fixe* plus haut sur cette page). En
+   option : déterminer le verrouilleur standard [4], à partir de la p. 318.
+
+Les deux tableaux suivants donnent, pour chaque plage de HFF : la longueur et la hauteur du
+levier de la crémone de semi-fixe standard KSR ; la longueur, la hauteur de poignée et
+l'anti-fausse manœuvre (AFM, J / N, **INC-288**) de la crémone OB KSR ; et le renvoi d'angle de
+chaque vantail, imprimé « Renvoi d'angle standard → à partir de la page 266 » ou « Renvoi d'angle
+spécial court → à partir de la page 267 » (voir
+[Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md)).
+Une longueur et une hauteur de levier imprimées une seule fois pour deux plages (cellule
+fusionnée) sont répétées sur chaque ligne [1 p. 249].
+
+**Axe de fouillot 8 mm** [1 p. 249] :
+
+<table>
+<thead>
+<tr><th>Champ d'application</th><th colspan="3">Crémone de semi-fixe standard KSR</th><th colspan="4">Crémone OB KSR</th></tr>
+<tr><th>HFF (mm)</th><th>Longueur de l'élément (mm)</th><th>Hauteur du levier (mm)</th><th>Type de renvoi d'angle</th><th>Longueur de l'élément (mm)</th><th>Hauteur de la poignée (mm)</th><th>AFM</th><th>Type de renvoi d'angle</th></tr>
+</thead>
+<tbody>
+<tr><td>431 – 510</td><td>600</td><td>233</td><td>Renvoi d'angle spécial court (p. 267)</td><td>490</td><td>120</td><td>N</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>511 – 600</td><td>600</td><td>233</td><td>Renvoi d'angle standard (p. 266)</td><td>600</td><td>170</td><td>N</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>601 – 800</td><td>690</td><td>325</td><td>Renvoi d'angle standard (p. 266)</td><td>690</td><td>263</td><td>N</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>801 – 1 000</td><td>890</td><td>335</td><td>Renvoi d'angle standard (p. 266)</td><td>890</td><td>413</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 001 – 1 200</td><td>1 090</td><td>335</td><td>Renvoi d'angle standard (p. 266)</td><td>1 090</td><td>513</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 201 – 1 400</td><td>1 290</td><td>335</td><td>Renvoi d'angle standard (p. 266)</td><td>1 290</td><td>563</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 401 – 1 600</td><td>1 490</td><td>335</td><td>Renvoi d'angle standard (p. 266)</td><td>1 490</td><td>563</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 601 – 1 800</td><td>1 690</td><td>335</td><td>Renvoi d'angle standard (p. 266)</td><td>1 690</td><td>563 / 1 000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 801 – 2 000</td><td>1 890</td><td>640</td><td>Renvoi d'angle standard (p. 266)</td><td>1 890</td><td>1 000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>2 001 – 2 200</td><td>2 090</td><td>640</td><td>Renvoi d'angle standard (p. 266)</td><td>2 090</td><td>1 000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>2 201 – 2 400</td><td>2 290</td><td>640</td><td>Renvoi d'angle standard (p. 266)</td><td>2 290</td><td>1 000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+</tbody>
+</table>
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 249)
+
+**Pour les HFF au-delà de 2 401 mm, un verrouilleur médian est nécessaire** [1 p. 249].
+
+**Fouillot 15 mm et tailles supérieures** [1 p. 249] :
+
+<table>
+<thead>
+<tr><th>Champ d'application</th><th colspan="3">Crémone de semi-fixe standard KSR</th><th colspan="4">Crémone OB KSR</th></tr>
+<tr><th>HFF (mm)</th><th>Longueur de l'élément (mm)</th><th>Hauteur du levier (mm)</th><th>Type de renvoi d'angle</th><th>Longueur de l'élément (mm)</th><th>Hauteur de la poignée (mm)</th><th>AFM</th><th>Type de renvoi d'angle</th></tr>
+</thead>
+<tbody>
+<tr><td>280 – 370</td><td>445</td><td>156</td><td>Renvoi d'angle spécial court (p. 267)</td><td>460</td><td>120</td><td>N</td><td>Renvoi d'angle spécial court (p. 267)</td></tr>
+<tr><td>371 – 555</td><td>445</td><td>156</td><td>Renvoi d'angle standard (p. 266)</td><td>460</td><td>120</td><td>N</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>431 – 510</td><td>600</td><td>195</td><td>Renvoi d'angle spécial court (p. 267)</td><td>460</td><td>120</td><td>N</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>511 – 600</td><td>600</td><td>195</td><td>Renvoi d'angle standard (p. 266)</td><td>600</td><td>170</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>601 – 800</td><td>690</td><td>300</td><td>Renvoi d'angle standard (p. 266)</td><td>690</td><td>263</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>801 – 1 000</td><td>890</td><td>490</td><td>Renvoi d'angle standard (p. 266)</td><td>890</td><td>413</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 001 – 1 200</td><td>1 090</td><td>335</td><td>Renvoi d'angle standard (p. 266)</td><td>1 090</td><td>513</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 201 – 1 400</td><td>1 290</td><td>335</td><td>Renvoi d'angle standard (p. 266)</td><td>1 290</td><td>563</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 401 – 1 600</td><td>1 490</td><td>335</td><td>Renvoi d'angle standard (p. 266)</td><td>1 490</td><td>563</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 601 – 1 800</td><td>1 690</td><td>335</td><td>Renvoi d'angle standard (p. 266)</td><td>1 690</td><td>563 / 1 000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 801 – 2 000</td><td>1 890</td><td>640</td><td>Renvoi d'angle standard (p. 266)</td><td>1 890</td><td>1 000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>2 001 – 2 200</td><td>2 090</td><td>640</td><td>Renvoi d'angle standard (p. 266)</td><td>2 090</td><td>1 000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>2 201 – 2 400</td><td>2 290</td><td>640</td><td>Renvoi d'angle standard (p. 266)</td><td>2 290</td><td>1 000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+</tbody>
+</table>
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 249)
+
+La plage 371 – 555 mm recouvre les plages 431 – 510 et 511 – 600 mm, qui donnent une autre
+crémone de semi-fixe (600 mm au lieu de 445 mm) et, pour 431 – 510 mm, un autre renvoi d'angle
+(entrée **INC-290**). **Pour les HFF au-delà de 2 401 mm, un verrouilleur médian est
+nécessaire** [1 p. 250].
+
+## Crémone de semi-fixe standard KSR, hauteur de poignée fixe, fouillot 8 à 50 mm
+
+![Crémone de semi-fixe standard KSR, hauteur de poignée fixe](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-semi-fixe-standard-hp-fixe.png)
+
+Crémones de semi-fixe standard KSR, section 4.6.1.1.2 « Fouillot 8 à 50 mm » ; un seul type
+d'ouverture, fenêtre à la française / oscillo-battante à ouvrant semi-fixe ; cotes en mm. La
+colonne « Axe de fouillot » porte les fouillots imprimés dans la cellule de la référence ; les
+colonnes suivent les pictogrammes de la légende, dont « hauteur de levier fixe » et « nombre de
+gâches soudées » [1 p. 11-12, 250] :
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de levier (mm) | Anti-fausse manœuvre | Loqueteau | Nombre de gâches soudées | Renvoi d'angle intégré | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | --- | ---: | ---: | ---: | :---: | :---: | :---: | :---: | :---: | :---: | --- |
+| 810974 | 8 | 431 – 710 | 600 | 200 | 233 | N | N | – | J | – / 1 | – / P | Roto Sil |
+| 771953 | 8 | 601 – 800 | 690 | 200 | 325 | N | N | – | N | – | – | Roto Sil |
+| 771954 | 8 | 801 – 1000 | 890 | 200 | 335 | N | N | 1 | N | – | – | Roto Sil |
+| 2003815 | 15, 25, 30, 35, 40, 45, 50 | 280 – 555 | 445 | 200 | 156 | N | N | – | J | – / 1 | – / P | Roto Sil |
+| 795462 | 15, 25, 30, 35, 40, 45, 50 | 431 – 710 | 600 | 200 | 195 | J | N | – | J | – / 1 | – / P | Roto Sil |
+| 763116 | 15, 25, 30, 35, 40, 45, 50 | 601 – 800 | 690 | 200 | 300 | J | N | – | N | – | – | Roto Sil |
+| 763117 | 15, 25, 30, 35, 40, 45, 50 | 801 – 1000 | 890 | 200 | 490 | J | N | 1 | N | – | – | Roto Sil |
+| 763118 | 8, 15, 25, 30, 35, 40, 45, 50 | 1001 – 1200 | 1090 | 200 | 335 | J | N | 1 | N | – | – | Roto Sil |
+| 763119 | 8, 15, 25, 30, 35, 40, 45, 50 | 1201 – 1400 | 1290 | 200 | 335 | J | N | 1 | N | – | – | Roto Sil |
+| 763120 | 8, 15, 25, 30, 35, 40, 45, 50 | 1401 – 1600 | 1490 | 200 | 335 | J | N | 2 | N | – | – | Roto Sil |
+| 795474 | 8, 15, 25, 30, 35, 40, 45, 50 | 1601 – 1800 | 1690 | 200 | 335 | J | J | 2 | N | – | – | Roto Sil |
+| 795476 | 8, 15, 25, 30, 35, 40, 45, 50 | 1801 – 2000 | 1890 | 200 | 640 | J | J | 2 | N | – | – | Roto Sil |
+| 795478 | 8, 15, 25, 30, 35, 40, 45, 50 | 2001 – 2200 | 2090 | 200 | 640 | J | J | 3 | N | – | – | Roto Sil |
+| 795480 | 8, 15, 25, 30, 35, 40, 45, 50 | 2201 – 2400 | 2290 | 200 | 640 | J | J | 3 | N | – | – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 250)
+
+Sous le tableau, deux encadrés INFO [1 p. 250] :
+
+- Anti-fausse manœuvre (butée de crémone de semi-fixe) prémontée en standard.
+- En cas d'utilisation d'une crémone de semi-fixe standard (CDR 1 N, CDR 2, CDR 2 N), utiliser une
+  têtière de compas pour l'ouvrant pivotant, à partir de la p. 282 (voir
+  [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md)).
+
+La nomenclature de montage KSR de l'oscillo-battant à deux vantaux sans meneau fixe (repères 18a
+et 18) porte les mêmes numéros de 763118 à 795480 avec des longueurs inférieures de 110 mm
+(980 à 2 180 mm), deux références absentes de ce tableau (2009311, 835109) et 2 G au lieu de
+3 gâches soudées pour 795478 (entrée **CTR-117**) ; voir
+[Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md)
+[2 p. 45].
+
+## Crémone de semi-fixe standard, poignée centrée / variable : possibilités de combinaisons
+
+Même vue que pour la hauteur de poignée fixe ; l'ouvrant principal porte ici une crémone OB à
+poignée milieu / variable [3] [1 p. 251].
+
+![Crémone de semi-fixe standard, poignée centrée / variable, possibilités de combinaisons](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-semi-fixe-standard-hp-variable-combinaisons.png)
+
+| Repère | Signification |
+| --- | --- |
+| [1] | Crémone de semi-fixe standard |
+| [2] | Verrouilleur de têtière |
+| [3] | Crémone OB – poignée milieu/variable |
+| [4] | Verrouilleur standard |
+| [5] | Renvoi d'angle standard |
+| [6] | Renvoi d'angle spécial court |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 251)
+
+**Détermination de la crémone** [1 p. 251] :
+
+1. Déterminer la hauteur fond de feuillure d'ouvrant (HFF) de l'élément. INFO : consulter les
+   possibilités de combinaison et le renvoi d'angle requis [5] + [6] dans les tableaux
+   ci-dessous.
+2. Sélectionner la crémone de semi-fixe standard [1] à l'aide de la hauteur fond de feuillure
+   d'ouvrant (HFF) et de la longueur de l'élément. En option : déterminer le verrouilleur de
+   têtière [2], à partir de la p. 322.
+3. Sélectionner la crémone OB - poignée milieu/variable [3] à l'aide de la longueur de l'élément :
+   fouillot 8 mm, fouillot 15 mm ou fouillots 25, 30, 35, 40, 45, 50 mm, à partir de la p. 222
+   (sections *Crémone OB, hauteur de poignée centrée / variable* plus haut sur cette page). En
+   option : déterminer le verrouilleur standard [4], à partir de la p. 318.
+
+Mêmes colonnes que pour la hauteur de poignée fixe ; la hauteur du levier et la hauteur de
+poignée sont ici des plages [1 p. 252].
+
+**Axe de fouillot 8 mm** [1 p. 252] :
+
+<table>
+<thead>
+<tr><th>Champ d'application</th><th colspan="3">Crémone de semi-fixe standard</th><th colspan="4">Crémone OB</th></tr>
+<tr><th>HFF (mm)</th><th>Longueur de l'élément (mm)</th><th>Hauteur du levier (mm)</th><th>Type de renvoi d'angle</th><th>Longueur de l'élément (mm)</th><th>Hauteur de la poignée (mm)</th><th>AFM</th><th>Type de renvoi d'angle</th></tr>
+</thead>
+<tbody>
+<tr><td>621 – 800</td><td>680</td><td>235 – 275</td><td>Renvoi d'angle spécial court (p. 267)</td><td>800</td><td>311 – 510</td><td>N</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>801 – 900</td><td>680</td><td>276 – 335</td><td>Renvoi d'angle standard (p. 266)</td><td>980</td><td>351 – 400</td><td>N</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>901 – 1 200</td><td>980</td><td>249 – 448</td><td>Renvoi d'angle standard (p. 266)</td><td>980</td><td>401 – 600</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 201 – 1 600</td><td>1 380</td><td>448 – 658</td><td>Renvoi d'angle standard (p. 266)</td><td>1 380</td><td>601 – 800</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 601 – 2 000</td><td>1 780</td><td>680 – 880</td><td>Renvoi d'angle standard (p. 266)</td><td>1780</td><td>801 – 1 000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>2 001 – 2 400</td><td>2 180</td><td>880 – 1 080</td><td>Renvoi d'angle standard (p. 266)</td><td>2 180</td><td>1 001 – 1 200</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+</tbody>
+</table>
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 252)
+
+**Pour les HFF au-delà de 2 401 mm, un verrouilleur médian est nécessaire** [1 p. 252].
+
+**Fouillot 15 mm et tailles supérieures** [1 p. 252] :
+
+<table>
+<thead>
+<tr><th>Champ d'application</th><th colspan="3">Crémone de semi-fixe standard</th><th colspan="4">Crémone OB</th></tr>
+<tr><th>HFF (mm)</th><th>Longueur de l'élément (mm)</th><th>Hauteur du levier (mm)</th><th>Type de renvoi d'angle</th><th>Longueur de l'élément (mm)</th><th>Hauteur de la poignée (mm)</th><th>AFM</th><th>Type de renvoi d'angle</th></tr>
+</thead>
+<tbody>
+<tr><td>370 – 450</td><td>400</td><td>255 – 265</td><td>Renvoi d'angle spécial court (p. 267)</td><td>430</td><td>215 – 225</td><td>N</td><td>Renvoi d'angle spécial court (p. 267)</td></tr>
+<tr><td>451 – 520</td><td>400</td><td>266 – 300</td><td>Renvoi d'angle spécial court (p. 267)</td><td>430</td><td>226 – 260</td><td>N</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>521 – 620</td><td>400</td><td>301 – 350</td><td>Renvoi d'angle standard (p. 266)</td><td>430</td><td>261 – 310</td><td>N</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>621 – 650</td><td>680</td><td>393 – 407</td><td>Renvoi d'angle spécial court (p. 267)</td><td>510</td><td>311 – 400</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>651 – 800</td><td>680</td><td>408 – 482</td><td>Renvoi d'angle standard (p. 266)</td><td>510</td><td>311 – 400</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>801 – 1 200</td><td>980</td><td>482 – 682</td><td>Renvoi d'angle standard (p. 266)</td><td>980</td><td>401 – 600</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 201 – 1 600</td><td>1 380</td><td>448 – 648</td><td>Renvoi d'angle standard (p. 266)</td><td>1 380</td><td>601 – 800</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 601 – 2 000</td><td>1 780</td><td>680 – 880</td><td>Renvoi d'angle standard (p. 266)</td><td>1 780</td><td>801 – 1 000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>2 001 – 2 400</td><td>2180</td><td>880 – 1 080</td><td>Renvoi d'angle standard (p. 266)</td><td>2 180</td><td>1 001 – 1 200</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+</tbody>
+</table>
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 252)
+
+**Pour les HFF au-delà de 2 401 mm, un verrouilleur médian est nécessaire** [1 p. 252].
+
+Plusieurs lignes de ces deux tableaux ne concordent pas avec le tableau des références de la
+p. 253 ni avec celui des crémones OB à poignée centrée / variable de la p. 224 (hauteurs de
+levier, plages de HFF, longueurs ; entrée **INC-291**). Les tableaux sont transcrits tels
+qu'imprimés.
+
+## Crémone de semi-fixe standard, poignée centrée / variable, fouillot 8 à 50 mm
+
+![Crémone de semi-fixe standard, poignée centrée / variable](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-semi-fixe-standard-hp-variable.png)
+
+Crémones de semi-fixe standard, section 4.6.1.2.2 « Fouillot 8 à 50 mm » ; type d'ouverture :
+fenêtre à la française / oscillo-battante à ouvrant semi-fixe ; cotes en mm ; le pictogramme de
+hauteur de levier est celui de la hauteur milieu / variable ; ce tableau n'a pas de colonnes
+renvoi d'angle intégré, galets ni goujons [1 p. 253] :
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de levier (mm) | Anti-fausse manœuvre | Loqueteau | Nombre de gâches soudées | Traitement de surface |
+| --- | --- | --- | ---: | ---: | --- | :---: | :---: | :---: | --- |
+| 242726 | 8 | 621 – 900 | 680 | 125 / 120 | 236 – 375 | N | N | 1 | Roto Sil |
+| 791986 | 8 | 901 – 1200 | 980 | 200 / 200 | 298 – 448 | J | N | 1 | Roto Sil |
+| 233418 | 15, 25, 30, 35, 40, 45, 50 | 431 – 620 | 500 | 100 / 100 | 225 – 350 | N | N | – | Roto Sil |
+| 763125 | 15, 25, 30, 35, 40, 45, 50 | 621 – 800 | 630 | 100 / 100 | 393 – 482 | J | N | 1 | Roto Sil |
+| 763126 | 15, 25, 30, 35, 40, 45, 50 | 801 – 1200 | 980 | 200 / 200 | 482 – 682 | J | N | 1 | Roto Sil |
+| 763127 | 8, 15, 25, 30, 35, 40, 45, 50 | 1201 – 1600 | 1380 | 200 / 200 | 448 – 658 | J | N | 2 | Roto Sil |
+| 795482 | 8, 15, 25, 30, 35, 40, 45, 50 | 1601 – 2000 | 1780 | 200 / 200 | 680 – 880 | J | J | 2 | Roto Sil |
+| 795484 | 8, 15, 25, 30, 35, 40, 45, 50 | 2001 – 2400 | 2180 | 200 / 200 | 880 – 1080 | J | J | 4 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 253)
+
+Sous le tableau, trois encadrés INFO [1 p. 253] :
+
+- Un étrier de sécurité est requis pour les crémones de semi-fixe en cas de fenêtres à deux
+  vantaux CDR 2 / CDR 2 N. Voir à partir de la p. 410 (voir
+  [Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md)).
+- Anti-fausse manœuvre (butée de crémone de semi-fixe) prémontée en standard.
+- En cas d'utilisation d'une crémone de semi-fixe standard (CDR 1 N, CDR 2, CDR 2 N), utiliser une
+  têtière de compas pour l'ouvrant pivotant, à partir de la p. 282.
+
+La crémone de semi-fixe à sortie de tringle des nomenclatures de montage KSR (786439 à 786443,
+635173, fouillots -6 et 8 mm) est une autre pièce, plus bas sur cette page (section *Crémone de
+semi-fixe à sortie de tringle, pour F-6 et F8*) ; aucune de ses références ne figure dans les
+tableaux des p. 250 et 253.
+
+# Crémone de semi-fixe Plus
+
+La crémone de semi-fixe Plus (section 4.6.2) se choisit comme la crémone de semi-fixe standard :
+par la HFF, avec la crémone OB de l'ouvrant principal et les renvois d'angle des deux vantaux
+[1 p. 254].
+
+## Crémone de semi-fixe Plus KSR, hauteur de poignée fixe : possibilités de combinaisons
+
+Même disposition que pour la crémone de semi-fixe standard : à gauche le vantail semi-fixe et sa
+crémone de semi-fixe Plus KSR [1], à droite l'ouvrant principal et sa crémone OB KSR à hauteur de
+poignée fixe [3], les verrouilleurs [2] et [4] en haut, les renvois d'angle [5] et [6] dans les
+angles [1 p. 254].
+
+![Crémone de semi-fixe Plus KSR, hauteur de poignée fixe, possibilités de combinaisons](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-semi-fixe-plus-hp-fixe-combinaisons.png)
+
+| Repère | Signification |
+| --- | --- |
+| [1] | Crémone de semi-fixe Plus KSR |
+| [2] | Verrouilleur de têtière |
+| [3] | Crémone OB KSR – hauteur de poignée fixe |
+| [4] | Verrouilleur standard |
+| [5] | Renvoi d'angle standard |
+| [6] | Renvoi d'angle spécial court |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 254)
+
+**Détermination de la crémone** [1 p. 254] :
+
+1. Déterminer la hauteur fond de feuillure d'ouvrant (HFF) de l'élément. INFO : consulter les
+   possibilités de combinaison et le renvoi d'angle requis [5] + [6] dans les tableaux
+   ci-dessous.
+2. Sélectionner la crémone de semi-fixe Plus KSR [1] à l'aide de la hauteur fond de feuillure
+   d'ouvrant (HFF) et de la longueur de l'élément. En option : déterminer le verrouilleur de
+   têtière [2], à partir de la p. 322.
+3. Sélectionner la crémone OB KSR - hauteur de poignée fixe [3] à l'aide de la longueur de
+   l'élément : fouillot 8 mm, fouillot 15 mm ou fouillots 25, 30, 35, 40, 45, 50 mm, à partir de
+   la p. 212. En option : déterminer le verrouilleur standard [4], à partir de la p. 318.
+
+Mêmes colonnes que les tableaux de la crémone de semi-fixe standard KSR [1 p. 255].
+
+**Axe de fouillot 8 mm** [1 p. 255] :
+
+<table>
+<thead>
+<tr><th>Champ d'application</th><th colspan="3">Crémone de semi-fixe Plus KSR</th><th colspan="4">Crémone OB KSR</th></tr>
+<tr><th>HFF (mm)</th><th>Longueur de l'élément (mm)</th><th>Hauteur du levier (mm)</th><th>Type de renvoi d'angle</th><th>Longueur de l'élément (mm)</th><th>Hauteur de la poignée (mm)</th><th>AFM</th><th>Type de renvoi d'angle</th></tr>
+</thead>
+<tbody>
+<tr><td>431 – 510</td><td>600</td><td>233</td><td>Renvoi d'angle spécial court (p. 267)</td><td>490</td><td>120</td><td>N</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>511 – 600</td><td>600</td><td>233</td><td>Renvoi d'angle standard (p. 266)</td><td>600</td><td>170</td><td>N</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>601 – 800</td><td>690</td><td>325</td><td>Renvoi d'angle standard (p. 266)</td><td>690</td><td>263</td><td>N</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>801 – 1 000</td><td>890</td><td>335</td><td>Renvoi d'angle standard (p. 266)</td><td>890</td><td>413</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 001 – 1 200</td><td>1 090</td><td>335</td><td>Renvoi d'angle standard (p. 266)</td><td>1 090</td><td>513</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 201 – 1 400</td><td>1 290</td><td>335</td><td>Renvoi d'angle standard (p. 266)</td><td>1 290</td><td>563</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 401 – 1 600</td><td>1 490</td><td>335</td><td>Renvoi d'angle standard (p. 266)</td><td>1 490</td><td>563</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 601 – 1 800</td><td>1 690</td><td>335</td><td>Renvoi d'angle standard (p. 266)</td><td>1 690</td><td>563 / 1 000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 801 – 2 000</td><td>1 890</td><td>640</td><td>Renvoi d'angle standard (p. 266)</td><td>1 890</td><td>1 000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>2 001 – 2 200</td><td>2 090</td><td>640</td><td>Renvoi d'angle standard (p. 266)</td><td>2 090</td><td>1 000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>2 201 – 2 400</td><td>2 290</td><td>640</td><td>Renvoi d'angle standard (p. 266)</td><td>2 290</td><td>1 000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+</tbody>
+</table>
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 255)
+
+**Pour les HFF au-delà de 2 401 mm, un verrouilleur médian est nécessaire** [1 p. 255].
+
+**Fouillot 15 mm et tailles supérieures** [1 p. 255] :
+
+<table>
+<thead>
+<tr><th>Champ d'application</th><th colspan="3">Crémone de semi-fixe Plus KSR</th><th colspan="4">Crémone OB KSR</th></tr>
+<tr><th>HFF (mm)</th><th>Longueur de l'élément (mm)</th><th>Hauteur du levier (mm)</th><th>Type de renvoi d'angle</th><th>Longueur de l'élément (mm)</th><th>Hauteur de la poignée (mm)</th><th>AFM</th><th>Type de renvoi d'angle</th></tr>
+</thead>
+<tbody>
+<tr><td>431 – 510</td><td>600</td><td>195</td><td>Renvoi d'angle spécial court (p. 267)</td><td>460</td><td>120</td><td>N</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>511 – 600</td><td>600</td><td>195</td><td>Renvoi d'angle standard (p. 266)</td><td>600</td><td>170</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>601 – 800</td><td>690</td><td>300</td><td>Renvoi d'angle standard (p. 266)</td><td>690</td><td>263</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>801 – 1000</td><td>890</td><td>490</td><td>Renvoi d'angle standard (p. 266)</td><td>890</td><td>413</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 001 – 1 200</td><td>1 090</td><td>335</td><td>Renvoi d'angle standard (p. 266)</td><td>1 090</td><td>513</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 201 – 1 400</td><td>1 290</td><td>335</td><td>Renvoi d'angle standard (p. 266)</td><td>1 290</td><td>563</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 401 – 1 600</td><td>1 490</td><td>335</td><td>Renvoi d'angle standard (p. 266)</td><td>1 490</td><td>563</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 601 – 1 800</td><td>1 690</td><td>335</td><td>Renvoi d'angle standard (p. 266)</td><td>1 690</td><td>563 / 1 000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 801 – 2 000</td><td>1 890</td><td>640</td><td>Renvoi d'angle standard (p. 266)</td><td>1 890</td><td>1 000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>2 001 – 2 200</td><td>2 090</td><td>640</td><td>Renvoi d'angle standard (p. 266)</td><td>2 090</td><td>1 000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>2 201 – 2 400</td><td>2 290</td><td>640</td><td>Renvoi d'angle standard (p. 266)</td><td>2 290</td><td>1 000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+</tbody>
+</table>
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 255)
+
+**Pour les HFF au-delà de 2 401 mm, un verrouilleur médian est nécessaire** [1 p. 255].
+
+Ces deux tableaux reprennent, ligne pour ligne, les longueurs et hauteurs de levier des tableaux
+de la crémone de semi-fixe standard KSR (p. 249) ; les crémones de semi-fixe Plus KSR du tableau
+des références ci-dessous (p. 256) ont d'autres hauteurs de levier (144, 234, 496, 546 mm) :
+entrée **INC-292**. Les tableaux sont transcrits tels qu'imprimés.
+
+## Crémone de semi-fixe Plus KSR, hauteur de poignée fixe, fouillot 8 à 50 mm
+
+![Crémone de semi-fixe Plus KSR, hauteur de poignée fixe](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-semi-fixe-plus-hp-fixe.png)
+
+Crémones de semi-fixe Plus KSR, section 4.6.2.1.2 « Fouillot 8 à 50 mm » ; type d'ouverture :
+fenêtre à la française / oscillo-battante à ouvrant semi-fixe ; cotes en mm. Toutes les
+références sont imprimées pour les fouillots 8, 15, 25, 30, 35, 40, 45 et 50 mm (une seule
+cellule pour le tableau) ; la colonne « renvoi d'angle intégré » porte « – » sauf pour 2007106
+[1 p. 256] :
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de levier (mm) | Anti-fausse manœuvre | Loqueteau | Nombre de gâches soudées | Renvoi d'angle intégré | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | --- | ---: | ---: | ---: | :---: | :---: | :---: | :---: | :---: | :---: | --- |
+| 2007106 | 8, 15, 25, 30, 35, 40, 45, 50 | 431 – 710 | 600 | 200 | 144 | J | N | – | J | – / 1 | – / P | Roto Sil |
+| 2007116 | 8, 15, 25, 30, 35, 40, 45, 50 | 601 – 800 | 690 | 200 | 234 | J | N | – | – | – | – | Roto Sil |
+| 2007117 | 8, 15, 25, 30, 35, 40, 45, 50 | 801 – 1000 | 890 | 200 | 496 | J | N | 1 | – | – | – | Roto Sil |
+| 2007118 | 8, 15, 25, 30, 35, 40, 45, 50 | 1001 – 1200 | 1090 | 200 | 496 | J | N | 1 | – | – | – | Roto Sil |
+| 2007119 | 8, 15, 25, 30, 35, 40, 45, 50 | 1201 – 1400 | 1290 | 200 | 546 | J | N | 1 | – | – | – | Roto Sil |
+| 2007120 | 8, 15, 25, 30, 35, 40, 45, 50 | 1401 – 1600 | 1490 | 200 | 546 | J | N | 2 | – | – | – | Roto Sil |
+| 2007121 | 8, 15, 25, 30, 35, 40, 45, 50 | 1601 – 1800 | 1690 | 200 | 546 | J | J | 2 | – | – | – | Roto Sil |
+| 2007122 | 8, 15, 25, 30, 35, 40, 45, 50 | 1801 – 2000 | 1890 | 200 | 546 | J | J | 2 | – | – | – | Roto Sil |
+| 2007123 | 8, 15, 25, 30, 35, 40, 45, 50 | 2001 – 2200 | 2090 | 200 | 546 | J | J | 3 | – | – | – | Roto Sil |
+| 2007124 | 8, 15, 25, 30, 35, 40, 45, 50 | 2201 – 2400 | 2290 | 200 | 546 | J | J | 3 | – | – | – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 256)
+
+Sous le tableau, deux encadrés INFO [1 p. 256] :
+
+- Anti-fausse manœuvre (butée de crémone de semi-fixe) prémontée en standard.
+- En cas d'usage d'une crémone de semi-fixe Plus (CDR 1 N, CDR 2, CDR 2 N), utiliser une têtière
+  de compas de sécurité de base (oscillo-battant) ou une têtière de compas de sécurité
+  (oscillo-battant), à partir de la p. 281 (voir
+  [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md)).
+
+## Crémone de semi-fixe Plus, position de poignée centrée / variable : possibilités de combinaisons
+
+L'ouvrant principal porte ici une crémone OB à poignée milieu / variable [3] [1 p. 257].
+
+![Crémone de semi-fixe Plus, poignée centrée / variable, possibilités de combinaisons](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-semi-fixe-plus-hp-variable-combinaisons.png)
+
+| Repère | Signification |
+| --- | --- |
+| [1] | Crémone de semi-fixe Plus |
+| [2] | Verrouilleur de têtière |
+| [3] | Crémone OB – poignée milieu/variable |
+| [4] | Verrouilleur standard |
+| [5] | Renvoi d'angle standard |
+| [6] | Renvoi d'angle spécial court |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 257)
+
+**Détermination de la crémone** [1 p. 257] :
+
+1. Déterminer la hauteur fond de feuillure d'ouvrant (HFF) de l'élément. INFO : consulter les
+   possibilités de combinaison et le renvoi d'angle requis [5] + [6] dans les tableaux
+   ci-dessous.
+2. Sélectionner la crémone de semi-fixe Plus [1] à l'aide de la hauteur fond de feuillure
+   d'ouvrant (HFF) et de la longueur de l'élément. En option : déterminer le verrouilleur de
+   têtière [2], à partir de la p. 322.
+3. Sélectionner la crémone OB - poignée milieu/variable [3] à l'aide de la longueur de l'élément :
+   fouillot 8 mm, fouillot 15 mm ou fouillots 25, 30, 35, 40, 45, 50 mm, à partir de la p. 222.
+   En option : déterminer le verrouilleur standard [4], à partir de la p. 318.
+
+**Axe de fouillot 8 mm** [1 p. 258] :
+
+<table>
+<thead>
+<tr><th>Champ d'application</th><th colspan="3">Crémone de semi-fixe Plus</th><th colspan="4">Crémone OB</th></tr>
+<tr><th>HFF (mm)</th><th>Longueur de l'élément (mm)</th><th>Hauteur du levier (mm)</th><th>Type de renvoi d'angle</th><th>Longueur de l'élément (mm)</th><th>Hauteur de la poignée (mm)</th><th>AFM</th><th>Type de renvoi d'angle</th></tr>
+</thead>
+<tbody>
+<tr><td>431 – 520</td><td>400</td><td>194 – 239</td><td>Renvoi d'angle spécial court (p. 267)</td><td>500</td><td>215 – 260</td><td>N</td><td>Renvoi d'angle spécial court (p. 267)</td></tr>
+<tr><td>521 – 620</td><td>400</td><td>240 – 289</td><td>Renvoi d'angle standard (p. 266)</td><td>500</td><td>261 – 310</td><td>N</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>621 – 720</td><td>680</td><td>290 – 329</td><td>Renvoi d'angle spécial court (p. 267)</td><td>800</td><td>311 – 510</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>721 – 800</td><td>680</td><td>330 – 379</td><td>Renvoi d'angle standard (p. 266)</td><td>800</td><td>311 – 510</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>801 – 1 200</td><td>980</td><td>380 – 579</td><td>Renvoi d'angle standard (p. 266)</td><td>980</td><td>401 – 600</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 201 – 1 600</td><td>1 380</td><td>580 – 779</td><td>Renvoi d'angle standard (p. 266)</td><td>1380</td><td>601 – 800</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1 601 – 2 000</td><td>1 780</td><td>780 – 979</td><td>Renvoi d'angle standard (p. 266)</td><td>1 780</td><td>801 – 1 000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>2 001 – 2 400</td><td>2 180</td><td>980 – 1 179</td><td>Renvoi d'angle standard (p. 266)</td><td>2 180</td><td>1 001 – 1 200</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+</tbody>
+</table>
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 258)
+
+**Pour les HFF au-delà de 2 401 mm, un verrouilleur médian est nécessaire** [1 p. 258].
+
+**Fouillot 15 mm et tailles supérieures** [1 p. 258] :
+
+<table>
+<thead>
+<tr><th>Champ d'application</th><th colspan="3">Crémone de semi-fixe Plus</th><th colspan="4">Crémone OB</th></tr>
+<tr><th>HFF (mm)</th><th>Longueur de l'élément (mm)</th><th>Hauteur du levier (mm)</th><th>Type de renvoi d'angle</th><th>Longueur de l'élément (mm)</th><th>Hauteur de la poignée (mm)</th><th>AFM</th><th>Type de renvoi d'angle</th></tr>
+</thead>
+<tbody>
+<tr><td>431 – 450</td><td>400</td><td>194 – 204</td><td>Renvoi d'angle spécial court (p. 267)</td><td>430</td><td>215 – 225</td><td>N</td><td>Renvoi d'angle spécial court (p. 267)</td></tr>
+<tr><td>451 – 520</td><td>400</td><td>205 – 239</td><td>Renvoi d'angle spécial court (p. 267)</td><td>430</td><td>226 – 260</td><td>N</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>521 – 620</td><td>400</td><td>240 – 289</td><td>Renvoi d'angle standard (p. 266)</td><td>430</td><td>261 – 310</td><td>N</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>621 – 700</td><td>680</td><td>290 – 329</td><td>Renvoi d'angle spécial court (p. 267)</td><td>580</td><td>311 – 400</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>701 – 800</td><td>680</td><td>330 – 379</td><td>Renvoi d'angle standard (p. 266)</td><td>580</td><td>311 – 400</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>801 – 1200</td><td>980</td><td>380 – 579</td><td>Renvoi d'angle standard (p. 266)</td><td>980</td><td>401 – 600</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1201 – 1600</td><td>1380</td><td>580 – 779</td><td>Renvoi d'angle standard (p. 266)</td><td>1380</td><td>601 – 800</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>1601 – 2000</td><td>1780</td><td>780 – 979</td><td>Renvoi d'angle standard (p. 266)</td><td>1780</td><td>801 – 1000</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+<tr><td>2 001 – 2 400</td><td>2180</td><td>980 – 1 179</td><td>Renvoi d'angle standard (p. 266)</td><td>2 180</td><td>1 001 – 1 200</td><td>J</td><td>Renvoi d'angle standard (p. 266)</td></tr>
+</tbody>
+</table>
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 258)
+
+**Pour les HFF au-delà de 2 401 mm, un verrouilleur médian est nécessaire** [1 p. 258].
+
+## Crémone de semi-fixe Plus, poignée centrée / variable, fouillot 8 à 50 mm
+
+![Crémone de semi-fixe Plus, poignée centrée / variable](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-semi-fixe-plus-hp-variable.png)
+
+Crémones de semi-fixe Plus, section 4.6.2.2.2 « Fouillot 8 à 50 mm » ; type d'ouverture : fenêtre
+à la française / oscillo-battante à ouvrant semi-fixe ; cotes en mm ; toutes les références pour
+les fouillots 8 à 50 mm (une seule cellule) [1 p. 259] :
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de levier (mm) | Anti-fausse manœuvre | Loqueteau | Nombre de gâches soudées | Traitement de surface |
+| --- | --- | --- | ---: | ---: | --- | :---: | :---: | :---: | --- |
+| 2007128 | 8, 15, 25, 30, 35, 40, 45, 50 | 431 – 620 | 400 | 100 / 100 | 194 – 289 | N | N | – | Roto Sil |
+| 2007129 | 8, 15, 25, 30, 35, 40, 45, 50 | 621 – 800 | 680 | 100 / 100 | 290 – 379 | J | N | 1 | Roto Sil |
+| 2007130 | 8, 15, 25, 30, 35, 40, 45, 50 | 801 – 1200 | 980 | 200 / 200 | 380 – 579 | J | N | 1 | Roto Sil |
+| 2007131 | 8, 15, 25, 30, 35, 40, 45, 50 | 1001 – 1400 | 1180 | 200 / 200 | 480 – 679 | J | N | 1 | Roto Sil |
+| 2007132 | 8, 15, 25, 30, 35, 40, 45, 50 | 1201 – 1600 | 1380 | 200 / 200 | 580 – 779 | J | N | 2 | Roto Sil |
+| 2007133 | 8, 15, 25, 30, 35, 40, 45, 50 | 1601 – 2000 | 1780 | 200 / 200 | 780 – 979 | J | J | 2 | Roto Sil |
+| 2007134 | 8, 15, 25, 30, 35, 40, 45, 50 | 2001 – 2400 | 2180 | 200 / 200 | 980 – 1179 | J | J | 4 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 259)
+
+Sous le tableau, les deux mêmes encadrés INFO que p. 256 : anti-fausse manœuvre (butée de crémone
+de semi-fixe) prémontée en standard ; en cas d'usage d'une crémone de semi-fixe Plus (CDR 1 N,
+CDR 2, CDR 2 N), têtière de compas de sécurité de base (oscillo-battant) ou têtière de compas de
+sécurité (oscillo-battant), à partir de la p. 281 [1 p. 259].
+
+Les listes de positions du chapitre « Aperçu des ferrures » renvoient la « Crémone de semi-fixe
+Plus KSR - hauteur de poignée fixe » à la p. 256 et la « Crémone de semi-fixe Plus - hauteur de
+poignée milieu/variable » à la p. 259 : ce sont les pages de ces deux tableaux de références ; le
+sommaire du chapitre (p. 211) renvoie au début de la section, p. 254 [1 p. 161, 197, 211].
+
+# Crémone de semi-fixe à levier séparé
+
+Section 4.6.3 « Levier séparé » : deux tableaux de crémones de semi-fixe et le levier séparé
+291743, qui « est nécessaire pour chaque crémone de semi-fixe avec levier séparé mobile »
+[1 p. 259-260]. Les deux tableaux de
+crémones ont le même type d'ouverture que les autres crémones de semi-fixe (fenêtre à la
+française / oscillo-battante à ouvrant semi-fixe) et n'ont que sept colonnes : fouillot, HFF,
+longueur, zone de recoupe, hauteur de levier, traitement de surface, N° de matériel
+[1 p. 259-260].
+
+## Crémone de semi-fixe à levier séparé, hauteur de poignée constante
+
+![Crémone de semi-fixe à levier séparé, hauteur de poignée constante](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-semi-fixe-levier-separe.png)
+
+Section 4.6.3.1 « Hauteur de poignée constante » ; le pictogramme de la colonne de hauteur est
+celui de la hauteur de levier fixe ; le tableau commence p. 259 et se poursuit p. 260 ; cotes en
+mm [1 p. 259-260] :
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de levier (mm) | Traitement de surface |
+| --- | --- | --- | ---: | ---: | ---: | --- |
+| 787399 | 8 | 431 – 710 | 600 | 200 | 233 | Roto Sil |
+| 338124 | 8 | 601 – 800 | 690 | 200 | 335 | Roto Sil |
+| 291770 | 8 | 801 – 1000 | 890 | 200 | 195 | Roto Sil |
+| 788502 | 15, 25, 30, 35, 40, 45, 50 | 431 – 710 | 600 | 200 | 195 | Roto Sil |
+| 338125 | 15, 25, 30, 35, 40, 45, 50 | 601 – 800 | 690 | 200 | 195 | Roto Sil |
+| 291746 | 15, 25, 30, 35, 40, 45, 50 | 801 – 1000 | 890 | 200 | 490 | Roto Sil |
+| 291747 | 8, 15, 25, 30, 35, 40, 45, 50 | 1001 – 1200 | 1090 | 200 | 335 | Roto Sil |
+| 291748 | 8, 15, 25, 30, 35, 40, 45, 50 | 1201 – 1400 | 1290 | 200 | 335 | Roto Sil |
+| 291749 | 8, 15, 25, 30, 35, 40, 45, 50 | 1401 – 1600 | 1490 | 200 | 335 | Roto Sil |
+| 291750 | 8, 15, 25, 30, 35, 40, 45, 50 | 1601 – 1800 | 1690 | 200 | 335 | Roto Sil |
+| 291751 | 8, 15, 25, 30, 35, 40, 45, 50 | 1801 – 2000 | 1890 | 200 | 640 | Roto Sil |
+| 291762 | 8, 15, 25, 30, 35, 40, 45, 50 | 2001 – 2200 | 2090 | 200 | 640 | Roto Sil |
+| 291763 | 8, 15, 25, 30, 35, 40, 45, 50 | 2201 – 2400 | 2290 | 200 | 640 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 259-260)
+
+Levier séparé adapté : voir à partir de la p. 260 (section *Levier séparé* ci-dessous)
+[1 p. 260].
+
+## Crémone de semi-fixe à levier séparé, hauteur de poignée centrale / variable
+
+![Crémone de semi-fixe à levier séparé, hauteur de poignée centrale / variable](/assets/quincaillerie/roto-nx-catalogue/cremones/cremone-semi-fixe-levier-separe-hp-variable.png)
+
+Section 4.6.3.2 « Hauteur de poignée centrale/variable » ; pictogramme de hauteur de levier
+milieu / variable ; toutes les références pour les fouillots 8 à 50 mm (une seule cellule) ; cotes
+en mm [1 p. 260] :
+
+| N° de matériel | Axe de fouillot (mm) | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Hauteur de levier (mm) | Traitement de surface |
+| --- | --- | --- | ---: | ---: | --- | --- |
+| 293629 | 8, 15, 25, 30, 35, 40, 45, 50 | 370 – 620 | 400 | 100 / 100 | 225 – 350 | Roto Sil |
+| 293631 | 8, 15, 25, 30, 35, 40, 45, 50 | 621 – 800 | 680 | 100 / 100 | 393 – 482 | Roto Sil |
+| 293633 | 8, 15, 25, 30, 35, 40, 45, 50 | 801 – 1200 | 980 | 200 / 200 | 482 – 682 | Roto Sil |
+| 293635 | 8, 15, 25, 30, 35, 40, 45, 50 | 1201 – 1600 | 1380 | 200 / 200 | 448 – 658 | Roto Sil |
+| 293636 | 8, 15, 25, 30, 35, 40, 45, 50 | 1601 – 2000 | 1780 | 200 / 200 | 680 – 890 | Roto Sil |
+| 293637 | 8, 15, 25, 30, 35, 40, 45, 50 | 2001 – 2400 | 2180 | 200 / 200 | 880 – 1090 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 260)
+
+Levier séparé adapté : voir à partir de la p. 260 [1 p. 260].
+
+## Levier séparé
+
+![Levier séparé 291743](/assets/quincaillerie/roto-nx-catalogue/cremones/levier-separe-291743.png)
+
+Section 4.6.3.3 « Levier séparé » : une seule référence, colonnes désignation, traitement de
+surface et N° de matériel [1 p. 260].
+
+| N° de matériel | Désignation | Traitement de surface |
+| --- | --- | --- |
+| 291743 | Levier séparé | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 260)
+
+INFO : **est nécessaire pour chaque crémone de semi-fixe avec levier séparé mobile** [1 p. 260].
+
+# Verrou d'arête
+
+Section 4.7 « Verrou d'arête », dernière section du chapitre « Crémone » : des pièces courtes,
+dessinées seules, en deux familles, pour **rainure de battement** (standard et KSR) et pour
+**feuillure Euro**. Chaque tableau porte la longueur, le traitement de surface et le N° de matériel, et celui de la
+feuillure Euro deux cotes de plus [1 p. 261]. Dans les nomenclatures de montage KSR, 305638,
+633419 et 618666 sont appelés « Verrou pour semi-fixe » (repère 22), voir
+[Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md).
+
+## Verrou d'arête pour rainure de battement, standard
+
+Section 4.7.1.1 « Standard » : deux dessins, une pièce longue (200 et 390 mm) et une pièce
+courte (97 mm) [1 p. 261].
+
+![Verrou d'arête pour rainure de battement, standard, 200 et 390 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/verrou-arete-rainure-battement-standard-200-390.png)
+
+| N° de matériel | Longueur (mm) | Traitement de surface |
+| --- | ---: | --- |
+| 633419 | 200 | Roto Sil |
+| 618666 | 390 | Roto Sil |
+
+![Verrou d'arête pour rainure de battement, standard, 97 mm](/assets/quincaillerie/roto-nx-catalogue/cremones/verrou-arete-rainure-battement-standard-97.png)
+
+| N° de matériel | Longueur (mm) | Traitement de surface |
+| --- | ---: | --- |
+| 305638 | 97 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 261)
+
+Les nomenclatures de montage KSR donnent 305638 en « Verrou pour semi-fixe 100 » (entrée
+**CTR-117**).
+
+## Verrou d'arête pour rainure de battement, KSR
+
+![Verrou d'arête pour rainure de battement, KSR](/assets/quincaillerie/roto-nx-catalogue/cremones/verrou-arete-rainure-battement-ksr.png)
+
+Section 4.7.1.2 « KSR » ; la pièce est dessinée avec un retour en équerre à son extrémité droite
+[1 p. 261].
+
+| N° de matériel | Longueur (mm) | Traitement de surface |
+| --- | ---: | --- |
+| 628710 | 265 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 261)
+
+## Verrou d'arête pour feuillure Euro
+
+![Verrou d'arête pour feuillure Euro](/assets/quincaillerie/roto-nx-catalogue/cremones/verrou-arete-feuillure-euro.png)
+
+Section 4.7.2 « Feuillure Euro » ; en plus de la longueur, deux colonnes à pictogramme :
+« profondeur de feuillure » (angle de feuillure, flèche oblique) et « jeu » (deux profils
+emboîtés, cote fléchée en bas), voir
+[Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md)
+[1 p. 11, 261].
+
+| N° de matériel | Longueur (mm) | Profondeur de feuillure (mm) | Jeu (mm) | Traitement de surface |
+| --- | ---: | ---: | ---: | --- |
+| 260189 | 97 | 18 | 12 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 261)
+
+# Crémones OB KSR, fouillot 8 mm, hauteur de poignée fixe
+
+Tables des nomenclatures de montage KSR (ouvrant oscillo-battant, p. 38 ; même liste p. 42), où
+les longueurs diffèrent de celles du catalogue pour les mêmes références (entrée **CTR-115**) [2 p. 38].
+
+**Crémone OB, hauteur poignée fixe, fouillot 8 mm ⁴⁾ (repère 1a)** — ⁴⁾ avec renvoi d'angle OB
+intégré :
+
+| Hauteur en feuillure (mm) | Longueur crémone (mm) | Hauteur poignée (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 300 – 600 ²⁾ ³⁾ | 490 | 120 | - | 734530 |
+| 601 – 900 ¹⁾ | 790 | 220 | 1 E | 2009309 |
+
+Notes de la nomenclature : ¹⁾ HFF 601-700 avec mini renvoi d'angle ; ²⁾ pas de releveur /
+anti-fausse manœuvre ; ³⁾ HFF 300-400 avec mini renvoi d'angle ; ⁴⁾ avec renvoi d'angle OB
+intégré [2 p. 38].
+
+**Crémone OB KSR, hauteur poignée fixe, fouillot 8 mm (repère 1), galet E :**
+
+| Hauteur en feuillure (mm) | Longueur crémone (mm) | Hauteur poignée (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 801 – 1000 | 780 | 413 | 1 E | 771920 |
+| 1001 – 1200 | 980 | 513 | 1 E | 771921 |
+| 1201 – 1400 | 1180 | 563 | 1 E | 771922 |
+| 1401 – 1600 | 1380 | 563 | 2 E | 771923 |
+| 1601 – 1800 | 1580 | 563 | 2 E | 771924 |
+| 1601 – 1800 | 1380 + allonge 200 | 763 | 2 E | 771923 + 767639 |
+| 1601 – 1800 | 1580 | 1000 | 2 E | 795269 |
+| 1801 – 2000 | 1780 | 1000 | 2 E | 795271 |
+| 2001 – 2200 | 1980 | 1000 | 2 E | 795273 |
+| 2201 – 2400 | 2180 | 1000 | 3 E | 795275 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 38)
+
+**Version courte HP fixe, galet E** — mêmes références jusqu'à 1600 mm, puis une combinatoire
+propre au-delà :
+
+| Hauteur en feuillure (mm) | Longueur crémone (mm) | Hauteur poignée (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 801 – 1000 | 780 | 413 | 1 E | 771920 |
+| 1001 – 1200 | 980 | 513 | 1 E | 771921 |
+| 1201 – 1400 | 1180 | 563 | 1 E | 771922 |
+| 1401 – 1600 | 1380 | 563 | 1 E | 771923 |
+| 1601 – 1800 | 1380 + allonge 200 | 563 | 2 E | 771923 + 767639 |
+| 1601 – 1800 | 1380 + allonge 200 | 763 | 2 E | 771923 + 767639 |
+| 1801 – 2000 | 1780 | 1000 | 2 E | 795271 |
+| 2001 – 2200 | 1780 + allonge 200 | 1000 | 2 E | 795271 + 767639 |
+| 2201 – 2400 | 1780 + allonge 400 | 1000 | 2 E, 1 E | 795271 + 280346 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 38)
+
+## Crémones OB KSR fouillot 8 mm, galet V, et crémones à renvoi d'angle intégré F8 / F-6
+
+La planche « Crémones OB KSR fouillot de 8 mm et -6 mm » du manuel donne quatre crémones, repérées
+1 à 4 sur les dessins : deux crémones OB avec renvoi d'angle intégré (fouillot F8 et F-6), la
+crémone OB KSR à hauteur de poignée fixe en galet V et la crémone OB à hauteur de poignée variable
+(section suivante) [2 p. 81].
+
+**Crémone OB avec renvoi d'angle intégré, galet V** (repères 1 et 2) :
+
+| Repère | Fouillot | Hauteur en feuillure (mm) | Longueur crémone (mm) | Hauteur poignée (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | F8 | 601 – 900 | 790 | 220 | 1 V | 2009310 |
+| 2 | F-6 | 601 – 900 | 790 | 220 | 1 V | 2009317 |
+
+**Crémone OB KSR, hauteur poignée fixe, galet V** (repère 3) :
+
+| Hauteur en feuillure (mm) | Longueur crémone (mm) | Hauteur poignée (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 801 – 1000 | 780 | 413 | 1 V | 771940 |
+| 1001 – 1200 | 980 | 513 | 1 V | 771941 |
+| 1201 – 1400 | 1180 | 563 | 1 V | 771942 |
+| 1401 – 1600 | 1380 | 563 | 2 V | 771943 |
+| 1601 – 1800 | 1580 | 563 | 2 V | 771944 |
+| 1601 – 1800 | 1380 | 763 | 2 V | 771943 |
+| (ligne sans plage imprimée) | 200 | - | - | 767639 |
+| 1601 – 1800 | 1580 | 1000 | 2 V | 795270 |
+| 1801 – 2000 | 1780 | 1000 | 2 V | 795272 |
+| 2001 – 2200 | 1980 | 1000 | 2 V | 795274 |
+| 2201 – 2400 | 2180 | 1000 | 3 V | 795276 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 81)
+
+La ligne « 200 — 767639 » est imprimée sans plage ni désignation ; 767639 est le numéro de
+l'allonge sans galet de 200 mm ([Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md)).
+
+![Crémones OB avec renvoi d'angle intégré F8 (1) et F-6 (2)](/assets/quincaillerie/roto-nx-ksr/cremones/cremones-ob-renvoi-d-angle-integre-f8-f-6.png)
+
+Les deux crémones sont dessinées avec leur renvoi d'angle intégré, qui forme l'équerre du bas du
+dessin [2 p. 81].
+
+![Crémone OB KSR galet V (3) et crémone OB hauteur de poignée variable fouillot 8 mm (4)](/assets/quincaillerie/roto-nx-ksr/cremones/cremones-ob-ksr-galet-v-et-hp-variable-f8.png)
+
+# Crémones OB, fouillot 8 mm, hauteur de poignée variable
+
+Crémone OB, hauteur poignée variable – fouillot 8 mm (repère 4 de la planche « Crémones OB KSR
+fouillot de 8 mm et -6 mm ») : la hauteur de poignée est une plage [2 p. 81].
+
+| Hauteur en feuillure (mm) | Longueur crémone (mm) | Hauteur poignée (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 430 – 520 ⁴⁾ | 500 | 190 – 260 | - | 259764 |
+| 521 – 620 | 400 | 260 – 310 | - | 259765 |
+| 621 – 800 | 580 | 311 – 400 | 1 V | 502024 |
+| 801 – 1200 | 980 | 401 – 600 | 1 V | 502075 |
+| 1201 – 1600 | 1380 | 601 – 800 | 2 V | 502076 |
+| 1601 – 2000 | 1780 | 801 – 1000 | 2 V | 795375 |
+| 2001 – 2400 | 2180 | 1001 – 1200 | 4 V | 795377 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 81)
+
+La plage 430 – 520 appelle une note ⁴⁾ qui n'est pas imprimée sur la page (entrée **INC-207**).
+Le tableau de commande du catalogue donne à 259764 la plage 380 – 620 mm, n'a pas 259765 et porte
+840812 (621 – 1 020 mm) au lieu de 502024 (entrée **CTR-116**).
+Les crémones OB à hauteur de poignée variable des nomenclatures de l'ouvrant à soufflet avec
+renvoi d'angle (259764, 259765, 840794, 623646, 259768, 795374, 795376, galets E) sont sur
+[Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md).
+
+# Crémones OB KSR, fouillot 15 mm, hauteur de poignée fixe, galets E et V
+
+La planche « Crémones avec fouillot de 15 mm, galets E et V » du manuel donne la crémone OB KSR à
+hauteur de poignée fixe en galet E (repère 1) et en galet V (repère 2), puis la crémone OB à
+hauteur de poignée variable en galet E (3) et en galet V (4) [2 p. 82].
+
+**Crémone OB KSR, hauteur poignée fixe, galet E (1) :**
+
+| Hauteur en feuillure (mm) | Longueur crémone (mm) | Hauteur poignée (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 601 – 800 | 580 | 263 | - | 619591 |
+| 801 – 1000 | 780 | 413 | 1 E | 619592 |
+| 1001 – 1200 | 980 | 513 | 1 E | 619593 |
+| 1201 – 1400 | 1180 | 563 | 1 E | 619594 |
+| 1401 – 1600 | 1380 | 563 | 2 E | 619595 |
+| 1601 – 1800 | 1580 | 563 | 2 E | 619596 |
+| 1601 – 1800 | 1580 | 1000 | 2 E | 794636 |
+| 1801 – 2000 | 1780 | 1000 | 2 E | 794637 |
+| 2001 – 2200 | 1980 | 1000 | 2 E | 795280 |
+| 2201 – 2400 | 2180 | 1000 | 3 E | 795282 |
+
+**Crémone OB KSR, hauteur poignée fixe, galet V (2)** :
+
+| Hauteur en feuillure (mm) | Longueur crémone (mm) | Hauteur poignée (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 601 – 800 | 580 | 263 | - | 619591 |
+| 801 – 1000 | 780 | 413 | 1 V | 626542 |
+| 1001 – 1200 | 980 | 513 | 1 V | 626543 |
+| 1201 – 1400 | 1180 | 563 | 1 V | 626544 |
+| 1401 – 1600 | 1380 | 563 | 2 V | 626575 |
+| 1601 – 1800 | 1580 | 563 | 2 V | 626576 |
+| 1601 – 1800 | 1580 | 1000 | 2 V | 794640 |
+| 1801 – 2000 | 1780 | 1000 | 2 V | 794641 |
+| 2001 – 2200 | 1980 | 1000 | 3 V | 794642 |
+| 2201 – 2400 | 2180 | 1000 | 3 V | 794643 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 82)
+
+La ligne 601 – 800 porte le même numéro 619591, sans galet, dans les deux listes. Les longueurs de
+ces crémones diffèrent de celles de la planche du catalogue (p. 215) pour les mêmes numéros
+d'article (entrée **CTR-67**).
+
+![Crémones OB KSR fouillot 15 mm, galet E (1) et galet V (2)](/assets/quincaillerie/roto-nx-ksr/cremones/cremones-ob-ksr-f15-galets-e-v.png)
+
+# Crémones OB, fouillot 15 mm, hauteur de poignée variable
+
+Crémone OB, hauteur poignée variable – fouillot 15 mm, même planche [2 p. 82]. **Galet E (3) :**
+
+| Hauteur en feuillure (mm) | Longueur crémone (mm) | Hauteur poignée (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 310 – 450 ¹⁾ | 430 | 155 – 225 | - | 259717 |
+| 451 – 620 ¹⁾ | 400 | 225 – 310 | - | 259718 |
+| 621 – 800 | 580 | 311 – 400 | 1 E | 259719 |
+| 801 – 1200 | 980 | 401 – 600 | 1 E | 259720 |
+| 1201 – 1600 | 1380 | 601 – 800 | 2 E | 259721 |
+| 1601 – 2000 | 1780 | 801 – 1000 | 2 E | 795389 |
+| 2001 – 2400 | 2180 | 1001 – 1200 | 4 E | 795392 |
+
+**Galet V (4) :**
+
+| Hauteur en feuillure (mm) | Longueur crémone (mm) | Hauteur poignée (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 540 – 620 ¹⁾ | 515 | 226 – 315 | 1 V | 566500 |
+| 621 – 800 | 580 | 311 – 400 | 1 V | 355743 |
+| 801 – 1200 | 980 | 401 – 600 | 1 V | 355744 |
+| 1201 – 1600 | 1380 | 601 – 800 | 2 V | 355745 |
+| 1601 – 2000 | 1780 | 801 – 1000 | 2 V | 795390 |
+| 2001 – 2400 | 2180 | 1001 – 1200 | 4 V | 795393 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 82)
+
+Notes de la planche, telles qu'imprimées [2 p. 82] :
+
+- ¹⁾ Pas de releveur / anti-fausse manœuvre.
+- ²⁾ Avec renvoi d'angle OB intégré galet P spécial petite hauteur.
+- ³⁾ Avec renvoi d'angle OB intégré galet P standard.
+
+Les notes ²⁾ et ³⁾ ne sont appelées par aucune ligne de la planche (entrée **INC-207**).
+Le tableau de commande du catalogue donne à 259717 la plage 310 – 620 mm et n'a ni 259718 ni
+566500 (entrée **CTR-116**).
+
+![Crémones OB hauteur de poignée variable fouillot 15 mm, galet E (3) et galet V (4)](/assets/quincaillerie/roto-nx-ksr/cremones/cremones-ob-hp-variable-f15.png)
+
+# Crémones OB, fouillot -6 mm, hauteur de poignée fixe
+
+Famille distincte du fouillot 8 mm, relevée sur la nomenclature de l'oscillo-battant à deux
+vantaux avec poignée centrée ; un **adaptateur carré de 7 mm : fouillot -6** (réf. 493348)
+l'accompagne [2 p. 46]. Une ligne sans hauteur en feuillure est une allonge ou un prolongateur à
+ajouter à la crémone de la ligne au-dessus, dans l'ordre imprimé [2 p. 46].
+
+<table>
+<thead>
+<tr><th>Repère</th><th>Crémone</th><th>Hauteur en feuillure (mm)</th><th>Longueur (mm)</th><th>Hauteur poignée (mm)</th><th>Galets</th><th>N° d'article</th></tr>
+</thead>
+<tbody>
+<tr><td rowspan="2">1a</td><td rowspan="2">Crémone OB, hauteur poignée fixe, fouillot -6 mm ⁴⁾</td><td>435 – 600 ²⁾ ³⁾</td><td>170</td><td>170</td><td>-</td><td>602130</td></tr>
+<tr><td>601 – 900 ¹⁾</td><td>790</td><td>220</td><td>1 E</td><td>2009316</td></tr>
+<tr><td rowspan="17">1</td><td rowspan="17">Crémone OB KSR, hauteur poignée fixe, fouillot -6 mm</td><td>801 – 1100 ⁵⁾</td><td>880</td><td>413</td><td>1 E</td><td>838096</td></tr>
+<tr><td>1001 – 1200</td><td>980</td><td>513</td><td>1 E</td><td>823584</td></tr>
+<tr><td>1201 – 1400</td><td>1180</td><td>563</td><td>1 E</td><td>823585</td></tr>
+<tr><td>1401 – 1600</td><td>1180</td><td>563</td><td>1 E</td><td>823585</td></tr>
+<tr><td>(complément)</td><td>200</td><td>-</td><td>1 E</td><td>450821</td></tr>
+<tr><td>1601 – 1800</td><td>1180</td><td>563</td><td>1 E</td><td>823585</td></tr>
+<tr><td>(complément)</td><td>400</td><td>-</td><td>1 E</td><td>280346</td></tr>
+<tr><td>1601 – 1800</td><td>1180</td><td>763</td><td>1 E</td><td>823585</td></tr>
+<tr><td>(complément)</td><td>200</td><td>-</td><td>-</td><td>767639</td></tr>
+<tr><td>(complément)</td><td>200</td><td>-</td><td>1 E</td><td>450821</td></tr>
+<tr><td>1601 – 1800</td><td>1580</td><td>1000</td><td>2 E</td><td>823587</td></tr>
+<tr><td>1801 – 2000</td><td>1580</td><td>1000</td><td>2 E</td><td>823587</td></tr>
+<tr><td>(complément)</td><td>200</td><td>-</td><td>-</td><td>737639</td></tr>
+<tr><td>2001 – 2200</td><td>1580</td><td>1000</td><td>2 E</td><td>823587</td></tr>
+<tr><td>(complément)</td><td>400</td><td>-</td><td>1 E</td><td>280346</td></tr>
+<tr><td>2201 – 2400</td><td>1580</td><td>1000</td><td>2 E</td><td>823587</td></tr>
+<tr><td>(complément)</td><td>600</td><td>-</td><td>1 E</td><td>255282</td></tr>
+</tbody>
+</table>
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 46)
+
+Le complément de 200 mm de la plage 1 801 – 2 000 est imprimé **737639**, là où toutes les autres
+listes portent l'allonge de 200 mm 767639 (entrée **INC-197**). Le complément de 600 mm de la plage
+2 201 – 2 400 porte le numéro 255282, qui est ailleurs celui du verrouilleur médian 600 KU.
+
+**Crémone de semi-fixe, fouillot -6 mm**, manœuvrée par un levier (galets G) [2 p. 46] :
+
+<table>
+<thead>
+<tr><th>Repère</th><th>Crémone</th><th>Hauteur en feuillure (mm)</th><th>Longueur (mm)</th><th>Hauteur levier (mm)</th><th>Galets</th><th>N° d'article</th></tr>
+</thead>
+<tbody>
+<tr><td>17a</td><td>Crémone de semi-fixe hauteur poignée fixe ⁴⁾</td><td>601 – 900 ¹⁾</td><td>790</td><td>156</td><td>1 G</td><td>2009318</td></tr>
+<tr><td rowspan="12">17</td><td rowspan="12">Crémone de semi-fixe KSR, hauteur poignée fixe</td><td>801 – 1100 ⁵⁾</td><td>880</td><td>156</td><td>1 G</td><td>838097</td></tr>
+<tr><td>1001 – 1200</td><td>980</td><td>195</td><td>1 G</td><td>823596</td></tr>
+<tr><td>1201 – 1400</td><td>1180</td><td>435</td><td>1 G</td><td>823597</td></tr>
+<tr><td>1401 – 1600</td><td>1380</td><td>485</td><td>1 G</td><td>823597</td></tr>
+<tr><td>(complément)</td><td>200</td><td>-</td><td>-</td><td>767639</td></tr>
+<tr><td>1601 – 1800</td><td>1580</td><td>485</td><td>1 G</td><td>823599</td></tr>
+<tr><td>1801 – 2000</td><td>1580</td><td>922</td><td>2 G</td><td>823599</td></tr>
+<tr><td>(complément)</td><td>200</td><td>-</td><td>-</td><td>767639</td></tr>
+<tr><td>2001 – 2200</td><td>1580</td><td>922</td><td>2 G</td><td>823599</td></tr>
+<tr><td>(complément)</td><td>400</td><td>-</td><td>1 G</td><td>280345</td></tr>
+<tr><td>2201 – 2400</td><td>1580</td><td>922</td><td>2 G</td><td>823599</td></tr>
+<tr><td>(complément)</td><td>600</td><td>-</td><td>1 G</td><td>280331</td></tr>
+</tbody>
+</table>
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 46)
+
+Notes ¹⁾ à ⁵⁾ : voir [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md),
+section *Oscillo-battant à deux vantaux, poignée centrée* [2 p. 47].
+
+# Crémones à sortie de tringle
+
+La *crémone à sortie de tringle* équipe l'ouvrant à la française : ses tringles sortent en haut et
+en bas du boîtier et se prolongent par un prolongateur de crémone. Elle est listée sur trois
+nomenclatures du manuel — ouvrant à la française à un et deux vantaux (PDF p. 48), deux vantaux
+larges avec poignée centrée (p. 50), deux vantaux avec crémone de semi-fixe (p. 52) — voir
+[Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md)
+[2 p. 48, 50, 52].
+
+Dans les tableaux, une ligne porte soit un seul numéro d'article (colonne « sans galet », les
+premières plages), soit un numéro en galet E et un en galet P ; un astérisque renvoie à la note
+« \* Pas de renvoi d'angle possible ». Un « 1 » est imprimé après la longueur de crémone de toutes
+les plages à partir de 601 mm, sans intitulé de colonne ; il est reporté tel quel [2 p. 48].
+
+**Fouillot 8 mm** (repère 1), identique sur les trois nomenclatures, sauf la plage 375 – 600 mm,
+absente de la p. 52 [2 p. 48, 50, 52] :
+
+| Hauteur en feuillure (mm) | Hauteur poignée (mm) | Longueur crémone (mm) | « 1 » imprimé | N° d'article | N° d'article, galet E | N° d'article, galet P |
+| --- | --- | --- | --- | --- | --- | --- |
+| 375 – 600 | 120 | 245 | - | 625614 \* | - | - |
+| 601 – 800 | 220 | 425 | 1 | - | 729791 | - |
+| 801 – 1000 | 413 | 575 | 1 | - | 625617 | 625622 |
+| 1001 – 1200 | 513 | 675 | 1 | - | 625618 | 625623 |
+| 1201 – 1800 | 563 | 725 | 1 | - | 625619 | 625624 |
+| 1801 – 2400 | 763 | 925 | 1 | - | 625620 | 625625 |
+| 1801 – 2400 | 1000 | 1125 | 1 | - | 625621 | 625626 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 48)
+
+**Fouillot -6 mm** (repère 1a), avec l'adaptateur carré de 7 mm : fouillot -6 mm (repère 2, réf.
+493348), mêmes remarques [2 p. 48, 50, 52] :
+
+| Hauteur en feuillure (mm) | Hauteur poignée (mm) | Longueur crémone (mm) | « 1 » imprimé | N° d'article | N° d'article, galet E | N° d'article, galet P |
+| --- | --- | --- | --- | --- | --- | --- |
+| 375 – 600 | 120 | 245 | - | 623206 \* | - | - |
+| 601 – 800 | 220 | 425 | 1 | - | 729790 | - |
+| 801 – 1000 | 413 | 575 | 1 | - | 623199 | 623214 |
+| 1001 – 1200 | 513 | 675 | 1 | - | 623200 | 623215 |
+| 1201 – 1800 | 563 | 725 | 1 | - | 623201 | 623216 |
+| 1801 – 2400 | 763 | 925 | 1 | - | 623207 | 623217 |
+| 1801 – 2400 | 1000 | 1125 | 1 | - | 623203 | 623218 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 48)
+
+## Prolongateur de crémone à sortie de tringle
+
+Le prolongateur (repère 3) allonge la tringle de la crémone à sortie de tringle ; les trois
+nomenclatures ne donnent pas les mêmes plages (entrée **INC-198**). Pour la plage 2 201 – 2 400,
+deux lignes se cumulent : une allonge de 200 mm (767639) et un prolongateur de 1 075 mm
+[2 p. 48, 50, 52].
+
+| Hauteur en feuillure (mm) | Longueur (mm) | N° d'article | N° d'article, galet E | N° d'article, galet P | Nomenclature |
+| --- | --- | --- | --- | --- | --- |
+| 375 – 600 | 305 | 364484 \* | - | - | p. 48 et 50 |
+| 601 – 800 | 375 | 623603 \* | - | - | p. 48, 50, 52 |
+| 801 – 1000 | 425 | 623604 | - | - | p. 48, 50, 52 |
+| 1001 – 1200 | 525 | 367088 | - | - | p. 48, 50, 52 |
+| 1201 – 1400 | 675 | 623645 | 473099 | 490598 | p. 48 et 50 |
+| 1401 – 1800 | 675 | 623645 | 473099 | 490598 | p. 52 |
+| 1601 – 2000 | 875 | - | 375797 | 456690 | p. 48 |
+| 1801 – 2000 | 875 | - | 375797 | 456690 | p. 50 et 52 |
+| 2001 – 2200 | 1075 | - | 375799 | 456691 | p. 48, 50, 52 |
+| 2201 – 2400 | 200 | 767639 | - | - | p. 48, 50, 52 |
+| 2201 – 2400 | 1075 | - | 375799 | 456691 | p. 48, 50, 52 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 48, 50, 52)
+
+## Crémone de semi-fixe à sortie de tringle, pour F-6 et F8
+
+Crémone du vantail semi-fixe de l'ouvrant à la française à deux vantaux, pour fouillot -6 et 8 mm
+(repère 3, numéro partagé sur la liste avec le prolongateur : entrée **INC-199**) [2 p. 52] :
+
+| Hauteur en feuillure (mm) | Hauteur poignée (mm) | Longueur crémone (mm) | N° d'article |
+| --- | --- | --- | --- |
+| 601 – 800 | 136 | 425 | 786439 |
+| 801 – 1000 | 328 | 575 | 786440 |
+| 1001 – 1200 | 428 | 675 | 786441 |
+| 1201 – 1800 | 478 | 725 | 786442 |
+| 1801 – 2400 | 678 | 925 | 786443 |
+| 1801 – 2400 | 915 | 1125 | 635173 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 52)
+
+**Prolongateur crémone de semi-fixe** (repère 4), sans ou avec gâche ; pour la plage 2 201 – 2 400,
+une allonge de 200 mm (767639) et un prolongateur de 1 075 mm avec gâche (619992) [2 p. 52] :
+
+| Hauteur en feuillure (mm) | Longueur (mm) | N° d'article, sans gâche | N° d'article, avec gâche |
+| --- | --- | --- | --- |
+| 601 – 800 | 375 | 623603 \* | - |
+| 801 – 1000 | 425 | 623604 | - |
+| 1001 – 1200 | 525 | 367088 | - |
+| 1401 – 1800 | 675 | 623645 | 619994 |
+| 1801 – 2000 | 875 | - | 619993 |
+| 2001 – 2200 | 1075 | - | 619992 |
+| 2201 – 2400 | 200 | 767639 | - |
+| 2201 – 2400 | 1075 | - | 619992 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 52)
+
+# Serrures Roto NX H100 (porte-fenêtre à condamnation au cylindre)
+
+La *condamnation au cylindre* verrouille la porte-fenêtre par un cylindre à clé, logé dans la
+serrure H100 qui remplace la crémone. L'*axe de fouillot* (ou entraxe) est ici la distance entre
+le fouillot et le bord du vantail, imprimée en paire « 25 - 70 », « 28 - 70 », « 35 - 70 » ; le
+second nombre (70) n'est pas défini par le manuel. Voir aussi
+[Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md) pour la serrure des
+portes elles-mêmes, une famille distincte [2 p. 54].
+
+**Serrure H100 à sortie de tringle – cond. cylindre** (repère 1), porte-fenêtre à un et deux
+vantaux ; champs d'application : largeur en feuillure 290 à 1 600 mm, hauteur en feuillure 1 325 à
+2 400 mm, poids du vantail max. 130 ou 150 kg [2 p. 54]. La même serrure équipe la porte-fenêtre à
+deux vantaux pour personnes à mobilité réduite [2 p. 58].
+
+| Axe de fouillot, entraxe (mm) | Hauteur poignée (mm) | Longueur crémone (mm) | « 1 » imprimé | N° d'article, galet E | N° d'article, galet P |
+| --- | --- | --- | --- | --- | --- |
+| 25 – 70 | 1000 | 1125 | 1 | 476548 | 492370 |
+| 28 – 70 | 1000 | 1125 | 1 | 476549 | 740864 |
+| 35 – 70 | 1000 | 1125 | 1 | 476550 | - |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 54, 58)
+
+Prolongateur de crémone associé (repère 2). La première colonne de numéros n'a pas d'intitulé
+(ni galet E ni galet P) ; pour la plage 2 201 – 2 400, une allonge de 200 mm (767639) et un
+prolongateur de 1 075 mm se cumulent [2 p. 54] :
+
+| Hauteur en feuillure (mm) | Longueur (mm) | N° d'article | N° d'article, galet E | N° d'article, galet P |
+| --- | --- | --- | --- | --- |
+| 1350 – 1550 | 425 | 623604 | - | - |
+| 1451 – 1650 | 525 | 367088 | - | - |
+| 1601 – 1800 | 675 | 623645 | 473099 | 490598 |
+| 1801 – 2000 | 875 | - | 375797 | 456690 |
+| 2001 – 2200 | 1075 | - | 375799 | 456691 |
+| 2201 – 2400 | 200 | 767639 | - | - |
+| 2201 – 2400 | 1075 | - | 375799 | 456691 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 54)
+
+Les plages 1 350 – 1 550 et 1 451 – 1 650 se chevauchent, et la plus basse commence à 1 350 mm
+alors que le champ d'application commence à 1 325 mm (entrée **INC-200**). La porte-fenêtre PMR
+reprend les cinq dernières lignes (1 601 à 2 400 mm) [2 p. 58].
+
+**Serrure H100 à galets – cond. cylindre** (repère 1), porte-fenêtre à un vantail ; champs
+d'application : largeur en feuillure 290 à 1 600 mm, hauteur en feuillure 1 600 à 2 400 mm, poids
+du vantail max. 130 ou 150 kg [2 p. 56] :
+
+| Axe de fouillot, entraxe (mm) | Hauteur poignée (mm) | Longueur crémone (mm) | « 2 » imprimé | N° d'article, galet E | N° d'article, galet P |
+| --- | --- | --- | --- | --- | --- |
+| 25 – 70 | 1000 | 1125 | 2 | 619907 | 619910 |
+| 28 – 70 | 1000 | 1125 | 2 | 619906 | 619909 |
+| 35 – 70 | 1000 | 1125 | 2 | 619905 | 619908 |
+
+Prolongateur de crémone associé (repère 2) [2 p. 56] :
+
+| Hauteur en feuillure (mm) | Longueur (mm) | Nombre imprimé | N° d'article | N° d'article, galet E | N° d'article, galet P |
+| --- | --- | --- | --- | --- | --- |
+| 1601 – 1800 | 675 | 1 | - | 619938 | 619941 |
+| 1801 – 2000 | 875 | 2 | - | 619937 | 619940 |
+| 2001 – 2200 | 1075 | 2 | - | 619936 | 619939 |
+| 2201 – 2400 | 200 | - | 767639 | - | - |
+| 2201 – 2400 | 1075 | 2 | - | 619936 | 619939 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 56)
+
+## Porte-fenêtre à deux vantaux, accessibilité aux personnes à mobilité réduite
+
+Champs d'application : largeur en feuillure 290 à 1 600 mm, hauteur en feuillure 1 600 à 2 400 mm,
+poids du vantail max. 130 ou 150 kg. La serrure H100 à sortie de tringle (repère 1) et son
+prolongateur (repère 2) sont ceux du tableau ci-dessus ; le vantail principal reçoit aussi une
+crémone à sortie de tringle, et le vantail semi-fixe une *crémone de semi-fixe à double
+mouvement* [2 p. 58] :
+
+| Repère | Pièce | Hauteur en feuillure (mm) | Hauteur poignée (mm) | Longueur crémone (mm) | « 1 » imprimé | N° d'article | N° d'article, galet E | N° d'article, galet P |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1a | Crémone à sortie de tringle – fouillot 8 mm | 1801 – 2400 | 1000 | 1125 | 1 | - | 625621 | 625626 |
+| 1b | Crémone à sortie de tringle – fouillot -6 mm | 1801 – 2400 | 1000 | 1125 | 1 | - | 623203 | 623218 |
+| 3 | Crémone de semi fixe à double mouvement pour H100 | 1601 – 2400 | 915 | 1125 | - | 619943 | - | - |
+| 3a | Crémone de semi fixe à double mouvement pour F-6 et F8 | 1601 – 2400 | 915 | 1125 | - | 635173 | - | - |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 58)
+
+Prolongateur crémone de semi-fixe (repère 4) ; pour la plage 2 201 – 2 400, une allonge de 200 mm et
+un prolongateur de 1 075 mm [2 p. 58] :
+
+| Hauteur en feuillure (mm) | Longueur (mm) | N° d'article |
+| --- | --- | --- |
+| 1601 – 1800 | 675 | 619994 |
+| 1801 – 2000 | 875 | 619993 |
+| 2001 – 2200 | 1075 | 619992 |
+| 2201 – 2400 | 200 | 767639 |
+| 2201 – 2400 | 1075 | 619992 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 58)
+
+Les autres pièces de ces trois porte-fenêtres (ferrage symétrique, options, gâches) sont sur
+[Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md).
+
+# Crémones OB EasyMix, hauteur de poignée fixe
+
+La planche « EasyMix » du manuel donne deux crémones OB EasyMix à hauteur de poignée fixe
+(repère 1) et deux boîtiers, carré (2) et cylindre (3), qui se choisissent par la cote de
+fouillot, de 25 à 50 mm [2 p. 83].
+
+**Crémone OB EasyMix, hauteur poignée fixe, galet E (1) :**
+
+| Hauteur en feuillure (mm) | Longueur crémone (mm) | Hauteur poignée (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 601 – 800 | 690 | 263 | - | 788302 |
+| 801 – 1000 | 890 | 413 | 1 E | 788303 |
+| 1001 – 1200 | 1090 | 513 | 1 E | 788304 |
+| 1201 – 1400 | 1290 | 563 | 1 E | 788305 |
+| 1401 – 1600 | 1490 | 563 | 2 E | 788306 |
+| 1601 – 1800 | 1690 | 563 | 2 E | 788307 |
+| 1601 – 1800 | 1690 | 1000 | 2 E | 788308 |
+| 1801 – 2000 | 1890 | 1000 | 2 E | 788309 |
+| 2001 – 2200 | 2090 | 1000 | 3 E | 788310 |
+| 2201 – 2400 | 2290 | 1000 | 3 E | 788311 |
+
+**Crémone OB EasyMix, hauteur poignée fixe, sécurité, galet V (1)** :
+
+| Hauteur en feuillure (mm) | Longueur crémone (mm) | Hauteur poignée (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 801 – 1000 | 890 | 413 | 1 V | 795284 |
+| 1001 – 1200 | 1090 | 513 | 1 V | 795285 |
+| 1201 – 1400 | 1290 | 563 | 1 V | 795286 |
+| 1401 – 1600 | 1490 | 563 | 2 V | 795287 |
+| 1601 – 1800 | 1690 | 563 | 2 V | 795288 |
+| 1601 – 1800 | 1690 | 1000 | 2 V | 788312 |
+| 1801 – 2000 | 1890 | 1000 | 2 V | 788313 |
+| 2001 – 2200 | 2090 | 1000 | 3 V | 788314 |
+| 2201 – 2400 | 2290 | 1000 | 3 V | 788315 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 83)
+
+**Boîtier carré (2) et boîtier cylindre (3)**, par fouillot (mm) :
+
+| Fouillot (mm) | N° d'article, boîtier carré | N° d'article, boîtier cylindre |
+| --- | --- | --- |
+| 25 | 787675 | 787656 |
+| 30 | 787677 | 787658 |
+| 35 | 787678 | 787659 |
+| 40 | 787679 | 787660 |
+| 45 | 787680 | 787661 |
+| 50 | 787681 | 787663 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 83)
+
+![Crémone OB EasyMix (1), boîtier carré (2) et boîtier cylindre (3)](/assets/quincaillerie/roto-nx-ksr/cremones/cremone-easymix-et-boitiers.png)
+
+# Ce que la source ne donne pas ici
+
+Les sections de catalogue ci-dessus couvrent tout le chapitre « Crémone », p. 212 à 261. Le verrou
+d'arête (section 4.7) n'a ni définition ni type d'ouverture. Les renvois d'angle des tableaux de
+combinaisons sont sur
+[Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md).
+
+Les nomenclatures de montage KSR et le catalogue portent les mêmes références avec des longueurs
+et des galets différents sur plusieurs familles : **CTR-67** (fouillot 15 mm), **CTR-115**
+(fouillot 8 mm), **CTR-116** (premières plages des crémones à hauteur de poignée variable),
+**CTR-117** (crémones de semi-fixe KSR, verrou 305638). Les tableaux de combinaisons des crémones
+de semi-fixe ne concordent pas toujours avec les tableaux de références : **INC-290**,
+**INC-291**, **INC-292**. Toutes les tables sont transcrites telles qu'imprimées.
+
+# Citations
+
+[1] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 —
+`raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 10 à 12, 18, 161, 197 et 211 à 261
+
+[2] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf.
+IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 38, 42,
+45, 46, 48, 50, 52, 54, 56, 58, 62, 66, 76, 81, 82 et 83 (numérotation du PDF)
+
+# Voir aussi
+
+- [Roto NX](/quincaillerie/roto-nx.md)
+- [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md)
+- [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md)
+- [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md)
+- [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md)
+- [Catalogue Roto NX pour profils PVC](/sources/roto-nx-catalogue-pvc.md)
+- [Instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md)
+- [ROTO](/fournisseurs/roto.md)
+
+===== PAGE 2 : /procedures/percage-montage-roto-nx.md =====
+# Ce que fait cette procédure
+
+Elle rassemble les cotes d'usinage et les gestes de montage de la ferrure Roto NX KSR sur une
+fenêtre PVC : coupe du profilé de vantail et cotes pour ferrure, perçage et montage de la poignée,
+cotes de perçage du dormant et de l'ouvrant pour les paliers et pivots avec leurs gabarits,
+montage de la ferrure sur le vantail, coupe de la crémone de semi-fixe, bras de compas du
+limiteur d'ouverture à soufflet, vissage et force de traction, accrochage et réglage [1 p. 88-93,
+107-113].
+
+Le *dormant* est le cadre fixe, l'*ouvrant* (ou *vantail*) la partie mobile ; la *feuillure* est
+le logement où l'un s'emboîte dans l'autre ; le *recouvrement* est la largeur dont l'ouvrant
+recouvre le dormant (voir le [glossaire](/reference/glossaire.md)).
+
+# Coupe du profilé de vantail, cotes pour ferrure
+
+La coupe montre le profilé de vantail (en gris) avec la rainure où se loge la ferrure (partie
+saumon) : ce sont les cotes que le profilé doit respecter pour recevoir la ferrure Roto NX
+[1 p. 88].
+
+![Coupe du profilé de vantail, cotes pour ferrure Roto NX](/assets/procedures/roto-nx-ksr-montage/coupe-profile-de-vantail-cotes-ferrure.png)
+
+| Cote lue sur la coupe | Valeur (mm) |
+| --- | --- |
+| Largeur de la rainure de ferrure (en haut) | 9,3 |
+| Cote à côté de la rainure (en haut) | 2,2 |
+| Hauteur, cote extérieure (à gauche) | 16,2 |
+| Hauteur, cote intérieure (à gauche) | 12,3 |
+| Cote horizontale en bas | 20 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 88)
+
+Les cotes 16,2 / 12,3 / 9,3 / 2,2 sont aussi celles des désignations de l'élément de fenêtre, voir
+[Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md).
+
+## Crémone avec fouillot -6
+
+La coupe d'un ouvrant équipé d'une crémone à fouillot -6 montre le carré de poignée (en rouge)
+traversant le profilé jusqu'au boîtier de crémone, et à côté l'adaptateur carré de 7 mm [1 p. 88].
+
+![Coupe du profilé avec crémone à fouillot -6 et adaptateur carré de 7 mm](/assets/procedures/roto-nx-ksr-montage/coupe-profile-cremone-fouillot-moins-6.png)
+
+| Cote | Valeur (mm) |
+| --- | --- |
+| Largeur en tête (en haut) | 12 |
+| Demi-largeur depuis l'axe (en haut) | 6 |
+| Cote verticale depuis l'axe de ferrure, intérieure | 22 |
+| Cote verticale depuis l'axe de ferrure, extérieure | 30 |
+| Diamètre minimal du passage (en bas) | min. ø13 |
+| Adaptateur carré de 7 mm, cote basse | 8 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 88)
+
+# Perçage et montage de la poignée de fenêtre
+
+## Perçage pour vis et carré de 7 mm
+
+La poignée se fixe par deux vis et un carré de 7 mm qui entre dans le fouillot de la crémone. Le
+perçage comporte trois trous alignés verticalement, à 43 mm d'entraxe entre les trous de vis ; il
+se place par rapport à l'axe de fouillot, décalé selon le fouillot (-6, 8 ou 15) [1 p. 88].
+
+![Perçage et fraisage pour la poignée de fenêtre Roto NX](/assets/procedures/roto-nx-ksr-montage/percage-poignee-de-fenetre.png)
+
+| Perçage | Diamètre | Profondeur de perçage |
+| --- | --- | --- |
+| Trou central (carré de 7 mm), fouillot de 8 et 15 | Ø 12 mm | hauteur recouvrement + 16 mm |
+| Trou central (carré de 7 mm), fouillot de (-6) | Ø 14 mm | hauteur recouvrement + 16 mm |
+| Deux trous de vis, pour vis à tête fraisée (DIN 965 M5 x ...) | Ø 10 mm | hauteur recouvrement + 16 mm |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 88)
+
+Le dessin porte aussi : l'entraxe **43** entre les deux trous Ø 10 ; les positions de fouillot
+**-6**, **8** et **15** cotées au-dessus du dessin ; un outil de perçage à trois forets
+Ø 10 / Ø 12 (14 avec fouillot -6) / Ø 10.
+
+**Fraisage du boîtier de crémone** : **pas de fraisage boîtier en fouillot -6**. Pour les fouillots
+8 / 15, le fraisage est un oblong d'au moins **65** mm de long (min. 65), de **12,3** de large,
+centré sur l'axe ; sur la coupe, **20** entre le bord du profilé et l'axe de fouillot 8 / 15, et
+**28** de profondeur de fraisage minimale [1 p. 88].
+
+## Montage de la poignée de fenêtre
+
+« La poignée est fixée au boîtier de commande de la crémone au moyen de vis à tête fraisée
+DIN 965 M 5 x … » [1 p. 88]. Le dessin nomme l'**épaulement**, la **rainure de ferrure** et le
+**boîtier de crémone**. La **poignée RotoLine avec galets**, tige carré 7 mm, porte des galets
+Ø 10 mm ; cote de **58** mm portée sur son dessin.
+
+![Montage de la poignée de fenêtre et poignée RotoLine](/assets/procedures/roto-nx-ksr-montage/montage-poignee-de-fenetre.png)
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 88)
+
+# Cotes de perçage du dormant et gabarit
+
+Les *paliers* (palier de compas en haut, palier d'angle en bas) se vissent sur le dormant ; leurs
+trous se percent aux cotes ci-dessous, relevées pour un **recouvrement de 20 mm**. **Les vis
+doivent traverser au moins deux parois du profil** [1 p. 89].
+
+![Cotes de perçage du dormant, palier de compas P 6/130 (P 3/130) et P 6/150](/assets/procedures/roto-nx-ksr-montage/percage-dormant-palier-de-compas.png)
+
+![Cotes de perçage du dormant, palier d'angle P 6/130, P 6/150 (P 3/130)](/assets/procedures/roto-nx-ksr-montage/percage-dormant-palier-d-angle.png)
+
+Les cotes sont relevées sur les trois dessins, sans que la planche les nomme ; le tableau dit où
+chacune est portée.
+
+| Palier | Perçage | Cote horizontale en haut (mm) | Cote horizontale en bas (mm) | Cotes près de l'« Axe du palier » (mm) | Cotes verticales à droite des trous (mm) |
+| --- | --- | --- | --- | --- | --- |
+| Palier de compas P 6/130 | Ø 6 mm, profondeur 9 mm | 19.5 | - | 36, 12 | 16, 48, 80 |
+| Palier de compas P 3/130 (*) | Ø 3 mm, profondeur 4 mm | 19.5 | - | 36, 12 | 16, 48, 80 |
+| Palier de compas P 6/150 | Ø 6 mm, profondeur 9 mm | 19.5 et 10 | - | 36, 12 | 16, 48, 74, 80 |
+| Palier d'angle P 6/130, P6/150 | Ø 6 mm, profondeur 9 mm | 20.0 | 18.5 | 36, 12 | 16, 48, 80 |
+| Palier d'angle P 3/130 (*) | Ø 3 mm, profondeur 4 mm | 20.0 | 18.5 | 36, 12 | 16, 48, 80 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 89)
+
+Comment lire les dessins : chaque palier est dessiné sur l'angle du dormant (en saumon), la
+rangée de trous en pointillés, l'« Axe du palier » en trait mixte ; l'astérisque rouge
+« * P 3/130 » signale la version percée Ø 3 mm, profondeur 4 mm, sur le même dessin que la P 6/130.
+Les cotes de la P 3/130 sont celles du dessin commun.
+
+**Gabarit (dormant)** pour palier de compas et palier d'angle P 6 : **numéro d'article 788436
++ usi 284** [1 p. 89].
+
+![Gabarit de perçage du dormant 788436](/assets/procedures/roto-nx-ksr-montage/gabarit-dormant-788436.png)
+
+# Cotes de perçage de l'ouvrant et gabarits
+
+Le *pivot d'angle* se visse en bas de l'ouvrant, côté paumelles. Deux trous Ø 6 mm, profondeur
+23 mm, pour pivot d'angle ; l'ouvrant est dessiné en gris, le dormant en saumon [1 p. 90].
+
+![Cotes de perçage de l'ouvrant, pivot d'angle P 6/150](/assets/procedures/roto-nx-ksr-montage/percage-ouvrant-pivot-d-angle.png)
+
+![Cotes de perçage de l'ouvrant, pivot d'angle P 6/150 compression réglable](/assets/procedures/roto-nx-ksr-montage/percage-ouvrant-pivot-d-angle-reglable.png)
+
+| Pivot d'angle | Perçage | Cotes verticales à gauche (mm) | Cote verticale à droite (mm) | Cote horizontale en bas (mm) | Gabarit, n° d'article |
+| --- | --- | --- | --- | --- | --- |
+| P 6/150 | Ø 6 mm, profondeur 23 mm | 54, 42.5, 16, 16 | 8 | 11 | 788438 |
+| P 6/150 compression réglable | Ø 6 mm, profondeur 23 mm | 70, 26.5, 16, 16 | 8 | 11 | 788503 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 90)
+
+Pour les deux gabarits : « Modifiez le réglage du gabarit lors de l'utilisation avec un axe de
+ferrure de 13 mm » [1 p. 90].
+
+# Montage de la ferrure sur le vantail
+
+## Découpe et raccordement de la crémone
+
+La page « Vantail — Presse / Montage de la ferrure » montre deux façons de découper et raccorder
+les éléments de ferrure (crémone, renvois d'angle) [1 p. 91] :
+
+1. **Découpe avec presse pneumatique** : **a.** perçage du trou ; **b.** raccordement **sans
+   plaquette de liaison** (deux vis).
+2. **Découpe sans presse pneumatique** : **a.** raccordement **avec plaquette de liaison**,
+   **numéro d'article 350401** (deux vis à travers la plaquette).
+
+![Découpe avec et sans presse pneumatique, raccordement avec ou sans plaquette de liaison](/assets/procedures/roto-nx-ksr-montage/decoupe-et-raccordement-cremone.png)
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 91)
+
+## Le montage (suggestions)
+
+Le dessin propose un ordre de pose des pièces autour du vantail (flèches vers le vantail) ; les
+repères sont [1 p. 91] :
+
+| Repère | Pièce |
+| --- | --- |
+| 1 | Renvoi d'angle 1 V |
+| 2 | Renvoi d'angle OB 1 V |
+| 3 | Renvoi d'angle coté compas 1 V |
+| 4 | Crémone OB |
+| 5 | Têtière de compas |
+| 6 | Verrouilleur médian horizontal et vertical |
+| 7 | Pivot d'angle en feuillure K |
+
+![Montage de la ferrure Roto NX sur le vantail (suggestions)](/assets/procedures/roto-nx-ksr-montage/montage-ferrure-vantail-suggestions.png)
+
+La crémone (4) est dessinée sur le montant gauche avec les trois trous de poignée en rouge ; le
+renvoi d'angle (1) en haut à gauche, le renvoi d'angle OB (2) en bas à gauche, la têtière de compas
+(5) en haut, le renvoi d'angle côté compas (3) en haut à droite, les verrouilleurs médians (6) sur
+le montant droit et en bas, le pivot d'angle (7) en bas à droite.
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 91)
+
+# Coupe de la crémone de semi-fixe
+
+« Lors de la coupe des crémones pour semi-fixe, veuillez procéder de la façon suivante » [1 p. 92] :
+
+1. Découper la Crémone de semi-fixe en position ouverte.
+2. Laisser toutes les autres pièces en position fixée.
+3. Monter la crémone semi-fixe avec la poignée environ à moitié de la course, de sorte que le bas
+   soit fermé mais que le haut soit encore ouvert.
+
+**Attention : les gâches doivent être positionnées dans le sens de rotation du deuxième ouvrant,
+excepté celles du seuil du bas qui doivent être positionnées en sens inverse** [1 p. 92].
+
+Deux photos montrent le levier de la crémone de semi-fixe dans deux positions : levier à
+l'horizontale (à gauche), levier incliné vers le bas (à droite).
+
+![Crémone de semi-fixe, levier en deux positions](/assets/procedures/roto-nx-ksr-montage/coupe-cremone-semi-fixe-positions.png)
+
+Le plan d'une fenêtre à deux vantaux (dormant en saumon) montre les gâches (petits rectangles) et
+le sens de rotation de chaque vantail (flèches courbes) ; il porte les cotes de positionnement
+des gâches [1 p. 92].
+
+![Positionnement des gâches d'une fenêtre à deux vantaux, sens de rotation](/assets/procedures/roto-nx-ksr-montage/gaches-deux-vantaux-sens-de-rotation.png)
+
+| Cote portée sur le plan | Valeur (mm) |
+| --- | --- |
+| Traverse haute, depuis l'angle de chaque vantail | A |
+| Traverse haute, de part et d'autre du battement | 50, 70 et 70, 50 |
+| Montants, première gâche depuis le haut | 149 |
+| Montants, gâches suivantes | MV1, MV2, MV3, MV4 |
+| Traverse basse, depuis le battement | 53 (vantail gauche), 18 et 86,5 (vantail droit) |
+| Traverse basse, gâches suivantes | MH1, MH2 |
+| Traverse basse, vantail droit, cote verticale | 12 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 92)
+
+Les valeurs de A, MV1 à MV4, MH1 et MH2 ne sont pas données sur cette page.
+
+# Montage du bras de compas — limiteur d'ouverture à soufflet et sécurité anti-rabattement
+
+Le dessin montre un vantail et, en haut, le bras de compas posé sur la traverse (flèche en haut à
+droite). Les vues de détail nomment la *platine* et le *plot de maintien* ; la
+*sécurité anti-rabattement* est la position de la platine dessinée sous « Position de la platine
+pour sécurité anti-rabattement » [1 p. 93].
+
+![Vantail, montage du bras de compas](/assets/procedures/roto-nx-ksr-montage/bras-de-compas-vantail.png)
+
+Deux réglages d'ouverture à soufflet sont dessinés [1 p. 93] :
+
+- **Ouverture à soufflet standard (140 mm)** : la platine se pose telle quelle ;
+- **Ouverture à soufflet limitée (80 mm)** : la platine est tournée de **180°** avant d'être posée.
+
+Dans les deux cas, les vues du bas (« Ouverture à soufflet 140 mm », « Ouverture à soufflet
+80 mm ») montrent la platine glissée vers le plot et repèrent la « Position de la platine pour
+sécurité anti-rabattement ».
+
+![Platine en ouverture à soufflet standard 140 mm et limitée 80 mm](/assets/procedures/roto-nx-ksr-montage/platine-anti-rabattement-140-80-mm.png)
+
+\* « Lors de l'ouverture à soufflet de la fenêtre, la platine se place automatiquement en position
+anti-rabattement. » [1 p. 93]
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 93)
+
+# Fixation des ferrures de sécurité
+
+Deux coupes à l'échelle 1:2 (« Coupe horizontale M 1:2 », « Coupe verticale M 1:2 ») montrent la
+gâche de sécurité (en gris foncé) vissée dans le dormant (en saumon), le profilé de vantail et le
+vitrage en gris [1 p. 107].
+
+![Fixation de la gâche de sécurité, coupes horizontale et verticale](/assets/procedures/roto-nx-ksr-montage/fixation-gache-de-securite-coupes.png)
+
+- **Fixation gâche de sécurité** : 3 vis 4 x … à travers toutes les parois si la fixation ne peut
+  se faire dans le profil de renforcement en acier.
+- **Fixation du parclose** : avec vis si nécessaire.
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 107)
+
+# Accrochage et décrochage du vantail, compas simple
+
+## Accrochage du vantail
+
+![Accrochage du vantail : compas [1] dans le palier de compas [2], tige d'axe [3]](/assets/procedures/roto-nx-ksr-montage/accrochage-vantail-compas-simple.png)
+
+1. Insérer l'ouvrant avec le compas [1] dans le palier de compas [2].
+2. Fermer l'ouvrant.
+3. Insérer la tige d'axe [3] par le bas et la pousser à fleur du palier.
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 107)
+
+## Décrochage du vantail
+
+![Décrochage du vantail avec l'outil d'extraction 899630](/assets/procedures/roto-nx-ksr-montage/decrochage-vantail-outil-899630.png)
+
+1. Fermer la fenêtre.
+2. Avec un outil d'extraction [1], pousser légèrement la tige d'axe [2] du haut vers le bas.
+3. Placer l'outil d'extraction sur la tige d'axe et la sortir verticalement vers le bas.
+
+**Outil d'extraction 899630** [1 p. 108].
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 108)
+
+# Réglages (uniquement si nécessaire)
+
+Six dessins montrent les points de réglage de la ferrure sur le vantail (gris) dans le dormant
+(saumon), avec la plage de réglage en mm de part et d'autre de la position initiale. La page ne
+nomme pas les réglages ; le tableau reprend ce que porte chaque dessin [1 p. 108].
+
+![Réglages de la ferrure Roto NX, palier d'angle et palier de compas](/assets/procedures/roto-nx-ksr-montage/reglages-palier-et-compas.png)
+
+| Dessin | Repère | Sens de la flèche | Plage (mm) |
+| --- | --- | --- | --- |
+| en haut à gauche, angle bas du vantail côté paumelles | [A] | vertical | +2.5 / -2.0 |
+| au milieu à gauche, même angle | [B] | horizontal, le long de la traverse basse | -2.0 / +2.0 |
+| en bas à gauche, angle bas du vantail | [C] | perpendiculaire au plan de la fenêtre | -0.5 / +0.5 |
+| en haut à droite, angle bas | - | cote verticale | 3.0 - 7.5 |
+| au milieu à droite, angle haut côté compas | [A] | horizontal | -2.0 / +3.0 |
+| en bas à droite, compas ouvert | [A] | perpendiculaire au plan de la fenêtre | -1.0 / +1.0 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 108)
+
+# Réglage des galets
+
+Les *galets* (goujons) de verrouillage E, P et V se règlent en les tournant : chaque quart de tour
+change la *compression d'appui* (le serrage du vantail contre le joint), et le goujon V se règle
+aussi en hauteur. Trois tables, une par goujon, avec son dessin, sa course de réglage et sa vue de
+côté (voir le [glossaire](/reference/glossaire.md)) [1 p. 109].
+
+![Réglage des galets E, P et V](/assets/procedures/roto-nx-ksr-montage/reglage-des-galets-e-p-v.png)
+
+| Goujon | Course de réglage | Réglage de la compression d'appui (mm) | Réglage en hauteur (mm) |
+| --- | --- | --- | --- |
+| E | position initiale | - | - |
+| E | 90° / 90° | ±0,8 | - |
+| P | position initiale | - | - |
+| P | 90° / 90° | ±0,8 | - |
+| V | position initiale | - | - |
+| V | 90° / 90° | ±0,8 | ±0,2 |
+| V | 180° / 180° | - | ±0,4 |
+| V | 270° / 270° | ±0,8 | ±0,6 |
+| V | 360° / 360° | - | ±0,8 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 109)
+
+La vue de côté du goujon V porte trois positions : « [1] 0 = Position initiale », « [2] -0,8 mm
+réglage max », « [3] +0,8 mm réglage max ». Les tables E et P ont une colonne « Hauteur » vide.
+
+# Montage / Vissage
+
+## Tailles et poids maxi de l'ouvrant
+
+Les caractéristiques techniques figurant dans la documentation spécifique du fabricant de
+ferrures, les schémas d'utilisation et les affectations des composants donnent des indications sur
+les tailles et poids maxi admissibles des ouvrants. **L'élément ayant la capacité de charge la plus
+faible admissible détermine ce faisant le poids maximal admissible de l'ouvrant** [1 p. 110].
+
+- Avant d'utiliser des jeux de données électroniques et surtout de les transposer dans des
+  programmes de construction de fenêtres, vérifier que les caractéristiques techniques, les schémas
+  d'utilisation et les affectations des éléments sont respectés.
+- Ne jamais dépasser les tailles et poids d'ouvrant maximum admissibles. En cas de doute, contacter
+  le fabricant de ferrures.
+
+## Obligations du fabricant de profils
+
+Le fabricant d'éléments est tenu de respecter toutes les cotes prédéfinies du système (par ex.
+dimensions d'écart d'étanchéité ou distances de verrouillage). Il doit en outre garantir et
+contrôler celles-ci régulièrement, en particulier lors de la première mise en place de nouvelles
+pièces de ferrure, et en permanence lors de la fabrication jusqu'à l'installation de l'élément
+comprise [1 p. 110].
+
+**INFO** : « Les pièces de ferrure sont en principe conçues de manière à pouvoir ajuster les cotes
+du système, dans la mesure elles sont influencées par la ferrure. Si un écart dans ces cotes n'est
+constaté qu'une fois l'élément monté, le fabricant de ferrures n'est pas responsable de l'éventuel
+coût supplémentaire occasionné. »
+
+## Composition des ferrures
+
+Les éléments à retard d'effraction dans des environnements à atmosphère agressive et corrosive
+nécessitent des ferrures répondant à des exigences particulières. Les éléments pour espaces
+humides et ceux pour l'utilisation dans des environnements à atmosphère agressive et corrosive
+nécessitent des ferrures répondant à des exigences particulières [1 p. 110].
+
+La résistance aux charges de vent des éléments en position fermée et verrouillée est fonction de
+la conception spécifique de ces dernières. Les charges dues au vent spécifiées par la législation
+et les normes (par exemple selon EN 12210 – en particulier pression de contrôle P3) peuvent être
+marquées sur le système de ferrures. Pour les domaines mentionnés précédemment correspondant à la
+composition et au montage des ferrures dans les éléments, un accord particulier doit être convenu
+entre le fabricant de ferrures et le fabricant de profils [1 p. 110].
+
+**INFO** : « Les spécifications du fabricant de ferrures concernant la composition des ferrures
+(par exemple l'utilisation de compas supplémentaires, la configuration des ferrures pour les
+éléments à retard d'effraction, etc.) sont obligatoires. »
+
+En général, les ferrures définies dans le présent document peuvent satisfaire aux exigences légales
+et normatives pour les habitations respectant les critères d'accessibilité [1 p. 110].
+
+## 8.2 Vissage
+
+Pour la fixation des pièces de ferrure, il faut utiliser des vis de montage de fenêtre en acier
+galvanisées et passivées (Ø 3,9 – 4,2 x …), et pour des contraintes climatiques plus élevées, des
+vis de montage de fenêtre avec traitement de surface complémentaire [1 p. 110].
+
+Lors de la fixation de pièces de ferrure porteuses essentielles en matière de sécurité (côtés
+paumelles), **le fabricant de fenêtres et de portes-fenêtres doit certifier les forces spécifiées
+conformément au tableau** (extrait de la directive TBDK de la Gütegemeinschaft Schlösser und
+Beschläge e. V, association allemande pour l'attribution des labels de qualité) au moyen d'essais
+et les garantir sur son produit [1 p. 110]. Le tableau « Poids d'ouvrant en kg / Force de traction
+en N ⁽³⁾ » de la p. 111 porte, de 60 à 150 kg, les mêmes dix valeurs que celui de la p. 22 : il est
+sur [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) (section des forces
+de traction TBDK). L'appel ⁽³⁾ de son en-tête n'a pas de note sur la page (entrée **INC-210**).
+
+**INFO** : « Respecter la directive TBDK pour les forces de traction en fonction du poids de
+vantail ! Autres informations sur www.beschlagindustrie.de. » Les directives de calage pour la
+technique de vitrage doivent être respectées [1 p. 111].
+
+## 8.3 Raccord par vis
+
+**DANGER — Danger de mort dus aux pièces de ferrures montées et vissées de manière non
+conforme !** Des pièces de ferrure mal montées et mal vissées risquent de provoquer des situations
+dangereuses et des accidents graves à mortels [1 p. 111] :
+
+- Respecter les indications du fabricant de profils pour le montage et le vissage, si nécessaire
+  contacter le fabricant de profils.
+- Utiliser les vis recommandées.
+- Choisir la longueur des vis en fonction des profilés utilisés.
+- Assurer une fixation suffisante des pièces de ferrure, si nécessaire contacter le fabricant des
+  vis.
+
+**ATTENTION — Dommages matériels dus à une visserie incorrecte !** Des vis incorrectes peuvent
+endommager les éléments :
+
+- Utiliser des vis en acier galvanisé et passivé.
+- En cas de sollicitation climatique élevée, utiliser des vis avec un joint d'étanchéité
+  supplémentaire.
+- Pour les composants en acier inoxydable n'utiliser que des vis en inox.
+- Pour les composants en aluminium, utiliser des vis en acier (revêtues de zink-nickel ou de zinc
+  lamellaire) ou en inox.
+
+**ATTENTION — Dommages matériels dus à un vissage non conforme !** Un vissage incorrect peut causer
+des risques d'endommagement sur les composants et l'ensemble de l'élément et altérer son bon
+fonctionnement :
+
+- En l'absence d'indication contraire, monter les vis de façon droite.
+- Serrer les têtes de vis au ras de la surface.
+- Ne pas trop serrer les vis. Respecter les couples de serrage. Sélectionner le couple de manière à
+  ne pas déformer la ferrure et le profil. Déterminer le couple spécifique au profil par essais de
+  butées.
+- Utiliser les vis recommandées.
+- Choisir la longueur des vis en fonction des profilés utilisés.
+
+# Accrochage et décrochage de l'ouvrant NT Designo II
+
+## Accrochage du vantail — Compas 350 et 500
+
+1. Mettre le palier d'angle en position initiale (= position de vantail fermée).
+2. Mettre la poignée en position ouvrant à la française.
+3. Basculer le vantail un peu et guider le vantail le long du cadre vers le bas jusqu'au moment où
+   le pivot d'angle pose sur le palier d'angle.
+
+![Accrochage de l'ouvrant NT Designo II, étapes 1 à 3](/assets/procedures/roto-nx-ksr-montage/designo-accrochage-etapes-1-3.png)
+
+**Tenir le vantail afin d'éviter la chute.**
+
+4. Pousser l'anti-fausse manœuvre (s'il y a une anti-fausse manœuvre).
+5. Mettre la poignée en position à soufflet. *Cela est une fausse manœuvre volontaire qui est
+   nécessaire ici !*
+6. Insérer la platine du compas avec la têtière de compas.
+7. Lever le bras de compas et insérer le plot dans le bras de compas.
+
+![Compas 350 et 500 : coulisseau, platine, plot, ouverture à soufflet 140 mm et 80 mm](/assets/procedures/roto-nx-ksr-montage/designo-compas-350-500-platine-et-plot.png)
+
+Les dessins nomment le **coulisseau**, la **platine** et le **plot** ; pour l'« Ouverture à
+soufflet 80 mm », la platine est tournée de **180°**. Aux deux réglages, 140 mm (standard) et 80 mm,
+la flèche rouge montre la « Position finale la platine = anti-rabattement * » ; « *La position
+finale de la platine est obtenue en position oscillo-battante du vantail. » Les légendes sont
+imprimées « Compas 350 er 500 » pour le réglage 80 mm [1 p. 112].
+
+8. Actionner l'anti-fausse manœuvre.
+9. Mettre la poignée en position ouvrant à la française.
+
+**Décrochage du vantail** : faire l'ensemble des opérations en sens inverse [1 p. 112].
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 112)
+
+## Accrochage du vantail — Compas 250
+
+Mêmes gestes, numérotés différemment : l'avertissement « Tenir le vantail afin d'éviter la chute
+du vantail » y est l'étape 4 [1 p. 113].
+
+1. Mettre le palier d'angle en position initiale (= position de vantail fermée).
+2. Mettre poignée en position ouvrant à la française.
+3. Basculer le vantail un peu et guider le vantail le long du cadre vers le bas jusqu'au moment où
+   le pivot d'angle pose sur le palier d'angle.
+4. Tenir le vantail afin d'éviter la chute du vantail.
+5. Pousser l'anti-fausse manœuvre (s'il y a une anti-fausse manœuvre).
+6. Mettre la poignée en position à soufflet. *Cela est une fausse manœuvre volontaire qui est
+   nécessaire ici !*
+7. Insérer la platine du compas avec la têtière de compas.
+8. Actionner l'anti-fausse manœuvre.
+9. Mettre la poignée en position ouvrant à la française.
+
+![Compas 250 : limiteur d'ouverture à soufflet et étrier de sécurité](/assets/procedures/roto-nx-ksr-montage/designo-compas-250-limiteur-et-etrier.png)
+
+Les dessins « Compas 250 – Ouverture à soufflet standard 140 mm » et « … 80 mm » nomment la
+**Position soufflet**, le **Limiteur d'ouverture à soufflet** et l'**Etrier de sécurité** (flèche
+de rotation rouge) [1 p. 113].
+
+**Option** : **Limiteur d'ouverture à 80 mm Designo, 487 206** (pour têtière de compas 250 Designo
+385393) — voir [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md).
+
+**Décrochage du vantail** : faire l'ensemble des opérations en sens inverse [1 p. 113].
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 113)
+
+# Réglages NT Designo II
+
+La page « Réglages NT Designo II » donne les plages de réglage du compas et du palier / pivot
+d'angle de la ferrure NT Designo II, en mm, avec une clé coudée engagée dans la ferrure (vantail en
+gris, dormant en saumon) [1 p. 115].
+
+## Réglage du compas
+
+![Réglage du compas NT Designo II : latéral et compression](/assets/procedures/roto-nx-ksr-montage/designo-reglage-du-compas.png)
+
+## Réglage du palier / pivot d'angle
+
+![Réglage du palier / pivot d'angle NT Designo II : hauteur, latéral, compression](/assets/procedures/roto-nx-ksr-montage/designo-reglage-palier-pivot-d-angle.png)
+
+| Pièce | Réglage | Plage (mm) |
+| --- | --- | --- |
+| Compas | réglage latéral | ± 2 |
+| Compas | réglage compression | ± 0,5 |
+| Palier / pivot d'angle | réglage hauteur | + 2,0 / - 1,0 |
+| Palier / pivot d'angle | réglage latéral | + 2,0 / - 1,5 |
+| Palier / pivot d'angle | réglage compression | ± 0,5 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 115)
+
+**Après le réglage en hauteur il faut régler le report de charge à nouveau** — voir
+[Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md) [1 p. 115].
+
+# Ce que le document ne dit pas
+
+Le positionnement des gâches par configuration est sur les pages de configuration
+([oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md),
+[ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md),
+[ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md)).
+
+# Citations
+
+[1] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf.
+IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 88 à 93,
+107 à 113 et 115 (numérotation du PDF)
+
+# Voir aussi
+
+- [Roto NX](/quincaillerie/roto-nx.md)
+- [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)
+- [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md)
+- [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md)
+- [Instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md)
+- [ROTO](/fournisseurs/roto.md)
+
+===== PAGE 3 : /quincaillerie/roto-nx-finitions.md =====
+# Codes couleur Roto
+
+Les pièces apparentes Roto NX (caches, compas, paliers laqués) se commandent par un **code couleur
+Roto** (R01.1, R07.2…). Le catalogue Roto NX pour profils PVC de juin 2023 donne la table de
+correspondance : une ligne par code Roto, la référence standard (RAL) quand il y en a une, et le nom
+de la couleur. Un « – » est une case imprimée « – » : pas de référence standard [2 p. 13].
+
+| Code couleur Roto | Code couleur standard | Couleur |
+| --- | --- | --- |
+| R01.1 | – | Argent naturel |
+| R01.2 | – | Champagne |
+| R01.3 | – | Titane |
+| R01.4 | – | Chrome |
+| R01.5 | – | Argent |
+| R02.2 | RAL 7016 | Gris anthracite |
+| R03.1 | – | Laiton mat |
+| R03.2 | – | Laiton brillant |
+| R03.3 | – | Or |
+| R03.4 | – | Aspect inox |
+| R04.1 | RAL 8019 | Gris-marron |
+| R04.3 | – | Brun-olive |
+| R04.4 | RAL 8022 | Brun-noir |
+| R05.3 | – | Bronze moyen |
+| R05.4 | – | Bronze foncé |
+| R05.5 | – | Bronze |
+| R06.2M | RAL 9005 mat | Noir intense mat |
+| R06.2 | RAL 9005 | Noir intense |
+| R06.4M | – | Noir mat |
+| R07.1 | RAL 9010 | Blanc pur |
+| R07.2 | RAL 9016 | Blanc |
+| R07.3 | RAL 9001 | Blanc-crème |
+| SF | SF | Couleur spéciale |
+| Brut | Brut | Sans revêtement |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 13)
+
+Dix pastilles d'exemple sont imprimées sous la table (R01.1, R01.2, R01.3, R03.1, R04.1, R04.4,
+R05.3, R05.5, R06.2, R07.2). « Des écarts de coloris par rapport à l'illustration sont possibles. »
+La pastille est un rendu indicatif, le code fait foi [2 p. 13].
+
+![Exemples de couleur : R01.1, R01.2, R01.3, R03.1, R04.1, R04.4, R05.3, R05.5, R06.2, R07.2](/assets/quincaillerie/roto-nx-catalogue/informations/exemples-de-couleur.png)
+
+Les noms des tables de caches ci-dessous, relevés sur le manuel de montage KSR, ne sont pas toujours
+ceux du catalogue : R04.3 y est « brun olive (RAL 8008) » quand le catalogue ne donne aucun code
+standard, R04.4 « brun foncé (RAL 8022) » au lieu de « Brun-noir », R01.3 « titane mat F9 » au lieu
+de « Titane », R06.2 « noir » au lieu de « Noir intense » (RAL 9005) ; **CTR-104**. Les codes
+« 7035 » et « 8003 » des tables de caches n'ont pas de ligne dans la table du catalogue.
+
+# Caches selon couleur
+
+Un *cache* est un capot qui habille une ferrure apparente — compas, palier, pivot — dans la
+couleur voulue. La page « Caches selon couleur » donne, pour chaque coloris, le numéro d'article du
+cache de chaque pièce : une ligne par coloris, une colonne par pièce, le code Roto du coloris
+(R01.1, R07.2…) en première colonne [1 p. 85].
+
+## Caches pour compas
+
+![Caches pour compas Roto NX : compas P, palier de compas P, palier de compas P 150 kg, palier compas P réglable](/assets/quincaillerie/roto-nx-ksr/finitions/caches-pour-compas.png)
+
+| Code | Coloris | Compas P | Palier de compas P | Palier de compas P 150kg | Palier compas P réglable |
+| --- | --- | --- | --- | --- | --- |
+| R01.1 | argent naturel | 788403 | 861148 | 788387 | 840406 |
+| R01.2 | champagne | 810816 | 861149 | 810812 | 840407 |
+| R01.3 | titane mat F9 | 788404 | 861155 | 788388 | 840408 |
+| R03.1 | laiton mat | 788405 | 861156 | 788389 | 840409 |
+| R02.2 | gris anthracite Ral 7016 | 857799 | 862561 | - | 2005469 |
+| R03.2 | laiton brillant | 810817 | 861160 | 810813 | 840415 |
+| R04.3 | brun olive (RAL 8008) | 810818 | 861153 | 810814 | 840417 |
+| R04.4 | brun foncé (RAL 8022) | 788407 | 861154 | 788391 | 840418 |
+| R05.3 | bronze moyen | 788408 | 861165 | 788392 | 840419 |
+| R05.5 | bronze | 788409 | 861166 | 788393 | 840420 |
+| R06.2 | noir | 821926 | 862558 | - | 2005470 |
+| 7035 | gris clair Ral 7035 | 835491 | 862559 | - | - |
+| 8003 | chêne doré | 819504 | 862381 | - | - |
+| R07.2 | blanc (RAL 9016) | 788410 | 861167 | 788394 | 840422 |
+| R07.3 | blanc crème | 810819 | 861168 | 810815 | 840421 |
+| Couleur sur demande | - | 840752 | 862560 | - | 840423 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 85)
+
+Un « - » est une case vide sur la page.
+
+## Caches pour palier et pivot d'angle
+
+![Caches pour palier et pivot d'angle Roto NX : pivot d'angle P, palier d'angle long P, palier d'angle court P](/assets/quincaillerie/roto-nx-ksr/finitions/caches-pour-palier-et-pivot-d-angle.png)
+
+| Code | Coloris | Pivot d'angle P | Palier d'angle long P | Palier d'angle court P |
+| --- | --- | --- | --- | --- |
+| R01.1 | argent naturel | 788427 | 788411 | 788419 |
+| R01.2 | champagne | 795971 | 795972 | 795973 |
+| R01.3 | titane mat F9 | 788428 | 788412 | 788420 |
+| R02.2 | gris anthracite Ral 7016 | 858172 | 858170 | 858171 |
+| R03.1 | laiton mat | 788429 | 788413 | 788421 |
+| R03.2 | laiton brillant | 795976 | 795977 | 795978 |
+| R04.3 | brun olive (RAL 8008) | 795981 | 795982 | 795983 |
+| R04.4 | brun foncé (RAL 8022) | 788431 | 788415 | 788423 |
+| R05.3 | bronze moyen | 788432 | 788416 | 788424 |
+| R05.5 | bronze | 788433 | 788417 | 788425 |
+| R06.2 | noir | 821923 | 821925 | 821924 |
+| 7035 | gris clair Ral 7035 | 835494 | 835492 | 835493 |
+| 8003 | chêne doré | 819507 | 819505 | 819506 |
+| R07.2 | blanc (RAL 9016) | 788434 | 788418 | 788426 |
+| R07.3 | blanc crème | 795986 | 795987 | 795988 |
+| Couleur sur demande | - | 840749 | 840751 | 840750 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 85)
+
+## Caches en kit de 5 pièces, bouchon pivot, bouchon compas
+
+Le kit est dessiné comme un ensemble de cinq caches ; le bouchon pivot et le bouchon compas ont
+leurs propres colonnes [1 p. 85].
+
+![Caches en kit de 5 pièces, bouchon pivot et bouchon compas Roto NX](/assets/quincaillerie/roto-nx-ksr/finitions/caches-en-kit-bouchons.png)
+
+| Code | Coloris | Caches en kit de 5 pièces | Bouchon pivot | Bouchon compas |
+| --- | --- | --- | --- | --- |
+| R01.1 | argent naturel | 862564 | 642266 | - |
+| R01.3 | titane mat F9 | 862565 | 799287 | 788500 |
+| R02.2 | gris anthracite Ral 7016 | 862572 | - | - |
+| R03.1 | laiton mat | 862566 | - | - |
+| R03.2 | laiton brillant | 862567 | - | - |
+| R04.4 | brun foncé (RAL 8022) | 862568 | - | - |
+| R05.5 | bronze | 862569 | - | - |
+| R06.2 | noir | 862570 | - | - |
+| R07.2 | blanc (RAL 9016) | 862571 | 642267 | 788435 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 85)
+
+# Pièces Roto NX laquées
+
+La page « Pièces Roto NX laquées » donne les compas, paumelles, paliers et pivots Roto NX livrés
+directement laqués blanc ou titane ; G et D sont les versions gauche et droite [1 p. 86].
+
+## Compas OB
+
+Compas P, Système 12/20-13, laqué blanc et laqué titane, par largeur en feuillure :
+
+![Compas OB Roto NX](/assets/quincaillerie/roto-nx-ksr/finitions/compas-ob-laque.png)
+
+| Largeur en feuillure (mm) | Longueur (mm) | Laqué blanc, gauche | Laqué blanc, droite | Laqué titane, gauche | Laqué titane, droite |
+| --- | --- | --- | --- | --- | --- |
+| 290 – 410 | 150* | 788456 | 788457 | 795092 | 795093 |
+| 411 – 600 | 250 | 788458 | 788459 | 795094 | 795095 |
+| 601 – 800 | 350 | 788460 | 788461 | 795096 | 795097 |
+| 801 – 1600 | 500 | 788462 | 788463 | 795098 | 795099 |
+
+## Compas OB TF
+
+Compas P, Système 12/20-13 TF, laqué blanc :
+
+![Compas OB TF Roto NX](/assets/quincaillerie/roto-nx-ksr/finitions/compas-ob-tf-laque.png)
+
+| Largeur en feuillure (mm) | Longueur (mm) | Gauche | Droite |
+| --- | --- | --- | --- |
+| 290 – 410 | 150* | 814727 | 814728 |
+| 411 – 600 | 250 | 814729 | 814730 |
+| 601 – 800 | 350 | 814731 | 814732 |
+| 801 – 1600 | 500 | 814733 | 814734 |
+
+L'astérisque de la longueur 150 n'a pas de note sur la page ; sur la nomenclature de
+l'oscillo-battant un vantail, le même « 150* » renvoie à « ouverture à soufflet maximale : 80 mm »
+([Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md)).
+« TF » n'est pas expliqué sur la page.
+
+## Paumelles OF
+
+![Paumelles OF Roto NX](/assets/quincaillerie/roto-nx-ksr/finitions/paumelles-of-laquees.png)
+
+| Couleur | Gauche | Droite |
+| --- | --- | --- |
+| Blanc | 788476 | 788477 |
+| Titane | 795210 | 795211 |
+
+## Palier de compas, palier d'angle et pivot d'angle
+
+![Palier de compas P 3/130, 6/130, 6/150](/assets/quincaillerie/roto-nx-ksr/finitions/palier-de-compas-laque.png)
+
+![Palier d'angle P 3/130, 6/130, 6/150](/assets/quincaillerie/roto-nx-ksr/finitions/palier-d-angle-laque.png)
+
+![Pivot d'angle 6/150](/assets/quincaillerie/roto-nx-ksr/finitions/pivot-d-angle-laque.png)
+
+| Pièce | Laqué blanc | Laqué titane |
+| --- | --- | --- |
+| Palier de compas P 3/130 | 859174 | 859964 |
+| Palier de compas P 6/130 | 859960 | 859965 |
+| Palier de compas P 6/150 | 859961 | 859966 |
+| Palier d'angle P 3/130 | 787210 | 795013 |
+| Palier d'angle P 6/130 | 787211 | 795014 |
+| Palier d'angle P 6/150 | 787212 | 788501 |
+| Pivot d'angle P 6/150 | 230342 | 795019 |
+| Pivot d'angle P 6/150 réglable en compression | 639305 | 788327 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 86)
+
+# Montage du renvoi de fouillot
+
+Le *renvoi de fouillot* se monte entre la poignée et le boîtier de la crémone (vue éclatée
+ci-dessous) ; il est proposé en option « pour poignée centrée » sur l'oscillo-battant à deux
+vantaux NT Designo II (voir
+[Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md))
+[1 p. 73, 87].
+
+## Vue de montage
+
+La vue éclatée montre, de gauche à droite : la poignée et ses deux vis, une plaque percée de
+trois trous, deux vis, le renvoi de fouillot, puis la crémone avec son boîtier.
+
+![Montage du renvoi de fouillot Roto NX](/assets/quincaillerie/roto-nx-ksr/finitions/montage-renvoi-de-fouillot.png)
+
+Consignes écrites sur le dessin [1 p. 87] :
+
+1. **Déplomber le ferrage avant la mise en place du renvoi de fouillot.**
+2. Les **vis de fixation du renvoi de fouillot** sont **non fournies**.
+3. **Selon gamme, il peut être nécessaire d'usiner une partie du renfort** (légende de la coupe
+   A-A).
+
+## Cotes de perçage et de fraisage
+
+Trois vues et une coupe A-A donnent les cotes, en mm [1 p. 87] :
+
+![Cotes de perçage et de fraisage du renvoi de fouillot Roto NX](/assets/quincaillerie/roto-nx-ksr/finitions/renvoi-de-fouillot-cotes-de-percage.png)
+
+- **Vue de gauche** (côté renvoi de fouillot) : un contour rectangulaire à angles arrondis
+  **R6**, haut de **57**, portant trois trous alignés ; **43** entre les trous haut et bas ;
+  **33.5** en cote horizontale, du trait de repère gauche jusqu'au bord droit du contour ; la
+  ligne A-A passe par le trou central ;
+- **Vue du milieu** : un trou oblong haut de **32** et large de **12.3**, sur la ligne « Milieu de
+  la poignée » ;
+- **Vue de droite** : deux perçages **Ø 10 (2x)**, haut et bas, à **43** l'un de l'autre, et un
+  perçage **Ø 12** au centre, sur la ligne « Milieu de la poignée » ;
+- **Coupe A-A** : un profilé en coupe, avec une cote **8** entre l'axe du perçage et un trait de
+  rappel en haut, et deux cotes **11** (verticale) et **4** (horizontale) en bas, près de
+  la légende « Selon gamme, il peut être nécessaire d'usiner une partie du renfort ».
+
+| Élément | Cote (mm) |
+| --- | --- |
+| Hauteur du contour (vue de gauche) | 57 |
+| Entraxe des trous haut et bas | 43 |
+| Cote horizontale du contour | 33.5 |
+| Rayon des angles du contour | R6 |
+| Trou oblong, hauteur | 32 |
+| Trou oblong, largeur | 12.3 |
+| Perçages haut et bas | Ø 10 (2x) |
+| Perçage central | Ø 12 |
+| Coupe A-A, axe → trait de rappel | 8 |
+| Coupe A-A, cotes basses | 11 et 4 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 87)
+
+# Ce que la source ne donne pas
+
+Le numéro d'article du renvoi de fouillot n'est pas sur la page (il est « voir fichier gamme » sur
+les nomenclatures) ; la page ne dit pas à quelle gamme de profilé correspond l'usinage du renfort.
+
+# Citations
+
+[1] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf.
+IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 85 à 87
+(numérotation du PDF)
+
+[2] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 —
+`raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 13 (numérotation du PDF)
+
+# Voir aussi
+
+- [Roto NX](/quincaillerie/roto-nx.md)
+- [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md)
+- [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md)
+- [Instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md)
+- [ROTO](/fournisseurs/roto.md)
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/contradictions-entre-sources.md :
+| CTR-117 | Longueurs, gâches et références des crémones de semi-fixe KSR à hauteur de poignée fixe ; longueur du verrou 305638 | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 45 (imprimée 43, oscillo-battant à deux vantaux sans meneau fixe), relue en image à 110 dpi le 29/09/2026 : repère 18a, 431–710⁶⁾ → 600, levier 233, **810974** ; 601–900¹⁾ → **790**, levier 156, 1 G, **2009311** ; repère 18, « Crémone de semi-fixe KSR hauteur poignée fixe » : 801–1000 → **780**, 335, 1 G, **835109** ; 1001–1200 → **980**, 1 G, 763118 ; 1201–1400 → **1180**, 1 G, 763119 ; 1401–1600 → **1380**, 2 G, 763120 ; 1601–1800 → **1580**, 2 G, 795474 ; 1801–2000 → **1780**, 640, 2 G, 795476 ; 2001–2200 → **1980**, 640, **2 G**, 795478 ; 2201–2400 → **2180**, 640, 3 G, 795480 ; repère 22 : « Verrou pour semi-fixe **100** (non illustré) 305638 » | Catalogue Roto NX pour profils PVC, CTL_105_FR_v5, juin 2023, relu en image à 250 dpi le 29/09/2026 : PDF p. 250, crémone de semi-fixe standard KSR : 810974 431 – 710, 600, levier 233 (identique) ; pas de 2009311 ni de 835109 (601 – 800 → 771953, 690 mm ; 801 – 1000 → 771954, 890 mm, fouillot 8 mm) ; 763118 à 795480 : **1090, 1290, 1490, 1690, 1890, 2090, 2290 mm**, mêmes hauteurs de levier, colonne « nombre de gâches soudées » 1, 1, 2, 2, 2, **3**, 3 ; PDF p. 261, verrou d'arête pour rainure de battement standard : 305638, longueur **97** | Aucune : demander à ROTO la longueur réelle de 763118 à 795480 (écart constant de 110 mm, même schéma que **CTR-115**), le nombre de gâches de 795478, si 2009311 et 835109 sont toujours livrées, et la longueur de 305638. Le « G » du manuel (non défini, voir le glossaire) est imprimé là où le catalogue a sa colonne « nombre de gâches soudées » : lecture à confirmer | Crémone de semi-fixe commandée à une longueur qui ne correspond pas à la HFF, ou référence commandée qui n'est plus au catalogue ; voir [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+/anomalies/incoherences-internes.md :
+| INC-292 | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023 | PDF p. 255 (4.6.2.1.1 possibilités de combinaisons, crémone de semi-fixe Plus KSR, hauteur de poignée fixe) contre p. 256 (tableau des références) et p. 249 (même tableau pour la crémone de semi-fixe standard KSR), relues en image à 170-250 dpi le 29/09/2026 | Les deux tableaux de la p. 255 (« Crémone de semi-fixe Plus KSR ») portent, ligne pour ligne, les longueurs et hauteurs du levier de la crémone de semi-fixe **standard** KSR de la p. 249 (levier 233, 325, 335, 640 mm en fouillot 8 mm ; 195, 300, 490, 335, 640 mm en 15 mm et plus), alors que les crémones de semi-fixe Plus KSR de la p. 256 ont des hauteurs de levier de **144** (2007106), **234** (2007116), **496** (2007117, 2007118) et **546 mm** (2007119 à 2007124) | Tableaux de la p. 255 probablement copiés de la p. 249 sans reprendre les hauteurs de levier de la crémone Plus ; à confirmer par ROTO | Hauteur de levier du vantail semi-fixe prévue à la mauvaise cote si l'on suit le tableau de combinaisons ; voir [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-104 | Noms et codes RAL des couleurs Roto R04.3, R04.4, R01.3, R06.2 | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 13 (section 1.1.3 « Couleurs »), relue en image le 29/09/2026 : R01.3 « – » « Titane » ; R04.3 « – » « Brun-olive » ; R04.4 « RAL 8022 » « Brun-noir » ; R06.2 « RAL 9005 » « Noir intense » | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 85, tables « Caches selon couleur », d'après [Finitions Roto NX](/quincaillerie/roto-nx-finitions.md) : R01.3 « titane mat F9 » ; R04.3 « brun olive (**RAL 8008**) » ; R04.4 « **brun foncé** (RAL 8022) » ; R06.2 « noir » | Le code Roto (R04.3, R04.4…) : c'est lui qui se commande ; ne pas convertir R04.3 en RAL 8008 avant confirmation par ROTO | Une teinte commandée ou annoncée au client par son RAL ou son nom peut ne pas correspondre au code Roto livré (brun olive annoncé RAL 8008 sans que le catalogue le confirme ; R04.4 nommé « brun foncé » ou « brun-noir ») |
+/anomalies/incoherences-internes.md :
+| INC-290 | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023 | PDF p. 249, 4.6.1.1.1 possibilités de combinaisons de la crémone de semi-fixe standard KSR, tableau « Fouillot 15 mm et tailles supérieures », relu en image à 200 dpi le 29/09/2026 | Plages de HFF qui se recouvrent : « 371 – 555 » → crémone de semi-fixe 445 mm, levier 156, renvoi d'angle standard ; « 431 – 510 » → 600 mm, levier 195, **renvoi d'angle spécial court** ; « 511 – 600 » → 600 mm, levier 195, renvoi d'angle standard. Le tableau des références p. 250 porte de même 2003815 (280 – 555, 445 mm) et 795462 (431 – 710, 600 mm) | Indéterminée : soit deux choix admis entre 431 et 555 mm, soit une borne mal imprimée (371 – 430 ?) ; à arbitrer par ROTO | Pour un vantail de 431 à 555 mm, deux crémones de semi-fixe et, de 431 à 510 mm, deux renvois d'angle possibles selon la ligne lue ; voir [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+/anomalies/incoherences-internes.md :
+| INC-291 | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023 | PDF p. 252 (4.6.1.2.1 possibilités de combinaisons, crémone de semi-fixe standard à poignée centrée / variable) contre p. 253 (tableau des références) et p. 224 (crémones OB à poignée centrale / variable, fouillot 15 mm), relues en image à 200-250 dpi le 29/09/2026 | Fouillot 8 mm : p. 252, 621 – 800 et 801 – 900 → 680 mm, levier « 235 – 275 » et « 276 – 335 », contre p. 253, 242726, 621 – 900, 680 mm, levier **236 – 375** ; p. 252, 901 – 1 200 → 980 mm, levier **249 – 448**, contre 791986, **298 – 448**. Fouillot 15 mm et plus : p. 252, 370 – 450 / 451 – 520 / 521 – 620 → crémone de semi-fixe **400 mm**, levier 255 – 350, contre p. 253, 233418, **431 – 620**, **500 mm**, levier **225 – 350** ; p. 252, 621 – 650 / 651 – 800 → **680 mm**, contre 763125, **630 mm** ; p. 252, 1 201 – 1 600 → levier **448 – 648**, contre 763127 (fouillots 8 à 50), **448 – 658** ; crémone OB 621 – 800 → **510 mm**, 311 – 400, contre p. 224, 289862 / 259719, 621 – 800, **580 mm**, 311 – 400 | Indéterminée ; à arbitrer par ROTO. Les tableaux de références (p. 224, 253) portent un N° de matériel, les tableaux de combinaisons n'en portent pas | Crémone de semi-fixe ou crémone OB choisie à une longueur qui ne correspond à aucune référence, ou levier hors de la plage de la référence commandée ; voir [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-108 | Hauteur fond de feuillure minimale, côté paumelles Designo, fenêtre OF et OB sans report de charge, 100 kg | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 31 (imprimée 29), relue en image le 29/09/2026 : « Hauteur de vantail HFF …… 280 – 2600 mm » ; le bord gauche du diagramme de la même page commence vers 400 mm de HFF | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 50 (section 2.3.1.2 « 100 kg »), relue en image le 29/09/2026 : « Hauteur fond de feuillure d'ouvrant 400 – 2 600 mm » en sécurité de base et en CDR 1 N, « 490 – 2 400 mm » en CDR 2 / CDR 2 N ; même diagramme | **400 mm**, la plus restrictive des deux, qui est aussi celle que trace le diagramme des deux documents | Un vantail Designo 100 kg de 280 à 400 mm de HFF est admis par le tableau du manuel, lu par le vérificateur de faisabilité, et refusé par le catalogue ; voir [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |

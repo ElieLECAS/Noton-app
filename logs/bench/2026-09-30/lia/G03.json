@@ -1,0 +1,39 @@
+{
+  "question": "Le carré W4070495, il fait quelle longueur ?",
+  "pages_lues": [
+    "/quincaillerie/askey-coulissant-65-nv-quincaillerie.md",
+    "/quincaillerie/roto-nx-legende-catalogue.md",
+    "/procedures/redressement-montant-porte-cintre-9708.md",
+    "/profiles/askey-coulissant-65-nv-dormants-et-ouvrants.md",
+    "/procedures/fabrication-coulissant-askey-65-nv.md"
+  ],
+  "anomalies": [
+    "VER-25"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "W4070495 carré longueur"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/askey-coulissant-65-nv-quincaillerie.md",
+        "/quincaillerie/roto-nx-legende-catalogue.md",
+        "/procedures/redressement-montant-porte-cintre-9708.md"
+      ],
+      "caracteres": 31526
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "W4070495 W1041261 carré de manœuvre poignée",
+        "gamme": "Coulissant 65 NV"
+      },
+      "pages_nouvelles": [
+        "/profiles/askey-coulissant-65-nv-dormants-et-ouvrants.md",
+        "/procedures/fabrication-coulissant-askey-65-nv.md"
+      ],
+      "caracteres": 27278
+    }
+  ]
+}

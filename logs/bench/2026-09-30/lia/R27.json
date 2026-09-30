@@ -1,0 +1,73 @@
+{
+  "question": "je cherche une fonction qui ralentit le vantail de mon coulissant PVC",
+  "pages_lues": [
+    "/equipements/moustiquaires-battantes-coulissantes-fixes.md",
+    "/quincaillerie/askey-coulissant-65-nv-quincaillerie.md",
+    "/quincaillerie/lumeal-ga-roulements-et-fermetures.md",
+    "/quincaillerie/roto-nx-accessoires-et-gabarits.md",
+    "/quincaillerie/soleal-py-serrures-et-paumelles.md",
+    "/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md",
+    "/quincaillerie/roto-patio-inowa.md",
+    "/gammes/innoslide.md"
+  ],
+  "anomalies": [
+    "CTR-12",
+    "CTR-121",
+    "INC-301",
+    "INC-302",
+    "INC-303",
+    "INC-304",
+    "INC-305",
+    "VER-20"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "ralentisseur amortisseur frein fermeture vantail coulissant",
+        "tags": [
+          "coulissant"
+        ]
+      },
+      "pages_nouvelles": [
+        "/equipements/moustiquaires-battantes-coulissantes-fixes.md",
+        "/quincaillerie/askey-coulissant-65-nv-quincaillerie.md",
+        "/quincaillerie/lumeal-ga-roulements-et-fermetures.md"
+      ],
+      "caracteres": 27901
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "coulissant PVC amortisseur freinage fin de course vantail ralentit",
+        "systeme": "Roto Patio Inowa"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/roto-nx-accessoires-et-gabarits.md",
+        "/quincaillerie/soleal-py-serrures-et-paumelles.md",
+        "/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md"
+      ],
+      "caracteres": 132098
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/quincaillerie/roto-patio-inowa.md"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/roto-patio-inowa.md"
+      ],
+      "caracteres": 3997
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/gammes/innoslide.md"
+      },
+      "pages_nouvelles": [
+        "/gammes/innoslide.md"
+      ],
+      "caracteres": 6734
+    }
+  ]
+}

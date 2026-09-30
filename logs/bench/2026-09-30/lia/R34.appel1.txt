@@ -1,0 +1,607 @@
+===== PAGE 1 : /coloris/coloris-portes-entree.md =====
+# Finitions des portes d'entrée par gamme
+
+Une porte d'entrée PROFERM se choisit d'abord par sa gamme, qui fixe le matériau, puis par sa
+finition : « Laquée, satinée ou granitée, plaxée 1 ou 2 faces, texturée, avec un vitrage classique
+ou décoratif » [1 p. 10]. Les familles de teintes sont les suivantes :
+
+- **teinté dans la masse** : le PVC est coloré dans toute son épaisseur, sans couche rapportée ;
+- **plaxé** : un film décor est appliqué sur le PVC (voir le [glossaire](/reference/glossaire.md)) ;
+- **laqué** : une laque est appliquée ; RAL désigne le nuancier normalisé à code de quatre chiffres,
+  « satiné » et « granité » sont les deux aspects de la laque ;
+- **texture** : décor à effet de matière (bois, cuir, carbone, métal) propre à la gamme TEXTURAL.
+
+Dans chaque table, une ligne par teinte ; « Faces » dit si la teinte couvre une face (l'extérieur)
+ou les deux faces de la porte. La pastille imprimée est un **rendu indicatif** : le code et le nom
+font foi à la commande. Les nuanciers des fenêtres de chaque gamme sont sur leurs propres pages :
+[Coloris PERFORM](/coloris/coloris-perform.md), [Coloris HYBRIDE](/coloris/coloris-hybride.md),
+[Coloris LUMINE](/coloris/coloris-lumine.md), [Coloris TEXTURAL](/coloris/coloris-textural.md) ; ceux
+des monoblocs Hexa sur [Coloris Sélection Hexa](/coloris/coloris-selection-hexa.md).
+
+## PERFORM, portes d'entrée PVC
+
+Finitions intérieures et extérieures des portes d'entrée PVC [PERFORM](/gammes/perform.md). Les
+plaxés ne se font **que sur la collection AUTHENTIQUE** ([Collection Authentique](/portes/collection-authentique.md)).
+L'astérisque de la source renvoie à « finition design uniquement » [1 p. 10].
+
+| Code de la source | Nom | Famille | Faces | Restriction | Pastille |
+| --- | --- | --- | --- | --- | ---: |
+| 9016 | Blanc 9016 | teinté dans la masse | 1 ou 2 faces | - | ![Blanc 9016, 1 ou 2 faces](/assets/coloris/portes-entree/perform-blanc-9016.png) |
+| 607 Kömmerling (proche 9001) | Ivoire | teinté dans la masse | 2 faces uniquement | - | ![Ivoire, 2 faces uniquement](/assets/coloris/portes-entree/perform-ivoire.png) |
+| - | Chêne irlandais | plaxé | 1 ou 2 faces | collection AUTHENTIQUE ; finition design uniquement | ![Chêne irlandais, 1 ou 2 faces](/assets/coloris/portes-entree/perform-chene-irlandais.png) |
+| - | Chêne doré | plaxé | 1 ou 2 faces | collection AUTHENTIQUE | ![Chêne doré, 1 ou 2 faces](/assets/coloris/portes-entree/perform-chene-dore.png) |
+| - | Siena | plaxé | 1 ou 2 faces | collection AUTHENTIQUE ; finition design uniquement | ![Siena, 1 ou 2 faces](/assets/coloris/portes-entree/perform-siena.png) |
+| 7016 | 7016 veiné | plaxé | 1 ou 2 faces | collection AUTHENTIQUE | ![7016 veiné, 1 ou 2 faces](/assets/coloris/portes-entree/perform-7016-veine.png) |
+| - | Acajou | plaxé | 1 face extérieure uniquement | collection AUTHENTIQUE ; finition design uniquement | ![Acajou, 1 face extérieure uniquement](/assets/coloris/portes-entree/perform-acajou.png) |
+| - | Les laqués, finition « satiné » ou « granité » | laqué | - | laquage possible si ouverture extérieure ou menuiserie cintrée | ![Les laqués, laquage possible si ouverture extérieure ou menuiserie cintrée](/assets/coloris/portes-entree/perform-laques.png) |
+
+(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 10)
+
+Le laquage d'une porte PERFORM n'est possible que si la porte est à ouverture extérieure ou si
+c'est une menuiserie cintrée ; aucune teinte laquée n'est codée, la pastille est un éventail de
+couleurs [1 p. 10]. Les modèles photographiés sont Arcadia et 872-0.
+
+## HYBRIDE, portes d'entrée PVC et aluminium
+
+La porte [HYBRIDE](/gammes/hybride.md) est en PVC à l'intérieur et en aluminium à l'extérieur
+[1 p. 11]. Trois blocs de finitions : intérieures PVC, extérieures aluminium, et laquage
+intérieur et extérieur.
+
+| Code de la source | Nom | Famille | Faces | Restriction | Pastille |
+| --- | --- | --- | --- | --- | ---: |
+| 9016 | Blanc 9016 | teinté dans la masse (intérieur PVC) | 1 ou 2 faces | - | ![Blanc 9016, 1 ou 2 faces](/assets/coloris/portes-entree/hybride-blanc-9016.png) |
+| 607 Kömmerling (proche 9001) | Ivoire | teinté dans la masse (intérieur PVC) | 2 faces uniquement | - | ![Ivoire, 2 faces uniquement](/assets/coloris/portes-entree/hybride-ivoire.png) |
+| 9016 | Blanc 9016 brillant (laqué) | extérieur aluminium, standard | - | - | ![Blanc 9016 brillant laqué](/assets/coloris/portes-entree/hybride-alu-blanc-9016-brillant.png) |
+| 3004 | Rouge 3004 satiné | extérieur aluminium, laqué à prix préférentiel | - | - | ![Rouge 3004 satiné](/assets/coloris/portes-entree/hybride-rouge-3004-satine.png) |
+| 2900 | Gris 2900 granité | extérieur aluminium, laqué à prix préférentiel | - | - | ![Gris 2900 granité](/assets/coloris/portes-entree/hybride-gris-2900-granite.png) |
+| 7016 | Anthracite 7016 satiné | extérieur aluminium, laqué à prix préférentiel | - | - | ![Anthracite 7016 satiné](/assets/coloris/portes-entree/hybride-anthracite-7016-satine.png) |
+| 7016 | Anthracite 7016 granité | extérieur aluminium, laqué à prix préférentiel | - | - | ![Anthracite 7016 granité](/assets/coloris/portes-entree/hybride-anthracite-7016-granite.png) |
+| 7039 | Gris 7039 granité | extérieur aluminium, laqué à prix préférentiel | - | - | ![Gris 7039 granité](/assets/coloris/portes-entree/hybride-gris-7039-granite.png) |
+| 7035 | Gris 7035 granité | extérieur aluminium, laqué à prix préférentiel | - | - | ![Gris 7035 granité](/assets/coloris/portes-entree/hybride-gris-7035-granite.png) |
+| 8019 | Marron 8019 granité | extérieur aluminium, laqué à prix préférentiel | - | - | ![Marron 8019 granité](/assets/coloris/portes-entree/hybride-marron-8019-granite.png) |
+| 2100 | Noir 2100 granité | extérieur aluminium, laqué à prix préférentiel | - | - | ![Noir 2100 granité](/assets/coloris/portes-entree/hybride-noir-2100-granite.png) |
+| 9005 | Noir 9005 granité | extérieur aluminium, laqué à prix préférentiel | - | - | ![Noir 9005 granité](/assets/coloris/portes-entree/hybride-noir-9005-granite.png) |
+| RAL | Laquage toutes teintes RAL, finition « satiné » ou « granité » | laqué, intérieur et extérieur | 2 faces identiques | si ouverture extérieure, ou si menuiserie cintrée (uniquement sur PVC) | ![Laquage toutes teintes RAL possibles si 2 faces identiques](/assets/coloris/portes-entree/hybride-laquage-ral.png) |
+
+(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 11)
+
+Les neuf coloris laqués à prix préférentiel sont les neuf lignes de Rouge 3004 à Noir 9005. Le
+laquage toutes teintes RAL de la porte HYBRIDE n'est possible que si les deux faces sont
+identiques, et si la porte est à ouverture extérieure ou, uniquement sur PVC, si c'est une
+menuiserie cintrée [1 p. 11]. Les modèles photographiés sont Dorine et Isabelle.
+
+## LUMINE, portes d'entrée aluminium
+
+La porte [LUMINE](/gammes/lumine.md) est en aluminium, laquée à l'intérieur et à l'extérieur
+[1 p. 12].
+
+| Code de la source | Nom | Famille | Faces | Restriction | Pastille |
+| --- | --- | --- | --- | --- | ---: |
+| 9016 | Blanc 9016 brillant | laqué standard | 1 ou 2 face(s) | - | ![Blanc 9016 brillant](/assets/coloris/portes-entree/lumine-blanc-9016-brillant.png) |
+| 7016 | Anthracite 7016 satiné | laqué standard | 1 ou 2 face(s) | - | ![Anthracite 7016 satiné](/assets/coloris/portes-entree/lumine-anthracite-7016-satine.png) |
+| 7016 | Anthracite 7016 granité | laqué standard | 1 ou 2 face(s) | - | ![Anthracite 7016 granité](/assets/coloris/portes-entree/lumine-anthracite-7016-granite.png) |
+| 3004 | Rouge 3004 satiné | laqué standard | 1 face uniquement | - | ![Rouge 3004 satiné](/assets/coloris/portes-entree/lumine-rouge-3004-satine.png) |
+| 2900 | Gris 2900 granité | laqué standard | 1 face uniquement | - | ![Gris 2900 granité](/assets/coloris/portes-entree/lumine-gris-2900-granite.png) |
+| 7039 | Gris 7039 granité | laqué standard | 1 face uniquement | - | ![Gris 7039 granité](/assets/coloris/portes-entree/lumine-gris-7039-granite.png) |
+| 7035 | Gris 7035 granité | laqué standard | 1 face uniquement | - | ![Gris 7035 granité](/assets/coloris/portes-entree/lumine-gris-7035-granite.png) |
+| 8019 | Marron 8019 granité | laqué standard | 1 face uniquement | - | ![Marron 8019 granité](/assets/coloris/portes-entree/lumine-marron-8019-granite.png) |
+| 2100 | Noir 2100 granité | laqué standard | 1 face uniquement | - | ![Noir 2100 granité](/assets/coloris/portes-entree/lumine-noir-2100-granite.png) |
+| 9005 | Noir 9005 granité | laqué standard | 1 face uniquement | - | ![Noir 9005 granité](/assets/coloris/portes-entree/lumine-noir-9005-granite.png) |
+| RAL | Laquage toutes teintes RAL, finition « satiné » ou « granité » | laqué | face intérieure ou 2 faces | - | ![Laquage toutes teintes RAL possibles sur face intérieure ou 2 faces](/assets/coloris/portes-entree/lumine-laquage-ral.png) |
+
+(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 12)
+
+Trois coloris standards se font sur une ou deux faces, sept sur une face uniquement ; le laquage
+toutes teintes RAL est possible sur la face intérieure ou sur les deux faces, « et toutes autres
+teintes personnalisées sur demande » [1 p. 12]. Les modèles photographiés sont 706-0 et 2740.
+
+## TEXTURAL, portes d'entrée
+
+La porte [TEXTURAL](/gammes/textural.md) associe des textures bois à l'intérieur et un laquage
+extérieur toutes teintes [1 p. 13]. Trois blocs : les textures possibles à l'intérieur et à
+l'extérieur, les textures intérieures seulement (avec un extérieur laqué satiné ou granité), et les
+textures exclusives.
+
+| Code de la source | Nom | Famille | Faces | Restriction | Pastille |
+| --- | --- | --- | --- | --- | ---: |
+| - | Chêne irlandais | texture, intérieure et extérieure | 1 ou 2 faces | - | ![Chêne irlandais, 1 ou 2 faces](/assets/coloris/portes-entree/textural-chene-irlandais.png) |
+| - | Chêne doré | texture, intérieure et extérieure | 1 ou 2 faces | - | ![Chêne doré, 1 ou 2 faces](/assets/coloris/portes-entree/textural-chene-dore.png) |
+| - | Siena | texture, intérieure et extérieure | 1 ou 2 faces | - | ![Siena, 1 ou 2 faces](/assets/coloris/portes-entree/textural-siena.png) |
+| RAL | Laquage toutes teintes RAL, finition « satiné » ou « granité » | laqué, intérieur et extérieur | - | - | ![Laquage toutes teintes RAL](/assets/coloris/portes-entree/textural-laquage-ral.png) |
+| - | Teck de Java | texture intérieure | intérieur, avec extérieur laqué satiné ou granité | - | ![Teck de Java](/assets/coloris/textural/teck-de-java.png) |
+| - | Teck de Brunéo | texture intérieure | intérieur, avec extérieur laqué satiné ou granité | - | ![Teck de Brunéo](/assets/coloris/textural/teck-de-bruneo.png) |
+| - | Blanc cérusé | texture intérieure | intérieur, avec extérieur laqué satiné ou granité | - | ![Blanc cérusé](/assets/coloris/textural/blanc-ceruse.png) |
+
+(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 13)
+
+Chêne irlandais et Siena portent un astérisque (« CHÊNE IRLANDAIS* », « SIENA* ») sans renvoi
+imprimé sur la page TEXTURAL ; le seul renvoi de la page concerne la finition glossy [1 p. 13].
+
+### Textures exclusives TEXTURAL des portes d'entrée
+
+Vingt-sept textures exclusives ; « les parcloses sont contretypées ou laquées dans le RAL
+s'approchant de la texture choisie » (la parclose est la baguette qui maintient le vitrage ;
+contretypée : teinte réalisée sur mesure pour s'approcher de la texture), « et bien d'autres
+textures à retrouver dans notre nuancier TEXTURAL® ». L'astérisque des deux glossy renvoie à
+« Pour la finition glossy, choisissez votre couleur ! » [1 p. 13]. Une ligne par texture, dans
+l'ordre de la source ; la colonne « Parclose » donne la teinte de parclose imprimée sous la
+pastille.
+
+| Nom | Parclose | Pastille |
+| --- | --- | ---: |
+| Carbone noir | RAL 9005 | ![Carbone noir](/assets/coloris/textural/exclusive-carbone-noir.png) |
+| Carbone gris clair | RAL 9006 | ![Carbone gris clair](/assets/coloris/textural/exclusive-carbone-gris-clair.png) |
+| Carbone gris foncé | contretypée | ![Carbone gris foncé](/assets/coloris/textural/exclusive-carbone-gris-fonce.png) |
+| Carbone argenté | contretypée | ![Carbone argenté](/assets/coloris/textural/exclusive-carbone-argente.png) |
+| Acier strié | RAL 9006 | ![Acier strié](/assets/coloris/textural/exclusive-acier-strie.png) |
+| Doré strié | contretypée | ![Doré strié](/assets/coloris/textural/exclusive-dore-strie.png) |
+| Blanc strié | contretypée | ![Blanc strié](/assets/coloris/textural/exclusive-blanc-strie.png) |
+| Argenté | contretypée | ![Argenté](/assets/coloris/textural/exclusive-argente.png) |
+| Wengé | contretypée | ![Wengé](/assets/coloris/textural/exclusive-wenge.png) |
+| Wengé cuivré | RAL 8019 | ![Wengé cuivré](/assets/coloris/textural/exclusive-wenge-cuivre.png) |
+| Gris écaillé | RAL 7012 | ![Gris écaillé](/assets/coloris/portes-entree/textural-exclusive-gris-ecaille.png) |
+| Teck foncé | contretypée | ![Teck foncé](/assets/coloris/textural/exclusive-teck-fonce.png) |
+| Noyer | contretypée | ![Noyer](/assets/coloris/textural/exclusive-noyer.png) |
+| Cuir ivoire | contretypée | ![Cuir ivoire](/assets/coloris/textural/exclusive-cuir-ivoire.png) |
+| Cuir kaki | contretypée | ![Cuir kaki](/assets/coloris/textural/exclusive-cuir-kaki.png) |
+| Cuir marron patiné | contretypée | ![Cuir marron patiné](/assets/coloris/textural/exclusive-cuir-marron-patine.png) |
+| Cuir anthracite | contretypée | ![Cuir anthracite](/assets/coloris/textural/exclusive-cuir-anthracite.png) |
+| Cuir noir | RAL 9005 | ![Cuir noir](/assets/coloris/textural/exclusive-cuir-noir.png) |
+| Bois ivoire | contretypée | ![Bois ivoire](/assets/coloris/textural/exclusive-bois-ivoire.png) |
+| Terre de Sienne | contretypée | ![Terre de Sienne](/assets/coloris/textural/exclusive-terre-de-sienne.png) |
+| Chêne | contretypée | ![Chêne](/assets/coloris/textural/exclusive-chene.png) |
+| Hêtre | contretypée | ![Hêtre](/assets/coloris/textural/exclusive-hetre.png) |
+| Feuille d'or | contretypée | ![Feuille d'or](/assets/coloris/textural/exclusive-feuille-d-or.png) |
+| Feuille d'aluminium | contretypée | ![Feuille d'aluminium](/assets/coloris/textural/exclusive-feuille-d-aluminium.png) |
+| Caméléon | contretypée | ![Caméléon](/assets/coloris/textural/exclusive-cameleon.png) |
+| Glossy RAL 3002 | - | ![Glossy RAL 3002](/assets/coloris/textural/exclusive-glossy-ral-3002.png) |
+| Glossy RAL 9005 | - | ![Glossy RAL 9005](/assets/coloris/textural/exclusive-glossy-ral-9005.png) |
+
+(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 13)
+
+Les modèles photographiés sont Adonis et Arpège [1 p. 13].
+
+## Collection Graphite, teintes de fond et décors
+
+Les portes de la [collection Graphite](/portes/collection-graphite.md), monoblocs de la gamme
+TEXTURAL, se choisissent en deux temps : la teinte de fond, puis le coloris du décor peint. La
+teinte de fond est un laquage toutes teintes possible, en finition « satiné » ou « granité ». Les
+décorations sont réalisées par un peintre ; les modèles peuvent donc varier de quelques
+centimètres [1 p. 99]. La table donne les coloris de la personnalisation graphique, dans l'ordre
+du catalogue, le code RAL tel qu'il est imprimé en première colonne.
+
+| Code de la source | Nom | Famille | Faces | Restriction | Pastille |
+| --- | --- | --- | --- | --- | ---: |
+| - | Blanc | décor peint | - | - | ![Blanc, décor Graphite](/assets/coloris/portes-entree/graphite-decor-blanc.png) |
+| RAL 2100 | Noir (**INC-39**) | décor peint | - | - | ![Noir RAL 2100, décor Graphite](/assets/coloris/portes-entree/graphite-decor-noir-2100.png) |
+| RAL 7016 | Gris | décor peint | - | - | ![Gris RAL 7016, décor Graphite](/assets/coloris/portes-entree/graphite-decor-gris-7016.png) |
+| RAL 3004 | Rouge | décor peint | - | - | ![Rouge RAL 3004, décor Graphite](/assets/coloris/portes-entree/graphite-decor-rouge-3004.png) |
+| RAL 6029 | Vert | décor peint | - | - | ![Vert RAL 6029, décor Graphite](/assets/coloris/portes-entree/graphite-decor-vert-6029.png) |
+| RAL 2008 | Orange | décor peint | - | - | ![Orange RAL 2008, décor Graphite](/assets/coloris/portes-entree/graphite-decor-orange-2008.png) |
+| RAL 5012 | Bleu | décor peint | - | - | ![Bleu RAL 5012, décor Graphite](/assets/coloris/portes-entree/graphite-decor-bleu-5012.png) |
+| RAL 1036 | Or | décor peint | - | - | ![Or RAL 1036, décor Graphite](/assets/coloris/portes-entree/graphite-decor-or-1036.png) |
+| - | Gris aluminium anodisé | décor | - | - | - |
+
+(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 99)
+
+Le gris aluminium anodisé est proposé à la place des huit coloris (« ou gris aluminium
+anodisé ») ; il n'a pas de pastille [1 p. 99]. Le noir des décors Graphite est imprimé « Noir
+RAL 2100 », alors que les finitions HYBRIDE et LUMINE du même catalogue nomment « Noir 2100
+granité » la teinte de code 2100 (**INC-39**, registre
+[Incohérences internes](/anomalies/incoherences-internes.md)).
+
+# Citations
+
+[1] [Catalogue portes d'entrée PROFERM, édition mars 2024](raw/catalogue-portes-entree-2024-03.pdf), p. 10 à 13 et 99
+
+# Voir aussi
+
+- [Arguments de vente des portes d'entrée](/commercial/portes-d-entree.md)
+- [Collection Authentique](/portes/collection-authentique.md)
+- [Collection Graphite](/portes/collection-graphite.md)
+- [Coloris TEXTURAL](/coloris/coloris-textural.md)
+- [Coloris Sélection Hexa](/coloris/coloris-selection-hexa.md)
+- [Garanties par composant](/garanties/garanties-par-composant.md)
+
+===== PAGE 2 : /commercial/proferm.md =====
+# Ce qui est annoncé
+
+Cette page rassemble ce que la marque PROFERM annonce d'elle-même : des promesses et des
+formules, pas des valeurs mesurées. Les performances mesurées de chaque gamme sont sur sa page
+[gamme](/gammes/perform.md) et sur [Labels et certifications](/certifications/labels-et-certifications.md).
+
+## Signature et slogans
+
+PROFERM se présente comme « Fabricant français de menuiseries innovantes » [1 p. 1]. Le catalogue
+menuiseries réunit quatre gammes, chacune avec son slogan [1 p. 1, 3] :
+
+| Gamme | Slogan | Matériau |
+| --- | --- | --- |
+| [PERFORM](/gammes/perform.md) | La fenêtre ultra-durable | PVC |
+| [HYBRIDE](/gammes/hybride.md) | La fenêtre écologique | mixte PVC intérieur, aluminium extérieur |
+| [LUMINE](/gammes/lumine.md) | L'aluminium en mode sublime | aluminium |
+| [TEXTURAL](/gammes/textural.md) | La fenêtre qui habille votre intérieur | décorative |
+
+« Choisir une menuiserie PROFERM c'est l'assurance d'acquérir des fenêtres et des portes
+françaises fabriquées pour durer. » [1 p. 3]
+
+« Optez pour la menuiserie de vos envies. » [1 p. 4]
+
+## Qualité et durabilité, les quatre engagements
+
+Situé au cœur des Hauts-de-France, PROFERM se présente comme le fabricant français de menuiseries
+innovantes par excellence, et propose des menuiseries PVC, ALU, HYBRIDE et TEXTURAL® [1 p. 2].
+Sous le titre « Qualité & durabilité, PROFERM s'engage », quatre engagements sont annoncés
+[1 p. 2] :
+
+| Engagement | Ce qui est annoncé |
+| --- | --- |
+| Qualité | La qualité des menuiseries PROFERM résulte d'une combinaison judicieuse des meilleurs matériaux et des meilleures technologies, associée à ses propres méthodes de fabrication. Soudures, finitions, ferrures, épaisseur de parois des menuiseries : PROFERM s'engage à fournir des menuiseries haut de gamme alliant prouesses techniques, esthétisme et fiabilité. |
+| Engagement | Depuis sa création, PROFERM innove et investit régulièrement pour optimiser son outil de production et garantir une fabrication française de très haut niveau, à partir de matériaux élaborés à 95 % sur le territoire français, pour proposer des produits de qualité, toujours plus performants. |
+| Sécurité et durabilité | PROFERM veille à garantir un haut niveau de qualité et de sécurité à ses produits. Grâce à ses procédés de fabrication et la gestion des flux, inspirés des méthodes employées dans l'automobile, PROFERM assure un haut niveau de fiabilité, une forte réactivité et une qualité constante des menuiseries. |
+| Proximité | PROFERM met tout en œuvre pour garantir l'écoute, l'accompagnement et la satisfaction de sa clientèle, et veille à toujours fournir un produit et un service de qualité dans les meilleurs délais, pour chacun de ses clients. |
+
+La même page met en avant une « Garantie 15 ans » portant sur la structure de la fenêtre, et
+renvoie à l'ensemble des garanties [1 p. 2] : les durées par composant sont sur
+[Garanties par composant](/garanties/garanties-par-composant.md). Le bandeau de bas de page porte
+« Fabrication française » sous des photos d'atelier. Le label
+Origine France Garantie (AFNOR, certificat 112799) figure en couverture [1 p. 1] ; il est décrit
+sur [Labels et certifications](/certifications/labels-et-certifications.md).
+
+## Les gammes de produits
+
+« PROFERM va au-delà des exigences du marché en matière de normes et procédés pour vous offrir une
+collection de menuiseries qui répond à toutes vos attentes. PVC, ALU, HYBRIDE et TEXTURAL®, grâce
+à ses gammes, PROFERM vous propose la meilleure menuiserie du marché alliant esthétisme,
+robustesse et performance. » [1 p. 4] La présentation de chaque gamme sur cette même page est
+reprise sur sa page commerciale : [PERFORM](/commercial/perform.md),
+[HYBRIDE](/commercial/hybride.md), [LUMINE](/commercial/lumine.md),
+[TEXTURAL](/commercial/textural.md).
+
+## Vitrages et volets roulants
+
+« Pour votre confort et votre sécurité, pour renforcer l'isolation thermique et phonique de votre
+habitation, choisissez le vitrage le plus adapté à votre besoin parmi notre large gamme. » [1 p. 27]
+Les compositions et les valeurs sont sur [Performances des vitrages](/vitrages/performances-vitrages.md).
+
+« Sécurisez et isolez votre maison grâce aux volets roulants. Ils renforceront les capacités
+d'isolation thermique et phonique de vos menuiseries ainsi que leur durabilité. En plus de
+sécuriser votre habitat, nos volets roulants s'adaptent à l'esthétique de votre maison et sur
+toutes les menuiseries PROFERM ! » « Optez pour le volet roulant intégré ! Assemblé à la
+menuiserie, c'est LA solution idéale en terme d'isolation thermique et de rapidité de pose. »
+« Pour une parfaite harmonie, le coffre est disponible dans toutes les teintes RAL et peut être
+plaxé dans tous les films proposés dans nos gammes de fenêtres. » [1 p. 28] Le détail est sur
+[Volets roulants](/equipements/volets-roulants.md).
+
+## Labels, garanties et environnement
+
+Les labels eux-mêmes sont sur [Labels et certifications](/certifications/labels-et-certifications.md) ;
+ce qui en est dit en plus du fait [1 p. 34] :
+
+| Label | Ce qui est annoncé |
+| --- | --- |
+| La French Fab | En rejoignant la French Fab, PROFERM affirme sa volonté de participer à la transformation de l'industrie française par la diffusion des concepts et technologies de l'Industrie du Futur. |
+| Le Coq Vert | L'adhésion est « une suite logique de l'engagement PROFERM » ; rejoindre le Coq Vert offre à PROFERM « une opportunité unique de partager ses expériences et de co-construire des solutions innovantes et durables avec d'autres entreprises engagées ». |
+| FFCP | Cela fait de PERFORM76 « un choix idéal pour les projets ambitieux et écologiques ». |
+| RC2 | Grâce à un ensemble de composants de haute performance et des innovations, la fenêtre PERFORM76 « offre une résistance optimale aux tentatives d'effraction » ; CERIBOIS est présenté comme un « organisme reconnu pour son expertise dans l'évaluation de la résistance des menuiseries ». |
+| Label ROTO Performance | PROFERM est présenté comme le « premier fabricant à recevoir le Label ROTO Performance ». |
+
+« La satisfaction est au cœur de nos préoccupations. C'est pourquoi, PROFERM s'engage à vous
+fournir tranquillité et sérénité jusqu'à plusieurs années après la pose de vos menuiseries.
+PROFERM vous offre des garanties exceptionnelles et exclusives sur l'ensemble des composants. »
+[1 p. 35] Les durées sont sur [Garanties par composant](/garanties/garanties-par-composant.md).
+
+Sous « PROFERM respecte l'environnement » [1 p. 35] :
+
+- **Économies d'énergie** : « PROFERM contribue au respect de l'environnement grâce à ses
+  menuiseries performantes. Opter pour une menuiserie conçue par PROFERM, c'est faire des économies
+  d'énergie et réduire les gaz à effets de serre. »
+- **Matériaux recyclables** : « Le PVC Greenline® de chez KÖMMERLING® a la particularité d'être
+  recyclable, sans plomb ni cadmium. L'aluminium, quant à lui, s'inscrit dans une réelle démarche
+  de filière de recyclage. PROFERM utilise pour la fabrication de ses menuiseries l'aluminium bas
+  carbone de TECHNAL®. Un aluminium recyclé à 75 % avec les plus faibles émissions de carbone qui en
+  fait un matériau respectueux de l'environnement. »
+
+La dernière page reprend la signature « Fabricant français de menuiseries innovantes », les
+coordonnées, le renvoi aux catalogues en ligne et la mention « Fabrication française » [1 p. 36].
+
+## En juin 2023
+
+Le dépliant général de juin 2023 réunit les mêmes quatre gammes sous les mêmes slogans en
+couverture, avec la signature « Fabricant français de menuiseries innovantes » et le macaron
+« Garantie 15 ans* », « *sur la structure de la fenêtre » [2 p. 1]. Sous « Nos garanties », la
+même phrase qu'en 2026 : « La satisfaction est au cœur de nos préoccupations. C'est pourquoi
+PROFERM s'engage à vous fournir tranquillité et sérénité jusqu'à plusieurs années après la pose de
+vos menuiseries. PROFERM vous offre des garanties exceptionnelles et exclusives sur l'ensemble des
+composants » [2 p. 7] ; la grille est sur [Garanties par composant](/garanties/garanties-par-composant.md).
+
+« Organisme certificateur, le CSTB (Centre Scientifique et Technique du Bâtiment) a classé PROFERM
+parmi les 5 meilleurs fabricants français au test A\*E\*V. » ; le classement est présenté comme
+« Le plus haut niveau de résistance au vent et à l'air » (valeur sur
+[Labels et certifications](/certifications/labels-et-certifications.md)) [2 p. 7].
+
+Chaque page de gamme se termine par « Retrouvez toutes les informations sur la gamme … dans notre
+catalogue général » [2 p. 3-6]. La quatrième de couverture porte la signature, les coordonnées et
+un encadré vierge sous « Un projet ? Posez toutes vos questions à : » [2 p. 8].
+
+## En mars 2024, catalogue portes d'entrée
+
+La couverture du catalogue portes d'entrée porte « Catalogue portes d'entrée », « Fabrication
+française » et la signature « Fabricant français de menuiseries innovantes », sur la photo d'un
+modèle Arpège [3 p. 1]. « Situé au cœur des Hauts-de-France, PROFERM est le fabricant français de
+menuiseries innovantes par excellence & propose des menuiseries PVC, ALU, HYBRIDE & TEXTURAL®. »
+« Toutes nos menuiseries sont fabriquées dans notre atelier de production basé à Douvrin, dans le
+Nord de la France. PROFERM vous garantit une fabrication 100 % française. » [3 p. 2]
+
+Sous « PROFERM en quelques chiffres » [3 p. 3] :
+
+| Chiffre annoncé | Valeur | Unité |
+| --- | --- | --- |
+| Usine, à Douvrin dans le Pas-de-Calais | 1 | usine |
+| Collaborateurs | 220 | personnes |
+| Surface de production | 14 000 | m² |
+| Châssis fabriqués par an | 56 000 | châssis |
+
+(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 3)
+
+Cinq valeurs sont affichées sous « Nos valeurs » : qualité, sécurité, innovation, garantie,
+esthétique [3 p. 3].
+
+Sous « Une entreprise engagée pour l'environnement » : « PROFERM s'engage dans une politique
+environnementale par le choix des matériaux utilisés dans la fabrication de ses menuiseries : le
+PVC Greenline® de chez KÖMMERLING® a la particularité d'être complètement recyclable, d'être en
+partie composé de PVC recyclé et de ne pas comporter de plomb ni de cadmium dans sa composition ;
+l'aluminium bas carbone de TECHNAL® s'inscrit, quant à lui, dans une réelle démarche
+éco-responsable : une fabrication avec les plus faibles émissions de carbone possibles & un
+matériau composé à 75 % d'aluminium recyclé. » « Chez PROFERM, les chutes de matières premières
+produites lors des différentes phases de la production des menuiseries sont recyclées. » La page
+renvoie aux réseaux sociaux et à www.proferm.net [3 p. 3].
+
+En fin de catalogue : « Retrouvez-nous sur PROFERM.NET » et « Professionnels, nos tarifs sont
+disponibles sur : ELCIA PRODEVIS », au-dessus d'une page de notes [3 p. 159]. La quatrième de
+couverture porte la signature « Fabricant français de menuiseries innovantes », l'adresse 355
+Avenue de Londres, ZI Artois Flandres - 62138 Douvrin, info@proferm.net, www.proferm.net,
+03.21.77.42.20, les réseaux sociaux, un cadre « Un projet ? Posez toutes vos questions à : » et
+« Fabrication française » [3 p. 160].
+
+# Ce que la source ne chiffre pas
+
+« Les meilleurs matériaux », « la meilleure menuiserie du marché », « un haut niveau de
+fiabilité », « les meilleurs délais » ne sont rattachés à aucune mesure, aucun essai ni aucun
+délai chiffré. Les « économies d'énergie » et la réduction des « gaz à effets de serre » ne sont pas chiffrées, ni les « plus faibles émissions de carbone » de l'aluminium [1 p. 35]. « Confort acoustique inégalé » (moteur RS100) et « LA solution idéale » (volet
+intégré) ne sont rattachés à aucune valeur [1 p. 28]. Le seul chiffre de la page des engagements est la part de matériaux élaborés sur le
+territoire français, 95 % [1 p. 2].
+
+# Citations
+
+[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 1 à 4, 27, 28, 34 à 36
+[2] [Dépliant général PROFERM, édition juin 2023](raw/depliant-general-2023-06.pdf), p. 1, 3 à 8
+[3] [Catalogue portes d'entrée PROFERM, édition mars 2024](raw/catalogue-portes-entree-2024-03.pdf), p. 1 à 3, 159 et 160
+
+# Voir aussi
+
+- [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md)
+- [Labels et certifications](/certifications/labels-et-certifications.md)
+- [Garanties par composant](/garanties/garanties-par-composant.md)
+
+===== PAGE 3 : /quincaillerie/poignees-et-croisillons.md =====
+# Ce que couvre cette page
+
+Les accessoires de manœuvre et de décoration des menuiseries PROFERM : la **poignée** qui manœuvre
+une fenêtre ou un coulissant, la **béquille double** (une poignée de chaque côté, sur plaque ou sur
+rosace, avec l'entrée de clé) qui équipe une porte-fenêtre, la **fausse crémone** (tige décorative
+verticale apparente sur l'ouvrant), les **croisillons** (barrettes qui divisent visuellement le
+vitrage) et quelques petits accessoires. Voir le [glossaire](/reference/glossaire.md).
+
+Une ligne par modèle, ou par modèle et par groupe de gammes quand les finitions ou la disponibilité
+diffèrent. « Finitions de série » : les finitions imprimées « disponible en … » ; « finitions en
+option » : celles marquées « en option » ou « sur demande ». La colonne Gammes ne nomme que les
+gammes dont la page du catalogue montre le modèle. L'image est la photo du catalogue.
+**Sécustik®** est la gamme de poignées à sécurité des modèles ATLANTA et TOULON (**VER-11** pour
+son fabricant).
+
+# Poignées de fenêtre
+
+Relevées sur les pages accessoires des gammes PERFORM (p. 7), HYBRIDE (p. 11), LUMINE (p. 15) et
+TEXTURAL (p. 23) [1].
+
+| Modèle | Type | Usage | Finitions de série | Finitions en option | Gammes | Restriction | Image |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| Sécustik® ATLANTA | poignée | fenêtre | blanc, aspect inox, caramel ou laiton | - | PERFORM, HYBRIDE, LUMINE, TEXTURAL | - | ![Sécustik ATLANTA](/assets/quincaillerie/poignees/secustik-atlanta.png) |
+| Sécustik® TOULON | poignée | fenêtre | noir, 7016, aspect inox ou blanc | - | PERFORM, HYBRIDE, LUMINE, TEXTURAL | - | ![Sécustik TOULON](/assets/quincaillerie/poignees/secustik-toulon.png) |
+| TOULON, position décalée | poignée | fenêtre à quincaillerie invisible ou à ouvrant caché | blanc, noir, F9 [2 p. 3] | laquage RAL [2 p. 3] | LUMINE (LUMINE55), PERFORM+, HYBRIDE+ | **seule poignée réalisable sur PERFORM+ et HYBRIDE+**, poignée centrée impossible [2 p. 2-3] | ![Poignée TOULON décalée, PERFORM+ et HYBRIDE+](/assets/quincaillerie/poignees/toulon-decalee.png) |
+| Technal® BERLIN | poignée | fenêtre | inox, blanc, noir ou 7016 | modèle en option ; autres coloris sur demande | LUMINE | - | ![Technal BERLIN](/assets/quincaillerie/poignees/technal-berlin.png) |
+| Technal® ANTIBES | poignée | fenêtre | noir, 7016, aspect inox ou blanc | modèle en option | LUMINE | - | ![Technal ANTIBES](/assets/quincaillerie/poignees/technal-antibes.png) |
+| Sécustik® ATLANTA | poignée | porte-fenêtre LUMINE65 | blanc ou aspect inox [3 p. 4] | - | LUMINE (LUMINE65) | caramel et laiton non cités (**CTR-28**) | ![Sécustik ATLANTA](/assets/quincaillerie/poignees/secustik-atlanta.png) |
+| Sécustik® TOULON | poignée | porte-fenêtre LUMINE65 | noir, 7016, aspect inox ou blanc [3 p. 4] | - | LUMINE (LUMINE65) | - | ![Sécustik TOULON](/assets/quincaillerie/poignees/secustik-toulon.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 7, 11, 15 et 23 ; raw/brochure-lumine65-2025-02.pdf, p. 4)
+
+Sur la fenêtre LUMINE65, les poignées Sécustik® ATLANTA (blanc, aspect inox, caramel ou laiton)
+et Sécustik® TOULON (noir, 7016, aspect inox ou blanc) sont celles des lignes « fenêtre »
+ci-dessus [3 p. 4].
+
+La poignée TOULON est décalée sur la quincaillerie invisible de la LUMINE55 [1 p. 14]. Sur les
+gammes à ouvrant caché PERFORM+ et HYBRIDE+, **la pose de serrures sur porte-fenêtre est exclue**
+[2 p. 2].
+
+# Béquilles doubles et rosaces, pour portes-fenêtres
+
+| Modèle | Type | Usage | Finitions de série | Finitions en option | Gammes | Restriction | Image |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| TOULON sur plaque | béquille double sur plaque | porte-fenêtre | noir, 7016, aspect inox ou blanc | - | PERFORM, LUMINE | - | ![TOULON sur plaque](/assets/quincaillerie/poignees/toulon-sur-plaque.png) |
+| Sécustik® TOULON avec rosace | béquille double sur rosace | porte-fenêtre | noir, 7016, aspect inox ou blanc | - | PERFORM, HYBRIDE, LUMINE, TEXTURAL | - | ![Sécustik TOULON avec rosace](/assets/quincaillerie/poignees/secustik-toulon-rosace.png) |
+| ATLANTA plaque large | béquille double sur plaque | porte-fenêtre | inox ou laiton | - | PERFORM, HYBRIDE, LUMINE, TEXTURAL | - | ![ATLANTA plaque large](/assets/quincaillerie/poignees/atlanta-plaque-large.png) |
+| ATLANTA plaque étroite | béquille double sur plaque | porte-fenêtre | inox, blanc ou laiton | noir et 7016 | PERFORM, HYBRIDE, LUMINE, TEXTURAL | - | ![ATLANTA plaque étroite](/assets/quincaillerie/poignees/atlanta-plaque-etroite.png) |
+| Sécustik® ATLANTA avec rosace | béquille double sur rosace | porte-fenêtre | inox, blanc ou laiton | noir et 7016 | PERFORM, HYBRIDE, LUMINE, TEXTURAL | - | ![Sécustik ATLANTA avec rosace](/assets/quincaillerie/poignees/secustik-atlanta-rosace.png) |
+| Technal® BERLIN | béquille double sur rosace | porte-fenêtre | inox, blanc, noir ou 7016 | modèle en option ; autres coloris sur demande | LUMINE | - | ![Technal BERLIN, béquille](/assets/quincaillerie/poignees/technal-berlin-bequille.png) |
+| ATLANTA plaque étroite | béquille double sur plaque | porte-fenêtre LUMINE65 | blanc ou aspect inox [3 p. 4] | noir et 7016 [3 p. 4] | LUMINE (LUMINE65) | laiton non cité (**CTR-28**) | ![ATLANTA plaque étroite](/assets/quincaillerie/poignees/atlanta-plaque-etroite.png) |
+| Sécustik® ATLANTA avec rosace | béquille double sur rosace | porte-fenêtre LUMINE65, pour oscillo-battant | blanc ou aspect inox [3 p. 4] | noir et 7016 [3 p. 4] | LUMINE (LUMINE65) | laiton non cité (**CTR-28**) | ![Sécustik ATLANTA avec rosace](/assets/quincaillerie/poignees/secustik-atlanta-rosace.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 7, 11, 15 et 23 ; raw/brochure-lumine65-2025-02.pdf, p. 4)
+
+Sur la porte-fenêtre LUMINE65, la béquille double TOULON sur plaque et la Sécustik® TOULON avec
+rosace ont les finitions des lignes ci-dessus (noir, 7016, aspect inox ou blanc) ; les rosaces y
+sont données « pour oscillo-battant » (ouverture à la française et en soufflet par la même
+poignée) [3 p. 4].
+
+# Poignées de coulissant
+
+Les poignées de coulissant dépendent du produit, pas de la gamme ; celles des coulissants
+aluminium se rangent en quatre groupes : tous coulissants, LUMINE65, SOLÉAL & GALANDAGE, LUMÉAL
+[1 p. 17]. Le coulissant PVC [INNOSLIDE](/gammes/innoslide.md) a sa propre poignée, sur la
+dernière ligne [4 p. 3]. Voir
+[Coulissants aluminium](/gammes/coulissants-aluminium.md). « Ouvrant principal » : le vantail qui
+se manœuvre ; « semi-fixe » : le vantail qui ne s'ouvre qu'après lui.
+
+| Modèle | Type | Usage | Finitions de série | Finitions en option | Gammes | Restriction | Image |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| Sécustik® ATLANTA | poignée | tous coulissants | blanc, aspect inox, caramel ou laiton | - | coulissants aluminium | - | ![Sécustik ATLANTA](/assets/quincaillerie/poignees/secustik-atlanta.png) |
+| Sécustik® TOULON | poignée | tous coulissants | noir, 7016, aspect inox ou blanc | - | coulissants aluminium | - | ![Sécustik TOULON](/assets/quincaillerie/poignees/secustik-toulon.png) |
+| SEOUL | cuvette de tirage | tous coulissants | noir, 7016, aspect inox ou blanc | modèle en option | coulissants aluminium | - | ![SEOUL](/assets/quincaillerie/poignees/seoul.png) |
+| DEHLI | poignée encastrée | tous coulissants | inox, blanc ou noir | modèle en option | coulissants aluminium | sur le coulissant LUMINE65, autre nom et autre dessin : **MLINI** (**CTR-12**) | ![DEHLI](/assets/quincaillerie/poignees/dehli.png) |
+| Sécustik® ATLANTA | poignée | coulissant LUMINE65 | blanc ou aspect inox [3 p. 3] | - | LUMINE (coulissant LUMINE65) | caramel et laiton non cités (**CTR-28**) | ![Sécustik ATLANTA](/assets/quincaillerie/poignees/secustik-atlanta.png) |
+| SEOUL | cuvette encastrée | coulissant LUMINE65 | inox, blanc ou noir [3 p. 3] | modèle en option [3 p. 3] | LUMINE (coulissant LUMINE65) | 7016 non cité (**CTR-28**) | ![SEOUL](/assets/quincaillerie/poignees/seoul.png) |
+| MLINI | poignée encastrée | coulissant LUMINE65 | inox, blanc ou noir [3 p. 3] | modèle en option [3 p. 3] | LUMINE (coulissant LUMINE65) | nom et dessin différents de la DEHLI (**CTR-12**) | ![Poignée encastrée MLINI](/assets/quincaillerie/poignees/mlini.png) |
+| SYDNEY | poignée | coulissant LUMINE65, sur ouvrant principal | inox, blanc ou noir | modèle en option | LUMINE (coulissant LUMINE65) | - | ![Poignée SYDNEY](/assets/quincaillerie/poignees/sydney.png) |
+| MILAN | poignée | coulissant LUMINE65, sur semi-fixe | inox, blanc ou noir | modèle en option | LUMINE (coulissant LUMINE65) | - | ![Poignée MILAN](/assets/quincaillerie/poignees/milan.png) |
+| SYDNEY | poignée | SOLÉAL et GALANDAGE, sur ouvrant principal | inox, blanc ou noir | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55) | - | ![Poignée SYDNEY](/assets/quincaillerie/poignees/sydney.png) |
+| Technal® SHANGHAI | poignée | SOLÉAL et GALANDAGE, sur ouvrant principal | inox, blanc, noir ou 7016 | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55) | - | ![Technal SHANGHAI](/assets/quincaillerie/poignees/technal-shanghai.png) |
+| Technal® PEKIN | poignée | SOLÉAL et GALANDAGE, sur ouvrant principal | F9, blanc, noir ou 7016 | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55) | - | ![Technal PEKIN](/assets/quincaillerie/poignees/technal-pekin.png) |
+| MILAN | poignée | SOLÉAL et GALANDAGE, sur semi-fixe | inox, blanc ou noir | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55) | - | ![Poignée MILAN](/assets/quincaillerie/poignees/milan.png) |
+| Technal® GRENADE | poignée | SOLÉAL et GALANDAGE, sur semi-fixe | inox, blanc, noir ou 7016 | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55) | - | ![Technal GRENADE](/assets/quincaillerie/poignees/technal-grenade.png) |
+| Technal® BERLIN | poignée | SOLÉAL, GALANDAGE et LUMÉAL | inox, blanc, noir ou 7016 | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55, LUMÉAL55) | - | ![Technal BERLIN](/assets/quincaillerie/poignees/technal-berlin.png) |
+| Technal® ANTIBES | poignée | SOLÉAL, GALANDAGE et LUMÉAL | noir, 7016, aspect inox ou blanc | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55, LUMÉAL55) | - | ![Technal ANTIBES](/assets/quincaillerie/poignees/technal-antibes.png) |
+| Technal® OSAKA | poignée de tirage | LUMÉAL | inox | - | LUMINE (LUMÉAL55) | - | ![Technal OSAKA](/assets/quincaillerie/poignees/technal-osaka.png) |
+| Technal® KOBE | bouton de manœuvre | LUMÉAL | - | - | LUMINE (LUMÉAL55) | - | ![Technal KOBE](/assets/quincaillerie/poignees/technal-kobe.png) |
+| Technal® TOKYO | poignée droite | LUMÉAL | inox | modèle en option | LUMINE (LUMÉAL55) | - | ![Technal TOKYO](/assets/quincaillerie/poignees/technal-tokyo.png) |
+| Technal® KYOTO | poignée inclinée | LUMÉAL | inox | modèle en option | LUMINE (LUMÉAL55) | - | ![Technal KYOTO](/assets/quincaillerie/poignees/technal-kyoto.png) |
+| Poignée design minimal | poignée | LUMÉAL, dépliants de juin 2023 et d'avril 2026 | - | - | LUMINE (LUMÉAL) | « en standard » [5 p. 3, 6 p. 2] | ![Poignée design minimal, photo de la Technal OSAKA](/assets/quincaillerie/poignees/technal-osaka.png) |
+| Poignée design droit | poignée | LUMÉAL, dépliants de juin 2023 et d'avril 2026 | - | modèle en option [5 p. 3, 6 p. 2] | LUMINE (LUMÉAL) | - | ![Poignée design droit, photo de la Technal TOKYO](/assets/quincaillerie/poignees/technal-tokyo.png) |
+| Poignée inclinée | poignée | LUMÉAL, dépliants de juin 2023 et d'avril 2026 | - | modèle en option [5 p. 3, 6 p. 2] | LUMINE (LUMÉAL) | - | ![Poignée inclinée, photo de la Technal KYOTO](/assets/quincaillerie/poignees/technal-kyoto.png) |
+| Bouton de manoeuvre | bouton de manœuvre | LUMÉAL, dépliants de juin 2023 et d'avril 2026 | - | - | LUMINE (LUMÉAL) | - | ![Bouton de manoeuvre, photo du Technal KOBE](/assets/quincaillerie/poignees/technal-kobe.png) |
+| Poignée du coulissant INNOSLIDE, modèle non nommé | poignée | coulissant INNOSLIDE | blanc, noir ou F9 [4 p. 3] | - | INNOSLIDE | - | ![Poignée du coulissant INNOSLIDE](/assets/quincaillerie/poignees/poignee-innoslide.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 17 ; raw/brochure-lumine65-2025-02.pdf, p. 3 ; raw/depliant-lumeal-2023-06.pdf, p. 3 ; raw/depliant-lumeal-2026-04.pdf, p. 2 ; raw/depliant-innoslide-2024-01-a4-web.pdf, p. 3)
+
+Sur le coulissant LUMINE65, la Sécustik® TOULON (noir, 7016, aspect inox ou blanc), la SYDNEY
+sur ouvrant principal et la MILAN sur semi-fixe (inox, blanc ou noir, en option) ont les finitions
+des lignes ci-dessus [3 p. 3].
+
+Les dépliants LUMÉAL de juin 2023 et d'avril 2026 présentent les quatre mêmes poignées « au design exclusif pour personnaliser
+votre baie coulissante » sans nom de modèle ni finition ; la poignée design minimal y est dite
+« Discrète, elle est préconisée par les architectes » [5 p. 3, 6 p. 2]. Ses quatre photos sont celles des
+Technal® OSAKA, TOKYO, KYOTO et KOBE du groupe LUMÉAL au catalogue général, qui en donne les noms
+et les finitions [1 p. 17] : les images des lignes ci-dessus sont celles du catalogue.
+
+L'image de la poignée INNOSLIDE réunit la photo de la poignée noire seule et deux vues de la
+poignée posée sur l'ouvrant ; le modèle n'est pas nommé [4 p. 3].
+
+Aucune finition n'est imprimée pour le bouton KOBE. OSAKA et KOBE ne portent pas la mention « en
+option », à la différence des autres poignées du groupe LUMÉAL [1 p. 17].
+
+# Poignées de porte d'entrée
+
+Poignées présentées avec la [Sélection Hexa](/portes/selection-hexa.md) ; aucune finition n'est
+imprimée [1 p. 31].
+
+| Modèle | Type | Usage | Finitions de série | Finitions en option | Gammes | Restriction | Image |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| Poignée VIENNE | béquille sur rosace, avec entrée de cylindre | porte d'entrée | - | - | Sélection Hexa (LUMINE, HYBRIDE) | - | ![Poignée VIENNE](/assets/quincaillerie/poignees/vienne.png) |
+| Poignée ROME | béquille sur rosace, avec entrée de cylindre | porte d'entrée | - | - | Sélection Hexa (LUMINE, HYBRIDE) | - | ![Poignée ROME](/assets/quincaillerie/poignees/rome.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 31)
+
+# Fausses crémones
+
+La fausse crémone décorative est proposée en deux finitions sur les gammes PERFORM, HYBRIDE et
+TEXTURAL [1 p. 7, 11, 23].
+
+| Modèle | Type | Usage | Finitions de série | Finitions en option | Gammes | Restriction | Image |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| Fausse crémone décorative | décor | fenêtre, porte-fenêtre | blanc ou fer cémenté | - | PERFORM, HYBRIDE, TEXTURAL | **sauf sur porte-fenêtre avec serrure** | ![Fausse crémone décorative](/assets/quincaillerie/poignees/fausse-cremone.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 7, 11 et 23)
+
+La fausse crémone n'apparaît pas dans les accessoires de la gamme LUMINE ni des coulissants
+[1 p. 15, 17].
+
+# Croisillons
+
+Les croisillons se choisissent par leur largeur, en millimètres ; « sans croix » : les barrettes ne
+se croisent pas. Une ligne par croisillon ; la colonne Gammes nomme les pages qui le montrent
+[1 p. 7, 11, 15, 17, 23].
+
+| Croisillon | Largeur (mm) | Croix | Gammes | Image |
+| --- | --- | --- | --- | ---: |
+| 10 mm | 10 | oui | PERFORM, HYBRIDE, LUMINE, coulissants aluminium, TEXTURAL | ![Croisillon 10 mm](/assets/quincaillerie/croisillons/croisillon-10.png) |
+| 18 mm | 18 | oui | PERFORM, HYBRIDE, LUMINE, coulissants aluminium, TEXTURAL | ![Croisillon 18 mm](/assets/quincaillerie/croisillons/croisillon-18.png) |
+| 26 mm | 26 | oui | PERFORM, HYBRIDE, LUMINE, coulissants aluminium, TEXTURAL | ![Croisillon 26 mm](/assets/quincaillerie/croisillons/croisillon-26.png) |
+| 45 mm | 45 | oui | PERFORM, HYBRIDE, LUMINE, coulissants aluminium, TEXTURAL | ![Croisillon 45 mm](/assets/quincaillerie/croisillons/croisillon-45.png) |
+| Laiton 8 mm | 8 | sans croix | PERFORM, HYBRIDE, LUMINE, coulissants aluminium, TEXTURAL | ![Croisillon laiton 8 mm sans croix](/assets/quincaillerie/croisillons/croisillon-laiton-8.png) |
+| Plomb 8 mm | 8 | sans croix | PERFORM, HYBRIDE, LUMINE, coulissants aluminium, TEXTURAL | ![Croisillon plomb 8 mm sans croix](/assets/quincaillerie/croisillons/croisillon-plomb-8.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 7)
+
+# Autres accessoires
+
+| Accessoire | Description | Gammes | Image |
+| --- | --- | --- | ---: |
+| Moustiquaire | Moustiquaire avec cadre fixe. Possibilité de laisser la fenêtre ouverte, fermée ou ouvrant battant | PERFORM, HYBRIDE, LUMINE, TEXTURAL | ![Moustiquaire avec cadre fixe](/assets/quincaillerie/accessoires/moustiquaire.png) |
+| Soubassement, menuiserie PVC | Soubassement mouluré en option. Existe aussi en plat | PERFORM, HYBRIDE, TEXTURAL | ![Soubassement mouluré, PVC](/assets/quincaillerie/accessoires/soubassement-moulure-pvc.png) |
+| Soubassement, menuiserie aluminium | Soubassement mouluré en option. Existe aussi en plat | LUMINE, coulissants aluminium | ![Soubassement mouluré, aluminium](/assets/quincaillerie/accessoires/soubassement-aluminium.png) |
+| Verrou de sécurité | En option. Disponible en blanc ou noir | coulissants aluminium | ![Verrou de sécurité](/assets/quincaillerie/accessoires/verrou-de-securite.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 7, 15 et 17)
+
+Le soubassement est le panneau plein qui remplace le vitrage en partie basse d'une porte-fenêtre.
+
+# Citations
+
+[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 7, 11, 14, 15, 17, 23 et 31
+[2] [Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023](raw/brochure-perform-plus-hybride-plus-2023-05.pdf), p. 2-3
+[3] [Brochure LUMINE65, édition février 2025](raw/brochure-lumine65-2025-02.pdf), p. 3-4
+[4] [Dépliant INNOSLIDE, édition janvier 2024, version A4 web](raw/depliant-innoslide-2024-01-a4-web.pdf), p. 3
+[5] [Dépliant LUMÉAL, édition juin 2023](raw/depliant-lumeal-2023-06.pdf), p. 3
+[6] [Dépliant LUMÉAL, édition avril 2026](raw/depliant-lumeal-2026-04.pdf), p. 2
+
+# Voir aussi
+
+- [PERFORM](/gammes/perform.md)
+- [HYBRIDE](/gammes/hybride.md)
+- [LUMINE](/gammes/lumine.md)
+- [TEXTURAL](/gammes/textural.md)
+- [Coulissants aluminium](/gammes/coulissants-aluminium.md)
+- [PERFORM+](/gammes/perform-plus.md)
+- [HYBRIDE+](/gammes/hybride-plus.md)
+- [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md)
+- [TECHNAL](/fournisseurs/technal.md)
+- [ROTO](/fournisseurs/roto.md)
+- [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /portes/collection-elements.md | Porte d'entrée | Collection Éléments | porte-entree, elements, insert-bois, chene-graphite, chene-naturel, chene-blanchi | La collection Éléments, portes d'entrée à parement uni et inserts à l'aspect bois naturel et veinage sur la face extérieure, en monobloc ou en panneau, réalisables en PERFORM, HYBRIDE, TEXTURAL et LUMINE — trois aspects bois, onze modèles avec leur vue intérieure, leur coloris présenté, leur indicateur de prix et leur photo. | ection Éléments est **réalisable dans les gammes [PERFORM](/gammes/perform.md), [HYBRIDE](/gammes/hybride.md), [TEXTURAL](/gammes/textural.md) et [LUM |
+| /portes/panneaux-et-monoblocs.md | Porte d'entrée | Panneaux et monoblocs | porte-entree, panneau, monobloc, thermixel, thermalux, verrissima | Les deux modes de fabrication d'une porte d'entrée PROFERM, panneau et monobloc, avec leurs gammes ; les compositions du panneau de couleur, du panneau blanc et du panneau verrier VERRISSIMA (classes EN 356, vitrage SP510) ; les monoblocs THERMIXEL et THERMALUX et leurs Up ; les vitrages de sécurité du panneau (33.2) et du monobloc (44.2/4/4) selon le décor. | de nombreux avantages [1 p. 145] : - meilleures performances en matière d'isolation thermique (plus grande épaisseur de l'isolant) ; - sécurité renf |
+| /portes/collection-classique.md | Porte d'entrée | Collection Classique | porte-entree, classique, moulure, demi-lune, chapeau-de-gendarme, vitrage-diamant | La collection Classique, portes d'entrée traditionnelles à moulures en saillie, en monobloc ou en panneau, réalisables en PERFORM, HYBRIDE, TEXTURAL et LUMINE — vingt-sept modèles avec leur vitrage, leurs gammes, leur coloris présenté, leur indicateur de prix et leur photo, les vitrages diamant proposés par modèle et les cimaises des modèles LUCENA et SAFIRA. | lles, présentées comme « l'alliance des matériaux performants et de l'élégance intemporelle » [1 p. 123]. Leurs lignes sont géométriques, cintrées, en |
+| /gammes/perform.md | Gamme | PERFORM | pvc, fenetre, perform, kommerling | Gamme de fenêtres et portes PVC de PROFERM, déclinée en profilés de 70 et 76 mm sur profilés KÖMMERLING GREENLINE. | # Définition et déclinaisons PERFORM est la gamme de menuiseries en PVC de PROFERM : fenêtres et portes, en ouverture à la française, oscillo-battant |
+| /quincaillerie/accessoires-portes-entree.md | Quincaillerie | Accessoires de porte d'entrée | porte-entree, baton-de-tirage, heurtoir, poignee, bequille, bouton | Bâtons de tirage, pavé et poignée de tirage, heurtoirs, poignées, boutons et boîtes aux lettres des portes d'entrée PROFERM, avec leurs dimensions, leurs finitions, leurs restrictions par ouvrant et par gamme, et la photo de chacun. | -2024/pave-de-tirage.png) / / Poignée de tirage / PERFORM, HYBRIDE et TEXTURAL / ![Poignée de tirage](/assets/quincaillerie/accessoires/portes-2024/po |
+| /coloris/coloris-textural.md | Coloris | Coloris TEXTURAL | coloris, nuancier, textures, laquage, parclose, textural | Textures et coloris de la gamme TEXTURAL — textures intérieures et intérieur et/ou extérieur, laquage RAL extérieur ou 2 faces, 26 textures exclusives intérieures avec la teinte de leur parclose. | re** est un décor à effet de matière (bois, cuir, carbone, métal) appliqué sur le profilé ; le **laquage** est l'application d'une laque, ici en toute |
+| /coloris/coloris-perform.md | Coloris | Coloris PERFORM | coloris, nuancier, pvc, plaxe, teinte-masse, laquage | Nuancier des menuiseries PVC PERFORM (PERFORM70 et PERFORM76) — teintés dans la masse, plaxés et laqués, avec les faces, la finition de profil et les restrictions de chaque teinte. | # Nuancier PERFORM, intérieur et extérieur PVC Les menuiseries PVC [PERFORM](/gammes/perform.md) (PERFORM70 et PERFORM76) se font en blanc, en ivoire |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/contradictions-entre-sources.md :
+| CTR-12 | Nom de la poignée encastrée de coulissant | Brochure LUMINE65, p. 3 : « Poignée encastrée **MLINI** — En option. Disponible en inox, blanc ou noir », sur le coulissant LUMINE65 ; la photo montre une poignée argent à levier incliné | Catalogue général, p. 17 : « **DEHLI** — En option. Poignée encastrée. Disponible en inox, blanc ou noir », pour tous les coulissants ; la photo montre une cuvette blanche aux bords arrondis. Relu en image le 25/09/2026 : les deux photos ne représentent pas le même objet | **Aucune** — même fonction, même finitions, même position dans la liste, mais deux noms et deux dessins : il peut s'agir de deux poignées distinctes. Les deux sont portées sur [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) | Référence introuvable à la commande, ou poignée livrée qui n'est pas celle montrée au client |
+/anomalies/contradictions-entre-sources.md :
+| CTR-28 | Finitions de cinq poignées et béquilles sur la LUMINE65 | Brochure LUMINE65, février 2025 : coulissant (p. 3) Sécustik® ATLANTA « blanc ou aspect inox », cuvette encastrée SEOUL « En option. Disponible en inox, blanc ou noir » ; porte-fenêtre (p. 4) poignée Sécustik® ATLANTA « blanc ou aspect inox », béquille ATLANTA plaque étroite et Sécustik® ATLANTA avec rosace « blanc ou aspect inox. Noir et 7016 en option ». La même brochure donne à la Sécustik® ATLANTA de fenêtre « blanc, aspect inox, caramel ou laiton » (p. 4) | Catalogue général, janvier 2026 : Sécustik® ATLANTA de coulissant « blanc, aspect inox, caramel ou laiton », SEOUL « noir, 7016, aspect inox ou blanc » (p. 17) ; ATLANTA plaque étroite et Sécustik® ATLANTA avec rosace « inox, blanc ou laiton », noir et 7016 en option (p. 15) | **aucune** — aucune règle ne départage une liste de finitions ; les deux listes sont portées ligne par ligne sur [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md), avec leur source | Poignée caramel ou laiton, ou SEOUL 7016, promise sur une LUMINE65 où elle n'existe peut-être pas ; ou finition inox refusée à tort |
+/anomalies/incoherences-internes.md :
+| INC-36 | Catalogue portes d'entrée, mars 2024 | 55 | Le modèle IMIZA, « Réf. 3660 », est « Modèle présenté en RAL3660 » : le numéro de la teinte reprend celui de la référence du modèle. Sur la même page, ISABELLE (« Réf. 3720 ») est « présentée en RAL 3700 ». Ni RAL 3660 ni RAL 3700 ne figurent parmi les teintes des portes d'entrée (p. 10 à 13, [Coloris des portes d'entrée](/coloris/coloris-portes-entree.md)) | Remplacer par la teinte réellement photographiée, que le document ne permet pas d'identifier | Un coloris présenté recopié tel quel dans un devis désigne une teinte que la gamme ne propose pas |

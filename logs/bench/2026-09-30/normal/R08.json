@@ -1,0 +1,26 @@
+{
+ "id": "R08",
+ "reponse": "Non : dans le wiki, **aucune poignée n'est réservée au seul galandage**. Les poignées des coulissants aluminium PROFERM se rangent en quatre groupes (tous coulissants, LUMINE65, SOLÉAL & GALANDAGE, LUMÉAL) : le galandage (GALANDAGE55) partage toujours ses poignées avec le coulissant SOLÉAL55.\n- Groupe **SOLÉAL et GALANDAGE**, sur ouvrant principal : SYDNEY (inox, blanc ou noir), Technal SHANGHAI (inox, blanc, noir ou 7016), Technal PEKIN (F9, blanc, noir ou 7016) ; sur semi-fixe : MILAN (inox, blanc ou noir), Technal GRENADE (inox, blanc, noir ou 7016) ; toutes en option.\n- Communes SOLÉAL, GALANDAGE et LUMÉAL : Technal BERLIN (inox, blanc, noir ou 7016), Technal ANTIBES (noir, 7016, aspect inox ou blanc), en option.\n- Tous coulissants : Sécustik ATLANTA, Sécustik TOULON, cuvette de tirage SEOUL (option), poignée encastrée DEHLI (option).\nCôté système TECHNAL SOLEAL GY 55 (galandage et coulissant traditionnel), le choix de l'organe de manœuvre dépend du **montant** et non du galandage : cuvette encastrée TGY3712 / TGY3719, bouton sur plaque TGY3713 / TGY3714 (montant lame seulement), poignée de tirage TGY3717, poignée extérieure TGY3718, poignée fixe TGY3732 / TGY3733, poignée design droit TGY3606, anse galbée TGY6004, cuvette à levier TGY6003, béquille carré 7 mm T960030 / TCZ61051.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/quincaillerie/poignees-et-croisillons.md", "extrait": "Les poignées de coulissant dépendent du produit, pas de la gamme ; celles des coulissants aluminium se rangent en quatre groupes : tous coulissants, LUMINE65, SOLÉAL & GALANDAGE, LUMÉAL [1 p. 17]."},
+  {"page": "/quincaillerie/poignees-et-croisillons.md", "extrait": "| SYDNEY | poignée | SOLÉAL et GALANDAGE, sur ouvrant principal | inox, blanc ou noir | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55) | - |"},
+  {"page": "/quincaillerie/poignees-et-croisillons.md", "extrait": "| Technal® GRENADE | poignée | SOLÉAL et GALANDAGE, sur semi-fixe | inox, blanc, noir ou 7016 | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55) | - |"},
+  {"page": "/gammes/coulissants-aluminium.md", "extrait": "SYDNEY, SHANGHAI, PEKIN, MILAN, GRENADE, BERLIN et ANTIBES sur SOLÉAL et GALANDAGE"},
+  {"page": "/quincaillerie/soleal-gy-roulements-et-fermetures.md", "extrait": "| **Cuvette encastrée** | Intérieure | **TGY3712** | **TGY3719** | Oui (OS / SF) | Oui (OS / SF) | Non | Oui |"}
+ ],
+ "ambiguite": "Réponse négative établie par le classement des poignées (aucun groupe « galandage seul ») ; le wiki ne l'écrit pas en toutes lettres. « Uniquement pour galandage » peut aussi viser un organe de manœuvre spécifique au refoulement (cuvette encastrée pour que le vantail rentre dans la cloison) : le wiki n'en parle pas.",
+ "outils": 3,
+ "comment_trouve": "Grep « galandage » croisé avec « poign / cuvette » dans quincaillerie/ et les pages SOLEAL GY ; le tableau des poignées de coulissant (poignees-et-croisillons.md) groupe SOLÉAL et GALANDAGE ensemble ; la procédure de pose du galandage ne parle d'aucune poignée.",
+ "formulations": [
+  "Existe-t-il une poignée spécifique pour un coulissant à galandage (vantail escamoté dans la cloison) ?",
+  "poignée galandage",
+  "Quelles poignées pour un GALANDAGE55 ?"
+ ],
+ "defauts_wiki": [
+  "Question de présence/absence : le wiki ne dit nulle part « aucune poignée n'est réservée au galandage » ; la réponse se déduit d'un tableau de 21 Ko (poignees-et-croisillons.md).",
+  "Orthographe : l'utilisateur écrit « galandage » comme le wiki (bien), mais « poignée » au singulier ; le tableau écrit « poignée » dans la colonne Type (bien).",
+  "Deux nomenclatures sans pont : les noms commerciaux PROFERM (SYDNEY, SHANGHAI…) dans poignees-et-croisillons.md et les références TECHNAL (TGY3712, TGY3606…) dans soleal-gy-roulements-et-fermetures.md ; aucune correspondance entre les deux n'est donnée.",
+  "La page procedures/pose-soleal-gy-galandage.md (qui porte « galandage » dans son titre et remontera en tête) ne contient aucune information sur les poignées."
+ ]
+}

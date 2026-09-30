@@ -1,0 +1,38 @@
+{
+  "question": "Quelle est la garantie sur la structure d'une LUMINE 65 ?",
+  "pages_lues": [
+    "/commercial/lumine.md",
+    "/gammes/lumine.md",
+    "/commercial/proferm.md",
+    "/garanties/garanties-par-composant.md"
+  ],
+  "anomalies": [
+    "CTR-03",
+    "VER-50"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "garantie structure LUMINE 65",
+        "gamme": "LUMINE"
+      },
+      "pages_nouvelles": [
+        "/commercial/lumine.md",
+        "/gammes/lumine.md",
+        "/commercial/proferm.md"
+      ],
+      "caracteres": 41396
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/garanties/garanties-par-composant.md"
+      },
+      "pages_nouvelles": [
+        "/garanties/garanties-par-composant.md"
+      ],
+      "caracteres": 14515
+    }
+  ]
+}

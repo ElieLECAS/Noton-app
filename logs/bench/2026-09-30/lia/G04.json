@@ -1,0 +1,30 @@
+{
+  "question": "La 787347, c'est pour quelle LFF ?",
+  "pages_lues": [
+    "/quincaillerie/roto-nx-ksr-oscillo-battant.md",
+    "/quincaillerie/roto-nx-compas-et-paliers.md",
+    "/quincaillerie/roto-nx-champs-application.md"
+  ],
+  "anomalies": [
+    "CTR-106",
+    "CTR-107",
+    "CTR-108",
+    "CTR-110",
+    "CTR-113",
+    "CTR-118"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "787347 LFF"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/roto-nx-ksr-oscillo-battant.md",
+        "/quincaillerie/roto-nx-compas-et-paliers.md",
+        "/quincaillerie/roto-nx-champs-application.md"
+      ],
+      "caracteres": 200677
+    }
+  ]
+}

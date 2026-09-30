@@ -1,0 +1,1708 @@
+===== PAGE 1 : /procedures/capotage-aluclip-systeme-70.md =====
+# Ce que fait cette procédure
+
+La variante AluClip du système 70 Plateforme de [profine](/fournisseurs/profine.md)
+(e.VOLUTION, e.MOTION, e.XCLUSIVE) habille la face extérieure des profilés PVC d'un **capot
+aluminium** clippé (voir le [glossaire](/reference/glossaire.md)). Cette procédure donne, dans
+l'ordre du manuel de mise en œuvre (registre 2.6.2), le poinçonnage et le fraisage des capots
+après débit, l'étanchéité de leurs jonctions, leur positionnement et leur collage, la pose des
+joints, le battement rapporté 0140, le drainage et la décompression des profilés capotés, puis la
+mise en œuvre des profilés complémentaires capotés : réhausses, demi-capot, tapées et appuis
+aluminium.
+
+Les capots eux-mêmes, leurs cotes et leurs cotes de débit sont dans
+[Capots et accessoires AluClip du système 70](/profiles/systeme-70-aluclip.md) ; les coupes des
+profilés capotés dans
+[Plans de combinaison AluClip du système 70](/profiles/systeme-70-aluclip-plans-de-combinaison.md).
+La même mise en œuvre, telle que la décrit le DTD, est dans
+[Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md#capotage-aluminium).
+
+# Conditions et interdictions
+
+**Les capots aluminium de 2 mètres et plus doivent être systématiquement sécurisés par collage en
+partie centrale avec un joint silicone neutre de 20 mm au minimum** [1 p. 349].
+
+**Les capots aluminium des traverses et meneaux doivent être systématiquement sécurisés par collage
+au silicone neutre, minimum 20 mm de large** [1 p. 349].
+
+**Les directives de fabrication quant au nombre et au positionnement des trous de drainage sont à
+respecter !** Ne percer que la chambre prévue pour l'évacuation de l'eau. **Attention : les
+chambres sous et derrière la chambre à percer ne doivent en aucun cas être endommagées !**
+[1 p. 353]
+
+**Tous les profilés PVC, blancs ou filmés, recevant des capotages aluminium doivent être
+intégralement renforcés** [1 p. 354].
+
+Prévoir les ventilations des profilés de couleurs (renvoi « * » des coupes de décompression)
+[1 p. 358].
+
+# Étapes
+
+## Poinçonnages et fraisages
+
+Après débits, les capots peuvent être poinçonnés ou fraisés : la découpe (grugeage) en bout de
+capot laisse passer le capot qui vient contre lui aux jonctions. **Pour les coupes fraisées,
+prévoir une sur-cote de 2,3 mm à chaque extrémité** (détail à l'échelle 2:1 : 2,3 mm entre la
+longueur de fraisage et la longueur de sciage). Le contour de fraisage, à l'échelle 1:1, a
+60 mm de haut, un rayon R6 et un angle de 16° [1 p. 347].
+
+![Sur-cote de fraisage de 2,3 mm et contour de fraisage 60 mm, R6, 16°](/assets/procedures/moe-systeme-70/aluclip/poinconnage-fraisage-sur-cote-contour.png)
+
+À gauche, le détail de l'extrémité : longueur de fraisage et longueur de sciage, 2,3 mm d'écart ;
+au milieu, le capot fraisé en perspective ; à droite, le contour de fraisage coté.
+
+Chaque poinçonnage est une découpe à 105° avec un rayon R2, sur 17,5 mm de profondeur ;
+la cote de poinçonnage se prend soit depuis le bout du capot (dormants et ouvrants), soit
+symétriquement de part et d'autre de l'axe du meneau ou de la traverse. Une ligne par capot,
+telle qu'elle est écrite sous chaque croquis [1 p. 347] :
+
+| Poinçonnage | Capot (profilé habillé) | Cote de poinçonnage (mm) |
+| --- | --- | --- |
+| traverses / meneaux de dormant, de part et d'autre de l'axe | 9C22 (2425) | 92,5 |
+| traverses / meneaux de dormant, de part et d'autre de l'axe | A174 (6157) | 82,5 |
+| dormants | A107 (6100) | 56,5 |
+| dormants | A107 (6101) | 66,5 |
+| dormants | 9C02 (2502) | 87 |
+| ouvrants | A170 (6112-6113) | 54 |
+| ouvrants | A172 (6115-6116) | 78 |
+| ouvrants | 9C36 (2416) | 98,5 |
+| ouvrants | A109 (rénovations) | 43 |
+| ouvrants | A108 (6104) | 60 |
+| traverses / meneaux d'ouvrant, de part et d'autre de l'axe | A175 (6127) | 82,5 |
+| traverses / meneaux d'ouvrant, de part et d'autre de l'axe | 9B13 (2425) | 92,5 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 347, registre 2.6.2, p. 34, version septembre 2023)
+
+Les capots A109 et A108 sont des capots de dormant (plans de combinaison) et sont listés ici
+sous « Dimensions de poinçonnage des ouvrant » — entrée **INC-188** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md). Le poinçonnage des meneaux
+distingue l'A174 (6157, meneau de dormant) et l'A175 (6127, meneau d'ouvrant), et le
+9C22 (2425, dormant) du 9B13 (2425, ouvrant) : voir **VER-106**.
+
+![Poinçonnage des capots de traverses et meneaux de dormant](/assets/procedures/moe-systeme-70/aluclip/poinconnage-traverses-meneaux-dormant.png)
+
+![Poinçonnage des capots de dormant](/assets/procedures/moe-systeme-70/aluclip/poinconnage-dormants.png)
+
+![Poinçonnage des capots d'ouvrant](/assets/procedures/moe-systeme-70/aluclip/poinconnage-ouvrants.png)
+
+![Poinçonnage des capots de traverses et meneaux d'ouvrant](/assets/procedures/moe-systeme-70/aluclip/poinconnage-traverses-meneaux-ouvrant.png)
+
+À gauche de chaque croquis, la découpe vue de face avec ses cotes ; à droite, la coupe du capot.
+
+![Capots dormants : vertical poinçonné, traverses / meneaux, horizontal](/assets/procedures/moe-systeme-70/aluclip/poinconnage-perspective-capots-dormants.png)
+
+![Capots d'ouvrants : vertical poinçonné et horizontal](/assets/procedures/moe-systeme-70/aluclip/poinconnage-perspective-capots-ouvrants.png)
+
+Sur le dormant, le capot vertical est poinçonné pour recevoir le capot de traverse ou de meneau et
+le capot horizontal ; sur l'ouvrant, le capot vertical poinçonné reçoit le capot horizontal.
+
+## Étanchéités
+
+Il est préconisé d'assurer l'étanchéité des jonctions de capots aluminium avec un **silicone
+neutre** suivant les cas de figures présentés ci-dessous, afin d'éviter toute infiltration d'eau
+entre les capots aluminium et les profilés PVC. L'étanchéité silicone peut être de couleur
+approchante à la teinte des capots [1 p. 348].
+
+![Étanchéité, jonction par coupe et poinçonnage, angle du dormant](/assets/procedures/moe-systeme-70/aluclip/etancheite-jonction-coupe-poinconnage-angle.png)
+
+![Étanchéité, jonction par coupe et poinçonnage, traverse](/assets/procedures/moe-systeme-70/aluclip/etancheite-jonction-coupe-poinconnage-traverse.png)
+
+Jonction par coupe et poinçonnage : le cordon d'étanchéité (quadrillé) court le long du
+montant et de la traverse du dormant, sous les capots, dans l'angle (en haut) et à la jonction
+d'une traverse (en bas), avant la pose du capot vertical poinçonné.
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 348, registre 2.6.2, p. 35)
+
+## Positionnement des capots aluminium
+
+Dormants et ouvrants : les capots sont positionnés en appui contre les bords extérieurs des
+profilés PVC pour être ensuite rabattus et clippés vers l'intérieur suivant les schémas
+ci-dessous. Les capots aluminium de 2 mètres et plus doivent être systématiquement sécurisés par
+collage en partie centrale avec un joint silicone neutre de 20 mm au minimum [1 p. 349].
+
+1. Positionnement (flèche 1) : poser le capot en appui contre le bord extérieur du profilé.
+2. Clippage (flèche 2) : rabattre le capot vers l'intérieur jusqu'à ce qu'il clippe.
+
+![Positionnement et clippage des capots de dormant et d'ouvrant (dess. 1), collage au-delà de 2 m (dess. 2)](/assets/procedures/moe-systeme-70/aluclip/positionnement-capots-dormant-ouvrant.png)
+
+Dess. 1 : à gauche l'ouvrant, à droite le dormant, flèches 1 (positionnement) et 2 (clippage).
+Dess. 2 : un capot de 2 m, le point de colle au milieu.
+
+Traverses et meneaux de dormants et d'ouvrants : les capots aluminium des traverses et meneaux
+doivent être systématiquement sécurisés par collage au silicone neutre, minimum 20 mm de large.
+Les jonctions des capots aluminium doivent être étanchées sur toute la largeur de coupe (voir
+rubrique étanchéités). Les traverses intermédiaires horizontales sont à drainer suivant les
+directives de fabrication ; une étanchéité entre le profilé PVC et le capot alu est à prévoir aux
+endroits des drainages [1 p. 349].
+
+![Capot de traverse ou meneau : positionnement, clippage et étanchéité des drainages](/assets/procedures/moe-systeme-70/aluclip/positionnement-capot-traverse-meneau.png)
+
+Le capot est posé en pied (1), puis rabattu (2) ; la bande grise est l'**étanchéité des drainages
+au silicone à l'endroit des perçages**.
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 349, registre 2.6.2, p. 36)
+
+## Mise en place des joints enfilés
+
+Les joints de frappe et de vitrage se positionnent de façon continue dans la périphérie du cadre et
+doivent être collés à la jonction de leurs extrémités. En cas de positionnement des joints de
+façon non continue (c'est-à-dire coupés aux angles), il est recommandé de les comprimer lors de
+leur mise en place pour éviter tout retrait longitudinal ; les jonctions aux angles doivent
+également être collées avec une colle rapide de type C007 [1 p. 350].
+
+Les joints EPDM (gris ou noir) se posent suivant les directives de vitrage 70 mm : 9E46 en
+X, 101000 et joint de décompression 9043 en Y, joint de frappe EPDM 9040 en Z. Leurs coupes sont
+dans [Capots et accessoires AluClip du système 70](/profiles/systeme-70-aluclip.md#joints-epdm)
+[1 p. 350].
+
+![Joints EPDM 9E46, 101000, 9043 et 9040 et leurs positions X, Y, Z](/assets/procedures/moe-systeme-70/aluclip/joints-enfiles-epdm.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 350, registre 2.6.2, p. 37)
+
+## Mise en œuvre du battement rapporté 0140
+
+1. Le montage du battement s'effectue après capotage de l'ouvrant.
+2. Longueur de débit du capot de battement 9C40 = battement 0140 + 4 mm.
+3. Le battement 0140 doit être déligné (recoupé en longueur de son aile) suivant le plan
+   ci-dessous : 1,5 mm et 8 mm.
+4. La fixation du capot de battement s'effectue à l'aide des vis plots 9B18, espacés de
+   300 mm maximum et pré-percés avec le gabarit 9998.2.
+5. Sécuriser le capot alu par collage au silicone neutre sur 20 mm de large.
+6. Le joint de frappe 101000 doit être collé dans le battement [1 p. 351].
+
+![Gabarit de perçage sur le battement 0140, cote 16 (dess. 1)](/assets/procedures/moe-systeme-70/aluclip/battement-0140-gabarit-perage.png)
+
+Dess. 1 : le gabarit de perçage (hachuré) posé sur le battement 0140, le perçage à 16 mm du
+bord. Le dessin légende le gabarit « 9988.2 », le texte écrit « 9998.2 » — entrée **INC-187**.
+
+![Battement 0140 déligné, vis plot 9B18 et capot 9C40](/assets/procedures/moe-systeme-70/aluclip/battement-0140-capot-9c40-vis-9b18.png)
+
+Le capot 9C40 à gauche, la vis plot 9B18 au milieu, le battement 0140 à droite avec le délignage
+coté 1,5 × 8 mm.
+
+![Embout de battement 9414.1 repris pour l'AluClip](/assets/procedures/moe-systeme-70/aluclip/embout-battement-9414-1.png)
+
+Reprise de l'embout de battement 9414 pour adaptation alu clip : l'embout 9414.1 est
+recoupé de 1,5 mm [1 p. 351].
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 351, registre 2.6.2, p. 38)
+
+Les cotes de débit du battement 0140 et du capot 9C40 depuis la DFO sont dans
+[Capots et accessoires AluClip du système 70](/profiles/systeme-70-aluclip.md#capots-douvrant-et-battement-à-deux-vantaux).
+
+## Fixation d'un battement rapporté, vue éclatée
+
+La planche suivante, sans texte ni légende de référence, dessine en vue éclatée un battement
+rapporté sur un ouvrant capoté, ses deux embouts (haut et bas) et ses vis. Cotes portées : 19,5
+mm entre l'extrémité de l'ouvrant et le bout du battement, en haut et en bas ; première vis à
+80 mm de chaque extrémité, puis max. 300 mm entre vis [1 p. 352].
+
+![Battement rapporté : embouts, vis à 80 mm des extrémités puis tous les 300 mm maximum](/assets/procedures/moe-systeme-70/aluclip/battement-rapporte-fixation-embouts.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 352, registre 2.6.2, p. 39)
+
+## Drainage en façade : busette M450 et joint G008
+
+Accessoires nécessaires : pour un montage et une installation corrects, **ne percer
+impérativement qu'avec la fraise étagée T005** [1 p. 353].
+
+| Pièce | Désignation | Cotes (mm) |
+| --- | --- | --- |
+| G008 | joint d'étanchéité | Ø 14 |
+| M450 | busette | Ø 15,5 (tête), Ø 10 (tige), 7,5 de tête, 14 de tige |
+| T005 | fraise étagée | Ø 13,8 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 353, registre 2.6.2, p. 40)
+
+La même busette est légendée 697010 / G008 sur la planche des accessoires (entrée **VER-107**
+du registre [Informations à vérifier](/anomalies/informations-a-verifier.md)).
+
+![Joint G008, busette M450 et fraise étagée T005](/assets/procedures/moe-systeme-70/aluclip/drainage-g008-m450-t005.png)
+
+En fonction du système de fenêtre : ne percer que la chambre prévue pour l'évacuation de l'eau.
+
+1. Déterminer l'axe de perçage = X : l'axe de perçage est environ 7,1 mm au-dessus de la
+   paroi inférieure de la chambre d'évacuation.
+2. Déterminer la profondeur de perçage = Y.
+3. Percer les trous de drainage avec une défonceuse et la fraise étagée T005. Afin d'obtenir une
+   étanchéité parfaite du joint G008, veiller lors du perçage à respecter l'**angle de pénétration
+   de 90°**.
+4. Ébavurer le trou pour éviter toute détérioration lors de la mise en place du joint.
+5. Placer le joint G008 dans l'ouverture (1.).
+6. Presser la busette M450 dans le joint G008 (2.). La busette doit bien reposer à plat sur le
+   capot alu, être compressée et ne doit pas bouger [1 p. 353].
+
+![Perçage à la fraise T005 : axe X, 7,1 mm, profondeur Y, 90°](/assets/procedures/moe-systeme-70/aluclip/drainage-percage-axe-x-profondeur-y.png)
+
+La fraise traverse le capot et la paroi du dormant à 90° ; X se mesure du haut du capot à l'axe,
+Y du capot au fond du perçage, 7,1 mm entre l'axe et la paroi inférieure.
+
+![Mise en place du joint G008 puis de la busette M450](/assets/procedures/moe-systeme-70/aluclip/drainage-mise-en-oeuvre-g008-m450.png)
+
+## Renforcement, drainages et décompressions
+
+Drainages : le drainage et la ventilation des profilés capotés en aluminium sont à réaliser
+comme indiqué ci-dessous. Néanmoins, pour les cas de figures des évacuations d'eau des dormants en
+façades, les perçages extérieurs se feront en diamètre 13,8 mm pour recevoir le joint
+d'étanchéité G008 et la busette M450 [1 p. 354].
+
+Décompressions : les décompressions nécessaires aux évacuations d'eau doivent être réalisées
+par l'insertion du joint de décompression 9043 sur 300 mm en partie haute et centrale des
+ouvertures de dormants [1 p. 354].
+
+![Insertion du joint 9043 sur 300 mm, drainages 5 × 25 mm en traverse basse](/assets/procedures/moe-systeme-70/aluclip/decompression-9043-drainages-5x25.png)
+
+Sur un dormant à deux ouvertures : en traverse haute, le joint 9043 inséré sur 300 mm au milieu
+de chaque ouverture ; en traverse basse, les drainages 5 × 25 mm, dessinés de deux formes
+(petits rectangles et perçages arrondis). Les cotes de la traverse basse sont données dans l'ordre
+où elles sont portées sous chaque ouverture, sur deux lignes, avec x = 20 - 200 mm
+[1 p. 354] :
+
+| Ouverture | Première ligne de cotes, de gauche à droite (mm) | Seconde ligne de cotes (mm) |
+| --- | --- | --- |
+| gauche | X ; min. 50 ; 50 ; 50 ; X | max. 600 ; max. 600 |
+| droite | X ; 50 ; min. 50 ; X | max. 600 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 354, registre 2.6.2, p. 41)
+
+## Drainages en façade des dormants
+
+Chaque coupe dessine en gris foncé les perçages du dormant capoté : le perçage de ventilation
+de la préchambre, 5 × 25 mm ou Ø 8, incliné à 50°, et le perçage de drainage en façade,
+à travers le capot (busette, 13,8 mm) ou sous le capot au-dessus de l'appui (5 mm). La cote
+verticale se prend depuis le haut du capot. Une ligne par coupe [1 p. 355] :
+
+| Dormant | Habillage ou appui dessiné | Hauteur du drainage sous le haut du capot (mm) | Perçage de drainage (mm) | Ventilation | Page PDF |
+| --- | --- | --- | --- | --- | --- |
+| 6102, 6105, 6155, 6107, 6156 | habillage A503 | 33 | 13,8 | 5 × 25 ou Ø 8 à 50° | 355 |
+| 6102, 6105, 6155, 6107, 6156 | appui A477 | 38 | 5 | 5 × 25 ou Ø 8 à 50° | 355 |
+| 6104 | habillage A503 | 33 | 13,8 | 5 × 25 ou Ø 8 à 50° | 355 |
+| 6104 | appui A491 | 38 | 5 | 5 × 25 ou Ø 8 à 50° | 355 |
+| 6100 | - | 33 | 13,8 | 5 × 25 ou Ø 8 à 50° | 355 |
+| 2502 | appui A491 | 54,5 | 13,8 | 5 × 25 ou Ø 8 à 50° | 355 |
+| 6101 | appui A491 | 38 | 5 | 5 × 25 ou Ø 8 à 50° | 355 |
+| 6101 | appui A491 | 33 | 13,8 | 5 × 25 ou Ø 8 à 50° | 355 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 355, registre 2.6.2, p. 42, version septembre 2023)
+
+![Drainages en façade des dormants 6102 à 6156 et 6104, avec A503, A477 et A491](/assets/procedures/moe-systeme-70/aluclip/drainages-facade-dormants-1.png)
+
+![Drainages en façade des dormants 6100, 2502 et 6101](/assets/procedures/moe-systeme-70/aluclip/drainages-facade-dormants-2.png)
+
+## Drainages des ouvrants
+
+Sur les ouvrants capotés 2416, 6115 et 6112, la ventilation de la préchambre est un
+perçage 5 × 25 mm ou Ø 8 à 50° sous le haut du capot, et le drainage un perçage **5 × 25
+mm ou Ø 8** vertical, vers le bas, au pied du capot [1 p. 356].
+
+![Drainages des ouvrants 2416, 6115 et 6112](/assets/procedures/moe-systeme-70/aluclip/drainages-ouvrants.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 356, registre 2.6.2, p. 43)
+
+## Drainages vers le bas des traverses
+
+Sur les traverses capotées 2425 et 6127 / 6157, mêmes perçages : ventilation **5 × 25 mm
+ou Ø 8 à 50°, drainage 5 × 25 mm ou Ø 8** vers le bas [1 p. 357].
+
+![Drainages vers le bas des traverses 2425 et 6127 / 6157](/assets/procedures/moe-systeme-70/aluclip/drainages-traverses-vers-le-bas.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 357, registre 2.6.2, p. 44)
+
+## Drainages et décompressions en coupe verticale
+
+Deux coupes verticales de châssis capotés : à gauche un ouvrant au-dessus d'un fixe, à droite un
+fixe au-dessus d'un ouvrant. Sur les traverses, les perçages de Ø 6 et Ø 8 ; en traverse
+basse du dormant, la busette de Ø 10. Deux médaillons agrandissent le joint de frappe :
+décompression (grugeage de joint ou joint 9043) et joint de frappe 101000. Les chambres
+marquées \* sont les préchambres à ventiler sur les profilés de couleur [1 p. 358].
+
+![Coupes verticales : décompression par grugeage ou joint 9043, joint de frappe 101000, perçages Ø 6, Ø 8, Ø 10](/assets/procedures/moe-systeme-70/aluclip/decompression-coupes-9043-101000.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 358, registre 2.6.2, p. 45)
+
+Les drainages et décompressions du châssis non capoté sont dans
+[Drainage, décompression et ventilation du système 70](/procedures/drainage-decompression-ventilation-systeme-70.md).
+
+## Réhausses pour dormants 6101 et 2502
+
+Une réhausse est un profilé PVC qui s'assemble au dos d'un dormant pour en augmenter la
+hauteur. Afin d'éviter toute apparition d'espace entre profilés pouvant être causée par des
+dilatations dues aux variations de températures, il est recommandé d'effectuer une liaison entre
+profilés dormants et réhausses, ainsi que réhausses avec réhausses, **par vissages à intervalles
+maximum de 400 mm. L'utilisation des réhausses nécessite une reprise de délignage** suivant les
+plans ci-joints. Après montage des réhausses de dormants, celles-ci peuvent être habillées par des
+plats aluminiums, voir suggestions de dimensions ci-jointes. Les chambres des réhausses de
+dormant doivent être fermées en bout suivant les directives citées en registre 2.5.1.2 page 1
+[1 p. 359].
+
+# Cotes
+
+## Réhausses et plats aluminium
+
+Chaque réhausse est dessinée avec la reprise de délignage (8 mm de large, 1,3 mm de
+profondeur, sur l'aile de clippage) et, à gauche, le plat aluminium suggéré, de 2 mm
+d'épaisseur et de la hauteur cotée [1 p. 359].
+
+| Réhausse | Délignage : largeur (mm) | Délignage : profondeur (mm) | Plat alu suggéré : épaisseur (mm) | Plat alu suggéré : hauteur (mm) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 0302 | - | - | - | - | ![Réhausse 0302](/assets/profiles/systeme70/aluclip/rehausse-0302.png) |
+| 0204.1 | 8 | 1,3 | 2 | 18 | ![Réhausse 0204.1](/assets/profiles/systeme70/aluclip/rehausse-0204-1.png) |
+| 0210.2 | 8 | 1,3 | 2 | 28 | ![Réhausse 0210.2](/assets/profiles/systeme70/aluclip/rehausse-0210-2.png) |
+| 0207.3 | - | 1,3 | 2 | 53 | ![Réhausse 0207.3](/assets/profiles/systeme70/aluclip/rehausse-0207-3.png) |
+| 0301.1 | - | 1,3 | 2 | 83 | ![Réhausse 0301.1](/assets/profiles/systeme70/aluclip/rehausse-0301-1.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 359, registre 2.6.2, p. 46, version septembre 2023)
+
+La 0302 est dessinée seule, sans délignage ni plat ; la largeur de délignage de 8 mm n'est
+cotée que sur les 0204.1 et 0210.2. Les réhausses sans capot sont dans
+[Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md).
+
+## Profilés complémentaires AluClip
+
+La planche « AluClip Profilés Complémentaires » dessine, sur la perspective d'une fenêtre, les
+tapées aluminium (repère ①, profilés qui épaississent le dormant côté extérieur, voir le
+[glossaire](/reference/glossaire.md)) et la pièce d'appui aluminium (repère ②, en traverse
+basse), puis chaque profilé avec sa largeur (cote horizontale) et sa hauteur (cote verticale), et
+les accessoires [1 p. 360].
+
+![Tapée (1) et appui (2) aluminium sur la fenêtre](/assets/procedures/moe-systeme-70/aluclip/profiles-complementaires-tapee-appui-perspective.png)
+
+| Référence | Désignation | Largeur (mm) | Hauteur (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| A469 | tapée | 30 | 31,5 | ![Tapée A469](/assets/profiles/systeme70/tapees-alu/tapee-alu-a469-moe.png) |
+| A470 | tapée | 50 | 35 | ![Tapée A470](/assets/profiles/systeme70/tapees-alu/tapee-alu-a470-moe.png) |
+| A471 | tapée | 70 | 35 | ![Tapée A471](/assets/profiles/systeme70/tapees-alu/tapee-alu-a471-moe.png) |
+| A472 | tapée | 90 | 35 | ![Tapée A472](/assets/profiles/systeme70/tapees-alu/tapee-alu-a472-moe.png) |
+| A473 | tapée | 110 | 35 | ![Tapée A473](/assets/profiles/systeme70/tapees-alu/tapee-alu-a473-moe.png) |
+| A475 | appui | 97 | 19,7 | ![Appui A475](/assets/profiles/systeme70/appuis/appui-a475-moe.png) |
+| A476 | appui | 137 | 19,7 | ![Appui A476](/assets/profiles/systeme70/appuis/appui-a476-moe.png) |
+| A477 | appui | 77 | 19,7 | ![Appui A477](/assets/profiles/systeme70/appuis/appui-a477-moe.png) |
+| A491 | appui | 57 | 19,7 | ![Appui A491](/assets/profiles/systeme70/appuis/appui-a491-moe.png) |
+| A502 | habillage, sans désignation sur la planche | 100 (épaisseur 3) | 100 | ![Habillages A502 et A503](/assets/profiles/systeme70/aluclip/habillage-a502-a503.png) |
+| A503 | habillage, sans désignation sur la planche | 40 (épaisseur 2) | 60 | ![Habillages A502 et A503](/assets/profiles/systeme70/aluclip/habillage-a502-a503.png) |
+| A474 | demi-capot | 21,4 | 41,2 | ![Demi-capot A474 et clip M569](/assets/profiles/systeme70/aluclip/demi-capot-a474-clip-m569.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 360, registre 2.6.2, p. 47, version septembre 2023)
+
+Sont dessinés en perspective, sans cote, le clip M569, l'embout d'appui M643, l'embout de
+tapée M646 et le patin d'étanchéité G250. Les mêmes tapées, appuis et habillages, avec
+leurs embouts et leurs autres sources, sont dans
+[Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md).
+
+![Embouts M643 et M646, patin G250](/assets/procedures/moe-systeme-70/aluclip/embouts-m643-m646-patin-g250.png)
+
+## Cotes de débit théoriques des tapées et appuis
+
+Pour le débit des profilés en alu, se référer aux indications ci-dessous. **Les cotes de débit des
+tapées et appuis sont définies par méthode de calcul, les cotes exactes sont à relever sur les
+cadres soudés.** Une ligne par position et par dormant ; la quantité est le nombre de pièces
+nécessaires par châssis, pour la tapée ou l'appui choisi [1 p. 368-371].
+
+| Position | Dormant | Cote de débit (mm) | Profilés nécessaires | Page PDF |
+| --- | --- | --- | --- | --- |
+| tapée en traverse haute | 6104 | DHT − 2 × 34,8 | A469, A470, A471, A472 ou A473, 1 × | 368 |
+| tapée en traverse haute | 6101 | DHT − 2 × 28,8 | A469 à A473, 1 × | 368 |
+| tapée en traverse haute | 6105, 6107, 6155, 6156 | DHT − 2 × 34,8 | A469 à A473, 1 × | 368 |
+| tapée verticale | 6104 | DHT − 2,3 | A469 à A473, 2 × | 369 |
+| tapée verticale | 6102, 6105, 6107, 6155, 6156 | DHT + 13 | A469 à A473, 2 × | 369 |
+| tapée verticale | 6101 | DHT + 3,7 | A469 à A473, 2 × | 369 |
+| appui en traverse basse | 6102, 6104, 6105, 6107, 6155, 6156 | DHT − 2 × 34,8 | A475, A476 ou A491, 1 × | 370 |
+| appui en traverse basse | 6101 | DHT − 2 × 28,8 | A475, A476 ou A491, 1 × | 370 |
+| appui en traverse basse | 6102, 6105, 6107, 6155, 6156 | DHT − 2 × 34,8 | A477, 1 × | 371 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 368 à 371, registre 2.6.2, p. 55 à 58, version septembre 2023)
+
+Le 6102 n'est pas cité pour la tapée en traverse haute. Les pages 369, 370 et 371 écrivent « 6155
+und 6156 » (mot allemand). Les cotes de débit des capots sont dans
+[Capots et accessoires AluClip du système 70](/profiles/systeme-70-aluclip.md#cotes-de-débit-des-capots).
+
+![Cotes de débit des tapées en traverse haute](/assets/procedures/moe-systeme-70/aluclip/debit-tapees-traverse-haute.png)
+
+![Cotes de débit des tapées verticales](/assets/procedures/moe-systeme-70/aluclip/debit-tapees-verticales.png)
+
+![Cotes de débit des appuis en traverse basse](/assets/procedures/moe-systeme-70/aluclip/debit-appuis-traverse-basse.png)
+
+![Cote de débit de l'appui A477](/assets/procedures/moe-systeme-70/aluclip/debit-appui-a477.png)
+
+# Mise en œuvre des profilés complémentaires capotés
+
+## 1. Montage des demi-capots AluClip
+
+- Pour le drainage caché sous le demi-capot, poser les clips de fixation M569 avec une **vis
+  3,9 × 13 mm (dess. 2). Utiliser le gabarit de perçage T127** (« pour système 70 »).
+- Respecter les entre-axes de fixation (dess. 1 et 3) : 150 mm de l'extrémité, puis
+  400 mm.
+- L'étanchéité du capot alu est à réaliser selon les directives de mise en œuvre générales
+  [1 p. 361].
+
+![Dess. 1 : entre-axes de fixation 150, 400, 400](/assets/procedures/moe-systeme-70/aluclip/demi-capot-entraxes-fixation.png)
+
+![Dess. 2 : demi-capot A474 avec clip M569 sur dormant, 23,5 mm, gabarit T127](/assets/procedures/moe-systeme-70/aluclip/demi-capot-a474-m569-gabarit-t127.png)
+
+Dess. 2 : exemple de montage du demi-capot A474 avec clip de fixation M569 sur dormant ; la
+cote 23,5 mm est portée verticalement le long du demi-capot.
+
+![Dess. 3 : pose des clips M569 à 150 puis 400 mm, demi-capot mis en place](/assets/procedures/moe-systeme-70/aluclip/demi-capot-pose-clips-m569.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 361, registre 2.6.2, p. 48)
+
+## 2. Mise en place du patin d'étanchéité G250
+
+- Apposer un cordon de silicone selon le dess. 4, avant la mise en place des patins
+  d'étanchéité (mastic d'étanchéité, 31 mm).
+- Appliquer le patin d'étanchéité G250 à fleur avec le dormant (dess. 5) [1 p. 362].
+
+![Dess. 4 : étanchéité sous le patin, mastic sur 31 mm](/assets/procedures/moe-systeme-70/aluclip/patin-g250-etancheite-dess4.png)
+
+![Dess. 5 : patin d'étanchéité G250 sur dormant](/assets/procedures/moe-systeme-70/aluclip/patin-g250-dess5.png)
+
+## 3. Mise en place des tapées
+
+- Débiter les tapées selon le tableau des cotes de débit (« page 54 à 58 » du registre, soit
+  *Cotes de débit théoriques des tapées et appuis* ci-dessus).
+- Réaliser l'étanchéité sur la tapée : mastic d'étanchéité sur tapée (étanchéité de fil,
+  dess. 6).
+- Positionner la tapée sur le dormant : placer et centrer la tapée sur le dormant [1 p. 363].
+
+![Étanchéité des tapées, mastic sur tapée](/assets/procedures/moe-systeme-70/aluclip/tapees-etancheite.png)
+
+![Dess. 6 : étanchéité de fil sur les tapées, tapée placée et centrée sur le dormant](/assets/procedures/moe-systeme-70/aluclip/tapees-mise-en-place-dess6.png)
+
+## 4. Montage des embouts M646 sur les tapées verticales
+
+1. Percer des trous de Ø 3 mm dans les tapées verticales à 30,5 mm du haut à l'aide du
+   gabarit T134 (dess. 1).
+2. et 3. Retirer la protection de la face adhésive de l'embout M646, positionner l'embout en
+   extrémité des tapées et visser à l'aide de vis 3,9 × 19 mm (mise en place des embouts bas).
+4. Retirer la protection de la partie montante du patin d'étanchéité, et replier le patin sur
+   la tapée (dess. 2, repli à 90°).
+5. Avant la mise en place de la tapée, il faut y apposer un **mastic d'étanchéité sur toute la
+   longueur** (dess. 3 : coller le patin sur la tapée) [1 p. 364].
+
+![Montage des embouts M646 : perçage au gabarit T134, embouts bas, repli et collage du patin](/assets/procedures/moe-systeme-70/aluclip/tapees-embouts-m646-gabarit-t134.png)
+
+À gauche, la coupe montre le mastic d'étanchéité entre tapée et dormant ; les repères ① à ⑤
+suivent les étapes ci-dessus ; la photographie montre l'embout après retrait du film de
+protection.
+
+## 5. Mise en place de la pièce d'appui
+
+- Débiter la pièce d'appui.
+- Avant la mise en place de l'appui, appliquer le **mastic d'étanchéité sur toute la largeur de
+  l'appui, dans la rainure prévue à cet effet** (dess. 1).
+- Retirer le film de protection de la partie montante du patin d'étanchéité M646, **humidifier
+  légèrement la partie collante** du patin pour éviter le collage dès que la pièce d'appui arrive
+  au contact du patin d'étanchéité ; cela permet un réglage si nécessaire (dess. 2, 3).
+- **NB : dans le cas du dormant 6104, la pièce d'appui n'est pas clippée dans la rainure du
+  dormant, et vient en appui sur l'extérieur du dormant** [1 p. 365].
+
+![Dess. 1 : rainure prévue pour l'étanchéité de la pièce d'appui](/assets/procedures/moe-systeme-70/aluclip/appui-rainure-etancheite-dess1.png)
+
+![Dess. 2 et 3 : étanchéité sur toute la longueur de l'appui, patin humidifié](/assets/procedures/moe-systeme-70/aluclip/appui-mise-en-place-dess2-dess3.png)
+
+## 6. Mise en place des tapées et appuis
+
+- Visser les tapées et appuis en périphérie du dormant avec des vis autoforeuses 3,9 × 32 mm
+  (dess. 2) ; une rainure de vissage est prévue à cet effet.
+- **Le vissage doit être réalisé à 150 mm des angles du châssis puis tous les 300 mm** (dess. 1).
+- Enlever l'excédent de silicone si besoin.
+- Visser latéralement la pièce d'appui au travers des tapées, à l'aide de vis 3,9 × 32 ; la
+  position des vis est donnée par l'embout M646 (dess. 3 : vissage au travers de l'embout et du
+  patin d'étanchéité) [1 p. 366].
+
+![Directives de vissage (dess. 1), coupes B-B et A-A, positionnement des vis (dess. 2) et vissage de l'appui (dess. 3)](/assets/procedures/moe-systeme-70/aluclip/tapees-appuis-vissage.png)
+
+Coupes B-B (tapée en traverse haute) et A-A (appui en traverse basse) : la vis traverse la tapée ou
+l'appui et entre dans la rainure de vissage du dormant.
+
+## 7. Mise en place des embouts d'appuis
+
+Après avoir coupé ou cassé les embouts d'appuis M643 en fonction du débord de la pièce d'appui
+(cote « Maß X »), les visser à l'aide de vis 3,9 × 19 mm (dess. 1). Dess. 2 : assemblage des
+tapées dans la pièce d'appui à l'aide de vis auto-foreuses 3,9 × 32 mm. Dess. 3 : vue de dessus,
+dimensions des amorces de rupture M643 : 22,3, 42,3 et 62,3 mm [1 p. 367].
+
+![Embouts d'appui M643 : cote X, vis 3,9 × 19, amorces de rupture](/assets/procedures/moe-systeme-70/aluclip/embouts-appui-m643.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 361 à 367, registre 2.6.2, p. 48 à 54, version septembre 2023)
+
+# Ce que le document ne dit pas
+
+Le manuel ne donne ni le couple ni l'outillage de la poinçonneuse, ni la longueur des plats
+aluminium des réhausses. La planche de la p. 352 ne nomme ni le battement ni les embouts dessinés.
+Le cordon « 31 » du dess. 4 est coté sans unité ni objet précis.
+
+# Citations
+
+[1] [Système 70 Plateforme, manuel de mise en œuvre, profine](raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf), p. 347-371
+
+# Voir aussi
+
+- [Capots et accessoires AluClip du système 70](/profiles/systeme-70-aluclip.md)
+- [Plans de combinaison AluClip du système 70](/profiles/systeme-70-aluclip-plans-de-combinaison.md)
+- [Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md)
+- [Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md)
+
+===== PAGE 2 : /profiles/perform76-appuis-et-seuils.md =====
+# Deux familles d'appuis, selon le dormant
+
+L'**appui** est le profil posé sous le dormant bas, penté vers l'extérieur, qui rejette l'eau
+de pluie loin du mur ; le **seuil** est son équivalent au bas d'une porte-fenêtre, sur lequel on
+passe. Les appuis PERFORM76 forment deux groupes qui ne se mélangent pas.
+
+| Groupe | Appuis | Dormants |
+| --- | --- | --- |
+| Rénovation et neuf avec aile | 6136, 6137, 76768 | 76177, 76180, 76185 |
+| Neuf sans aile | 76751, 76752, 76753, 76758 + 76719 | 76171, 76172 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 16, 20, 21 et 22)
+
+# Cotes des appuis 6136, 6137 et 76768
+
+Appuis du premier groupe, cotes en mm. Les trois sont pentés à **3°**.
+
+| Appui | Largeur (mm) | Longueur (mm) | Épaisseur (mm) | Retombée (mm) | Nez d'appui 4319 | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 6136 | 67 | 127 | 14 | 3,5 | oui | ![Appui 6136](/assets/profiles/perform76/appuis/appui-6136.png) |
+| 6137 | 97 | 157 | 14 | 3,5 | oui | ![Appui 6137](/assets/profiles/perform76/appuis/appui-6137.png) |
+| 76768 | 136 | 196 | 14 | 22 | non | ![Appui 76768](/assets/profiles/perform76/appuis/appui-76768.png) |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 16)
+
+La **hauteur d'about** de ces trois appuis dépend du dormant :
+
+| Dormant | Aile (mm) | Hauteur d'about (mm) |
+| --- | --- | --- |
+| 76177 | 40 | 26 |
+| 76185 | 60 | 46 |
+| 76180 | 20 | 6 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 16, 18, 19 et 24)
+
+Sur le dormant neuf 76180, les mêmes appuis sont cotés **14** au-dessus et **6** en dessous, sans
+la retombée de 3,5 mm portée sur les dormants rénovation [1 p. 19]. La même cote de 6 mm figure
+sous les appuis 6137 et 76768 de la planche du 76171, où le dormant bas devient un 76180
+[1 p. 24].
+
+Les 20 mm d'écart de hauteur d'about entre 76177 et 76185 reprennent exactement les 20 mm d'écart
+d'aile.
+
+# Cotes des appuis 76751, 76752, 76753 et 76758
+
+Appuis du second groupe, cotes en mm.
+
+| Appui | Hauteur (mm) | Décomposition (mm) | Pente | Particularité | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 76751 | 30 | 20 / 56 | - | livré non monté | ![Appui 76751](/assets/profiles/perform76/appuis/appui-76751.png) |
+| 76752 | 50 | 20 / 56 | - | livré non monté | ![Appui 76752](/assets/profiles/perform76/appuis/appui-76752.png) |
+| 76753 | 35 | 21 / 46, sur 76 | - | - | ![Appui 76753](/assets/profiles/perform76/appuis/appui-76753.png) |
+| 76758 + 76719 | 15 à 20 | 80 en saillie, dénivelé 3, retombée 5,5, largeur totale 156 | **5°** | ensemble de deux profils | ![Appui 76758 + 76719](/assets/profiles/perform76/appuis/appui-76758.png) |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 22 et 24)
+
+**L'ensemble 76758 + 76719 est le seul appui penté à 5°** ; les six autres appuis de la gamme sont
+à 3°.
+
+Les appuis **76751 et 76752 sont livrés non montés**, à intégrer au temps d'atelier. La mention du
+cahier technique cite un « 76152 » qui n'existe nulle part ailleurs — entrée **INC-04** du
+registre [Incohérences internes](/anomalies/incoherences-internes.md).
+
+L'appui **76758 ne se commande pas seul** : il forme un ensemble avec le **76719**. C'est l'appui
+du dormant 76171 en pose isolée jusqu'à 155 mm d'isolant — voir
+[Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md).
+
+# Cotes du nez d'appui et du seuil
+
+| Référence | Type | Cotes (mm) | Compatibilité | Coupe |
+| --- | --- | --- | --- | ---: |
+| 4319 | nez d'appui | 18 / 8 | appuis 6136 et 6137 uniquement | ![Nez d'appui 4319](/assets/profiles/perform76/appuis/nez-appui-4319.png) |
+| A076 | seuil aluminium | 76 de large, 10 et 10, about 20 | les cinq dormants | ![Seuil A076 + Rejet d'eau A062](/assets/profiles/perform76/appuis/seuil-a076.png) |
+| A062 | rejet d'eau | - | s'associe au seuil A076 | - |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 16 et 22)
+
+Le nez d'appui **4319 ne se monte pas sur le 76768** : il n'est représenté que sur les appuis
+6136 et 6137.
+
+Le seuil **A076 et le rejet d'eau A062 vont toujours ensemble** ; ils ne sont jamais figurés
+séparément sur les cinq planches dormant. Aucune cote n'est donnée pour le A062.
+
+# Pièces d'appui et tapées aluminium
+
+Les dormants capotés (habillés d'un capot aluminium) peuvent recevoir des tapées et des appuis
+aluminium, distincts des appuis et tapées PVC ci-dessus. Une ligne par référence ; la cote est
+celle que la coupe porte : la largeur de l'appui (cote horizontale du haut), la hauteur de la
+tapée (cote verticale de droite).
+
+| Pièce | Fonction | Cote portée sur la coupe (mm) | Coupe |
+| --- | --- | --- | ---: |
+| A475 | pièce d'appui alu | 97 | ![Appui A475](/assets/profiles/systeme76/tapees-alu/appui-a475.png) |
+| A476 | pièce d'appui alu | 137 | ![Appui A476](/assets/profiles/systeme76/tapees-alu/appui-a476.png) |
+| A477 | pièce d'appui alu, réservée à la rénovation | 77 | ![Appui A477](/assets/profiles/systeme76/tapees-alu/appui-a477.png) |
+| A491 | pièce d'appui alu | 57 | ![Appui A491](/assets/profiles/systeme76/tapees-alu/appui-a491.png) |
+| DT100 | bavette alu, dessinée parmi les pièces d'appui alu | 100 | ![Appui DT100](/assets/profiles/systeme76/tapees-alu/appui-dt100.png) |
+| A469 | tapée alu | 30 | ![Tapée A469](/assets/profiles/systeme76/tapees-alu/tapee-a469.png) |
+| A470 | tapée alu | 50 | ![Tapée A470](/assets/profiles/systeme76/tapees-alu/tapee-a470.png) |
+| A471 | tapée alu | 70 | ![Tapée A471](/assets/profiles/systeme76/tapees-alu/tapee-a471.png) |
+| A472 | tapée alu | 90 | ![Tapée A472](/assets/profiles/systeme76/tapees-alu/tapee-a472.png) |
+| A473 | tapée alu | 110 | ![Tapée A473](/assets/profiles/systeme76/tapees-alu/tapee-a473.png) |
+
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 18 ; même planche :
+raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 17)
+
+Le DT100 est dessiné avec les pièces d'appui aluminium A475 à A491 [2 p. 18] ; son schéma de montage le nomme « bavette DT100 » — voir [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md#montage-de-la-bavette-dt100) [2 p. 42].
+La hauteur de chacune de ces pièces (31,5 et 35 mm pour les tapées, 19,7 mm pour les appuis), leur
+mode opératoire pas à pas et leurs cotes de débit sont dans
+[Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md#tapées-et-appuis-aluminium-sur-dormant-capoté).
+Les tapées et appuis aluminium se vissent sur le dormant capoté avec un entraxe maximum de 400 mm,
+avec les embouts M646 et M643 et la mousse G251 — prescription complète dans
+[DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md), section 2.2.3.3.5.
+
+Les deux embouts des tapées et appuis aluminium sont dessinés sous le titre « Embouts de pièces
+d'appui et de tapées aluminium » : l'embout **M643**, en vue de face, qui obture l'extrémité de la
+pièce d'appui aluminium, et l'embout de tapée **M646**, vu de dessus (en haut, avec ses tétons et
+ses trois logements de vis) et vu de face (en bas, marqué « M646-R »). Aucun des deux n'est coté
+[3 p. 20].
+
+| Embout | Fonction | Coupe |
+| --- | --- | ---: |
+| M643 | embout d'extrémité de pièce d'appui aluminium | ![Embout M643](/assets/profiles/systeme76/tapees-alu/embout-m643.png) |
+| M646 | embout de tapée aluminium, avec sa plaquette en mousse repliée qui reçoit la pièce d'appui | ![Embout M646](/assets/profiles/systeme76/tapees-alu/embout-m646.png) |
+
+(schéma: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 20)
+
+**L'appui A476 ne peut pas être assemblé avec la tapée A469** ; il s'assemble avec les tapées
+A470, A471, A472 ou A473 [2 p. 8-9]. L'appui A477 est réservé aux mises en œuvre en rénovation
+sur dormant existant.
+
+**Ces mêmes références A469 à A473 désignent des « embouts d'extrémité de pièce d'appui » sur le
+poster Gamme 70 KÖMMERLING**, une fonction différente de la tapée qu'elles nomment ici. Système
+distinct, plan illisible à confirmer : à vérifier avant toute commande croisée entre les deux
+systèmes — entrée **VER-40** du registre
+[Informations à vérifier](/anomalies/informations-a-verifier.md).
+
+Le système 76 Advanced compte trois seuils supplémentaires, absents du cahier technique
+PERFORM76. Largeur et hauteur en mm ; les coupes des A075 et A077 sont celles de la planche des
+profilés principaux du système, où chaque seuil est dessiné avec l'extrémité du dormant posée
+dessus.
+
+| Seuil | Largeur (mm) | Hauteur (mm) | Coupe |
+| --- | --- | --- | ---: |
+| A075 | 76 | 26 | ![Seuil A075](/assets/profiles/systeme76/seuils/seuil-a075.png) |
+| A077 | 123 | 20 | ![Seuil A077](/assets/profiles/systeme76/seuils/seuil-a077.png) |
+| A343 | 135 | 20 | ![Seuil A343](/assets/profiles/systeme76/seuils/seuil-a343.png) |
+
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 14 ; raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 13 ; raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1)
+
+Le **A343** n'est pas dessiné sur la planche des profilés principaux ; sa coupe le montre seul,
+sans dormant, avec sa largeur de 135 mm en haut et sa hauteur de 20 mm à droite [2 p. 14]. Les
+seuils A075, A076, A077 et A343 sont des seuils mixtes aluminium – PVC, dont la fabrication est décrite
+dans [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md), section 2.8.6.1.
+
+## Seuil A076 avec A065 et Z151
+
+Sur la planche des profilés principaux, le seuil **A076** (76 mm de large, 20 mm de haut) est
+dessiné sous deux pièces : le profilé aluminium **A065**, de 76 mm, et le profilé **Z151**, dessiné en trait
+fin entre les deux. La planche ne légende pas leur
+fonction.
+
+![Seuil A076 avec A065 et Z151](/assets/profiles/systeme76/seuils/seuil-a076-a065-z151.png)
+
+De haut en bas : le A065, la Z151, puis le A076 avec l'extrémité du dormant posée dessus, à
+droite. La cote de 76 mm, en haut, est portée au-dessus du A065 ; la cote de 20 mm, à droite, est
+la hauteur du seuil.
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1, troisième bande)
+
+## Pièces dessinées avec les seuils
+
+| Pièce | Position sur la planche | Dessin |
+| --- | --- | ---: |
+| G067 | à gauche du seuil A075 | ![G067](/assets/profiles/systeme76/seuils/bouchon-g067.png) |
+| G255 | à gauche du seuil A077 | ![G255](/assets/profiles/systeme76/seuils/profil-g255.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1)
+
+Le **G067** est le bouchon d'about propre au seuil A075. Les sets d'assemblage de chaque dormant
+sur les seuils A076, A077 et A075 sont dans
+[Assemblages du système 76](/profiles/systeme-76-assemblages.md).
+
+**Le A075 est plus haut que le A076** — 26 contre 20 mm — pour la même largeur de 76 mm. Il se
+monte **uniquement avec contre-profilage du montant** (équerre M150 et pièce d'étanchéité J064),
+son extrémité est obturée par le bouchon G067 et il est drainé à 100 mm des montants puis tous les
+600 mm maximum par un orifice de 5 × 25 mm environ ; les seuils A076, A077 et A343 se montent
+sans contre-profilage (équerre M154 et pièce de compensation) ou avec (M150 et J064) [3 p. 5].
+Le montage complet est au § 2.2.3.1.4 de [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md). Les sets, les schémas de perçage, les
+gabarits, les contours de fraisage et les étapes de montage de chaque dormant et meneau sur ces
+seuils, ainsi que les rejets d'eau A062 et A064, sont dans
+[Mise en œuvre du seuil du système 76 Advanced](/procedures/mise-en-oeuvre-seuil-systeme-76.md) ;
+la porte-fenêtre avec fixe latéral sur seuil filant dans
+[Porte-fenêtre avec fixe latéral du système 76 Advanced](/procedures/porte-fenetre-fixe-lateral-systeme-76.md).
+Le A077 (123 mm) et le A343 (135 mm) sont plus larges ;
+aucune source n'attribue chaque seuil à un dormant précis — entrée **VER-39** du registre
+[Informations à vérifier](/anomalies/informations-a-verifier.md).
+
+# Cotes des compensateurs
+
+Les deux compensateurs sont réservés aux dormants rénovation 76177 et 76185. Chacun se monte dans
+deux orientations.
+
+| Compensateur | Cotes (mm) | Usage | Coupe |
+| --- | --- | --- | ---: |
+| 6143 | 19 × 29 | profil rénovation | ![Compensateur 6143](/assets/profiles/perform76/compensateurs/compensateur-6143.png) |
+| 6144 | 12 × 16 | profil rénovation | ![Compensateur 6144](/assets/profiles/perform76/compensateurs/compensateur-6144.png) |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 16)
+
+## Montage des compensateurs
+
+Le **compensateur** est un petit profil tubulaire clipsé sous l'aile du dormant rénovation, qui
+comble l'écart avec l'ancien bâti. Chacun se monte dans deux orientations : debout ou couché, ce
+qui donne deux épaisseurs de compensation avec la même pièce.
+
+![Dormant rénovation 76177 + compensateur 6143](/assets/profiles/perform76/compensateurs/montage-76177-6143.png)
+
+![Dormant rénovation 76185 + compensateur 6143](/assets/profiles/perform76/compensateurs/montage-76185-6143.png)
+
+Le compensateur **6143** se monte debout (19 de large, 29 de haut) ou couché (29 de large,
+19 de haut), sur le 76177 comme sur le 76185.
+
+![Dormant rénovation 76177 + compensateur 6144](/assets/profiles/perform76/compensateurs/montage-76177-6144.png)
+
+![Dormant rénovation 76185 + compensateur 6144](/assets/profiles/perform76/compensateurs/montage-76185-6144.png)
+
+Le compensateur **6144** se monte de même, en 12 × 16 ou en 16 × 12.
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 16)
+
+# Compatibilités
+
+| Référence | 76171 | 76172 | 76177 | 76180 | 76185 |
+| --- | --- | --- | --- | --- | --- |
+| Appui 6136 | non | non | oui | oui | oui |
+| Appui 6137 | non | non | oui | oui | oui |
+| Appui 76768 | non | non | oui | oui | oui |
+| Appui 76751 | oui | oui | non | non | non |
+| Appui 76752 | oui | oui | non | non | non |
+| Appui 76753 | oui | oui | non | non | non |
+| Appui 76758 + 76719 | oui | oui | non | non | non |
+| Nez d'appui 4319 | non | non | oui | oui | oui |
+| Seuil A076 + rejet d'eau A062 | oui | oui | oui | oui | oui |
+| Compensateur 6143 | non | non | oui | non | oui |
+| Compensateur 6144 | non | non | oui | non | oui |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 14, 15, 16, 18, 20, 21 et 22)
+
+Le seuil aluminium est le seul profil complémentaire commun aux cinq dormants.
+
+Les appuis 6137 et 76768 apparaissent malgré tout sur un dormant 76171 à partir de 175 mm
+d'isolant, parce que le dormant bas devient alors un 76180 — voir
+[Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md).
+
+# Citations
+
+[1] Cahier technique PERFORM76, version 02/09/2026 CC03 —
+`raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, pages du PDF 14 à 22 et 24
+
+[2] DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED —
+`raw/dta-trocal-76-advanced-6-16-2334-v5.pdf`, p. 8, 9, 14 et 18
+
+[3] [DTD n° DBV-25-6/16-2334_V5, système 76 Advanced](raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf)
+
+# Voir aussi
+
+- [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md)
+- [Dormants PERFORM76](/profiles/perform76-dormants.md)
+- [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md)
+- [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md)
+- [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md)
+- [Assemblages du système 76](/profiles/systeme-76-assemblages.md)
+- [Informations à vérifier](/anomalies/informations-a-verifier.md)
+- [Cahier technique PERFORM76](/sources/cahier-technique-perform76.md)
+
+===== PAGE 3 : /procedures/capotage-aluclip-systeme-76.md =====
+# Ce que fait cette procédure
+
+La **variante AluClip** du système 76 Advanced à joint central de
+[profine](/fournisseurs/profine.md) habille la face extérieure des profilés PVC d'un **capot
+aluminium** clippé (voir le [glossaire](/reference/glossaire.md)). Cette procédure donne, dans
+l'ordre du manuel de mise en œuvre, le poinçonnage des capots aux jonctions, leur étanchéité, leur
+montage et leur collage, les inserts de compensation, le fraisage du meneau et le drainage à
+travers le capot. Les cotes de débit des capots sont dans
+[Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md#cotes-de-débit-des-capots-aluminium-aluclip),
+les coupes des profilés capotés dans
+[Plans de combinaison AluClip du système 76](/profiles/systeme-76-aluclip-plans-de-combinaison.md),
+les cotes de chaque capot dans
+[Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md#capots-de-la-variante-aluclip-planches-du-manuel-de-mise-en-œuvre).
+La même mise en œuvre, telle que la décrit l'avis technique, est dans
+[Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md#usinage-des-capots).
+
+# Conditions et interdictions
+
+**Contre l'oxydation ou la corrosion des capots alu mis en œuvre en atmosphères agressives**
+(zones côtières, environnements industriels, à proximité d'élevage…), il est recommandé
+d'effectuer un traitement de préanodisation des barres aluminium avant laquage (ex. type
+Qualimarine). Le prestataire de laquage conseille dans le choix du traitement de surface selon
+l'implantation géographique des produits finis. Les parties usinées (coupes, poinçonnage) devront
+également être traitées par application de produits spécifiques ; profine peut communiquer les
+coordonnées de fournisseur pour ce type de produits [1 p. 357].
+
+**Pour éviter toute accumulation de chaleur, en cas de capot alu autre que de couleur blanche, les
+préchambres extérieures des profilés doivent impérativement être ventilées** [1 p. 362].
+
+**Les directives de fabrication quant au nombre et au positionnement des trous de drainage sont à
+respecter !** Ne percer que la chambre prévue pour l'évacuation de l'eau : **les chambres sous et
+derrière la chambre à percer ne doivent en aucun cas être endommagées !** [1 p. 363]
+
+# Étapes
+
+## Poinçonnage des capots
+
+Les capots alu sont **poinçonnés au droit des différentes jonctions** : là où un capot de
+traverse ou de meneau et le capot horizontal viennent contre le capot vertical (voir les
+perspectives ci-dessous). La découpe est un biais à **105°** avec un rayon **R3** ;
+en coupe, le retour du capot est entaillé sur **16** mm, avec un angle de **15°**. Cote portée
+sous la découpe, par capot [1 p. 357] :
+
+| Capot | Emplacement de la découpe | Cote portée sous la découpe (mm) |
+| --- | --- | --- |
+| A048 | traverses / meneaux de dormants, symétrique de part et d'autre de l'axe | 102,2 |
+| A385 | dormants | 50,0 |
+| A386 | dormants | 61,6 |
+| A033 | dormants | 77,3 |
+| A034 | dormants | 95,3 |
+| A035 | dormants | 107,3 |
+| A042 | ouvrants | 42,3 |
+| A043 | ouvrants | 50,3 |
+| A044 | ouvrants | 82,3 |
+| A045 | traverses / meneaux d'ouvrant | 72,2 |
+| A046 | traverses / meneaux d'ouvrant | 88,2 |
+| A047 | traverses / meneaux d'ouvrant | 114,2 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 357, registre 2.6.2, p. 53, version décembre 2016, échelle 1:2)
+
+Les cotes des A048, A033, A034 et A035 sont les mêmes que celles de l'avis technique. Le
+**A386** n'est cité nulle part ailleurs dans le manuel ; il est l'un des deux repères de perçage du
+gabarit T073 de l'avis technique. **Alternative : pas de poinçonnage de capot dormant si le contour de
+fraisage est adapté** [1 p. 357].
+
+![Dimensions de poinçonnage des capots AluClip](/assets/procedures/moe-76-advanced/aluclip-poinconnage.png)
+
+À gauche, chaque découpe vue de face, avec ses cotes ; au centre, la coupe du capot avec
+l'entaille de 16 mm à 15° ; à droite, en perspective, le capot alu dormant vertical poinçonné qui
+reçoit le capot alu traverse horizontal, puis le capot alu dormant horizontal ; en bas à droite, le
+capot alu ouvrant vertical et le capot alu ouvrant horizontal.
+
+## Étanchéité entre capots et profilés
+
+Il est préconisé d'assurer l'étanchéité entre capots alu et profilés PVC avec un **silicone
+neutre, idéalement de couleur approchante à la teinte des capots**, comme indiqué ci-dessous
+[1 p. 358].
+
+![Étanchéité, jonction coupe 90° et poinçonnage](/assets/procedures/moe-76-advanced/aluclip-etancheite-jonction-90-poinconnage.png)
+
+**Jonction coupe 90° et poinçonnage** : le cordon d'étanchéité (hachuré) court sur la traverse et
+sur les montants, dans l'angle, sous les capots.
+
+![Étanchéité, jonction sur traverse ou meneau](/assets/procedures/moe-76-advanced/aluclip-etancheite-jonction-traverse-meneau.png)
+
+**Jonction sur traverse / meneau** : le cordon court le long du montant et sur la traverse, sous le
+capot de traverse qui vient dans la découpe du capot vertical.
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 358, registre 2.6.2, p. 54, version mars 2021)
+
+## Montage des capots sur le dormant et l'ouvrant
+
+Les capots sont positionnés en appui contre les bords extérieurs des profilés PVC (1.) pour être
+ensuite rabattus et clippés vers l'intérieur (2.). **Les capots aluminium de 2 mètres et plus
+doivent être systématiquement sécurisés par collage en partie centrale avec un joint silicone
+neutre de 20 mm au minimum** [1 p. 359].
+
+1. **Ordre de montage capot dormant** : 1. capot horizontal ; 2. capot vertical.
+2. **Ordre de montage capot ouvrant** : 1. capot vertical ; 2. capot horizontal.
+
+![Montage du capot sur le dormant (dess. 1) et sur l'ouvrant (dess. 2)](/assets/procedures/moe-76-advanced/aluclip-montage-capot-dormant-ouvrant.png)
+
+Dess. 1 (dormant) et dess. 2 (ouvrant) : la flèche 1. pousse le capot contre le bord bas du
+profilé, la flèche 2. le fait pivoter pour le clipper en haut.
+
+## Inserts de compensation G023 et G024
+
+**Au minimum 2 inserts de compensation** — **G023** pour dormant (dess. 3) ou **G024** pour ouvrant
+(dess. 4) — sont positionnés aux extrémités des capots, et **à partir de 2 m, en rajouter un au
+milieu** [1 p. 359].
+
+| Insert | Usage | Longueur (mm) | Hauteur (mm) | Largeur (mm) |
+| --- | --- | --- | --- | --- |
+| G023 | insert de compensation pour dormant | 20 | 10 | 8,5 |
+| G024 | insert de compensation pour ouvrant | 20 | 15 | 6 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 359, registre 2.6.2, p. 55, version décembre 2016)
+
+![Inserts G023 et G024 et leur position sous le capot](/assets/procedures/moe-76-advanced/aluclip-inserts-g023-g024.png)
+
+À gauche, les deux inserts en perspective, cotés ; à droite, l'insert (hachuré) sous le pied du
+capot, sur le dormant (dess. 3) et sur l'ouvrant (dess. 4).
+
+## Joint de frappe dormant
+
+Le **joint de frappe dormant G069** se positionne de façon continue dans la périphérie du cadre et
+doit être collé à la jonction de ses extrémités. En cas de positionnement des joints de façon non
+continue (c'est-à-dire coupé aux angles), il est recommandé de les comprimer lors de leur mise en
+place pour éviter tout retrait longitudinal, et de coller les jonctions avec une colle rapide de
+type **C007** [1 p. 359]. Le G069 n'apparaît dans aucune autre planche du système 76 : le joint de
+frappe dormant de la variante AluClip y est le **G161** — entrée **VER-59** du registre
+[Informations à vérifier](/anomalies/informations-a-verifier.md).
+
+## Capots de traverse et de meneau
+
+**Les capots alu des traverses / meneaux doivent être systématiquement sécurisés par collage au
+silicone neutre, minimum 20 mm de large.** Les jonctions doivent être étanchées sur toute la largeur
+de coupe (voir dessins). Les traverses intermédiaires horizontales sont à drainer suivant les
+directives de fabrication ; une étanchéité entre le profilé PVC et le capot alu est à prévoir aux
+endroits des drainages [1 p. 360].
+
+![Capot poinçonné (dess. 1) et meneau fraisé (dess. 2), colle Ködiglaze](/assets/procedures/moe-76-advanced/aluclip-traverse-meneau-poinconne-fraise.png)
+
+Dess. 1, **capot poinçonné** ; dess. 2, **meneau fraisé** : dans les deux cas, la jonction entre le
+capot vertical et le capot de traverse est collée à la **colle Ködiglaze** (hachuré).
+
+**Alternative meneau / traverse** : pour un assemblage meneau / traverse comme représenté
+(dess. 1), la solution sans poinçonnage du capot alu (dess. 2), en modifiant le contour de fraisage
+(« page 49 »), peut être une alternative [1 p. 360]. La page imprimée 49 du registre porte les cotes
+de débit de l'ouvrant 76283 ; le contour de fraisage du meneau est à la page imprimée 57 (section
+*Contour de fraisage du meneau / traverse 76372, 76373* ci-dessous) — entrée **INC-77**.
+
+![Montage du capot de traverse ou de meneau (dess. 3)](/assets/procedures/moe-76-advanced/aluclip-montage-capot-traverse-meneau.png)
+
+## Capot de l'ouvrant extérieur
+
+Le capot est positionné en appui contre les bords extérieurs du profilé PVC pour être ensuite
+rabattu et clippé vers l'intérieur (dess. 4). **Les capots alu de 2 mètres et plus doivent être
+systématiquement sécurisés par collage en partie centrale avec un joint silicone neutre de 20 mm
+au minimum.** Les traverses sont à drainer suivant les directives de fabrication ; une étanchéité
+entre le profilé PVC et le capot alu est à prévoir aux endroits des drainages. **Ordre de montage
+capot ouvrant : 1. capot vertical ; 2. capot horizontal** [1 p. 360].
+
+![Montage du capot de l'ouvrant extérieur (dess. 4)](/assets/procedures/moe-76-advanced/aluclip-montage-capot-ouvrant-exterieur.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 360, registre 2.6.2, p. 56, version février 2019)
+
+## Contour de fraisage du meneau / traverse 76372, 76373
+
+Contour de fraisage du bout du meneau ou de la traverse **76372** ou **76373** en variante capotée.
+Les cotes se prennent
+depuis le **côté de référence** (à droite) ; la hauteur totale est la **cote de débit meneau /
+traverse** [1 p. 361].
+
+| Élément du contour | Cote (mm ou °) |
+| --- | --- |
+| retrait du premier gradin, depuis le côté de référence | 31,2 |
+| angle du biais côté extérieur du profilé | 75° |
+| largeur du biais, depuis le côté extérieur | 14,8 |
+| largeur du premier gradin | 49,7 |
+| hauteur du second gradin | 14,6 |
+| hauteur du troisième gradin | 2 |
+| largeurs en pied, depuis le côté de référence | 4 ; 4 ; 3,5 |
+| hauteur de l'encoche X | 6 |
+| détail X : retrait et chanfrein | 0,5 ; 45° |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 361, registre 2.6.2, p. 57, version décembre 2016, échelle 1:2)
+
+![Contour de fraisage du meneau / traverse 76372 et 76373](/assets/procedures/moe-76-advanced/aluclip-contour-fraisage-meneau-76372-76373.png)
+
+En haut, le contour coté, le côté extérieur du profilé en haut, le côté de référence à droite, le
+détail X agrandi à gauche ; en bas, le contour de fraisage en tireté, reporté sur le dormant
+capoté.
+
+## Drainage et décompression
+
+Les positions des ouvertures sont spécifiées dans le registre 1.3.1 (voir
+[Drainage, décompression et ventilation du système 76 Advanced](/procedures/drainage-decompression-ventilation-systeme-76.md)).
+**Pour les drainages en façade, utiliser pour les dormants et les traverses la busette M450 et le
+joint d'étanchéité G008** [1 p. 362].
+
+**Drainage par le bas** : pour un drainage vers le bas, utiliser les réhausses appropriées, comme
+par exemple : **76704, 76705, 76706, 76708, 76709, 76753, 76754, 76764 ou 76765**. Éviter, grâce au
+bon choix du profil, d'obturer les évacuations d'eau par un rajout ultérieur d'une pièce d'appui.
+Veiller aux détails suivants dans la gamme 76 [1 p. 362] :
+
+![Chambres à ne pas endommager, évacuation conforme et préchambre ventilée](/assets/procedures/moe-76-advanced/aluclip-drainage-chambres-et-ventilation.png)
+
+Sur le dormant, le meneau et l'ouvrant capotés, la chambre en gris **ne doit pas être endommagée
+par l'usinage du trou de drainage**. Deux médaillons agrandissent le pied d'un capot : l'un, barré
+d'un trait, est légendé **« Evacuation de l'eau non conforme ! »**, l'autre **« Evacuation de l'eau
+conforme ! »**. En bas, la **préchambre ventilée et drainée** : perçage oblong **5 × 25 mm** à
+**50°** ; l'astérisque renvoie à la règle de ventilation des préchambres (voir *Conditions et
+interdictions*).
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 362, registre 2.6.2, p. 58, version décembre 2016, échelle 1:2)
+
+## Perçage et pose de la busette M450 dans le joint G008
+
+Pour un montage et une installation corrects, **ne percer impérativement qu'avec la fraise étagée
+T005** [1 p. 363].
+
+| Pièce | Désignation | Cotes (mm) |
+| --- | --- | --- |
+| G008 | joint d'étanchéité | Ø 14 |
+| M450 | busette | Ø 15,5 (tête), Ø 10 (tige), 7,5 de tête, 14 de tige |
+| T005 | fraise étagée | Ø 13,8 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 363, registre 2.6.2, p. 59, version décembre 2016)
+
+![Joint G008, busette M450 et fraise étagée T005](/assets/procedures/moe-76-advanced/aluclip-drainage-g008-m450-t005.png)
+
+1. **Déterminer l'axe de perçage = X** : l'axe de perçage est environ **7,1 mm** au-dessus de la
+   paroi inférieure de la chambre d'évacuation.
+2. **Déterminer la profondeur de perçage = Y.**
+3. **Percer les trous de drainage avec une défonceuse et la fraise étagée T005.** Afin d'obtenir une
+   étanchéité parfaite du joint G008, veiller lors du perçage à respecter l'**angle de pénétration
+   de 90°**.
+4. **Ébavurer le trou** pour éviter toute détérioration lors de la mise en place du joint, et faire
+   une étanchéité au silicone entre le capot et le dormant PVC.
+5. **Placer le joint G008** dans l'ouverture.
+6. **Presser la busette M450** dans le joint G008. La busette doit bien reposer à plat sur le capot
+   alu, être compressée et ne doit pas bouger [1 p. 363].
+
+![Perçage à la fraise T005, axe X et profondeur Y](/assets/procedures/moe-76-advanced/aluclip-drainage-percage-t005.png)
+
+La fraise traverse le capot et la paroi du dormant à 90° ; X se mesure du haut du capot à l'axe,
+Y du capot au fond du perçage. La coupe cote **7,9** mm entre l'axe et la paroi inférieure de la
+chambre, là où le texte donne « environ 7,1 mm » — entrée **INC-77** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md).
+
+![Mise en place du joint G008 puis de la busette M450](/assets/procedures/moe-76-advanced/aluclip-drainage-mise-en-oeuvre-g008-m450.png)
+
+1. le joint G008 entre dans le perçage ; 2. la busette M450 entre dans le joint ; à droite, les deux
+en place, l'**étanchéité mastic silicone** (quadrillée) entre le capot et le dormant.
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 363)
+
+## Drainage et ventilation des profilés capotés, profilé par profilé
+
+Chaque coupe dessine en gris foncé les perçages du profilé capoté : le **perçage oblong de
+ventilation** de la préchambre, **5 × 25 mm**, incliné (40° sur les dormants et les traverses, 50°
+sur les ouvrants), et le **perçage de drainage**, en façade (à travers le capot, avec la busette
+M450 et le joint G008) ou par le bas. Les cotes verticales se prennent depuis le haut du capot ;
+l'astérisque marque les préchambres extérieures à ventiler en cas de capot alu autre que de
+couleur blanche [1 p. 364-366].
+
+| Profilé capoté | Drainage | Cotes portées (mm) | Page PDF |
+| --- | --- | --- | --- |
+| A314 / 76180 | en façade | 43,5 ; 13,8 ; ventilation 5 × 25 à 40° | 364 |
+| A313 / 76177 | en façade | 31,3 ; 13,8 ; ventilation 5 × 25 à 40° | 364 |
+| A313 / 76178 | en façade | 31,3 ; 13,8 ; ventilation 5 × 25 à 40° | 364 |
+| dormant rénovation dessiné sans légende | en façade | 31,3 ; 13,8 ; ventilation 5 × 25 à 40° | 364 |
+| A491 / A385 / 76180 | en façade avec pièce d'appui | 48,4 ; 5 ; ventilation 5 × 25 à 40° | 364 |
+| A491 / A385 / 76171 | en façade avec pièce d'appui | 48,4 ; 5 ; ventilation 5 × 25 à 40° | 364 |
+| A073 / 76172, ouverture extérieure | en façade | 28,5 ; 19 ; 13,8 ; oblong 5 × 25 à 6 du bord ; ventilation 5 × 25 à 40° | 365 |
+| A073 / 76172, ouverture extérieure | par le bas | 58,5 ; oblong 5 × 25 mm ou 3 × Ø 6, à 6 du bord ; ventilation 5 × 25 à 40° | 365 |
+| A042 / « 76270 » (ouvrant) | par le bas | 8 ; oblong 5 × 25 à 7 du bord ; ventilation 5 × 25 à 50° | 365 |
+| A043 / 76271 | par le bas | 8 ; oblong 5 × 25 à 7 du bord ; ventilation 5 × 25 à 50° | 365 |
+| A044 / 76272 | par le bas | 40 ; oblong 5 × 25 à 7 du bord ; ventilation 5 × 25 à 50° | 365 |
+| A039 / 76283, ouverture extérieure | par le bas | oblong 5 × 25 à 6 du bord ; ventilation 5 × 25 à 50° | 365 |
+| A048 / 76372 (traverse) | en façade | 37 ; 13,8 ; ventilation 5 × 25 à 40° | 366 |
+| A048 / 76372 (traverse) | par le bas | 53 ; oblong 5 × 25 à 6 du bord ; ventilation 5 × 25 à 40° | 366 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 364 à 366, registre 2.6.2, p. 60 (février 2019), 61 et 62 (décembre 2016), échelle 1:2)
+
+**Alternative : des perçages oblongs de plus de 50 mm de profondeur peuvent être remplacés par 3
+trous de Ø 6**, alignés sur **25** mm de long et **6** mm de large [1 p. 365-366]. La planche de
+l'ouvrant A042 le légende « **76270** », référence inconnue ailleurs dans le manuel — l'ouvrant
+habillé du A042 est le 76281 (entrée **INC-78** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md)). Le **A491**, dessiné avec le
+demi-capot A385 et une pièce d'appui, n'est pas décrit ailleurs dans le manuel.
+
+![Dormants capotés, drainage en façade et avec pièce d'appui](/assets/procedures/moe-76-advanced/aluclip-drainage-dormants-facade.png)
+
+![Dormant A073 / 76172 et ouvrants capotés, drainage](/assets/procedures/moe-76-advanced/aluclip-drainage-dormant-a073-et-ouvrants.png)
+
+![Traverse A048 / 76372, drainage en façade et par le bas](/assets/procedures/moe-76-advanced/aluclip-drainage-traverse-76372.png)
+
+**Ventilation du meneau et de la traverse d'ouvrant** : le meneau **A048 / 76372** est percé de
+**deux trous de Ø 5** à **40°**, de part et d'autre, à **200** mm de chaque extrémité. La traverse
+d'ouvrant **A045 / 76300** reçoit en coupe A-A un perçage de ventilation 5 × 25 à 50° et un
+oblong de drainage 5 × 25 à 6 du bord, à 33 mm ; en coupe B-B, deux trous de Ø 5 à 50°, à 200 mm
+des extrémités, avec la mention **« profilé couleur ! »**. **Analogue pour les profilés 76301 et
+76303 en tant que traverse d'ouvrant** [1 p. 367-368].
+
+![Meneau A048 / 76372, trous de Ø 5 à 200 mm](/assets/procedures/moe-76-advanced/aluclip-drainage-meneau-76372-decompression.png)
+
+![Traverse d'ouvrant A045 / 76300, coupes A-A et B-B](/assets/procedures/moe-76-advanced/aluclip-drainage-traverse-ouvrant-76300.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 367 et 368, registre 2.6.2, p. 63 et 64, version décembre 2016)
+
+## Décompression du dormant, joint G090
+
+**À noter : la décompression du dormant se fait au milieu de chaque ouvrant !** **Pour éviter toute
+accumulation de chaleur, les préchambres extérieures des profilés couleurs, laqués ou filmés 2
+faces ou 1 face extérieure doivent impérativement être ventilées** [1 p. 369].
+
+Coupes A-A et B-B, repérées sur le pictogramme d'un châssis à deux ouvrants superposés : en B-B, une
+pièce de **Ø 10** traverse le capot de la traverse ; jeu de **12** mm ; deux
+médaillons agrandissent le **joint de décompression G090** (coupe A-A) et le **joint de frappe**
+(coupe B-B). La planche suivante redonne les mêmes coupes sur une fenêtre avec ouvrant au-dessus
+d'un fixe et sur un fixe au-dessus d'un ouvrant, avec **6** mm entre le bas du capot et la gorge,
+et les pièces de Ø 10 [1 p. 369-370].
+
+![Décompression du dormant, joint G090, coupes A-A et B-B](/assets/procedures/moe-76-advanced/aluclip-drainage-decompression-g090.png)
+
+![Décompression, ouvrant et fixe superposés](/assets/procedures/moe-76-advanced/aluclip-drainage-decompression-ouvrant-et-fixe.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 369 et 370, registre 2.6.2, p. 65 et 66, version décembre 2016, échelle 1:2)
+
+## Traitement du battement en variante AluClip
+
+Les **sets d'embout de battement** de la variante capotée sont le **M501 AluClip** pour le battement
+76473, le **M286 AluClip** pour le battement 76471 avec capot en aluminium et le **M289 AluClip**
+pour le battement 76472 avec capot en aluminium ; leur composition (vis Ø 3,9 × 32 mm ISO 7049-C,
+embouts M501.R / .L, M108 et M106.R / .L, M111 et M109.R / .L) et leurs déclinaisons **.L** (joint
+gris clair), **.S** (joint noir) et **.B** (joint brun) sont celles du tableau de
+[Traitement du battement du système 76 Advanced](/procedures/traitement-du-battement-systeme-76.md#sets-dembout-de-battement),
+reprises à l'identique sur la planche AluClip. **Attention : les profilés d'ouvrant doivent toujours
+être renforcés verticalement au niveau du battement** [1 p. 371].
+
+![Sets d'embout de battement M501, M286 et M289 AluClip](/assets/procedures/moe-76-advanced/aluclip-sets-embout-battement.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 371, registre 2.6.2, p. 67, version décembre 2016)
+
+Le **montage des battements** en variante capotée suit les mêmes étapes et les mêmes cotes que
+sans capot : battement débité à **DEO − 94 mm** (76473, 76471, 76472), renfort **V316** (76471) ou
+**V317** (76472) débité à **longueur du battement − 24 mm**, centré et vissé ; pour le 76471,
+délignage du recouvrement de l'ouvrant (fig. 1, **20** mm) avant montage ; nettoyer les surfaces de
+coupe. Les coupes portent l'**embout affleurant** de **11** mm, **47**, **12** et **4** mm, et
+renvoient au registre 2.3.1 pour les cotes de débit ; seuls les profilés y sont dessinés avec leur
+capot [1 p. 372-374]. Les étapes détaillées sont dans
+[Traitement du battement du système 76 Advanced](/procedures/traitement-du-battement-systeme-76.md#battement-76473).
+
+![Montage du battement 76473 capoté](/assets/procedures/moe-76-advanced/aluclip-battement-76473-montage.png)
+
+![Montage du battement 76471 capoté, renfort V316](/assets/procedures/moe-76-advanced/aluclip-battement-76471-montage.png)
+
+![Montage du battement 76472 capoté, renfort V317](/assets/procedures/moe-76-advanced/aluclip-battement-76472-montage.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 372 à 374, registre 2.6.2, p. 68 à 70, version décembre 2016, échelle 1:2)
+
+La coupe du 76473 écrit « Débit **FF0** » (chiffre zéro) là où celles des 76471 et 76472 écrivent
+« Débit FFO » (entrée **INC-80**).
+
+## Montage sur seuil en variante AluClip
+
+**Assemblage dormant avec capot alu et seuil A076** (écrit « AO76 », entrée **INC-80**) : se reporter au registre 2.4.5
+pour l'assemblage dormant / seuil (voir
+[Mise en œuvre du seuil du système 76 Advanced](/procedures/mise-en-oeuvre-seuil-systeme-76.md)).
+En complément, **usiner le capot alu au niveau de l'assemblage mécanique** suivant les croquis,
+poinçonné ou coupé [1 p. 375] :
+
+| Seuil | Variante | Usinage | Détail | Cotes (mm, °) |
+| --- | --- | --- | --- | --- |
+| A076 | 1 | usinage capot alu dormant et meneau | W | 84° ; 10,6 ; 5 ; 0,5 |
+| A076 | 2 | usinage capot alu dormant (dos de dormant) | W | 84° ; R1,5 ; 4,4 ; 0,5 |
+| A075 | 1 | usinage capot alu dormant et meneau | Y | 80° ; 23,2 ; 5 ; 0,5 |
+| A075 | 2 | - | Z | 80° ; R1,5 ; 4,4 ; 0,5 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 375 et 376, registre 2.6.2, p. 71 et 72, version décembre 2016, échelle 1:2)
+
+**Variante 2 : le capot alu doit être poinçonné ou fraisé suivant le contour du seuil** [1 p. 375-376].
+**Assemblage dormant avec capot alu et seuil A075** (écrit « AO75 ») : même renvoi au registre 2.4.5
+et même usinage du capot. **À noter : le traitement du rejet d'eau est réalisé comme indiqué
+registre 2.4.5** [1 p. 376]. Les cotes de débit du capot vertical sur seuil sont dans
+[Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md#capots-verticaux-sur-seuil-aluminium).
+
+![Usinage du capot alu sur seuil A076, variantes 1 et 2](/assets/procedures/moe-76-advanced/aluclip-seuil-a076-usinage-capot.png)
+
+![Usinage du capot alu sur seuil A075, variantes 1 et 2](/assets/procedures/moe-76-advanced/aluclip-seuil-a075-usinage-capot.png)
+
+À gauche, les perspectives de l'angle bas du dormant capoté sur le seuil (en variante 1, la pièce
+d'assemblage vissée au pied du montant) ; à droite, les détails W, Y et Z en coupe.
+
+## Réhausses et élargisseurs capotés
+
+**Mise en œuvre des profilés complémentaires — 1. Rehausse.** Afin d'éviter toute apparition
+d'espace entre profilés pouvant être causé par des dilatations dues aux variations de température,
+il est recommandé d'effectuer une liaison entre profilés dormants et rehausses, ainsi que
+rehausses / rehausses, par vissage (dess. 2). **Entraxe de fixation max. 400 mm.** Si plusieurs
+rehausses sont assemblées en bloc, il faut impérativement que celles-ci soient fixées entre elles
+par vissage afin d'assurer la retenue souhaitée. **Pour la mise en œuvre des capots alu sur les
+rehausses, celles-ci doivent être délignées** (dess. 1, détail X : **3,4** mm et **1,2** mm) ;
+après assemblage des rehausses, celles-ci peuvent être capotées [1 p. 377].
+
+**Montage** : les capots alu **A120, A121 et A124** sont glissés dans l'arrière du dormant puis
+clippés dans la rehausse. Étancher les extrémités des rehausses / capot alu [1 p. 377].
+
+| Capot | Élargisseur habillé | Cotes du capot sur la planche (mm) |
+| --- | --- | --- |
+| A120 | 76701 | 4 + 30 |
+| A121 | 76702 | 4 + 60 |
+| A124 | 76703 | 4 + 120 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 377, registre 2.6.2, p. 73, version décembre 2016, échelle 1:2)
+
+Dess. 2 : exemple d'une rehausse avec **A120**, celle-ci est glissée par le bas dans le capot
+dormant. La planche est titrée « Rehausse Elargisseur » et parle de « rehausses » pour les
+élargisseurs 76701 à 76703 (voir
+[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md)).
+
+![Réhausses et élargisseurs 76701 à 76703 avec capots A120, A121, A124](/assets/procedures/moe-76-advanced/aluclip-rehausse-elargisseur-capots-a120-a124.png)
+
+## Fixation du profilé A249 (accouplement)
+
+**Mise en œuvre des habillages des systèmes de liaison et poteaux d'angles pour profilés en
+capotage aluminium.** La fixation du profilé **A249** s'effectue par **vis plot S075** espacées au
+**maximum de 400 mm**, de **100 à 150 mm de l'extrémité** du profilé. **Pare-vapeur préconisé pour
+étanchéité par l'extérieur** [1 p. 378]. La coupe cote **21** mm entre le bord du profilé A249 et l'axe
+de la vis ; le dess. 1 cote les entraxes 400, 400 et 150 mm. Les systèmes de liaison et poteaux
+d'angle sont dans
+[Accouplement d'éléments du système 76 Advanced](/procedures/accouplement-elements-systeme-76.md).
+
+![Fixation du profilé A249 par vis plot S075, entraxe de fixation](/assets/procedures/moe-76-advanced/aluclip-fixation-a249.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 378, registre 2.6.2, p. 74, version décembre 2016, échelle 1:2)
+
+## Tapées et appuis aluminium sur dormant capoté
+
+Les dormants capotés reçoivent, en périphérie, des **tapées aluminium** (profilés qui épaississent
+le dormant côté extérieur, voir le [glossaire](/reference/glossaire.md)) et, en traverse basse, une
+**pièce d'appui aluminium**. La planche « AluClip Profilés Complémentaires » les dessine avec leurs
+cotes, repérées À (tapée) et Á (appui) sur la perspective de la fenêtre [1 p. 379]. Les tapées et
+appuis, leurs fonctions et leurs coupes sont dans
+[Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md#pièces-dappui-et-tapées-aluminium) ;
+le manuel porte en plus leur seconde cote :
+
+| Référence | Désignation | Largeur (mm) | Hauteur (mm) |
+| --- | --- | --- | --- |
+| A469 | tapée | 30 | 31,5 |
+| A470 | tapée | 50 | 35 |
+| A471 | tapée | 70 | 35 |
+| A472 | tapée | 90 | 35 |
+| A473 | tapée | 110 | 35 |
+| A475 | appui | 97 | 19,7 |
+| A476 | appui | 137 | 19,7 |
+| A477 | appui | 77 | 19,7 |
+| A491 | appui | 57 | 19,7 |
+| A502 | habillage, sans désignation sur la planche | 100 (épaisseur 3) | 100 |
+| A503 | habillage, sans désignation sur la planche | 40 (épaisseur 2) | 60 |
+| A385 | demi-capot | 20,2 | 51 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 379, registre 2.6.2, p. 75, version février 2019, échelle 1:2)
+
+Sont dessinés en perspective, sans cote, le clip **M569**, l'embout d'appui **M643**, l'embout de
+tapée **M646** et le patin d'étanchéité **G251**. Le **A385** est coté ici **20,2** × 51 mm, comme
+sur le poster, là où la planche AluClip des dormants le cote 20,3 (entrée **CTR-35**). Les
+**A502** et **A503** sont les habillages aluminium de
+[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) ;
+l'épaisseur du **A502** y est de 2 mm (planche de l'avis technique), elle est cotée **3** mm ici —
+entrée **CTR-36** du registre [Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
+
+![AluClip, profilés complémentaires : tapées, appuis, demi-capot et accessoires](/assets/procedures/moe-76-advanced/aluclip-profiles-complementaires-vue-ensemble.png)
+
+### 1. Montage des demi-capots AluClip
+
+- Pour le **drainage caché sous le demi-capot**, fixer les clips de fixation **M569** avec une **vis
+  3,9 × 13 mm** (dessin 2). Pour ce faire, utiliser le **gabarit de perçage T073**.
+- Respecter les **entraxes de fixation** (dessins 1 et 3) : **150** mm de l'extrémité, puis **400**
+  mm.
+- L'étanchéité du capot alu est à réaliser selon les directives de mise en œuvre générales
+  [1 p. 380].
+
+Dessin 2 : exemple de montage du demi-capot **A385** avec clip de fixation **M569** sur dormant, cote
+de **32,5** mm ; dessin 3 : pose des clips de fixation M569, puis demi-capot mis en place.
+
+![Montage du demi-capot A385 : entraxes, clip M569, gabarit T073](/assets/procedures/moe-76-advanced/aluclip-demi-capot-a385-m569-t073.png)
+
+### 2. Mise en place du patin d'étanchéité G251
+
+- Apposer un **cordon de silicone** selon le dessin 4, avant la mise en place des patins
+  d'étanchéité (mastic d'étanchéité, cote **31** mm).
+- Appliquer le patin d'étanchéité **G251 à fleur avec le dormant** (dessin 5) [1 p. 381].
+
+![Étanchéité sous le patin et patin G251 sur dormant](/assets/procedures/moe-76-advanced/aluclip-patin-g251.png)
+
+### 3. Mise en place des tapées
+
+- Débiter les tapées selon le tableau des cotes de débit (« page 81 à 82 » ; voir *8. Cotes de
+  débit* ci-dessous).
+- Réaliser l'étanchéité sur la tapée : **étanchéité de fil dans la rainure avec du mastic
+  silicone**.
+- Positionner la tapée sur le dormant : **placer et centrer la tapée sur le dormant** (dessin 6)
+  [1 p. 382].
+
+![Étanchéité de fil et mise en place des tapées](/assets/procedures/moe-76-advanced/aluclip-tapees-etancheite-mise-en-place.png)
+
+### 4. Montage des embouts M646 sur les tapées verticales
+
+1. Percer des trous de **Ø 3 mm** dans les tapées verticales, à **30,5 mm** du haut, à l'aide du
+   **gabarit T134** (dessin 1).
+2. Retirer la protection de la face adhésive de l'embout **M646**, positionner l'embout en
+   extrémité des tapées et visser à l'aide de **vis 3,9 × 19 mm** (mise en place des embouts bas).
+3. Retirer la protection de la partie montante du patin d'étanchéité, et **replier le patin** sur la
+   tapée (dessins 2 et 3, repli à 90°, puis coller le patin sur la tapée).
+4. Avant la mise en place de la tapée, y apposer un **mastic silicone sur toute la longueur**
+   (dessin 4) [1 p. 383].
+
+![Montage des embouts M646 sur les tapées verticales, gabarit T134](/assets/procedures/moe-76-advanced/aluclip-tapees-embouts-m646.png)
+
+### 5. Mise en œuvre de la pièce d'appui
+
+- Débiter la pièce d'appui selon le tableau des cotes de débit (« page 85 à 86 »).
+- Avant la mise en place de l'appui, appliquer le **mastic d'étanchéité sur toute la largeur de
+  l'appui, dans la rainure prévue à cet effet** (dessin 1).
+- Retirer le film de protection de la partie montante du patin d'étanchéité **M646**, **humidifier
+  légèrement la partie collante** du patin pour éviter le collage dès que la pièce d'appui arrive au
+  contact du patin d'étanchéité ; cela permet un réglage si nécessaire (dessins 2 et 3).
+- **NB : dans le cas du dormant 76180, la pièce d'appui n'est pas clippée dans la rainure du
+  dormant, et vient en appui sur l'extérieur du dormant** [1 p. 384].
+
+![Mise en œuvre de la pièce d'appui aluminium](/assets/procedures/moe-76-advanced/aluclip-appui-mise-en-oeuvre.png)
+
+### 6. Fixation des tapées et appuis sur le dormant
+
+- Visser les tapées et appuis en périphérie du dormant avec des **vis autoforeuses 3,9 × 32 mm**
+  (dessin 2) ; une rainure de vissage est prévue à cet effet.
+- **Le vissage doit être réalisé à 150 mm des angles du châssis, puis tous les 300 mm au moins**
+  (dessin 1).
+- Enlever l'excédent de silicone si besoin.
+- Visser latéralement la pièce d'appui au travers des tapées, à l'aide de vis 3,9 × 32 ; les
+  positions des vis sont données par l'embout M646 (dessin 3 : vissage au travers de l'embout et du
+  patin d'étanchéité) [1 p. 385].
+
+Coupes B-B (tapée en traverse haute) et A-A (appui en traverse basse) : la vis traverse la tapée ou
+l'appui et entre dans la rainure de vissage du dormant.
+
+![Fixation des tapées et appuis sur le dormant, coupes A-A et B-B](/assets/procedures/moe-76-advanced/aluclip-tapees-appuis-fixation.png)
+
+### 7. Mise en œuvre des embouts d'appuis
+
+Après avoir **coupé ou cassé les embouts d'appuis M643** en fonction du débord de la pièce d'appui
+(cote « Maß X »), les visser à l'aide de **vis 3,9 × 19 mm**. Dessin 2 : assemblage des tapées dans
+la pièce d'appui à l'aide de vis autoforeuses 3,9 × 32 mm. Dessin 3 : dimensions des amorces de
+rupture du M643, vue de dessus : **22,3**, **42,3** et **62,3** mm [1 p. 386].
+
+![Embouts d'appui M643 et leurs amorces de rupture](/assets/procedures/moe-76-advanced/aluclip-embouts-appui-m643.png)
+
+### 8. Cotes de débit théoriques des tapées et appuis
+
+Pour le débit des profilés en alu, se référer aux indications ci-dessous. **Les cotes de débit des
+tapées et appuis sont définies par méthode de calcul, les cotes exactes sont à relever sur les
+cadres soudés** [1 p. 387]. Une ligne par position et par dormant ; la quantité est le nombre de
+pièces nécessaires par châssis, pour la tapée ou l'appui choisi.
+
+| Position | Dormant | Cote de débit (mm) | Profilés nécessaires | Page PDF |
+| --- | --- | --- | --- | --- |
+| tapée en traverse haute | 76180 | DHT − 2 × 34,8 | A469, A470, A471, A472 ou A473, 1 × | 387 |
+| tapée en traverse haute | 76171, 76172, 76173 | DHT − 2 × 28,8 | A469 à A473, 1 × | 387 |
+| tapée en traverse haute | 76177, 76178, 76185 | DHT − 2 × 34,8 | A469 à A473, 1 × | 387 |
+| tapée verticale | 76180 | DHT − 2,3 | A469 à A473, 2 × | 388 |
+| tapée verticale | 76177, 76178, 76185 | DHT + 13 | A469 à A473, 2 × | 388 |
+| tapée verticale | 76171, 76172, 76173 | DHT + 3,7 | A469 à A473, 2 × | 388 |
+| appui en traverse basse | 76180, 76177, 76178, 76185 | DHT − 2 × 34,8 | A475, A476 ou A491, 1 × | 389 |
+| appui en traverse basse | 76171, 76172, 76173 | DHT − 2 × 28,8 | A475, A476 ou A491, 1 × | 389 |
+| appui en traverse basse | 76177, 76178, 76185 | DHT − 2 × 34,8 | A477, 1 × | 390 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 387 à 390, registre 2.6.2, p. 83 à 86, version février 2019, échelle 1:2)
+
+La page 390 porte le pied de page en allemand (« Maßstab », « Seite », « Technische Änderungen
+vorbehalten! »).
+
+![Cotes de débit des tapées en traverse haute](/assets/procedures/moe-76-advanced/aluclip-debit-tapees-traverse-haute.png)
+
+![Cotes de débit des tapées verticales](/assets/procedures/moe-76-advanced/aluclip-debit-tapees-verticales.png)
+
+![Cotes de débit des appuis en traverse basse](/assets/procedures/moe-76-advanced/aluclip-debit-appuis-traverse-basse.png)
+
+![Cote de débit de l'appui A477](/assets/procedures/moe-76-advanced/aluclip-debit-appui-a477.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 380 à 390, registre 2.6.2, p. 76 à 86, version février 2019)
+
+## Accouplement d'éléments capotés
+
+**Mise en œuvre : le montage / assemblage des profilés PVC est analogue à celui décrit dans le
+registre 2.5.2** (voir
+[Accouplement d'éléments du système 76 Advanced](/procedures/accouplement-elements-systeme-76.md)).
+**Les profilés d'accouplement doivent être usinés pour la mise en œuvre avec les capots alu**
+(détails X et Y : le bord de l'aile du profilé d'accouplement est retiré, en gris). **Les
+habillages aluminium des profilés d'accouplement ne sont pas disponibles dans le programme
+AluClip !** [1 p. 391-394]
+
+Chaque coupe associe deux dormants **76171** renforcés **V306.Z** (IW 2,30 cm⁴ chacun) et le profilé
+d'accouplement ; la **valeur statique** est la somme des IW, en cm⁴. Une ligne par accouplement :
+
+| Accouplement | Profilé d'accouplement | Renfort | IW du profilé d'accouplement (cm⁴) | Valeur statique (cm⁴) | Entretoise (mm) | Autres cotes (mm) | Page PDF |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 90° | 8355 | V263 | 14,40 | 19,10 | 10 × 38,5 | 25 ; 25 | 391 |
+| 135° | 8356 | V262 | 7,60 | 12,20 | 10 × 38,5 | 24,8 ; 25 | 391 |
+| angle variable 90° à 180° | 8340 / 8341 | V265 (8340), - (8341) | 8,70 | 13,30 | 10 × 38,5 | 25 ; 25 | 392 |
+| contreventement | A250 | 2 × V264 | 26,00 (renfort alternatif), 35,80 (2 × V264) | 66,40 | - | 31,2 ; 14,25 ; 23 | 392 |
+| profilé de liaison H, variante 1 | 76605 | V331 | 10,00 | 14,60 | 13,5 × 33,5 | 53,1 ; 31,4 ; détail X 6,6 | 393 |
+| profilé de liaison H, variante 2 | 76605 | V331 | 10,00 | 14,60 | 13,5 × 33,5 | 89,5 ; 69 ; 49 ; 31,4 ; détail Y 15,8 | 393 |
+| profilé de liaison G022 | G022 | - | - | 4,60 | - | 2 ; 4 ; 25 | 394 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 391 à 394, registre 2.6.2, p. 87 à 90, version décembre 2016, échelle 1:2)
+
+Pour le contreventement **A250** : **14,25 mm : axe de vissage avec adaptateur M136 et vis de
+montage AMOIII** ; **23 mm : alternative d'axe de vissage pour vissage dans renfort** ; l'astérisque
+du 26,00 renvoie à « Renfort alternatif » [1 p. 392]. La valeur statique de 66,40 cm⁴ est la somme des
+quatre lignes du tableau (2,30 + 2,30 + 26,00 + 35,80). Celle de l'**accouplement 90°**, **19,10**
+cm⁴, n'est pas la somme de ses lignes (2,30 + 2,30 + 14,40 = 19,00) — entrée **INC-79** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md). Sur la coupe G022, chaque dormant est coté
+« DHT » jusqu'à l'axe, avec 2 mm de jeu. La seconde entretoise de la page 393 est légendée
+« Entretoiose ».
+
+![Accouplement 90° sur poteau d'angle 8355, capots alu](/assets/procedures/moe-76-advanced/aluclip-accouplement-90-8355.png)
+
+![Accouplement 135° sur poteau d'angle 8356, capots alu](/assets/procedures/moe-76-advanced/aluclip-accouplement-135-8356.png)
+
+![Détail X : usinage du profilé d'accouplement pour les capots alu](/assets/procedures/moe-76-advanced/aluclip-accouplement-detail-x-usinage.png)
+
+![Accouplement angle variable 8340 / 8341, capots alu](/assets/procedures/moe-76-advanced/aluclip-accouplement-angle-variable-8340-8341.png)
+
+![Accouplement contreventement A250, capots alu](/assets/procedures/moe-76-advanced/aluclip-accouplement-contreventement-a250.png)
+
+![Accouplement avec profilé de liaison H 76605, variante 1](/assets/procedures/moe-76-advanced/aluclip-accouplement-liaison-h-76605-v1.png)
+
+![Accouplement avec profilé de liaison H 76605, variante 2](/assets/procedures/moe-76-advanced/aluclip-accouplement-liaison-h-76605-v2.png)
+
+![Accouplement avec profilé de liaison G022, capots alu](/assets/procedures/moe-76-advanced/aluclip-accouplement-liaison-g022.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 391 à 394)
+
+## Mise en œuvre du capot A072 (AluClip Pro)
+
+La variante **AluClip Pro** habille l'ouvrant 76271 du capot épais **A072**, sans renfort acier (voir
+[Plans de combinaison AluClip du système 76](/profiles/systeme-76-aluclip-plans-de-combinaison.md#caractéristiques-de-la-variante-aluclip-pro)).
+Le capot se met en œuvre en **coupe à 45°** ou en **variante imbriquée** (débit à 90°, fraisage de
+contour et emboutissage). Les cotes de débit sont dans
+[Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md#capot-a072-de-laluclip-pro).
+
+### Fabrication coupe à 45°
+
+1. Le débit du capot alu est réalisé avec une **cale de tronçonnage spécifique sur une tronçonneuse à
+   double tête**. Cote de débit : **DEO − 59,6 (2 × 29,8) mm** ; effectuer toujours la prise de cote
+   sur le cadre soudé. La cale de tronçonnage, grâce à son contour, donne une **précontrainte au
+   profilé** lors du débit afin d'éviter, lors de l'assemblage sur le cadre PVC, un espace entre les 2
+   capots.
+2. Afin de permettre un clippage plus aisé du capot sur la cale de tronçonnage, effectuer une
+   **dépouille au niveau des coins supérieurs** (exemple 1 : fraisé ; exemple 2 : coupé à la scie,
+   limé).
+3. Il est conseillé d'appliquer une **bande de couleur appropriée au niveau de l'angle** (dess. 1) afin
+   d'éviter, lors d'éventuelles dilatations, l'apparition d'un trait blanc.
+4. **Clipper les capots sur l'ouvrant** [1 p. 404].
+
+![Coupe à 45° : cote de débit DEO − 59,6 et cale de tronçonnage](/assets/procedures/moe-76-advanced/aluclip-pro-coupe-45-debit-cale.png)
+
+![Coupe à 45° : dépouille des coins, bande de couleur (dess. 1), capot avant et après montage](/assets/procedures/moe-76-advanced/aluclip-pro-coupe-45-depouille-et-montage.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 404, registre 2.6.3, p. 10, version décembre 2016)
+
+### Fabrication imbriquée
+
+**Avant-propos** : le process de fabrication de la variante imbriquée demande une **précision de
+travail élevée et méticuleuse**. profine recommande fortement de ne réaliser les coupes et les
+fraisages qu'avec les outillages qu'elle propose [1 p. 405].
+
+1. **Le débit du capot se fait à 90°** : capot alu horizontal à **DEO − 59,6 (2 × 29,8) mm**, capot
+   alu vertical à **DEO − 94 (2 × 47) mm**, prise de cote toujours sur le cadre soudé.
+2. **Cales et train de fraise** : pour la mise en œuvre des capots, il faut la **poinçonneuse
+   AluClip**, également une **cale et un train de fraise spécifiques**. Le train de fraise est un
+   **train de fraise double pour réaliser en un passage 2 contours différents** (train de fraise A et
+   train de fraise B) [1 p. 405].
+
+![Fabrication imbriquée : débit du capot horizontal et du capot vertical](/assets/procedures/moe-76-advanced/aluclip-pro-imbriquee-debit.png)
+
+Coupe des trains de fraise : **train de fraise B** (en haut), 25 mm de haut décomposés 13,7 + 11,3,
+dépouille de 3,61 mm ; **train de fraise A** (en bas), 28 mm de haut, angle de 86° ; 33 mm entre les
+deux trains ; les capots sont posés hachurés sur leurs cales.
+
+![Train de fraise double A et B](/assets/procedures/moe-76-advanced/aluclip-pro-trains-de-fraise.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 405, registre 2.6.3, p. 11, version décembre 2016, échelle 1:2)
+
+**Table de fraisage avec cales** : cales pour usinage simultané de 4 capots — deux capots horizontaux
+(repère À) inclinés à **75° ± 5°**, deux capots verticaux (repère Á) à **90° ± 5°**, sur une table
+d'environ **500 × 330** mm (cales d'environ 300 mm, 15 mm de jeu). **À noter : les cales doivent être
+réglables** [1 p. 406]. Cotes des deux cales, en mm :
+
+| Cale | Cotes (mm) |
+| --- | --- |
+| cale de capot horizontal (À) | 65 de large ; 8 + 46,7 + 10,3 ; 18,5 et 38 de haut ; flanc à 105° |
+| cale de capot vertical (Á) | 75 de large ; environ 63,6 de haut, 56 et 62,3 ; 59,2, 48, 40,5, 10,3, 7,2, 5,5, 4, 4 ; 15, 3,8, 3,8, 3,5 ; angle de 91° |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 406, registre 2.6.3, p. 12, version décembre 2016)
+
+![Table de fraisage avec cales pour 4 capots](/assets/procedures/moe-76-advanced/aluclip-pro-table-de-fraisage-cales.png)
+
+**Étape de fabrication** : après le débit des capots à 90°, ils sont usinés simultanément ; après
+avoir coupé les plateaux (90°), les 4 capots sont fraisés simultanément (la planche écrit
+« befräßt »). Le **capot horizontal** après usinage est **prêt pour montage** : entaille de **24,1**
+mm, flanc à **15°**. Le **capot vertical** après usinage demande **2 poinçonnages supplémentaires
+pour finaliser** ; entaille de **17,7** mm [1 p. 407].
+
+![Étape de fabrication : capot horizontal et capot vertical après usinage](/assets/procedures/moe-76-advanced/aluclip-pro-etape-fabrication.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 407, registre 2.6.3, p. 13, version décembre 2016)
+
+**Poinçonner** le capot vertical :
+
+1. **1. Poinçonnage** : le **poinçonnage standard AluClip**, **50,3** mm, biais à **105°**, rayon
+   **R3**, avec une cote de 17,7 mm depuis l'extrémité.
+2. **2. Poinçonnage** : cotes **17,7**, **20,2** et **3** mm portées sur la vue en perspective et sur
+   la vue de face, la partie retirée hachurée.
+3. **Assembler les capots.** Angle terminé [1 p. 408].
+
+![Poinçonnages 1 et 2 du capot vertical, angle terminé](/assets/procedures/moe-76-advanced/aluclip-pro-poinconnage.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 408, registre 2.6.3, p. 14, version décembre 2016)
+
+## Mise en œuvre de l'AluClip Zero
+
+La variante **AluClip Zero** associe l'ouvrant **76282** et le capot affleurant **A195** (voir
+[Plans de combinaison AluClip du système 76](/profiles/systeme-76-aluclip-plans-de-combinaison.md#caractéristiques-de-la-variante-aluclip-zero)) ;
+ses cotes de débit sont dans
+[Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md#ouvrant-76282-et-capot-a195-de-laluclip-zero).
+
+### Ouvrant 76282
+
+**Mise en œuvre identique à celle de l'ouvrant 76271, mêmes abaques de renforcement, mêmes
+renforts** (V307.Z, V308, V306.Z dessinés). **Fixation renfort : utiliser des vis autoforeuses à têtes
+fraisées**, 3,9 × 16 mm, à **25** mm du bord intérieur du profilé [1 p. 417].
+
+**Drainage et décompression** : les positionnements des usinages sont donnés au registre 1.3.1 (voir
+[Drainage, décompression et ventilation du système 76 Advanced](/procedures/drainage-decompression-ventilation-systeme-76.md)).
+**Remarquer la modification d'évacuation de l'eau dans l'ouvrant 76282** : oblong **5 × 25 mm** à **6**
+mm du bord [1 p. 417].
+
+![Fixation du renfort dans l'ouvrant 76282, renforts V307.Z, V308, V306.Z](/assets/procedures/moe-76-advanced/aluclip-zero-fixation-renfort-76282.png)
+
+![Drainage de l'ouvrant 76282, oblong 5 × 25 mm](/assets/procedures/moe-76-advanced/aluclip-zero-drainage-76282.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 417, registre 2.6.5, p. 9, version janvier 2019)
+
+### Capots A195
+
+1. Les capots sont **débités à 90°** suivant les cotes de débit (« page 11 » du registre).
+2. En complément, **les capots verticaux sont usinés** comme indiqué fig. 1 : entaille de **24,7** mm
+   de long, **4,3** mm et **6** mm de large [1 p. 420].
+3. **Montage des capots alu** : 1. capots alu verticaux ; 2. capots alu horizontaux [1 p. 421].
+4. **Mise en place des capots et fixation avec verrou S012** : positionner le capot sur l'intérieur de
+   l'ouvrant, puis le faire glisser vers l'extérieur (1.) ; **positionner par basculement le verrou
+   S012 sous le joint de feuillure ouvrant et le capot alu** (2.), puis le visser (3.).
+5. Le verrou **S012** est positionné aux extrémités des capots (**environ 50 mm**), puis **tous les
+   300 mm**. Celui-ci est fixé avec une **vis de 4 × 16 mm** (vis A3J-H2 Ø 4 × 16 mm) [1 p. 421].
+6. **Adhésif I008 sur A195** : appliquer l'adhésif I008 sur le capot A195, **à fleur côté
+   supérieur**. Faire chevaucher l'adhésif dans l'angle au niveau des 2 capots [1 p. 421].
+
+![Usinage du capot vertical A195 (fig. 1)](/assets/procedures/moe-76-advanced/aluclip-zero-usinage-capot-vertical-a195.png)
+
+![Montage des capots A195 et fixation par verrou S012](/assets/procedures/moe-76-advanced/aluclip-zero-montage-capots-verrou-s012.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 420 et 421, registre 2.6.5, p. 12 et 13, version janvier 2019)
+
+La vis est écrite « A3J-H2 » ici et « A3J-HJ2 » sur la présentation du produit (p. 409) — entrée
+**INC-82**.
+
+### Vitrage
+
+**Entretoise M490 pour montage du vitrage avec A195 / I008** : afin de permettre le positionnement
+du vitrage, appliquer l'entretoise **M490** sur la **moitié inférieure de la bande adhésive I008**
+(dess. 1, 5 mm). M490 évite un contact direct de la bande adhésive lors du vitrage ; celle-ci est
+compressée lors du pareclosage. **Mettre une pièce à 100 mm des coins intérieurs, puis tous les
+300 mm** [1 p. 422]. Les épaisseurs de vitrage admises par parclose sont dans
+[Tableau de vitrage du système 76](/profiles/systeme-76-tableau-de-vitrage.md#vitrage-de-laluclip-zero).
+
+![Entretoise M490 sur la bande adhésive I008](/assets/procedures/moe-76-advanced/aluclip-zero-entretoise-m490.png)
+
+**Collage vitrage** : **il faut coller le vitrage à partir d'un poids d'ouvrant de 40 kg.** Le calage
+du vitrage peut se faire à l'horizontal ou à la verticale (dess. 1). Le collage se fait entre les
+cales de vitrage (dess. 2). **Attention : le collage ne remplace pas les renforts !** Des cales
+complémentaires sont à positionner au niveau des points de verrouillage ; **à partir d'un vitrage de
+1 300 mm, rajouter une cale supplémentaire au milieu du vitrage** [1 p. 423].
+
+Dess. 1 : positionnement des cales, à **40** mm des angles et à **100** mm pour les cales
+complémentaires ; légende : cale de support (noir), cale de distance (hachures fines), cale
+complémentaire pour la stabilité du vitrage vertical, cale complémentaire pour le positionnement du
+vitrage (quadrillé).
+
+![Positionnement des cales de vitrage AluClip Zero (dess. 1)](/assets/procedures/moe-76-advanced/aluclip-zero-collage-cales.png)
+
+Types de collage recommandés, en respectant toujours les préconisations du fournisseur de colle pour
+la mise en œuvre [1 p. 423] :
+
+| Collage | Zone de collage sur le profilé et le vitrage ① | Hauteur de collage entre profilé et vitrage ② | Colle conseillée |
+| --- | --- | --- | --- |
+| 1. collage au bord du vitrage (dess. 3) | suivre les instructions du fournisseur de colle | épaisseur minimum de collage 5 mm | Sikasil WT 480 (SIKA) (2K-Silikon) |
+| 2. collage en feuillure (dess. 4) | spécifications du fournisseur de colle, surface minimum de collage 15 mm | épaisseur minimum de collage 5 mm | Ködiglaze P (KÖMMERLING CHEMISCHE Fabrik) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 423, registre 2.6.5, p. 15, version janvier 2019)
+
+La fiche technique de chaque colle se trouve sur l'Extranet profine.
+
+![Collage entre les cales (dess. 2), au bord du vitrage (dess. 3) et en feuillure (dess. 4)](/assets/procedures/moe-76-advanced/aluclip-zero-collage-dessins.png)
+
+### AluClip Zero sans capotage alu du dormant
+
+La mise en œuvre du capot **A195** peut également être réalisée sur un **dormant sans capotage alu**.
+Pour cela il suffit de **remplacer le joint G061 par le joint G127** ; celui-ci est enfilé sur la
+périphérie du dormant et collé à la jonction des extrémités. Cotes : **99** mm = 24,5 + 36-50 mm de
+vitrage, 3,2 mm, **111,2** mm = 37,2 + 74 [1 p. 424].
+
+![AluClip Zero sur dormant sans capotage, joint G127](/assets/procedures/moe-76-advanced/aluclip-zero-sans-capotage-dormant-g127.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 424, registre 2.6.5, p. 16, version janvier 2019)
+
+Le joint **G061** n'est cité nulle part ailleurs dans le manuel ; la page est titrée en allemand
+« System 76 Mitteldichtung ».
+
+# Ce que le document ne dit pas
+
+Les valeurs de X et de Y ne sont pas chiffrées. Le type de silicone neutre n'est pas désigné par
+une référence.
+
+# Citations
+
+[1] Mise en œuvre Système 76 Advanced, profine —
+`raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`, registre 2.6.2 « AluClip, Mise en oeuvre »
+et « AluClip, Drainage, Décompression », p. 357 à 394 du PDF (pages imprimées 53 à 90), versions
+décembre 2016, février 2019 et mars 2021 ; registre 2.6.3 « AluClip Pro, Mise en oeuvre »,
+p. 404 à 408 du PDF (pages imprimées 10 à 14), version décembre 2016 ; registre 2.6.5 « AluClip
+Zero, Mise en oeuvre » et « AluClip Zero, Vitrage », p. 417 et 420 à 424 du PDF (pages imprimées 9
+et 12 à 16), version janvier 2019
+
+# Voir aussi
+
+- [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md)
+- [Plans de combinaison AluClip du système 76](/profiles/systeme-76-aluclip-plans-de-combinaison.md)
+- [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md)
+- [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md)
+- [Mise en œuvre Système 76 Advanced](/sources/profine-mise-en-oeuvre-76-advanced.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /sources/dta-trocal-76-advanced.md | Document source | DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED | dta, cstb, profine, trocal, systeme-76-advanced, pose | Document Technique d'Application CSTB de 56 pages du système PVC 76 Advanced de profine, premier document réglementaire du wiki. | md) / / 18 / pièces d'appui alu A475, A476, A477, A491, DT100 ; tapées alu A469 à A473 / transcrit / [Appuis et seuils PERFORM76](/profiles/perform76- |
+| /sources/dtd-6-16-2335.md | Document source | DTD n° DBV-24-6/16-2335_V5, système e.XCLUSIVE, e.MOTION, e.VOLUTION | dtd, cstb, dta, profine, kommerling, trocal | Dossier Technique Détaillé de 53 pages du second système profine certifié en références 6xxx (Gamme 70), portant les prescriptions de fabrication, profilés, renforts, assemblages dormants/seuils/traverses, quincailleries et le critère L* < 82. | md) / / 22 / tapées alu A469 à A473 et appuis alu A491, A475, A476, A477 (capotage) ; habillages 1486, 1487, 9621, 91076, A502, A503 (CTR-41) ; 18 gar |
+| /procedures/fabrication-systeme-76-advanced.md | Procédure | Fabrication et assemblage du système 76 Advanced | systeme-76-advanced, profine, assemblage, seuil, capot, aluclip | Les schémas d'atelier et les plans de pose du système 76 Advanced de profine — assemblages de fourrure, d'appui, de seuil et de traverse, capotage aluminium, tapées et appuis alu, drainages et décompressions, couleurs sombres, coupes de principe et onze poses types. | teme-76-advanced.pdf, p. 34). ![Appuis aluminium A491 et A476 sous dormant demi-capoté, embout M643](/assets/certifications/dta-6-16-2334/appuis-alu- |
+| /profiles/systeme-70-profiles-complementaires.md | Profilé | Profilés complémentaires du système 70 | systeme-70, gamme-70, profine, elargisseur, liaison, appui | Les élargisseurs, profilés de liaison, poteaux d'angle et de contreventement, habillages, réhausses, battements intérieurs, pièces d'appui PVC et aluminium, tapées, compensations, cornières, profilés plats, coulisses, parcloses avec l'épaisseur de remplissage, joints et accessoires du système 70 (Kömmerling Gamme 70), avec leurs cotes, leurs renforts et leur coupe. | bout / Coupe / / --- / --- / --- / --- / ---: / / A491 / 57 / 20 / M643 / ![Pièce d'appui A491](/assets/profiles/systeme70/appuis/appui-alu-a491.png) |
+| /procedures/fabrication-systeme-70.md | Procédure | Fabrication et assemblage du système 70 | systeme-70, e-volution, profine, assemblage, soudure, seuil | Les schémas d'atelier et les plans de mise en œuvre du DTD du système 70 de profine (e.XCLUSIVE, e.MOTION, e.VOLUTION) — assemblages de meneau et traverse, soudure à plat du 6127, élargisseurs et rehausseurs, seuils, capotage aluminium, tapées et appuis alu, drainages, couleurs sombres, coupes et plans de pose. | blage tapées / fourrures, capotage : A469 à A473, A491, A476, A477 en rénovation](/assets/certifications/dtd-6-16-2335/tapees-appuis-alu-capotage.png) |
+| /sources/posters-kommerling-70.md | Document source | Posters Gamme 70 KÖMMERLING, mars 2025 | poster, kommerling, gamme-70, profine, profile, reference | Deux planches A0 KÖMMERLING du système 70 Plateforme — profilés principaux et profilés complémentaires — dessinant en coupe cotée chaque profilé avec son capot aluminium, les renforts acier et leurs inerties Iz, les seuils, les embouts et les sets d'assemblage. | d) / / quatrième bande / pièces d'appui aluminium A491, A475, A476, A477 « M643 Embout d'extrémité de pièce d'appui » ; M643 ; G083, S076, S073, S074, |
+| /sources/dtd-6-16-2334.md | Document source | DTD n° DBV-25-6/16-2334_V5, système 76 Advanced | dtd, cstb, dta, profine, systeme-76-advanced, fabrication | Dossier Technique Détaillé de 60 pages du système 76 Advanced, pièce jointe au DTA 6/16-2334_V5, portant les prescriptions de fabrication opposables, les cotes de profilés, les renforts, parcloses, accessoires et le critère colorimétrique L* < 82. | md) / / 17 / pièces d'appui alu A475, A476, A477, A491, DT100 ; tapées alu A469 à A473 / transcrit / [Appuis et seuils PERFORM76](/profiles/perform76- |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/informations-a-verifier.md :
+| VER-40 | Homonymie des références A469 à A473 entre le système 76 et le système 70 | DTA n° 6/16-2334_V5, p. 18 : A469 à A473 sont des **tapées aluminium** cotées 30 à 110 mm de haut, confirmé par la planche « Montage des tapées et appuis — Avec demi-capot en traverse basse » (p. 30), où les cinq sont dessinées en tapées contre le dormant. Le poster Gamme 70 KÖMMERLING nomme les mêmes cinq références « embouts d'extrémité de pièce d'appui », une fonction différente, sur une planche dont les cotes ne sont pas lisibles avec certitude Poster Kömmerling Gamme 70, profilés complémentaires, mars 2025 (réf. PROFINE/73/POSTERPLANA0/PRINC/COMP/2024), p. 1, relu en image à 500-600 dpi le 28/09/2026 : les A469 à A473 sont dessinés en profilés aluminium hachurés de 30 à 110 mm de large sur 32 à 35 mm de haut, **sans aucune légende de fonction** ; la légende « M643 Embout d'extrémité de pièce d'appui » est écrite sous les pièces d'appui aluminium **A491, A475, A476 et A477**, pas sous les A469 à A473. L'attribution « embouts d'extrémité de pièce d'appui » venait d'une lecture antérieure de la planche. | profine — savoir s'il s'agit d'une coïncidence de numérotation entre deux systèmes distincts ou d'une erreur de lecture du poster |
+/anomalies/contradictions-entre-sources.md :
+| CTR-32 | Référence de la réhausse de 35 mm cotée 35 / 21 + 46 / 26,5 et 43 | Poster Système 76 Advanced, profilés complémentaires, 2022, p. 1 : la coupe porte, écrite dans le profilé, la référence **76776** | Mise en œuvre Système 76 Advanced, registre 2.1.3, p. 8 (PDF p. 46, relu en image à 400 dpi le 25/09/2026) : même coupe, mêmes cotes, titrée « **76753** Réhausse de 35 mm » ; le cahier technique PERFORM76 range un appui **76753** de 35 mm, 21 / 46 sur 76, parmi les appuis des dormants 76171 et 76172 | **aucune** — les deux références sont portées sur [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) avec leur source ; le manuel et le cahier concordent, le poster est seul | Réhausse commandée sous une référence qui n'est pas celle du profilé voulu, ou refusée faute de la trouver au tarif |
+/anomalies/incoherences-internes.md :
+| INC-25 | DTD n° DBV-25-6/16-2334_V5, système 76 Advanced ; DTA n° 6/16-2334_V5 | DTD 4, 23 et 24 ; DTA 22 | L'embout de la pièce d'appui 6137 est écrit « **9F56.1** » dans le § 2.2.3.1.3 (DTD p. 4) et sur la planche « Embouts de pièces d'appui » (« EMBOUT 9F56.1 POUR 6137 (2 PIECES) », DTD p. 23), mais « Embouts de remplissage **9F56** », sans le suffixe .1, sur la coupe « Assemblage fourrure et pièce d'appui PVC » (DTD p. 24, DTA p. 22) Le manuel de mise en œuvre, registre 2.1.3, p. 7 (PDF p. 45), écrit « **9F55** » pour 6136 et « **9F56** » pour 6137, sans suffixe | Lire 9F56.1 ; le suffixe .1 est porté par le texte et par la planche cotée, sous réserve que 9F56 ne désigne pas une version antérieure de l'embout | Embout commandé sous la référence sans suffixe, et livré dans une version qui n'est pas celle cotée |
+/anomalies/incoherences-internes.md :
+| INC-45 | Mise en œuvre Système 76 Advanced | registre 2.1.3, p. 7 et 9 imprimées (PDF p. 45 et 47) | Deux planches titrent une cote que leur dessin ne porte pas : « 6137 Pièce d'appui de **157 mm** », coupe cotée **156,5** ; « 6141 Tapée de **75 mm** », coupe cotée **75,5**. Relu en image le 25/09/2026 | Le titre arrondit la cote, ou la coupe dessinée est celle d'une variante (la tapée de 75,5 mm est la 6141.1 dans [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md)) : à faire préciser par profine | Débit ou saillie d'appui calculé sur 157 au lieu de 156,5 mm ; tapée 6141 commandée pour une épaisseur qui est celle de la 6141.1 |
+/anomalies/informations-a-verifier.md :
+| VER-27 | Périmètre d'emploi et cotes du profilé acier 9708 (la mention « Partiellement résolu » portée le 19/09 reposait sur une lecture que l'image de la planche ne confirme pas : à réexaminer par l'utilisateur) | Préconisation de mise en œuvre du profilé acier 9708, profine France, p. 1, relue en image à 400 dpi le 28/09/2026 : la planche ne nomme aucun système ni aucune gamme (« rattrapage de montants de portes cintrés », avec la seule exclusion des traverses intermédiaires horizontales). L'élévation porte trois cotes sans légende : 2500 (longueur), 40 (à mi-longueur, en travers du profilé cintré) et 25 (à l'extrémité basse) ; rien n'écrit que 40 est une « flèche de précontrainte » ni que 25 est une « largeur d'appui ». La coupe `X 1:1` dessine un **plat** (le texte dit « renfort plat ») d'épaisseur 6, avec une cote 25 prise du bord gauche jusqu'à un trait intérieur ; la largeur totale n'est pas cotée. La lecture antérieure « section en U 25 × 9 mm, rainure 6 mm » n'est pas sur la planche. Aucune matière ni nuance d'acier n'est donnée. Impact : un atelier qui commanderait ou débiterait le 9708 sur la foi de « 25 × 9 en U » ou d'une flèche de 40 mm travaillerait sur des valeurs non écrites | profine |

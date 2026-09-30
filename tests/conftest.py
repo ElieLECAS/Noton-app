@@ -121,6 +121,7 @@ from app.models.user import User
 from app.models.user_role import UserRole
 from app.services.auth_service import create_access_token, get_password_hash
 from app.services.rbac_seed_service import seed_rbac_system
+from app.services import vocal_service
 from sqlmodel import SQLModel
 
 
@@ -238,6 +239,17 @@ def _init_db() -> Generator[None, None, None]:
 def db_session() -> Generator[Session, None, None]:
     with Session(engine) as session:
         yield session
+
+
+@pytest.fixture(autouse=True)
+def _sans_prechauffage(monkeypatch):
+    """Le démarrage de l'app synthétise les phrases d'attente en tâche de fond. Dans un test,
+    c'était un appel réel à Voxtral, et une course avec la synthèse factice du test : la tâche
+    remplissait son journal après la réponse, et l'ordre dépendait de la charge."""
+    async def rien() -> None:
+        return None
+
+    monkeypatch.setattr(vocal_service, "prechauffer_attentes", rien)
 
 
 @pytest.fixture

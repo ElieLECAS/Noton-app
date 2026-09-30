@@ -1,0 +1,75 @@
+{
+  "question": "comment choisir ses fenetres par rapport au zones sismiques ?",
+  "pages_lues": [
+    "/reference/choix-des-fenetres-exposition-au-vent-2008.md",
+    "/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md",
+    "/quincaillerie/roto-nx-legende-catalogue.md",
+    "/reference/classification-aev-par-site.md",
+    "/reference/resistance-au-vent-volets-soprofen.md",
+    "/reference/regions-climatiques-par-departement.md",
+    "/certifications/dta-6-16-2334.md",
+    "/certifications/dtd-6-16-2335.md",
+    "/procedures/montage-generaux-profine.md"
+  ],
+  "anomalies": [
+    "CTR-100",
+    "CTR-101",
+    "CTR-102",
+    "CTR-119",
+    "CTR-83",
+    "CTR-98",
+    "INC-221",
+    "VER-115",
+    "VER-123"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "zone sismique séisme sismicité fenêtre"
+      },
+      "pages_nouvelles": [
+        "/reference/choix-des-fenetres-exposition-au-vent-2008.md",
+        "/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md",
+        "/quincaillerie/roto-nx-legende-catalogue.md"
+      ],
+      "caracteres": 109345
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "sismicité parasismique sismique Eurocode 8 bâtiment catégorie d'importance",
+        "limite": 8
+      },
+      "pages_nouvelles": [
+        "/reference/classification-aev-par-site.md",
+        "/reference/resistance-au-vent-volets-soprofen.md",
+        "/reference/regions-climatiques-par-departement.md"
+      ],
+      "caracteres": 58686
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/certifications/dta-6-16-2334.md"
+      },
+      "pages_nouvelles": [
+        "/certifications/dta-6-16-2334.md"
+      ],
+      "caracteres": 55253
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "pose en zones sismiques éléments de remplissage 4 m² guide de dimensionnement parasismique éléments non structuraux",
+        "type": "Certification",
+        "limite": 8
+      },
+      "pages_nouvelles": [
+        "/certifications/dtd-6-16-2335.md",
+        "/procedures/montage-generaux-profine.md"
+      ],
+      "caracteres": 121753
+    }
+  ]
+}

@@ -1,0 +1,1081 @@
+===== PAGE 1 : /procedures/systemes-speciaux-systeme-70-evo2008.md =====
+# Ce que fait cette procédure
+
+Un **système spécial** est une façon de construire une menuiserie du système 70 qui sort de la
+fenêtre ordinaire ouvrant à la française : une fenêtre de rénovation posée sur l'ancien cadre en
+bois, une fenêtre **basculante** (l'ouvrant pivote autour d'un axe horizontal placé à mi-hauteur),
+une porte d'entrée, un coulissant à déport, un ouvrant qui s'ouvre vers l'extérieur. Pour chacun,
+le classeur KÖMMERLING « Système e.VOLUTION » d'août 2008 (système F 91, système 70 de profine)
+donne la liste des profilés et de leurs renforts, les opérations de fabrication, les coupes et les
+cotes de débit (les longueurs auxquelles on coupe les barres).
+
+Le registre 6 est découpé en sous-registres paginés chacun à partir de 1 : 6.1 « Rénovation »
+(PDF p. 307-308), 6.2 « Basculant » (PDF p. 309-314), 6.3 « Porte d'entrée » (PDF p. 315-320),
+6.4 « Coulissante à déport » (PDF p. 321-326) et 6.5 « Ouvrant vers l'extérieur » (PDF p.
+327-328). Les termes du métier (dormant, ouvrant,
+renfort, battement, feuillure, DHT…) sont expliqués dans le [glossaire](/reference/glossaire.md).
+
+# Rénovation sur dormant existant (registre 6.1)
+
+## Description du système rénovation
+
+Le système rénovation est une variante du système e.VOLUTION conçue pour le remplacement
+d'anciennes fenêtres en bois ou en acier. L'ancien dormant (le cadre fixe scellé dans le mur) reste
+en place, ce qui permet d'éviter les travaux de maçonnerie et de finition importants et coûteux. Le
+dormant en PVC est placé de l'intérieur sur le cadre dormant existant et fixé à la maçonnerie au
+moyen de vis et de chevilles. L'habillage extérieur est effectué par un profilé en PVC ou en alu
+clippé sur les plots de fixation ; le profilé d'habillage extérieur est à adapter exactement aux
+contours existants. **Attention** : en cas d'anciens dormants bois, assurer une ventilation
+suffisante entre cadre existant et profilé d'habillage extérieur. La gamme de dormants rénovation
+permet d'assurer dans tous les cas l'habillage intérieur de l'ancien dormant [1 p. 307].
+
+Pour la détermination des dimensions maximales, se conformer aux indications du registre 4 (voir
+[Abaques de renforcement du système 70, 2008](/profiles/systeme-70-abaques-evo2008.md)) [1 p. 307].
+
+## Profilés et accessoires
+
+Tous les ouvrants et meneaux de la série e.VOLUTION peuvent être utilisés avec les dormants
+rénovation. La table donne, pour chaque dormant rénovation, sa référence de commande et son renfort
+acier ; la seconde table donne les profilés d'habillage extérieur et leurs accessoires [1 p. 307].
+
+| Dormant rénovation | Référence de commande | Renfort |
+| --- | --- | --- |
+| 6102 | F91-01- 6102 | F00-40- V600 |
+| 6105 | F91-01- 6105 | F00-40- V600 |
+| 6106 | F91-01- 6106 | F00-40- V600 |
+| 6107 | F91-01- 6107 | F00-40- V600 |
+
+| Référence | Désignation | Référence de commande |
+| --- | --- | --- |
+| 5072 | profilé d'habillage extérieur en PVC (clippable) | F00-69- 5072 |
+| 9621 | profilé d'habillage extérieur en aluminium (clippable) | F00-57- 9621 |
+| 9471 | plots de fixation | F00-75- 9471 |
+| 9914 | gabarit de perçage pour plots de fixation | F00-70- 9914 |
+
+Les cotes des dormants rénovation sont sur [Profilés et renforts du système
+70](/profiles/systeme-70-profiles-et-renforts.md), celles des habillages 5072 et 9621 et du plot
+9471 sur [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md).
+
+## Conditions
+
+**La vérification de l'état du châssis en bois existant est essentielle lors de l'utilisation de ce
+système.** Le matériau doit être exempt de défauts et on veillera particulièrement à ce que le cadre
+en bois n'ait subi aucun dommage provoqué par l'humidité. Dans tous les cas, suivre les directives
+des conditions générales de mise en œuvre en travaux neufs et sur dormants existants éditées par le
+CSTB (cahier 3521 — juillet 2005) [1 p. 307].
+
+Réalisation du système rénovation [1 p. 307] :
+
+1. Il est impératif de s'assurer que le degré d'humidité restant dans le cadre en bois soit ≤ 20 %.
+2. Lorsque le cadre dormant en bois est déligné (recoupé dans sa largeur), assurer ensuite la
+   protection des surfaces par application d'une imprégnation.
+3. Le cadre en bois doit être sain et les surfaces du bois doivent être traitées, la bonne et
+   solide fixation au gros-œuvre devant être garantie.
+
+## Étapes de pose de la fenêtre système rénovation
+
+Les étapes sont numérotées a) à f) comme dans la source [1 p. 307] :
+
+- a) Positionner la menuiserie dans le cadre bois, la centrer et régler à l'aide de cales, la fixer
+  et étancher par l'extérieur.
+- b) Avant de mettre en place le profilé d'habillage extérieur en alu F00-57- 9621, remplir de
+  mastic d'étanchéité la rainure prévue à cet effet.
+- c) D'abord, mettre en place le profilé d'habillage horizontal F00-57- 9621 en partie basse et
+  l'étancher. À noter : écart maximal des chevilles = 20 cm ; le premier point de fixation se
+  trouvant à 35 mm de l'extrémité du profilé d'habillage extérieur.
+- d) Découper les profilés d'habillage extérieurs pour les parties verticales et les clipper sur
+  les plots de fixation F00-75- 9471 prémontés.
+- e) Assurer la ventilation du cadre en bois existant.
+- f) Après la mise en place des profilés d'habillage, assurer l'étanchéité entre ceux-ci et la
+  maçonnerie sur les parties verticales (les deux montants). Voir le dessin descriptif ci-dessous.
+
+## Nomenclature de l'exemple de rénovation
+
+La perspective « EXEMPLE » (échelle 1:2) montre, en haut, le montant et, en bas, l'angle bas d'une
+fenêtre rénovation posée dans un ancien cadre bois : le dormant PVC 6107 vient contre le cadre bois
+côté intérieur, l'habillage alu 9621 recouvre le cadre bois côté extérieur, clippé sur les plots
+9471 [1 p. 308].
+
+![Exemple de rénovation, dormant 6107 sur cadre bois existant avec habillage 9621](/assets/procedures/systemes-speciaux-evo2008/renovation-exemple-6107-9621-9471.png)
+
+Chaque chiffre cerclé du dessin renvoie à la liste suivante [1 p. 308].
+
+| Repère | Élément |
+| --- | --- |
+| 1 | Dormant F91-01- 6107 |
+| 2 | Habillage extérieur alu F00-57- 9621 |
+| 2.1 | Habillage extérieur alu, déligné |
+| 3 | Plot de fixation F00-75- 9471 |
+| 4 | Cadre dormant en bois existant |
+| 5 | Rainure pour l'étanchéité |
+| 6 | Crépi intérieur et extérieur |
+| 7 | Maçonnerie |
+| 8 | Renfort en acier F00-40- V600 |
+| 9 | Perçage pour le drainage |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 308)
+
+# Fenêtre basculante (registre 6.2)
+
+Une fenêtre **basculante** a un ouvrant qui tourne autour de deux pivots placés au milieu de ses
+montants (l'élévation de la planche dessine les pivots à mi-hauteur). Dans le système 70 de 2008,
+la fenêtre basculante associe l'ouvrant 2418 à des **battements tubulaires** 0140 assemblés en
+« U » et fixés l'un sur le dormant, l'autre sur l'ouvrant [1 p. 309, 311-312].
+
+## Profilés et accessoires nécessaires
+
+La table donne les profilés de la fenêtre basculante, leur référence de commande et leur renfort
+[1 p. 309].
+
+| Élément | Référence de commande | Renfort |
+| --- | --- | --- |
+| Dormant 6101 | F91-01- 6101 | F00-40- V601 |
+| Dormant 2502 | F95-01- 2502 | F00-40- V030, F00-40- V031 |
+| Ouvrant 2418 | F95-06- 2418 | F00-40- V030 |
+| Battement tubulaire 0140 | F90-25- 0140 | F00-40- 9111.1 |
+| Support de vitrage, auto-drainant | F90-75- 9326 | - |
+
+Les parcloses se choisissent selon les directives de vitrage « fenêtre ouvrant à déport »,
+registre 5.4 (voir [Tableau de vitrage du système 70](/profiles/systeme-70-tableau-de-vitrage.md#directives-de-vitrage-du-classeur-evolution-de-2008)).
+Petites pièces : rivets, vis à tôle, vis à tête cylindrique bombée (B 4,8 x 50) [1 p. 309]. L'étape
+5 des opérations prescrit des vis à tête fraisée 4,8 x 50 (**INC-262**).
+
+**Dimensions extérieures maximales de l'ouvrant basculant** [1 p. 309] :
+
+| Teinte | Dimensions extérieures maximales de l'ouvrant (cm) |
+| --- | --- |
+| en blanc 654 / ton pierre 607 | 250 x 160 |
+| autres | 230 x 160 |
+
+## Opérations
+
+Pour la fabrication, il faut impérativement respecter les plans de construction. Se conformer
+également aux dimensions de débit indiquées. Les dimensions extérieures de l'ouvrant, de la
+feuillure de l'ouvrant et du vitrage se rapportent aux dimensions extérieures du dormant
+(= dimension hors tout DHT). **Attention** : le jeu en feuillure périphérique est dans tous les cas
+de 12 mm [1 p. 309].
+
+## Plan des profilés du basculant
+
+La planche « Plan des profilés — Basculant » (échelle 1:2) dessine les quatre profilés avec leurs
+cotes et la valeur Iz (moment d'inertie du renfort, en cm⁴ : plus il est élevé, plus le profilé
+renforcé est rigide) des renforts qu'ils reçoivent. Sous les dormants et l'ouvrant est écrit « 9326
+support de cale de vitrage » [1 p. 310].
+
+| Profilé | Largeur (mm) | Hauteur hors tout (mm) | Décomposition de la hauteur (mm) | Renfort | Iz (cm⁴) | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| Dormant 6101 | 70 | 64 | 20 + 44 | V601 | 3,2 | ![Dormant 6101, basculant](/assets/procedures/systemes-speciaux-evo2008/basculant-dormant-6101-v601.png) |
+| Dormant 2502 | 70 | 85 | 20 + 65 | V030 | 4,5 | ![Dormant 2502, basculant](/assets/procedures/systemes-speciaux-evo2008/basculant-dormant-2502-v030-v031.png) |
+| Dormant 2502 | 70 | 85 | 20 + 65 | V031 | 5,3 | ![Dormant 2502, basculant](/assets/procedures/systemes-speciaux-evo2008/basculant-dormant-2502-v030-v031.png) |
+| Ouvrant 2418 | 70 | 96 | 20 + 56 + 20 | V057 | 3,8 | ![Ouvrant 2418, basculant](/assets/procedures/systemes-speciaux-evo2008/basculant-ouvrant-2418-v057-v059-v069.png) |
+| Ouvrant 2418 | 70 | 96 | 20 + 56 + 20 | V059 | 4,5 | ![Ouvrant 2418, basculant](/assets/procedures/systemes-speciaux-evo2008/basculant-ouvrant-2418-v057-v059-v069.png) |
+| Ouvrant 2418 | 70 | 96 | 20 + 56 + 20 | V069 | - | ![Ouvrant 2418, basculant](/assets/procedures/systemes-speciaux-evo2008/basculant-ouvrant-2418-v057-v059-v069.png) |
+| Battement 0140 | 66 | 62 | 20 + 34 + 8 | 9111.1 | 2,6 | ![Battement 0140, basculant](/assets/procedures/systemes-speciaux-evo2008/basculant-battement-0140-9111-1.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 310)
+
+Le V069 de l'ouvrant 2418 est écrit sans valeur d'Iz. Le renfort en gras de chaque tableau de la
+planche est V601, V030, V057 et 9111.1. La planche donne à l'ouvrant 2418 les renforts V057,
+V059 et V069, là où la liste des profilés (p. 309), les opérations et les cotes de débit (p. 311,
+313, 314) donnent le V030 (**INC-261**).
+
+## Opérations de fabrication
+
+Pour la fabrication des fenêtres, les opérations suivantes sont recommandées [1 p. 311] :
+
+1. Débit à onglet des dormants et ouvrants selon le procédé habituel.
+2. Renforcer les profilés en insérant les renforts en acier correspondants (les solidariser avec
+   les profilés en PVC).
+3. Souder les dormants et ouvrants selon le procédé décrit dans les instructions KÖMMERLING.
+4. Couper le battement tubulaire F90-25- 0140 et l'assembler en « U ». Prévoir pour la soudure une
+   surlongueur de 5 mm pour le battement F90-25- 0140 à fixer sur le dormant et de 6 mm pour le
+   profilé à fixer sur l'ouvrant. Pour le montage ultérieur des pivots, prévoir également une
+   légère surlongueur des battements verticaux.
+5. Fixer les demi-châssis de battement ainsi préparés sur le dormant et l'ouvrant. Utiliser pour
+   cela des vis à tête fraisée 4,8 x 50. Pour assurer l'étanchéité à l'eau, le profilé de
+   battement est à étancher dans sa partie de raccord au dormant (en traverse basse) avec du
+   silicone.
+6. La ventilation et la décompression du dormant et de l'ouvrant s'effectuent au travers de la
+   préchambre selon les instructions habituelles (cf. registre 4.1 — **INC-263**). Percer des
+   trous de drainage dans la traverse basse du profilé de battement, côté dormant (diamètre 8 mm,
+   distance : 60 cm, voir dessin). **Les cales de vitrage doivent toujours être positionnées
+   alternativement aux perçages afin qu'elles ne puissent pas obturer les trous de drainage.**
+7. Visser les accessoires sur dormant et ouvrant et poser les ferrures. **Attention** : respecter
+   les instructions des fabricants de ferrures. En raison du type de pivots utilisés, il n'est pas
+   nécessaire d'interrompre les joints à ce niveau. Ces joints sont positionnés en dessous des
+   pivots.
+8. Effectuer le vitrage selon les instructions habituelles.
+9. Montage et fixation de l'ouvrant dans le dormant.
+
+**Indication importante.** À partir d'une largeur d'ouvrant de 150 cm, le renfort de la traverse
+basse est à cintrer de 0,5 % dans le sens de la vitre. Procéder à une précontrainte vers le haut du
+dormant en partie supérieure lors du montage d'un caisson de volet roulant. De plus, à partir d'une
+largeur d'ouvrant de 200 cm, il est nécessaire de prévoir des équerres en acier galvanisé
+(F90-67- 9669) dans la feuillure de vitrage. Ces pièces stabilisatrices doivent être fixées de
+façon à ne pas obturer les ouvertures prévues pour la ventilation et la décompression [1 p. 311].
+
+La coupe qui accompagne les opérations (dessin non à l'échelle) montre la traverse basse de
+l'ouvrant 2418 (renfort V030) au-dessus de la traverse haute du dormant 6101 (renfort V601), les
+deux battements 0140 (renfort 9111.1) fixés sur l'un et sur l'autre, la pièce F00-65- 0391
+dessinée dans le battement et le cordon de « Silicone » au raccord du battement sur le dormant
+[1 p. 311].
+
+![Coupe du basculant, ouvrant 2418, battements 0140, dormant 6101 et pièce 0391](/assets/procedures/systemes-speciaux-evo2008/basculant-coupe-2418-0140-6101-0391.png)
+
+La légende de la coupe : ouvrant F95-06- 2418, renfort F00-40- V030 ; battement F90-25- 0140,
+renfort F00-40- 9111.1 ; dormant F91-01- 6101, renfort F00-40- V601. La pièce 0391 n'est ni
+désignée ni listée ailleurs sur les pages du basculant.
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 311)
+
+## Coupes du basculant
+
+La planche « Description du système — Basculant » (dessins non à l'échelle) montre une élévation
+de la fenêtre basculante, avec le losange des pivots au milieu, et les traits de coupe A-A
+(verticale, au milieu), B-B (horizontale, au-dessus des pivots) et C-C (horizontale, au-dessous)
+[1 p. 312].
+
+![Coupe verticale A-A du basculant et élévation avec les traits de coupe](/assets/procedures/systemes-speciaux-evo2008/basculant-coupe-verticale-a-a.png)
+
+La coupe verticale A-A est dessinée en deux variantes côte à côte, en haut la traverse haute et en
+bas la traverse basse : à gauche, un dormant à renfort rectangulaire ; à droite, un dormant plus
+haut à renfort ouvert. Les variantes ne sont pas légendées sur la planche.
+
+![Coupes horizontales B-B et C-C du basculant](/assets/procedures/systemes-speciaux-evo2008/basculant-coupes-horizontales-b-b-c-c.png)
+
+Les coupes horizontales B-B et C-C montrent chacune les deux montants, en deux variantes l'une
+sous l'autre, avec les mêmes dormants que la coupe A-A.
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 312)
+
+## Cotes de débit du basculant
+
+Deux planches « Côtes de débit du système — Basculant » (échelle 1:2) donnent, pour chacun des
+deux dormants, la coupe verticale cotée, l'élévation repérée et les formules de débit. Toutes les
+cotes partent de la **DHT** (dimension hors tout du dormant, DHT_L en largeur, DHT_H en hauteur) ;
+**X** est l'encombrement du pivot, donné par le quincaillier. Les repères ① à ⑧ sont ceux du
+dessin [1 p. 313-314].
+
+| Repère | Désignation | Dormant 6101 (p. 313) | Dormant 2502 (p. 314) |
+| --- | --- | --- | --- |
+| ① | DHT_L, DHT_H — dimension hors tout largeur, hauteur | - | - |
+| ② | Dimension extérieure ouvrant | DHT – 140 mm | DHT – 182 mm |
+| ③ | Dimension vitrage | DHT – 297 mm | DHT – 339 mm |
+| ④ | Dimension feuillure | DHT – 180 mm | DHT – 222 mm |
+| ⑤ | Longueur battement horizontal haut | DHT_L – 72 + 1 | DHT_L – 114 + 1 |
+| ⑥ | Longueur battement horizontal bas | DHT_L – 72 – 1 | DHT_L – 114 – 1 |
+| ⑦ | Longueur battement vertical bas | 0,5 x (DHT_H – 72 – X) + 10 | 0,5 x (DHT_H – 114 – X) + 10 |
+| ⑧ | Longueur battement vertical haut | 0,5 x (DHT_H – 72 – X) + 10 | 0,5 x (DHT_H – 114 – X) + 10 |
+
+Les cotes portées sur les deux coupes verticales, en mm, décrites par leur place sur le dessin
+[1 p. 313-314] :
+
+| Cote portée sur la coupe | Dormant 6101 (p. 313) | Dormant 2502 (p. 314) |
+| --- | --- | --- |
+| À gauche, hauteur du dormant (en haut et en bas sur la 6101, en bas seulement sur la 2502) | 64 | 85 |
+| À gauche, entre le dormant et le battement de l'ouvrant, en haut et en bas | 6 | 6 |
+| À gauche, en bas, entre ce jeu de 6 mm et le départ de la dimension vitrage ③ | 78,5 | 78,5 |
+| À droite, en haut et en bas, du bord du dormant au bord du battement | 36 | 57 |
+| Au centre, en haut et en bas, entre le battement et la feuillure | 12 | 12 |
+| À droite, en bas, entre le bas de la dimension feuillure ④ et le bord du battement | 20 | 20 |
+
+![Cotes de débit du basculant sur dormant 6101](/assets/procedures/systemes-speciaux-evo2008/basculant-debit-6101-0140-2418.png)
+
+Sur la planche du dormant 6101, les profilés et leurs Iz (cm⁴) sont : dormant F91-01- 6101,
+renfort F00-40- V601, 3,2 ; battement F90-25- 0140, renfort F00-40- 9111.1, 2.6 ; ouvrant
+F95-06- 2418, renfort F00-40- V030, 4,5 ; Iz-total 10,3 [1 p. 313].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 313)
+
+![Cotes de débit du basculant sur dormant 2502](/assets/procedures/systemes-speciaux-evo2008/basculant-debit-2502-1172-2418.png)
+
+Sur la planche du dormant 2502, les profilés et leurs Iz (cm⁴) sont : dormant F95-01- 2502,
+renfort F00-40- V030, \*4,5, ou F00-40- V031, 5,3 ; battement **F00-25- 1172**, renfort
+F00-40- 9111.1, \*2,6 ; ouvrant F95-06- 2418, renfort F00-40- V030, \*4,5 ; Iz-total 12,6.
+L'astérisque signifie « renfort représenté » [1 p. 314]. Le battement y est nommé 1172, là où la
+liste des profilés ne connaît que le 0140 (**INC-264**), et l'Iz-total de 12,6 n'est pas la somme
+des trois valeurs marquées d'un astérisque (4,5 + 2,6 + 4,5 = 11,6) (**INC-265**).
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 314)
+
+# Porte d'entrée (registre 6.3)
+
+La porte d'entrée du système 70 de 2008 se construit avec les ouvrants de 118 mm 2415 (ouvrant
+vers l'extérieur) et 2416 (ouvrant vers l'intérieur), posés sur le seuil aluminium à rupture
+thermique 9C42. Tous les dormants, meneaux et battements peuvent être utilisés [1 p. 315]. La même
+porte, dans le manuel de 2023, est sur [Porte d'entrée du système 70](/procedures/porte-d-entree-systeme-70.md) ;
+le seuil 9C42 de 2008 est détaillé sur [Seuil aluminium de porte 9C42 du système 70,
+2008](/procedures/seuil-alu-9c42-systeme-70-evo2008.md).
+
+## Nomenclature des profilés de la porte d'entrée
+
+La table donne, pour chaque élément, sa désignation, sa hauteur quand elle est écrite et sa
+référence de commande [1 p. 315].
+
+| Élément | Désignation | Hauteur (mm) | Référence de commande |
+| --- | --- | --- | --- |
+| 2415 | ouvrants vers l'extérieur | 118 | F95-13- 2415 |
+| 2416 | ouvrants vers l'intérieur | 118 | F95-13- 2416 |
+| V003 | renfort pour ouvrant F95-13- 2415 et pour ouvrant F95-13- 2416 | - | F00-40- V003 |
+| V004 | renfort pour ouvrant F95-13- 2415 et pour ouvrant F95-13- 2416 | - | F00-40- V004 |
+| 0303 | élargisseur | - | F90-64- 0303 |
+| 9287.2 | set d'insert pour soudure d'angle | - | F00-94- 9287.2 |
+| 9679 | outil de serrage | - | F00-87- 9679 |
+
+## Plan des profilés de la porte d'entrée
+
+La planche (échelle 1:2) dessine les deux ouvrants, le rejet d'eau 9F46, le seuil 9C42 dans ses
+deux sens, l'insert soudable et l'élargisseur 0303, chacun avec ses cotes et, pour les profilés
+renforcés, le tableau Renfort / Iz (moment d'inertie du renfort en cm⁴). Sous les deux ouvrants est écrit « 9326 support de cale de
+vitrage » [1 p. 316].
+
+| Profilé | Référence de commande | Largeur (mm) | Hauteur hors tout (mm) | Décomposition, côté droit (mm) | Renforts | Iz (cm⁴) | Coupe |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| Ouvrant 2416 | F95-13- 2416 | 70 | 118 (98 + 20 à gauche) | 20 + 98 | V003, V004, V124 | 12,3 (V003) | ![Ouvrant 2416, porte d'entrée](/assets/procedures/systemes-speciaux-evo2008/porte-ouvrant-2416-v003-v004-v124.png) |
+| Ouvrant 2415 | F95-13- 2415 | 70 | 118 | 20 + 78 + 20 | V003, V004, V124 | 12,3 (V003) | ![Ouvrant 2415, porte d'entrée](/assets/procedures/systemes-speciaux-evo2008/porte-ouvrant-2415-v003-v004-v124.png) |
+| Élargisseur 0303 | F90-64- 0303 | 70 | 94 | 20 + 90 | chambre haute V026, V025, V045, V046 ; chambre basse V031, V030 | V026 3,7 ; V025 3,9 ; V045 2,7 ; V046 2,7 ; V031 5,3 ; V030 4,5 | ![Élargisseur 0303, porte d'entrée](/assets/procedures/systemes-speciaux-evo2008/porte-elargisseur-0303-renforts.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 316)
+
+Sur l'élargisseur 0303, les renforts en gras sont V026 (chambre haute) et V031 (chambre basse) ;
+le registre 1.2 (p. 13) ne donne au 0303 que le V045 en chambre haute (**INC-266**). La référence
+de commande de l'élargisseur est écrite F90-64- 0303 sur les pages de la porte (p. 315, 316 et
+texte de la p. 318), F95-64- 0303 dans la liste de la p. 318 et au registre 1.2 (**INC-268**).
+
+Le rejet d'eau 9F46 et le seuil 9C42 sont dessinés sans renfort [1 p. 316] :
+
+| Profilé | Référence de commande | Cotes relevées (mm) | Coupe |
+| --- | --- | --- | ---: |
+| Rejet d'eau 9F46 | F95-50- 9F46 | largeur 44,5 ; 16,8 jusqu'au premier pli ; hauteur 18 ; joint brosse dessiné sous l'aile | ![Rejet d'eau 9F46, porte d'entrée](/assets/procedures/systemes-speciaux-evo2008/porte-rejet-d-eau-9f46.png) |
+| Seuil 9C42, nez à droite | F95-50- 9C42 | largeur de la partie haute 70 ; hauteur 20 | ![Seuil 9C42, nez à droite](/assets/procedures/systemes-speciaux-evo2008/porte-seuil-9c42-a.png) |
+| Seuil 9C42, nez à gauche | F95-50- 9C42 | largeur de la partie haute 70 ; hauteur 20 | ![Seuil 9C42, nez à gauche](/assets/procedures/systemes-speciaux-evo2008/porte-seuil-9c42-b.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 316)
+
+La photo de la même planche montre deux profilés d'angle en vis-à-vis, chacun avec son insert
+dépassant du renfort, légendée « F00-94- 9287 Insert soudable » et « F00-87- 9679 Outil de
+serrage » [1 p. 316].
+
+![Insert soudable 9287 et outil de serrage 9679](/assets/procedures/systemes-speciaux-evo2008/porte-insert-9287-outil-9679.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 316)
+
+## Dimensions maximales de l'ouvrant de porte
+
+La table donne largeur × hauteur maximales de l'ouvrant, en mm, selon la finition des profilés,
+avec les renforts V003 / V004 dans les deux cas [1 p. 317].
+
+| Porte | Profilés blanc / beige / gris, avec renfort V003 / V004 (mm) | Profilés filmés, avec renfort V003 / V004 (mm) |
+| --- | --- | --- |
+| Porte 1 vantail | 1100 x 2300 | 1000 x 2200 |
+| Porte 2 vantaux | 1000 x 2300 | 900 x 2200 |
+
+\* Poids maxi du remplissage : 30 kg/m² [1 p. 317]. Le manuel de 2023 donne 1100 × 2200 mm à la
+porte 1 vantail en profilés plaxés (**CTR-99**).
+
+## Directives de fabrication de la porte d'entrée
+
+Placer dans les quatre coins les inserts de soudure F00-94- 9287 dans le renfort F00-40- V003.
+L'équerre de fond de feuillure F00-67- 9670 n'est pas nécessaire. Afin d'améliorer la résistance
+au flambage des profils 2415 / 2416, on utilise l'insert de soudure F00-94- 9287 placé dans le
+renfort fermé F00-40- V003 [1 p. 317].
+
+Fabrication [1 p. 317] :
+
+- Renforcer les profils 2415 / 2416 soit avec le renfort acier F00-40- V004 / V003, ou
+  F00-40- 9119 ;
+- couper les renforts à 90° ;
+- enfoncer l'insert dans le renfort jusqu'à buter ;
+- arracher avec l'outil référence 9679 la languette de blocage qui dépasse.
+
+Pour une porte, 8 inserts sont nécessaires. 1 set F46-94- 9287 comprend 8 inserts ; 1 UE (unité
+d'emballage) comprend 5 sets, donc 40 inserts [1 p. 317]. Le set est écrit F00-94- 9287.2 dans la
+nomenclature de la p. 315 et F46-94- 9287 ici (**INC-267**).
+
+**Nota : dans le cas d'une porte d'entrée, il faut renforcer systématiquement le dormant, l'ouvrant
+ou la traverse éventuelle, ceci dans toutes les teintes y compris le blanc et le 607** [1 p. 317].
+
+## Mise en place de l'insert de soudure
+
+Les trois photos de la colonne de gauche montrent la mise en place de l'insert dans le bout d'un
+profilé de porte, dans l'ordre des chiffres portés sur les photos [1 p. 317] :
+
+1. Enfoncer l'insert jusqu'à la butée. Seule la languette en T dépasse du profil.
+2. Placer l'outil tel que représenté ci-dessous.
+3. Basculer l'outil du côté vitrage vers le côté ferrure (sens 3) … et fini.
+
+![Mise en place de l'insert 9287, photos 1 à 3](/assets/procedures/systemes-speciaux-evo2008/porte-insert-9287-mise-en-place-1-2-3.png)
+
+Sur la photo 1, la flèche 1 montre la languette qui dépasse ; sur la photo 2, la flèche 2 montre
+l'outil posé sur le bout du profilé et la flèche courbe 3 le sens de bascule ; la dernière photo
+montre l'insert en place et l'outil à côté.
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 317)
+
+## Utilisation de l'élargisseur 0303
+
+Un **élargisseur** est un profil accolé au dormant pour élargir la menuiserie
+([glossaire](/reference/glossaire.md)) ; sur la porte d'entrée, l'élargisseur 0303 se combine au
+dormant 2502 du châssis fixe voisin (coupes C-C, D-D et E-E ci-dessous). Profilés et pièces de l'utilisation de l'élargisseur
+[1 p. 318] :
+
+| Élément | Référence de commande |
+| --- | --- |
+| Élargisseur | F95-64- 0303 |
+| Seuil à rupture thermique | F95-50- 9C42 |
+| Ouvrant | F95-13- 2416 |
+| Dormant | F95-01- 2502 |
+| Renfort pour élargisseur | F00-40- V026 / F00-40- V046 ; F00-40- V025 / F00-40- V045 ; F00-40- V031 / F00-40- V030 |
+| Set d'assemblage | F90-77- 9714 |
+| Gabarit de perçage | F90-70- 9918 |
+
+Deux élévations, « Seuil filant » et « Seuil non filant », montrent une porte à gauche et un
+châssis fixe à droite, avec les traits de coupe A-A et B-B sur la porte, C-C et E-E sur le fixe
+[1 p. 318].
+
+![Élévations seuil filant et seuil non filant avec traits de coupe](/assets/procedures/systemes-speciaux-evo2008/porte-elargisseur-0303-elevations-seuil-filant-non-filant.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 318)
+
+**Seuil aluminium filant** [1 p. 318] :
+
+- On peut obtenir les mêmes largeurs de vue de vitrage grâce à l'élargisseur F90-64- 0303.
+- Les cotes de débit pour le profilé d'élargisseur F90-64- 0303 en combinaison avec le dormant
+  F95-01- 2502 se trouvent au « chapitre 3.1, page 2, Point 4 Meneau/traverse » (**INC-269** ; les
+  cotes de débit des meneaux sont sur [Cotes de débit du système 70](/profiles/systeme-70-cotes-de-debit.md)).
+- Contre-profiler l'élargisseur avec la fraise pour meneau.
+- Dans le cas de l'utilisation de l'élargisseur F90-64- 0303 avec le seuil F95-50- 9C42, il
+  convient de déligner le pied de l'élargisseur selon croquis (coupe D-D) et d'étancher avec du
+  silicone. Le set d'assemblage F90-77- 9714 est fixé à l'aide de vis pour PVC (coupe D-D) en
+  utilisant le gabarit de perçage F90-70- 9918.
+
+**Seuil non filant** — en utilisant le profilé d'élargisseur F90-64- 0303 avec le dormant F95-01-
+2502, il convient de couper le profilé selon le croquis (croquis 1 / coupe E-E) [1 p. 318] :
+
+- a) En partant de la cote de vitrage de 65 mm, déligner le profilé sur toute sa longueur.
+- b) En partant de la cote de vitrage et de la cote basse du profilé 49,2 mm, couper le profilé à
+  17° à une cote de 49 mm et sur une profondeur de 15 mm.
+
+Le profilé d'élargisseur sera étanché à l'aide de silicone et fixé au moyen du set d'assemblage
+F90-77- 9714 en utilisant le gabarit de perçage F90-70- 9918 [1 p. 318].
+
+![Croquis 1, coupe E-E, élargisseur 0303 sur dormant avec seuil non filant](/assets/procedures/systemes-speciaux-evo2008/porte-elargisseur-0303-croquis-1-coupe-e-e.png)
+
+Le croquis 1 (« Utilisation sur dormant avec seuil non filant ») dessine l'élargisseur 0303 coupé :
+largeur (70) entre parenthèses, hauteur 63\* à droite (repère a), 47 à gauche jusqu'à la coupe
+biaise, angle 17°\* et largeur basse 49.2\* (repères b) ; « \* = déligné » [1 p. 318]. Le texte
+parle d'une cote de vitrage de 65 mm, le croquis cote 63\* (**VER-119**).
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 318)
+
+## Coupes de la porte d'entrée avec seuil filant
+
+La planche (échelle 1:2) donne quatre coupes de la porte et de son fixe latéral sur seuil filant :
+A-A (traverse haute de la porte), C-C (traverse haute du fixe avec élargisseur 0303), B-B (pied de
+la porte sur le seuil 9C42), D-D (pied du fixe sur le seuil). Les références et les renforts sont
+écrits dans les chambres, le V003 de l'ouvrant entre parenthèses [1 p. 319].
+
+![Coupes A-A et C-C de la porte d'entrée, seuil filant](/assets/procedures/systemes-speciaux-evo2008/porte-seuil-filant-coupes-a-a-c-c.png)
+
+- **Coupe A-A** : dormant 2502 (renfort V031) au-dessus de l'ouvrant 2416 (renfort (V003) ou
+  V004) ; hauteur totale 175 ; à droite 57 (dormant), 98 (ouvrant), 20 ; en haut 70 et 5 ; en bas
+  20 et 70.
+- **Coupe C-C** : dormant 2502 (V031) sur l'élargisseur 0303 (V030 dans la chambre haute, V026
+  dans la chambre basse) ; hauteur totale 175 ; à droite 65, 90, 20 ; en haut 70 et 5.
+- \* « Pour éviter des déformations il convient de ventiler toutes les préchambres pour les
+  profilés autres que blanc » : les astérisques du dessin marquent les préchambres à ventiler.
+
+![Coupes B-B et D-D de la porte d'entrée, seuil filant](/assets/procedures/systemes-speciaux-evo2008/porte-seuil-filant-coupes-b-b-d-d.png)
+
+- **Coupe B-B** : ouvrant 2416 ((V003) / V004) sur le seuil 9C42, rejet d'eau 9C76 sur la face
+  extérieure ; à gauche 98, 10, 20 ; à droite 20, 98, 10 et 128 au total ; au pied 8 ; en bas 70
+  et 90 ; angle de 5° sur la parclose.
+- **Coupe D-D** : élargisseur 0303 (V026 dans la chambre haute, V030 dans la chambre basse) sur
+  le seuil 9C42, pied « déligné » ; « Set d'assemblage 9714 et vissage » ; à gauche 128, 8, 7 et
+  un angle de 9° ; à droite 20, 88, 20 ; en haut 70 ; angle de 5°.
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 319)
+
+Le rejet d'eau de la coupe B-B est légendé 9C76, alors que la planche des profilés dessine le
+9F46 et que le seuil 9C42 de 2008 reçoit le 9F46 (voir le registre 5.8) ; les deux références sont
+reportées telles qu'écrites.
+
+## Coupes de la porte d'entrée avec seuil non filant
+
+Même porte, avec un seuil qui ne passe que sous la porte : A-A et C-C comme sur seuil filant, B-B
+sur le seuil 9C42, E-E au pied du fixe, où l'élargisseur coupé repose sur un dormant 2502 [1 p. 320].
+
+![Coupes A-A et C-C de la porte d'entrée, seuil non filant](/assets/procedures/systemes-speciaux-evo2008/porte-seuil-non-filant-coupes-a-a-c-c.png)
+
+- **Coupe A-A** : dormant 2502 (V031), ouvrant 2416 ((V003) / V004) ; 175 ; à droite 57, 98, 20 ;
+  en haut 70 et 5 ; en bas 20 et 70.
+- **Coupe C-C** : dormant 2502 (V031), élargisseur 0303 (V030 en haut, V026 en bas) ; 175 ; à
+  droite 65, 90, 20 ; en haut 70 et 5. Même note sur la ventilation des préchambres.
+
+![Coupes B-B et E-E de la porte d'entrée, seuil non filant](/assets/procedures/systemes-speciaux-evo2008/porte-seuil-non-filant-coupes-b-b-e-e.png)
+
+- **Coupe B-B** : ouvrant 2416 ((V003) / V004) sur le seuil 9C42, rejet d'eau 9C76 ; à gauche 98,
+  10, 20 ; au pied 8 ; à droite 20, 98, 10 et 128 ; en bas **76** et 90 (70 et 90 sur la coupe
+  B-B du seuil filant) ; angle de 5°.
+- **Coupe E-E** : élargisseur 0303 coupé (V026) — « Elargisseur 0303 coupé (voir Registre 6.3,
+  Page 4) » — sur le dormant 2502 (V031) ; « Set d'assemblage 9714 et vissage » ; « Retiré ou
+  coupé le joint au droit des trous d'évacuation d'eau » ; « étanchéité » à gauche ; 128 à
+  gauche ; à droite 20, 43, 65 ; en bas 70 ; 5 à gauche.
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 320)
+
+# Coulissant à déport (registre 6.4)
+
+Un **coulissant à déport** (la planche écrit « coulissante à déport ») est un châssis dont
+l'ouvrant coulisse le long de la partie fixe (flèches des schémas ci-dessous) ; le classeur
+n'en décrit pas la ferrure ([glossaire](/reference/glossaire.md)). Pour la fabrication d'une coulissante à déport, les profils ouvrants F91-06- 6112, F91-06- 6115,
+F91-06- 6121, F91-06- 6123 et F95-13- 2416 peuvent être utilisés. Dimensions maximales des
+ouvrants : voir les abaques des pages 02 à 06 (ci-dessous) [1 p. 321].
+
+## Schémas de composition
+
+Les quatre schémas (dessins non à l'échelle) montrent les compositions prévues, écrites sous
+chaque schéma ; sur les dessins, les parties coulissantes portent une flèche et les fixes une
+croix « + » [1 p. 321].
+
+| Schéma | Composition |
+| --- | --- |
+| A | 1 coulissant / 1 fixe, gauche ou droit |
+| G | 1 coulissant / 2 fixes |
+| C | 2 coulissants / 2 fixes |
+| K | 2 coulissants / 1 fixe |
+
+![Schémas A, G, C et K du coulissant à déport](/assets/procedures/systemes-speciaux-evo2008/coulissant-deport-schemas-a-g-c-k.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 321)
+
+## Conditions de fabrication
+
+Dans le cas de coloris autres que blanc, les dimensions maximales des ouvrants sont valables pour
+des éléments isolés. Ne pas dépasser la largeur de 2,50 m par élément dans le cas d'un
+accouplement. D'autre part, il s'agit de prévoir des éléments de dilatation entre un accouplement
+(par ex. …0934) [1 p. 321].
+
+**Quincailleries.** Attention au poids de l'élément par rapport à la quincaillerie utilisée ;
+consulter votre fournisseur habituel. Entraxe des points de verrouillage : 800 mm maxi [1 p. 321].
+
+**Renforcement.** Les dormants, ouvrants, meneaux sont à renforcer systématiquement. Pour des
+raisons statiques, n'utilisez que les meneaux F95-15- 2425 et F91-15- 2427 en liaison avec le
+dormant. Dans tous les cas, un calcul de vérification statique est obligatoire (voir [Statique et
+moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md)). Pour des éléments
+très exposés statiquement, l'utilisation du renforcement supplémentaire F00-40- 9120 et de son
+habillage F00-96- 1114 est indiqué [1 p. 321].
+
+## Abaques des dimensions maximales d'ouvrant
+
+Chaque abaque « Dimension maxi ouvrants » est valable pour les coloris blanc 654 / ton pierre 607
+/ gris 147, sur dormant F95-01- 2502 (renfort F00-40- V030) et meneau F95-15- 2425 (renfort
+F00-40- 9132), avec la mention « Les quincailleries doivent correspondre au poids de l'élément » et
+un entraxe de verrouillage maxi de 800 mm. L'axe vertical est la hauteur d'ouvrant en cm (max.
+210), l'axe horizontal la largeur d'ouvrant en cm ; une courbe sépare les dimensions admises
+(sous la courbe) des autres. Les tables ci-dessous relèvent la hauteur maximale lue sur la courbe
+à chaque graduation de 10 cm de largeur, précision de lecture ±0,5 cm ; avant le départ de la
+courbe, la hauteur maximale est la borne de 210 cm du cadre [1 p. 322-326].
+
+Sur les trois premières planches, une remarque renvoie à la courbe : « des dimensions
+supérieures peuvent être atteintes avec l'utilisation du renfort F00-40- 9120 et de son
+habillage F00-96- 1114 (voir pages 5 et 6) » [1 p. 322-324].
+
+### Ouvrants 6112 et 6121, renfort V058 (p. 322)
+
+Ouvrant F91-06- 6112 (F00-40- V058) ou F91-06- 6121 (F00-40- V058) ; largeur max. 150 cm
+[1 p. 322].
+
+| Largeur d'ouvrant (cm) | 40 à 80 | 90 | 100 | 110 | 120 | 130 | 140 | 150 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Hauteur d'ouvrant maximale (cm) | 210 | 204,5 | 199 | 194,5 | 190,5 | 187 | 185 | 183,5 |
+
+![Abaque du coulissant à déport, ouvrants 6112 et 6121, avec la coupe verticale](/assets/procedures/systemes-speciaux-evo2008/coulissant-deport-abaque-6112-6121-v058.png)
+
+La coupe verticale à gauche de l'abaque montre la traverse haute et la traverse basse : dormant
+F95-01- 2502 (V030), ouvrant F91-06- 6112 (V058) ou F91-06- 6121 (V058), jeu de 12 mm coté en
+haut et en bas. L'élévation en haut à gauche montre un coulissant et un fixe (+).
+
+![Coupe horizontale du coulissant à déport, ouvrants 6112 ou 6121](/assets/procedures/systemes-speciaux-evo2008/coulissant-deport-coupe-horizontale-6112-6121.png)
+
+La coupe horizontale, de gauche à droite : dormant F95-01- 2502 (F00-40- V030), ouvrant F91-06-
+6112 (F00-40- V058) ou F40-06- 6121 (F00-40- V058) (**INC-271**), meneau F95-15- 2425 (F00-40-
+9132), dormant F95-01- 2502 (F00-40- V030) ; jeu de 12 mm coté deux fois.
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 322)
+
+### Ouvrants 6115 et 6123, renfort V057 (p. 323)
+
+Ouvrant F91-06- 6115 (F00-40- V057) ou F91-06- 6123 (F00-40- V057) ; largeur max. 190 cm
+[1 p. 323].
+
+| Largeur d'ouvrant (cm) | 60 à 100 | 110 | 120 | 130 | 140 | 150 | 160 | 170 | 180 | 190 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Hauteur d'ouvrant maximale (cm) | 210 | 205 | 201 | 197,5 | 195 | 193 | 191,5 | 190,5 | 190,5 | 190 |
+
+![Abaque du coulissant à déport, ouvrants 6115 et 6123, avec la coupe verticale](/assets/procedures/systemes-speciaux-evo2008/coulissant-deport-abaque-6115-6123-v057.png)
+
+La coupe verticale : dormant F95-01- 2502 (V030), ouvrant F91-06- 6115 (V057) ou F91-06- 6123
+(V057), jeu de 12 mm en haut et en bas.
+
+![Coupe horizontale du coulissant à déport, ouvrants 6115 ou 6123](/assets/procedures/systemes-speciaux-evo2008/coulissant-deport-coupe-horizontale-6115-6123.png)
+
+La coupe horizontale : dormant F95-01- 2502 (V030), ouvrant F91-06- 6115 (V057) ou F91-06- 6123
+(V057), meneau F95-15- 2425 (9132), dormant F95-01- 2502 (V030) ; jeu de 12 mm coté deux fois.
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 323)
+
+### Ouvrant 2416, renfort V003 (p. 324)
+
+Ouvrant F95-13- 2416 (F00-40- V003) ; largeur max. 190 cm [1 p. 324].
+
+| Largeur d'ouvrant (cm) | 70 à 130 | 140 | 150 | 160 | 170 | 180 | 190 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Hauteur d'ouvrant maximale (cm) | 210 | 205,5 | 204 | 203 | 202 | 201,5 | 201,5 |
+
+![Abaque du coulissant à déport, ouvrant 2416, avec la coupe verticale](/assets/procedures/systemes-speciaux-evo2008/coulissant-deport-abaque-2416-v003.png)
+
+La coupe verticale : dormant F95-01- 2502 (V030), ouvrant F95-13- 2416 (V003), jeu de 12 mm en
+haut et en bas.
+
+![Coupe horizontale du coulissant à déport, ouvrant 2416](/assets/procedures/systemes-speciaux-evo2008/coulissant-deport-coupe-horizontale-2416.png)
+
+La coupe horizontale : dormant F95-01- 2502 (V030), ouvrant F95-13- 2416 (V003), meneau F95-15-
+2425 (9132), dormant F95-01- 2502 (V030) ; jeu de 12 mm coté deux fois.
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 324)
+
+### Avec renfort supplémentaire 9120 et habillage 1114 (p. 325 et 326)
+
+Les deux dernières planches regroupent les cinq ouvrants — F91-06- 6112 et F91-06- 6121 (F00-40-
+V058), F91-06- 6115 et F91-06- 6123 (F00-40- V057), F95-13- 2416 (F00-40- V003) — sur meneau
+F95-15- 2425 (F00-40- 9132) ; largeur max. 190 cm. Les coupes horizontales dessinent sur le
+meneau l'habillage F00-96- 1114 (F00-40- 9120) [1 p. 325-326].
+
+**Planche p. 325.** Trois courbes, reliées par des flèches aux dessins des ouvrants à droite de
+l'abaque : la courbe basse à la flèche partant du 6112, la courbe médiane à celle partant du 6115,
+la courbe haute à celle partant du 2416 ; les dessins du 6123 et du 6121 n'ont pas de flèche
+propre. La courbe basse s'arrête sur une verticale à 150 cm de largeur, qui descend jusqu'au bas du
+cadre [1 p. 325].
+
+| Largeur d'ouvrant (cm) | 80 à 110 | 120 | 125 | 130 | 140 | 150 | 160 | 170 | 180 | 190 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Courbe basse, flèche du 6112 (cm) | 210 | 204,5 | - | 201 | 199 | 197,5 | - | - | - | - |
+| Courbe médiane, flèche du 6115 (cm) | 210 | 210 | 210 | 207,5 | 204,5 | 203 | 201,5 | 201 | 200,5 | 200 |
+| Courbe haute, flèche du 2416 (cm) | 210 | 210 | 210 | 210 | 210 | 210 | 210 | 207 | 205 | 205 |
+
+La colonne 125 cm n'est pas une graduation : c'est le départ de la courbe médiane, entre les
+graduations 120 et 130. Au-delà de 150 cm, la courbe basse n'existe plus (`-`) : la verticale à
+150 cm borne la largeur.
+
+![Abaque du coulissant à déport avec renfort 9120 et habillage 1114, trois courbes](/assets/procedures/systemes-speciaux-evo2008/coulissant-deport-abaque-9120-1114-4130g.png)
+
+![Coupe horizontale du coulissant à déport avec habillage 1114, profilés 4130G et 4132G](/assets/procedures/systemes-speciaux-evo2008/coulissant-deport-coupe-horizontale-9120-1114-4130g-4132g.png)
+
+La coupe horizontale de la p. 325 : dormant F95-01- 2502 (F00-40- V030) surmonté du profilé
+F03-79- 4130G à gauche et à droite ; ouvrant F91-06- 6112 / 6121 (F00-40- V057), F91-06- 6115 /
+6123 (F00-40- V058) ou F95-13- 2416 (F00-40- V003) ; meneau F95-15- 2425 (F00-40- 9132) surmonté
+du profilé F03-79- 4132G et de l'habillage F00-96- 1114 (F00-40- 9120). Les renforts V057 / V058
+de cette légende sont inversés par rapport à la liste de la même page (**INC-270**). Les profilés
+4130G et 4132G ne sont désignés nulle part.
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 325)
+
+**Planche p. 326.** Même liste, même légende d'ouvrants, mais l'abaque ne porte aucune courbe :
+seulement une verticale à 150 cm partant de 197,5 cm vers le bas et trois flèches, venant des
+dessins du 2416 (vers 190 cm × 205 cm), du 6115 (vers 190 cm × 200 cm) et du 6112 (vers 150 cm ×
+197,5 cm) [1 p. 326]. La coupe horizontale est celle de la p. 325 sans les profilés 4130G et
+4132G : dormant 2502 (V030), ouvrant 6112 / 6121 (V057), 6115 / 6123 (V058) ou 2416 (V003), meneau
+2425 (9132) avec habillage F00-96- 1114 (F00-40- 9120), dormant 2502 (V030). Ce que la p. 326
+autorise sous le point de chaque flèche n'est pas tracé (**VER-120**).
+
+![Abaque du coulissant à déport avec renfort 9120 et habillage 1114, sans courbe](/assets/procedures/systemes-speciaux-evo2008/coulissant-deport-abaque-9120-1114.png)
+
+![Coupe horizontale du coulissant à déport avec habillage 1114](/assets/procedures/systemes-speciaux-evo2008/coulissant-deport-coupe-horizontale-9120-1114.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 326)
+
+# Ouvrant vers l'extérieur (registre 6.5)
+
+La fenêtre ouvrant vers l'extérieur associe le dormant 2403 et l'ouvrant 2418 [1 p. 327]. Les
+coupes de cette combinaison (dormant 2403 / ouvrant 2418 et battements) sont sur [Types
+d'ouverture et plans de combinaison du système 70](/profiles/systeme-70-plans-de-combinaison.md),
+le drainage de l'ouvrant vers l'extérieur sur [Directives générales de fabrication du système 70,
+2008](/procedures/directives-generales-systeme-70-evo2008.md#drainage-et-décompression-registre-52).
+
+## Nomenclature des profilés
+
+La table reprend la nomenclature « Ouvrant vers l'extérieur » : désignation, dimension écrite et
+référence de commande [1 p. 327].
+
+| Élément | Dimension écrite (mm) | Référence de commande |
+| --- | --- | --- |
+| Dormant 2403 | 66 | F95-01- 2403 |
+| Ouvrant 2418 | 92 | F95-06- 2418 |
+| Renfort pour dormant F95-01- 2403 | - | F00-40- V045 |
+| Renfort pour ouvrant F95-06- 2418 | - | F00-40- V030 |
+| Équerre de fond de feuillure G/D pour assemblage mécanique meneau (accessoire non représenté) | - | F90-77- 9714 |
+
+Les dimensions écrites (66 et 92 mm) ne sont pas les hauteurs cotées sur le plan des profilés
+(70 et 96 mm) (**INC-272**).
+
+## Plan des profilés
+
+Le plan (échelle 1:2) donne les deux profilés avec leurs cotes, leur renfort et son Iz (cm⁴), et
+les accessoires écrits sous chacun [1 p. 328].
+
+| Profilé | Largeur (mm) | Hauteur hors tout (mm) | Décomposition (mm) | Renfort | Iz (cm⁴) | Accessoires écrits sous le profilé | Coupe |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| Dormant 2403 | 70 | 70 | 20 + 50 (à gauche) | V045 | 2,7 | F90-77- 9714 équerre de fond de feuillure ; F90-70- 9918 gabarit de perçage pour 9714 ; 9326 support de cale de vitrage | ![Dormant 2403, ouvrant vers l'extérieur](/assets/procedures/systemes-speciaux-evo2008/ouvrant-exterieur-dormant-2403-v045.png) |
+| Ouvrant 2418 | 70 | 96 | 20 + 56 + 20 (à droite) | V030 | 4,5 | F90-77- 9714 équerre de fond de feuillure ; F90-70- 9918 gabarit de perçage pour 9714 ; 9645 support de cale de vitrage | ![Ouvrant 2418, ouvrant vers l'extérieur](/assets/procedures/systemes-speciaux-evo2008/ouvrant-exterieur-ouvrant-2418-v030.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 328)
+
+# Ce que le document ne dit pas
+
+- Le modèle et l'encombrement X des pivots du basculant (« donné par le quincaillier »)
+- La valeur d'Iz du renfort V069 de l'ouvrant 2418
+- La désignation de la pièce 0391 dessinée dans le battement du basculant
+- Laquelle des deux variantes des coupes A-A, B-B et C-C correspond à quel dormant
+- La désignation du rejet d'eau 9C76 des coupes de la porte d'entrée
+- La ferrure du coulissant à déport et les hauteurs admises sous les flèches de l'abaque sans courbe (p. 326)
+- La désignation des profilés F03-79- 4130G et 4132G du coulissant à déport
+- Le débit de l'élargisseur 0303 avec le dormant 2502 au renvoi indiqué (INC-269)
+
+# Citations
+
+[1] [Système e.VOLUTION, plan des profilés et manuel technique, système F 91, édition août 2008](raw/profine-plans-profiles-e-volution-2008-08.pdf),
+registre 6, PDF p. 307 à 328
+
+# Voir aussi
+
+- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
+- [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md)
+- [Abaques de renforcement du système 70, 2008](/profiles/systeme-70-abaques-evo2008.md)
+- [Directives générales de fabrication du système 70, 2008](/procedures/directives-generales-systeme-70-evo2008.md)
+- [Plans des profilés e.VOLUTION, août 2008](/sources/plans-profiles-e-volution-2008.md)
+
+===== PAGE 2 : /procedures/seuil-alu-9c42-systeme-70-evo2008.md =====
+# Ce que fait cette procédure
+
+Le **seuil** est le profilé posé au sol, en bas d'une porte, sur lequel viennent s'assembler les
+montants du [dormant](/reference/glossaire.md) (le cadre fixe) et, s'il y en a, le
+[meneau](/reference/glossaire.md) (le montant fixe entre deux vantaux). Le seuil F95-50- **9C42** est
+un seuil de porte en aluminium, dessiné par le classeur KÖMMERLING « Système e.VOLUTION » d'août 2008
+(système F 91, système 70 de profine) dans son registre 5.8 « Seuils Aluminium de portes ». Ce
+registre est paginé à partir de 1 : sa page imprimée N est la page N + 291 du PDF [1 p. 292-296].
+
+Le **rejet d'eau** est le profilé fixé en bas de l'ouvrant qui écarte l'eau de pluie ; le **joint
+brosse** est une bande de poils qui ferme le jeu entre le rejet d'eau et le seuil. DHT est la
+dimension hors tout (la cote extérieure) d'un dormant ; AEV désigne les performances d'étanchéité à
+l'air, à l'eau et de résistance au vent ([glossaire](/reference/glossaire.md)). Les seuils du manuel
+profine de 2023 (9F67, 9F68, 9F69, Z043) sont sur
+[Mise en œuvre du seuil du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md) ; la coupe du
+9C42 et du 9F46 sous les ouvrants de porte 2416 et 2415 est sur
+[Types d'ouverture et plans de combinaison du système 70](/profiles/systeme-70-plans-de-combinaison.md).
+
+# Conditions et interdictions
+
+- « Seuil filant sur toute la largeur de l'élément l'assemblage des montants sur le seuil se faisant
+  à l'aide des sets d'assemblages. Ce type d'assemblage assure une étancheité et un positionnement
+  optimal. » [1 p. 292]
+- « Pour garantir une bonne étanchéité il est nécessaire d'étancher entre le dormant et
+  l'assemblage de seuil. » (écrit au montage du dormant et à celui du meneau) [1 p. 293-294]
+- Rejet d'eau 9F46 avec le seuil 9C42 : « **Attention:** Cette combinaison nécessite le respect d'un
+  jeu de 10 mm (voir croquis 1). » [1 p. 295]
+
+# Seuil 9C42 : plan et description
+
+## 1) Plan du seuil F95-50- 9C42
+
+Le plan est à l'échelle 1:1 : profilé de 70 mm de large et 20 mm de haut, avec un nez incliné vers
+la gauche ; l'inclinaison du dessus du nez est cotée **6°** (chiffre tourné, lu sur le rendu à
+400 dpi) [1 p. 292].
+
+| Profilé | Largeur (mm) | Hauteur (mm) | Inclinaison du nez (°) | Coupe |
+| --- | --- | --- | --- | ---: |
+| F95-50- 9C42 | 70 | 20 | 6 | ![Seuil 9C42](/assets/procedures/directives-evo2008/seuil-9c42-plan-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 292)
+
+Le même profilé, dessiné sur les planches des ouvrants de porte, est aussi sur
+[Assemblages du système 70](/profiles/systeme-70-assemblages.md#seuil-9c42-et-profilé-9f46-des-plans-de-2008).
+
+## 2) Description et 3) avantages
+
+« Seuil de porte en aluminium anodisé conforme aux normes pour personnes handicapées. » Le seuil
+possède, dans les termes de la planche [1 p. 292] :
+
+- « Ce seuil et à rupture de pont thermique. » (la rupture de pont thermique est une barrière
+  isolante entre la face intérieure et la face extérieure du profilé métallique) ;
+- « Ce seuil est conforme à la norme handicapés. » ;
+- « Il permet l'utilisation de gâche affleuranté. » (la gâche est la pièce qui reçoit le pêne de la
+  serrure).
+
+## Sets d'assemblage dormant et meneau
+
+Le set d'assemblage est la pièce vissée sur le seuil sur laquelle se pose le bas du montant. La
+page imprimée 1 du registre 5.8 porte la table « Set d'assemblage dormant » et l'encadré « Set d'assemblage meneaux » (meneau
+F95-15- 2425, set F95-94- 9C84), identiques à ceux du registre 1.6 du même
+classeur : la table, une ligne par dormant, est sur
+[Assemblages du système 70](/profiles/systeme-70-assemblages.md#sets-dassemblage-des-dormants-et-du-meneau-2425-p-47)
+[1 p. 292].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 292)
+
+![Set d'assemblage dormant : montant, set et seuil](/assets/procedures/directives-evo2008/seuil-9c42-sets-assemblage-dormant-evo2008.png)
+
+![Set d'assemblage meneau 9C84 sur le seuil, meneau 2425](/assets/procedures/directives-evo2008/seuil-9c42-set-assemblage-meneau-9c84-evo2008.png)
+
+# Étapes
+
+## 4) Montage dormant sur seuil
+
+1. « Couper le seuil F95-50- 9C42 (1) (Longueur= voir croquis suivant) » — le débit du seuil de
+   chaque dormant est donné aux pages imprimées 5 à 9 (voir *Débits par dormant*).
+2. « Prépercer selon croquis avec un foret de Ø 3 mm. »
+3. « Couper éventuellement le couvercle en PVC pour une fixation au sol ».
+4. « Visser le set d'assemblage adéquat (3) avec le seuil (1) à l'aide de vis inox (4) Ø 4,0 x
+   19 mm. »
+5. Étancher entre le dormant et l'assemblage de seuil.
+6. « Positionner le dormant sur le seuil/l'assemblage de seuil et visser latéralement avec des vis
+   auto foreuse (6) Ø 3,9 x 25 mm. »
+
+[1 p. 293]
+
+Le dessin (échelle 1:1) montre de haut en bas le montant du dormant, débité « DHT - 20 mm », le set
+d'assemblage (3) avec ses vis inox (4) et ses vis auto-foreuses (6), puis le seuil (1) et la pièce
+repérée (2), posée sur le seuil au droit du montant et que la planche ne légende pas. Le perçage Ø 3
+est coté 11 et 17 mm depuis un bord du seuil et à la distance X de son extrémité ; en pied, le seuil
+est coté 20 mm de haut, 5 mm de retrait, Y « Cote seuil » et DHT.
+
+![Montage du dormant sur le seuil 9C42 : set d'assemblage, vis et perçage](/assets/procedures/directives-evo2008/seuil-9c42-montage-dormant-sur-seuil-evo2008.png)
+
+| Repère ou cote du dessin | Valeur |
+| --- | --- |
+| (1) | seuil F95-50- 9C42 |
+| (3) | set d'assemblage adéquat (voir *Sets d'assemblage dormant et meneau*) |
+| (4) | vis inox Ø 4,0 × 19 mm |
+| (6) | vis auto-foreuse Ø 3,9 × 25 mm |
+| Débit du montant de dormant | DHT – 20 mm |
+| Perçage (mm) | Ø 3 |
+| Position du perçage (mm) | 11 ; 17 ; X |
+| Hauteur du seuil (mm) | 20 |
+| Retrait en bout (mm) | 5 |
+| Cote seuil | Y |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 293)
+
+Les valeurs de X et de Y ne sont pas données sur la planche.
+
+## 5) Montage meneau sur seuil
+
+1. « Couper le seuil F95-50- 9C42 (1) (Longueur = Dim. Hors Tout Dormant – 10 mm) »
+2. « Prépercer selon croquis avec un foret de Ø 3 mm. »
+3. « Couper éventuellement le couvercle en PVC pour une fixation au sol ».
+4. « Visser le set d'assemblage du meneau (3) avec le seuil (1) à l'aide de vis inox (4) Ø 4,0 x
+   19 mm. »
+5. « Pour garantir une bonne étanchéité il est nécessaire d'étancher entre le dormant et
+   l'assemblage de seuil. »
+6. « Positionner le meneau sur le seuil/l'assemblage de seuil et visser latéralement avec des vis
+   auto foreuse (6) Ø 3,9 x 25 mm. »
+
+[1 p. 294]
+
+Le dessin (échelle 1:1, cartouche « Seuils Aluminium de portes — Contours de fraisage ») montre le
+meneau (5) débité « DHT - 20 mm », le set d'assemblage du meneau (3) avec quatre vis inox (4) et
+quatre vis auto-foreuses (6), le seuil (1) et la pièce (2). Le perçage Ø 3 est coté 19 mm, 11 et
+17 mm ; la position du meneau est cotée 57 mm jusqu'à la « Cote à l'axe ».
+
+![Montage du meneau sur le seuil 9C42 : set d'assemblage, vis et perçage](/assets/procedures/directives-evo2008/seuil-9c42-montage-meneau-sur-seuil-evo2008.png)
+
+| Repère ou cote du dessin | Valeur |
+| --- | --- |
+| (1) | seuil F95-50- 9C42 |
+| (3) | set d'assemblage du meneau (F95-94- 9C84 pour le meneau 2425) |
+| (4) | vis inox Ø 4,0 × 19 mm |
+| (5) | meneau |
+| (6) | vis auto-foreuse Ø 3,9 × 25 mm |
+| Débit du seuil | dimension hors tout dormant – 10 mm |
+| Débit du meneau | DHT – 20 mm |
+| Perçage (mm) | Ø 3 |
+| Position du perçage (mm) | 19 ; 11 ; 17 |
+| Distance à la « Cote à l'axe » (mm) | 57 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 294)
+
+## 6) Montage du rejet d'eau F95-50- 9F46
+
+« Nous vous conseillons d'utiliser avec le seuil 9C42 le set de rejet d'eau 9F46 pour garantir de
+meilleurs résultats AEV. » [1 p. 295] Étapes de la planche :
+
+1. Respecter un jeu de 10 mm entre le rejet d'eau et le seuil (croquis 1).
+2. « Couper le rejet d'eau 9C46 (Longueur = Dim ext. Ouvrant – 80 mm), voir croquis 3. »
+3. « Percer Ø 8 mm au droit des trous d'evacuation dans le rejet d'eau. »
+4. « Coller les embouts de rejet d'eau avec de la cyano et les visser avec des vis inox (3) Ø 3,9 x
+   13 mm (voir croquis 2). » (la cyano est une colle cyanoacrylate, à prise rapide)
+5. « Positionner le rejet d'eau sur l'ouvrant et presser le sur la surface nettoyé au préalable
+   avec le double face. Visser ensuite le rejet d'eau à l'aide de vis inox Ø 3,9 x 19 mm sur
+   l'ouvrant (4) (voir croquis 1). »
+6. « Coller les joints brosse 9C44 à chaque extrémité (Longueur = Dim. ext. Ouvrant – 40 mm). »
+
+[1 p. 295]
+
+Le titre et le premier paragraphe écrivent « 9F46 », l'étape de débit et le croquis 3 « 9C46 »
+(**INC-256**). Le débit du rejet d'eau est « Dim ext. Ouvrant – 80 mm » sur cette page et
+« Largeur hors tout ouvrant – 74 » à la page imprimée 5 (**INC-257**).
+
+Le croquis 1 est la coupe verticale du bas de l'ouvrant : le rejet d'eau 9F46 vissé sur l'ouvrant,
+le seuil 9C42 en dessous ; le jeu de 10 mm est coté verticalement entre le rejet d'eau et le seuil,
+17 mm et 7 mm horizontalement sous le rejet d'eau.
+
+![Rejet d'eau 9F46 sur seuil 9C42, croquis 1 : jeu de 10 mm](/assets/procedures/directives-evo2008/seuil-9c42-rejet-d-eau-croquis1-jeu-10-evo2008.png)
+
+Le croquis 2 montre l'embout de rejet d'eau et sa vis.
+
+![Rejet d'eau, croquis 2 : embout et vis](/assets/procedures/directives-evo2008/seuil-9c42-rejet-d-eau-croquis2-embout-evo2008.png)
+
+Le croquis 3 est la vue en bout du rejet d'eau sur le seuil : première vis à « environ 100 mm » du
+bout, « Distance maxi de vissage 400 mm » ensuite ; « Percage Ø 8 au niveau des trous
+d'évacuation » ; en pied, « Coupe joint brosse 9C44 » à 20 mm et « Coupe rejet d'eau 9C46 » à 40 mm
+du bout.
+
+![Rejet d'eau, croquis 3 : débit, vissage et perçage d'évacuation](/assets/procedures/directives-evo2008/seuil-9c42-rejet-d-eau-croquis3-debit-vissage-evo2008.png)
+
+| Cote du rejet d'eau | Valeur |
+| --- | --- |
+| Jeu rejet d'eau / seuil (mm) | 10 |
+| Débit du rejet d'eau | dimension extérieure d'ouvrant – 80 mm (**INC-257**) |
+| Débit du joint brosse 9C44 | dimension extérieure d'ouvrant – 40 mm |
+| Coupe du joint brosse depuis le bout (mm) | 20 |
+| Coupe du rejet d'eau depuis le bout (mm) | 40 |
+| Première vis depuis le bout (mm) | environ 100 |
+| Entraxe maximal de vissage (mm) | 400 |
+| Perçage d'évacuation (mm) | Ø 8 |
+| Vis des embouts | inox Ø 3,9 × 13 mm |
+| Vis du rejet d'eau sur l'ouvrant | inox Ø 3,9 × 19 mm |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 295)
+
+# Débits par dormant
+
+Les pages imprimées 5 à 9 du registre 5.8 dessinent chacune, pour une famille de dormants, la même
+vue de face du bas d'une porte : en haut la coupe horizontale du montant de dormant, au milieu
+l'« Embout de fixation », à gauche la coupe verticale du bas de l'ouvrant 6123 avec le rejet d'eau
+(légendé « 9C46 ») sur le seuil 9C42, en bas l'« Embout de rejet d'eau ». Chacune porte un tableau
+« Correspondance des dormants / embouts » et les formules de débit. Une ligne par dormant ; les
+débits sont écrits comme sur les planches (cotes en mm) [1 p. 296-300].
+
+| Dormant | Famille (titre de la planche) | Embout (correspondance) | Débit du montant de dormant | Débit du seuil 9C42 | Débit du rejet d'eau | Page PDF |
+| --- | --- | --- | --- | --- | --- | --- |
+| 2502 | dormant standard | 9C79 | hauteur hors tout – 20, coupe droite | hors tout dormant – 10 | largeur hors tout ouvrant – 74 | 296 |
+| 6101 | dormant standard | 9F40 | hauteur hors tout – 20, coupe droite | hors tout dormant – 10 | largeur hors tout ouvrant – 74 | 296 |
+| 6102 | dormant rénovation | 9F43 | hauteur hors tout – 20 + recouvrement, coupe droite | hors tout dormant + 6 | largeur hors tout ouvrant – 74 | 297 |
+| 6105 | dormant rénovation | 9F43 | hauteur hors tout – 20 + recouvrement, coupe droite | hors tout dormant + 6 | largeur hors tout ouvrant – 74 | 297 |
+| 6107 | dormant rénovation | 9F43 | hauteur hors tout – 20 + recouvrement, coupe droite | hors tout dormant + 6 | largeur hors tout ouvrant – 74 | 297 |
+| 6106 | dormant rénovation | 9F41 | hauteur hors tout – 20 + recouvrement, coupe droite | hors tout dormant – 10 | largeur hors tout ouvrant – 74 | 298 |
+| 6104 | dormant neuf | 9F46 | hauteur hors tout – 20 + recouvrement, coupe droite | hors tout dormant – 10 | largeur hors tout ouvrant – 74 | 299 |
+| 6108 | dormant large | 9F41 | hauteur hors tout, coupe droite | hors tout dormant – 52 | largeur hors tout ouvrant – 74 | 300 |
+| 6109 | dormant large | 9F41 | hauteur hors tout, coupe droite | hors tout dormant – 52 | largeur hors tout ouvrant – 74 | 300 |
+| 6110 | dormant large | 9F41 | hauteur hors tout, coupe droite | hors tout dormant – 52 | largeur hors tout ouvrant – 74 | 300 |
+| 6111 | dormant large | 9F41 | hauteur hors tout, coupe droite | hors tout dormant – 52 | largeur hors tout ouvrant – 74 | 300 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 296-300)
+
+Sur chaque planche, une cote verticale de 10 mm est portée au-dessus du seuil, sous le rejet d'eau.
+Le « recouvrement » ajouté au débit du montant n'est pas chiffré. Trois cases ne concordent pas
+avec le reste du registre : le rejet d'eau se débite à « Dim ext. Ouvrant – 80 mm » à la page
+imprimée 4 et à « largeur hors tout ouvrant – 74 » ici (**INC-257**) ; le 6106 reçoit l'embout 9F41
+ici et le set 9F43 dans la table de la page imprimée 1 (**INC-258**) ; le 6104 reçoit ici un
+« embout » 9F46, référence du rejet d'eau, et le set 9F41 dans la table de la page imprimée 1
+(**INC-259**).
+
+## Dormant standard 2502 et 6101 (page imprimée 5)
+
+![Montage du seuil 9C42 sur dormant standard : débits du montant, du seuil et du rejet d'eau](/assets/procedures/directives-evo2008/seuil-9c42-dormant-standard-debits-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 296)
+
+## Dormants rénovation 6102, 6105 et 6107 (page imprimée 6)
+
+![Montage du seuil 9C42 sur dormants rénovation 6102, 6105, 6107](/assets/procedures/directives-evo2008/seuil-9c42-dormants-renovation-6102-6105-6107-debits-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 297)
+
+## Dormant rénovation 6106 (page imprimée 7)
+
+![Montage du seuil 9C42 sur dormant rénovation 6106](/assets/procedures/directives-evo2008/seuil-9c42-dormant-renovation-6106-debits-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 298)
+
+## Dormant neuf 6104 (page imprimée 8)
+
+![Montage du seuil 9C42 sur dormant neuf 6104](/assets/procedures/directives-evo2008/seuil-9c42-dormant-6104-debits-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 299)
+
+## Dormants larges 6108, 6109, 6110 et 6111 (page imprimée 9)
+
+Sur les dormants larges, le montant se débite à la hauteur hors tout, coupe droite, et le dormant
+est découpé en pied pour recevoir le seuil : le dessin « DECOUPE DORMANT » montre le seuil 9C42
+(70 mm de large, 20 mm de haut) logé dans l'entaille du montant, avec la « COTE DE DEBIT DORMANT »
+portée jusqu'au dessous du seuil [1 p. 300].
+
+| Cote de la découpe | Valeur (mm) |
+| --- | --- |
+| Largeur du seuil dans la découpe | 70 |
+| Hauteur du seuil dans la découpe | 20 |
+
+![Montage du seuil 9C42 sur dormants larges 6108 à 6111, découpe du dormant](/assets/procedures/directives-evo2008/seuil-9c42-dormants-larges-6108-a-6111-debits-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 300)
+
+# Seuil avec élargisseur 0207
+
+« Seuil avec elargisseur » (page imprimée 10, échelle 1:1) : coupe verticale du bas de l'ouvrant
+6123 avec son rejet d'eau (légendé « 9C46 »), sur le seuil 9C42, lui-même posé sur l'élargisseur
+0207 (l'élargisseur est un profilé qui rehausse ou élargit le dormant). Cotes de haut en bas sur la
+droite de la coupe [1 p. 301] :
+
+| Cote | Valeur (mm) |
+| --- | --- |
+| 1re cote, en haut | 10 |
+| 2e cote | 10 |
+| 3e cote | 10 |
+| 4e cote, hauteur de l'élargisseur 0207 | 50 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 301)
+
+![Seuil 9C42 sur élargisseur 0207 sous l'ouvrant 6123](/assets/procedures/directives-evo2008/seuil-9c42-avec-elargisseur-0207-evo2008.png)
+
+# Ce que le document ne dit pas
+
+- La pièce repérée (2) sur les dessins de montage du dormant et du meneau
+- Les valeurs de X et de Y du perçage et de la « Cote seuil »
+- Le produit d'étanchéité entre le dormant et l'assemblage de seuil
+
+# Citations
+
+[1] [Système e.VOLUTION, plan des profilés et manuel technique, système F 91, édition août 2008](raw/profine-plans-profiles-e-volution-2008-08.pdf),
+registre 5.8, PDF p. 292 à 301
+
+# Voir aussi
+
+- [Mise en œuvre du seuil du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md)
+- [Assemblages du système 70](/profiles/systeme-70-assemblages.md)
+- [Types d'ouverture et plans de combinaison du système 70](/profiles/systeme-70-plans-de-combinaison.md)
+- [Plans des profilés e.VOLUTION, août 2008](/sources/plans-profiles-e-volution-2008.md)
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/incoherences-internes.md :
+| INC-264 | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008 | PDF p. 309, 311, 313 et 314 (registre 6.2), relue(s) en image à 200 dpi le 29/09/2026 | Battement du basculant : la liste des profilés (p. 309), la coupe des opérations (p. 311) et la planche de débit du dormant 6101 (p. 313) écrivent « F90-25- **0140** » ; la planche de débit du dormant 2502 (p. 314) écrit « Battement F00-25- **1172** », renfort 9111.1, Iz 2,6 ; le 1172 n'apparaît nulle part ailleurs dans le registre 6.2 | F90-25- 0140, ou un battement 1172 propre au dormant 2502 : à confirmer par profine | Commande d'un battement inconnu de la liste ; voir [Systèmes spéciaux du système 70, 2008](/procedures/systemes-speciaux-systeme-70-evo2008.md) |
+/anomalies/incoherences-internes.md :
+| INC-265 | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008 | PDF p. 313 et 314 (registre 6.2, pages imprimées 5 et 6), relue(s) en image à 200 dpi le 29/09/2026 | Iz-total du basculant sur dormant 2502 : « \*4,5 » (V030) + « \*2,6 » (9111.1) + « \*4,5 » (V030 de l'ouvrant) = 11,6, la planche imprime « Iz-total **12,6** » ; avec le V031 (5,3) la somme ferait 12,4 ; sur la planche du dormant 6101, 3,2 + 2.6 + 4,5 = 10,3 est juste | 11,6 cm⁴ avec les renforts représentés | Un Iz total surestimé de 1 cm⁴ fausse le contrôle de rigidité de la traverse ; voir [Systèmes spéciaux du système 70, 2008](/procedures/systemes-speciaux-systeme-70-evo2008.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-99 | Dimensions maximales de l'ouvrant de porte d'entrée 1 vantail en profilés filmés / plaxés, système 70 | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008, PDF p. 317 (registre 6.3, page imprimée 3), relue(s) en image à 200 dpi le 29/09/2026 : « Porte 1 vantail — Profilés filmés avec renfort V003 / V004 — **1000 x 2200 mm** » (blanc / beige / gris 1100 x 2300, 2 vantaux 1000 x 2300 et 900 x 2200) | Mise en œuvre Système 70 Plateforme, profine, septembre 2023, PDF p. 276, d'après [Porte d'entrée du système 70](/procedures/porte-d-entree-systeme-70.md) : « Porte 1 vantail — Profilés plaxés — **1100 × 2200** » (les trois autres cases identiques) | Aucune : chaque dimension reste avec son document et sa date ; à confirmer par profine | 100 mm de largeur de porte filmée admise en plus selon le document suivi ; voir [Systèmes spéciaux du système 70, 2008](/procedures/systemes-speciaux-systeme-70-evo2008.md) |

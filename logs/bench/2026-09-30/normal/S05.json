@@ -1,0 +1,21 @@
+{
+ "id": "S05",
+ "reponse": "Même en cherchant côté Roto NX, la référence 763392 n'apparaît nulle part dans le wiki : ni sur la page des crémones Roto NX (/quincaillerie/roto-nx-cremones.md, qui liste les numéros de matériel des crémones OB KSR, OB poignée centrée / variable, crémones verrou, raccords, semi-fixe…), ni sur les autres pages Roto NX, ni dans les registres d'anomalies. Pourtant, le registre de couverture du catalogue Roto NX PVC est entièrement transcrit (aucune page « à faire »). Les références voisines présentes sont par exemple 763116 à 763120 et 763125 à 763127 (crémones de semi-fixe standard Roto NX), mais pas 763392. Il faut vérifier la référence (chiffre inversé ou mal lu, référence d'un autre catalogue, référence plus récente que le catalogue) ou demander le type de crémone (OB KSR, poignée fixe ou centrée, axe de fouillot, HFF) pour retrouver le bon numéro dans les tableaux.",
+ "dans_le_wiki": "non",
+ "preuves": [
+  {"page": "/quincaillerie/roto-nx-cremones.md", "extrait": "| 763116 | 15, 25, 30, 35, 40, 45, 50 | 601 – 800 | 690 | 200 | 300 | J | N | – | N | – | – | Roto Sil |"}
+ ],
+ "ambiguite": "La référence est peut-être mal saisie. Pour trouver la bonne crémone Roto NX, il faudrait l'usage (OB, verrou, semi-fixe), l'axe de fouillot (8, 15, 25 à 50 mm), la hauteur de poignée (fixe ou centrée / variable) et la HFF (hauteur feuillure de l'ouvrant).",
+ "outils": 8,
+ "comment_trouve": "Grep « 763392 », « 763 392 », « 763.392 », « 3392 » sur tout le wiki : aucun résultat. Liste de tous les 763xxx du wiki (763116-763127, 763723) : pas de 763392. Vérifié que la fiche source du catalogue Roto NX ne porte aucune ligne « à faire ».",
+ "formulations": [
+  "numéro de matériel Roto 763392, c'est quelle crémone NX ?",
+  "Roto 763392",
+  "je cherche une crémone Roto NX oscillo-battant, référence commençant par 7633"
+ ],
+ "defauts_wiki": [
+  "Référence absente du wiki alors que le catalogue Roto NX est déclaré entièrement transcrit : soit la référence est fausse, soit elle vient d'un document non versé dans raw/.",
+  "roto-nx-cremones.md fait 150 ko : une recherche BM25 qui livre la page entière noie le modèle ; une référence voisine (763116…) peut être prise pour la bonne.",
+  "Relance (« chez Roto NX une crémone ») sans la référence : la recherche doit reprendre 763392 de l'historique."
+ ]
+}

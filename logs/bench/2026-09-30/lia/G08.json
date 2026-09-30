@@ -1,0 +1,23 @@
+{
+  "question": "Un 10/14/4, ça fait combien de dB d'affaiblissement ?",
+  "pages_lues": [
+    "/vitrages/performances-vitrages.md",
+    "/gammes/askey-frappe-65-oc.md",
+    "/gammes/hybride.md"
+  ],
+  "anomalies": [],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "10/14/4 affaiblissement acoustique dB vitrage Rw"
+      },
+      "pages_nouvelles": [
+        "/vitrages/performances-vitrages.md",
+        "/gammes/askey-frappe-65-oc.md",
+        "/gammes/hybride.md"
+      ],
+      "caracteres": 25580
+    }
+  ]
+}

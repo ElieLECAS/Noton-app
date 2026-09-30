@@ -1,0 +1,501 @@
+===== PAGE 1 : /fournisseurs/technal.md =====
+# Ce que PROFERM lui achète
+
+TECHNAL (groupe Hydro Building Systems) fournit l'intégralité des **systèmes aluminium** de PROFERM : profilés extrudés à rupture de pont thermique, quincailleries visibles et cachées, roulements, serrures et poignées de manœuvre [1 p. 4, 15-18].
+
+| Produit PROFERM | Gamme système TECHNAL | Fiches du wiki |
+| --- | --- | --- |
+| Fenêtre et porte-fenêtre battante [LUMINE55](/gammes/lumine.md) | **SOLEAL FY 55** (Apparent et Minimal) | [Dormants et ouvrants](/profiles/soleal-fy-dormants-et-ouvrants.md), [Cotes de débit](/profiles/soleal-fy-cotes-de-debit.md), [Parcloses et vitrage](/profiles/soleal-fy-parcloses-et-vitrage.md), [Quincaillerie](/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md), [Fabrication](/procedures/fabrication-soleal-fy.md) |
+| Fenêtre quincaillerie cachée [LUMINE](/gammes/lumine.md) | **SOLEAL FY 55/65 QC** (180°) | [Quincaillerie visible et cachée](/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md), [Fabrication](/procedures/fabrication-soleal-fy.md) |
+| Coulissant traditionnel SOLÉAL55 | **SOLEAL GY 55** (Coulissant universel) | [Dormants et rails](/profiles/soleal-gy-dormants-et-rails.md), [Cotes de débit](/profiles/soleal-gy-cotes-de-debit.md), [Roulements et fermetures](/quincaillerie/soleal-gy-roulements-et-fermetures.md), [Pose et galandage](/procedures/pose-soleal-gy-galandage.md) |
+| Coulissant à galandage GALANDAGE55 | **SOLEAL GY 55 Galandage** (1 à 4 vantaux) | [Dormants et rails](/profiles/soleal-gy-dormants-et-rails.md), [Pose et galandage](/procedures/pose-soleal-gy-galandage.md) |
+| Coulissant d'angle sans poteau | **SOLEAL GY 55 Angle 90°** | [Cotes de débit](/profiles/soleal-gy-cotes-de-debit.md), [Pose et galandage](/procedures/pose-soleal-gy-galandage.md) |
+| Coulissant à ouvrant caché LUMÉAL55 | **LUMEAL GA** (Le Coulissant Minimal) | [Dormants et ouvrants](/profiles/lumeal-ga-dormants-et-ouvrants.md), [Cotes de débit](/profiles/lumeal-ga-cotes-de-debit.md), [Roulements et fermetures](/quincaillerie/lumeal-ga-roulements-et-fermetures.md), [Fabrication et pose](/procedures/fabrication-et-pose-lumeal-ga.md) |
+| Portes lourdes grand trafic | **SOLEAL PY 55** (Porte battante et VV) | [Dormants et ouvrants](/portes/soleal-py-dormants-et-ouvrants.md), [Cotes de débit](/portes/soleal-py-cotes-de-debit.md), [Serrures et paumelles](/quincaillerie/soleal-py-serrures-et-paumelles.md), [Seuil PMR PY1100](/procedures/technal-seuil-pmr-py1100.md) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 4, 15 et 16)
+
+---
+
+# Aluminium bas carbone
+
+Aluminium bas carbone des profilés TECHNAL du LUMÉAL, dans les termes de la source ; une ligne par
+caractéristique [2 p. 2].
+
+| Caractéristique | Valeur |
+| --- | --- |
+| Empreinte carbone | 2,3 kg de CO₂ par kg d'aluminium |
+| Aluminium recyclé | au minimum 75 %, recyclé en fin de vie (déchets post-consommation) |
+| Qualité | aluminium de première qualité |
+
+(schéma: raw/depliant-lumeal-2026-04.pdf, p. 2)
+
+« L'aluminium bas carbone est un aluminium recyclé à faible teneur en carbone » [2 p. 2]. La
+marque Hydro CIRCAL et l'alliage 6060 T6, que ce tableau portait, ne figurent sur aucune page des
+dépliants LUMÉAL de juin 2023 et d'avril 2026 (**VER-53**).
+
+---
+
+# Garantie propre
+
+La **ferrure TECHNAL est garantie 10 ans sur le fonctionnement**, au même régime que la ferrure ROTO [2 p. 2].
+
+Le catalogue général ne distingue que « ferrure ROTO » à 10 ans et « autre ferrure » à 2 ans, formulation qui range implicitement la quincaillerie TECHNAL dans les 2 ans — entrée **CTR-09** du registre [Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
+
+Les autres durées applicables aux produits aluminium sont dans [Garanties par composant](/garanties/garanties-par-composant.md).
+
+---
+
+# Poignées TECHNAL
+
+Proposées en option ou de série sur les menuiseries aluminium.
+
+| Poignée | Application | Caractéristiques |
+| --- | --- | --- |
+| **BERLIN** | Fenêtre LUMINE, coulissants SOLÉAL, GALANDAGE, LUMÉAL | Béquille design galbée |
+| **ANTIBES** | Fenêtre LUMINE, coulissants SOLÉAL, GALANDAGE, LUMÉAL | Ligne contemporaine carrée |
+| **SHANGHAI** | Coulissants SOLÉAL et GALANDAGE | Ouvrant principal |
+| **PEKIN** | Coulissants SOLÉAL et GALANDAGE | Ouvrant principal |
+| **GRENADE** | Coulissants SOLÉAL et GALANDAGE | Vantail semi-fixe |
+| **OSAKA / TGA3618** | Coulissant LUMÉAL GA | Poignée de tirage inclinée |
+| **KOBE** | Coulissant LUMÉAL GA | Bouton de manœuvre encastré |
+| **TOKYO / TGA6000** | Coulissant LUMÉAL GA | Poignée de tirage droite tubulaire |
+| **KYOTO / TGA3606** | Coulissant LUMÉAL GA | Poignée de tirage plate inclinée |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 15 et 17)
+
+Finitions et teintes dans [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md).
+
+---
+
+# Laquage : une capacité PROFERM, pas une prestation TECHNAL
+
+**PROFERM laque en interne**, sur plusieurs cabines, et confectionne des couleurs sur mesure au-delà des teintes standards et à prix préférentiel [2 p. 2]. C'est une capacité de production propre, au même titre que l'atelier de cintrage et l'atelier de ferronnerie d'art.
+
+La gamme LUMINE65 est thermolaquée à 100 % en **QUALICOAT classe 2** [1 p. 18]. PROFERM revendique par ailleurs être le seul fabricant à bénéficier de la certification CSTB avec la **laque 29943** sur les menuiseries aluminium prélaquées [1 p. 15].
+
+Les durées de garantie de laquage sont dans [Garanties par composant](/garanties/garanties-par-composant.md).
+
+---
+
+# Citations
+
+[1] Catalogue menuiseries PROFERM, édition janvier 2026 — `raw/catalogue-general-2026-01.pdf`, p. 4, 15 à 18, 35 et 36
+[2] Dépliant LUMÉAL, édition avril 2026 — `raw/depliant-lumeal-2026-04.pdf`, p. 2
+
+---
+
+# Voir aussi
+
+- [LUMINE](/gammes/lumine.md)
+- [Coulissants aluminium](/gammes/coulissants-aluminium.md)
+- [Profilés dormants et ouvrants SOLEAL FY](/profiles/soleal-fy-dormants-et-ouvrants.md)
+- [Profilés dormants et rails SOLEAL GY](/profiles/soleal-gy-dormants-et-rails.md)
+- [Profilés dormants et ouvrants SOLEAL PY](/portes/soleal-py-dormants-et-ouvrants.md)
+- [Profilés dormants et ouvrants LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md)
+- [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md)
+- [Garanties par composant](/garanties/garanties-par-composant.md)
+
+===== PAGE 2 : /quincaillerie/poignees-et-croisillons.md =====
+# Ce que couvre cette page
+
+Les accessoires de manœuvre et de décoration des menuiseries PROFERM : la **poignée** qui manœuvre
+une fenêtre ou un coulissant, la **béquille double** (une poignée de chaque côté, sur plaque ou sur
+rosace, avec l'entrée de clé) qui équipe une porte-fenêtre, la **fausse crémone** (tige décorative
+verticale apparente sur l'ouvrant), les **croisillons** (barrettes qui divisent visuellement le
+vitrage) et quelques petits accessoires. Voir le [glossaire](/reference/glossaire.md).
+
+Une ligne par modèle, ou par modèle et par groupe de gammes quand les finitions ou la disponibilité
+diffèrent. « Finitions de série » : les finitions imprimées « disponible en … » ; « finitions en
+option » : celles marquées « en option » ou « sur demande ». La colonne Gammes ne nomme que les
+gammes dont la page du catalogue montre le modèle. L'image est la photo du catalogue.
+**Sécustik®** est la gamme de poignées à sécurité des modèles ATLANTA et TOULON (**VER-11** pour
+son fabricant).
+
+# Poignées de fenêtre
+
+Relevées sur les pages accessoires des gammes PERFORM (p. 7), HYBRIDE (p. 11), LUMINE (p. 15) et
+TEXTURAL (p. 23) [1].
+
+| Modèle | Type | Usage | Finitions de série | Finitions en option | Gammes | Restriction | Image |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| Sécustik® ATLANTA | poignée | fenêtre | blanc, aspect inox, caramel ou laiton | - | PERFORM, HYBRIDE, LUMINE, TEXTURAL | - | ![Sécustik ATLANTA](/assets/quincaillerie/poignees/secustik-atlanta.png) |
+| Sécustik® TOULON | poignée | fenêtre | noir, 7016, aspect inox ou blanc | - | PERFORM, HYBRIDE, LUMINE, TEXTURAL | - | ![Sécustik TOULON](/assets/quincaillerie/poignees/secustik-toulon.png) |
+| TOULON, position décalée | poignée | fenêtre à quincaillerie invisible ou à ouvrant caché | blanc, noir, F9 [2 p. 3] | laquage RAL [2 p. 3] | LUMINE (LUMINE55), PERFORM+, HYBRIDE+ | **seule poignée réalisable sur PERFORM+ et HYBRIDE+**, poignée centrée impossible [2 p. 2-3] | ![Poignée TOULON décalée, PERFORM+ et HYBRIDE+](/assets/quincaillerie/poignees/toulon-decalee.png) |
+| Technal® BERLIN | poignée | fenêtre | inox, blanc, noir ou 7016 | modèle en option ; autres coloris sur demande | LUMINE | - | ![Technal BERLIN](/assets/quincaillerie/poignees/technal-berlin.png) |
+| Technal® ANTIBES | poignée | fenêtre | noir, 7016, aspect inox ou blanc | modèle en option | LUMINE | - | ![Technal ANTIBES](/assets/quincaillerie/poignees/technal-antibes.png) |
+| Sécustik® ATLANTA | poignée | porte-fenêtre LUMINE65 | blanc ou aspect inox [3 p. 4] | - | LUMINE (LUMINE65) | caramel et laiton non cités (**CTR-28**) | ![Sécustik ATLANTA](/assets/quincaillerie/poignees/secustik-atlanta.png) |
+| Sécustik® TOULON | poignée | porte-fenêtre LUMINE65 | noir, 7016, aspect inox ou blanc [3 p. 4] | - | LUMINE (LUMINE65) | - | ![Sécustik TOULON](/assets/quincaillerie/poignees/secustik-toulon.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 7, 11, 15 et 23 ; raw/brochure-lumine65-2025-02.pdf, p. 4)
+
+Sur la fenêtre LUMINE65, les poignées Sécustik® ATLANTA (blanc, aspect inox, caramel ou laiton)
+et Sécustik® TOULON (noir, 7016, aspect inox ou blanc) sont celles des lignes « fenêtre »
+ci-dessus [3 p. 4].
+
+La poignée TOULON est décalée sur la quincaillerie invisible de la LUMINE55 [1 p. 14]. Sur les
+gammes à ouvrant caché PERFORM+ et HYBRIDE+, **la pose de serrures sur porte-fenêtre est exclue**
+[2 p. 2].
+
+# Béquilles doubles et rosaces, pour portes-fenêtres
+
+| Modèle | Type | Usage | Finitions de série | Finitions en option | Gammes | Restriction | Image |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| TOULON sur plaque | béquille double sur plaque | porte-fenêtre | noir, 7016, aspect inox ou blanc | - | PERFORM, LUMINE | - | ![TOULON sur plaque](/assets/quincaillerie/poignees/toulon-sur-plaque.png) |
+| Sécustik® TOULON avec rosace | béquille double sur rosace | porte-fenêtre | noir, 7016, aspect inox ou blanc | - | PERFORM, HYBRIDE, LUMINE, TEXTURAL | - | ![Sécustik TOULON avec rosace](/assets/quincaillerie/poignees/secustik-toulon-rosace.png) |
+| ATLANTA plaque large | béquille double sur plaque | porte-fenêtre | inox ou laiton | - | PERFORM, HYBRIDE, LUMINE, TEXTURAL | - | ![ATLANTA plaque large](/assets/quincaillerie/poignees/atlanta-plaque-large.png) |
+| ATLANTA plaque étroite | béquille double sur plaque | porte-fenêtre | inox, blanc ou laiton | noir et 7016 | PERFORM, HYBRIDE, LUMINE, TEXTURAL | - | ![ATLANTA plaque étroite](/assets/quincaillerie/poignees/atlanta-plaque-etroite.png) |
+| Sécustik® ATLANTA avec rosace | béquille double sur rosace | porte-fenêtre | inox, blanc ou laiton | noir et 7016 | PERFORM, HYBRIDE, LUMINE, TEXTURAL | - | ![Sécustik ATLANTA avec rosace](/assets/quincaillerie/poignees/secustik-atlanta-rosace.png) |
+| Technal® BERLIN | béquille double sur rosace | porte-fenêtre | inox, blanc, noir ou 7016 | modèle en option ; autres coloris sur demande | LUMINE | - | ![Technal BERLIN, béquille](/assets/quincaillerie/poignees/technal-berlin-bequille.png) |
+| ATLANTA plaque étroite | béquille double sur plaque | porte-fenêtre LUMINE65 | blanc ou aspect inox [3 p. 4] | noir et 7016 [3 p. 4] | LUMINE (LUMINE65) | laiton non cité (**CTR-28**) | ![ATLANTA plaque étroite](/assets/quincaillerie/poignees/atlanta-plaque-etroite.png) |
+| Sécustik® ATLANTA avec rosace | béquille double sur rosace | porte-fenêtre LUMINE65, pour oscillo-battant | blanc ou aspect inox [3 p. 4] | noir et 7016 [3 p. 4] | LUMINE (LUMINE65) | laiton non cité (**CTR-28**) | ![Sécustik ATLANTA avec rosace](/assets/quincaillerie/poignees/secustik-atlanta-rosace.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 7, 11, 15 et 23 ; raw/brochure-lumine65-2025-02.pdf, p. 4)
+
+Sur la porte-fenêtre LUMINE65, la béquille double TOULON sur plaque et la Sécustik® TOULON avec
+rosace ont les finitions des lignes ci-dessus (noir, 7016, aspect inox ou blanc) ; les rosaces y
+sont données « pour oscillo-battant » (ouverture à la française et en soufflet par la même
+poignée) [3 p. 4].
+
+# Poignées de coulissant
+
+Les poignées de coulissant dépendent du produit, pas de la gamme ; celles des coulissants
+aluminium se rangent en quatre groupes : tous coulissants, LUMINE65, SOLÉAL & GALANDAGE, LUMÉAL
+[1 p. 17]. Le coulissant PVC [INNOSLIDE](/gammes/innoslide.md) a sa propre poignée, sur la
+dernière ligne [4 p. 3]. Voir
+[Coulissants aluminium](/gammes/coulissants-aluminium.md). « Ouvrant principal » : le vantail qui
+se manœuvre ; « semi-fixe » : le vantail qui ne s'ouvre qu'après lui.
+
+| Modèle | Type | Usage | Finitions de série | Finitions en option | Gammes | Restriction | Image |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| Sécustik® ATLANTA | poignée | tous coulissants | blanc, aspect inox, caramel ou laiton | - | coulissants aluminium | - | ![Sécustik ATLANTA](/assets/quincaillerie/poignees/secustik-atlanta.png) |
+| Sécustik® TOULON | poignée | tous coulissants | noir, 7016, aspect inox ou blanc | - | coulissants aluminium | - | ![Sécustik TOULON](/assets/quincaillerie/poignees/secustik-toulon.png) |
+| SEOUL | cuvette de tirage | tous coulissants | noir, 7016, aspect inox ou blanc | modèle en option | coulissants aluminium | - | ![SEOUL](/assets/quincaillerie/poignees/seoul.png) |
+| DEHLI | poignée encastrée | tous coulissants | inox, blanc ou noir | modèle en option | coulissants aluminium | sur le coulissant LUMINE65, autre nom et autre dessin : **MLINI** (**CTR-12**) | ![DEHLI](/assets/quincaillerie/poignees/dehli.png) |
+| Sécustik® ATLANTA | poignée | coulissant LUMINE65 | blanc ou aspect inox [3 p. 3] | - | LUMINE (coulissant LUMINE65) | caramel et laiton non cités (**CTR-28**) | ![Sécustik ATLANTA](/assets/quincaillerie/poignees/secustik-atlanta.png) |
+| SEOUL | cuvette encastrée | coulissant LUMINE65 | inox, blanc ou noir [3 p. 3] | modèle en option [3 p. 3] | LUMINE (coulissant LUMINE65) | 7016 non cité (**CTR-28**) | ![SEOUL](/assets/quincaillerie/poignees/seoul.png) |
+| MLINI | poignée encastrée | coulissant LUMINE65 | inox, blanc ou noir [3 p. 3] | modèle en option [3 p. 3] | LUMINE (coulissant LUMINE65) | nom et dessin différents de la DEHLI (**CTR-12**) | ![Poignée encastrée MLINI](/assets/quincaillerie/poignees/mlini.png) |
+| SYDNEY | poignée | coulissant LUMINE65, sur ouvrant principal | inox, blanc ou noir | modèle en option | LUMINE (coulissant LUMINE65) | - | ![Poignée SYDNEY](/assets/quincaillerie/poignees/sydney.png) |
+| MILAN | poignée | coulissant LUMINE65, sur semi-fixe | inox, blanc ou noir | modèle en option | LUMINE (coulissant LUMINE65) | - | ![Poignée MILAN](/assets/quincaillerie/poignees/milan.png) |
+| SYDNEY | poignée | SOLÉAL et GALANDAGE, sur ouvrant principal | inox, blanc ou noir | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55) | - | ![Poignée SYDNEY](/assets/quincaillerie/poignees/sydney.png) |
+| Technal® SHANGHAI | poignée | SOLÉAL et GALANDAGE, sur ouvrant principal | inox, blanc, noir ou 7016 | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55) | - | ![Technal SHANGHAI](/assets/quincaillerie/poignees/technal-shanghai.png) |
+| Technal® PEKIN | poignée | SOLÉAL et GALANDAGE, sur ouvrant principal | F9, blanc, noir ou 7016 | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55) | - | ![Technal PEKIN](/assets/quincaillerie/poignees/technal-pekin.png) |
+| MILAN | poignée | SOLÉAL et GALANDAGE, sur semi-fixe | inox, blanc ou noir | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55) | - | ![Poignée MILAN](/assets/quincaillerie/poignees/milan.png) |
+| Technal® GRENADE | poignée | SOLÉAL et GALANDAGE, sur semi-fixe | inox, blanc, noir ou 7016 | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55) | - | ![Technal GRENADE](/assets/quincaillerie/poignees/technal-grenade.png) |
+| Technal® BERLIN | poignée | SOLÉAL, GALANDAGE et LUMÉAL | inox, blanc, noir ou 7016 | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55, LUMÉAL55) | - | ![Technal BERLIN](/assets/quincaillerie/poignees/technal-berlin.png) |
+| Technal® ANTIBES | poignée | SOLÉAL, GALANDAGE et LUMÉAL | noir, 7016, aspect inox ou blanc | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55, LUMÉAL55) | - | ![Technal ANTIBES](/assets/quincaillerie/poignees/technal-antibes.png) |
+| Technal® OSAKA | poignée de tirage | LUMÉAL | inox | - | LUMINE (LUMÉAL55) | - | ![Technal OSAKA](/assets/quincaillerie/poignees/technal-osaka.png) |
+| Technal® KOBE | bouton de manœuvre | LUMÉAL | - | - | LUMINE (LUMÉAL55) | - | ![Technal KOBE](/assets/quincaillerie/poignees/technal-kobe.png) |
+| Technal® TOKYO | poignée droite | LUMÉAL | inox | modèle en option | LUMINE (LUMÉAL55) | - | ![Technal TOKYO](/assets/quincaillerie/poignees/technal-tokyo.png) |
+| Technal® KYOTO | poignée inclinée | LUMÉAL | inox | modèle en option | LUMINE (LUMÉAL55) | - | ![Technal KYOTO](/assets/quincaillerie/poignees/technal-kyoto.png) |
+| Poignée design minimal | poignée | LUMÉAL, dépliants de juin 2023 et d'avril 2026 | - | - | LUMINE (LUMÉAL) | « en standard » [5 p. 3, 6 p. 2] | ![Poignée design minimal, photo de la Technal OSAKA](/assets/quincaillerie/poignees/technal-osaka.png) |
+| Poignée design droit | poignée | LUMÉAL, dépliants de juin 2023 et d'avril 2026 | - | modèle en option [5 p. 3, 6 p. 2] | LUMINE (LUMÉAL) | - | ![Poignée design droit, photo de la Technal TOKYO](/assets/quincaillerie/poignees/technal-tokyo.png) |
+| Poignée inclinée | poignée | LUMÉAL, dépliants de juin 2023 et d'avril 2026 | - | modèle en option [5 p. 3, 6 p. 2] | LUMINE (LUMÉAL) | - | ![Poignée inclinée, photo de la Technal KYOTO](/assets/quincaillerie/poignees/technal-kyoto.png) |
+| Bouton de manoeuvre | bouton de manœuvre | LUMÉAL, dépliants de juin 2023 et d'avril 2026 | - | - | LUMINE (LUMÉAL) | - | ![Bouton de manoeuvre, photo du Technal KOBE](/assets/quincaillerie/poignees/technal-kobe.png) |
+| Poignée du coulissant INNOSLIDE, modèle non nommé | poignée | coulissant INNOSLIDE | blanc, noir ou F9 [4 p. 3] | - | INNOSLIDE | - | ![Poignée du coulissant INNOSLIDE](/assets/quincaillerie/poignees/poignee-innoslide.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 17 ; raw/brochure-lumine65-2025-02.pdf, p. 3 ; raw/depliant-lumeal-2023-06.pdf, p. 3 ; raw/depliant-lumeal-2026-04.pdf, p. 2 ; raw/depliant-innoslide-2024-01-a4-web.pdf, p. 3)
+
+Sur le coulissant LUMINE65, la Sécustik® TOULON (noir, 7016, aspect inox ou blanc), la SYDNEY
+sur ouvrant principal et la MILAN sur semi-fixe (inox, blanc ou noir, en option) ont les finitions
+des lignes ci-dessus [3 p. 3].
+
+Les dépliants LUMÉAL de juin 2023 et d'avril 2026 présentent les quatre mêmes poignées « au design exclusif pour personnaliser
+votre baie coulissante » sans nom de modèle ni finition ; la poignée design minimal y est dite
+« Discrète, elle est préconisée par les architectes » [5 p. 3, 6 p. 2]. Ses quatre photos sont celles des
+Technal® OSAKA, TOKYO, KYOTO et KOBE du groupe LUMÉAL au catalogue général, qui en donne les noms
+et les finitions [1 p. 17] : les images des lignes ci-dessus sont celles du catalogue.
+
+L'image de la poignée INNOSLIDE réunit la photo de la poignée noire seule et deux vues de la
+poignée posée sur l'ouvrant ; le modèle n'est pas nommé [4 p. 3].
+
+Aucune finition n'est imprimée pour le bouton KOBE. OSAKA et KOBE ne portent pas la mention « en
+option », à la différence des autres poignées du groupe LUMÉAL [1 p. 17].
+
+# Poignées de porte d'entrée
+
+Poignées présentées avec la [Sélection Hexa](/portes/selection-hexa.md) ; aucune finition n'est
+imprimée [1 p. 31].
+
+| Modèle | Type | Usage | Finitions de série | Finitions en option | Gammes | Restriction | Image |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| Poignée VIENNE | béquille sur rosace, avec entrée de cylindre | porte d'entrée | - | - | Sélection Hexa (LUMINE, HYBRIDE) | - | ![Poignée VIENNE](/assets/quincaillerie/poignees/vienne.png) |
+| Poignée ROME | béquille sur rosace, avec entrée de cylindre | porte d'entrée | - | - | Sélection Hexa (LUMINE, HYBRIDE) | - | ![Poignée ROME](/assets/quincaillerie/poignees/rome.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 31)
+
+# Fausses crémones
+
+La fausse crémone décorative est proposée en deux finitions sur les gammes PERFORM, HYBRIDE et
+TEXTURAL [1 p. 7, 11, 23].
+
+| Modèle | Type | Usage | Finitions de série | Finitions en option | Gammes | Restriction | Image |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| Fausse crémone décorative | décor | fenêtre, porte-fenêtre | blanc ou fer cémenté | - | PERFORM, HYBRIDE, TEXTURAL | **sauf sur porte-fenêtre avec serrure** | ![Fausse crémone décorative](/assets/quincaillerie/poignees/fausse-cremone.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 7, 11 et 23)
+
+La fausse crémone n'apparaît pas dans les accessoires de la gamme LUMINE ni des coulissants
+[1 p. 15, 17].
+
+# Croisillons
+
+Les croisillons se choisissent par leur largeur, en millimètres ; « sans croix » : les barrettes ne
+se croisent pas. Une ligne par croisillon ; la colonne Gammes nomme les pages qui le montrent
+[1 p. 7, 11, 15, 17, 23].
+
+| Croisillon | Largeur (mm) | Croix | Gammes | Image |
+| --- | --- | --- | --- | ---: |
+| 10 mm | 10 | oui | PERFORM, HYBRIDE, LUMINE, coulissants aluminium, TEXTURAL | ![Croisillon 10 mm](/assets/quincaillerie/croisillons/croisillon-10.png) |
+| 18 mm | 18 | oui | PERFORM, HYBRIDE, LUMINE, coulissants aluminium, TEXTURAL | ![Croisillon 18 mm](/assets/quincaillerie/croisillons/croisillon-18.png) |
+| 26 mm | 26 | oui | PERFORM, HYBRIDE, LUMINE, coulissants aluminium, TEXTURAL | ![Croisillon 26 mm](/assets/quincaillerie/croisillons/croisillon-26.png) |
+| 45 mm | 45 | oui | PERFORM, HYBRIDE, LUMINE, coulissants aluminium, TEXTURAL | ![Croisillon 45 mm](/assets/quincaillerie/croisillons/croisillon-45.png) |
+| Laiton 8 mm | 8 | sans croix | PERFORM, HYBRIDE, LUMINE, coulissants aluminium, TEXTURAL | ![Croisillon laiton 8 mm sans croix](/assets/quincaillerie/croisillons/croisillon-laiton-8.png) |
+| Plomb 8 mm | 8 | sans croix | PERFORM, HYBRIDE, LUMINE, coulissants aluminium, TEXTURAL | ![Croisillon plomb 8 mm sans croix](/assets/quincaillerie/croisillons/croisillon-plomb-8.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 7)
+
+# Autres accessoires
+
+| Accessoire | Description | Gammes | Image |
+| --- | --- | --- | ---: |
+| Moustiquaire | Moustiquaire avec cadre fixe. Possibilité de laisser la fenêtre ouverte, fermée ou ouvrant battant | PERFORM, HYBRIDE, LUMINE, TEXTURAL | ![Moustiquaire avec cadre fixe](/assets/quincaillerie/accessoires/moustiquaire.png) |
+| Soubassement, menuiserie PVC | Soubassement mouluré en option. Existe aussi en plat | PERFORM, HYBRIDE, TEXTURAL | ![Soubassement mouluré, PVC](/assets/quincaillerie/accessoires/soubassement-moulure-pvc.png) |
+| Soubassement, menuiserie aluminium | Soubassement mouluré en option. Existe aussi en plat | LUMINE, coulissants aluminium | ![Soubassement mouluré, aluminium](/assets/quincaillerie/accessoires/soubassement-aluminium.png) |
+| Verrou de sécurité | En option. Disponible en blanc ou noir | coulissants aluminium | ![Verrou de sécurité](/assets/quincaillerie/accessoires/verrou-de-securite.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 7, 15 et 17)
+
+Le soubassement est le panneau plein qui remplace le vitrage en partie basse d'une porte-fenêtre.
+
+# Citations
+
+[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 7, 11, 14, 15, 17, 23 et 31
+[2] [Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023](raw/brochure-perform-plus-hybride-plus-2023-05.pdf), p. 2-3
+[3] [Brochure LUMINE65, édition février 2025](raw/brochure-lumine65-2025-02.pdf), p. 3-4
+[4] [Dépliant INNOSLIDE, édition janvier 2024, version A4 web](raw/depliant-innoslide-2024-01-a4-web.pdf), p. 3
+[5] [Dépliant LUMÉAL, édition juin 2023](raw/depliant-lumeal-2023-06.pdf), p. 3
+[6] [Dépliant LUMÉAL, édition avril 2026](raw/depliant-lumeal-2026-04.pdf), p. 2
+
+# Voir aussi
+
+- [PERFORM](/gammes/perform.md)
+- [HYBRIDE](/gammes/hybride.md)
+- [LUMINE](/gammes/lumine.md)
+- [TEXTURAL](/gammes/textural.md)
+- [Coulissants aluminium](/gammes/coulissants-aluminium.md)
+- [PERFORM+](/gammes/perform-plus.md)
+- [HYBRIDE+](/gammes/hybride-plus.md)
+- [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md)
+- [TECHNAL](/fournisseurs/technal.md)
+- [ROTO](/fournisseurs/roto.md)
+- [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md)
+
+===== PAGE 3 : /profiles/soleal-gy-cotes-de-debit.md =====
+# Formules de débit des profilés du cadre dormant
+
+Les profilés dormants sont débités à coupe d'onglet à 45° sur les 4 côtés :
+
+| Configuration | Profilé traverse haute & montants | Profilé traverse basse (avec recueil) | Débit montants | Débit traverses |
+| --- | --- | --- | --- | --- |
+| **2 rails sans rainure BTC** | TGY1104 | TGY1120 | 2x $H$ à 45° | 2x $L$ à 45° |
+| **2 rails à rainure BTC** | TGY1113 | TGY1114 | 2x $H$ à 45° | 2x $L$ à 45° |
+| **2 rails avec Couvre-joint** | TGY1115 | TGY1116 | 2x $H$ à 45° | 2x $L$ à 45° |
+| **Dormant rénovation** | TGY1121 | TGY1121 | 2x $H$ à 45° | 2x $L$ à 45° |
+| **3 rails sans rainure BTC** | TGY1111 | TGY1112 | 2x $H$ à 45° | 2x $L$ à 45° |
+| **3 rails à rainure BTC** | TGY1100 | TGY1101 | 2x $H$ à 45° | 2x $L$ à 45° |
+| **4 rails à rainure BTC** | TGY1102 | TGY1103 | 2x $H$ à 45° | 2x $L$ à 45° |
+| **Intégration frappe 55** | TGY1119 | TGY1119 | 2x $(Hx + 8)$ à 45° | 2x $(Lx + 8)$ à 45° |
+| **Intégration frappe 65** | TGY1143 | TGY1143 | 2x $(H - 19)$ à 45° | 2x $(L - 19)$ à 45° |
+
+---
+
+# Formules de débit des profilés ouvrants
+
+Tous les profilés ouvrants sont débités à coupe droite à 90°.
+
+### 1. Hauteur des montants d'ouvrants
+La hauteur de tous les montants (latéraux et centraux) est strictement constante :
+$$\mathbf{H_{\text{montant}} = H - 77\text{ mm}}$$
+
+Profilés concernés :
+- Montants latéraux : TGY1202, TGY1300, TGY1200, TGY1201, TGY1301, TGY1302, TGY1303, TGY1304, TGY1220.
+- Montants centraux : TGY1207, TGY1208, TGY1209, TGY1210, TGY1211, TGY1213, TGY1214, TGY1215, TGY1216, TGY1217.
+
+Profilés additionnels d'ouvrant :
+- Battement de percussion centrale **TGY1204** : débit $= \mathbf{H - 170\text{ mm}}$
+- Battement de percussion d'angle **TGY1206** : débit $= \mathbf{H - 170\text{ mm}}$
+- Profilé d'angle prépercé **TGY2203** : débit $= \mathbf{H - 77\text{ mm}}$ (angle sortant) ou $\mathbf{H - 111\text{ mm}}$ (angle sortant avec seuil PMR ou angle rentrant)
+- Couvre-joint de finition d'angle **TGY2206** : débit $= \mathbf{H - 77\text{ mm}}$ (angle sortant) ou $\mathbf{H - 111\text{ mm}}$ (avec seuil PMR)
+
+### 2. Largeur des traverses d'ouvrants (basses et hautes)
+Profilés traverses : **T141015** (vitrage 24-28 mm) ou **T141021** (vitrage 29-32 mm).
+
+| Configuration du châssis | Nombre de vantaux / rails | Nombre de traverses | Débit unitaire traverse basse et haute |
+| --- | --- | --- | --- |
+| **Fenêtre / Porte-fenêtre 2 vantaux** | 2 vtx / 2 rails | 4 | $\mathbf{L/2 - 91\text{ mm}}$ |
+| **Porte-fenêtre 3 vantaux indépendants** | 3 vtx / 2 rails | 6 | $\mathbf{L/3 - 61\text{ mm}}$ |
+| **Porte-fenêtre 4 vantaux** | 4 vtx / 2 rails (percussion) | 8 | $\mathbf{L/4 - 73\text{ mm}}$ |
+| **Porte-fenêtre 3 vantaux 3 rails** | 3 vtx / 3 rails | 6 | $\mathbf{L/3 - 61\text{ mm}}$ |
+| **Porte-fenêtre 6 vantaux 3 rails** | 6 vtx / 3 rails (percussion) | 12 | $\mathbf{L/6 - 49,5\text{ mm}}$ |
+| **Porte-fenêtre 4 vantaux 4 rails** | 4 vtx / 4 rails | 8 | $\mathbf{L/4 - 45,5\text{ mm}}$ |
+| **Porte-fenêtre 8 vantaux 4 rails** | 8 vtx / 4 rails (percussion) | 16 | $\mathbf{L/8 - 37,5\text{ mm}}$ |
+| **Galandage 1 vantail** | 1 vtl monorail | 2 | $\mathbf{L - 73\text{ mm}}$ |
+| **Galandage 2 vantaux percussion** | 2 vtx monorail percussion | 4 | $\mathbf{L/2 - 37,5\text{ mm}}$ |
+| **Galandage 2 vantaux 2 rails** | 2 vtx sur 2 rails | 4 | $\mathbf{L/2 - 37,5\text{ mm}}$ |
+| **Intégration frappe SOLEAL FY** | 2 vtx coulissant | 4 | $\mathbf{Lx/2 - 106\text{ mm}}$ |
+
+### 3. Traverses intermédiaires
+- Pour vitrage 24 à 28 mm (**T141018**) :
+  $$\text{Débit } T141018 = \text{Débit traverse basse } T141015 + 0,5\text{ mm}$$
+  *(Exemple en 2 vantaux : $\mathbf{L/2 - 90,5\text{ mm}}$).*
+- Pour vitrage 29 à 32 mm (**T141009**) :
+  $$\text{Débit } T141009 = \text{Débit traverse basse } T141021 + 0,5\text{ mm}$$
+  *(Exemple en 2 vantaux : $\mathbf{L/2 - 90,5\text{ mm}}$).*
+
+Positionnement obligatoire de la traverse intermédiaire par rapport à la poignée $Hp$ :
+- Fermeture sans clé : $ht_1 < Hp - 148\text{ mm}$ ou $ht_1 > Hp + 103\text{ mm}$.
+- Fermeture avec verrouillage à clé : $ht_1 < Hp - 258\text{ mm}$ ou $ht_1 > Hp + 103\text{ mm}$.
+
+---
+
+# Cotes de vitrage et remplissage
+
+Le jeu de fond de feuillure est de 14 mm sur les 4 côtés de chaque panneau verrier.
+
+### 1. Hauteur de vitrage
+$$\mathbf{H_{\text{vitrage}} = H - 179\text{ mm}}$$
+
+En cas de traverse intermédiaire :
+$$\mathbf{h_1 = H - ht_2 - 108\text{ mm}} \quad \text{et} \quad \mathbf{h_2 = H - ht_1 - 108\text{ mm}}$$
+
+### 2. Largeur de vitrage selon typologie
+
+| Typologie de menuiserie | Formule de débit de la largeur de vitrage |
+| --- | --- |
+| **2 vantaux sur 2 rails** | $\mathbf{L_v = L/2 - 91,5\text{ mm}}$ |
+| **3 vantaux indépendants (2 rails)** | $\mathbf{L_v = L/3 - 61,5\text{ mm}}$ |
+| **4 vantaux sur 2 rails (percussion)** | $\mathbf{L_v = L/4 - 73,5\text{ mm}}$ |
+| **3 vantaux sur 3 rails** | $\mathbf{L_v = L/3 - 61,5\text{ mm}}$ |
+| **6 vantaux sur 3 rails (percussion)** | $\mathbf{L_v = L/6 - 50\text{ mm}}$ |
+| **4 vantaux sur 4 rails** | $\mathbf{L_v = L/4 - 46\text{ mm}}$ |
+| **8 vantaux sur 4 rails (percussion)** | $\mathbf{L_v = L/8 - 38\text{ mm}}$ |
+| **Galandage 1 vantail** | $\mathbf{L_v = L - 73,5\text{ mm}}$ |
+| **Galandage 2 vantaux percussion** | $\mathbf{L_v = L/2 - 38\text{ mm}}$ |
+| **Galandage 2 vantaux sur 2 rails** | $\mathbf{L_v = L/2 - 38\text{ mm}}$ |
+| **Châssis composé avec frappe FY** | $\mathbf{H_v = Hx - 209\text{ mm}} \quad ; \quad \mathbf{L_v = Lx/2 - 106,5\text{ mm}}$ |
+
+---
+
+# Cotes de débit des rails de roulement (Aluminium et Inox)
+
+### 1. Chemins de roulement aluminium rapportés (Réf. T341000)
+- 2 vantaux 2 rails : 2 rails de débit $= \mathbf{L - 95\text{ mm}}$.
+- 3 vantaux indépendants (2 rails) : 2 rails de débit $= \mathbf{L - 95\text{ mm}}$.
+- 4 vantaux 2 rails : 1 rail de débit $= \mathbf{L - 95\text{ mm}}$ + 2 rails de débit $= \mathbf{L/2 - 63\text{ mm}}$.
+- 3 vantaux 3 rails : 3 rails de débit $= \mathbf{L - 95\text{ mm}}$.
+- 6 vantaux 3 rails : 2 rails de débit $= \mathbf{L - 95\text{ mm}}$ + 2 rails de débit $= \mathbf{L/2 - 63\text{ mm}}$.
+- 4 vantaux 4 rails : 4 rails de débit $= \mathbf{L - 95\text{ mm}}$.
+- 8 vantaux 4 rails : 3 rails de débit $= \mathbf{L - 95\text{ mm}}$ + 2 rails de débit $= \mathbf{L/2 - 63\text{ mm}}$.
+- Galandage 1 vantail : 1 rail de débit $= \mathbf{2L - 116\text{ mm}}$.
+- Galandage 2 vantaux percussion : 2 rails de débit $= \mathbf{L - 47,5\text{ mm}}$.
+- Galandage 2 vantaux 2 rails : 2 rails de débit $= \mathbf{3L/2 - 47\text{ mm}}$.
+
+### 2. Chemins de roulement inox rapportés (Réf. TGY4007)
+- Ensemble des coulissants traditionnels (2 vtx, 3 vtx indép./dép., 4 vtx 2R, 3 vtx 3R, 6 vtx 3R, 4 vtx 4R, 8 vtx 4R) : débit $= \mathbf{L - 80\text{ mm}}$.
+- Composé intégration frappe FY : débit $= \mathbf{L - 110\text{ mm}}$.
+- Galandage 1 vantail : débit $= \mathbf{2L - 101\text{ mm}}$.
+- Galandage 2 vantaux percussion : débit $= \mathbf{L - 32,5\text{ mm}}$.
+- Galandage 2 vantaux 2 rails : débit $= \mathbf{3L/2 - 32\text{ mm}}$.
+
+---
+
+# Cotes de débit des boucliers thermiques PVC (T821000, T431025, TGY4006)
+
+### 1. Bouclier thermique intermédiaire T821000
+- Verticaux montants : 2 unités de débit $= \mathbf{H - 95\text{ mm}}$ (châssis 2 rails) ; 4 unités de débit $= \mathbf{H - 95\text{ mm}}$ (3 rails) ; 6 unités de débit $= \mathbf{H - 95\text{ mm}}$ (4 rails).
+- Horizontal traverse haute : 1 unité de débit $= \mathbf{L - 37\text{ mm}}$ (2 rails) ; 2 unités de débit $= \mathbf{L - 37\text{ mm}}$ (3 rails) ; 3 unités de débit $= \mathbf{L - 37\text{ mm}}$ (4 rails).
+- Galandage :
+  - 1 vantail : 2x $(H - 95)$ et 1x $(2L - 57)$.
+  - 2 vantaux percussion : 2x $(H - 95)$ et 1x $(2L - 6)$.
+  - 2 vantaux 2 rails : 2x $(H - 95)$ et 1x $(3L/2 + 12)$.
+
+### 2. Bouclier PVC supérieur TGY4006 (traverse haute et montants)
+- Montants verticaux : débit $= \mathbf{H - 47\text{ mm}}$ (2 unités en 2 rails, 4 en 3 rails, 6 en 4 rails).
+- Traverses horizontales :
+  - 2 vantaux : 4 unités de débit $= \mathbf{L/2 - 67,5\text{ mm}}$.
+  - 3 vantaux dépendants : 1x $(L/3 - 73)$ et 1x $(2L/3 - 61,5)$.
+  - 3 vantaux indépendants : 4x $(L/3 - 37,5)$ et 2x $(L/3 - 132)$.
+  - 4 vantaux 2 rails : 4x $(L/4 - 49,5)$ et 2x $(L/2 - 108,5)$.
+  - 3 vantaux 3 rails : 4x $(L/3 - 37,5)$ et 4x $(2L/3 - 97)$.
+  - 6 vantaux 3 rails : 4x $(L/3 - 73)$, 2x $(L/3 - 61)$, 4x $(L/6 - 26)$, 2x $(2L/3 - 156)$.
+  - 4 vantaux 4 rails : 4x $(L/4 - 23)$, 4x $(3L/4 - 111,5)$, 4x $(L/2 - 67,5)$.
+  - 8 vantaux 4 rails : 4x $(L/8 - 14)$, 2x $(3L/4 - 179,5)$, 4x $(L/4 - 49,5)$, 2x $(L/2 - 108,5)$, 4x $(3L/8 - 85)$, 2x $(L/4 - 37,5)$.
+
+---
+
+# Cotes de débit pour seuil PMR (TGY2100)
+
+- Profilé seuil plat d'accès PMR **TGY2100** : débit $= \mathbf{L - 12\text{ mm}}$ (coupe droite 90°).
+- Clip de maintien sur pièce d'appui **TGY3608** : quantité $= \mathbf{1 + L/500}$, vissé à l'aide de vis fournies hors tubulures.
+- Joint d'étanchéité entre rails bas **TGY2531** :
+  - 2 vantaux : 2 unités de débit $= \mathbf{L/2 - 67,5\text{ mm}}$.
+  - 3 vantaux dépendants : 1x $(L/3 - 73)$ et 1x $(2L/3 - 61,5)$.
+  - 3 vantaux indépendants : 2x $(L/3 - 37,5)$ et 1x $(L/3 - 132)$.
+  - 4 vantaux 2 rails : 2x $(L/4 - 49,5)$ et 1x $(L/2 - 108,5)$.
+
+---
+
+# Prises de cotes et débits spécifiques aux châssis d'angle à 90°
+
+Pour les coulissants d'angle sans poteau, les cotes $L_{1d}$ et $L_{2d}$ sont mesurées depuis l'appui de la tapée jusqu'à l'arrière du dormant. Les cotes fictives de calcul $L_1$ et $L_2$ valent :
+
+### 1. Angle sortant
+$$\mathbf{L_1 = L_{1d} - 43,7\text{ mm}} \quad \text{et} \quad \mathbf{L_2 = L_{2d} - 43,7\text{ mm}}$$
+- Pour 3 rails : déduction $= - 94,9\text{ mm}$.
+- Pour 4 rails : déduction $= - 146,1\text{ mm}$.
+- Seuil PMR angle sortant : débit $= \mathbf{(L_1 - 12) + 208,5\text{ mm}}$ (coupes 45°-90°).
+
+### 2. Angle rentrant
+$$\mathbf{L_1 = L_{1d} + 62,5\text{ mm}} \quad \text{et} \quad \mathbf{L_2 = L_{2d} + 62,5\text{ mm}}$$
+- Pour 3 rails : addition $= + 113,7\text{ mm}$.
+- Pour 4 rails : addition $= + 164,9\text{ mm}$.
+- Seuil PMR angle rentrant : débit $= \mathbf{(L_1 - 12) - 68,5\text{ mm}}$ (coupes 45°-90°).
+
+---
+
+# Voir aussi
+
+- [Profilés dormants et rails SOLEAL GY 55](/profiles/soleal-gy-dormants-et-rails.md)
+- [Roulements et fermetures SOLEAL GY 55](/quincaillerie/soleal-gy-roulements-et-fermetures.md)
+- [Pose et galandage SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md)
+- [Fournisseur Technal](/fournisseurs/technal.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /quincaillerie/soleal-gy-roulements-et-fermetures.md | Quincaillerie | Roulements, fermetures et manœuvres Technal SOLEAL GY 55 | technal, soleal, soleal-gy, quincaillerie, roulettes, chariots | Guide technique exhaustif de la quincaillerie du coulissant SOLEAL GY 55 de TECHNAL (chariots simples/doubles alu et inox jusqu'à 200 kg, fermetures 1 à 4 points, crémones à clé, organes de manœuvre, poignée réversible TGY3606, fermeture pompier et gâches). | /profiles/soleal-gy-cotes-de-debit.md) - [Pose et galandage SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md) - [Fournisseur Technal](/fournisseu |
+| /gammes/coulissants-aluminium.md | Gamme | Coulissants aluminium | aluminium, coulissant, soleal, galandage, lumeal, lumine | Les quatre coulissants aluminium de PROFERM — SOLÉAL55, GALANDAGE55, LUMÉAL55 et LUMINE65 — avec leurs limites dimensionnelles et quincailleries. | filé) ; 2 à 8 vantaux, 2 à 4 rails possibles. * **GALANDAGE55** : coulissant à galandage en aluminium (les vantaux s'effacent dans l'épaisseur du mur |
+| /commercial/lumine.md | Commercial | Arguments de vente LUMINE | commercial, argumentaire, lumine, aluminium, technal, coulissant | Ce que PROFERM annonce de la gamme aluminium LUMINE et de ses coulissants — slogan, avantages, quincaillerie invisible, laque certifiée CSTB, QUALICOAT classe 2 — séparé des valeurs mesurées. | e d'isolation, de robustesse et d'esthétique. / / GALANDAGE55 / Le coulissant à galandage en aluminium permet d'exploiter au mieux les petites surface |
+| /sources/technal-soleal-gy-fabrication.md | Document source | Catalogue de fabrication Technal SOLEAL GY 55 | technal, soleal, soleal-gy, coulissant, galandage, fabrication | Guide officiel de fabrication et catalogue d'atelier Technal pour le système coulissant et galandage SOLEAL GY 55 (Réf. 5746.003 - 09/2021, 200 pages). | /01/02) pour 2, 3 et 4 rails / à faire / [Pose et galandage SOLEAL GY](/procedures/pose-soleal-gy-galandage.md), [Dormants et rails SOLEAL GY](/profil |
+| /procedures/pose-soleal-gy-galandage.md | Procédure | Fabrication, pose et étanchéité du galandage Technal SOLEAL GY 55 | technal, soleal, soleal-gy, galandage, pose, fabrication | Procédure complète d'atelier et de chantier pour les coulissants à galandage et traditionnels SOLEAL GY 55 de TECHNAL (1 à 4 vantaux, caissons de refoulement, chicanes fixes, drainages étagés, talons injectés, seuil PMR et règles NF DTU 36.5). | # Architecture du système à galandage SOLEAL GY 55 Le galandage SOLEAL GY 55 permet l'escamotage intégral des vantaux coulissants dans l'épaisseur de |
+| /sources/technal-soleal-gy-conception.md | Document source | Catalogue de conception Technal SOLEAL GY 55 | technal, soleal, soleal-gy, coulissant, galandage, conception | Catalogue technique de conception générale Technal pour la gamme de coulissants universels SOLEAL GY 55 (Réf. 5744.005 - 09/2021, 184 pages). | raditionnels 2, 3 et 4 rails (jusqu'à 8 vantaux), galandages 1, 2, 3 et 4 vantaux, coulissants d'angle à 90° sans poteau, seuils PMR, ensembles compos |
+| /sources/technal-soleal-gy-installation.md | Document source | Notice d'installation Technal SOLEAL GY 55 | technal, soleal, soleal-gy, coulissant, pose, chantier | Notice officielle de pose et de mise en œuvre chantier Technal pour le coulissant SOLEAL GY 55 (Réf. 5832.002 / 5832.003 - 05/2018, 18 pages). | m}$, $3\text{ mm}$ au-delà) / à faire / [Pose et galandage SOLEAL GY](/procedures/pose-soleal-gy-galandage.md) / / 4-6 / Pose du dormant et équipemen |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/contradictions-entre-sources.md :
+| CTR-12 | Nom de la poignée encastrée de coulissant | Brochure LUMINE65, p. 3 : « Poignée encastrée **MLINI** — En option. Disponible en inox, blanc ou noir », sur le coulissant LUMINE65 ; la photo montre une poignée argent à levier incliné | Catalogue général, p. 17 : « **DEHLI** — En option. Poignée encastrée. Disponible en inox, blanc ou noir », pour tous les coulissants ; la photo montre une cuvette blanche aux bords arrondis. Relu en image le 25/09/2026 : les deux photos ne représentent pas le même objet | **Aucune** — même fonction, même finitions, même position dans la liste, mais deux noms et deux dessins : il peut s'agir de deux poignées distinctes. Les deux sont portées sur [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) | Référence introuvable à la commande, ou poignée livrée qui n'est pas celle montrée au client |
+/anomalies/contradictions-entre-sources.md :
+| CTR-28 | Finitions de cinq poignées et béquilles sur la LUMINE65 | Brochure LUMINE65, février 2025 : coulissant (p. 3) Sécustik® ATLANTA « blanc ou aspect inox », cuvette encastrée SEOUL « En option. Disponible en inox, blanc ou noir » ; porte-fenêtre (p. 4) poignée Sécustik® ATLANTA « blanc ou aspect inox », béquille ATLANTA plaque étroite et Sécustik® ATLANTA avec rosace « blanc ou aspect inox. Noir et 7016 en option ». La même brochure donne à la Sécustik® ATLANTA de fenêtre « blanc, aspect inox, caramel ou laiton » (p. 4) | Catalogue général, janvier 2026 : Sécustik® ATLANTA de coulissant « blanc, aspect inox, caramel ou laiton », SEOUL « noir, 7016, aspect inox ou blanc » (p. 17) ; ATLANTA plaque étroite et Sécustik® ATLANTA avec rosace « inox, blanc ou laiton », noir et 7016 en option (p. 15) | **aucune** — aucune règle ne départage une liste de finitions ; les deux listes sont portées ligne par ligne sur [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md), avec leur source | Poignée caramel ou laiton, ou SEOUL 7016, promise sur une LUMINE65 où elle n'existe peut-être pas ; ou finition inox refusée à tort |
+/anomalies/informations-a-verifier.md :
+| VER-53 | Source de « Hydro CIRCAL » et de l'alliage « 6060 T6 » de l'aluminium bas carbone TECHNAL | La page [TECHNAL](/fournisseurs/technal.md) portait, sous le locator du dépliant LUMÉAL d'avril 2026, p. 2 : « 75 %, déchets post-consommation Hydro CIRCAL » et « Première qualité bâtiment (alliage 6060 T6) ». Les dépliants LUMÉAL de juin 2023 (p. 2) et d'avril 2026 (p. 2), relus en image le 25/09/2026, n'écrivent que « aluminium de première qualité fabriqué avec un minimum de 75 % d'aluminium recyclé en fin de vie (déchets post-consommation) » ; les deux mentions sont retirées du tableau. Elles peuvent venir d'un document TECHNAL non encore versé dans `raw/` | Service achats, TECHNAL |
+/anomalies/incoherences-internes.md :
+| INC-196 | Instructions de montage Roto NX KSR, réf. IMO_180_NX_FR_v2, novembre 2022 | PDF p. 44 (imprimée 42), oscillo-battant à deux vantaux | La note « ⁵⁾ uniquement HP 563 et 1000. » figure sous la liste, mais aucune ligne de la page ne porte le renvoi ⁵⁾ | Retrouver la ligne à laquelle la note s'applique (probablement une crémone) | Une restriction de hauteur de poignée s'applique à une pièce qu'on ne peut pas identifier |

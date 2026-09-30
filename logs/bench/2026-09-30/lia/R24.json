@@ -1,0 +1,31 @@
+{
+  "question": "donne moi les cotes du dormants 6106",
+  "pages_lues": [
+    "/profiles/systeme-70-plans-de-combinaison.md",
+    "/profiles/systeme-70-profiles-et-renforts.md",
+    "/profiles/systeme-70-assemblages.md"
+  ],
+  "anomalies": [
+    "CTR-39",
+    "CTR-78",
+    "INC-12",
+    "INC-258",
+    "VER-38",
+    "VER-62"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "6106 dormant cotes",
+        "limite": 3
+      },
+      "pages_nouvelles": [
+        "/profiles/systeme-70-plans-de-combinaison.md",
+        "/profiles/systeme-70-profiles-et-renforts.md",
+        "/profiles/systeme-70-assemblages.md"
+      ],
+      "caracteres": 264370
+    }
+  ]
+}

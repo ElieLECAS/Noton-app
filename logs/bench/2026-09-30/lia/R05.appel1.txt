@@ -1,0 +1,1744 @@
+===== PAGE 1 : /procedures/percage-coulisses-lame-serrure-soprofen.md =====
+# Domaine d'application et conditions préalables
+
+La présente procédure détaille les opérations de traçage et d'usinage des lumières de verrouillage en fond de coulisses pour les volets roulants [SOPROFEN](/fournisseurs/soprofen.md) équipés d'une manœuvre manuelle par tirage direct avec lame finale à serrure [1 p. 1].
+
+L'intervention s'effectue **sur place, une fois le volet roulant posé** dans la baie [1 p. 1] :
+* Le tablier doit être complètement descendu en appui sur la bavette ou sur le sol fini [1 p. 1].
+* Les lames basses doivent être fermement tassées à l'aide des poignées cuvettes montées sur la lame à serrure avant tout traçage [1 p. 1].
+
+# Outillage requis
+
+* Mètre ruban et réglet métallique de précision.
+* Crayon de traçage de menuisier.
+* Perceuse portative équipée d'un foret métaux de diamètre $\varnothing 10\text{ mm}$ [1 p. 1].
+* Lime plate de serrurier (nécessaire pour les cylindres ovales) [1 p. 1].
+
+# Identification du type de cylindre
+
+La méthode de traçage et la cote de positionnement du trou dépendent de la géométrie du barillet de serrure intégré à la lame finale [1 p. 1] :
+
+| Type de cylindre | Repère de traçage initial | Formule du centre de perçage (mm) | Forme de l'usinage en fond de coulisse |
+| --- | --- | --- | --- |
+| 1er modèle : cylindre rond | Trait au crayon sur le **dessus** de la lame finale | $\text{Trait dessus} - 10$ | Trou cylindrique brut $\varnothing 10\text{ mm}$ |
+| 2ème modèle : cylindre ovale | Trait au crayon sur le **dessous** de la lame finale | $\text{Trait dessous} + 15$ | Trou $\varnothing 10\text{ mm}$ ovalisé à la lime |
+
+(schéma: raw/moustiquaires/export_doc_134.zip, p. 1)
+
+# Étapes opératoires d'exécution
+
+### Étape 1 : Descente et mise en pression du tablier
+1. Dérouler manuellement le tablier jusqu'à ce que la lame finale repose parfaitement sur l'appui maçonné ou le sol fini [1 p. 1].
+2. Presser fermement vers le bas les poignées cuvettes afin de tasser l'ensemble des ajours et supprimer tout jeu entre les lames basses [1 p. 1].
+
+### Étape 2 : Traçage des traits de référence
+1. Identifier visuellement le modèle de cylindre (rond ou ovale) [1 p. 1].
+2. À l'aide d'un crayon fin, tracer sur les deux coulisses de guidage :
+   * Le trait d'affleurement supérieur (dessus de la lame) pour un cylindre rond [1 p. 1].
+   * Le trait d'affleurement inférieur (dessous de la lame) pour un cylindre ovale [1 p. 1].
+
+### Étape 3 : Remontée du tablier et pointage
+1. Remonter le tablier d'environ 500 mm pour dégager complètement la zone de travail en fond de coulisses [1 p. 1].
+2. Reporter la cote de centre de perçage au fond de chaque coulisse :
+   * **Pour cylindre rond** : mesurer $10\text{ mm}$ vers le bas à partir du trait supérieur tracé à l'étape 2 [1 p. 1].
+   * **Pour cylindre ovale** : mesurer $15\text{ mm}$ vers le haut à partir du trait inférieur tracé à l'étape 2 [1 p. 1].
+
+### Étape 4 : Perçage et ajustement
+1. Pointer et percer un trou franc de diamètre $\varnothing 10\text{ mm}$ dans le fond de chaque coulisse [1 p. 1].
+2. **Pour le cylindre rond** : ébavurer les contours du trou $\varnothing 10\text{ mm}$ [1 p. 1].
+3. **Pour le cylindre ovale** : à l'aide d'une lime plate douce, ovaliser verticalement le perçage pour créer une lumière oblongue recevant sans frottement la targette rectangulaire de $10\text{ mm}$ de hauteur [1 p. 1].
+
+### Étape 5 : Contrôle fonctionnel
+1. Redescendre le tablier en position fermée.
+2. Actionner la clé dans le barillet pour déployer les targettes latérales à gauche et à droite.
+3. Vérifier que les targettes s'engagent librement dans les lumières percées sans point dur ni contrainte mécanique sur la clé.
+
+# Assistance technique fabricant
+
+En cas de difficulté de mise en œuvre, le service technique SOPROFEN est joignable via [1 p. 2] :
+* **Hotline Professionnelle** : `03 88 900 990` (accessible sur code d'accès chargé de clientèle, du lundi au jeudi de 9h à 12h et de 14h à 17h30, le vendredi de 9h à 12h et de 13h30 à 16h30).
+* **Centre de formation technique** : `03 88 905 034`.
+
+# Citations
+
+[1] [Notice de perçage des coulisses pour lame à serrure SOPROFEN, réf. NO-MM-T-TD-00-FR-032008](raw/moustiquaires/export_doc_134.zip), p. 1 et 2
+
+# Voir aussi
+
+- [SOPROFEN](/fournisseurs/soprofen.md)
+- [Volets roulants](/equipements/volets-roulants.md)
+- [Notice de perçage des coulisses pour lame à serrure SOPROFEN (2008)](/sources/soprofen-notice-percage-coulisse-lame-serrure.md)
+
+===== PAGE 2 : /procedures/directives-generales-systeme-70-evo2008.md =====
+# Ce que fait cette procédure
+
+Elle réunit les directives générales de fabrication des fenêtres du système 70 telles que le
+classeur KÖMMERLING « Système e.VOLUTION » d'août 2008 (système F 91, registre 5.1) les écrit : la
+matière des profilés, puis le parcours d'un profilé dans l'atelier, de la livraison au cadre
+soudé et ébavuré. Elle décrit les menuiseries de cette génération ; les directives en vigueur
+depuis 2023 sont sur [Fabrication des profilés PVC, directives
+profine](/procedures/fabrication-profiles-pvc.md), et chaque section ci-dessous dit où les deux
+textes diffèrent.
+
+Le registre 5.1 est paginé de 1 à N : sa page imprimée N est la page N + 192 du PDF.
+
+# Caractéristiques de la matière
+
+La fabrication des fenêtres Kömmerling s'effectue à l'aide de profilés dont la réalisation se fait
+par extrusion à partir de la formulation 4091/4092/4093/4094 - 654/607/147. Un contrôle de
+fabrication permanent assure la qualité et l'exactitude dimensionnelle des profilés [1 p. 193].
+L'extrusion est la mise en forme du PVC chaud poussé à travers une filière qui lui donne la section
+du profilé.
+
+La table donne, pour la matière des profilés (le compound Kömalit Z), chaque caractéristique avec
+sa valeur, telles qu'imprimées [1 p. 193-194].
+
+| Caractéristique | Valeur |
+| --- | --- |
+| ®Kömalit Z | compound suivant mélange KÖMMERLING |
+| Masse volumique | 1,44 g/cm³ |
+| Résilience au choc à −40 °C | sans rupture |
+| Résistance au choc à 23 °C sur barreau entaillé | ≥ 40 kJ/m² |
+| Dureté à la bille (temps de pression 30 s) | 100 N/mm² |
+| Résistance à la traction | ≥ 40 N/mm² |
+| Module d'élasticité | ≥ 2500 N/mm² |
+| Température de ramollissement Vicat VST/B (mesurée dans l'huile) | ≥ 80 °C |
+| Température de ramollissement ISO R 75/A (mesurée dans l'huile) | ≥ 69 °C |
+| Coefficient de dilatation linéaire (de −30 °C à +50 °C) | 0,8 × 10⁻⁴ K⁻¹ |
+| Conductivité thermique | 0,16 W/mK |
+| Résistance de transmission spécifique | 10¹⁶ Ω cm |
+| Constance diélectrique relative | 3,3 à 50 Hz ; 2,9 à « 106 Hz » (**INC-228**) |
+| Comportement au feu | difficilement inflammable, autoextingible |
+| Stabilité de la teinte (RAL RG 716/1, 1re partie) | après un rayonnement énergétique de 0,8 GJ/m², supérieure au facteur 4 de l'échelle des gris |
+| Résistance au vieillissement | après un rayonnement énergétique de 0,8 GJ/m², perte de résistance au choc < 30 % |
+| Résistant à l'égard de | termites, pourritures, produits chimiques, par exemple lessives, acides, sels, solutions salines, alcalis, eaux de mer, huiles, chaux, ciments, gaz d'échappement de tous genres |
+| Comportement physiologique et à l'environnement | inerte, neutre ; la stabilité de la teinte ainsi que la résistance aux produits chimiques garantissent une manipulation sans danger pour la santé ni danger pour l'environnement |
+| Acoustique | tous les classements peuvent être atteints (Ac1, Ac2, Ac3, Ac4) en mettant en œuvre les composants adéquats |
+| Thermique | le coefficient Uw de la fenêtre est déterminé par la performance du vitrage (tenant compte de l'intercalaire) et par la valeur Uf des profilés ; le coefficient Uf du profilé est fonction de la combinaison utilisée, il est compris entre 1,9 et 1,3 W/m²K |
+
+®Kömalit Z est une marque déposée de la société profine KÖMMERLING. « NB : Tous ces résultats
+correspondent bien évidemment à une norme en vigueur. » [1 p. 193-194]
+
+Uw est le coefficient de transmission thermique de la fenêtre entière, Uf celui du cadre (profilés
+seuls), tous deux en W/m²K ; Ac1 à Ac4 sont les classes acoustiques
+([glossaire](/reference/glossaire.md)). L'intercalaire est l'entretoise qui sépare les verres d'un
+double vitrage.
+
+# Livraison, déchargement et stockage
+
+## 1. Livraison
+
+Les profilés fenêtres et volets roulants sont livrés soit en unités d'emballage, soit en cassettes.
+Le métrage composant chaque unité d'emballage ou cassette est indiqué dans chaque tarif respectif.
+Afin d'éviter toute contestation ultérieure, vérifier la conformité [1 p. 197] :
+
+- du métrage indiqué sur le bulletin de livraison ;
+- de la qualité des profilés livrés.
+
+## 1.1 Déchargement
+
+Pour effectuer le déchargement des cassettes, se servir d'un engin de manutention tel que chariot
+élévateur frontal ou latéral ou pont roulant (2,5 t mini). Éviter tout moyen de déchargement
+pouvant entraîner une déformation ou une détérioration des profilés [1 p. 197].
+
+## 1.2 Stockage
+
+1. Stocker les profilés à plat afin d'éviter toute déformation.
+2. Munir les étagères d'une assise plane et solide.
+3. Les profilés blancs peuvent être stockés à l'extérieur, tout en évitant qu'ils se salissent.
+4. Les profilés filmés ou de couleur sont à stocker à l'intérieur ou sous couvert. Le fait d'ouvrir
+   les unités d'emballage ou l'emballage des cassettes permet d'éviter une condensation à
+   l'intérieur de la protection, et de ce fait évite une éventuelle dégradation de la surface
+   filmée.
+5. Dans tous les cas, les profilés devront être transformés à une température supérieure ou égale
+   à 15°. Nota : les profilés PVC pour fenêtres s'échauffent en moyenne de 1° par heure entreposés
+   dans une ambiance de 18 à 20°. Dans cette hypothèse, les profilés devront se soumettre le temps
+   nécessaire, avant transformation, à un préstockage à une température minimale de 18° [1 p. 197].
+
+Un profilé filmé est un profilé revêtu d'un film décoratif (plaxé) ; la transformation est le
+travail en atelier (débit, soudure).
+
+## 1.3 Stockage des renforts
+
+Afin d'éviter une formation de rouille blanche sur la surface de l'acier, prévoir impérativement un
+stockage à l'intérieur. Dans l'impossibilité d'un stockage intérieur, couvrir l'acier d'une bâche
+bien ventilée [1 p. 197]. Le renfort est le profilé d'acier glissé dans la chambre du profilé PVC.
+
+Les directives de 2023 portent le même seuil de 15 °C à l'usinage et le même échauffement
+d'environ 1 °C par heure à 18-20 °C ([Fabrication des profilés PVC, directives
+profine](/procedures/fabrication-profiles-pvc.md), *Conditions et interdictions*) ; elles
+chiffrent l'entreposage préalable à une température ambiante d'au moins 15 °C, là où le texte de
+2008 écrit un préstockage à 18° minimum.
+
+# Débit
+
+Le débit est la coupe des barres de profilé à la longueur voulue, à 45° pour les angles soudés.
+Les tronçonneuses une tête et les tronçonneuses doubles sont adaptées au débit des profilés en PVC
+[1 p. 198].
+
+## 2.1 Directives concernant la machine
+
+Les meilleurs résultats ont été obtenus avec des lames en métal dur à denture plate « en
+trapèze » [1 p. 198] :
+
+| Paramètre | Valeur |
+| --- | --- |
+| Pas de denture | environ 13 mm (par exemple Ø 450 mm = 110 dents, Ø 500 mm = 120 dents) |
+| Vitesse de coupe | environ 60 à 70 m/s |
+| Avance de l'outil de coupe | réglée de manière à assurer une surface de coupe nette |
+| Lame pour les profilés complémentaires à paroi mince (parcloses, rehausses, etc.) | lame à denture fine, pas environ 3 à 4 mm |
+
+**Attention : des lames de scie émoussées ou une avance trop rapide provoquent une rupture du
+matériau et réduisent la qualité de la coupe** [1 p. 198].
+
+Lors du débit du profilé, il faut tenir compte de la surlongueur nécessaire pour la soudure. La
+grande partie des soudeuses courantes sont réglées pour un cordon de 6 mm ; il peut cependant
+varier d'une machine à l'autre. Pour s'assurer que les dimensions exactes des cadres sont
+effectivement maintenues, il faudrait contrôler le cordon effectif obtenu avec chaque tête et, au
+besoin, la régler pour qu'elle produise un bourrelet de même importance (6 mm) [1 p. 198]. Le
+cordon (ou bourrelet) est la matière fondue qui ressort de part et d'autre du plan de soudure ;
+les directives de 2023 donnent pour cette zone de fonte une valeur indicative de 5 à 6 mm
+([Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md#excédents-de-longueur-pour-soudeuses)).
+
+Avec les tronçonneuses doubles, il est possible de passer de la mesure extérieure du dormant déjà
+réglée à la mesure feuillure de l'ouvrant en utilisant, par exemple, des cales, mais seulement si
+la tronçonneuse double n'est pas commandée par ordinateur [1 p. 198].
+
+## 2.2 Conditions préalables à un débit de bonne qualité
+
+Lorsqu'on retire les profilés des cassettes ou des rayons, il faut veiller à ce que les surfaces
+visibles des profilés ne soient pas abîmées ou rayées [1 p. 198].
+
+1. Température des profilés : supérieure ou égale à 15 °C (respecter la durée de pré-stockage pour
+   tempérer les profilés).
+2. Réglage des angles de l'outil de coupe : exactement 45° ; écart maximum toléré : 0,5° ; angle
+   d'inclinaison de la scie : 90°.
+3. Respecter les instructions concernant la machine.
+4. **Respect du jeu périphérique entre ouvrant et dormant.** Pour garantir un bon fonctionnement de
+   la fenêtre, il est nécessaire, entre autres, de respecter le jeu périphérique entre ouvrant et
+   dormant (jeu de feuillure) de 12⁺¹ mm [1 p. 198].
+
+Le jeu de feuillure est l'espace laissé entre le bord de l'ouvrant et la feuillure du dormant, où
+se logent les ferrures ([glossaire](/reference/glossaire.md)).
+
+![Jeu périphérique de 12 mm entre ouvrant et dormant (2008)](/assets/procedures/directives-evo2008/jeu-de-feuillure-12-mm-evo2008.png)
+
+Coupe d'un dormant (à gauche, avec son renfort hachuré) et d'un ouvrant (à droite, renfort en
+équerre hachuré). En haut, la cote 12⁺¹ mm est le jeu périphérique, égal au jeu de feuillure,
+« jeu nécessaire pour les ferrures » ; en bas, une cote verticale de 3,5⁺¹ mm [1 p. 198].
+
+| Cote | Valeur (mm) | Tolérance (mm) |
+| --- | --- | --- |
+| Jeu périphérique = jeu de feuillure | 12 | +1 |
+| Cote verticale portée en bas du dessin | 3,5 | +1 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 198)
+
+La condition essentielle à cette opération est donc une découpe adaptée aux dimensions du jeu de
+feuillure, qui s'obtient en fonction du type de positionnement, comme représenté dans le tableau
+ci-dessous [1 p. 199]. Une ligne par type de scie : la position de l'outil de coupe et sa zone de
+pivotement, puis où se placent les cales sous le dormant et sous l'ouvrant pendant la coupe.
+
+| Outil de coupe et zone de pivotement | Calage du dormant | Calage de l'ouvrant |
+| --- | --- | --- |
+| outil de coupe de l'arrière, zone de pivotement 45°/90°/45° | cales en bas | cales en bas |
+| outil de coupe de l'arrière, zone de pivotement 45°/90° l'extérieur | cales en bas | cales en haut, avec les vérins de levage |
+| outil de coupe de l'arrière, zone de pivotement 90°/45° l'extérieur | cales en haut, avec les vérins de levage | cales en bas |
+| outil de coupe du haut ou de dessous, zone de pivotement 45°/90°/45° | cales à l'arrière | cales à l'arrière |
+
+![Calage des profilés au débit selon le type de scie (2008)](/assets/procedures/directives-evo2008/calage-des-profiles-au-debit-evo2008.png)
+
+Le tableau imprimé montre, pour chaque ligne, le dormant (colonne de gauche) et l'ouvrant (colonne
+de droite) posés contre la butée de la scie, les cales en blocs hachurés. Sur la première et la
+dernière ligne, le dessin du dormant porte « Outil de coupe 45° basculé vers extérieur » et celui
+de l'ouvrant « Outil de coupe 45° basculé vers l'intérieur » ; « Vérin de levage » repère le vérin
+sous le profilé calé en haut [1 p. 199].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 199)
+
+## 2.3 Contrôle du débit
+
+Une vérification du débit doit être effectuée en début de production et à chaque changement de
+profilé [1 p. 199].
+
+- Il est préférable de stocker les profilés débités verticalement, car en stockage horizontal les
+  pointes des profilés peuvent être abîmées par l'opérateur. **Ils devront être soudés sous 48 h.**
+  Une durée de stockage plus longue pourrait occasionner des dépôts de poussière sur la surface
+  découpée et donc endommager la qualité de la soudure.
+- Pendant le débit, veiller à ce que les profilés, et en particulier les surfaces découpées, ne
+  comportent pas de salissures. **Des salissures résiduelles sur les surfaces découpées influencent
+  la qualité des soudures** [1 p. 199].
+
+# Fraisage et perçage
+
+## 3. Fraisage
+
+Utiliser des fraiseuses à grande vitesse de rotation comme celles utilisées pour le bois ou
+l'aluminium. KÖMMERLING recommande l'utilisation de fraises à grande denture possédant une
+géométrie assurant une bonne évacuation des copeaux [1 p. 199].
+
+## 4. Perçage
+
+Tous les profilés PVC peuvent être percés avec des forets généralement utilisés dans l'acier. La
+vitesse de rotation et d'avance est fonction de la profondeur de perçage [1 p. 199].
+
+| Paramètre du foret | Valeur |
+| --- | --- |
+| Angle de dépouille | environ 30° |
+| Angle d'attaque | 110° |
+| Angle de coupe | 12 à 16° |
+| Perçage de plus de 20 mm | forets étagés, avec un dispositif muni d'un canon de perçage |
+| Diamètre de plus de 40 mm | l'opération se fait en carottage |
+
+# Renforcement
+
+## 5.1 Généralités
+
+Les profilés ouvrants doivent être renforcés suivant les directives KÖMMERLING [1 p. 200].
+
+## 5.2 Profilés laqués ou filmés
+
+**Tous les profilés principaux (dormants / ouvrants, traverses et meneaux) doivent absolument être
+renforcés.** Les profilés blancs destinés à être laqués ultérieurement **ne sont pas considérés
+comme des profilés blancs** et doivent être renforcés systématiquement [1 p. 200].
+
+## 5.3 Profilés blancs
+
+### 5.3.1 Dormants
+
+En général [1 p. 200] :
+
+- renforcement du dormant en traverse basse à partir de DHT 1500 mm (DHT : dimension hors tout) ;
+- traverse haute de dormant et dormant liaisonné à la maçonnerie sans organes de rotation :
+  renforcement non obligatoire ;
+- les dormants non fixés à la maçonnerie (par exemple ceux situés sous les caissons de volets
+  roulants) doivent être renforcés (voir dessin 4) ;
+- dans le cas d'un assemblage mécanique par équerres, ou par pièce d'ancrage, les dormants et
+  traverses doivent être renforcés (voir dessin 1) ;
+- les renforts utilisés pour les profilés principaux figurent dans le programme de livraison de
+  KÖMMERLING. **Des éventuelles réclamations suite à l'utilisation de renforts autres que ceux
+  proposés par KÖMMERLING seront rejetées.**
+
+**Dormants multicellulaires avec préchambre intérieure** : renforcement non obligatoire pour les
+dormants liés à la maçonnerie ; dans tous les cas, renforcement de la traverse basse pour
+L > 1500 mm. Dans le cas OF (ouvrant à la française), KÖMMERLING préconise l'utilisation de
+platines vissées côté dormant et ouvrant, ou d'une platine à visser côté dormant et de fiches côté
+ouvrant ; les autres solutions étant sous la responsabilité du fabricant [1 p. 200].
+
+Le renforcement de la traverse basse de dormant au-delà de 1500 mm n'a pas d'équivalent dans les
+directives de 2023, où le dormant blanc lié à la maçonnerie n'est pas obligatoirement renforcé
+([Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md#quand-renforcer)) —
+**CTR-87**.
+
+### 5.3.2 Ouvrants
+
+Pour le renforcement des ouvrants, se reporter aux diagrammes [1 p. 200] : ce sont les
+[abaques de renforcement du système 70 de 2008](/profiles/systeme-70-abaques-evo2008.md).
+
+### 5.3.3 Meneaux / traverses
+
+Renforcement à déterminer suivant calcul statique [1 p. 200] : voir [Statique et moments
+d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md).
+
+### Dessin 1 : renfort du dormant à l'assemblage mécanique d'un meneau
+
+![Renfort du dormant sous un meneau assemblé par équerres 9714, dessin 1 (2008)](/assets/procedures/directives-evo2008/renfort-assemblage-mecanique-9714-dess1-evo2008.png)
+
+En haut, la coupe du meneau avec son renfort ; en dessous, le meneau vu de face, assemblé sur la
+traverse de dormant par deux équerres d'assemblage mécanique de fond de feuillure, gauche et
+droite, F90-77- 9714, vissées. Dans la traverse de dormant, sous l'assemblage, un renfort
+d'environ 250 mm (tireté) [1 p. 200].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 200)
+
+## 5.4 Débit du renfort
+
+### 5.4.1 Renforcement de l'ouvrant et du dormant
+
+Le renfort s'arrête à distance de l'angle soudé : à 5 mm minimum de l'angle (dessin 2) et à 55 mm
+maximum de l'angle (dessin 3) [1 p. 201].
+
+### 5.4.2 Renforcement côté organes de rotation
+
+Ce renfort devra avoir la longueur suffisante de manière à ce que la quincaillerie (paumelles,
+pivot, compas) puisse être fixée dans l'acier avec au moins 2 vis. **Dans le cas d'une fixation
+dans le PVC, veiller à ne pas « abîmer » le filetage.** Pour les autres dormants, minimum 5 mm,
+maximum 55 mm (voir dessins 2 et 3) [1 p. 201].
+
+### 5.4.3 Renforcement des meneaux / traverses
+
+Veiller à ce que le renfort soit en retrait haut et bas de 10 mm par rapport à l'assemblage
+mécanique (dessin 4). Les équerres de fond de feuillure droite et gauche sont à visser dans
+l'acier [1 p. 201].
+
+| Renfort | Position | Cote (mm) |
+| --- | --- | --- |
+| ouvrant et dormant | distance minimale à l'angle | 5 |
+| ouvrant et dormant | distance maximale à l'angle | 55 |
+| côté organes de rotation | longueur | suffisante pour fixer la quincaillerie avec au moins 2 vis dans l'acier |
+| meneau / traverse | retrait haut et bas par rapport à l'assemblage mécanique | 10 |
+
+![Renfort arrêté à 5 mm minimum de l'angle, dessin 2 (2008)](/assets/procedures/directives-evo2008/renfort-5-mm-de-l-angle-dess2-evo2008.png)
+
+Angle soudé d'un cadre vu de face, le renfort en tireté dans chaque profilé : il s'arrête à
+« min. 5 » mm de la coupe d'onglet, dans le montant comme dans la traverse ; la coupe du profilé
+est dessinée à droite.
+
+![Renfort arrêté à 55 mm maximum de l'angle, dessin 3 (2008)](/assets/procedures/directives-evo2008/renfort-55-mm-de-l-angle-dess3-evo2008.png)
+
+Même angle : le renfort ne s'arrête pas à plus de « max. 55 » mm de l'angle.
+
+![Renfort de meneau en retrait de 10 mm, dessin 4 (2008)](/assets/procedures/directives-evo2008/renfort-meneau-retrait-10-mm-dess4-evo2008.png)
+
+Pied d'un meneau sur la traverse de dormant : le renfort du meneau (tireté) s'arrête 10 mm au-dessus
+de la pièce d'assemblage (rectangle croisé), traversée par une goupille.
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 201)
+
+La liste des dormants (5.3.1) renvoie au dessin 4 pour les dormants non fixés à la maçonnerie ; le
+dessin 4 imprimé montre le retrait du renfort de meneau (**INC-229**).
+
+## 5.5 Fixation du renfort : généralités
+
+### 5.5.1 Moyens de liaison
+
+| Moyen de liaison | Statut |
+| --- | --- |
+| rivets ou vis autoforeuses étanches traitées anti-corrosion | autorisés |
+| vis à tête fraisée | recommandées |
+| cloutage | **interdit** |
+
+### 5.5.2 Entraxe de fixation
+
+- entre vis / rivets : maxi 300 mm ;
+- de l'extrémité du renfort : maxi 30 mm [1 p. 201].
+
+# Fraisage des boîtiers de crémones, perçage des poignées
+
+La crémone est la ferrure de fermeture manœuvrée par la poignée ; son boîtier se loge dans une
+entaille fraisée dans l'ouvrant. Le fouillot est la pièce de la crémone qui reçoit le carré de
+la poignée ([glossaire](/reference/glossaire.md)).
+
+Les profilés ouvrants larges ou étroits sont conçus pour l'utilisation de ferrures courantes dont
+la dimension des fouillots se situe entre 7 et 18 mm. On ne pratique le fraisage pour le boîtier
+de crémone que dans la paroi en PVC du logement pour ferrure. Le fraisage des boîtiers de crémones
+peut s'effectuer avec des machines standards. Les perçages pour la fixation des poignées dans
+l'acier et le PVC peuvent être réalisés avec des machines courantes [1 p. 202].
+
+Lorsqu'on utilise des profilés d'ouvrant étroits, l'utilisation des ferrures avec fouillot compris
+entre 7 et 9 mm est recommandée. Cela évite le fraisage du renfort et du PVC. Si l'on choisit
+malgré tout une ferrure ayant un fouillot de 14 à 18 mm avec des profilés d'ouvrant étroits, il
+faut fraiser le renfort en acier avant de l'insérer dans le profilé PVC (ne pas interrompre le
+renfort). Il est possible d'effectuer le fraisage après avoir inséré l'acier ; pour ce faire, des
+machines spéciales pour le fraisage de l'acier sont nécessaires. Dans ce cas, il est nécessaire
+d'étancher le fond de feuillure vitrage afin d'éviter que l'humidité ne pénètre dans la chambre du
+renfort ; on pourra, par exemple, utiliser un capuchon collé à l'endroit du défonçage ou étancher
+au silicone [1 p. 202].
+
+| Profilé d'ouvrant | Fouillot de la ferrure (mm) | Usinage |
+| --- | --- | --- |
+| large ou étroit | 7 à 18 | profilés conçus pour ces ferrures courantes |
+| étroit | 7 à 9 (recommandé) | pas de fraisage du renfort ni du PVC |
+| étroit | 14 à 18 | fraiser le renfort avant de l'insérer, sans l'interrompre ; ou fraiser après insertion avec une machine spéciale, puis étancher le fond de feuillure vitrage (capuchon collé ou silicone) |
+
+**Attention : le renfort ne doit en aucun cas être interrompu à l'emplacement du boîtier de
+crémone** [1 p. 202].
+
+![Fraisage du boîtier de crémone dans un ouvrant renforcé (2008)](/assets/procedures/directives-evo2008/fraisage-boitier-de-cremone-evo2008.png)
+
+Vue en perspective d'un montant d'ouvrant coupé, son renfort (hachuré en coupe) dans la chambre :
+l'entaille oblongue du boîtier de crémone est fraisée dans la paroi du logement de ferrure, le
+renfort restant continu derrière ; une flèche désigne l'entaille, et une pièce oblongue est
+dessinée seule à droite. Légende imprimée : « Utiliser les renforts pré-usinés avec le profilé 6115 et
+6123 » [1 p. 202]. Les ouvrants 6115 et 6123 sont sur [Profilés et renforts du système
+70](/profiles/systeme-70-profiles-et-renforts.md).
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 202)
+
+# Soudage
+
+Les angles d'un cadre PVC sont soudés bout à bout : les deux coupes d'onglet sont chauffées
+contre un miroir (plaque chauffante revêtue de téflon), puis pressées l'une contre l'autre ; la
+matière fondue qui ressort forme le bourrelet (ou cordon) que l'on ébavure ensuite.
+
+## 7. Soudage (texte de la page imprimée 11)
+
+Afin d'obtenir des résultats de soudure optimum, il est impératif de respecter les points
+suivants ainsi que les instructions du fabricant de soudeuses [1 p. 203] :
+
+1. Température du profilé supérieure à 15°.
+2. Tolérance d'angle de coupe inférieure à 0,5°.
+3. Les surfaces de soudure devront être exemptes de poussière, de sueur, de copeaux, d'humidité et
+   de film de protection.
+4. Les paramètres de soudure indiqués ci-dessous et ci-contre :
+   - contrôle de la température de l'élément chauffant, température 235° à 245°, à contrôler sur
+     la surface du miroir de soudure au moyen d'un instrument de mesure ;
+   - état de surface de l'élément chauffant : exempt de résidus, avec un aspect de surface sans
+     détériorations ;
+   - limitation du bourrelet minimum 2 ± 0,2 mm (plus la limitation est faible, plus la résistance
+     des angles diminue). **Nota** : les 2 mm indiqués sont l'espace entre les couteaux de la
+     soudeuse quand ceux-ci sont en mode soudure ; il ne faut pas confondre avec la surlongueur de
+     matière qui est consommée par la soudure. Température des couteaux : 45 à 50° ;
+   - cales adaptées au profilé à souder. Vérifier la température de soudure directement sur le
+     miroir au moyen d'un instrument de mesure adapté [1 p. 203].
+
+**Réglage visuel de la température** [1 p. 203] :
+
+1. Monter graduellement en température jusqu'à constatation d'un bourrelet jaunâtre (limite de
+   brûler la matière).
+2. Descendre la température de 5°. Après cette opération, le bourrelet ne doit plus présenter de
+   traces jaunâtres, et donc la valeur optimale est atteinte. Cette température de surface est
+   valable pour les profilés blancs et structurés.
+
+En complément, il est indispensable de réaliser périodiquement des essais de cassure d'angles
+(station à 2 chariots) afin d'avoir la certitude de se situer au-dessus des valeurs de rupture
+minimales établies pour chaque profilé. KÖMMERLING profine se tient à disposition pour faire ces
+essais sur simple demande [1 p. 203].
+
+**Positionnement des profilés dans la soudeuse.** Afin d'éviter des erreurs d'équerrage,
+présenter les profilés comme suit, sur une soudeuse 2 têtes par exemple [1 p. 203] :
+
+- dormant horizontal → ouvrant horizontal ;
+- dormant vertical → ouvrant vertical.
+
+L'ébavurage ne pourra s'effectuer au plus tôt qu'après une minute [1 p. 203].
+
+## Directives pour le soudage de profilés PVC pour fenêtres (page imprimée 12)
+
+La page imprimée 12 est une fiche KÖMMERLING KUNSTSTOFF GMBH (Postfach 21 65, 66929 Pirmasens) qui
+récapitule les paramètres, à laquelle renvoie le titre « 7. Soudage (Directives page 12) »
+[1 p. 204].
+
+| Rubrique | Paramètre | Valeur |
+| --- | --- | --- |
+| Exigences | température mini des profilés | 15 °C ; absorption thermique environ 1 °C par heure, par exemple stockage extérieur à −10 °C = stockage intérieur de 25 heures à 15 °C avant utilisation |
+| Exigences | cotes en longueur des profilés à assembler | à respecter |
+| Exigences | écart angulaire | maxi 0,5° |
+| Exigences | surfaces à souder | exemptes de toute saleté, graisse, humidité, copeaux et de film protecteur |
+| Soudure | température du miroir | 235 à 245 °C, contrôlée avec un appareil de mesure muni d'un palpeur |
+| Soudure | surface du téflon | nette de toute impureté |
+| Soudure | cales de soudure | adaptées aux différents types de profilés |
+| Pressions standards | pression de serrage | environ 6 bars |
+| Pressions standards | pression d'accostage | 2,5 à 3,0 bars |
+| Pressions standards | pression de soudage | 5 à 6 bars |
+| Limitation du cordon de soudure | limitation | 2 ± 0,2 mm |
+| Limitation du cordon de soudure | température des couteaux | 45 à 50 °C |
+| Temps de soudure | temps de fusion | 40 à 50 s |
+| Temps de soudure | temps d'ajustement | maxi 2 s |
+| Temps de soudure | temps de soudure | mini 25 s |
+| Temps de refroidissement avant ébavurage | durée | minimum 45 s (mais pas plus de 30 min) |
+| Temps de refroidissement avant ébavurage | refroidissement accéléré | **pas de refroidissement accéléré** (par exemple au moyen d'air comprimé) |
+| Soudage avec insert de soudure | température du miroir chauffant | 235 °C |
+| Soudage avec insert de soudure | temps de fusion | 60 s |
+| Soudage avec insert de soudure | temps d'ajustement | maxi 2 s |
+| Soudage avec insert de soudure | temps de soudure | mini 25 s |
+| Soudage avec insert de soudure | temps de refroidissement | mini 60 s |
+| Ébavurage | amorces de rupture | à éviter |
+| Ébavurage | profondeur de la rainure | maxi 0,3 mm |
+| Ébavurage | angles intérieurs | couteau arrondi |
+| Ébavurage | rainure à joint | limiter la profondeur de l'ébavurage |
+
+Remarque : les paramètres indiqués dans ces directives sont des recommandations, qui peuvent
+toutefois varier en fonction des différentes machines [1 p. 204].
+
+![Influence du temps de fusion sur la résistance des angles (2008)](/assets/procedures/directives-evo2008/soudage-temps-de-fusion-resistance-des-angles-evo2008.png)
+
+La courbe donne la résistance des angles soudés (en N, en ordonnée, sans graduation chiffrée) en
+fonction du temps de fusion (en secondes, en abscisse, de 20 à 60 s), avec une température du
+miroir de 240 °C. La résistance croît jusqu'à un maximum atteint dans la bande grisée « temps
+recommandé », de 40 à 50 s, puis décroît jusqu'à 60 s. L'ordonnée n'étant pas graduée, aucune
+valeur de résistance ne se lit sur la courbe [1 p. 204].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 204)
+
+Plusieurs paramètres diffèrent de la directive de soudage de 2023 ([Fabrication des profilés
+PVC](/procedures/fabrication-profiles-pvc.md#directive-de-soudage-des-profilés-de-fenêtre-en-pvc)) :
+température du miroir, temps de fusion (standard et avec insert), pressions de serrage et de
+soudage, profondeur de la rainure d'ébavurage — **CTR-88**.
+
+# Ébavurage
+
+## 8. Ébavurage des dormants et ouvrants sans joint
+
+L'ébavurage enlève le bourrelet laissé par la soudure à l'angle du cadre [1 p. 205].
+
+1. Ne pas refroidir la soudure rapidement (par exemple à l'air comprimé).
+2. L'ébavurage ne doit pas être effectué avant 1 min, sous risque d'affaiblir la soudure. Le laps
+   de temps d'attente idéal est de 30 min (**INC-230**).
+3. Pour l'ébavurage, utiliser les couteaux ayant les caractéristiques suivantes :
+
+| Caractéristique du couteau | Valeur (mm) |
+| --- | --- |
+| Largeur de la rainure | 3 |
+| Profondeur de la rainure, maxi | 0,3 |
+
+La fragilité de l'angle est obtenue par [1 p. 205] :
+
+- un impact dans l'angle intérieur obtenu par un ébavurage manuel au moyen d'un ciseau à bois ;
+- une rainure d'ébavurage trop profonde ;
+- un perçage trop profond de la gorge du joint ;
+- l'utilisation d'un produit de nettoyage dissolvant.
+
+**Remarque** : un perçage pour ébavurage de la gorge du joint trop profond conduit à réduire la
+résistance de l'angle et, dans le cas de sollicitations AEV très élevées, favorise le passage de
+l'eau sous le joint (mauvaise étanchéité à l'eau) [1 p. 205]. AEV désigne le classement air, eau,
+vent de la fenêtre ([Labels et certifications](/certifications/labels-et-certifications.md)).
+
+![Perçage de la gorge de joint à l'angle soudé, foret de 6,5 mm (2008)](/assets/procedures/directives-evo2008/ebavurage-percage-gorge-de-joint-6-5-evo2008.png)
+
+Angle intérieur d'un cadre soudé vu de face : le cordon de soudure (hachuré) suit la diagonale, et
+la gorge du joint est percée à l'angle (disque noir) par un foret de diamètre 6,5 mm, dessiné
+au-dessus [1 p. 205].
+
+| Cote | Valeur (mm) |
+| --- | --- |
+| Diamètre du foret de perçage de la gorge du joint | 6,5 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 205)
+
+La directive de 2023 écrit 0,5 mm de profondeur de rainure maximale (**CTR-88**).
+
+# Cintrage des profilés
+
+## 9. Cintrage des profilés
+
+Le cintrage est la mise en courbe d'un profilé pour une fenêtre cintrée. Pour cintrer des profilés PVC pour fenêtres, KÖMMERLING préconise la méthode à bains
+d'huile, par exemple vendue par les sociétés Witte ou Schulten [1 p. 206].
+
+Les profilés filmés ou laqués peuvent présenter un aspect mat et gris après cintrage. Les causes
+peuvent être une température non appropriée du bain de cintrage ou un refroidissement trop rapide
+dans l'eau. Une autre cause peut être l'emploi d'un liquide de cintrage non approprié, à base de
+glycérine par exemple, produit qui absorbe l'eau résiduelle, nuisant à la qualité du cintrage et
+de l'état de surface. **N'employer que du liquide à base de paraffine** [1 p. 206].
+
+Cet aspect mat et gris peut être enlevé en retravaillant les profilés avec l'un des composants
+suivants [1 p. 206] :
+
+| Produit | Code |
+| --- | --- |
+| Kö Lackcleaner | F00-74- 9959 |
+| Laque en spray - UV | F00-74- 9963 |
+
+Les directives suivantes sont à respecter [1 p. 206] :
+
+1. Nettoyer les parties légèrement mates et grises avec un chiffon doux à peine humidifié avec le
+   Kö-Cleaner, après cintrage et refroidissement. Il faut ainsi obtenir une surface propre, sèche
+   et sans reste de graisse.
+2. Pour des surfaces légèrement grises dues à de l'eau diffuse, le traitement doit s'effectuer avec
+   un pistolet à air chaud.
+3. Après cela, laquer les surfaces avec le spray UV. La dose doit être secouée environ 30 secondes
+   avant utilisation. Le spray doit être appliqué de façon **régulière** à une distance d'environ
+   25 à 30 cm du profilé. Si nécessaire, répéter l'opération après un temps de séchage d'environ 5
+   à 10 min.
+4. Laisser ensuite le produit s'aérer environ 2 heures sans toucher la surface traitée.
+
+**Diamètres minimum réalisables.** En collaboration avec des fabricants de machines, KÖMMERLING a
+obtenu des diamètres minimums, en plein cintre, avec une qualité acceptable, à condition
+d'utiliser les gabarits prévus par le fabricant et de respecter les instructions de façonnage.
+Les valeurs doivent être considérées comme des valeurs de référence ; en dessous, ou pour des cas
+spéciaux, consulter le fournisseur [1 p. 206].
+
+Les dix-neuf diamètres imprimés en 2008 sont ceux du tableau de [Châssis cintrés et
+trapézoïdaux du système 70](/procedures/chassis-cintres-trapezoidaux-systeme-70.md), profilé par
+profilé (de Ø 0,50 m pour le 6100 à Ø 1,00 m pour les 2415 et 2416) ; la liste de 2008 ne porte
+pas le 6155. Elle imprime chaque profilé avec son code complet [1 p. 206] :
+
+| Profilé | Code imprimé |
+| --- | --- |
+| 6100 | F91-01- 6100 |
+| 6101 | F91-01- 6101 |
+| 2502 | F95-01- 2502 |
+| 6102 | F91-01- 6102 |
+| 6104 | F91-01- 6104 |
+| 6105 | F91-01- 6105 |
+| 6106 | F91-01- 6106 |
+| 6107 | F91-01- 6107 |
+| 6108 | F91-02- 6108 |
+| 6109 | F91-02- 6109 |
+| 6110 | F91-02- 6110 |
+| 6111 | F91-02- 6111 |
+| 6112 | F91-06- 6112 |
+| 6115 | F91-06- 6115 |
+| 6121 | F91-09- 6121 |
+| 6123 | F91-09- 6123 |
+| 2415 | F95-13- 2415 |
+| 2416 | F95-13- 2416 |
+| 2418 | F95-06- 2418 |
+
+# Meneaux et traverses
+
+## 10. Mise en place des meneaux et traverses
+
+Le meneau est le montant fixe qui partage un dormant, la traverse l'élément horizontal qui le
+partage en hauteur ([glossaire](/reference/glossaire.md)). L'assemblage des meneaux et traverses
+peut se faire de deux manières [1 p. 207].
+
+### 10.1 Par soudure
+
+**Uniquement pour les profilés blancs, beige et gris (exclus également ceux qui seront laqués
+ultérieurement et ceux filmés)** [1 p. 207] :
+
+- a) assemblage des meneaux ou des traverses par soudure en V ;
+- b) assemblage des meneaux ou des traverses par soudage à plat (voir registre 5.10, plus bas).
+
+### 10.2 Assemblage mécanique
+
+Pour réaliser des assemblages mécaniques, il existe des sets spéciaux d'ancrage des meneaux et des
+équerres de fond de feuillure. Les meneaux et traverses sont contreprofilés pour leur donner la
+géométrie du dormant ou de l'ouvrant (fraiseuse en bout). Pour la description détaillée de la
+fabrication des assemblages mécaniques, voir la description du système, à la rubrique
+« Assemblages mécaniques » du registre 5.3 [1 p. 207]. Les sets et équerres du système 70 sont
+sur [Assemblages du système 70](/profiles/systeme-70-assemblages.md).
+
+# Joints
+
+## 11. Joints EPDM
+
+L'étanchéité entre ouvrant et dormant ou du vitrage s'effectue au moyen de joints. Une légère
+application de silicone facilite la mise en place manuelle de ces derniers. Les joints font partie
+intégrante du système ; comme tous les produits KÖMMERLING, ils relèvent du contrôle de son
+service « Assurance Qualité ». **Des éventuelles réclamations suite à l'utilisation de produits
+autres que ceux proposés par KÖMMERLING seraient rejetées** [1 p. 207]. L'EPDM est un caoutchouc
+synthétique ; les joints du système 70 sont sur [Joints et garnitures des systèmes
+profine](/profiles/joints-et-garnitures-profine.md).
+
+Mise en place [1 p. 207] :
+
+| Joint | Code imprimé | Mise en place | Surlongueur |
+| --- | --- | --- | --- |
+| joint de frappe 9040 EPDM | F40-45- 9040 | joint tournant, interrompu en partie horizontale haute par le joint de décompression réf. F40-45-9043, avec lequel il est collé en bout (dessin 1) | 2 % |
+| joints de vitrage 9044 / 9045 EPDM | F00-45- 9044 / F00-45- 9045 | joints tournants dans l'angle, qui doivent épouser ce dernier d'une façon détendue (dessin 2) ; en partie supérieure horizontale, abouter ce joint et le coller | - |
+
+![Joint de frappe 9040 aboutant le joint de décompression 9043 en traverse haute, dessin 1 (2008)](/assets/procedures/directives-evo2008/joint-de-frappe-9040-et-decompression-9043-dess1-evo2008.png)
+
+Angle d'un cadre en perspective, dessin auquel renvoie la mise en place du joint de frappe 9040
+et du joint de décompression 9043 [1 p. 207].
+
+![Joint de vitrage dans l'angle, mauvais et bon, dessin 2 (2008)](/assets/procedures/directives-evo2008/joint-de-vitrage-dans-l-angle-dess2-evo2008.png)
+
+À gauche, « mauvais » : le joint tendu dans l'angle se soulève et laisse un vide (en noir) ; à
+droite, « bon » : le joint épouse l'angle, détendu [1 p. 207].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 207)
+
+## 12. Joints PCE soudables
+
+### 12.1 Matériau
+
+Les joints soudables pour fenêtres font partie de la famille des élastomères qui, sous l'action de
+la chaleur, peuvent être transformés. Grâce à cette propriété qui les rend soudables, le joint de
+vitrage et le joint de frappe peuvent être montés sur les profilés en usine, à l'extrusion, et
+seront soudés avec le dormant ou l'ouvrant [1 p. 208].
+
+### 12.2 Fabrication
+
+La qualité finale de la fenêtre dépend directement de la qualité de la transformation des
+profilés. Outre les rajouts mentionnés ci-dessous, les directives connues jusqu'à présent restent
+valables [1 p. 208].
+
+### 12.3 Débit
+
+Les tronçonneuses utilisées jusqu'à présent pour le débit des profilés sans joints sont adaptées à
+cette nouvelle conception. Les cales et les galets de convoyage devront être adaptés à cette
+nouvelle géométrie. Prendre soin de ne pas déformer le joint lors du débit, avec un vérin par
+exemple, car s'il est trop court il ne sera pas soudé et n'assurera pas l'étanchéité dans les
+angles [1 p. 208].
+
+La qualité de la coupe sera obtenue avec une scie bien affûtée et adaptée, par une vitesse de
+rotation et d'avance appropriée, et par la bonne méthode d'attaque du profilé par l'outil de
+coupe. La scie devra avoir les caractéristiques suivantes ; pour le reste, s'adresser au
+fournisseur de machine [1 p. 208] :
+
+| Caractéristique de la scie | Valeur |
+| --- | --- |
+| Denture | droite en trapèze |
+| Nombre de dents | 120 dents pour un diamètre de 500 mm |
+| Angle du trapèze | 44° |
+| Angle de dépouille | 5° |
+| Angle d'attaque | 15° |
+| Épaisseur des dents | 4 mm |
+
+### 12.4 Soudure
+
+Les soudeuses utilisées jusqu'à présent pour le soudage des profilés sans joints sont adaptées à
+cette nouvelle conception, et les paramètres ne sont pas à modifier. Limiter le cordon de soudure
+à 2,5 + 2,5 = 5 mm ; suivant les machines utilisées, ce cordon peut être de 3 + 3 = 6 mm.
+KÖMMERLING préconise de le limiter à 5 mm, car on prend moins de matière lors de la soudure ; ceci
+a pour conséquence d'avoir moins de remontées de PVC dur derrière le joint, par exemple, et
+d'avoir un bourrelet moins important aux endroits non ébavurés et visibles (comme derrière le
+joint de frappe ouvrant) [1 p. 208].
+
+Par contre, les cales seront à modifier afin de pouvoir recevoir les profilés avec joints, ceci
+pour éviter leur déformation lors de la soudure. Limiter le bourrelet au niveau des joints en
+réglant les couteaux au minimum. Veiller à ne pas déformer ou écraser les joints lors de leur mise
+en place sur la soudeuse [1 p. 208].
+
+### 12.5 Ébavurage
+
+Veiller à ce que l'outil d'ébavurage (une fraise conique) vienne éliminer le point dur dans les
+angles. **Une programmation précise de l'ébavureuse est indispensable** [1 p. 208].
+
+| Profilé | Joint | Joint prémonté | Joint à monter | Ce que l'ébavurage doit assurer |
+| --- | --- | --- | --- | --- |
+| ouvrant | joint de vitrage | 9B58 | 9B58T | éviter des cassures de vitrage lors du parclosage et assurer une bonne étanchéité |
+| ouvrant | joint de frappe | 9C31 | 9C31T | assurer une bonne étanchéité dormant / ouvrant et limiter le couple de fermeture de la poignée |
+| dormant | joint de frappe | 9C32 | 9C32T | assurer une bonne étanchéité dormant / ouvrant et limiter le couple de fermeture de la poignée |
+
+La page oppose le joint « prémonté » (9B58, 9C31, 9C32) au joint « à monté » (9B58T, 9C31T,
+9C32T) [1 p. 208]. Le parclosage est la pose des
+parcloses qui tiennent le vitrage.
+
+![Ouvrant avec joints soudables 9B58 et 9C31 (2008)](/assets/procedures/directives-evo2008/ouvrant-joints-soudables-9b58-9c31-evo2008.png)
+
+Coupe d'un ouvrant : joint de vitrage F00-45- 9B58 en haut à gauche, joint de frappe F00-45- 9C31
+en bas à droite, renfort hachuré dans la chambre centrale.
+
+![Dormant avec joint soudable 9C32 (2008)](/assets/procedures/directives-evo2008/dormant-joint-soudable-9c32-evo2008.png)
+
+Coupe d'un dormant : joint de frappe F00-45- 9C32 en haut à gauche, renfort hachuré dans la
+chambre centrale.
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 208)
+
+### 12.5 Ébavurage (suite) : éliminer les points durs
+
+Pour éliminer ces points durs, deux possibilités [1 p. 209] :
+
+- presser les angles pendant la soudure à la valeur de compression du joint, vantail verrouillé ;
+- ébavurer correctement le bourrelet PVC sous les joints avec une fraise conique.
+
+**Nota** : dans tous les cas, un équipement spécifique pour la soudeuse et l'ébavureuse sera à
+installer ; se rapprocher des fabricants de machines [1 p. 209].
+
+![Ébavurage manuel d'un angle à joint soudable (photo, 2008)](/assets/procedures/directives-evo2008/ebavurage-joint-soudable-photo-outil-evo2008.png)
+
+![Angle soudé d'un profilé à joint soudable (photo, 2008)](/assets/procedures/directives-evo2008/ebavurage-joint-soudable-photo-angle-evo2008.png)
+
+Deux photos sans légende : à gauche, un outil tenu à la main dans l'angle d'un cadre ; à droite,
+un angle soudé vu de près, le joint et le cordon de soudure.
+
+![Ébavurage sous les joints soudables à la fraise conique, Ø 4 et Ø 8 (2008)](/assets/procedures/directives-evo2008/ebavurage-joints-soudables-fraise-conique-o4-o8-evo2008.png)
+
+Coupes d'un ouvrant (à gauche) et d'un dormant (à droite) : à chaque joint, une fraise conique
+(outil en pointe, dessiné dans l'axe de la gorge) dégage le bourrelet sous le joint. Les cotes
+portées sont des diamètres de l'outil [1 p. 209] :
+
+| Profilé | Joint | Diamètres portés sur l'outil (mm) |
+| --- | --- | --- |
+| ouvrant | joint côté gauche du dessin | Ø 4 et Ø 8 |
+| ouvrant | joint côté droit du dessin | Ø 8 et Ø 4 |
+| dormant | joint du dessin | Ø 8 et Ø 4 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 209)
+
+### 12.6 Cintrage
+
+**Ne pas cintrer les profilés avec joints**, car l'échauffement entraînera un gonflement de ces
+derniers dans le rayon de courbure, ce qui provoquera fatalement une mauvaise étanchéité et un
+dysfonctionnement de la fenêtre. Il est donc impératif d'enfiler les joints après cintrage
+[1 p. 209].
+
+### 12.7 Drainage ouvrant / dormant
+
+Les trous oblongs de drainage et de décompression des ouvrants / dormants / traverses devront être
+de 5 × 25 mm [1 p. 209]. Le drainage évacue l'eau entrée dans la feuillure ; la décompression
+équilibre la pression entre l'extérieur et la feuillure ([Drainage, décompression et ventilation
+du système 70](/procedures/drainage-decompression-ventilation-systeme-70.md)).
+
+### 12.8 Décompression ouvrant
+
+Les trous de décompression devront être de 5 × 25 mm [1 p. 209].
+
+### 12.9 Décompression dormant
+
+La décompression peut se faire par [1 p. 209] :
+
+- a) trous oblongs 5 × 25 mm en fond de feuillure vers la préchambre (**obligatoires**) ;
+- b) au choix, soit :
+  - couper le joint sur 50 mm ;
+  - trous oblongs 5 × 25 mm en façade extérieure du dormant ;
+  - trous oblongs 5 × 25 mm ou un trou Ø 8 mm dans le recouvrement du dormant.
+
+Le registre 5.2 (p. 217, 220) donne 100 mm de joint découpé ou retiré pour la même décompression
+(**INC-235**) ; ses règles de drainage et de décompression sont au chapitre *Drainage et
+décompression (registre 5.2)* plus bas.
+
+# Quincailleries
+
+## 13. Quincailleries
+
+Utiliser les quincailleries adaptées à chaque système et respecter les directives des fabricants,
+en veillant à la vérification des poids des vantaux pour le choix des accessoires porteurs
+[1 p. 210]. La quincaillerie (ou ferrure) regroupe les pièces qui font pivoter, basculer et
+verrouiller l'ouvrant.
+
+## 14. Fixation des quincailleries
+
+1. Pour la fixation des accessoires de quincaillerie dans le PVC ou l'acier, utiliser les vis
+   appropriées (plan 1).
+2. Respecter les directives indiquées par les fournisseurs tels que SFS, Ejot, Schüring, etc.
+3. Le vissage au moyen de visseuses pneumatiques ou électriques est autorisé, mais en veillant à ne
+   pas « abîmer » le pas de vis. Contrôler régulièrement le moment de vissage de ces appareils.
+4. Pour le dormant, dans le cas d'un renforcement, solidariser les organes de rotation porteurs au
+   minimum avec deux vis dans l'acier.
+5. De bons résultats ont été obtenus par le procédé de l'avant-trou dans l'acier, en perçant avec
+   un diamètre inférieur de 0,7 mm à celui de la vis. Ceci n'est pas une obligation, mais il s'est
+   avéré que le positionnement de la vis, et par voie de conséquence de l'organe de rotation, est
+   nettement plus précis et prédispose à une bonne fonctionnalité de l'ouvrant par rapport au
+   dormant.
+6. Pour l'ouvrant, utiliser toute la longueur du canal de vissage (plan 2) [1 p. 210].
+
+| Règle de vissage | Valeur |
+| --- | --- |
+| Vis dans l'acier pour un organe de rotation porteur sur dormant renforcé | 2 au minimum |
+| Diamètre de l'avant-trou dans l'acier | diamètre de la vis moins 0,7 mm (conseillé, non obligatoire) |
+| Longueur de vissage dans l'ouvrant | toute la longueur du canal de vissage |
+
+![Vis de quincaillerie traversant le renfort acier, dessin 1 (2008)](/assets/procedures/directives-evo2008/vissage-quincaillerie-dans-l-acier-dess1-evo2008.png)
+
+Dessin 1 (le texte dit « plan 1 ») : une vis traverse la paroi du profilé et le renfort d'acier
+dessiné dessous.
+
+![Vis de quincaillerie dans le canal de vissage de l'ouvrant, dessin 2 (2008)](/assets/procedures/directives-evo2008/vissage-quincaillerie-canal-de-vissage-dess2-evo2008.png)
+
+Dessin 2 (« plan 2 ») : la vis engagée sur toute la longueur du canal de vissage.
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 210)
+
+## 15. Gâches
+
+Le nombre et l'entraxe des gâches verticales et horizontales sont donnés par les diagrammes de
+renforcement [1 p. 210] ([abaques de 2008](/profiles/systeme-70-abaques-evo2008.md)). La gâche
+est la pièce fixée sur le dormant dans laquelle s'engage le galet de verrouillage de l'ouvrant.
+
+## 16. Essai de fonctionnement
+
+Après le montage des quincailleries sur dormant et ouvrant, procéder à un essai de fonctionnement
+de l'ensemble [1 p. 210].
+
+## 17. Gabarits
+
+Pour le positionnement des quincailleries, des gabarits sont à disposition chez les fournisseurs
+[1 p. 210].
+
+# Profilés filmés
+
+Un profilé filmé est un profilé PVC revêtu d'un film décoratif collé ; le
+film cité ici est le film Renolit [1 p. 212].
+
+## 18. Directives de fabrication des profilés filmés
+
+### 18.1 Directives générales
+
+Les directives sont identiques aux directives régissant les systèmes autres que blancs [1 p. 211].
+
+### 18.2 Débit
+
+Inhérente au procédé de filmage, une mauvaise adhérence du film sur 10 mm aux deux extrémités
+d'une barre de 6 ml (mètres linéaires) est à prendre en compte. De ce fait, **il est impératif de
+couper environ 15 mm de chaque côté de la barre** et d'en tenir compte dans l'optimisation du
+débit [1 p. 211].
+
+### 18.3 Soudage
+
+Pour le soudage, les directives énoncées pour le blanc restent valables, avec une surlongueur de
+soudure par côté de 2 mm (ne pas aller en dessous, pour éviter de faire chuter la résistance de
+l'angle) [1 p. 211].
+
+### 18.4 Ébavurage
+
+#### 18.4.1 Ébavurage des surfaces visibles intérieur / extérieur
+
+Il existe deux types d'ébavurage pour profilés filmés, mais ils sont conditionnés par la soudure
+[1 p. 211] :
+
+| Méthode | Inconvénient | Avantage | Outil |
+| --- | --- | --- | --- |
+| ébavurage avec une rainure, comme sur le blanc | rainure plus visible, car le film ne recouvre pas complètement l'angle, ou rainure de couleur différente du reste du châssis | on garde les mêmes paramètres de soudage et les mêmes couteaux d'ébavurage | couteaux à dépouille négative avec une profondeur d'ébavurage de 0,4 mm (0,2 mm pour le film + 0,1 mm pour la colle) (**INC-231**) |
+| ébavurage avec couteau à dépouille négative permettant le jointage à 0,2 mm environ du film dans les angles | nécessite des paramètres de soudage différents de ceux du blanc ; ébavurage souvent difficile à réaliser sur des profilés arrondis | - | couteau à dépouille négative |
+
+![Couteau d'ébavurage à dépouille positive (photo, 2008)](/assets/procedures/directives-evo2008/couteau-ebavurage-depouille-positive-evo2008.png)
+
+« Couteau à dépouille positive » : deux couteaux photographiés.
+
+![Couteau d'ébavurage à dépouille négative (photo, 2008)](/assets/procedures/directives-evo2008/couteau-ebavurage-depouille-negative-evo2008.png)
+
+« Couteau à dépouille négative » : deux couteaux photographiés [1 p. 211].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 211)
+
+#### 18.4.2 Ébavurage du coin intérieur
+
+En fonction de la qualité de l'ébavurage de l'angle intérieur du dormant, des corrections
+éventuelles devront être apportées au couteau (nouvel affûtage, vitesse d'exécution, pression de
+l'outil, etc.). Si ces réglages ne peuvent s'effectuer, une finition manuelle s'impose
+[1 p. 211].
+
+#### 18.4.3 Ébavurage du coin extérieur
+
+L'adjonction du film et de la colle modifie l'épaisseur du profilé (2 × 0,2 mm + 2 × 0,1 mm =
+0,6 mm pour un profilé filmé 2 faces). Il est possible que ce phénomène nécessite une correction
+au niveau du paramétrage des machines et de l'outil [1 p. 212].
+
+### 18.5 Set de retouche de la rainure
+
+Après ébavurage, KÖMMERLING conseille de retoucher la rainure avec un feutre de retouche afin de
+l'harmoniser avec la teinte du film. Ces feutres portent la référence **9366**. Agiter
+vigoureusement ce stylo afin de bien mélanger les pigments avant usage [1 p. 212].
+
+### 18.6 Fraisage des meneaux
+
+L'adjonction du film et de la colle modifie l'épaisseur du profilé (2 × 0,2 mm + 2 × 0,1 mm =
+0,6 mm pour un profilé filmé 2 faces). Il est possible que ce phénomène nécessite une correction
+au niveau du paramétrage des machines et de l'outil [1 p. 212].
+
+| Couche | Épaisseur par face (mm) | Profilé filmé 2 faces (mm) |
+| --- | --- | --- |
+| film | 0,2 | 2 × 0,2 |
+| colle | 0,1 | 2 × 0,1 |
+| total | - | 0,6 |
+
+### 18.7 Cintrage
+
+Outre les directives spécifiques énoncées ci-dessous, les directives générales restent valables.
+Les profilés PVC sont filmés par des machines spéciales, sur le principe d'un revêtement
+présentant sur sa face arrière une surface préencollée ; initialement, la surface à filmer est
+enduite d'une première couche d'accrochage [1 p. 212].
+
+Normalement, les profilés de couleur atteignent une température de surface maxi de 65 °C. D'autre
+part, la température de cintrage atteignant 130 °C, on risque de voir apparaître éventuellement un
+cloquage sous le film. La raison en est que, dans le cas de profilés fraîchement filmés,
+l'évaporation des substances volatiles résidant dans la colle n'est pas terminée. Il est donc
+indispensable de faire disparaître ces solvants par séchage, donc par un stockage abrité et une
+continuelle aération des profilés [1 p. 212].
+
+**Conseil** [1 p. 212] :
+
+- les profilés destinés à être cintrés devront faire l'objet d'un stockage **au minimum pendant 4
+  semaines** à l'intérieur du hall de fabrication, en prenant soin de les entreposer sur des
+  intercalaires permettant ainsi une ventilation optimale ;
+- le cintrage peut également faire apparaître un aspect plus brillant sur le film ; on peut y
+  remédier en « ponçant » légèrement la surface incriminée avec du papier de verre très fin (000).
+
+**Attention à ne pas diminuer la couche acrylique de protection avec cette opération** [1 p. 212].
+
+### 18.8 Nettoyage et entretien
+
+**N'utilisez pas de produits à base de solvant, ceci endommagerait le film Renolit** (pictogramme
+de danger) [1 p. 212].
+
+### 18.9 Montage des accessoires
+
+Les règles de montage de ces accessoires sont celles régissant les profilés structurés. **Ne pas
+coller ces accessoires**, car le risque de formation de cloques, donc de décollement du film, est
+quasiment certain. Occasionnellement, un collage peut s'effectuer avec des colles liquides à prise
+très rapide à base de cyanoacrylate monomère [1 p. 212].
+
+# Transport et stockage des châssis
+
+## 19. Transport et stockage
+
+Les châssis terminés devront être protégés contre d'éventuelles dégradations ou contre la
+poussière, stockés et transportés debout, sécurisés contre un éventuel glissement ou basculement,
+sur des racks ou palettes prévus à cet effet. Protéger ces châssis, lors d'un stockage plus long,
+au moyen d'un film clair, transparent et microperforé, ceci pour éviter l'accumulation de chaleur
+[1 p. 213].
+
+# Assemblages par collage
+
+## 20. Assemblages par collage
+
+Pour ce faire, utiliser une colle appropriée. S'assurer auprès de son fournisseur de la bonne tenue
+du collage, ceci sans déformation des profilés, symptôme de certaines colles contenant trop de
+solvants. Le principe de ce collage réside dans le fait que la colle dissout le PVC, et la
+résultante est que l'assemblage pourra être considéré comme une soudure chimique. Lire
+attentivement la notice d'utilisation [1 p. 213].
+
+### 20.1 Préparation des surfaces
+
+Les profilés PVC sont à nettoyer afin d'enlever toute saleté ou poussière avec un produit
+approprié. Cette opération ne devra s'effectuer qu'une fois, car les agents actifs du nettoyant
+sont à renouveler à chaque opération. **Attention : ne nettoyer que les surfaces à coller, car les
+parties ultérieurement exposées risquent de jaunir** [1 p. 213].
+
+### 20.2 Dosage de la colle et collage
+
+1. Appliquer la colle en cordon régulier, directement du tube, sur une des surfaces à coller.
+2. Trente secondes au plus tard après la mise en place de la colle, assembler les deux surfaces en
+   pression pendant environ 2 à 4 min (ces paramètres sont fonction de la colle utilisée).
+3. Enlever au moyen d'une spatule le surplus éventuel de colle.
+4. L'efficacité de cette liaison sera maximale après 24 h.
+5. Pour un collage par des températures inférieures à 10 °C, le temps de pression ou d'application
+   devra se situer environ entre 6 et 12 min (ces paramètres sont fonction de la colle utilisée).
+6. La colle, avec la présence volatile de solvants, a la particularité de s'épaissir : il est donc
+   indispensable de refermer le tube immédiatement après usage [1 p. 213].
+
+| Étape du collage | Durée |
+| --- | --- |
+| Délai maximal entre la mise en place de la colle et l'assemblage | 30 s |
+| Temps de pression | environ 2 à 4 min |
+| Temps de pression ou d'application en dessous de 10 °C | environ 6 à 12 min |
+| Efficacité maximale de la liaison | après 24 h |
+
+### 20.3 Remarque concernant la colle
+
+Malgré une haute résistance aux UV des colles, des réactions à leur contact peuvent faire
+apparaître un jaunissement de cette dernière ; donc éviter, par exemple dans le cas d'un rejet
+d'eau, de se servir de la colle comme cordon d'étanchéité [1 p. 213].
+
+### 20.4 Éviter les erreurs
+
+Éviter d'utiliser le même chiffon ayant servi à enlever le surplus de colle pour nettoyer la
+fenêtre : cette colle serait répartie sur la surface à nettoyer, ce qui conduirait fatalement à des
+jaunissements [1 p. 214]. En résumé :
+
+- enlever le surplus de colle avec une spatule, après prise ;
+- ne pas utiliser de chiffon ;
+- ne pas utiliser la colle comme masse d'étanchéité ;
+- ne pas utiliser le chiffon destiné au nettoyage pour enlever le surplus de colle.
+
+# Nettoyage, remarques et garantie
+
+## 21. Nettoyage des profilés
+
+Les produits agressifs pour le nettoyage des profilés sont **à proscrire** : sous l'action des UV,
+de la pluie et du froid, le film présentera des fissures et des changements de teinte importants.
+Le nettoyage devra se faire au moyen de produits non agressifs utilisés généralement en ménager
+(par exemple liquide vaisselle fortement dilué). Les taches tenaces s'enlèveront avec le
+Köraclean extra pour les surfaces blanches, le Köraclean color pour les revêtements filmés, ou le
+Köraclean R100C pour le blanc, beige et gris [1 p. 214].
+
+Les conseils d'entretien du même registre (p. 195) attribuent le Köraclean extra aux profilés
+blancs, gris clair et beige (**INC-233**) ; ils sont sur [Usage, nettoyage et entretien d'une
+menuiserie profine](/entretien/usage-nettoyage-entretien-menuiseries-profine.md).
+
+## 22. Remarques
+
+Dans tous les cas, il est indispensable de définir avec le fournisseur les besoins en colle,
+silicone et produits de nettoyage, ceci sur le plan technique, afin de s'assurer des bonnes
+caractéristiques et des compatibilités sur les différents supports [1 p. 214].
+
+## 23. Garantie
+
+**Les réclamations émanant du non-respect de ces points, ainsi que de la mise en œuvre de produits
+ou accessoires non préconisés ou non validés par KÖMMERLING, seront rejetées** [1 p. 214].
+
+# Comportement thermique du PVC
+
+## 24. Comportement thermique du PVC
+
+La dilatation linéaire est exprimée par un coefficient mesurant l'allongement par unité de
+longueur pour une variation de 1 °C. Ce coefficient est généralement donné pour un domaine de
+température de 20 à 300 °C. Le coefficient de dilatation linéaire du PVC est de **70 × 10⁻⁶**,
+soit 8 fois supérieur au verre [1 p. 214].
+
+Exemple : un profilé PVC de 2 m de longueur (exprimée en mm) s'échauffant de 30 °C s'allongera de
+2000 × 70 × 10⁻⁶ × 30 = 4,2 mm [1 p. 214].
+
+| Donnée | Valeur |
+| --- | --- |
+| Coefficient de dilatation linéaire du PVC | 70 × 10⁻⁶ par °C |
+| Rapport au verre | 8 fois supérieur |
+| Allongement d'un profilé de 2000 mm échauffé de 30 °C | 4,2 mm |
+
+La fiche matière du même registre (p. 193) donne 0,8 × 10⁻⁴ K⁻¹ de −30 °C à +50 °C
+(**INC-232**).
+
+# Soudure à plat (registre 5.10)
+
+La **soudure à plat** assemble un meneau ou une traverse (le profilé intermédiaire qui partage un
+châssis) en le soudant en bout, à plat, sur la face du profilé qui le reçoit, au lieu de le visser
+sur un set d'assemblage mécanique ([glossaire](/reference/glossaire.md)). Le registre 5.10 du
+classeur de 2008 tient en deux pages, imprimées 1 et 2 (PDF p. 215 et 216). La soudure à plat du meneau 6127 telle que le DTD
+du système 70 la dessine (zone soudée, équerres 9714, usinage de la traverse) est sur [Fabrication
+et assemblage du système 70](/procedures/fabrication-systeme-70.md#soudure-à-plat-du-meneau-6127).
+
+## Les deux cas de soudure à plat
+
+Les deux perspectives montrent, chacune, le profilé récepteur (à gauche, avec le meneau soudé
+dessus) et le bout du meneau préparé pour la soudure (à droite). La chambre à renfort est la
+chambre centrale du profilé, celle qui reçoit le renfort acier ; les parements intérieurs sont les
+faces vues côté intérieur ; la zone de soudure est le contour du bout du meneau qui fond contre le
+profilé récepteur [1 p. 215].
+
+**Cas 1 — parements intérieurs soudés.** Le contour de soudure du meneau suit aussi le parement
+intérieur : les parements intérieurs du meneau et du profilé récepteur sont soudés entre eux, ce
+qui « nécessite un ragréage du cordon de soudure » (le cordon de matière qui déborde est repris à
+l'outil pour rendre la surface lisse) [1 p. 215].
+
+![Soudure à plat, cas 1 : parements intérieurs soudés, chambre à renfort et zone de soudure](/assets/procedures/directives-evo2008/soudure-a-plat-cas-1-parements-soudes-evo2008.png)
+
+Lecture : à gauche, l'assemblage terminé en perspective, repères « Chambre a renfort » et
+« Parements int. soudes (nécessite un ragréage du cordon de soudure) » ; à droite, le bout du
+meneau, contour de soudure en trait épais, repère « Zone de soudure ». Dessin non à l'échelle.
+
+**Cas 2 — parements intérieurs non soudés.** Le contour de soudure s'arrête avant le parement
+intérieur : les parements intérieurs ne sont pas soudés [1 p. 215].
+
+![Soudure à plat, cas 2 : parements intérieurs non soudés, chambre à renfort et zone de soudure](/assets/procedures/directives-evo2008/soudure-a-plat-cas-2-parements-non-soudes-evo2008.png)
+
+Lecture : mêmes repères que pour le cas 1, « Parements int. non soudes » à la place des parements
+soudés. Dessin non à l'échelle.
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 215)
+
+## Aspect qualitatif
+
+Texte de la page imprimée 2, dans ses termes [1 p. 216] :
+
+- Compte tenu de la mise au point assez récente de cette technique de soudure et du peu de recul,
+  la soudure à plat est réservée aux entreprises certifiées NF CSTBat (marque de qualité du CSTB,
+  Centre Scientifique et Technique du Bâtiment, pour les fenêtres certifiées).
+- L'Avis Technique du système devra préciser les profilés qui pourront être assemblés par soudure
+  à plat ainsi que le matériel utilisé.
+- La soudure doit être de conception rigoureusement étanche, sans ajout de produit d'étanchéité
+  complémentaire, hormis dans la gorge de clipsage des « pareclose » (parcloses), pour une
+  utilisation en traverse dans le cas 1.
+- La chambre à renfort doit être rendue étanche par la soudure sans complément d'étanchéité par
+  mastic en solin.
+- Contrôles qualitatifs : résistance de la soudure par la méthode de la Marque NF CSTBat ; essai
+  de fatigue 10000 cycles à ± 600 Pa et 100 cycles à + 1200 Pa (Pa : pascal, unité de pression).
+- Calcul de la contrainte : la surface à prendre en compte pour le calcul de la contrainte sera la
+  surface soudée et non la surface entière du profilé de meneau ou de traverse ; la contrainte
+  moyenne ne doit pas être inférieure à « 25 N/mm » (unité écrite ainsi sur la page, **INC-234**).
+
+| Contrôle qualitatif de la soudure à plat | Valeur |
+| --- | --- |
+| Résistance de la soudure | méthode de la Marque NF CSTBat |
+| Essai de fatigue, première série | 10000 cycles à ± 600 Pa |
+| Essai de fatigue, seconde série | 100 cycles à + 1200 Pa |
+| Contrainte moyenne minimale, calculée sur la surface soudée | 25 (unité écrite « N/mm », INC-234) |
+
+**L'utilisation de la soudure à plat est préconisée par la société profine uniquement pour le cas
+d'utilisation en traverse d'ouvrant. La soudure à plat n'est pas adaptée dans le cas de
+configuration meneau ou traverse sur dormant parce qu'elle n'apporte pas la résistance mécanique
+nécessaire** [1 p. 216].
+
+Le DTD du système 70 admet la soudure à plat du meneau 6127 (**CTR-89**).
+
+## Aspect matériel
+
+Texte de la page imprimée 2, dans ses termes [1 p. 216] :
+
+- La soudure à plat nécessite un matériel adapté. Il n'est pas possible de réaliser des soudures à
+  plat avec une soudeuse pour soudure en pointe (la soudeuse d'angle ordinaire, qui soude deux
+  coupes d'onglet).
+- Un contre-profilage du meneau ou de la traverse à la forme de la feuillure est nécessaire avant
+  l'opération de soudure (le bout du meneau est usiné au contour du profilé récepteur).
+- La qualité de la soudure dépend énormément de la qualité et de la précision de la soudeuse
+  (positionnement des butées, précision des courses…) et du choix et de la forme des miroirs (les
+  plaques chauffantes de la soudeuse, contre lesquelles le PVC fond), qui doivent être
+  parfaitement adaptés à la forme du profilé à souder.
+- La présence de renfort dans le profilé recevant le meneau ou la traverse est un élément
+  perturbateur à la qualité de la soudure par la diffusion de la chaleur le long du renfort ; la
+  conception du renfort devra en tenir compte en faisant en sorte que l'âme du renfort soit
+  éloignée de la zone de soudure.
+- Liste de matériel possible : HOLLINGER 2MSU 2KD ; URBAN AKS 6105-635.
+
+# Drainage et décompression (registre 5.2)
+
+Le **drainage** est l'ensemble des trous qui laissent sortir l'eau entrée dans la feuillure (le
+logement du vitrage ou de l'ouvrant) ; la **décompression** (ou ventilation) est l'ensemble des
+orifices qui mettent la feuillure à la pression de l'air extérieur ([glossaire](/reference/glossaire.md)). La **préchambre** est la chambre extérieure
+du profilé, entre la feuillure et la face extérieure. Le registre 5.2 du classeur de 2008 s'intitule
+« Drainage/Décompression (joints à enfiler) EPDM 9040, 9044.1, 9045.1, joints PCE 9C32, 9B58,
+9C31 » : il vaut pour les deux familles de joints (EPDM, joints en caoutchouc enfilés dans leur
+gorge ; PCE, joints coextrudés soudables) [1 p. 217]. Le registre 5.2 est paginé de 1 à N : sa page
+imprimée N est la page N + 216 du PDF. Les perçages profilé par profilé du manuel de 2023 sont sur
+[Drainage, décompression et ventilation du système 70](/procedures/drainage-decompression-ventilation-systeme-70.md).
+
+## Drainage et décompression du dormant, vue d'ensemble (page imprimée 1)
+
+Afin d'assurer une évacuation correcte dans la feuillure du dormant, il faut prévoir des trous de
+drainage ainsi que des orifices de décompression (ventilation). Ne pas obstruer les trous avec les
+cales-ponts de vitrage [1 p. 217].
+
+**Drainage** (détaillé page imprimée 3) : dans la partie horizontale inférieure, au moins 2 trous
+espacés de 600 mm maximum. Dimensions : trous oblongs 5 × 25 mm ; alternative : trou Ø 8 mm,
+acceptable dans le cas où cet orifice n'est pas obturé par un cache tempête, rejet d'eau, etc. Les
+trous feuillure / préchambre et ceux dans la préchambre vers l'extérieur sont à prévoir décalés
+d'environ 50 mm [1 p. 217].
+
+**Décompression** (détaillée page imprimée 4) : la décompression nécessaire est réalisée par le
+joint de décompression F40-45-**9043** (longueur = 100 mm) centré dans la partie horizontale
+supérieure, à la place du joint de frappe, ou en grugeant (entaillant) la lèvre du joint PCE
+[1 p. 217].
+
+Le schéma montre un dormant à deux vitrages séparés par un meneau, « vu de l'intérieur (sans
+ouvrant) ». En haut, au milieu de chaque traverse haute, le joint de décompression ou le grugeage
+du joint PCE sur 100 mm. En bas, dans la feuillure du dormant, les trous de drainage « 5 x 25 mm
+minimum » : les petits rectangles sont les trous de la feuillure vers la préchambre, les demi-lunes
+hachurées les trous de la préchambre vers l'extérieur, décalés de 50 mm des premiers.
+
+![Dormant vu de l'intérieur, drainage 5 × 25 mm et joints de décompression de 100 mm](/assets/procedures/directives-evo2008/drainage-decompression-dormant-vu-interieur-evo2008.png)
+
+Cotes portées sur le schéma, en mm (dessin non à l'échelle) :
+
+| Repère du schéma de la page imprimée 1 | Cote (mm) |
+| --- | --- |
+| Joint de décompression ou grugeage du joint PCE, longueur | 100 |
+| Premier trou de préchambre, depuis le trou de feuillure voisin, aux extrémités | min. 50 |
+| Décalage trou de feuillure / trou de préchambre, entre deux trous | 50 |
+| Entraxe des trous de préchambre | max. 600 |
+| Position des trous extrêmes depuis l'angle du dormant ou le meneau | « Dans la zone 20-200 » |
+| Dimension des trous de drainage | 5 × 25 minimum |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 217)
+
+## Drainage et décompression de l'ouvrant (page imprimée 2)
+
+Afin d'éviter une accumulation d'humidité, les feuillures ouvrant devront être décompressées et
+présenter des trous d'évacuation [1 p. 218] :
+
+- dans **les parties horizontales inférieures** : prévoir au moins deux trous avec un entraxe
+  maximal de 600 mm ;
+- dans **les parties horizontales supérieures** : un trou dans chaque coin ;
+- dimensions de trous : trous oblongs de 5 × 25 mm au minimum ; alternative : trou Ø 8 mm,
+  acceptable dans le cas où cet orifice n'est pas obturé par un cache tempête, rejet d'eau, etc. ;
+- les trous feuillure / préchambre et ceux dans la préchambre vers l'extérieur sont à prévoir
+  décalés d'environ 50 mm ;
+- la décompression est à prévoir pour chaque élément vitré ;
+- dans le cas de vitrages fixes, les trous de décompression sont à réaliser dans la partie
+  horizontale supérieure du recouvrement ;
+- **ne pas obstruer les trous avec les ponts de vitrage.**
+
+Le schéma montre l'ouvrant vu de l'intérieur, à l'échelle 1:2 : en haut, deux trous de
+« Décompression (5 x 25 mm) », un vers chaque coin ; en bas, les « Trous d'évacuation (5 x 25 mm) » :
+petits rectangles en fond de feuillure vitrage, demi-lunes hachurées dans la préchambre, décalés de
+50 mm.
+
+![Ouvrant vu de l'intérieur, trous de décompression et trous d'évacuation 5 × 25 mm](/assets/procedures/directives-evo2008/drainage-decompression-ouvrant-vu-interieur-evo2008.png)
+
+| Repère du schéma de la page imprimée 2 | Cote (mm) |
+| --- | --- |
+| Trous extrêmes depuis l'angle de l'ouvrant | 20-200 |
+| Décalage trou de feuillure / trou de préchambre | 50 |
+| Entraxe des trous de préchambre | max. 600 |
+| Trous de décompression et d'évacuation | 5 × 25 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 218)
+
+## Drainage du dormant, variantes (page imprimée 3)
+
+Afin d'assurer une évacuation correcte de la feuillure du dormant, il faut prévoir des trous de
+drainage ainsi que des orifices de décompression (ventilation). Ne pas obstruer les trous avec des
+ponts de vitrage [1 p. 219].
+
+**1. Drainage dormant**
+
+**1.1 Du fond de feuillure vers la préchambre.** Au moins deux trous 5 × 25 mm espacés de 600 mm
+maxi, ceci dans la plage de 20 à 200 mm de chaque angle dormant ou meneau [1 p. 219].
+
+**1.2 De la préchambre vers l'extérieur.** Deux possibilités au choix [1 p. 219] :
+
+- **Variante 1** : au moins deux trous 5 × 25 mm par le bas du dormant, espacés de 600 mm maxi et
+  décalés de 50 mm par rapport aux trous fond de feuillure / préchambre, ceci pour éviter un
+  contact direct avec l'atmosphère extérieure ;
+- **Variante 2** : au moins deux trous 5 × 25 mm en façade du dormant, espacés de 600 mm maxi et
+  décalés de 50 mm par rapport aux trous fond de feuillure / préchambre, ceci pour éviter un
+  contact direct avec l'atmosphère extérieure.
+
+La coupe du dormant, à l'échelle 1:1, montre en haut le trou oblong 5 × 25 mm percé en biais du
+fond de feuillure vers la préchambre, puis les deux sorties au choix : flèche horizontale
+« Variante 2 », trous oblongs 5 × 25 mm en façade du dormant ; flèche verticale « Variante 1 »,
+trous oblongs 5 × 25 mm par le bas du dormant.
+
+![Coupe du dormant, drainage fond de feuillure vers préchambre, variantes 1 et 2](/assets/procedures/directives-evo2008/drainage-dormant-variantes-1-2-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 219)
+
+## Décompression du dormant, variantes (page imprimée 4)
+
+**2. Décompression dormant**
+
+**2.1 Du fond de feuillure vers la préchambre.** Deux trous 5 × 25 mm, ceci dans la plage de 20 à
+200 mm de chaque angle dormant ou meneau [1 p. 220].
+
+**2.2 De la préchambre vers l'extérieur.** Trois possibilités au choix [1 p. 220] :
+
+- **Variante 1** : découpe du joint sur 100 mm centrée sur la partie horizontale dormant dans le
+  cas PCE, ou joint de décompression 9043 dans le cas EPDM ;
+- **Variante 2** : deux trous 5 × 25 mm ou Ø 8 mm dans le recouvrement dormant, décalés de 50 mm
+  minimum par rapport aux trous de fond de feuillure / préchambre afin d'éviter un contact direct
+  avec l'atmosphère extérieure ;
+- **Variante 3** : deux trous 5 × 25 mm en façade du dormant, décalés de 50 mm minimum par rapport
+  aux trous de fond de feuillure / préchambre afin d'éviter un contact direct avec l'atmosphère
+  extérieure.
+
+Le registre 5.1 (§ 12.9, p. 209) écrit « couper le joint sur 50 mm » pour la même décompression
+du dormant (**INC-235**).
+
+La coupe de la traverse haute du dormant, à l'échelle 1:1, montre les trous oblongs 5 × 25 mm du
+fond de feuillure vers la préchambre, la « Variante 3 » (trous oblongs 5 × 25 mm en façade du
+dormant) et la « Variante 2 » (trous Ø 8 mm ou 5 × 25 mm dans le recouvrement dormant, sous le
+joint).
+
+![Coupe de la traverse haute du dormant, décompression variantes 2 et 3](/assets/procedures/directives-evo2008/decompression-dormant-variantes-2-3-evo2008.png)
+
+La variante 1 est dessinée en quatre détails ronds du joint de frappe du dormant, de gauche à
+droite : « Joint de frappe F40-45-**9C31** » en place ; « Joint de décompression F40-45-**9043** »
+à sa place, « ou » ; « Grugeage du joint PCE » ; « Retirer le joint sur 100 mm », gorge vide.
+
+![Décompression du dormant, variante 1 : joint 9C31, joint de décompression 9043, grugeage, joint retiré sur 100 mm](/assets/procedures/directives-evo2008/decompression-dormant-variante-1-joints-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 220)
+
+## Drainage de l'ouvrant (page imprimée 5)
+
+Afin d'assurer une évacuation correcte de la feuillure de l'ouvrant, il faut prévoir des trous de
+drainage ainsi que des orifices de décompression. Ne pas obstruer les trous avec des ponts de
+vitrage [1 p. 221].
+
+**3. Drainage ouvrant**
+
+**3.1 Du fond de feuillure vers la préchambre.** Au moins deux trous 5 × 25 mm espacés de 600 mm
+maxi, ceci dans la plage de 20 à 200 mm de chaque angle ouvrant ou meneau [1 p. 221].
+
+**3.2 De la préchambre vers l'extérieur.** Au moins deux trous 5 × 25 mm par le bas de l'ouvrant,
+espacés de 600 mm maxi et décalés de 50 mm minimum par rapport aux trous fond de feuillure /
+préchambre, ceci pour éviter un contact direct avec l'atmosphère extérieure [1 p. 221].
+
+Les deux coupes, à l'échelle 1:1, montrent la traverse basse de deux ouvrants différents (à gauche
+un ouvrant à face droite, à droite un ouvrant à face galbée ; la planche ne les nomme pas). Sur
+chacune, la flèche oblique du haut désigne les trous oblongs 5 × 25 mm percés du fond de feuillure
+vers la préchambre, la flèche verticale du bas les trous oblongs 5 × 25 mm par le bas de l'ouvrant.
+
+![Drainage de la traverse basse de l'ouvrant, deux profils d'ouvrant, trous oblongs 5 × 25 mm](/assets/procedures/directives-evo2008/drainage-ouvrant-traverse-basse-deux-ouvrants-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 221)
+
+## Décompression de l'ouvrant (page imprimée 6)
+
+**4. Décompression ouvrant** [1 p. 222]
+
+**4.1 Du fond de feuillure vers la préchambre.** La décompression de la traverse haute est
+symétrique par rapport au drainage de la traverse basse.
+
+**4.2 De la préchambre vers l'extérieur.** La décompression de la traverse haute est symétrique
+par rapport au drainage de la traverse basse. Attention à respecter le décalage de 50 mm minimum
+des trous du fond de feuillure / préchambre par rapport aux trous de la préchambre vers
+l'extérieur.
+
+Les deux coupes, à l'échelle 1:1, montrent la traverse haute des deux mêmes ouvrants, retournée :
+la flèche verticale du haut désigne les trous oblongs 5 × 25 mm de la préchambre vers l'extérieur,
+la flèche oblique du bas les trous oblongs 5 × 25 mm du fond de feuillure vers la préchambre.
+
+![Décompression de la traverse haute de l'ouvrant, deux profils d'ouvrant, trous oblongs 5 × 25 mm](/assets/procedures/directives-evo2008/decompression-ouvrant-traverse-haute-deux-ouvrants-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 222)
+
+La page imprimée 2 (p. 218) écrit pour la même traverse haute d'ouvrant « un trou dans chaque
+coin » ; la page imprimée 6 la rend symétrique du drainage de la traverse basse, qui en compte au
+moins deux espacés de 600 mm maxi.
+
+## Vitrage fixe : exemple et variante (page imprimée 7)
+
+La planche, à l'échelle 1:2, est une coupe verticale de vitrages fixes posés directement dans le
+dormant, sans ouvrant ; les cotes donnent la dimension des perçages en mm (« 5x25 » : trou oblong
+5 × 25 mm ; « Ø8 » : trou rond de 8 mm) [1 p. 223].
+
+- **« Exemple »**, colonne de gauche, de haut en bas : la traverse haute du dormant (5x25 du fond
+  de feuillure vers la préchambre ; sortie par un 5x25 en façade « ou » un « Ø8 ou 5x25 » dans le
+  recouvrement), la traverse intermédiaire entre deux vitrages (5x25 depuis la feuillure du vitrage
+  du dessous ; sortie par un 5x25 en façade, un Ø8, ou un « 5x25 ou Ø8 » dans le recouvrement), la
+  traverse basse du dormant (5x25 du fond de feuillure vers la préchambre, 5x25 en façade).
+- **« Variante »**, au centre : la traverse intermédiaire percée seulement d'un 5x25 depuis la
+  feuillure, d'un Ø8 et d'un « 5x25 ou Ø8 » dans le recouvrement, sans perçage en façade.
+- Colonne de droite : un second dormant, traverse haute (5x25 vers la préchambre ; sortie par un
+  5x25 en façade « ou » un « Ø8 ou 5x25 » dans le recouvrement) et traverse basse (5x25 vers la
+  préchambre ; sortie par un 5x25 en façade « ou » un 5x25 par le bas).
+
+![Vitrages fixes dans le dormant, drainage et décompression, exemple et variante](/assets/procedures/directives-evo2008/drainage-decompression-vitrage-fixe-exemple-et-variante-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 223)
+
+## Drainage du meneau entre deux ouvrants (page imprimée 8)
+
+La planche, à l'échelle 1:2, donne trois coupes verticales d'un meneau (ici horizontal, entre un
+ouvrant au-dessus et un ouvrant au-dessous) et trois façons de le drainer, légendées sous chaque
+coupe : « drainage meneau vers le bas », « drainage meneau ou milieu », « drainage meneau en
+direct » ; la troisième coupe est dessinée avec des ouvrants à face galbée. En haut, quatre
+détails ronds du joint du meneau reliés aux coupes : « Joint de frappe » ; « Joint de
+décompression **9043** » « ou » « Grugeage du joint PCE » ; « Retirer le joint sur 100 mm »
+[1 p. 224].
+
+![Drainage du meneau entre deux ouvrants, vers le bas, au milieu ou en direct, et quatre détails du joint](/assets/procedures/directives-evo2008/drainage-meneau-bas-milieu-direct-evo2008.png)
+
+Repères de perçage portés sur chaque coupe, dans l'ordre de la planche, du haut vers le bas (en mm) :
+
+| Coupe de la page imprimée 8 | Repères portés | Détail de joint relié |
+| --- | --- | --- |
+| Drainage meneau vers le bas | 5x25 (en haut), 5x25 (à gauche), 5x25 (à droite), Ø8, 5x25 ou Ø8, 5x25 (en bas) | joint de frappe |
+| Drainage meneau ou milieu | 5x25 (en haut), 5x25 et 5x25 (à gauche), 5x25 (à droite), Ø8, 5x25 ou Ø8, 5x25 (en bas) | joint de décompression 9043 |
+| Drainage meneau en direct | 5x25 (en haut), 5x25 (à gauche, au-dessus d'un perçage en façade), 5x25 (à droite), Ø8, 5x25 ou Ø8, 5x25 (en bas) | grugeage du joint PCE |
+
+Le détail « Retirer le joint sur 100 mm » n'est relié à aucune coupe ; le trait de liaison du
+« Joint de frappe » descend jusqu'au joint du meneau de la première coupe. La planche ne porte ni
+entraxe ni décalage.
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 224)
+
+## Ouvrant à face galbée dans son dormant, et variante (page imprimée 9)
+
+La planche, à l'échelle 1:2, est une coupe verticale d'un ouvrant à face galbée dans son dormant :
+en haut la traverse haute du dormant et la traverse haute de l'ouvrant, en bas la traverse basse de
+l'ouvrant et la traverse basse du dormant ; à gauche, sous le titre « Variante », une traverse basse de dormant seule [1 p. 225].
+Les repères de perçage, en mm :
+
+- traverse haute du dormant : 5x25 du fond de feuillure vers la préchambre, sortie par un 5x25 en
+  façade « ou » par un « Ø8 ou 5x25 » dans le recouvrement ; le joint du dormant entouré à cet
+  endroit est relié au détail « Joint de frappe » ;
+- traverses haute et basse de l'ouvrant : 5x25, désignés par un même repère ;
+- traverse basse du dormant : 5x25 en façade ;
+- « Variante » : 5x25 du fond de feuillure vers la préchambre et « 5x25 ou Ø8 » en façade.
+
+En haut, les mêmes quatre détails du joint que sur la page imprimée 8 : « Joint de frappe »,
+« Joint de décompression **9043** » « ou » « Grugeage du joint PCE », « Retirer le joint sur
+100 mm » [1 p. 225].
+
+![Coupe verticale d'un ouvrant galbé dans son dormant, drainage et décompression, variante de traverse basse de dormant](/assets/procedures/directives-evo2008/drainage-ouvrant-sur-fixe-et-variante-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 225)
+
+## Fenêtres ouvrant vers l'extérieur (page imprimée 10)
+
+**Pour les fenêtres ouvrant vers l'extérieur, le joint de décompression est à poser dans la partie
+centrale inférieure de l'ouvrant** [1 p. 226].
+
+L'élévation, vue de l'intérieur, situe le « Joint de décompression » (trait noir épais) au milieu
+de la traverse basse, à cotes égales (« = », « = ») des deux montants ; elle indique les plans de
+coupe A-A (vertical, au milieu) et B-B (horizontal, à 100 mm du haut) ; les repères 12 et 50 (en
+mm) sont portés près du montant gauche et du joint.
+
+![Élévation de la fenêtre ouvrant vers l'extérieur, joint de décompression centré en partie basse, coupes A-A et B-B](/assets/procedures/directives-evo2008/ouvrant-vers-exterieur-joint-decompression-elevation-evo2008.png)
+
+| Repère de l'élévation de la page imprimée 10 | Cote (mm) |
+| --- | --- |
+| Hauteur de la coupe B-B depuis le haut | 100 |
+| Repère vertical près du montant gauche | 12 |
+| Repère horizontal au droit du joint de décompression | 50 |
+| Position du joint de décompression | au milieu (= / =) |
+
+Les coupes verticales, à l'échelle 1:2 : à gauche, une traverse basse (ouvrant vers l'extérieur
+sur son dormant), à droite la coupe A-A complète (haut et bas). Au-dessus, trois détails du
+joint : « Grugeage du joint PCE » « ou » « Joint de décompression F40-45-**9043** », et « Joint de
+frappe F40-45-**9040** ». Repères de perçage, en mm : 5x25 et « 5x25 ou Ø8 » à chaque traverse,
+5x25 dans le dormant bas [1 p. 226].
+
+![Fenêtre ouvrant vers l'extérieur, coupes verticales, drainage et joints](/assets/procedures/directives-evo2008/ouvrant-vers-exterieur-coupes-verticales-drainage-evo2008.png)
+
+La coupe horizontale B-B montre les deux montants : « 5x25 ou Ø8 » aux deux angles extérieurs et
+un « 5x25 ou Ø8 » dans chaque montant d'ouvrant, désignés par un même repère au milieu [1 p. 226].
+
+![Fenêtre ouvrant vers l'extérieur, coupe horizontale B-B, décompression 5x25 ou Ø8](/assets/procedures/directives-evo2008/ouvrant-vers-exterieur-coupe-horizontale-decompression-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 226)
+
+Les profilés de la fenêtre ouvrant vers l'extérieur du système 70 (dormant 2403, ouvrant 2418) sont
+sur [Types d'ouverture et plans de combinaison du système 70](/profiles/systeme-70-plans-de-combinaison.md).
+
+## Ventilations supplémentaires des profilés filmés (page imprimée 11)
+
+Un profilé filmé est un profilé PVC recouvert d'un film décor (couleur ou imitation bois) collé sur
+une ou deux faces ([glossaire](/reference/glossaire.md)).
+
+**Dans le cas de profilés filmés, il faut ventiler impérativement toutes les préchambres
+extérieures pour éviter une accumulation de chaleur. Cette remarque est valable pour les profilés
+filmés 2 faces et 1 face extérieure** (texte de la page : « il fant ventilés ») [1 p. 227].
+
+**Ces usinages sont à prévoir en plus de ceux réalisés pour le drainage et la décompression**
+[1 p. 227].
+
+| Dormants | Usinage | Position |
+| --- | --- | --- |
+| 6100, 6101, 2502, 6104, 6106 | « Trous 5 x 25 mm suivant plan ① » | plan 1 : à 100 mm de chaque angle, sur les quatre côtés |
+| 6100, 6101, 2502, 6104, 6106 | « 2 trous 5 x 20 mm à 10 cm de chaque angle en traverse basse pour ventiler la préchambre ① » | traverse basse, repère ① dans la préchambre, perçage par le bas |
+
+La même page donne 5 × 25 mm pour les trous du plan 1 et 5 × 20 mm pour les trous de la traverse
+basse repérés ① (**INC-236**).
+
+Le « Plan 1 », à gauche, est l'élévation du dormant : un repère à 100 mm de chaque angle, sur les
+quatre côtés, et la cote « 5x25 ». À droite, la coupe verticale d'un dormant, traverse haute et
+traverse basse, avec le repère ① dans la préchambre de la traverse basse et le perçage par le bas
+[1 p. 227].
+
+![Ventilation des profilés filmés, dormants 6100, 6101, 2502, 6104, 6106, plan 1 et coupe](/assets/procedures/directives-evo2008/ventilation-profiles-filmes-dormants-plan-1-evo2008.png)
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 227)
+
+La ventilation des profilés sombres (clarté L\* inférieure à 82) du manuel de 2023, profilé par
+profilé, est sur [Drainage, décompression et ventilation du système 70](/procedures/drainage-decompression-ventilation-systeme-70.md).
+
+# Citations
+
+[1] [Système e.VOLUTION, plan des profilés et manuel technique, système F 91, édition août 2008](raw/profine-plans-profiles-e-volution-2008-08.pdf),
+registre 5.1 « Directives générales », pages imprimées 1 à 22 (PDF p. 193 à 214) ; registre 5.10
+« Soudure à plat », pages imprimées 1 et 2 (PDF p. 215-216) ; registre 5.2 « Drainage/Décompression »,
+pages imprimées 1 à 11 (PDF p. 217 à 227)
+
+# Voir aussi
+
+- [Fabrication des profilés PVC, directives profine](/procedures/fabrication-profiles-pvc.md)
+- [Fabrication du système 70](/procedures/fabrication-systeme-70.md)
+- [Usage, nettoyage et entretien d'une menuiserie profine](/entretien/usage-nettoyage-entretien-menuiseries-profine.md)
+- [Drainage, décompression et ventilation du système 70](/procedures/drainage-decompression-ventilation-systeme-70.md)
+- [Assemblages mécaniques des meneaux et traverses du système 70, 2008](/procedures/assemblage-mecanique-meneau-traverse-systeme-70-evo2008.md)
+- [Plans des profilés e.VOLUTION, août 2008](/sources/plans-profiles-e-volution-2008.md)
+
+===== PAGE 3 : /procedures/chassis-cintres-trapezoidaux-systeme-70.md =====
+# Ce que fait cette procédure
+
+Un châssis spécial du système 70 Plateforme de [profine](/fournisseurs/profine.md)
+(e.VOLUTION, e.MOTION, e.XCLUSIVE) est une menuiserie qui n'est pas rectangulaire : soit
+cintrée (le profilé PVC est courbé à chaud en arc, comme la traverse haute d'une fenêtre en
+plein cintre), soit oblique (trapèze ou triangle, dont deux côtés se rejoignent sous un angle
+aigu appelé angle de pointe). Cette procédure donne le diamètre minimum auquel chaque profilé
+du système 70 peut être cintré, les conditions d'un bon cintrage, et les usinages à prévoir sur
+l'ouvrant et le dormant d'une menuiserie oblique selon son angle de pointe [1 p. 312-313].
+
+Le redressement d'un montant de porte cintré est traité à part, pour la gamme 76 :
+[Redressement d'un montant de porte cintré](/procedures/redressement-montant-porte-cintre-9708.md).
+
+# Conditions et interdictions
+
+Les diamètres minimum de cintrage ont été déterminés en coopération avec les fabricants de
+machines de cintrage : ce sont les diamètres minimum jugés qualitativement acceptables. **Les
+conditions préalables sont que les inserts prévus par le constructeur de la machine soient utilisés
+et que leurs recommandations soient suivies.** Le diamètre de cintrage minimum est égal à la
+largeur du profilé × 10 [1 p. 312].
+
+**Attention — conditions pour un bon cintrage** [1 p. 312] :
+
+- **les profilés ne doivent pas être cintrés avec leurs joints** ;
+- les joints d'étanchéité doivent être enfilés manuellement sur le profilé cintré.
+
+# Étapes
+
+## Cintrage de profilés en matière PVC
+
+Le diamètre de cintrage est le diamètre du cercle suivi par le profilé courbé (deux fois le rayon
+R dessiné sur la fenêtre plein cintre ci-dessous). Le tableau donne, pour chaque profilé du
+système 70, le diamètre minimum de cintrage, en mètres, tel qu'il est écrit dans la liste de la
+planche [1 p. 312].
+
+| Profilé | Diamètre minimum de cintrage (m) |
+| --- | --- |
+| 6100 | 0,50 |
+| 6101 | 0,70 |
+| 2502 | 0,70 |
+| 6102 | 0,85 |
+| 6104 | 0,70 |
+| 6105 | 0,85 |
+| 6155 | 0,85 |
+| 6106 | 0,85 |
+| 6107 | 0,90 |
+| 6108 | 0,85 |
+| 6109 | 0,85 |
+| 6110 | 0,90 |
+| 6111 | 0,90 |
+| 6112 | 0,70 |
+| 6115 | 0,80 |
+| 6121 | 0,70 |
+| 6123 | 0,80 |
+| 2415 | 1,00 |
+| 2416 | 1,00 |
+| 2418 | 0,90 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 312, registre 2.6.1, p. 1, version septembre 2023, dessin non à l'échelle)
+
+Les dormants (6100 à 6111, 2502) et les ouvrants (6112, 6115, 6121, 6123, 2415, 2416, 2418) sont
+décrits, avec leurs largeurs, dans
+[Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md). Les
+profilés absents de la liste (6113, 6116, 6117 à 6120, 6122, 6124, meneaux, battements, parcloses)
+n'ont pas de diamètre minimum de cintrage écrit sur la planche.
+
+![Fenêtre plein cintre, rayon R de la traverse cintrée](/assets/procedures/moe-systeme-70/cintrage/chassis-plein-cintre-rayon.png)
+
+Pictogramme d'une fenêtre oscillo-battante en plein cintre, vue de l'intérieur : la flèche R est
+le rayon de l'arc ; le cercle en tireté-point repère la zone cintrée du haut du châssis.
+
+![Profilé dormant et ouvrant cintrés en arc](/assets/procedures/moe-systeme-70/cintrage/cintrage-profile-arc.png)
+
+La coupe d'un dormant et de son ouvrant est dessinée sur l'arc cintré : les trois arcs sont les
+faces du profilé courbé, les traits en tireté-point les rayons qui limitent le tronçon dessiné.
+
+## Menuiserie oblique : trapèze, triangle
+
+Le plus petit angle de pointe réalisable **sans usinage supplémentaire de l'ouvrant ou du
+dormant est de 68°, en tenant compte d'un axe de rotation de 10.5/20** (position de l'axe de
+rotation de la ferrure, en mm, notée ainsi sur la planche). En dessous, des usinages sont à prévoir,
+voir tableau et dessin ci-dessous [1 p. 313].
+
+![Menuiserie oblique, angle de pointe α](/assets/procedures/moe-systeme-70/cintrage/menuiserie-oblique-angle-de-pointe.png)
+
+Pictogramme d'un châssis trapézoïdal : l'angle α est l'angle de pointe, entre le montant vertical
+et la traverse oblique ; le cercle en tireté-point repère la pointe, dont la coupe cotée est donnée
+plus bas.
+
+Le tableau dit quelles mesures d'usinage (repérées 1 à 5 sur la coupe) sont à réaliser pour
+chaque angle de pointe. Une croix signifie que la mesure est à réaliser ; l'en-tête de la planche
+est « Mesure 1-5 pour angle α ≤ 61° » [1 p. 313].
+
+| Angle de pointe α | Mesure 1 | Mesure 2 | Mesure 3 | Mesure 4 | Mesure 5 |
+| --- | --- | --- | --- | --- | --- |
+| 68° | - | - | - | - | - |
+| 61° | X | - | - | - | - |
+| 53° | X | X | - | - | - |
+| 51° | X | X | X | X | - |
+| 48° | X | X | X | X | X |
+| 44° (*) | X | X | X | X | X |
+
+(*) En fonction de la quincaillerie (axe de rotation 10.5/24) [1 p. 313].
+
+Les colonnes 1 à 5 de la planche ne portent pas de titre : la correspondance colonne → repère
+1 à 5 de la coupe suit leur ordre de gauche à droite.
+
+![Coupe dormant / ouvrant, usinages 1 à 5 de la menuiserie oblique](/assets/procedures/moe-systeme-70/cintrage/menuiserie-oblique-usinages-1-5.png)
+
+La coupe montre un dormant renforcé et son ouvrant vitré, avec trois petites zones hachurées : deux
+sur la paroi du dormant côté ouvrant, une sous le joint du haut du dormant. La planche ne dit pas
+en toutes lettres ce que chaque repère enlève ; le tableau donne l'emplacement de chaque repère
+cerclé sur la coupe et sa cote [1 p. 313].
+
+| Repère | Emplacement sur la coupe | Cote portée (mm ou °) |
+| --- | --- | --- |
+| 1 | paroi du dormant côté ouvrant, au droit des zones hachurées basses | 4 |
+| 2 | entre la paroi du dormant et la face biaise de l'ouvrant, en haut | 4.5 |
+| 3 | pied de l'ouvrant, largeur horizontale | 12 |
+| 4 | sous les cotes de pied 20,2 et 12, sans cote propre | - |
+| 5 | haut du dormant, biais mesuré depuis la verticale | 25° |
+
+Les cotes repérées d'un astérisque, 10,5 (verticale) et 20,2 (horizontale), positionnent
+l'axe de rotation (croix cerclée) par rapport au dormant. Le texte écrit un axe de rotation
+« 10.5/20 », la coupe cote 20,2 — entrée **INC-180** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md).
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 313, registre 2.6.1, p. 2, version septembre 2023, dessin non à l'échelle)
+
+# Ce que le document ne dit pas
+
+Les outils et la méthode d'usinage des repères 1 à 5, la longueur des usinages le long du
+profilé et le profilé dessiné dans la coupe (dormant et ouvrant non légendés) ne sont pas donnés.
+Le repère 4 n'a pas de cote propre.
+
+# Citations
+
+[1] [Système 70 Plateforme, manuel de mise en œuvre, profine](raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf), p. 312-313
+
+# Voir aussi
+
+- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
+- [Abaques dimensionnels du système 70](/profiles/systeme-70-abaques-dimensionnels.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /sources/soprofen-notice-percage-coulisse-lame-serrure.md | Source | Notice de perçage des coulisses pour lame à serrure SOPROFEN (2008) | source, soprofen, volet-roulant, tirage-direct, lame-serrure, coulisse | Notice technique d'atelier et de chantier Soprofen (réf. NO-MM-T-TD-00-FR-032008) pour le perçage des coulisses lors du verrouillage de la lame finale à serrure sur volet roulant à tirage direct. | l de cylindre : 1er modèle à barillet cylindrique rond, ou 2ème modèle à barillet cylindrique ovale.<br>4) Ligne de repère au crayon sur les coulisses |
+| /procedures/fabrication-systeme-70.md | Procédure | Fabrication et assemblage du système 70 | systeme-70, e-volution, profine, assemblage, soudure, seuil | Les schémas d'atelier et les plans de mise en œuvre du DTD du système 70 de profine (e.XCLUSIVE, e.MOTION, e.VOLUTION) — assemblages de meneau et traverse, soudure à plat du 6127, élargisseurs et rehausseurs, seuils, capotage aluminium, tapées et appuis alu, drainages, couleurs sombres, coupes et plans de pose. | issent sur le dormant ; la clause écrite (entraxe maximum de 300 mm, M646, M643, G250, A476 avec A471 à A473) est au § 2.2.3.5.4 du [DTD](/certificati |
+| /quincaillerie/roto-nx-ksr-confort-designo.md | Quincaillerie | Configurations Roto NX KSR — Confort et NT Designo II | roto, roto-nx, ksr, confort, designo, designo-ii | La quincaillerie Roto NX KSR de l'oscillo-battant Confort (fouillot 15 mm) et des configurations NT Designo II (oscillo-battant, ouvrant à la française, deux vantaux) — nomenclatures complètes, vues éclatées et positionnement des gâches. | HFF) / 530 à 1730 mm / / Poids du vantail / 50 kg maximum / / Force de fermeture / 1650 N / Autre valeur de HFF maximale : 1 600 mm [2 p. 48, 67] — e |
+| /procedures/capotage-aluclip-systeme-70.md | Procédure | Capotage AluClip du système 70 | systeme-70, e-volution, e-motion, e-xclusive, profine, aluclip | La mise en œuvre des capots aluminium AluClip sur les profilés PVC du système 70 Plateforme de profine — poinçonnage et fraisage des capots, étanchéité des jonctions, positionnement et collage des capots, joints enfilés, battement rapporté 0140 et capot 9C40, drainage en façade par busette M450 et joint G008, décompression par joint 9043, drainages des dormants, ouvrants et traverses capotés — et les profilés complémentaires capotés — réhausses et plats alu, demi-capot A474, patin G250, tapées A469 à A473, appuis A475 à A491, embouts M646 et M643, cotes de débit des tapées et appuis. | s de deux formes (petits rectangles et perçages arrondis). Les cotes de la traverse basse sont données dans l'ordre où elles sont portées sous chaque |
+| /certifications/dta-6-16-2334.md | Certification | DTA n° 6/16-2334_V5, système 76 Advanced | dta, cstb, avis-technique, profine, systeme-76-advanced, pose | Document Technique d'Application CSTB du système PVC 76 Advanced de profine, valide jusqu'au 31 juillet 2028, avec son domaine d'emploi et ses dimensions maximales. | s, établi selon la NF EN 12207, le débit de fuite maximum sous une différence de pression de 4 Pa obtenu par extrapolation est le suivant ; une ligne |
+| /profiles/systeme-76-cotes-de-debit.md | Profilé | Cotes de débit du système 76 | systeme-76-advanced, cote-de-debit, cintrage, trapeze, dormant, ouvrant | Les cotes à déduire de la dimension hors tout pour débiter dormants, meneaux, ouvrants, battements et seuils du système 76 Advanced à joint central, celles des capots aluminium AluClip, et les limites des châssis cintrés et trapézoïdaux. | vier 2019) # Châssis cintrés et trapézoïdaux ## Diamètre minimum de cintrage Le **cintrage** est la mise en forme courbe d'un profilé PVC, pour une |
+| /certifications/dtd-6-16-2335.md | Certification | DTD n° DBV-24-6/16-2335_V5, système 70 (e.XCLUSIVE, e.MOTION, e.VOLUTION) | dtd, dta, cstb, avis-technique, profine, e-volution | Dossier Technique Détaillé CSTB du système PVC 70 de profine (TROCAL e.XCLUSIVE, KBE e.MOTION, KÖMMERLING e.VOLUTION), relatif au DTA 6/16-2335_V5, avec ses prescriptions de fabrication clause par clause, ses dimensions maximales et ses tableaux d'assemblage. | ières ou perçages supplémentaires pour un entraxe maximum de 600 mm ; - sur la face extérieure : un nombre identique d'orifices de 5 × 25 décalés d'en |

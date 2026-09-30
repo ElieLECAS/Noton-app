@@ -1,0 +1,23 @@
+{
+ "id": "G02",
+ "reponse": "La T940023 est la paumelle sur pivot réglable de la quincaillerie visible SOLEAL FY (Technal, gamme LUMINE). Charge maximale : 130 kg par vantail, largeur de vantail Lv maxi 1 600 mm, un ensemble haut + bas par vantail. Entre 100 et 130 kg, la pièce de renfort T940022 est obligatoire. Attention : les paumelles sur pivot (T940035 et T940023) sont incompatibles avec le seuil PMR.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md", "extrait": "| **T940023** | Paumelle sur pivot réglable | **130 kg** | 1 600 mm | 1 ensemble haut + bas.<br>Pièce de renfort **T940022 obligatoire** entre 100 et 130 kg. |"},
+  {"page": "/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md", "extrait": "| Référence | Type d'organe | Charge maximale | Largeur $L_v$ maxi | Règle de répartition par vantail |"}
+ ],
+ "ambiguite": "",
+ "outils": 4,
+ "comment_trouve": "Grep « T940023|940023 » : deux lignes dans la page Quincaillerie visible et cachée SOLEAL FY (tableau paumelles + avertissement PMR). Grep complémentaire « pivot réglable|T940022|paumelle sur pivot » pour vérifier qu'aucune autre page ne donne une charge différente : aucune.",
+ "formulations": [
+  "Paumelle sur pivot réglable SOLEAL FY, poids maxi du vantail ?",
+  "T940023 charge maxi ?",
+  "Jusqu'à combien de kilos va la paumelle à pivot réglable sur une porte SOLEAL FY ?"
+ ],
+ "defauts_wiki": [
+  "Unités dans les cellules (« 130 kg », « 1 600 mm ») et gras dans les cellules : écarts au protocole, sans gêne pour la recherche par référence.",
+  "Aucun localisateur (schéma: …) propre au tableau des paumelles : la citation [2 p. 130] n'apparaît que dans l'avertissement PMR.",
+  "La colonne « Charge maximale » ne précise pas « par vantail » dans l'en-tête ; la question « charge maxi » sans le mot paumelle ni pivot peut remonter d'autres pages SOLEAL FY (QC, compas) avant celle-ci si la référence n'est pas tapée.",
+  "Page de 12,6 ko regroupant paumelles, ferrures OB/BO, quincaillerie cachée et serrures : correcte pour la référence exacte, peu discriminante pour « paumelle pivot »."
+ ]
+}

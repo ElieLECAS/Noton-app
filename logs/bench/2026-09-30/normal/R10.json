@@ -1,0 +1,27 @@
+{
+ "id": "R10",
+ "reponse": "La fenêtre battante LUMINE55 (SOLEAL FY 55) n'a pas de chicane dans le wiki : la chicane est le montant central où se rejoignent les vantaux d'un **coulissant**. Les coulissants 55 mm de la famille LUMINE sont le SOLÉAL55 / GALANDAGE55 (TECHNAL SOLEAL GY 55) et le LUMÉAL55 (TECHNAL LUMEAL GA).\n\n**SOLEAL GY 55 (SOLÉAL55, GALANDAGE55)** — montants centraux (chicanes), face vue 32,8 mm (35,1 mm en combinaison d'accroche), chicanes serties en polyamide Tecatherm 66 ESP :\n- vitrage 24-28 mm : TGY1207 standard chicane (Ix 6,12 cm⁴, Iy 1,96) ; TGY1208 renfort tubulaire rectangulaire (23,00 / 4,89) ; TGY1209 grande inertie tubulaire (54,45 / 7,08) ; TGY1210 renfort lame extérieure (21,98 / 2,42, vantaux centraux 4 vantaux percussion) ; TGY1211 renfort profil galbé Design (25,26 / 4,73) ;\n- vitrage 29-32 mm : TGY1213 standard chicane (5,96 / 1,68) ; TGY1214 tubulaire rectangulaire (23,00 / 4,68) ; TGY1215 grande inertie (54,26 / 6,89) ; TGY1216 lame extérieure (21,98 / 2,21) ; TGY1217 galbé Design (25,26 / 4,50).\nCombinaisons pour grandes baies : TGY1208+TGY1208 = 46,00 cm⁴ ; TGY1208+TGY1209 = 77,45 ; TGY1209+TGY1209 = 108,90 cm⁴ (jusqu'à H 2,50 m × L 3,00 m en 2 vantaux sous 1 200 Pa, classe A3). En galandage, chicanes fixes : TGY1144 (monorail, refoulement, débit H − 95) et TGY2523 (galandage 2 rails, débit H − 40).\n\n**LUMEAL GA (LUMÉAL55)** — montants centraux : vitrage 24 à 28 mm : T141037 chicane fine (face vue 46,7, largeur 37,8), T141038 renforcé (77,3), T141024 haute inertie (97,9) ; vitrage 29 à 32 mm : T141041 chicane fine (46,7), T141043 renforcé (77,3), T141042 haute inertie (97,9) ; inertie Iy 3,21 (fine), 7,49 (renforcé), 9,96 cm⁴ (haute inertie) ; débit H − 105. Renforts de chicane TGA3703 sur les montants renforcés T141042 / T141043.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/profiles/soleal-gy-dormants-et-rails.md", "extrait": "| **TGY1207** | 24-28 mm | Standard chicane | $6,12\\text{ cm}^4$ | $1,96\\text{ cm}^4$ | TGY1207 + TGY1207 ($I = 12,24\\text{ cm}^4$) |"},
+  {"page": "/profiles/soleal-gy-dormants-et-rails.md", "extrait": "| **TGY1213** | 29-32 mm | Standard chicane | $5,96\\text{ cm}^4$ | $1,68\\text{ cm}^4$ | TGY1213 + TGY1213 ($I = 11,92\\text{ cm}^4$) |"},
+  {"page": "/profiles/soleal-gy-dormants-et-rails.md", "extrait": "- **TGY1144** : Chicane fixe pour refoulement monorail (se visse en feuillure de dormant pour recréer la chicane d'étanchéité dans le caisson)."},
+  {"page": "/profiles/lumeal-ga-dormants-et-ouvrants.md", "extrait": "| **T141037** | Montant central chicane fine | 46,7 | 37,8 | Vitrage 24 à 28 mm |"},
+  {"page": "/profiles/lumeal-ga-dormants-et-ouvrants.md", "extrait": "| **T141041** | Montant central chicane fine | 46,7 | 37,8 | Vitrage 29 à 32 mm |"}
+ ],
+ "ambiguite": "« LUMINE 55 » désigne dans le wiki la fenêtre battante (SOLEAL FY 55), qui n'a pas de chicane. L'utilisateur vise sans doute un coulissant 55 mm de la famille LUMINE : SOLÉAL55 / GALANDAGE55 (SOLEAL GY) ou LUMÉAL55 (LUMEAL GA). À faire préciser ; à défaut, donner les deux.",
+ "outils": 2,
+ "comment_trouve": "Grep « chicane » : présent sur SOLEAL GY, LUMEAL GA, ASKEY Coulissant 65 NV, pas sur SOLEAL FY. Lecture des tableaux « Montants centraux (Chicanes) » de soleal-gy-dormants-et-rails.md et du tableau des ouvrants de lumeal-ga-dormants-et-ouvrants.md.",
+ "formulations": [
+  "Quels montants centraux pour un coulissant alu SOLÉAL55 ?",
+  "chicane lumine55",
+  "Donne-moi les chicanes du coulissant aluminium 55 mm avec leurs inerties"
+ ],
+ "defauts_wiki": [
+  "Nommage : l'utilisateur écrit « lumine 55 » ; le wiki ne relie jamais « LUMINE55 » aux coulissants (SOLÉAL55, GALANDAGE55, LUMÉAL55 sont rattachés à LUMINE par la frontmatter gamme: LUMINE, pas dans le texte des pages profils) ; « LUMINE55 » est réservé à la fenêtre SOLEAL FY qui n'a pas de chicane.",
+  "Les pages SOLEAL GY et LUMEAL GA ne contiennent pas le mot « LUMINE » dans le corps : un BM25 sur « lumine 55 chicane » risque de remonter gammes/lumine.md et soleal-fy-* (fenêtre) plutôt que les coulissants.",
+  "Donnée répartie sur deux systèmes (SOLEAL GY et LUMEAL GA) et, pour le galandage, sur une troisième page (pose-soleal-gy-galandage.md) ; ASKEY Coulissant 65 NV a aussi des chicanes et peut polluer.",
+  "Chez LUMEAL GA, les chicanes sont nommées « Montant central chicane fine / renforcé / haute inertie » : seules les « fines » portent le mot chicane dans leur ligne.",
+  "Sur SOLEAL GY, les inerties sont écrites en LaTeX ($6,12\\text{ cm}^4$) : nombres peu lisibles pour une recherche lexicale."
+ ]
+}

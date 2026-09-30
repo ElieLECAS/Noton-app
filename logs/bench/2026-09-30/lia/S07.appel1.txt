@@ -1,0 +1,522 @@
+===== PAGE 1 : /profiles/soleal-gy-dormants-et-rails.md =====
+# Présentation générale
+
+Le système **SOLEAL GY 55** (Le Coulissant Universel) de **TECHNAL** est conçu autour d'un module de base de **55 mm de profondeur** pour les profilés 2 rails périphériques. Il permet la réalisation de fenêtres et portes-fenêtres coulissantes en neuf et en rénovation, de 1 à 8 vantaux, ainsi que les solutions à galandage monorail, 2 et 3 rails, et les coulissants d'angle à 90° sans poteau intermédiaire.
+
+La rupture de pont thermique (RPT) est assurée par :
+- Des barrettes tubulaires ou plates en polyamide 6.6 renforcé à 25 % de fibres de verre de 30 mm sur les dormants.
+- Des barrettes de 22 mm sur les traverses d'ouvrants et 37 mm sur les montants latéraux d'ouvrants.
+- Des profilés isolants multichambres en PVC (Benvic ER019 extrudé par REHAU) clippés entre les rails.
+- Des chicanes serties en polyamide Tecatherm 66 ESP (Ensinger) sur les montants centraux.
+
+---
+
+# Profilés dormants
+
+## 1. Dormants 2 rails (profondeur 55 mm / hauteur vue 47,5 mm, encombrement 69,8 mm)
+
+| Référence | Type de dormant | Caractéristiques et intégration | Équerre d'angle |
+| --- | --- | --- | --- |
+| **TGY1104** | Périphérique sans rainure BTC | Face extérieure lisse, pose en tunnel ou applique avec pattes | TGY3603 (x2) |
+| **TGY1120** | Périphérique sans rainure BTC + recueil | Traverse basse avec gorge intérieure de recueil d'eau intégrée | TGY3603 (x2) |
+| **TGY1113** | Périphérique à rainure BTC | Double rainure pour clippage tapées de doublage 100 à 160 mm et couvre-joints | TGY3603 (x2) |
+| **TGY1114** | Périphérique à rainure BTC + recueil | Double rainure BTC avec gorge de recueil d'eau intégrée | TGY3603 (x2) |
+| **TGY1115** | Périphérique BTC + Couvre-joint intégré | Couvre-joint intérieur monobloc de 25 mm (hauteur totale 72,5 mm) | TGY3603 (x2) |
+| **TGY1116** | Périphérique BTC + CJ intégré + recueil | Couvre-joint intérieur monobloc 25 mm et recueil d'eau intégré | TGY3603 (x2) |
+| **TGY1121** | Dormant rénovation | Battement intérieur de 61 mm pour fixation de face en réhabilitation | TGY3603 (x2) + T85A04 |
+| **TGY1119** | Dormant d'intégration frappe 55 | Permet l'intégration du coulissant dans un ensemble composé SOLEAL FY 55 | T750229 + T750230 |
+| **TGY1143** | Dormant d'intégration frappe 65 | Permet l'intégration du coulissant dans un ensemble composé SOLEAL FY 65 | T750229 + T750230 |
+
+## 2. Dormants 3 rails (profondeur 106,2 mm / encombrement 121 mm)
+
+| Référence | Type de dormant | Caractéristiques et intégration | Équerres d'angle |
+| --- | --- | --- | --- |
+| **TGY1111** | 3 rails périphérique sans rainure | Version lisse pour pose sans doublage ou en tunnel | TGY3603 (x2) + TGY3600 (x1) |
+| **TGY1112** | 3 rails périphérique + recueil | Version sans rainure avec recueil d'eau intégré | TGY3603 (x2) + TGY3600 (x1) |
+| **TGY1100** | 3 rails périphérique avec rainure BTC | Reprise de doublages de 100 à 260 mm | TGY3603 (x2) + TGY3600 (x1) |
+| **TGY1101** | 3 rails périphérique BTC + recueil | Double rainure BTC et recueil d'eau intégré | TGY3603 (x2) + TGY3600 (x1) |
+| **TGY1141** | 3 rails spécial grand renfort | Inertie renforcée selon Axe XX' | TGY3603 (x2) + TGY3600 (x1) |
+| **TGY1142** | 3 rails spécial grand renfort + recueil | Inertie renforcée avec recueil d'eau | TGY3603 (x2) + TGY3600 (x1) |
+
+## 3. Dormants 4 rails (profondeur 157,4 mm / encombrement 172,2 mm)
+
+| Référence | Type de dormant | Caractéristiques et intégration | Équerres d'angle |
+| --- | --- | --- | --- |
+| **TGY1102** | 4 rails périphérique rainure BTC | Reprise de doublages jusqu'à 260 mm pour 4 vantaux ou 8 vantaux | TGY3603 (x2) + TGY3600 (x2) |
+| **TGY1103** | 4 rails périphérique BTC + recueil | Double rainure BTC et recueil d'eau intégré | TGY3603 (x2) + TGY3600 (x2) |
+
+---
+
+# Profilés ouvrants
+
+La gamme SOLEAL GY 55 propose deux familles d'ouvrants selon l'épaisseur de prise de vitrage :
+
+| Famille | Épaisseur vitrage | Traverse basse & haute | Montant latéral standard | Montant latéral renfort lame | Montant latéral tube renforcé |
+| --- | --- | --- | --- | --- | --- |
+| **Ouvrants 24-28 mm** | 24 à 28 mm | **T141015** (L=36, H=65) | **TGY1202** (L=41.2, H=64.5) | **TGY1200** (lame 40 mm) | **TGY1301** (tube 51.7 mm) |
+| **Ouvrants 29-32 mm** | 29 à 32 mm | **T141021** (L=40.2, H=65) | **TGY1300** (L=41.2, H=64.5) | **TGY1201** (lame 40 mm) | **TGY1302** (tube 51.7 mm) |
+
+### Montants centraux (Chicanes)
+
+Les montants centraux ont une face vue frontale ultra-fine de **32,8 mm** (ou 35,1 mm en combinaison d'accroche) :
+
+| Référence | Vitrage | Type de renfort | Inertie $I_x$ ($1\,200$ à $3\,000\text{ mm}$) | Inertie $I_y$ | Combinaisons courantes |
+| --- | --- | --- | --- | --- | --- |
+| **TGY1207** | 24-28 mm | Standard chicane | $6,12\text{ cm}^4$ | $1,96\text{ cm}^4$ | TGY1207 + TGY1207 ($I = 12,24\text{ cm}^4$) |
+| **TGY1208** | 24-28 mm | Renfort tubulaire rectangulaire | $23,00\text{ cm}^4$ | $4,89\text{ cm}^4$ | TGY1207 + TGY1208 ($I = 29,12\text{ cm}^4$) |
+| **TGY1209** | 24-28 mm | Grande inertie tubulaire | $54,45\text{ cm}^4$ | $7,08\text{ cm}^4$ | TGY1207 + TGY1209 ($I = 60,57\text{ cm}^4$) |
+| **TGY1210** | 24-28 mm | Renfort lame extérieure | $21,98\text{ cm}^4$ | $2,42\text{ cm}^4$ | Vantaux centraux 4 vtx percussion |
+| **TGY1211** | 24-28 mm | Renfort profil galbé Design | $25,26\text{ cm}^4$ | $4,73\text{ cm}^4$ | Gamme esthétique moderne |
+| **TGY1213** | 29-32 mm | Standard chicane | $5,96\text{ cm}^4$ | $1,68\text{ cm}^4$ | TGY1213 + TGY1213 ($I = 11,92\text{ cm}^4$) |
+| **TGY1214** | 29-32 mm | Renfort tubulaire rectangulaire | $23,00\text{ cm}^4$ | $4,68\text{ cm}^4$ | TGY1213 + TGY1214 ($I = 28,96\text{ cm}^4$) |
+| **TGY1215** | 29-32 mm | Grande inertie tubulaire | $54,26\text{ cm}^4$ | $6,89\text{ cm}^4$ | TGY1213 + TGY1215 ($I = 60,22\text{ cm}^4$) |
+| **TGY1216** | 29-32 mm | Renfort lame extérieure | $21,98\text{ cm}^4$ | $2,21\text{ cm}^4$ | Vantaux centraux 4 vtx 32 mm |
+| **TGY1217** | 29-32 mm | Renfort profil galbé Design | $25,26\text{ cm}^4$ | $4,50\text{ cm}^4$ | Design galbé 32 mm |
+
+### Combinaisons d'inertie maximale pour grandes baies
+- TGY1208 + TGY1208 = **$46,00\text{ cm}^4$**
+- TGY1208 + TGY1209 = **$77,45\text{ cm}^4$**
+- TGY1209 + TGY1209 = **$108,90\text{ cm}^4$** (permet des baies jusqu'à $H = 2,50\text{ m}$ et $L = 3,00\text{ m}$ en 2 vantaux sous vent 1 200 Pa Classe A3).
+
+---
+
+# Profilés spécifiques : Galandage, Angles et Bilame
+
+### 1. Galandage
+- **TGY1144** : Chicane fixe pour refoulement monorail (se visse en feuillure de dormant pour recréer la chicane d'étanchéité dans le caisson).
+- **TGY2523** : Chicane fixe pour châssis galandage 2 rails.
+- **TGY2519** : Profilé aluminium de reprise de cloison intérieure (reçoit la plaque de plâtre BA13/BA15).
+- **TGY2520** : Capot intérieur démontable à la spatule pour maintenance des chariots et accès au refoulement.
+- **TGY2525** : Capot de finition horizontal dans la zone de passage (remplacé par un rail T341000 dans les configurations PMR ou traverses continues).
+- **TGY3612** : Couvre-joint de finition de refoulement mural.
+
+### 2. Coulissant d'angle à 90° sans poteau
+- **TGY1206** : Profilé d'accroche percussion d'angle (se visse sur le montant d'ouvrant pour verrouiller l'angle à 90°).
+- **TGY2203** : Profilé d'angle pré-percé avec gorge de joint d'étanchéité de battue T410010.
+- **TGY2206** : Capot de finition extérieur d'angle.
+- **TGY3618** : Pièce d'angle de raccordement des rails bas extérieurs (à monter avant le rail T341000).
+- **TGY3619** : Ensemble étanchéité d'angle haut et bas avec injection TW110.
+
+### 3. Système anti-effet bilame
+Sous fort ensoleillement, la face extérieure de l'ouvrant se dilate plus vite que la face intérieure, entraînant un cintrage du montant latéral et des difficultés de manœuvre. Technal propose deux solutions certifiées :
+1. **Montant spécifique TGY1220** : profilé intégrant une lame de dilatation thermique décalée. Compense la dilatation jusqu'à $H = 2,18\text{ m}$ et la limite jusqu'à $H = 2,70\text{ m}$.
+2. **Renfort plat en acier galvanisé $50 \times 5\text{ mm}$** : glissé dans le montant tubulaire TGY1301 ou TGY1302, fixé par des douilles taraudées affleurantes M5 et vis FHC M5x20 tous les 250 mm, puis recouvert par le capot de finition clippable **TGY2516** (débit $H - 77\text{ mm}$).
+
+---
+
+# Table des moments d'inertie des profilés SOLEAL GY 55
+
+Calculée selon la norme européenne **NF EN 14024** (variation de la rupture thermique selon la longueur) :
+
+| Profilé | $I_x$ à $1\,200\text{ mm}$ | $I_x$ à $1\,600\text{ mm}$ | $I_x$ à $2\,000\text{ mm}$ | $I_x$ à $2\,250\text{ mm}$ | $I_x$ à $2\,500\text{ mm}$ | $I_x$ à $3\,000\text{ mm}$ | $I_y$ (axe fixe) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **T141009** (Tr. 29-32) | 5,30 | 6,81 | 7,86 | 8,35 | 8,73 | 9,29 | 9,48 |
+| **T141015** (Tr. 24-28) | 4,61 | 5,91 | 6,80 | 7,20 | 7,53 | 8,00 | 10,35 |
+| **T141018** (Tr. int. 24) | 4,63 | 5,94 | 6,83 | 7,24 | 7,57 | 8,04 | 9,19 |
+| **T141021** (Tr. 29-32) | 5,01 | 6,43 | 7,42 | 7,86 | 8,22 | 8,74 | 10,50 |
+| **TGY1100** (Dorm. 3R) | 69,56 | 82,45 | 92,89 | 98,18 | 102,63 | 109,54 | 15,13 |
+| **TGY1101** (Dorm. 3R rec) | 79,60 | 96,29 | 110,32 | 117,61 | 123,85 | 133,72 | 15,94 |
+| **TGY1102** (Dorm. 4R) | 203,49 | 229,36 | 250,92 | 262,07 | 271,58 | 286,56 | 20,04 |
+| **TGY1103** (Dorm. 4R rec) | 216,99 | 249,48 | 277,74 | 292,77 | 305,85 | 326,91 | 20,84 |
+| **TGY1104** (Dorm. 2R) | 15,35 | 19,41 | 22,45 | 23,92 | 25,12 | 26,91 | 9,98 |
+| **TGY1111** (Dorm. 3R) | 69,51 | 82,33 | 92,67 | 97,90 | 102,31 | 109,13 | 14,91 |
+| **TGY1112** (Dorm. 3R rec) | 79,55 | 96,18 | 110,13 | 117,36 | 123,56 | 133,33 | 15,71 |
+| **TGY1113** (Dorm. 2R BTC) | 15,23 | 19,30 | 22,35 | 23,82 | 25,03 | 26,83 | 10,21 |
+| **TGY1114** (Dorm. 2R rec) | 22,17 | 27,76 | 32,08 | 34,19 | 35,95 | 38,61 | 11,02 |
+| **TGY1115** (Dorm. 2R CJ) | 15,68 | 19,99 | 23,26 | 24,85 | 26,15 | 28,12 | 13,72 |
+| **TGY1116** (Dorm. 2R CJ rec)| 22,34 | 28,12 | 32,62 | 34,84 | 36,68 | 39,49 | 14,92 |
+| **TGY1119** (Intégr. FY55) | 25,41 | 31,41 | 36,29 | 38,77 | 40,86 | 44,11 | 25,74 |
+| **TGY1120** (Dorm. 2R rec) | 22,27 | 27,87 | 32,17 | 34,29 | 36,03 | 38,68 | 10,77 |
+| **TGY1121** (Dorm. Réno) | 22,20 | 27,87 | 32,34 | 34,56 | 36,42 | 39,26 | 21,70 |
+| **TGY1141** (Dorm. 3R) | 76,70 | 103,80 | 119,30 | 125,60 | 132,00 | 142,60 | 15,36 |
+| **TGY1142** (Dorm. 3R rec) | 64,40 | 82,40 | 95,70 | 101,70 | 105,90 | 113,00 | 14,57 |
+| **TGY1143** (Intégr. FY65) | 23,15 | 29,86 | 35,25 | 37,97 | 40,25 | 43,78 | 22,90 |
+| **TGY1200** (Lat. lame 24) | 15,94 | 19,69 | 22,64 | 24,11 | 25,33 | 27,20 | 19,47 |
+| **TGY1201** (Lat. lame 32) | 15,84 | 19,53 | 22,40 | 23,83 | 25,01 | 26,81 | 18,52 |
+| **TGY1202** (Lat. 24-28) | 5,46 | 7,28 | 8,63 | 9,27 | 9,79 | 10,56 | 14,58 |
+| **TGY1220** (Lat. bilame) | 70,98 | 80,39 | 88,12 | 92,07 | 95,42 | 100,64 | 23,38 |
+| **TGY1300** (Lat. 29-32) | 5,39 | 7,15 | 8,44 | 9,04 | 9,54 | 10,27 | 13,20 |
+| **TGY1301** (Lat. tube 24) | 8,70 | 11,65 | 13,97 | 15,12 | 16,08 | 17,54 | 21,41 |
+| **TGY1302** (Lat. tube 32) | 8,65 | 11,53 | 13,78 | 14,89 | 15,81 | 17,22 | 20,09 |
+| **TGY1303** (Lat. renf 24) | 17,97 | 21,78 | 24,74 | 26,20 | 27,42 | 29,26 | 20,99 |
+| **TGY1304** (Lat. renf 32) | 17,87 | 21,62 | 24,51 | 25,92 | 27,10 | 28,87 | 20,05 |
+
+---
+
+# Voir aussi
+
+- [Cotes de débit SOLEAL GY 55](/profiles/soleal-gy-cotes-de-debit.md)
+- [Roulements et fermetures SOLEAL GY 55](/quincaillerie/soleal-gy-roulements-et-fermetures.md)
+- [Pose et galandage SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md)
+- [Fournisseur Technal](/fournisseurs/technal.md)
+
+===== PAGE 2 : /profiles/soleal-fy-dormants-et-ouvrants.md =====
+# Architecture du système SOLEAL FY
+
+Le système à frappe **SOLEAL FY** de [TECHNAL](/fournisseurs/technal.md) est un système de fenêtres et portes-fenêtres en aluminium à rupture de pont thermique (RPT). Il est décliné en deux profondeurs de module d'ossature : **55 mm** (gamme standard [LUMINE55](/gammes/lumine.md)) et **65 mm** (gamme à haute isolation [LUMINE65](/gammes/lumine.md)) [1 p. 7, 2 p. 4, 3 p. 4].
+
+La coupure thermique tubulaire est assurée par deux barrettes serties de 20 mm en polyamide 6.6 renforcé de 25 % de fibre de verre (qualité certifiée QB 49) [1 p. 13].
+
+### Les trois versions d'ouvrants SOLEAL FY
+
+| Version d'ouvrant | Sigle | Profondeur | Caractéristiques techniques | Masse vue face extérieure |
+| --- | :---: | :---: | --- | :---: |
+| **Ouvrant Apparent** | **FYa / OA** | 65 mm (sur module 55)<br>75 mm (sur module 65) | Profilé tubulaire multi-chambre à double barrette 20 mm. Parclosage intérieur classique en aluminium (crochetable alu sur alu). 3 styles : Contemporain, Classique, Tradition. | 28,5 mm (fin) ou 40,5 mm (standard) ;<br>62,5 mm (ouvrant grande inertie pour serrure). |
+| **Ouvrant Minimal** | **FYm / OM** | 59,9 mm (sur module 55)<br>69,9 mm (sur module 65) | Profilé masqué à rupture thermique par barrette de 20,4 mm. Le vitrage est maintenu côté extérieur par une parclose isolante en TPE coextrudé formant un pan coupé visible (système breveté Technal). | Vue d'aluminium quasi nulle depuis l'extérieur (face vue du dormant seul). |
+| **Ouvrant Minimal Chant Clippable** | **CC** | 59,9 mm / 69,9 mm | Variante de l'ouvrant minimal recevant un profilé aluminium de finition clipsé directement sur la parclose TPE extérieure. | Finition aluminium affleurante masquant le joint TPE. |
+
+(schéma: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf, p. 4 et 6-10)
+
+---
+
+# Profilés dormants SOLEAL FY 55
+
+Les dormants sont basés sur un module tubulaire de 55 mm de profondeur avec barrettes polyamide de 20 mm [2 p. 38, 167-174].
+
+| Référence | Désignation | Hauteur de cage (mm) | Type de drainage | Usage et particularités | Masse vue (mm) |
+| --- | --- | :---: | :---: | --- | :---: |
+| **T215002** | Dormant tubulaire sans rainure | 15 | Apparent | Neuf, pose en tableau ou tunnel | 52 |
+| **T215023** | Dormant tubulaire avec rainures | 15 | Apparent | Neuf avec tapées d'isolation / bavettes | 52 |
+| **T215036** | Dormant avec aile de recouvrement | 15 | Apparent | Rénovation avec aile intégrée de 25 mm | 52 (aile 25) |
+| **T215025** | Dormant élargi 65 mm | 28 | Apparent | Neuf, vitrages lourds ou grande portée | 65 |
+| **T215038** | Dormant élargi avec aile | 28 | Apparent | Rénovation avec aile de 25 mm | 65 (aile 25) |
+| **T215005** | Dormant grand format 75 mm | 38 | Apparent | Grandes portées et ensembles composés | 75 |
+| **T215026** | Dormant grand format avec rainures | 38 | Apparent | Grandes portées avec tapées | 75 |
+| **TFY1119** | Dormant drainage caché sans rainure | 15 | Caché | Neuf, drainage invisible en feuillure | 52 |
+| **T215031** | Dormant drainage caché avec rainures | 15 | Caché | Neuf avec tapées et drainage invisible | 52 |
+| **T215041** | Dormant drainage caché avec aile | 15 | Caché | Rénovation avec aile 25 mm et drainage caché | 52 (aile 25) |
+| **T215046** | Dormant monobloc doublage 100 | 15 | Caché | Isolation par l'intérieur tapée intégrée 100 mm | 52 + 96 |
+| **T215051** | Dormant monobloc doublage 120 | 15 | Caché | Isolation par l'intérieur tapée intégrée 120 mm | 52 + 116 |
+| **T210085** | Dormant rénovation aile 62,5 mm | 15 | Apparent / Caché | Rénovation sur bâti bois existant sans dépose | 52 (aile 62,5) |
+| **T210073** | Dormant bande filante | 26 | Apparent | Raccordement continu sur dalle ou maçonnerie | 29,5 |
+| **T215078** | Dormant d'intégration mur rideau | 15 | Caché | Intégration dans façades MX et MY | 52 |
+| **T215263** | Dormant de dilatation | 15 | Apparent | Joint de dilatation entre châssis (avec TAS0048) | 61 |
+
+(schéma: raw/DTA 6_12-2016_V5 (1).pdf, p. 16-17)
+
+---
+
+# Profilés ouvrants SOLEAL FY 55 et FY 65
+
+### Ouvrants Apparents (FYa / OA)
+
+| Référence | Module | Type d'ouvrant | Largeur vue (mm) | Usages principaux |
+| --- | :---: | --- | :---: | --- |
+| **T215180** | 55 mm | Ouvrant apparent Contemporain | 28,5 | Fenêtre et porte-fenêtre standard 1 et 2 vantaux OF/OB |
+| **T215181** | 55 mm | Ouvrant apparent Contemporain large | 40,5 | Vantaux de dimensions supérieures ou intégration grille acoustique |
+| **T215182** | 55 mm | Ouvrant apparent Classique | 29,5 | Ligne Classique galbée moulurée |
+| **T215183** | 55 mm | Ouvrant apparent Tradition | 29,5 | Ligne Tradition avec pente et doucine |
+| **T215187** | 55 mm | Ouvrant apparent version Éclat | 29,5 | Vantail pour battement central réduit 116 mm |
+| **T215188** | 55 mm | Ouvrant apparent Tradition Éclat | 29,5 | Vantail Tradition pour battement central réduit |
+| **TFY1213** | 55 mm | Ouvrant grande inertie pour serrure | 62,5 | Porte-fenêtre avec serrure à clé, pênes et béquille double |
+| **TFY1217** | 55 mm | Ouvrant grande inertie Classique | 62,5 | Porte-fenêtre avec serrure en ligne Classique |
+| **TFY1218** | 55 mm | Ouvrant grande inertie Tradition | 62,5 | Porte-fenêtre avec serrure en ligne Tradition |
+| **TFY1223** | 55 mm | Ouvrant pour ventilation acoustique | 80,0 | Intégration de grille de ventilation acoustique en traverse |
+| **T215198** | 55 mm | Ouvrant pour châssis à l'italienne | 100,0 | Ouverture extérieure à l'italienne (compas T950002/04) |
+| **T210082** | 55 mm | Ouvrant pour châssis projection | 98,5 | Ouverture extérieure à projection (compas T950008) |
+| **TFY1206** | 65 mm | Ouvrant apparent 65 mm (QC) | 29,5 | Module 65 mm pour quincaillerie cachée ou visible |
+| **TFY1253** | 65 mm | Ouvrant apparent 65 mm renforcé | 40,5 | Module 65 mm pour très grandes dimensions |
+
+### Ouvrants Minimaux (FYm / OM)
+
+| Référence | Module | Ligne de style | Épaisseur vitrage admise (mm) | Largeur vue alu extérieure |
+| --- | :---: | --- | :---: | :---: |
+| **TFY1338** | 55 mm | Contemporain | 24 et 26 mm | Nulle (masqué derrière le dormant) |
+| **TFY1339** | 55 mm | Contemporain | 30 et 32 mm | Nulle |
+| **TFY1235** | 55 mm | Classique | 24 et 26 mm | Nulle |
+| **TFY1236** | 55 mm | Classique | 30 et 32 mm | Nulle |
+| **TFY1250** | 55 mm | Minimal seuil PMR (QC) | 24 et 26 mm | Nulle (traverse basse étanchée avec seuil TFY1160) |
+| **TFY1258** | 55 mm | Minimal seuil PMR standard | 24 et 26 mm | Nulle (seuil plat T215309) |
+| **TFY1337** | 65 mm | Minimal 65 mm (QC) | 24 et 26 mm | Nulle |
+| **TFY1232** | 65 mm | Minimal 65 mm (QC) | 30 et 32 mm | Nulle |
+| **TFY1233** | 65 mm | Minimal 65 mm (QC) | 40 et 42 mm | Nulle (triple vitrage épais) |
+| **TFY1259** | 65 mm | Minimal 65 mm seuil PMR | 24 et 26 mm | Nulle (seuil plat TFY1161) |
+
+(schéma: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf, p. 175-178)
+
+---
+
+# Profilés de battement central et meneaux
+
+| Référence | Type de profilé | Fonction d'assemblage | Inertie $I_x$ ($L=2\,000\text{ mm}$) | Inertie $I_y$ |
+| --- | --- | --- | :---: | :---: |
+| **T215186** | Battement central standard | Fenêtre 2 vantaux (masse visible 137 mm en apparent, 66 mm en minimal) | 12,89 cm⁴ | 7,51 cm⁴ |
+| **T510022** | Battue rapportée | Profilé plat de centrage de crémone pour ouvrant 2 vantaux | 16,48 cm⁴ | 0,96 cm⁴ |
+| **T591068** | Battement central réduit | Version Éclat (masse visible 116 mm sur fenêtre 2 vantaux) | 0,60 cm⁴ | 2,61 cm⁴ |
+| **T215202** | Traverse / meneau 15/77 | Traverse intermédiaire allège ou imposte (face vue 77 mm) | 12,66 cm⁴ | 10,45 cm⁴ |
+| **T215204** | Traverse / meneau 28/90 | Traverse intermédiaire moyenne (face vue 90 mm) | 14,73 cm⁴ | 19,20 cm⁴ |
+| **T215205** | Traverse / meneau 38/100 | Traverse intermédiaire lourde (face vue 100 mm) | 16,13 cm⁴ | 28,84 cm⁴ |
+| **T215207** | Traverse / meneau 58/120 | Traverse grande inertie (face vue 120 mm) | 18,65 cm⁴ | 57,00 cm⁴ |
+| **T215208** | Traverse / meneau 68/130 | Traverse très grande inertie (face vue 130 mm) | 19,80 cm⁴ | 76,10 cm⁴ |
+| **T215211** | Traverse / meneau 98/160 | Traverse de renfort d'inertie maximale (face vue 160 mm) | 23,45 cm⁴ | 160,00 cm⁴ |
+| **T215252** | Meneau renforcé intérieur 105 | Meneau vertical tubulaire grande hauteur (profondeur 105 mm) | 56,66 cm⁴ | 14,62 cm⁴ |
+| **T215261** | Meneau renforcé tubulaire 130 | Meneau vertical pour châssis composés sous fort vent | 146,03 cm⁴ | 50,37 cm⁴ |
+| **T215268** | Poteau tubulaire 130 | Poteau d'accouplement lourd multi-angles | 182,67 cm⁴ | 139,71 cm⁴ |
+
+(schéma: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf, p. 26-30)
+
+---
+
+# Moments d'inertie des profilés SOLEAL FY
+
+Calculés selon l'annexe C de la norme **NF EN 14024** (profilés métalliques à rupture de pont thermique). L'axe $XX'$ correspond au plan perpendiculaire au vitrage (résistance au vent), l'axe $YY'$ correspond au plan du vitrage (poids du vitrage) [2 p. 24-31].
+
+### Tableau d'inertie selon la longueur de barre
+
+| Profilé | Désignation | $I_x$ à 1 200 mm (cm⁴) | $I_x$ à 1 600 mm (cm⁴) | $I_x$ à 2 000 mm (cm⁴) | $I_x$ à 2 500 mm (cm⁴) | $I_x$ à 3 000 mm (cm⁴) | $I_y$ (cm⁴) |
+| --- | --- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **T215002** | Dormant 55 mm | 8,30 | 10,12 | 11,38 | 12,41 | 13,07 | 5,56 |
+| **T215005** | Dormant 75 mm | 10,35 | 12,95 | 14,89 | 16,60 | 17,74 | 19,77 |
+| **T215023** | Dormant 55 rainuré | 8,19 | 10,02 | 11,29 | 12,34 | 13,01 | 5,69 |
+| **T215026** | Dormant 75 rainuré | 10,23 | 12,84 | 14,79 | 16,51 | 17,67 | 20,18 |
+| **T215031** | Dormant drainage caché | 7,87 | 9,66 | 10,90 | 11,93 | 12,59 | 5,69 |
+| **T215036** | Dormant aile 25 mm | 9,44 | 11,68 | 13,27 | 14,60 | 15,47 | 7,99 |
+| **T215046** | Dormant monobloc 100 | 32,74 | 38,17 | 42,27 | 45,88 | 48,33 | 14,94 |
+| **T215051** | Dormant monobloc 120 | 56,52 | 63,96 | 69,64 | 74,69 | 78,13 | 15,48 |
+| **T210085** | Dormant réno aile 62,5 | 9,12 | 11,43 | 13,11 | 14,53 | 15,47 | 11,60 |
+| **T215180** | Ouvrant apparent 28,5 | 12,99 | 15,75 | 17,71 | 19,35 | 20,42 | 6,33 |
+| **T215181** | Ouvrant apparent 40,5 | 15,02 | 18,45 | 21,02 | 23,27 | 24,79 | 13,59 |
+| **TFY1213** | Ouvrant grande inertie | 17,41 | 21,56 | 24,83 | 27,82 | 29,90 | 33,69 |
+| **TFY1338** | Ouvrant minimal 24/26 | 8,72 | 8,72 | 8,72 | 8,72 | 8,72 | 8,27 |
+| **TFY1339** | Ouvrant minimal 30/32 | 8,43 | 8,43 | 8,43 | 8,43 | 8,43 | 7,81 |
+| **T215186** | Battement central 66 | 9,00 | 11,28 | 12,89 | 14,25 | 15,14 | 7,51 |
+| **T215202** | Traverse 15/77 | 9,07 | 11,18 | 12,66 | 13,90 | 14,70 | 10,45 |
+| **T215204** | Traverse 28/90 | 10,26 | 12,83 | 14,73 | 16,38 | 17,48 | 19,20 |
+| **T215205** | Traverse 38/100 | 11,04 | 13,93 | 16,13 | 18,08 | 19,40 | 28,84 |
+| **T215208** | Traverse 68/130 | 13,09 | 16,78 | 19,80 | 22,65 | 24,69 | 76,10 |
+| **T215211** | Traverse 98/160 | 15,17 | 19,59 | 23,45 | 27,31 | 30,21 | 160,00 |
+| **T215252** | Meneau 105 mm | 46,17 | 52,18 | 56,66 | 60,56 | 63,19 | 14,62 |
+| **T215261** | Meneau 130 mm | 123,20 | 135,77 | 146,03 | 155,68 | 162,57 | 50,37 |
+| **T215268** | Poteau 130 mm | 153,10 | 168,84 | 182,67 | 196,55 | 207,03 | 139,71 |
+
+---
+
+# Profilés complémentaires d'habillage et tapées
+
+Relevés sur le catalogue de conception (p. 153-166, 191-202) et le DTA (p. 7-8, 19-21) :
+
+### 1. Pièces d'appui tubulaires et bavettes
+* **Pièces d'appui tubulaires** : T700081 (profondeur 67 mm), T700082 (107 mm), T700083 (147 mm), TFY2105 (67 mm), TFY2106 (107 mm), TFY2107 (147 mm), TFY2516 (149 mm), TGY2113 (187 mm), TGY2115 (207 mm), TGY2117 (187 mm), TGY2119 (207 mm).
+* **Bavettes rapportées** : T591156 (49 mm), T591157 (89 mm), T591158 (109 mm), T591153 (114 mm), T591154 (134 mm), T591155 (173 mm).
+* **Bavettes de rénovation à clipser** : T591169 (105 mm, hauteur 67 mm), T591151 (bavette pliée 25/105 mm), T591191 (45 mm), T591192 (78 mm), T591242 (cornière $40 \times 40\text{ mm}$), T591243 (cornière $40 \times 60\text{ mm}$).
+
+### 2. Tapées d'isolation
+* **Pour dormant avec ou sans rainure (dormants type T215002 / T215023)** :
+  * Doublage 80 mm : tapée **T700076** (profondeur 21 mm) + bouchon T480001 + patte TGY3725
+  * Doublage 100 mm : tapée **T700077** (41 mm) + bouchon T780033 + patte TGY3726
+  * Doublage 120 mm : tapée **T700078** (61 mm) + bouchon T780033 + patte TGY3728
+  * Doublage 140 mm : tapée **T700079** (81 mm) + bouchon TGY3630 + patte TGY3729
+  * Doublage 160 mm : tapée **T700080** (101 mm) + bouchon TGY3630 + patte TGY3730
+  * Doublage 180 mm : tapée **TGY2111** (121 mm) + patte TFY3745
+  * Doublage 200 mm : tapée **TGY2112** (141 mm) + patte TFY3746
+* **Pour dormant avec rainure seule (type TFY1119)** : tapées séries TFY2100 (21 mm) à TFY2104 (101 mm), TFY2510 (121 mm) et TGY2128 (141 mm).
+
+### 3. Couvre-joints intérieurs
+* Profilés plats et à lèvres : T591180 (25 mm), T591200 (29 mm), T591181 (49 mm), T591182 (69 mm), TGY2121 (89 mm), TGY2122 (109 mm), clipsables sur rainure ou vissés avec vis T770020.
+
+---
+
+# Citations
+
+[1] DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm — `raw/DTA 6_12-2016_V5 (1).pdf`, p. 1 à 48
+
+[2] SOLEAL FY 55 évolution, Conception Ouvrant Minimal et Apparent, réf. 6057.003 — `raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf`, p. 1 à 224
+
+[3] SOLEAL FY 55 & 65, Évolution Quincaillerie Cachée, Conception, réf. 6319.003 — `raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf`, p. 1 à 180
+
+# Voir aussi
+
+- [Cotes de débit SOLEAL FY](/profiles/soleal-fy-cotes-de-debit.md)
+- [Parcloses et vitrages SOLEAL FY](/profiles/soleal-fy-parcloses-et-vitrage.md)
+- [Quincaillerie visible et cachée SOLEAL FY](/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md)
+- [Fabrication et usinage SOLEAL FY](/procedures/fabrication-soleal-fy.md)
+- [TECHNAL](/fournisseurs/technal.md)
+- [LUMINE](/gammes/lumine.md)
+
+===== PAGE 3 : /profiles/lumeal-ga-dormants-et-ouvrants.md =====
+# Définition
+
+Le système **LUMEAL GA** de **TECHNAL** est un coulissant à rupture de pont thermique caractérisé par un **ouvrant caché** (masqué dans le cadre dormant), offrant une finesse maximale des masses d'aluminium vues et un gain de clair de vitrage de 8 à 14 % par rapport à un coulissant traditionnel [1 p. 4].
+
+La rupture de pont thermique est réalisée par une barrette tubulaire ou multi-chambres en polyamide 6.6 armé de fibres de verre de **33 mm** sur les profilés dormants et de **22 mm** sur les profilés ouvrants, avec traverse haute d'ouvrant isolante en matériau thermoplastique [1 p. 4].
+
+---
+
+# Cotes
+
+### 1. Profilés dormants 2 rails (Module 100 mm) et monorail
+
+Profilés tubulaires multi-chambres en alliage d'aluminium 6060 T6, cotes en mm relevées sur les catalogues de conception et de fabrication.
+
+| Référence | Désignation | Face vue (mm) | Largeur / Profondeur (mm) | Spécificité d'assemblage |
+| --- | --- | --- | --- | --- |
+| **T141000** | Rail bas 2 rails | 50,5 | 100,0 | Double rainure BTC pour clippage des tapées |
+| **T141001** | Rail bas 2 rails | 50,5 | 100,0 | Lisse sans rainure BTC (pose tunnel ou ossature bois) |
+| **T141004** | Rail bas 2 rails à aile | 70,5 | 100,0 | Intègre une aile de recouvrement de 20 mm |
+| **T141012** | Traverse haute 2 rails à aile | 87,8 | 100,0 | Intègre un couvre-joint de 20 mm |
+| **T141017** | Traverse haute 2 rails | 67,8 | 100,0 | Lisse sans rainure BTC |
+| **T141019** | Traverse haute 2 rails | 67,8 | 100,0 | Double rainure BTC pour clippage des tapées |
+| **T141030** | Montant dormant 2 rails | 77,0 | 106,0 | Double rainure BTC pour tapées de doublage |
+| **T141031** | Montant dormant 2 rails | 77,0 | 106,0 | Lisse sans rainure BTC |
+| **T141007** | Montant dormant 2 rails à aile | 97,0 | 106,0 | Intègre un couvre-joint de 20 mm |
+| **T141025** | Rail bas monorail | 50,5 | 100,0 | Double rainure BTC pour 1 vantail + fixe |
+| **T141026** | Rail bas monorail | 50,5 | 100,0 | Lisse sans rainure BTC pour 1 vantail + fixe |
+| **T141029** | Rail bas monorail à aile | 70,5 | 100,0 | Aile de 20 mm pour 1 vantail + fixe |
+| **T141014** | Seuil PMR bas 2 rails | 32,7 | 100,0 | Seuil surbaissé recevant la rampe T401028 |
+| **T141013** | Seuil PMR bas monorail | 32,7 | 100,0 | Seuil surbaissé monorail recevant T401028 |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 64-70)
+
+---
+
+### 2. Profilés dormants 3 rails (Module 151 mm)
+
+Profilés multi-chambres pour coulissants à 3 et 6 vantaux sur 3 rails de roulement indépendants.
+
+| Référence | Désignation | Face vue (mm) | Largeur / Profondeur (mm) | Rôle technique |
+| --- | --- | --- | --- | --- |
+| **TGA1101** | Rail bas 3 rails | 50,5 | 151,2 | Reçoit 3 chemins de roulement T341000 |
+| **TGA1100** | Traverse haute 3 rails | 67,8 | 151,2 | Triple gorge de guidage supérieur |
+| **TGA1102** | Montant dormant 3 rails | 77,0 | 157,2 | Montant latéral avec rainure BTC |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 69)
+
+---
+
+### 3. Profilés ouvrants (ouvrant caché)
+
+Profilés intégrés dissimulés en feuillure de dormant lors de la fermeture du châssis.
+
+| Référence | Rôle et cinématique | Face vue (mm) | Largeur (mm) | Épaisseur vitrage admissible |
+| --- | --- | --- | --- | --- |
+| **T141015** | Traverse basse ouvrant | 65,0 | 36,0 | Vitrage 24 à 28 mm |
+| **T141018** | Traverse intermédiaire | 65,0 | 36,0 | Vitrage 24 à 28 mm |
+| **T141021** | Traverse basse ouvrant | 65,0 | 40,4 | Vitrage 29 à 32 mm |
+| **T141009** | Traverse intermédiaire | 65,0 | 40,2 | Vitrage 29 à 32 mm |
+| **T141039** | Montant latéral ouvrant | 41,2 | 48,0 | Vitrage 24 à 28 mm (porte la fermeture) |
+| **T141040** | Montant latéral ouvrant | 41,2 | 48,0 | Vitrage 29 à 32 mm (porte la fermeture) |
+| **T141037** | Montant central chicane fine | 46,7 | 37,8 | Vitrage 24 à 28 mm |
+| **T141038** | Montant central renforcé | 77,3 | 37,8 | Vitrage 24 à 28 mm |
+| **T141024** | Montant central haute inertie | 97,9 | 37,8 | Vitrage 24 à 28 mm |
+| **T141041** | Montant central chicane fine | 46,7 | 37,8 | Vitrage 29 à 32 mm |
+| **T141043** | Montant central renforcé | 77,3 | 37,8 | Vitrage 29 à 32 mm |
+| **T141042** | Montant central haute inertie | 97,9 | 37,8 | Vitrage 29 à 32 mm |
+| **T141033** | Montant percussion centrale | 80,8 | 31,0 | Montant battement pour 4 et 6 vantaux |
+| **T141034** | Montant percussion renforcé | 80,8 | 31,0 | Montant battement renforcé |
+| **T821004** | Traverse haute ouvrant PVC | 27,0 | 43,0 | Profilé thermoplastique 24 à 28 mm |
+| **T821005** | Traverse haute ouvrant PVC | 27,0 | 43,0 | Profilé thermoplastique 29 à 32 mm |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 71-75)
+
+---
+
+# Moments d'inertie (NF EN 14024)
+
+Moments d'inertie $I_x$ en flexion sous vent (axe XX') calculés selon l'annexe C de la norme NF EN 14024 par portée d'élément, et inertie fixe $I_y$ (axe YY') en $\text{cm}^4$ :
+
+| Référence profilé | $I_x$ à $1\,200\text{ mm}$ | $I_x$ à $1\,600\text{ mm}$ | $I_x$ à $2\,000\text{ mm}$ | $I_x$ à $2\,250\text{ mm}$ | $I_x$ à $2\,500\text{ mm}$ | $I_x$ à $3\,000\text{ mm}$ | $I_y$ (cm⁴) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **T141000** (Dormant 2R) | 26,68 | 35,86 | 43,77 | 47,95 | 51,58 | 57,38 | 16,51 |
+| **T141001** (Dormant 2R) | 27,02 | 36,16 | 44,01 | 48,15 | 51,73 | 57,46 | 16,25 |
+| **T141004** (Dormant 2R aile) | 28,57 | 38,39 | 46,92 | 51,46 | 55,41 | 61,77 | 20,83 |
+| **T141012** (Traverse H. aile) | 36,87 | 49,06 | 59,19 | 64,41 | 68,86 | 75,85 | 24,10 |
+| **T141017** (Traverse H. 2R) | 35,19 | 46,54 | 55,85 | 60,60 | 64,64 | 70,93 | 20,36 |
+| **T141019** (Traverse H. BTC) | 35,12 | 46,55 | 55,94 | 60,75 | 64,83 | 71,21 | 20,56 |
+| **T141030** (Montant 2R BTC) | 15,42 | 15,42 | 15,42 | 15,42 | 15,42 | 15,42 | 46,84 |
+| **T141031** (Montant 2R lisse) | 15,53 | 15,53 | 15,53 | 15,53 | 15,53 | 15,53 | 46,29 |
+| **T141007** (Montant 2R aile) | 17,53 | 17,53 | 17,53 | 17,53 | 17,53 | 17,53 | 62,84 |
+| **T141025** (Rail monorail BTC)| 28,43 | 37,36 | 44,66 | 48,37 | 51,51 | 56,41 | 10,57 |
+| **T141026** (Rail monorail) | 28,32 | 37,06 | 44,14 | 47,73 | 50,77 | 55,47 | 10,40 |
+| **T141029** (Rail monorail aile)| 30,30 | 39,81 | 47,64 | 51,64 | 55,04 | 60,35 | 14,85 |
+| **TGA1100** (Traverse H. 3R) | 103,68 | 128,70 | 150,87 | 162,83 | 173,33 | 190,41 | 31,30 |
+| **TGA1101** (Rail bas 3R) | 95,31 | 117,40 | 137,68 | 148,91 | 158,94 | 175,61 | 22,60 |
+| **TGA1102** (Montant 3R BTC) | 81,71 | 81,71 | 81,71 | 81,71 | 81,71 | 81,71 | 70,11 |
+| **T141014** (Seuil PMR 2R) | 26,19 | 33,41 | 38,97 | 41,69 | 43,93 | 47,33 | 4,32 |
+| **T141013** (Seuil PMR monorail)| 28,82 | 36,45 | 42,24 | 45,04 | 47,34 | 50,79 | 3,98 |
+| **T141015** (Ouvrant bas 24-28)| 4,61 | 5,91 | 6,80 | 7,20 | 7,53 | 8,00 | 10,35 |
+| **T141021** (Ouvrant bas 29-32)| 5,01 | 6,43 | 7,42 | 7,86 | 8,22 | 8,74 | 10,50 |
+| **T141037 / T141041** (Chicane)| — | — | — | — | — | — | 3,21 |
+| **T141038 / T141043** (Chicane)| — | — | — | — | — | — | 7,49 |
+| **T141024 / T141042** (Chicane)| — | — | — | — | — | — | 9,96 |
+| **T141039** (Montant latéral) | — | — | — | — | — | — | 4,54 |
+| **T141040** (Montant latéral) | — | — | — | — | — | — | 4,14 |
+| **T141033** (Percussion) | — | — | — | — | — | — | 4,62 |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 15-17)
+
+---
+
+# Compatibilités et prises de volume
+
+Le montage du vitrage s'effectue au moyen d'un joint portefeuille continu en EPDM à solin réduit, tournant dans les 4 angles :
+
+| Épaisseur vitrage (mm) | Référence joint ouvrant | Couleur de repère | Profilé ouvrant associé | Joint fixe (côté central) | Joint fixe (côté extérieur) |
+| --- | --- | --- | --- | --- | --- |
+| **24 mm** | **T411005** | Rouge | T141015 / T141037 / T141039 | T411005 (rouge) | TAS0016 (rouge, 6 mm) |
+| **25 mm** | **TGY5009** | Marron | T141015 / T141037 / T141039 | TGY5009 (marron) | TAS0016 (rouge, 6 mm) |
+| **26 mm** | **T411006** | Bleu | T141015 / T141037 / T141039 | T411006 (bleu) | TAS0015 (bleu, 5 mm) |
+| **27 mm** | **TGY5010** | Orange | T141015 / T141037 / T141039 | TGY5010 (orange) | TAS0015 (bleu, 5 mm) |
+| **28 mm** | **T411007** | Vert | T141015 / T141037 / T141039 | T411007 (vert) | T710004 (jaune, 4 mm) |
+| **29 mm** | **TGY5011** | Violet | T141021 / T141041 / T141040 | TGY5011 (violet) | T710004 (jaune, 4 mm) |
+| **30 mm** | **T411008** | Blanc | T141021 / T141041 / T141040 | T411008 (blanc) | T710003 (violet, 3 mm) |
+| **31 mm** | **TGY5012** | Jaune | T141021 / T141041 / T141040 | TGY5012 (jaune) | T710003 (violet, 3 mm) |
+| **32 mm** | **T411009** | Rose | T141021 / T141041 / T141040 | T411009 (rose) | T710002 (marron, 2 mm) |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 18-20)
+
+---
+
+# Ce que la source ne donne pas
+
+- Le document ne prévoit pas de mise en œuvre directe sur dormant bois existant (mise en œuvre sur gros œuvre maçonnerie, ITE ou monomur uniquement).
+- Les profilés latéraux d'ouvrants 141039 et 141040 sont dépourvus de barrette polyamide transversale : le DTA signale qu'ils peuvent être le siège de légères condensations passagères en période de grand froid [2 p. 4].
+
+---
+
+# Citations
+
+[1] LUMEAL GA — Catalogue de conception Le Coulissant Minimal (Réf. 5156.007 - 01/2021) — `raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf`
+[2] DTA n° 6/14-2166_V2, procédé LUMEAL Minimal Ga (27/05/2024) — `raw/DTA Lumeal GA 6-14-2166-v2.pdf`
+
+---
+
+# Voir aussi
+
+- [Cotes de débit LUMEAL GA](/profiles/lumeal-ga-cotes-de-debit.md)
+- [Roulements et fermetures LUMEAL GA](/quincaillerie/lumeal-ga-roulements-et-fermetures.md)
+- [Fabrication et pose LUMEAL GA](/procedures/fabrication-et-pose-lumeal-ga.md)
+- [Coulissants aluminium](/gammes/coulissants-aluminium.md)
+- [TECHNAL](/fournisseurs/technal.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /sources/technal-soleal-gy-conception.md | Document source | Catalogue de conception Technal SOLEAL GY 55 | technal, soleal, soleal-gy, coulissant, galandage, conception | Catalogue technique de conception générale Technal pour la gamme de coulissants universels SOLEAL GY 55 (Réf. 5744.005 - 09/2021, 184 pages). | (Septembre 2021, 184 pages) / / Système visé / **SOLEAL GY 55** (Le Coulissant Universel) / / Typologies couvertes / Coulissants traditionnels 2, 3 e |
+| /sources/technal-lumeal-ga-conception.md | Document source | Catalogue de conception Technal LUMEAL GA | technal, lumeal, lumeal-ga, coulissant, ouvrant-cache, conception | Catalogue technique officiel de conception générale Technal pour la gamme de coulissants minimaux à ouvrant caché LUMEAL GA (Réf. 5156.007 - 01/2021, 94 pages). | dormants (T141000 à TGA1102) et montants centraux/chicanes / à faire / [Dormants et ouvrants LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md) / |
+| /profiles/systeme-70-statique-et-inerties.md | Profilé | Statique et moments d'inertie du système 70 | profine, systeme-70, statique, inertie, iw, ig | La méthode de calcul statique du renforcement des menuiseries du système 70 Plateforme (formule générale, pressions des classes V selon l'EN 12211, allèges, modules d'élasticité, flèches admissibles, plans de charge), les moments d'inertie des fers plats et des tubes acier, les valeurs statiques Iw des meneaux et des assemblages de dormants, l'exemple d'application et les quinze tables des moments d'inertie requis. | cul statique Le calcul statique fixe le moment d'inertie minimal du renfort d'acier d'un élément de menuiserie PVC du système 70 Plateforme. Le momen |
+| /procedures/pose-soleal-gy-galandage.md | Procédure | Fabrication, pose et étanchéité du galandage Technal SOLEAL GY 55 | technal, soleal, soleal-gy, galandage, pose, fabrication | Procédure complète d'atelier et de chantier pour les coulissants à galandage et traditionnels SOLEAL GY 55 de TECHNAL (1 à 4 vantaux, caissons de refoulement, chicanes fixes, drainages étagés, talons injectés, seuil PMR et règles NF DTU 36.5). | tre allégée / / --- / --- / --- / --- / --- / / **Chicane fixe monorail** / **TGY1144** / Reconstitue la chicane étanche dans le caisson de refoulemen |
+| /gammes/coulissants-aluminium.md | Gamme | Coulissants aluminium | aluminium, coulissant, soleal, galandage, lumeal, lumine | Les quatre coulissants aluminium de PROFERM — SOLÉAL55, GALANDAGE55, LUMÉAL55 et LUMINE65 — avec leurs limites dimensionnelles et quincailleries. | r optimal** : montant central de 68 mm et montant chicane de 38 mm (le clair de jour est la surface de passage de la lumière). * **Brosse linéaire d |
+| /profiles/systeme-70-profiles-et-renforts.md | Profilé | Profilés et renforts du système 70 | systeme-70, gamme-70, e-volution, profine, dormant, ouvrant | Les dormants, ouvrants, battements, meneaux et traverses du système 70 Plateforme de profine (Kömmerling Gamme 70), avec leurs cotes, leur capot aluminium, leur coupe, les renforts acier écrits dans chaque chambre et leurs inerties. | dans sa chambre centrale un renfort acier, dont l'inertie** (la raideur de la section, en cm⁴) borne la dimension réalisable. Les termes sont définis |
+| /certifications/at-cstb-6-16-2339-coffres-chrono.md | Certification | Avis Technique CSTB n° 6/16-2339_V2, coffres Chrono SOPROFEN | certification, cstb, avis-technique, soprofen, bloc-baie, chrono-one | Évaluation technique officielle du CSTB pour les coffres blocs-baies PVC Chrono C, Chrono VX2, Chrono VRX2 réno et Chrono ONE de SOPROFEN — domaine d'emploi, performances thermiques Uc/Up, étanchéité à l'air C3/C4, rigidité EI et règles de pose. | andard ($\text{N.m}^2$) / $EI$ avec renfort haute inertie MX20-2 ($\text{N.m}^2$) / / --- / --- / --- / --- / / CX18 et CX22 / 5 040 / 57 960 (renfort |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/contradictions-entre-sources.md :
+| CTR-67 | Longueurs des crémones OB KSR fouillot 15 mm à hauteur de poignée fixe, galet E | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 82 (imprimée 80), relue en image le 29/09/2026, « Crémone OB KSR, hauteur poignée fixe — Galet E » : 601–800 → **580** mm, 619591 ; 801–1000 → 780, 619592 ; 1001–1200 → 980, 619593 ; 1201–1400 → 1180, 619594 ; 1401–1600 → 1380, 619595 ; 1601–1800 → 1580, 619596 ; 1601–1800 HP 1000 → 1580, **794636** ; 1801–2000 → 1780, 794637 ; 2001–2200 → 1980, 795280 ; 2201–2400 → 2180, 795282 | Catalogue Roto NX pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 215 (page imprimée 215 : la pagination du catalogue est celle du PDF), **relue en image à 150 dpi le 29/09/2026** (tranche 1 du retraitement du catalogue, contrôle ponctuel ; la planche elle-même reste à transcrire) : mêmes numéros sur les mêmes plages de HFF avec des longueurs de **690**, 890, 1090, 1290, 1490, 1690, 1890, 2090 et 2290 mm, soit 110 mm de plus à chaque ligne ; sur 1601–1800 à HP 1000, galet E, le catalogue donne 838345 au lieu de 794636 ; la relecture en image confirme ces longueurs, ce numéro, et la zone de recoupe de 200 mm sur toutes les lignes ; **complété le 29/09/2026 (tranche 5, planche transcrite, relue à 220 dpi)** : même écart pour le galet V, manuel p. 82 « Galet V » (580 à 2180 mm pour 619591, 626542 à 626576, 794640 à 794643 ; **794640** sur 1601–1800 à HP 1000) contre catalogue p. 216, 4.1.2.3 « Hauteur de poignée fixe - sécurité » (690 à 2290 mm ; **838324** sur 1601–1800 à HP 1000) ; et **795282** (2201–2400) porte « 3 E » au manuel p. 82, « 2 / – » galets au catalogue p. 215, où c'est 794639 qui porte « 3 / – » ; même écart de 110 mm en fouillot 8 mm, **CTR-115** | Aucune : demander à ROTO laquelle des deux longueurs est celle de la pièce | Une crémone commandée sur la longueur lue dans le mauvais document ne correspond pas à la pièce livrée ; recoupe et choix de plage faussés |
+/anomalies/contradictions-entre-sources.md :
+| CTR-81 | Renfort d'ouvrant associé aux dimensions maximales 650 × 2 070 mm et 550 × 2 170 mm (système 70) | Système e.VOLUTION, plan des profilés, système F 91, août 2008, PDF p. 120 (registre 4.1, page imprimée 1), relue en image le 29/09/2026 : « Avec utilisation du renfort **V127** en épaisseur 1,25 mm les dimensions maximales ouvrant à ne pas dépasser sont : 650 x 2070 mm (DHT 1400 x 2150 mm) ou 550 x 2170 mm (DHT 1200 x 2250 mm) » | Mise en œuvre Système 70 Plateforme, septembre 2023, PDF p. 128 (registre 2.3.3, p. 1) : mêmes dimensions et même épaisseur pour le renfort **V258**, avec l'encadré « attention » qui l'exclut des profilés laqués ou filmés | Pas de valeur retenue seule. À vérifier auprès de profine : le V258 remplace-t-il le V127, ou les deux renforts sont-ils différents avec les mêmes limites ? | Un renfort commandé sous la mauvaise référence ; l'exclusion des profilés laqués ou filmés, écrite pour le V258, n'est pas écrite pour le V127 |
+/anomalies/contradictions-entre-sources.md :
+| CTR-115 | Longueurs et galets des crémones OB KSR fouillot 8 mm à hauteur de poignée fixe, galets E et V | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, relues en image le 29/09/2026 : PDF p. 38, « Crémone OB KSR, hauteur poignée fixe, fouillot 8 mm », galet E : 801–1000 → **780** mm, 771920 ; 1001–1200 → 980, 771921 ; 1201–1400 → 1180, 771922 ; 1401–1600 → 1380, 771923 ; 1601–1800 → 1580, 771924 ; 1601–1800 HP 1000 → 1580, 795269 ; 1801–2000 → 1780, 795271 ; 2001–2200 → 1980, 795273 ; 2201–2400 → 2180, 795275 ; la même nomenclature liste un « Prolongateur de 110 mm 1 E » 794225 (repère 3). PDF p. 81, « Crémone OB KSR, hauteur poignée fixe — Galet V » : 780 à 2180 mm pour 771940 à 771944 et 795270 à 795276, et **2001–2200 → 1980 mm, 1000, « 2 V », 795274** | Catalogue Roto NX pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 213, 4.1.1.2 et 4.1.1.3, relue en image à 220 dpi le 29/09/2026 : mêmes références sur les mêmes plages de HFF avec des longueurs de **890**, 1090, 1290, 1490, 1690, 1890, 2090 et 2290 mm, soit 110 mm de plus à chaque ligne ; **795274 : nombre de galets « 3 / – »** ; le même catalogue, p. 245, liste 794225 comme « Raccord de crémone KSR sans sortie de tringle », longueur 110 mm, 1 galet E | Aucune : demander à ROTO si la longueur du catalogue comprend le prolongateur de 110 mm de la nomenclature, et combien de galets porte 795274. Même écart de 110 mm qu'en fouillot 15 mm (**CTR-67**) | Recoupe et choix de plage faussés si la longueur est lue dans le mauvais document ; un point de verrouillage de moins que prévu sur 795274 |
+/anomalies/contradictions-entre-sources.md :
+| CTR-117 | Longueurs, gâches et références des crémones de semi-fixe KSR à hauteur de poignée fixe ; longueur du verrou 305638 | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 45 (imprimée 43, oscillo-battant à deux vantaux sans meneau fixe), relue en image à 110 dpi le 29/09/2026 : repère 18a, 431–710⁶⁾ → 600, levier 233, **810974** ; 601–900¹⁾ → **790**, levier 156, 1 G, **2009311** ; repère 18, « Crémone de semi-fixe KSR hauteur poignée fixe » : 801–1000 → **780**, 335, 1 G, **835109** ; 1001–1200 → **980**, 1 G, 763118 ; 1201–1400 → **1180**, 1 G, 763119 ; 1401–1600 → **1380**, 2 G, 763120 ; 1601–1800 → **1580**, 2 G, 795474 ; 1801–2000 → **1780**, 640, 2 G, 795476 ; 2001–2200 → **1980**, 640, **2 G**, 795478 ; 2201–2400 → **2180**, 640, 3 G, 795480 ; repère 22 : « Verrou pour semi-fixe **100** (non illustré) 305638 » | Catalogue Roto NX pour profils PVC, CTL_105_FR_v5, juin 2023, relu en image à 250 dpi le 29/09/2026 : PDF p. 250, crémone de semi-fixe standard KSR : 810974 431 – 710, 600, levier 233 (identique) ; pas de 2009311 ni de 835109 (601 – 800 → 771953, 690 mm ; 801 – 1000 → 771954, 890 mm, fouillot 8 mm) ; 763118 à 795480 : **1090, 1290, 1490, 1690, 1890, 2090, 2290 mm**, mêmes hauteurs de levier, colonne « nombre de gâches soudées » 1, 1, 2, 2, 2, **3**, 3 ; PDF p. 261, verrou d'arête pour rainure de battement standard : 305638, longueur **97** | Aucune : demander à ROTO la longueur réelle de 763118 à 795480 (écart constant de 110 mm, même schéma que **CTR-115**), le nombre de gâches de 795478, si 2009311 et 835109 sont toujours livrées, et la longueur de 305638. Le « G » du manuel (non défini, voir le glossaire) est imprimé là où le catalogue a sa colonne « nombre de gâches soudées » : lecture à confirmer | Crémone de semi-fixe commandée à une longueur qui ne correspond pas à la HFF, ou référence commandée qui n'est plus au catalogue ; voir [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+/anomalies/incoherences-internes.md :
+| INC-197 | Instructions de montage Roto NX KSR, réf. IMO_180_NX_FR_v2, novembre 2022 | PDF p. 46-47 (imprimées 44-45), oscillo-battant à deux vantaux, poignée centrée | (1) Dans la crémone OB KSR fouillot -6 mm, le complément de 200 mm de la plage 1801-2000 est imprimé **737639**, là où toutes les autres listes du manuel donnent l'allonge de 200 mm **767639** ; (2) la vue éclatée dessine un repère **4** au milieu du battement qui ne figure pas dans la liste | (1) Lire 767639 ; (2) compléter la liste | (1) Commande d'une référence probablement inexistante ; (2) pièce dessinée sans référence |
+/anomalies/incoherences-internes.md :
+| INC-198 | Instructions de montage Roto NX KSR, réf. IMO_180_NX_FR_v2, novembre 2022 | PDF p. 48, 50 et 52 (imprimées 46, 48, 50), prolongateur de crémone à sortie de tringle | La même liste « Prolongateur de crémone » ne porte pas les mêmes plages : 623645 (675 mm) sur « 1201 – 1400 » p. 48 et 50 mais « 1401 – 1800 » p. 52 ; 375797 / 456690 (875 mm) sur « 1601 – 2000 » p. 48 mais « 1801 – 2000 » p. 50 et 52 ; aucune des trois ne couvre 1401-1600 de façon cohérente (p. 48 laisse 1401-1600 sans ligne ; p. 50 laisse 1401-1800 sans ligne) | Refaire une table unique des plages du prolongateur | Un vantail de 1 401 à 1 800 mm de HFF n'a pas de prolongateur certain |

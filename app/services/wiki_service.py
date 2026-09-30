@@ -8,11 +8,11 @@ Le wiki est un bundle OKF (``wiki_llm/wiki/*.md`` : frontmatter YAML + markdown,
     pas encore écrites — valides en OKF), les degrés, les pages périmées ;
   * l'**index de navigation** (``wiki_index.WikiIndex``) : recherche lexicale sur le texte
     intégral et registres d'anomalies, ce que l'outil ``chercher`` du chat interroge ;
-  * le **prompt système** du chat : consignes + vocabulaire + index des anomalies — quelques
-    milliers de tokens, PAS le wiki, qui ne tient dans aucune fenêtre — et sa clé de cache
-    Mistral (sha256 du prompt entier, donc toute modification des consignes, du vocabulaire ou
-    d'une entrée d'anomalie invalide proprement le cache) ;
-  * le **prompt du tour vocal** : les mêmes vocabulaire et index, précédés des consignes parlées
+  * le **prompt système** du chat : consignes + vocabulaire — quelques milliers de tokens, PAS
+    le wiki, qui ne tient dans aucune fenêtre, ni les anomalies, qui arrivent avec les pages
+    lues — et sa clé de cache Mistral (sha256 du prompt entier, donc toute modification des
+    consignes ou du vocabulaire invalide proprement le cache) ;
+  * le **prompt du tour vocal** : le même vocabulaire, précédé des consignes parlées
     (``app/prompts/vocal_consignes.md``) puis des consignes générales, avec sa propre clé de
     cache (``lia-vocal-``) — les règles de vérité sont écrites une fois, la forme parlée
     s'ajoute devant ;
@@ -54,9 +54,9 @@ LINK_RE = re.compile(r"\[([^\]]*)\]\((/[^)\s]+\.md)\)")
 FRONTMATTER_RE = re.compile(r"\A---\r?\n(.*?)\r?\n---\r?\n?(.*)\Z", re.DOTALL)
 # Ratio caractères / token mesuré le 18/09 sur le prompt réel (Small, tokenizer tekken).
 CHARS_PER_TOKEN = 2.924
-# Le prompt permanent ne porte plus que les consignes, le vocabulaire et l'index des anomalies :
-# il doit rester petit, puisqu'il est payé à chaque appel d'un tour d'outils. Au-delà de ce seuil
-# ESTIMÉ on avertit dans le JOURNAL — c'est en général le vocabulaire ou un registre qui enfle.
+# Le prompt permanent ne porte que les consignes et le vocabulaire : il doit rester petit,
+# puisqu'il est payé à chaque appel d'un tour d'outils. Au-delà de ce seuil ESTIMÉ on avertit
+# dans le JOURNAL — c'est en général le vocabulaire qui enfle.
 # L'administration ne montre pas cette mesure : elle n'a rien à dire à qui rédige le wiki.
 TOKEN_WARNING_THRESHOLD = 20_000
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -150,7 +150,7 @@ class WikiSnapshot:
     # recherche, jeté avec l'instantané dès qu'un fichier change.
     search_index: Dict[str, str] = field(default_factory=dict, repr=False)
     # Le prompt du tour vocal et sa clé : consignes parlées + consignes générales + le même
-    # vocabulaire et le même index des anomalies.
+    # vocabulaire.
     vocal_prompt: str = ""
     vocal_cache_key: str = ""
 
@@ -426,13 +426,13 @@ def _signature(root: Path) -> Tuple:
 
 
 def build_system_prompt(index: WikiIndex, consignes: str, cle: str = "lia-wiki-") -> Tuple[str, str]:
-    """Consignes, vocabulaire, index des anomalies. **Pas le wiki** : il ne tient pas.
+    """Consignes et vocabulaire. **Ni le wiki, ni les anomalies.**
 
     Le modèle n'a en permanence que de quoi *formuler une recherche* — les types de pages, les
-    tags, les gammes, les systèmes — et de quoi *savoir qu'une anomalie existe* : un identifiant
-    et un sujet par entrée. Les pages arrivent par l'outil ``chercher`` ; le détail d'une entrée
-    par ``lire_anomalie``, et les entrées qui concernent la réponse sont de toute façon injectées
-    par le serveur (règle 2).
+    tags, les gammes, les systèmes. On pose une question, il cherche dans le wiki : les pages
+    arrivent par ``chercher``, et les entrées d'anomalie rapprochées des pages lues arrivent avec
+    elles (règle 2). L'index des 479 entrées listé ici tirait le modèle hors de la question :
+    il y perdait la référence demandée (mesuré le 30/09, 0 requête sur 8 la gardait).
 
     Retourne ``(prompt, clé de cache)``. La clé couvre le prompt ENTIER, consignes comprises :
     modifier une consigne invalide donc le cache au lieu de servir un préfixe périmé. ``cle`` est
@@ -442,10 +442,6 @@ def build_system_prompt(index: WikiIndex, consignes: str, cle: str = "lia-wiki-"
         consignes.rstrip(),
         f"===== VOCABULAIRE DU WIKI ({len(index.entries)} pages indexées) =====",
         index.vocabulaire(),
-        f"===== INDEX DES ANOMALIES ({len(index.anomalies)} entrées) =====",
-        "Identifiant et sujet seulement. Le détail des entrées qui concernent ta réponse t'est "
-        "fourni automatiquement ; pour les autres, appelle lire_anomalie(identifiant).",
-        index.index_anomalies(),
     ])
     key = cle + hashlib.sha256(prompt.encode("utf-8")).hexdigest()[:32]
     return prompt, key

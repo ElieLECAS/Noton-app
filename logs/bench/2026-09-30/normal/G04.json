@@ -1,0 +1,25 @@
+{
+ "id": "G04",
+ "reponse": "Le 787347 est une têtière de compas Roto NX, côté paumelles P, sécurité de base (CDR 1 N), avec aération intégrée et blocage. Elle couvre une LFF (largeur fond de feuillure) de 601 à 800 mm : longueur 690 mm, zone de recoupe 200 mm, taille de compas 350, traitement Roto Sil. Le manuel de montage KSR (oscillo-battant un vantail) donne la même plage : largeur en feuillure 601 – 800 mm, compas 350 / longueur 690, n° d'article 787347 (le compas P associé est 787237 gauche / 787238 droite).",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/quincaillerie/roto-nx-compas-et-paliers.md", "extrait": "| 787347 | J | J | 601 – 800 | 690 | 200 | 350 | – | – | Roto Sil |"},
+  {"page": "/quincaillerie/roto-nx-compas-et-paliers.md", "extrait": "| N° de matériel | Aération intégrée | Blocage | LFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Taille | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |"},
+  {"page": "/quincaillerie/roto-nx-ksr-oscillo-battant.md", "extrait": "| 601 – 800 | 350 / 690 | 787347 | - | - |"}
+ ],
+ "ambiguite": "",
+ "outils": 4,
+ "comment_trouve": "Grep « 787347 » : deux pages concordantes (catalogue NX : têtières de compas côté P, CDR 1 N ; manuel KSR : têtière de compas oscillo-battant un vantail), plus une entrée de log qui confirme qu'un doublon de numéro a été corrigé sur la page KSR. Lecture des deux tableaux autour de la ligne.",
+ "formulations": [
+  "Têtière de compas Roto 787347, pour quelle largeur fond de feuillure ?",
+  "787347 LFF ?",
+  "Quelle têtière de compas Roto NX pour un vantail de 700 mm de large en fond de feuillure ?"
+ ],
+ "defauts_wiki": [
+  "Page principale énorme : roto-nx-compas-et-paliers.md fait 96,6 ko ; livrée entière avec deux autres, elle noie la ligne utile. La page KSR fait 39,7 ko.",
+  "Donnée portée par deux pages (catalogue NX et manuel KSR) : entorse à « une donnée, une page », avec un petit écart visible sur la dernière plage (787351 : 1201 – 1400 au catalogue, 1201 – 1600 au manuel KSR).",
+  "La question sans référence (« têtière pour LFF 700 ») impose de lire une plage « 601 – 800 » : une recherche lexicale sur « 700 » ne la trouve pas.",
+  "L'en-tête « Taille » (350) ne dit pas qu'il s'agit de la taille de compas associée ; seule la page KSR l'écrit « Compas / longueur ».",
+  "status: draft sur la page catalogue."
+ ]
+}

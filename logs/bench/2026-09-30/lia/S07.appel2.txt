@@ -1,0 +1,581 @@
+===== PAGE 1 : /profiles/soleal-gy-dormants-et-rails.md =====
+# Présentation générale
+
+Le système **SOLEAL GY 55** (Le Coulissant Universel) de **TECHNAL** est conçu autour d'un module de base de **55 mm de profondeur** pour les profilés 2 rails périphériques. Il permet la réalisation de fenêtres et portes-fenêtres coulissantes en neuf et en rénovation, de 1 à 8 vantaux, ainsi que les solutions à galandage monorail, 2 et 3 rails, et les coulissants d'angle à 90° sans poteau intermédiaire.
+
+La rupture de pont thermique (RPT) est assurée par :
+- Des barrettes tubulaires ou plates en polyamide 6.6 renforcé à 25 % de fibres de verre de 30 mm sur les dormants.
+- Des barrettes de 22 mm sur les traverses d'ouvrants et 37 mm sur les montants latéraux d'ouvrants.
+- Des profilés isolants multichambres en PVC (Benvic ER019 extrudé par REHAU) clippés entre les rails.
+- Des chicanes serties en polyamide Tecatherm 66 ESP (Ensinger) sur les montants centraux.
+
+---
+
+# Profilés dormants
+
+## 1. Dormants 2 rails (profondeur 55 mm / hauteur vue 47,5 mm, encombrement 69,8 mm)
+
+| Référence | Type de dormant | Caractéristiques et intégration | Équerre d'angle |
+| --- | --- | --- | --- |
+| **TGY1104** | Périphérique sans rainure BTC | Face extérieure lisse, pose en tunnel ou applique avec pattes | TGY3603 (x2) |
+| **TGY1120** | Périphérique sans rainure BTC + recueil | Traverse basse avec gorge intérieure de recueil d'eau intégrée | TGY3603 (x2) |
+| **TGY1113** | Périphérique à rainure BTC | Double rainure pour clippage tapées de doublage 100 à 160 mm et couvre-joints | TGY3603 (x2) |
+| **TGY1114** | Périphérique à rainure BTC + recueil | Double rainure BTC avec gorge de recueil d'eau intégrée | TGY3603 (x2) |
+| **TGY1115** | Périphérique BTC + Couvre-joint intégré | Couvre-joint intérieur monobloc de 25 mm (hauteur totale 72,5 mm) | TGY3603 (x2) |
+| **TGY1116** | Périphérique BTC + CJ intégré + recueil | Couvre-joint intérieur monobloc 25 mm et recueil d'eau intégré | TGY3603 (x2) |
+| **TGY1121** | Dormant rénovation | Battement intérieur de 61 mm pour fixation de face en réhabilitation | TGY3603 (x2) + T85A04 |
+| **TGY1119** | Dormant d'intégration frappe 55 | Permet l'intégration du coulissant dans un ensemble composé SOLEAL FY 55 | T750229 + T750230 |
+| **TGY1143** | Dormant d'intégration frappe 65 | Permet l'intégration du coulissant dans un ensemble composé SOLEAL FY 65 | T750229 + T750230 |
+
+## 2. Dormants 3 rails (profondeur 106,2 mm / encombrement 121 mm)
+
+| Référence | Type de dormant | Caractéristiques et intégration | Équerres d'angle |
+| --- | --- | --- | --- |
+| **TGY1111** | 3 rails périphérique sans rainure | Version lisse pour pose sans doublage ou en tunnel | TGY3603 (x2) + TGY3600 (x1) |
+| **TGY1112** | 3 rails périphérique + recueil | Version sans rainure avec recueil d'eau intégré | TGY3603 (x2) + TGY3600 (x1) |
+| **TGY1100** | 3 rails périphérique avec rainure BTC | Reprise de doublages de 100 à 260 mm | TGY3603 (x2) + TGY3600 (x1) |
+| **TGY1101** | 3 rails périphérique BTC + recueil | Double rainure BTC et recueil d'eau intégré | TGY3603 (x2) + TGY3600 (x1) |
+| **TGY1141** | 3 rails spécial grand renfort | Inertie renforcée selon Axe XX' | TGY3603 (x2) + TGY3600 (x1) |
+| **TGY1142** | 3 rails spécial grand renfort + recueil | Inertie renforcée avec recueil d'eau | TGY3603 (x2) + TGY3600 (x1) |
+
+## 3. Dormants 4 rails (profondeur 157,4 mm / encombrement 172,2 mm)
+
+| Référence | Type de dormant | Caractéristiques et intégration | Équerres d'angle |
+| --- | --- | --- | --- |
+| **TGY1102** | 4 rails périphérique rainure BTC | Reprise de doublages jusqu'à 260 mm pour 4 vantaux ou 8 vantaux | TGY3603 (x2) + TGY3600 (x2) |
+| **TGY1103** | 4 rails périphérique BTC + recueil | Double rainure BTC et recueil d'eau intégré | TGY3603 (x2) + TGY3600 (x2) |
+
+---
+
+# Profilés ouvrants
+
+La gamme SOLEAL GY 55 propose deux familles d'ouvrants selon l'épaisseur de prise de vitrage :
+
+| Famille | Épaisseur vitrage | Traverse basse & haute | Montant latéral standard | Montant latéral renfort lame | Montant latéral tube renforcé |
+| --- | --- | --- | --- | --- | --- |
+| **Ouvrants 24-28 mm** | 24 à 28 mm | **T141015** (L=36, H=65) | **TGY1202** (L=41.2, H=64.5) | **TGY1200** (lame 40 mm) | **TGY1301** (tube 51.7 mm) |
+| **Ouvrants 29-32 mm** | 29 à 32 mm | **T141021** (L=40.2, H=65) | **TGY1300** (L=41.2, H=64.5) | **TGY1201** (lame 40 mm) | **TGY1302** (tube 51.7 mm) |
+
+### Montants centraux (Chicanes)
+
+Les montants centraux ont une face vue frontale ultra-fine de **32,8 mm** (ou 35,1 mm en combinaison d'accroche) :
+
+| Référence | Vitrage | Type de renfort | Inertie $I_x$ ($1\,200$ à $3\,000\text{ mm}$) | Inertie $I_y$ | Combinaisons courantes |
+| --- | --- | --- | --- | --- | --- |
+| **TGY1207** | 24-28 mm | Standard chicane | $6,12\text{ cm}^4$ | $1,96\text{ cm}^4$ | TGY1207 + TGY1207 ($I = 12,24\text{ cm}^4$) |
+| **TGY1208** | 24-28 mm | Renfort tubulaire rectangulaire | $23,00\text{ cm}^4$ | $4,89\text{ cm}^4$ | TGY1207 + TGY1208 ($I = 29,12\text{ cm}^4$) |
+| **TGY1209** | 24-28 mm | Grande inertie tubulaire | $54,45\text{ cm}^4$ | $7,08\text{ cm}^4$ | TGY1207 + TGY1209 ($I = 60,57\text{ cm}^4$) |
+| **TGY1210** | 24-28 mm | Renfort lame extérieure | $21,98\text{ cm}^4$ | $2,42\text{ cm}^4$ | Vantaux centraux 4 vtx percussion |
+| **TGY1211** | 24-28 mm | Renfort profil galbé Design | $25,26\text{ cm}^4$ | $4,73\text{ cm}^4$ | Gamme esthétique moderne |
+| **TGY1213** | 29-32 mm | Standard chicane | $5,96\text{ cm}^4$ | $1,68\text{ cm}^4$ | TGY1213 + TGY1213 ($I = 11,92\text{ cm}^4$) |
+| **TGY1214** | 29-32 mm | Renfort tubulaire rectangulaire | $23,00\text{ cm}^4$ | $4,68\text{ cm}^4$ | TGY1213 + TGY1214 ($I = 28,96\text{ cm}^4$) |
+| **TGY1215** | 29-32 mm | Grande inertie tubulaire | $54,26\text{ cm}^4$ | $6,89\text{ cm}^4$ | TGY1213 + TGY1215 ($I = 60,22\text{ cm}^4$) |
+| **TGY1216** | 29-32 mm | Renfort lame extérieure | $21,98\text{ cm}^4$ | $2,21\text{ cm}^4$ | Vantaux centraux 4 vtx 32 mm |
+| **TGY1217** | 29-32 mm | Renfort profil galbé Design | $25,26\text{ cm}^4$ | $4,50\text{ cm}^4$ | Design galbé 32 mm |
+
+### Combinaisons d'inertie maximale pour grandes baies
+- TGY1208 + TGY1208 = **$46,00\text{ cm}^4$**
+- TGY1208 + TGY1209 = **$77,45\text{ cm}^4$**
+- TGY1209 + TGY1209 = **$108,90\text{ cm}^4$** (permet des baies jusqu'à $H = 2,50\text{ m}$ et $L = 3,00\text{ m}$ en 2 vantaux sous vent 1 200 Pa Classe A3).
+
+---
+
+# Profilés spécifiques : Galandage, Angles et Bilame
+
+### 1. Galandage
+- **TGY1144** : Chicane fixe pour refoulement monorail (se visse en feuillure de dormant pour recréer la chicane d'étanchéité dans le caisson).
+- **TGY2523** : Chicane fixe pour châssis galandage 2 rails.
+- **TGY2519** : Profilé aluminium de reprise de cloison intérieure (reçoit la plaque de plâtre BA13/BA15).
+- **TGY2520** : Capot intérieur démontable à la spatule pour maintenance des chariots et accès au refoulement.
+- **TGY2525** : Capot de finition horizontal dans la zone de passage (remplacé par un rail T341000 dans les configurations PMR ou traverses continues).
+- **TGY3612** : Couvre-joint de finition de refoulement mural.
+
+### 2. Coulissant d'angle à 90° sans poteau
+- **TGY1206** : Profilé d'accroche percussion d'angle (se visse sur le montant d'ouvrant pour verrouiller l'angle à 90°).
+- **TGY2203** : Profilé d'angle pré-percé avec gorge de joint d'étanchéité de battue T410010.
+- **TGY2206** : Capot de finition extérieur d'angle.
+- **TGY3618** : Pièce d'angle de raccordement des rails bas extérieurs (à monter avant le rail T341000).
+- **TGY3619** : Ensemble étanchéité d'angle haut et bas avec injection TW110.
+
+### 3. Système anti-effet bilame
+Sous fort ensoleillement, la face extérieure de l'ouvrant se dilate plus vite que la face intérieure, entraînant un cintrage du montant latéral et des difficultés de manœuvre. Technal propose deux solutions certifiées :
+1. **Montant spécifique TGY1220** : profilé intégrant une lame de dilatation thermique décalée. Compense la dilatation jusqu'à $H = 2,18\text{ m}$ et la limite jusqu'à $H = 2,70\text{ m}$.
+2. **Renfort plat en acier galvanisé $50 \times 5\text{ mm}$** : glissé dans le montant tubulaire TGY1301 ou TGY1302, fixé par des douilles taraudées affleurantes M5 et vis FHC M5x20 tous les 250 mm, puis recouvert par le capot de finition clippable **TGY2516** (débit $H - 77\text{ mm}$).
+
+---
+
+# Table des moments d'inertie des profilés SOLEAL GY 55
+
+Calculée selon la norme européenne **NF EN 14024** (variation de la rupture thermique selon la longueur) :
+
+| Profilé | $I_x$ à $1\,200\text{ mm}$ | $I_x$ à $1\,600\text{ mm}$ | $I_x$ à $2\,000\text{ mm}$ | $I_x$ à $2\,250\text{ mm}$ | $I_x$ à $2\,500\text{ mm}$ | $I_x$ à $3\,000\text{ mm}$ | $I_y$ (axe fixe) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **T141009** (Tr. 29-32) | 5,30 | 6,81 | 7,86 | 8,35 | 8,73 | 9,29 | 9,48 |
+| **T141015** (Tr. 24-28) | 4,61 | 5,91 | 6,80 | 7,20 | 7,53 | 8,00 | 10,35 |
+| **T141018** (Tr. int. 24) | 4,63 | 5,94 | 6,83 | 7,24 | 7,57 | 8,04 | 9,19 |
+| **T141021** (Tr. 29-32) | 5,01 | 6,43 | 7,42 | 7,86 | 8,22 | 8,74 | 10,50 |
+| **TGY1100** (Dorm. 3R) | 69,56 | 82,45 | 92,89 | 98,18 | 102,63 | 109,54 | 15,13 |
+| **TGY1101** (Dorm. 3R rec) | 79,60 | 96,29 | 110,32 | 117,61 | 123,85 | 133,72 | 15,94 |
+| **TGY1102** (Dorm. 4R) | 203,49 | 229,36 | 250,92 | 262,07 | 271,58 | 286,56 | 20,04 |
+| **TGY1103** (Dorm. 4R rec) | 216,99 | 249,48 | 277,74 | 292,77 | 305,85 | 326,91 | 20,84 |
+| **TGY1104** (Dorm. 2R) | 15,35 | 19,41 | 22,45 | 23,92 | 25,12 | 26,91 | 9,98 |
+| **TGY1111** (Dorm. 3R) | 69,51 | 82,33 | 92,67 | 97,90 | 102,31 | 109,13 | 14,91 |
+| **TGY1112** (Dorm. 3R rec) | 79,55 | 96,18 | 110,13 | 117,36 | 123,56 | 133,33 | 15,71 |
+| **TGY1113** (Dorm. 2R BTC) | 15,23 | 19,30 | 22,35 | 23,82 | 25,03 | 26,83 | 10,21 |
+| **TGY1114** (Dorm. 2R rec) | 22,17 | 27,76 | 32,08 | 34,19 | 35,95 | 38,61 | 11,02 |
+| **TGY1115** (Dorm. 2R CJ) | 15,68 | 19,99 | 23,26 | 24,85 | 26,15 | 28,12 | 13,72 |
+| **TGY1116** (Dorm. 2R CJ rec)| 22,34 | 28,12 | 32,62 | 34,84 | 36,68 | 39,49 | 14,92 |
+| **TGY1119** (Intégr. FY55) | 25,41 | 31,41 | 36,29 | 38,77 | 40,86 | 44,11 | 25,74 |
+| **TGY1120** (Dorm. 2R rec) | 22,27 | 27,87 | 32,17 | 34,29 | 36,03 | 38,68 | 10,77 |
+| **TGY1121** (Dorm. Réno) | 22,20 | 27,87 | 32,34 | 34,56 | 36,42 | 39,26 | 21,70 |
+| **TGY1141** (Dorm. 3R) | 76,70 | 103,80 | 119,30 | 125,60 | 132,00 | 142,60 | 15,36 |
+| **TGY1142** (Dorm. 3R rec) | 64,40 | 82,40 | 95,70 | 101,70 | 105,90 | 113,00 | 14,57 |
+| **TGY1143** (Intégr. FY65) | 23,15 | 29,86 | 35,25 | 37,97 | 40,25 | 43,78 | 22,90 |
+| **TGY1200** (Lat. lame 24) | 15,94 | 19,69 | 22,64 | 24,11 | 25,33 | 27,20 | 19,47 |
+| **TGY1201** (Lat. lame 32) | 15,84 | 19,53 | 22,40 | 23,83 | 25,01 | 26,81 | 18,52 |
+| **TGY1202** (Lat. 24-28) | 5,46 | 7,28 | 8,63 | 9,27 | 9,79 | 10,56 | 14,58 |
+| **TGY1220** (Lat. bilame) | 70,98 | 80,39 | 88,12 | 92,07 | 95,42 | 100,64 | 23,38 |
+| **TGY1300** (Lat. 29-32) | 5,39 | 7,15 | 8,44 | 9,04 | 9,54 | 10,27 | 13,20 |
+| **TGY1301** (Lat. tube 24) | 8,70 | 11,65 | 13,97 | 15,12 | 16,08 | 17,54 | 21,41 |
+| **TGY1302** (Lat. tube 32) | 8,65 | 11,53 | 13,78 | 14,89 | 15,81 | 17,22 | 20,09 |
+| **TGY1303** (Lat. renf 24) | 17,97 | 21,78 | 24,74 | 26,20 | 27,42 | 29,26 | 20,99 |
+| **TGY1304** (Lat. renf 32) | 17,87 | 21,62 | 24,51 | 25,92 | 27,10 | 28,87 | 20,05 |
+
+---
+
+# Voir aussi
+
+- [Cotes de débit SOLEAL GY 55](/profiles/soleal-gy-cotes-de-debit.md)
+- [Roulements et fermetures SOLEAL GY 55](/quincaillerie/soleal-gy-roulements-et-fermetures.md)
+- [Pose et galandage SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md)
+- [Fournisseur Technal](/fournisseurs/technal.md)
+
+===== PAGE 2 : /quincaillerie/soleal-gy-roulements-et-fermetures.md =====
+# Chariots de roulement et calage
+
+Les chariots SOLEAL GY 55 sont logés dans la traverse basse d'ouvrant (T141015 ou T141021). Leur corps en matériau isolant conserve la continuité de la rupture thermique de la traverse basse.
+
+### 1. Tableau de choix des roulettes et charges admissibles
+
+| Type de chariot | Référence | Réglage | Galets / Bandage | Poids maxi par vantail | Compatible Rail Alu T341000 | Compatible Rail Inox TGY4007 |
+| --- | --- | --- | --- | --- | --- | --- |
+| **Simple fixe** | **T401011** | Non réglable | Polyamide sur roulements à aiguilles | **100 kg** | Oui | Oui |
+| **Double fixe** | **T401012** | Non réglable | Polyamide sur roulements à aiguilles | **200 kg** | Oui | Oui |
+| **Double fixe Inox** | **TGY3873** | Non réglable | Galets 100% Inox | **200 kg** | **NON (Incompatible)** | **OUI** |
+| **Simple réglable** | **T441003** | Réglable en hauteur | Polyamide sur aiguilles | **100 kg** | Oui | Oui |
+| **Double réglable** | **T441004** | Réglable en hauteur | Polyamide sur aiguilles | **200 kg** | Oui | Oui |
+| **Double réglable Inox** | **TGY3872** | Réglable en hauteur | Galets 100% Inox | **200 kg** | **NON (Incompatible)** | **OUI** |
+
+> [!WARNING]
+> **Interdiction absolue** d'associer des chariots à roulettes inox (**TGY3872** / **TGY3873**) sur le chemin de roulement en aluminium **T341000**. L'inox détruirait par écrouissage le rail aluminium sous forte charge. L'utilisation du rail rapporté en acier inoxydable **TGY4007** est impérative avec les galets inox.
+
+### 2. Prescription de calage sous traverse : Cale TGA3817
+Pour transmettre directement la charge du vitrage vers les roulettes sans solliciter la rupture thermique des traverses :
+- **Prise de vitrage 29-32 mm (profilé T141021)** : Cale **TGA3817** obligatoire au droit de chaque roulette de manière systématique.
+- **Prise de vitrage 24-28 mm (profilé T141015)** : Cale **TGA3817** (zone sécable raccourcie) obligatoire si la largeur du vantail dépasse **1,50 m** OU si le poids du vantail dépasse **120 kg**.
+- La cale se fixe sur la traverse avec un point de colle avant vitrage.
+
+### 3. Réglage en hauteur des roulettes réglables
+- Les chariots réglables (T441003, T441004, TGY3872) sont ajustables en hauteur **sans dégonder le vantail** au moyen d'une clé Allen introduite par le chant latéral du montant d'ouvrant à travers l'orifice prévu à **25 mm** de hauteur.
+- Lors du réglage, il est obligatoire de soulager le vantail à l'aide de ventouses de vitrier pour éviter d'endommager la vis micrométrique de réglage sous la charge.
+
+---
+
+# Systèmes de fermeture et verrouillage
+
+La condamnation s'effectue par des mécanismes encastrés à têtière filante en acier inox (grade 3 anticorrosion NF EN 1670) :
+
+### 1. Gamme de crémones encastrées
+
+| Référence | Points de fermeture | Condamnation clé | Hauteur min. châssis | Hauteur min. poignée $Hp$ | Fixation |
+| --- | --- | --- | --- | --- | --- |
+| **TGY3700** | 1 point simple | Non | 395 mm | 219 mm | 2 vis TGY3723 |
+| **TGY3701** | 1 point à clé | Oui (cylindre) | 525 mm | 346 mm | 4 vis TGY3723 |
+| **TGY3702** | 3 points | Non | 1 292 mm | 721 mm | 6 vis TGY3723 |
+| **TGY3703** | 3 points à clé | Oui (cylindre) | 1 292 mm | 721 mm | 8 vis TGY3723 |
+| **TGY3704** | Rallonge 4ème point | Raccordée à TGY3702/03 | Pour très grandes hauteurs | — | 2 vis TGY3723 |
+| **TKG025** | Fermeture 1 point coquille | Non | 395 mm | 219 mm | Encastrée + pêne déporté TGY6006 |
+
+### 2. Cylindres et barillets européens
+- Montants latéraux standard TGY1202 et TGY1303 : Cylindre européen **30 x 30 mm** (Réf. **T1040**).
+- Montants latéraux à renfort tube TGY1301 et TGY1302 : Cylindre européen décentré **40 x 30 mm** (Réf. **T1044**).
+- Rosettes inox de protection de cylindre : Réf. **T960013** ou **TPY6003**.
+
+### 3. Fermeture pompier (Établissements Recevant du Public - ERP)
+Conforme à l'Arrêté du 25 juin 1980 et à l'article CO3 modifié du 28 avril 2016 :
+- Référence : **TGY3731** (avec vis de fixation T770059).
+- Compatible uniquement avec les montants simples **TGY1202** et **TGY1300**.
+- Permet l'ouverture d'urgence depuis l'extérieur à l'aide d'une clé spéciale pompier.
+- Exigence dimensionnelle réglementaire : passage libre minimum de **$H = 1\,800\text{ mm} \times L = 900\text{ mm}$**.
+
+### 4. Verrou central à clé TGY3622
+- Placé à la croisée centrale des vantaux en partie basse.
+- Montage sur cale **TGY3640** avec perçage Ø7 mm et écrou à sertir taraudé M5.
+- Vis de fixation CHc M5x16 et M5x25.
+- En cas d'utilisation du verrou central, les roulettes doivent être décalées à **62 mm** et les cales de vitrage à **71 mm** du chant du montant pour ne pas entrer en conflit avec le perçage Ø11 mm de la pièce de blocage.
+
+---
+
+# Organes de manœuvre et poignées
+
+### 1. Tableau de compatibilité des poignées selon les montants
+
+| Organe de manœuvre | Type | Réf. Laquée | Réf. Anodisée | Compatible Montant Standard (TGY1202/1300) | Compatible Montant Tube (TGY1301/1302) | Compatible Montant Lame (TGY1200/1201) | Compatible Montant Bilame (TGY1220) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **Cuvette encastrée** | Intérieure | **TGY3712** | **TGY3719** | Oui (OS / SF) | Oui (OS / SF) | Non | Oui |
+| **Bouton sur plaque** | Intérieure | **TGY3713** | **TGY3714** | Non | Non | **Oui (OS / SF)** | Oui |
+| **Poignée tirage Technal** | Intérieure | **TGY3717** | — | **Oui (OS / SF\*)** | **Oui (OS / SF\*)** | Non | Non |
+| **Poignée tirage extérieure**| Extérieure | **TGY3718** | — | Oui (OS / SF) | Oui (OS / SF) | Non | Non |
+| **Poignée fixe de tirage** | Int/Ext | **TGY3732 / TGY3733** | — | Oui (avec TGY3716) | Oui (avec TGY3716) | Oui | Oui |
+| **Poignée design droit** | Intérieure | **TGY3606** | — | Oui (OS) | Oui (OS) | Non | Non |
+| **Poignée anse galbée** | Intérieure | **TGY6004** | — | Oui (OS / SF) | Non | Non | Non |
+| **Cuvette à levier** | Intérieure | **TGY6003** | — | Oui (OS / SF) | Non | Non | Non |
+| **Béquille à carré de 7 mm**| Intérieure | **T960030 / TCZ61051**| — | Oui (avec kit TGY3721) | Non | Non | Non |
+
+*\*Note : Pour croiser les vantaux sans heurt avec la poignée TGY3717 sur semi-fixe, prévoir la butée TCG021.*
+
+### 2. Réversibilité de la poignée Design Droit TGY3606
+La poignée TGY3606 est réversible pour vantail de service à gauche ou à droite :
+1. Présenter la poignée en position ouverte.
+2. Retirer les 4 vis d'assemblage du corps arrière.
+3. Retirer la butée et le corps de fixation.
+4. Tourner le bras de manœuvre à 180°.
+5. Remonter la butée et visser.
+6. Retourner le corps arrière de 180° (les 2 logements de vis doivent être orientés côté serrure pour fixation par vis TGY3723).
+7. Revisser l'ensemble.
+
+---
+
+# Gâches, centreurs et accessoires de guidage
+
+### 1. Gâches de condamnation
+- **Gâche dormant périphérique TGY3705** : Se visse directement dans la gorge du dormant aluminium sans fraisage ni découpe du profilé à l'aide de vis Torx TGY3723.
+- **Gâche pour percussion centrale TGY3711** : Se visse en applique sur le profilé de percussion centrale TGY1204 ou de percussion d'angle TGY1206.
+- **Gâche renforcée anti-effraction TGY3742** : Équipée de vis de pré-positionnement et d'un contre-clameau en aluminium pour retard à l'effraction sur dormant 55 mm.
+- **Réglage micrométrique de la gâche** : La serrure Technal intègre un gabarit plastique réversible. En position horizontale, il sert de pige d'épaisseur pour aligner la gâche à exactement **6 mm** du boîtier de fermeture avant serrage définitif des vis.
+
+### 2. Centreurs d'ouvrants et guidage
+- **Centreur d'ouvrant TGY3832** : Se clipse par rotation au milieu du montant d'ouvrant. Garantit l'alignement parfait des vantaux en position fermée et le plaquage des joints brosses contre le vent.
+  - *Règle bilame :* Dans le cas d'une menuiserie soumise aux risques de bilame, poser obligatoirement **2 centreurs TGY3832** répartis sur la hauteur.
+- **Compensateur de centreur TGY3833** : Se monte face au centreur TGY3832 sur le profilé de percussion TGY1204 à l'aide d'une vis TGY3723.
+- **Guides de montants centraux TGY3883** : Se clipsent en tête et pied de chaque montant central après gondage des vantaux. Verrouillage par rotation des flèches à l'aide d'une clé Allen de 4 mm. Mousse d'étanchéité positionnée à fleur de profilé.
+- **Pièces anti-dégondage TGY3885** : Se montent sur chaque montant latéral après réglage des roulettes pour empêcher le soulèvement frauduleux de l'ouvrant.
+
+---
+
+# Voir aussi
+
+- [Profilés dormants et rails SOLEAL GY 55](/profiles/soleal-gy-dormants-et-rails.md)
+- [Cotes de débit SOLEAL GY 55](/profiles/soleal-gy-cotes-de-debit.md)
+- [Pose et galandage SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md)
+- [Fournisseur Technal](/fournisseurs/technal.md)
+
+===== PAGE 3 : /gammes/coulissants-aluminium.md =====
+# Définition et déclinaisons
+
+PROFERM fabrique quatre gammes de coulissants en aluminium, rattachées à l'offre [LUMINE](/gammes/lumine.md) et développées sur profilés [TECHNAL](/fournisseurs/technal.md) [1 p. 16] :
+
+* **SOLÉAL55** : coulissant en aluminium composé d'un module de 55 mm d'épaisseur à rupture de pont thermique de 20 mm (coupure isolante entre les faces extérieure et intérieure du profilé) ; 2 à 8 vantaux, 2 à 4 rails possibles.
+* **GALANDAGE55** : coulissant à galandage en aluminium (les vantaux s'effacent dans l'épaisseur du mur ou de la cloison), module de 55 mm à rupture de pont thermique de 20 mm ; 1 à 4 vantaux, jusqu'à 3 rails possibles.
+* **LUMÉAL55** : baie coulissante en aluminium à ouvrant caché ; gain de 8 à 14 % de clair de vitrage suivant son type de pose, masse d'aluminium réduite (-35 %) avec seulement 68 mm et 77 mm d'aluminium visible.
+* **LUMINE65** : coulissant avec un profil de 65 mm.
+
+Configurations annoncées du coulissant et du galandage aluminium, par période ; une ligne par
+produit et par période [1 p. 16, 5 p. 5] :
+
+| Produit | Période (document) | Vantaux | Rails |
+| --- | --- | --- | --- |
+| coulissant aluminium (SOLÉAL55 en 2026) | juin 2023 (dépliant général) | 2 à 4 | 2 à 4 |
+| coulissant aluminium (SOLÉAL55 en 2026) | janvier 2026 (catalogue général) | 2 à 8 | 2 à 4 |
+| galandage aluminium (GALANDAGE55 en 2026) | juin 2023 (dépliant général) | 1 à 4 | jusqu'à 3 |
+| galandage aluminium (GALANDAGE55 en 2026) | janvier 2026 (catalogue général) | 1 à 4 | jusqu'à 3 |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 16 ; raw/depliant-general-2023-06.pdf, p. 5)
+
+Ce que la marque annonce de chaque coulissant est sur [Arguments de vente LUMINE](/commercial/lumine.md).
+
+| Coulissant | Photo |
+| --- | ---: |
+| SOLÉAL55 | ![Coulissant SOLÉAL55](/assets/gammes/coulissants-aluminium/soleal55.png) |
+| GALANDAGE55 | ![Coulissant GALANDAGE55](/assets/gammes/coulissants-aluminium/galandage55.png) |
+| LUMÉAL55 | ![Coulissant LUMÉAL55](/assets/gammes/coulissants-aluminium/lumeal55.png) |
+| LUMINE65 | ![Coulissant LUMINE65](/assets/gammes/coulissants-aluminium/lumine65-coulissant.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 16)
+
+# Caractéristiques
+
+Spécifications dimensionnelles, thermiques et vitrages des quatre baies coulissantes [1 p. 16-17].
+
+| Modèle | Module (mm) | Rupture de pont thermique (mm) | Type d'ouvrant | Vitrage standard (mm) | Uw minimal (W/m²K) |
+| --- | --- | --- | --- | --- | --- |
+| SOLÉAL55 | 55 | 20 | - | - | - |
+| GALANDAGE55 | 55 | 20 | - | - | - |
+| LUMÉAL55 (LUMEAL GA) | 100 (2R) / 151 (3R) | 33 (dormant) / 22 (ouvrant) | caché | 28 (6/18/4) | 1,2 |
+| LUMINE65 | 65 | - | - | 28 (6/18/4), 32 mm possible | 1,6 (coulissant 2 vantaux 2 180 × 2 350 mm) |
+
+Le Uw de 1,4 W/m²K « en CV » sur vitrage 6/14/4 est donné pour « les coulissants » sans nom de produit : il n'est rattaché ni au SOLÉAL55 ni au GALANDAGE55 (**INC-02**, **VER-35**) [1 p. 17].
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 16-17 ; raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 4)
+
+## Équipements communs
+
+L'ensemble des configurations possibles se décline en drainage caché. Toutes les menuiseries peuvent être proposées avec un accès PMR (personnes à mobilité réduite) : en neuf, le seuil est encastré dans le sol ; en rénovation, le profil de rampe d'accès est adapté. Les coulissants et galandages sont normés RT 2012 et BBC (réglementation thermique 2012, label bâtiment basse consommation) [1 p. 17].
+
+Les poignées de coulissant, le verrou de sécurité, les croisillons et les soubassements, avec leurs finitions et leurs images, sont sur [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) [1 p. 17].
+
+# Dimensions limites
+
+## SOLÉAL55
+
+Largeur minimale et largeurs maximales du SOLÉAL55 par nombre de vantaux, en millimètres ; une
+ligne par nombre de vantaux [1 p. 16].
+
+| Nombre de vantaux | Largeur minimale (mm) | Largeur maximale (mm) |
+| --- | --- | --- |
+| 2 vantaux | 800 | 3 500 |
+| 3 vantaux | 800 | 5 400 |
+| 4 vantaux | 800 | 5 500 |
+| 6 à 8 vantaux | 800 | 6 200 |
+
+Les configurations dessinées sont : 2 vantaux - 2 rails, 3 vantaux - 3 rails, 4 vantaux - 2 rails,
+4 vantaux - 4 rails, 6 vantaux - 3 rails\* et 8 vantaux - 4 rails\*. \*Tarif et faisabilité sur
+demande [1 p. 16]. Sur les schémas, chaque case bleue est un vantail, les flèches montrent les sens
+de coulissement dessinés.
+
+![Largeurs et configurations du SOLÉAL55](/assets/gammes/coulissants-aluminium/soleal55-configurations.png)
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 16)
+
+## GALANDAGE55
+
+Largeur minimale et largeurs maximales du GALANDAGE55, en millimètres ; une ligne par
+configuration, telle qu'imprimée sous chaque cote [1 p. 16].
+
+| Configuration | Largeur minimale (mm) | Largeur maximale (mm) |
+| --- | --- | --- |
+| 1 vantail | 800 | 1 800 |
+| 2 vantaux | 800 | 3 200 |
+| 2 vantaux - 2 rails | 800 | 3 600 |
+| 4 vantaux - 2 rails | 800 | 4 200 |
+| 3 vantaux - 3 rails | 800 | 4 800 |
+
+Les configurations dessinées sont : 1 vantail, 2 vantaux - 1 rail, 2 vantaux - 2 rails, 3 vantaux -
+3 rails et 4 vantaux - 2 rails [1 p. 16].
+
+![Largeurs et configurations du GALANDAGE55](/assets/gammes/coulissants-aluminium/galandage55-configurations.png)
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 16)
+
+## LUMÉAL55
+
+Le LUMÉAL est la baie coulissante aluminium à ouvrant caché de PROFERM, sur profilés
+[TECHNAL](/fournisseurs/technal.md) en aluminium bas carbone (système LUMEAL GA) [4 p. 2]. Dans un
+coulissant à ouvrant caché, les montants et traverses des vantaux mobiles (les ouvrants) sont
+dissimulés derrière le dormant, le cadre fixe : « Le principe « ouvrant caché » permet de réduire
+les masses vues d'aluminium puisque seul le dormant reste visible, d'où une face vue aluminium de
+68 mm (par rapport à un coulissant traditionnel 150 mm), ce qui maximise le clair de vitrage de
++ 8 %. Il est même totalement invisible selon le type de pose. » [4 p. 2]
+
+Caractéristiques et performances du LUMÉAL, une ligne par caractéristique, avec la condition
+d'essai ou la précision que la source lui attache [1 p. 16, 4 p. 2]. Sw est le facteur solaire de
+la fenêtre (part de l'énergie solaire transmise), TLw sa transmission lumineuse.
+
+| Caractéristique | Valeur | Unité | Condition ou précision | Source |
+| --- | --- | --- | --- | --- |
+| Hauteur maximale par vantail | 2,7 | m | - | [4 p. 2] |
+| Largeur maximale par vantail | 2,25 | m | - | [4 p. 2] |
+| Largeur maximale de la baie | 6 | m | - | [4 p. 2] |
+| Charge maximale par vantail | 300 | kg | - | [4 p. 2] |
+| Grandes dimensions, largeur | 4,50 | m | 2 vantaux, avec H 2,70 m | [4 p. 2] |
+| Grandes dimensions, hauteur | 2,70 | m | 2 vantaux, avec L 4,50 m | [4 p. 2] |
+| Aluminium visible | 68 et 77 | mm | « seulement 68 mm et 77 mm d'aluminium visible » ; seul le dormant reste visible, face vue de 68 mm | [1 p. 16, 4 p. 2] |
+| Face vue d'un coulissant traditionnel, pour comparaison | 150 | mm | - | [4 p. 2] |
+| Réduction de la masse d'aluminium | 35 | % | « Masse d'aluminium réduite (-35 %) » | [1 p. 16, 4 p. 1, 2] |
+| Gain de clair de vitrage | 8 à 14 | % | suivant le type de pose | [1 p. 16, 4 p. 2] |
+| Uw (transmission thermique de la fenêtre) | 1,2 | W/m².K | « jusqu'à » | [1 p. 16, 4 p. 1, 2] |
+| Sw (facteur solaire) | 0,46 | - | - | [4 p. 2] |
+| TLw (transmission lumineuse) | 0,65 | - | - | [4 p. 2] |
+| Épaisseur de vitrage | 28 | mm | - | [4 p. 3] |
+| Perméabilité à l'air (déperdition) | 1,39 | m³/h/m² | « jusqu'à » ; 1 vantail + fixe, L 3 m × H 2,50 m | [4 p. 2] |
+| Classement A\*E\*V | A\*4 / E\*7A / V\*B3 | - | 2 vantaux, H 2,5 × L 3 m (**CTR-08**) ; voir [Labels et certifications](/certifications/labels-et-certifications.md) | [4 p. 2] |
+| Résistance à l'effraction | classe de résistance niveau 3 | - | selon la norme européenne EN 1627-30 | [4 p. 2] |
+| Aluminium des profilés | au minimum 75 % d'aluminium recyclé en fin de vie ; 2,3 kg de CO2 par kg d'aluminium | - | aluminium bas carbone TECHNAL | [4 p. 2] |
+
+(schéma: raw/depliant-lumeal-2023-06.pdf, p. 2 et 3 ; raw/depliant-lumeal-2026-04.pdf, p. 2)
+
+Le dépliant LUMÉAL d'avril 2026 porte, ligne pour ligne, les mêmes valeurs et les mêmes conditions
+que celui de juin 2023 [2 p. 1, 2].
+
+« L'aluminium bas carbone est un aluminium recyclé à faible teneur en carbone » ; il s'agit
+« d'un aluminium de première qualité fabriqué avec un minimum de 75 % d'aluminium recyclé en fin
+de vie (déchets post-consommation) » [4 p. 2].
+
+### Coupe et masses vues
+
+Coupe en perspective du LUMÉAL : dormant et deux vantaux vitrés, profilés aluminium gris [4 p. 2].
+
+![Coupe en perspective du coulissant LUMÉAL](/assets/gammes/coulissants-aluminium/lumeal-2023-coupe.png)
+
+Schéma des masses vues : la cote de 68 mm est portée sur la traverse haute du dormant, celle de
+77 mm sur le montant vertical, devant le vitrage (en bleu clair) [4 p. 2].
+
+![Aluminium visible du LUMÉAL, 68 mm et 77 mm](/assets/gammes/coulissants-aluminium/lumeal-2023-masses-vues-68-77.png)
+
+Trois photos de détail montrent l'ouvrant caché derrière le dormant [4 p. 2] :
+
+![Détails de l'ouvrant caché du LUMÉAL](/assets/gammes/coulissants-aluminium/lumeal-2023-details-ouvrant-cache.png)
+
+(schéma: raw/depliant-lumeal-2023-06.pdf, p. 2)
+
+### Ouvertures
+
+Configurations du LUMÉAL, une ligne par nombre de vantaux, une colonne par source ; chaque schéma
+montre la baie vue de face (flèches : vantaux qui coulissent) et, dessous, la vue en plan des
+vantaux sur leurs rails.
+
+| Configuration | Rails, catalogue général de janvier 2026 | Rails, dépliants LUMÉAL de juin 2023 et d'avril 2026 |
+| --- | --- | --- |
+| 2 vantaux | 2 | 2 |
+| 3 vantaux | 2 ou 3 | 2 ou 3 |
+| 4 vantaux | 2 | 2 ou 3 (**CTR-29**) |
+| 6 vantaux | 3 | 3 |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 16 ; raw/depliant-lumeal-2023-06.pdf, p. 2 ; raw/depliant-lumeal-2026-04.pdf, p. 2)
+
+Le 4 vantaux sur 3 rails n'est dessiné que sur le document produit, dans ses deux éditions ; il est retenu, sous réserve
+de validation, le catalogue de conception TECHNAL ne listant que le 4 vantaux sur 2 rails
+(**CTR-29**). Se rapprocher d'un technicien PROFERM afin de valider la faisabilité avant de passer
+commande [1 p. 16].
+
+![Configurations du LUMÉAL55, catalogue général](/assets/gammes/coulissants-aluminium/lumeal55-configurations.png)
+
+![Ouvertures du LUMÉAL, dépliants de juin 2023 et d'avril 2026](/assets/gammes/coulissants-aluminium/lumeal-2023-ouvertures.png)
+
+### Vitrage
+
+Le LUMÉAL reçoit un vitrage de 28 mm. « La performance thermique d'un vitrage se mesure grâce à
+son coefficient Ug. Plus ce coefficient est bas, plus le vitrage est isolant. » [4 p. 3, 2 p. 2] Ug est
+le coefficient de transmission thermique du vitrage seul, en W/m².K.
+
+![Vitrage 28 mm](/assets/gammes/coulissants-aluminium/lumeal-2023-vitrage-28.png)
+
+(schéma: raw/depliant-lumeal-2023-06.pdf, p. 3)
+
+Les poignées du LUMÉAL sont sur [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md),
+ses coloris sur [Coloris LUMINE](/coloris/coloris-lumine.md), sa grille de garanties sur
+[Garanties par composant](/garanties/garanties-par-composant.md) [4 p. 3, 2 p. 2].
+
+## LUMINE65
+
+Limites dimensionnelles et spécifications de profilés du coulissant LUMINE65 [1 p. 16, 3 p. 3] :
+
+| Configuration | Rails | Largeur mini (mm) | Largeur maxi (mm) | Hauteur mini (mm) | Hauteur maxi (mm) |
+| --- | --- | --- | --- | --- | --- |
+| 2 vantaux | 2 rails | 1 000 | 4 000 | 500 | 2 580 |
+| 4 vantaux | 2 rails | 2 000 | 6 000 | 500 | 2 580 |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 16 ; raw/brochure-lumine65-2025-02.pdf, p. 3)
+
+Largeur maximale de la baie : 6 m. Se rapprocher d'un technicien PROFERM afin de valider la faisabilité avant de passer commande [1 p. 16].
+
+![Largeurs et configurations du coulissant LUMINE65](/assets/gammes/coulissants-aluminium/lumine65-configurations.png)
+
+Le coulissant LUMINE65 se fait en 2 vantaux - 2 rails ou 4 vantaux - 2 rails, en vitrage 28 mm :
+6 | 18 | 4, 32 mm possible [3 p. 3]. Un rail est la glissière sur laquelle roule un vantail.
+
+Trois avantages sont donnés pour le coulissant LUMINE65, dans ces termes [3 p. 3] :
+
+* **Inertie optimisée au niveau du montant central.**
+* **Clair de jour optimal** : montant central de 68 mm et montant chicane de 38 mm (le clair de jour
+  est la surface de passage de la lumière).
+* **Brosse linéaire d'étanchéité et de finition sur traverse haute.**
+
+Performances du coulissant LUMINE65 [3 p. 3] : Uw jusque 1,6 W/m²K (coulissant 2 vantaux
+2 180 × 2 350 mm) ; performance acoustique jusqu'à 36 dB ; barrière centrale d'étanchéité par
+rupture de pont thermique, dont le classement A\*E\*V est sur
+[Labels et certifications](/certifications/labels-et-certifications.md) (**CTR-11**). La poignée
+encastrée du coulissant LUMINE65 est nommée **MLINI** et dessinée autrement que la DEHLI du
+catalogue général (**CTR-12**) : voir [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md).
+
+# Quincaillerie et poignées
+
+Les poignées des coulissants dépendent du produit : Sécustik® ATLANTA et TOULON, SEOUL et DEHLI
+pour tous les coulissants ; SYDNEY et MILAN sur LUMINE65 ; SYDNEY, SHANGHAI, PEKIN, MILAN,
+GRENADE, BERLIN et ANTIBES sur SOLÉAL et GALANDAGE ; OSAKA, KOBE, TOKYO, KYOTO, BERLIN et ANTIBES
+sur LUMÉAL. Finitions, options et images de chaque modèle :
+[Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) [1 p. 17].
+
+# Performances et certifications
+
+* **Classement CSTB A\*E\*V** : les classements des coulissants aluminium, sans produit nommé et par produit (LUMINE65 : **CTR-11** ; LUMÉAL : **CTR-08**), sont sur [Labels et certifications](/certifications/labels-et-certifications.md) [1 p. 17, 3 p. 3].
+* **Déperditions thermiques globales** : Uw jusqu'à 1,4 W/m²K en coulissant standard avec vitrage 6/14/4, Sw = 0,51 et TLw = 0,57 [1 p. 17]. Sur le LUMÉAL55, le coefficient Uw descend à 1,2 W/m²K [1 p. 16].
+* **Garantie ferrure Technal** : couverte par la garantie contractuelle [CTR-09].
+
+# Coloris
+
+SOLÉAL55, GALANDAGE55 et LUMÉAL55 se font en blanc 9016 brillant, en chêne doré 2 faces
+uniquement, et en laquage toutes teintes RAL (satiné ou granité) ; le coulissant LUMINE65 suit le
+nuancier LUMINE65. Nuancier complet : [Coloris LUMINE](/coloris/coloris-lumine.md) [1 p. 18].
+
+Le LUMÉAL a son propre nuancier, différent de celui du catalogue général (**CTR-10**) :
+trois couleurs extérieures standards, sept à prix préférentiel et la couleur sur mesure, voir
+[Coloris LUMINE](/coloris/coloris-lumine.md) [2 p. 2, 4 p. 3].
+
+# Ce qui n'est pas réalisable
+
+* **Chêne doré en 2 faces uniquement** sur SOLÉAL55, GALANDAGE55 et LUMÉAL55 [1 p. 18] ; le nuancier propre du LUMÉAL ne compte pas de chêne doré (**CTR-10**) [4 p. 3].
+* **Pas de bicoloration sur le LUMÉAL** : « Pas de bicoloration possible », en renvoi des couleurs extérieures standards et à prix préférentiel [2 p. 2].
+* **SOLÉAL55 en 6 vantaux - 3 rails et 8 vantaux - 4 rails** : tarif et faisabilité sur demande [1 p. 16].
+
+Aucune source ne dit si les coulissants aluminium se font en forme cintrée ou hors d'équerre (**VER-52**).
+
+# Citations
+
+[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 16 à 18, et 35
+[2] [Dépliant LUMÉAL, édition avril 2026](raw/depliant-lumeal-2026-04.pdf), p. 1 et 2
+[3] [Brochure LUMINE65, édition février 2025](raw/brochure-lumine65-2025-02.pdf), p. 3
+[4] [Dépliant LUMÉAL, édition juin 2023](raw/depliant-lumeal-2023-06.pdf), p. 1 à 3
+[5] [Dépliant général PROFERM, édition juin 2023](raw/depliant-general-2023-06.pdf), p. 5
+
+
+# Voir aussi
+
+- [LUMINE](/gammes/lumine.md)
+- [Coloris LUMINE](/coloris/coloris-lumine.md)
+- [Arguments de vente LUMINE](/commercial/lumine.md)
+- [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md)
+- [Profilés dormants et rails SOLEAL GY 55](/profiles/soleal-gy-dormants-et-rails.md)
+- [Cotes de débit SOLEAL GY 55](/profiles/soleal-gy-cotes-de-debit.md)
+- [Profilés dormants et ouvrants LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md)
+- [Cotes de débit LUMEAL GA](/profiles/lumeal-ga-cotes-de-debit.md)
+- [Roulements et fermetures LUMEAL GA](/quincaillerie/lumeal-ga-roulements-et-fermetures.md)
+- [Fabrication et pose LUMEAL GA](/procedures/fabrication-et-pose-lumeal-ga.md)
+- [Pose et galandage SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md)
+- [INNOSLIDE](/gammes/innoslide.md)
+- [TECHNAL](/fournisseurs/technal.md)
+- [Labels et certifications](/certifications/labels-et-certifications.md)
+- [Garanties par composant](/garanties/garanties-par-composant.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /procedures/pose-soleal-gy-galandage.md | Procédure | Fabrication, pose et étanchéité du galandage Technal SOLEAL GY 55 | technal, soleal, soleal-gy, galandage, pose, fabrication | Procédure complète d'atelier et de chantier pour les coulissants à galandage et traditionnels SOLEAL GY 55 de TECHNAL (1 à 4 vantaux, caissons de refoulement, chicanes fixes, drainages étagés, talons injectés, seuil PMR et règles NF DTU 36.5). | tre allégée / / --- / --- / --- / --- / --- / / **Chicane fixe monorail** / **TGY1144** / Reconstitue la chicane étanche dans le caisson de refoulemen |
+| /profiles/systeme-70-abaques-dimensionnels.md | Profilé | Abaques dimensionnels de renforcement du système 70 | profine, systeme-70, abaque, renforcement, ouvrant, of | Les règles générales de renforcement des ouvrants du système 70 Plateforme (vitrage de 35 kg/m² au plus, classements A*3 E*7B V*A2 et V*A3, entraxe de verrouillage, paumelles, renfort V258) et la clé de lecture des dix-huit abaques de renforcement d'ouvrant, repères A à G et 1 à 7, relevés case par case sur deux pages par classement au vent, avec les remarques du classeur e.VOLUTION de 2008 (vitrage de 30 kg/m² au plus, renfort V127). | # Ce que sont les abaques de renforcement du système 70 Un abaque de renforcement est un quadrillage largeur × hauteur d'ouvrant : chaque case de 100 |
+| /reference/glossaire.md | Référence | Glossaire des sigles et des cotes | glossaire, sigle, abreviation, cote, coefficient, vocabulaire | Les sigles, coefficients et repères de cote employés dans la documentation PROFERM et chez ses fournisseurs, avec leur sens et la page qui les utilise. | ; le renforcement systématique y est conseillé / [Abaques dimensionnels de renforcement du système 70](/profiles/systeme-70-abaques-dimensionnels.md) |
+| /profiles/systeme-70-abaques-evo2008.md | Sans type | systeme 70 abaques evo2008 |  | - | forcement du système 70 en 2008 Un diagramme (ou abaque) de renforcement est un quadrillage largeur × hauteur d'ouvrant : chaque case de 100 mm porte |
+| /profiles/lumeal-ga-dormants-et-ouvrants.md | Profilé | Profilés dormants et ouvrants Technal LUMEAL GA | technal, lumeal, lumeal-ga, coulissant, ouvrant-cache, dormants | Architecture technique, cotes de section et moments d'inertie des profilés aluminium à rupture de pont thermique et ouvrant caché du système de coulissant minimal LUMEAL GA de Technal. | e la fermeture) / / **T141037** / Montant central chicane fine / 46,7 / 37,8 / Vitrage 24 à 28 mm / / **T141038** / Montant central renforcé / 77,3 / |
+| /procedures/accouplement-elements-systeme-76.md | Procédure | Accouplement d'éléments du système 76 Advanced | systeme-76-advanced, profine, joint-central, accouplement, couplage, profile-de-liaison | L'accouplement vertical à 180° de deux dormants du système 76 Advanced à joint central par dos de dormant (76606, G022, 76604), par profilé de liaison H (76605, 76608), par contreventement aluminium A250 ou renfort V477, et en angle par poteaux 8355, 8356 et 8340 / 8341, avec les dimensions maximales par pression de vent, les inerties, les vis, les perçages et l'étanchéité. | ux références qu'elles illustrent. # Lecture des abaques de dimension maximale Chaque couplage vertical porte un **abaque « Dimension maxi Élément A |
+| /quincaillerie/lumeal-ga-roulements-et-fermetures.md | Quincaillerie | Roulements et fermetures Technal LUMEAL GA | technal, lumeal, lumeal-ga, coulissant, roulettes, ferrures | Chariots de roulement simples, doubles et triples jusqu'à 300 kg, ferrures de verrouillage 1 à 3 points, poignées de tirage et équipements de retard à l'effraction classe RC3 du coulissant minimal LUMEAL GA de Technal. | trous Ø6 mm) [2 p. 192, 196]. 2. **Renforts de chicane centraux TGA3703** : fixés par vis pression à travers les montants centraux renforcés T14104 |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/informations-a-verifier.md :
+| VER-52 | Formes cintrées et hors d'équerre des coulissants aluminium | La page [Coulissants aluminium](/gammes/coulissants-aluminium.md) portait, sans source, « Cintrage et formes hors d'équerre : incompatibles avec les rails de roulement des chariots coulissants ». Le catalogue général, p. 16 à 18, et le dépliant LUMÉAL de juin 2023, relu en image à 200 dpi le 25/09/2026, n'en disent rien ; la phrase est retirée | Service technique, TECHNAL |

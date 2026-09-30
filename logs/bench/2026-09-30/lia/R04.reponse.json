@@ -1,0 +1,10 @@
+{
+  "id": "R04",
+  "reponse": "La LUMINE55 est fabriquée sur le système TECHNAL SOLEAL FY 55. Pour un remplissage de **24 mm**, la réponse dépend de l'ouvrant :\n\n**Ouvrant apparent et partie fixe** (matrice des parcloses) :\n\n| Élément | Référence |\n| --- | --- |\n| Parclose | **T591005** (droite) ou **TFY2412** (arrondie), hauteur C = 15 mm |\n| Joint intérieur | **TAS0017** (vert, B = 7 mm) |\n| Joint extérieur | **T410010** (toujours) |\n\n24 mm est dans la prise de volume recommandée de ces deux parcloses (24 à 26 mm). Sur profilés anodisés, le clip anti-désaffleurement TAT0049 est obligatoire (1 par extrémité de parclose).\n\n**Ouvrant minimal** : pas de parclose intérieure alu ; le vitrage de 24 mm se pose sur le profilé d'ouvrant **TFY1338** (ou TFY1235), avec la parclose extérieure TPE **TFY4002** (noir) ou **TFY4003** (gris), le joint de vitrage intérieur **T710034** (jeu 6,5 mm) et le support de cale TFY3679.\n\nVariante : les parcloses pose de face T591222 (arrondie) et T591223 (galbée) couvrent 23 à 29 mm, mais imposent un vitrage 4 mm plus petit en largeur et en hauteur et ne sont pas autorisées en cas d'exigence de résistance aux chocs NF EN 13049 ; le joint à associer n'est pas donné pour elles.\n\nSource : (/profiles/soleal-fy-parcloses-et-vitrage.md)",
+  "pages_citees": [
+    "/profiles/soleal-fy-parcloses-et-vitrage.md"
+  ],
+  "appels": 1,
+  "trouve": "oui",
+  "navigation": "Une seule recherche « parclose joint remplissage 24 mm » avec les facettes gamme LUMINE et tag parclose : la page Parcloses et vitrages SOLEAL FY (gamme LUMINE) est arrivée en premier, entière, avec sa matrice et même l'exemple exact d'un remplissage de 24 mm. Les deux autres pages livrées (profilés complémentaires des systèmes 70 et 76, près de 2 500 lignes) étaient hors sujet, remontées par le seul mot « parclose », et le bloc d'anomalies ne portait que sur elles (CTR-23, CTR-40…) : rien à signaler. La facette gamme a bien fait son travail pour la première page ; le bruit des deux suivantes coûte cher en lecture sans rien apporter."
+}

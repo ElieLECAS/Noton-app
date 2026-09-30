@@ -122,6 +122,10 @@ Le renvoi ⁽¹⁾ du bras 486821 n'a pas de note sur la page, et la première p
 (451 – 560) commence sous la LFF minimale de 460 mm du champ d'application (entrée **INC-206**). La
 table K, E5, A se termine par une ligne grisée vide.
 
+Le catalogue Roto NX PVC de juin 2023 donne, pour le même limiteur, d'autres couples de cotes et
+de pièces (245 / 240 mm avec le compas n° 2 ou n° 3 et le bras n° 3, sans plage de LFF) : entrée
+**CTR-120**, voir [Deuxième compas, compas d'arrêt, limiteurs et compas d'aération Roto NX](/quincaillerie/roto-nx-compas-complementaires.md).
+
 # Vue éclatée
 
 La vue éclatée montre un ouvrant à la française complet, dont seules les trois pièces du limiteur

@@ -1,0 +1,30 @@
+{
+  "question": "pour un coulissant, il y a une crémone 3 point ref TGY3702, je cherche la référence de la crémone 4 points pour coulissant.",
+  "pages_lues": [
+    "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+    "/quincaillerie/ferrures-approuvees-profine.md",
+    "/quincaillerie/askey-coulissant-65-nv-quincaillerie.md"
+  ],
+  "anomalies": [
+    "CTR-103",
+    "CTR-115",
+    "CTR-116",
+    "CTR-12",
+    "INC-10",
+    "VER-20"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "TGY3702 crémone coulissant 3 points 4 points"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+        "/quincaillerie/ferrures-approuvees-profine.md",
+        "/quincaillerie/askey-coulissant-65-nv-quincaillerie.md"
+      ],
+      "caracteres": 37668
+    }
+  ]
+}

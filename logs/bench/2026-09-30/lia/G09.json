@@ -1,0 +1,30 @@
+{
+  "question": "La PPU01PROF, elle est en DIN gauche ou droite ?",
+  "pages_lues": [
+    "/portes/collection-lumiere.md",
+    "/quincaillerie/roto-nx-compas-et-paliers.md",
+    "/quincaillerie/roto-nx-pieces-fermeture-gaches.md"
+  ],
+  "anomalies": [
+    "CTR-118",
+    "INC-293",
+    "INC-294",
+    "INC-295",
+    "INC-296",
+    "VER-113"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "PPU01PROF DIN gauche droite"
+      },
+      "pages_nouvelles": [
+        "/portes/collection-lumiere.md",
+        "/quincaillerie/roto-nx-compas-et-paliers.md",
+        "/quincaillerie/roto-nx-pieces-fermeture-gaches.md"
+      ],
+      "caracteres": 166222
+    }
+  ]
+}

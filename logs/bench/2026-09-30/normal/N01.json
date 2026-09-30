@@ -1,0 +1,22 @@
+{
+ "id": "N01",
+ "reponse": "Le wiki ne donne pas la réponse. Aucune page ne mentionne une porte d'entrée (aluminium ou autre) classée coupe-feu EI30, ni un procès-verbal de résistance au feu. Ce que le wiki contient de proche : la porte aluminium Technal SOLEAL PY 55 est annoncée conforme à la NF EN 14351-1 et adaptée aux ERP, sans aucun classement de résistance au feu ; les PV cités pour SOLEAL PY (seuil PY1100, PV n° 404/12/202-x) sont des PV d'essais A*E*V, pas des PV feu ; les seules données « feu » du wiki sont des classements de réaction au feu de profilés PVC (M2 nu / M3 plaxé au DTA 6/16-2334, M3 pour les coffres CHRONO avec PV CREPIM DO-18-0432/A-R1 et DO-21-2677/A-R1), qui ne sont pas des classements de résistance au feu EI. À demander au fournisseur (Technal) ou au service technique.",
+ "dans_le_wiki": "non",
+ "preuves": [
+  {"page": "/portes/soleal-py-dormants-et-ouvrants.md", "extrait": "Conforme à la norme européenne produit **NF EN 14351-1** (marquage CE), il répond aux exigences sévères des bâtiments tertiaires, établissements recevant du public (ERP), logements collectifs et maisons individuelles."},
+  {"page": "/certifications/at-cstb-6-16-2339-coffres-chrono.md", "extrait": "* **Réaction au feu** : profilés PVC plaxés revêtus d'un film décoratif classés **M3** selon les procès-verbaux CREPIM DO-18-0432/A-R1 et DO-21-2677/A-R1 [1 p. 5]."}
+ ],
+ "ambiguite": "",
+ "outils": 5,
+ "comment_trouve": "Grep insensible à la casse sur « EI ?30|EI ?60|coupe-feu|coupe feu|pare-flamme|résistance au feu|procès-verbal|PV » : aucun résultat pertinent (les « PV » sont des PV AEV/acoustiques ou le sigle « poids de vantail »). Second grep « feu|incendie|désenfumage|EW 30|E 30|réaction au feu|Euroclass|flamme » : seulement des classements de réaction au feu de profilés PVC (DTA 6/16-2334, AT coffres CHRONO) et des exclusions « protection contre l'incendie des façades ». Recherche « ERP|établissements recevant|pompier|anti-panique|issue de secours » : SOLEAL PY (ERP, sans classement feu) et fermeture pompier SOLEAL GY. Liste des pages portes/, commercial/, certifications/ parcourue : aucune porte coupe-feu.",
+ "formulations": [
+  "Vous avez une porte alu EI30 avec procès-verbal de résistance au feu ?",
+  "Porte coupe-feu EI30 alu ?",
+  "Peut-on fournir une porte d'entrée pare-flammes / coupe-feu 30 minutes pour un ERP ?"
+ ],
+ "defauts_wiki": [
+  "Absence de donnée : aucune page ne dit explicitement que PROFERM ne propose pas de porte coupe-feu ; une recherche lexicale sur « feu » remonte les classements de réaction au feu M2/M3 des profilés PVC, qui peuvent être pris à tort pour une réponse.",
+  "Le sigle « PV » est employé dans le wiki pour « procès-verbal » et pour « poids de vantail » (Roto) : une recherche « PV » remonte des pages de quincaillerie sans rapport.",
+  "La page SOLEAL PY annonce l'usage en ERP sans préciser qu'aucun classement de résistance au feu n'est documenté."
+ ]
+}

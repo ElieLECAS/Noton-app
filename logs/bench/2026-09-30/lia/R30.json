@@ -1,0 +1,61 @@
+{
+  "question": "Quelles tapées utiliser pour une Isolation de 180 mm ?",
+  "pages_lues": [
+    "/profiles/askey-profils-complementaires.md",
+    "/profiles/perform76-tapees-et-isolation.md",
+    "/equipements/volet-roulant-bloc-lx-demi-linteau.md",
+    "/profiles/soleal-fy-dormants-et-ouvrants.md",
+    "/profiles/systeme-70-profiles-complementaires.md",
+    "/procedures/drainage-decompression-ventilation-systeme-70.md"
+  ],
+  "anomalies": [
+    "CTR-104",
+    "CTR-105",
+    "CTR-106",
+    "CTR-107",
+    "CTR-40",
+    "CTR-63",
+    "CTR-64",
+    "CTR-67",
+    "CTR-68",
+    "INC-45"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "tapée isolation 180 mm doublage épaisseur isolant",
+        "limite": 6
+      },
+      "pages_nouvelles": [
+        "/profiles/askey-profils-complementaires.md",
+        "/profiles/perform76-tapees-et-isolation.md",
+        "/equipements/volet-roulant-bloc-lx-demi-linteau.md"
+      ],
+      "caracteres": 50465
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/profiles/soleal-fy-dormants-et-ouvrants.md"
+      },
+      "pages_nouvelles": [
+        "/profiles/soleal-fy-dormants-et-ouvrants.md"
+      ],
+      "caracteres": 15530
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "tapée isolation 180 mm 76772 doublage",
+        "systeme": "70",
+        "limite": 5
+      },
+      "pages_nouvelles": [
+        "/profiles/systeme-70-profiles-complementaires.md",
+        "/procedures/drainage-decompression-ventilation-systeme-70.md"
+      ],
+      "caracteres": 172546
+    }
+  ]
+}

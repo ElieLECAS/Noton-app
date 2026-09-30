@@ -1,0 +1,37 @@
+{
+  "question": "parle moi de l'effet bilame",
+  "pages_lues": [
+    "/portes/panneaux-et-monoblocs.md",
+    "/profiles/soleal-gy-dormants-et-rails.md",
+    "/procedures/fabrication-profiles-pvc.md",
+    "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+    "/profiles/soleal-gy-cotes-de-debit.md"
+  ],
+  "anomalies": [],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "effet bilame"
+      },
+      "pages_nouvelles": [
+        "/portes/panneaux-et-monoblocs.md",
+        "/profiles/soleal-gy-dormants-et-rails.md",
+        "/procedures/fabrication-profiles-pvc.md"
+      ],
+      "caracteres": 81043
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "bilame TGY1220 TGY2516 centreur TGY3832",
+        "systeme": "SOLEAL GY"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+        "/profiles/soleal-gy-cotes-de-debit.md"
+      ],
+      "caracteres": 35180
+    }
+  ]
+}

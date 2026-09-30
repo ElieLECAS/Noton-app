@@ -26,7 +26,7 @@ source_pages:
   - resource: raw/profine-directives-generales-2023-01.pdf
     pages: 90-93
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
-    pages: 2-5, 17, 25-32
+    pages: 2-5, 17, 25-32, 451
 generated:
   by: process:multimodal-direct
   at: 2026-09-19T20:35:00Z
@@ -109,8 +109,17 @@ Chili et les États-Unis.
 Roto Frank Fenster- und Türtechnologie GmbH, Wilhelm-Frank-Platz 1, 70771 Leinfelden-Echterdingen,
 Allemagne ; téléphone +49 711 7598 0 ; fax +49 711 7598 253 ; info@roto-frank.com ;
 www.roto-frank.com [4 p. 32]. La société française du groupe est Roto Frank Ferrures S.A.S., à
-Saint Avold [4 p. 4] ; ses coordonnées sont sur
+Saint Avold [4 p. 4] ; ses coordonnées du manuel de montage sont sur
 [Roto NX KSR — conventions et consignes](/procedures/roto-nx-ksr-consignes-generales.md).
+
+La quatrième de couverture du catalogue Roto NX PVC donne : Roto Frank Ferrures S.A.S.,
+« Technologie pour fenêtres et portes », 42, Avenue Longchamp, 57502 Saint-Avold, France ;
+téléphone +33 3 87 29 24 40 ; fax +33 3 87 29 24 44 ; info.fr@roto-frank.com ;
+www.roto-frank.com. Sous le titre « Des ferrures pour relever n'importe quels défis : », elle
+reprend les quatre gammes : Roto Window, « Les ferrures pour fenêtres et portes-fenêtres » ;
+Roto Sliding, « Les ferrures pour fenêtres et portes-fenêtres coulissantes de grandes
+dimensions » ; Roto Door, « La technologie de ferrures dédiée aux portes d'entrée » ; Roto
+Equipment, « Les accessoires complémentaires pour fenêtres et portes » [4 p. 451].
 
 # Autres produits Roto
 

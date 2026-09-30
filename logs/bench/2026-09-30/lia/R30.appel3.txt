@@ -1,0 +1,2707 @@
+===== PAGE 1 : /profiles/systeme-70-profiles-complementaires.md =====
+# Les profilés complémentaires du système 70
+
+Les profilés complémentaires du système 70 de [profine](/fournisseurs/profine.md), titré
+« Kömmerling Gamme 70 », sont ceux qui s'ajoutent au cadre de la fenêtre : l'élargisseur (le
+profilé clippé sous ou à côté du dormant pour en augmenter la cote), le profilé de liaison (qui
+assemble deux dormants côte à côte ou en angle), la pièce d'appui (le profilé posé sous le
+dormant bas, qui rejette l'eau vers l'extérieur), la tapée (le profilé qui prolonge le dormant
+vers l'intérieur jusqu'au nu du doublage), la cornière d'habillage, la parclose (la
+baguette qui tient le vitrage dans sa feuillure) et leurs pièces. Les termes sont définis dans le
+[glossaire](/reference/glossaire.md). Les dormants, ouvrants, meneaux, battements et leurs
+renforts sont dans [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md),
+les seuils et sets d'assemblage dans [Assemblages du système 70](/profiles/systeme-70-assemblages.md).
+
+Le rattachement de ce système aux gammes PROFERM PERFORM70 et HYBRIDE70 n'est pas établi —
+entrée **VER-28** du registre [Informations à vérifier](/anomalies/informations-a-verifier.md).
+
+Toutes les coupes sont dessinées à l'échelle sur le poster ; la planche ne nomme pas les cotes,
+elles sont reprises ici par leur position sur le dessin, en mm. Une référence écrite dans une
+chambre est le renfort acier admis ; une légende écrite sous la référence est reprise telle
+quelle [1 p. 1].
+
+# Élargisseurs
+
+L'élargisseur se clippe sous le dormant ; chaque coupe porte en haut l'épaisseur de 70 mm et à
+gauche la hauteur ajoutée. Le profilé du dormant est dessiné en trait fin au-dessus de chaque
+élargisseur.
+
+| Élargisseur | Épaisseur (mm) | Hauteur ajoutée (mm) | Renfort écrit dans la chambre | Embouts écrits sous la coupe | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 0204B | 70 | 15 | - | - | ![Élargisseur 0204B](/assets/profiles/systeme70/elargisseurs/elargisseur-0204b.png) |
+| 0204 | 70 | 15 | - | 9D02 et 9C73 | ![Élargisseur 0204](/assets/profiles/systeme70/elargisseurs/elargisseur-0204.png) |
+| 0210 | 70 | 25 | - | 9D02 et 9C73 | ![Élargisseur 0210](/assets/profiles/systeme70/elargisseurs/elargisseur-0210.png) |
+| 0302 | 70 | 40 | V045 | - | ![Élargisseur 0302](/assets/profiles/systeme70/elargisseurs/elargisseur-0302.png) |
+| 0207 | 70 | 50 | V045 | 9D04 et 9C73 | ![Élargisseur 0207](/assets/profiles/systeme70/elargisseurs/elargisseur-0207.png) |
+| 0301 | 70 | 80 | V045, deux chambres | 9D05 et 9C73 | ![Élargisseur 0301](/assets/profiles/systeme70/elargisseurs/elargisseur-0301.png) |
+| 70703 | 70 | 120 | V287 | - | ![Élargisseur 70703](/assets/profiles/systeme70/elargisseurs/elargisseur-70703.png) |
+
+(schéma: raw/poster-kommerling-70-complementaires-2025-03.pdf, p. 1, colonne de gauche)
+
+Le 0204B est dessiné sous un seuil en trait fin. Le 70703 a trois chambres superposées,
+le renfort V287 dans la chambre haute. Le DTD cote les élargisseurs 0204 (15 mm), 0210 (25 mm),
+0207.3 (50 mm), 0301 (80 mm) et K363 (120 mm) sur 70 mm de large [2 p. 20] ; le poster
+dessine le 70703 à 120 mm et ne porte pas de K363, comme le manuel de mise en œuvre
+[3 p. 44] — entrée **VER-63** du registre
+[Informations à vérifier](/anomalies/informations-a-verifier.md).
+
+# Profilés de liaison et profilés plats de jonction
+
+| Profilé | Cotes portées (mm) | Coupe |
+| --- | --- | ---: |
+| 9036 et 0571 | 97 de large, dont 32 à droite ; 21 de haut à gauche, 11 à droite ; 70 sur la partie basse | ![Profilés 9036 et 0571](/assets/profiles/systeme70/liaisons/profils-9036-0571.png) |
+| 76609 | 20 de large, lame de 2 ; 16,6 de haut | ![Profilé 76609](/assets/profiles/systeme70/liaisons/liaison-76609.png) |
+| 1248 | 12 de large, 4 de haut | ![Profilé 1248](/assets/profiles/systeme70/liaisons/liaison-1248.png) |
+| 0432 | 70 | ![Profilé 0432](/assets/profiles/systeme70/liaisons/liaison-0432.png) |
+| 70601 | 70 ; décalage de 5 | ![Profilé 70601](/assets/profiles/systeme70/liaisons/liaison-70601.png) |
+| 0827 | 70 en haut, 69 en bas ; 26,2 et 19 aux extrémités ; 4,5 de haut | ![Profilé 0827](/assets/profiles/systeme70/liaisons/liaison-0827.png) |
+| 76766 | 70 sur le dormant ; 62 de large, 35 de haut | ![Profilé 76766](/assets/profiles/systeme70/liaisons/liaison-76766.png) |
+
+(schéma: raw/poster-kommerling-70-complementaires-2025-03.pdf, p. 1, bande supérieure)
+
+Le 9036 est la lèvre souple (pointillée) du profilé 0571, dessiné clippé sur un dormant de
+70 mm. Les 76609 et 1248 sont dessinés engagés entre deux dormants coupés (trait brisé en
+bas). Le 1248 est légendé « Jonc de jonction PVC » au système 76, et le 76766 « Pièce d'appui » —
+voir [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md).
+
+# Liaisons d'angle, poteaux et profilés de couplage
+
+Les profilés qui assemblent deux dormants en angle ou côte à côte, dessinés avec le dormant de
+70 mm en trait fin et le renfort écrit dans la chambre.
+
+| Profilé | Cotes portées (mm) | Renfort écrit dans la chambre | Légende | Coupe |
+| --- | --- | --- | --- | ---: |
+| 70604 et 70605 | 70 et 75 à droite | V265 | « Permet un angle de 78° à 220° » | ![Liaison 70604 et 70605](/assets/profiles/systeme70/liaisons/liaison-70604-70605.png) |
+| 70603 | 75 de large, 75 à gauche, 70 à droite | V287 | - | ![Liaison 70603](/assets/profiles/systeme70/liaisons/liaison-70603.png) |
+| 6356 | 35 et 35 sur les pans, 70 à droite ; angles 45° et 135° | 656 | - | ![Poteau 6356](/assets/profiles/systeme70/liaisons/liaison-6356.png) |
+| 93002 | 52 de large, 65 de haut | V260 | - | ![Profilé 93002](/assets/profiles/systeme70/renforts/renfort-93002-v260.png) |
+| 0374 | 70 sur le dormant ; 50 à gauche, 43 à droite ; 13 et 35 au pied | - | - | ![Profilé 0374](/assets/profiles/systeme70/liaisons/liaison-0374.png) |
+| 0379 | 70 sur le dormant ; 43 et 35 à gauche ; 12 et 22 au pied | - | - | ![Profilé 0379](/assets/profiles/systeme70/liaisons/liaison-0379.png) |
+| 93000 | 57 de large, 45 de haut, 25 à droite | V261 | - | ![Profilé 93000 avec V261](/assets/profiles/systeme70/renforts/renfort-93000-v261.png) |
+| 93000 | 57 de large, 25 de haut ; 70 et 14 sur le profilé assemblé | V250 | « 5275 Equerres fixation haute et basse pour V250 » ; joints G176 | ![Profilé 93000 avec V250 et G176](/assets/profiles/systeme70/liaisons/liaison-93000-v250.png) |
+| 70602 | 98 en haut, 70 en bas ; 46 à gauche, 48 à droite | V288 | - | ![Profilé 70602](/assets/profiles/systeme70/liaisons/liaison-70602.png) |
+
+(schéma: raw/poster-kommerling-70-complementaires-2025-03.pdf, p. 1, deuxième bande et colonne de droite)
+
+Le 93000 est dessiné deux fois : une première avec le renfort V261, une seconde assemblé à un
+profilé de 70 mm par le renfort V250 et deux joints G176. Le poteau 6356 porte dans sa chambre
+la référence 656, sans « V ».
+
+## Renforts acier du commerce
+
+Deux profilés tubulaires sont dessinés avec la légende « Renfort acier du commerce », leurs
+dimensions intérieures et leur inertie Iz (en cm⁴).
+
+| Profilé | Cotes du profilé (mm) | Renfort acier écrit dans la chambre | Épaisseur d'acier (mm) | Iz (cm⁴) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 91133 | 60 × 40 | 30 × 50 mm du commerce | 2 | 9,95 | ![Profilé 91133](/assets/profiles/systeme70/renforts/renfort-91133.png) |
+| 91134 | 120 × 60 | 50 × 100 mm du commerce | 3 | 106,0 | ![Profilé 91134](/assets/profiles/systeme70/renforts/renfort-91134.png) |
+
+(schéma: raw/poster-kommerling-70-complementaires-2025-03.pdf, p. 1, bande supérieure, au centre)
+
+# Pièces d'appui PVC
+
+La pièce d'appui se clippe sous le dormant bas. Chaque coupe porte en haut la saillie (cote
+horizontale du nez au dormant), à gauche la hauteur du nez, à droite la hauteur de 14 mm de la
+partie clippée ; l'embout de remplissage (la pièce qui ferme l'extrémité) est écrit sous la
+référence.
+
+| Pièce d'appui | Saillie (mm) | Hauteur du nez (mm) | Hauteur de la partie clippée (mm) | Embout de remplissage | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 6134 | 67 | 18 | 14 | 9F53 | ![Pièce d'appui 6134](/assets/profiles/systeme70/appuis/appui-6134.png) |
+| 6136 | 67 | 24 | 14 | 9F55 | ![Pièce d'appui 6136](/assets/profiles/systeme70/appuis/appui-6136.png) |
+| 6135 | 97 | 18 | 14 | 9F54 | ![Pièce d'appui 6135](/assets/profiles/systeme70/appuis/appui-6135.png) |
+| 6137 | 97 | 24 | 14 | 9F56 | ![Pièce d'appui 6137](/assets/profiles/systeme70/appuis/appui-6137.png) |
+| 76768 | 136 | 42 | - | M780, M781, M782 | ![Pièce d'appui 76768](/assets/profiles/systeme70/appuis/appui-76768.png) |
+
+(schéma: raw/poster-kommerling-70-complementaires-2025-03.pdf, p. 1, troisième bande)
+
+Le 6134 reçoit sous son nez le nez d'appui 4319, qui double la hauteur (18 + 18 mm). Les
+M780, M781 et M782 du 76768 sont dessinés hachurés dans ses trois chambres. Le DTD cote ces
+pièces autrement, par la largeur hors tout (6134 : 137 mm, 6136 : 127, 6137 : 157, 6135 : 167,
+76768 : 196 mm) — voir *Pièces d'appui du DTD* ci-dessous [2 p. 20] ; les cotes du 76768 et des 6136 et 6137 au système 76 sont dans
+[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md).
+
+# Pièces d'appui aluminium
+
+Les pièces d'appui aluminium sont dessinées hachurées, clippées sous le dormant de 70 mm dessiné
+en trait fin. Chacune porte la légende « M643 Embout d'extrémité de pièce d'appui ».
+
+| Pièce d'appui | Saillie (mm) | Hauteur du nez (mm) | Embout | Coupe |
+| --- | --- | --- | --- | ---: |
+| A491 | 57 | 20 | M643 | ![Pièce d'appui A491](/assets/profiles/systeme70/appuis/appui-alu-a491.png) |
+| A475 | 97 | 20 | M643 | ![Pièce d'appui A475](/assets/profiles/systeme70/appuis/appui-alu-a475.png) |
+| A476 | 137 | 20 | M643 | ![Pièce d'appui A476](/assets/profiles/systeme70/appuis/appui-alu-a476.png) |
+| A477 | 77 | 27 | M643 | ![Pièce d'appui A477](/assets/profiles/systeme70/appuis/appui-alu-a477.png) |
+
+(schéma: raw/poster-kommerling-70-complementaires-2025-03.pdf, p. 1, quatrième bande)
+
+![Embout M643](/assets/profiles/systeme70/accessoires/embout-m643.png)
+
+L'embout M643 est dessiné en perspective à droite de l'A477, légendé « Embout d'extrémité de
+pièce d'appui ».
+
+# Tapées PVC
+
+La tapée prolonge le dormant vers l'intérieur. Chaque coupe porte en haut la **largeur de la
+tapée et à gauche sa hauteur de 35 mm ; le patin d'étanchéité** (la plaque posée en about)
+est écrit sous la référence.
+
+| Tapée | Largeur (mm) | Hauteur (mm) | Patin d'étanchéité | Coupe |
+| --- | --- | --- | --- | ---: |
+| 6138 | 15 | 35 | M298 | ![Tapée 6138](/assets/profiles/systeme70/tapees-pvc/tapee-6138.png) |
+| 6139 | 35 | 35 | M298 | ![Tapée 6139](/assets/profiles/systeme70/tapees-pvc/tapee-6139.png) |
+| 6140 | 55 | 35 | M298 | ![Tapée 6140](/assets/profiles/systeme70/tapees-pvc/tapee-6140.png) |
+| 6141 | 75 | 35 | M298 | ![Tapée 6141](/assets/profiles/systeme70/tapees-pvc/tapee-6141.png) |
+| 6142 | 95 | 35 | M298 | ![Tapée 6142](/assets/profiles/systeme70/tapees-pvc/tapee-6142.png) |
+| 76772 | 115 | 35 | M613 | ![Tapée 76772](/assets/profiles/systeme70/tapees-pvc/tapee-76772.png) |
+| 76769 | 135 | 35 | M613 | ![Tapée 76769](/assets/profiles/systeme70/tapees-pvc/tapee-76769.png) |
+
+(schéma: raw/poster-kommerling-70-complementaires-2025-03.pdf, p. 1, cinquième bande)
+
+Pièces de tapée dessinées à côté :
+
+| Pièce | Légende sur la planche | Dessin |
+| --- | --- | ---: |
+| M298 | Patin d'étanchéité | ![Patin M298](/assets/profiles/systeme70/accessoires/patin-m298.png) |
+| M646 | Embout d'extrémité pour tapées | ![Embout M646](/assets/profiles/systeme70/accessoires/embout-m646.png) |
+| G250 | Embout d'étanchéité G 70 | ![Embout G250](/assets/profiles/systeme70/accessoires/embout-g250.png) |
+
+(schéma: raw/poster-kommerling-70-complementaires-2025-03.pdf, p. 1, cinquième et sixième bandes)
+
+Les mêmes tapées au système 76, avec l'isolation qu'elles permettent, sont dans
+[Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md).
+
+# Tapées aluminium A469 à A473
+
+Cinq profilés aluminium hachurés, dessinés sans légende de fonction sous la ligne des tapées PVC ;
+chaque coupe porte la largeur en haut et la hauteur à gauche.
+
+| Profilé | Largeur (mm) | Hauteur (mm) | Coupe |
+| --- | --- | --- | ---: |
+| A473 | 110 | 35 | ![Profilé A473](/assets/profiles/systeme70/tapees-alu/tapee-alu-a473.png) |
+| A472 | 90 | 35 | ![Profilé A472](/assets/profiles/systeme70/tapees-alu/tapee-alu-a472.png) |
+| A471 | 70 | 35 | ![Profilé A471](/assets/profiles/systeme70/tapees-alu/tapee-alu-a471.png) |
+| A470 | 50 | 35 | ![Profilé A470](/assets/profiles/systeme70/tapees-alu/tapee-alu-a470.png) |
+| A469 | 30 | 32 | ![Profilé A469](/assets/profiles/systeme70/tapees-alu/tapee-alu-a469.png) |
+
+(schéma: raw/poster-kommerling-70-complementaires-2025-03.pdf, p. 1, sixième bande)
+
+Au système 76, les A469 à A473 sont des tapées aluminium — voir
+[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) et
+l'entrée **VER-40**.
+
+# Cornières et profilés d'habillage
+
+Profilés d'habillage en L, dessinés imbriqués les uns dans les autres ; une ligne par référence,
+cotes des deux ailes et épaisseur. Sur 91053, 91054 et 91055, les ailes portent des graduations
+(des rainures de coupe espacées de 5, 10 ou 20 mm).
+
+| Profilé | Aile horizontale (mm) | Aile verticale (mm) | Épaisseur (mm) | Graduations (mm) |
+| --- | --- | --- | --- | --- |
+| 1487 | 70 | 130 | 3 | - |
+| 1486 | 70 | 90 | 3 | - |
+| 91073 | 25 | 70 | 3 | - |
+| 91063 | 20 | 40 | 2,5 | - |
+| 91076 | 50 | 100 | 3 | - |
+| 91062 | 35 | 35 | 2,5 | - |
+| 91060 | 20 | 20 | 2,5 | - |
+| 91054 | 100 | 100 | 2,5 | 10 sur les deux ailes |
+| 91055 | 95, soit 25 en pan coupé de 35 et 70 | 95, soit 25 et 70 | 2,5 | 20 sur les deux ailes |
+| 91053 | 60 | 40 | - | 5 sur l'aile horizontale, 10 sur l'aile verticale |
+| 91150 | 85 | 270 | 10 | - |
+| A231 | 60 | 100 | 2 | - |
+
+(schéma: raw/poster-kommerling-70-complementaires-2025-03.pdf, p. 1, colonne de droite)
+
+![Cornières 1487, 1486, 91073 et 91063](/assets/profiles/systeme70/cornieres/cornieres-1487-1486-91073-91063.png)
+
+![Cornières 91076, 91062 et 91060](/assets/profiles/systeme70/cornieres/cornieres-91076-91062-91060.png)
+
+![Cornière 91054, profilés 0692 et 91122](/assets/profiles/systeme70/cornieres/cornieres-91054-0692-91122.png)
+
+![Cornière 91055](/assets/profiles/systeme70/cornieres/corniere-91055.png)
+
+![Cornière 91053](/assets/profiles/systeme70/cornieres/corniere-91053.png)
+
+![Profilé 91150, tête](/assets/profiles/systeme70/cornieres/corniere-91150.png)
+
+Les dessins sont imbriqués comme sur la planche. Le 91150 porte un retour de 15 mm sous son
+aile de 85 mm ; son aile verticale de 270 mm et son épaisseur de 10 mm sont cotées plus bas sur la
+planche. Le 1487 et le 1486 ont une face striée sur une partie de l'aile. Les petits
+profilés 0692 (12 mm de large, 45 de haut) et 91122 (9 et 12 mm, 26 de haut) sont dessinés
+à l'intérieur du 91054.
+
+![Profilé 91122](/assets/profiles/systeme70/cornieres/profil-91122.png)
+
+Le A231 (hachuré, aluminium) est dessiné avec deux chevilles 9471 et une vue en perspective
+d'un dormant posé contre un habillage bois :
+
+![Profilé A231, chevilles 9471 et vue de pose](/assets/profiles/systeme70/accessoires/profil-a231-9471.png)
+
+(schéma: raw/poster-kommerling-70-complementaires-2025-03.pdf, p. 1, colonne de droite)
+
+| Profilé | Cotes portées (mm) | Coupe |
+| --- | --- | ---: |
+| 6144 | 12 de large, 16 de haut | ![Profilé 6144](/assets/profiles/systeme70/tapees-pvc/profil-6144.png) |
+| 6143 | 19 de large, 29 de haut | ![Profilé 6143](/assets/profiles/systeme70/tapees-pvc/profil-6143.png) |
+
+(schéma: raw/poster-kommerling-70-complementaires-2025-03.pdf, p. 1, deuxième bande, à droite)
+
+Les 6143 et 6144 sont dessinés sans légende ; le 6144 est clippé dans un profilé en trait fin. Au
+système 76, les 6143 et 6144 sont des compensateurs — voir
+[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md).
+
+# Profilés plats
+
+Profilés plats, dessinés en coupe avec leur largeur en haut et leur épaisseur à droite ; le
+suffixe « T » marque une variante dessinée avec une semelle sous la lame.
+
+| Profilé | Largeur (mm) | Épaisseur (mm) |
+| --- | --- | --- |
+| 91000 | 20 | 2 |
+| 91000 T | 20 | 3 |
+| 91002 | 30 | 2 |
+| 91002 T | 30 | 3 |
+| 91004 | 40 | 2 |
+| 91004 T | 40 | 3 |
+| 91005 | 50 | 2 |
+| 91005 T | 50 | 3 |
+| 0395 | 36 | 3 |
+| 91030 T | 20 | 7 |
+| 91031 T | 30 | 7 |
+| 91032 T | 40 | 7 |
+| 91043 T | 55 | 7 |
+| 91009 | 100 | 2,5 |
+| 91008 | 80 | 3 |
+| 91011 | 120 | 2,5 |
+| 91130 | 42 | 12 |
+| 91131 | 34 | 20 |
+
+(schéma: raw/poster-kommerling-70-complementaires-2025-03.pdf, p. 1, sixième et septième bandes)
+
+![Profilés plats 91000 à 91004](/assets/profiles/systeme70/profils-plats/profils-91000-a-91004.png)
+
+![Profilés plats 91004 T à 0395](/assets/profiles/systeme70/profils-plats/profils-91004t-a-0395.png)
+
+![Profilés 91030 T, 91031 T, 91032 T et 91043 T](/assets/profiles/systeme70/profils-plats/profils-91030t-91031t-91032t-91043t.png)
+
+![Profilé 91009](/assets/profiles/systeme70/profils-plats/profil-91009.png)
+
+![Profilé 91008](/assets/profiles/systeme70/profils-plats/profil-91008.png)
+
+![Profilé 91011](/assets/profiles/systeme70/profils-plats/profil-91011.png)
+
+![Profilés 91130 et 91131](/assets/profiles/systeme70/profils-plats/profils-91130-91131.png)
+
+Les 91030 T à 91043 T et les 91130, 91131 sont creux, à deux ou trois chambres ; le 91009 porte
+une rainure en V au milieu de sa face.
+
+# Profilés A243 T à 92010 TL
+
+Treize profilés en U à dos strié, dessinés sans légende de fonction au-dessus de la bande des
+parcloses ; chaque coupe porte en haut la largeur et à droite la hauteur. Les A243 T à A247 T ont
+une nervure en creux au milieu du dos.
+
+Le manuel de mise en œuvre Système 70 Plateforme (PDF p. 299) nomme ces profilés petits bois (alu à l'extérieur, PVC à l'intérieur) et leur donne d'autres cotes, par exemple A243 T 27 × 11,2 et 92000 T 26 × 12 : les deux jeux ne sont pas arbitrés (**CTR-64**), voir [Mise en œuvre des profilés complémentaires du système 70](/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md).
+
+| Profilé | Largeur (mm) | Hauteur (mm) |
+| --- | --- | --- |
+| A243 T | 9 | 27 |
+| A244 T | 11 | 27 |
+| A245 T | 9 | 35 |
+| A246 T | 11 | 35 |
+| A247 T | 14 | 50 |
+| 92000 T | 10 | 26 |
+| 92001 T | 12 | 26 |
+| 92002 T | 10 | 35 |
+| 92003 T | 12 | 35 |
+| 92004 T | 12 | 50 |
+| 92009 TL | 11 | 20 |
+| 92010 TL | 11 | 30 |
+| 92005 | 10 | 16 à gauche, 23 à droite |
+
+(schéma: raw/poster-kommerling-70-complementaires-2025-03.pdf, p. 1, septième bande)
+
+![Profilés A243 T à A247 T](/assets/profiles/systeme70/parcloses/parcloses-a243t-a247t.png)
+
+![Profilés 92000 T à 92004 T](/assets/profiles/systeme70/parcloses/parcloses-92000t-92004t.png)
+
+![Profilés 92009 TL, 92010 TL et 92005](/assets/profiles/systeme70/parcloses/parcloses-92009tl-92010tl-92005.png)
+
+Les 92009 TL et 92010 TL portent deux lèvres souples, en haut et en bas.
+
+# Parcloses
+
+La parclose maintient le vitrage dans la feuillure de l'ouvrant ou du dormant ; elle se
+choisit par l'épaisseur du remplissage (vitrage ou panneau). Chaque coupe porte en haut la
+largeur de la parclose et, entre parenthèses avec un astérisque, l'**épaisseur du
+remplissage** qu'elle tient. La planche précise : « (*) : Epaisseur du remplissage valable pour
+une feuillure de 54mm avec un joint post-extrudé ou d'épaisseur équivalente » [1 p. 1].
+
+| Parclose | Largeur de la parclose (mm) | Épaisseur du remplissage, feuillure de 54 mm (mm) | Hauteur (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| 76515 | 9,5 | 42 | - | ![Parclose 76515](/assets/profiles/systeme70/parcloses/parclose-76515.png) |
+| 76509 | 11 | 40 | - | ![Parclose 76509](/assets/profiles/systeme70/parcloses/parclose-76509.png) |
+| 76508 | 12 | 38 | - | ![Parclose 76508](/assets/profiles/systeme70/parcloses/parclose-76508.png) |
+| 76507 | 14 | 36 | - | ![Parclose 76507](/assets/profiles/systeme70/parcloses/parclose-76507.png) |
+| 76506 | 16 | 34 | - | ![Parclose 76506](/assets/profiles/systeme70/parcloses/parclose-76506.png) |
+| 76505 | 18 | 32 | - | ![Parclose 76505](/assets/profiles/systeme70/parcloses/parclose-76505.png) |
+| 6146 | 17,5 | 32 | - | ![Parclose 6146](/assets/profiles/systeme70/parcloses/parclose-6146.png) |
+| 1511 | 17,5 | 32 | - | ![Parclose 1511](/assets/profiles/systeme70/parcloses/parclose-1511.png) |
+| 76504 | 20 | 30 | - | ![Parclose 76504](/assets/profiles/systeme70/parcloses/parclose-76504.png) |
+| 6148 | 22 | 28 | - | ![Parclose 6148](/assets/profiles/systeme70/parcloses/parclose-6148.png) |
+| 76503 | 22 | 28 | - | ![Parclose 76503](/assets/profiles/systeme70/parcloses/parclose-76503.png) |
+| 1512 | 21,5 | 28 | - | ![Parclose 1512](/assets/profiles/systeme70/parcloses/parclose-1512.png) |
+| 76534 | 21 | 28 | 20 | ![Parclose 76534](/assets/profiles/systeme70/parcloses/parclose-76534.png) |
+| 2433 | 23,5 | 26 | - | ![Parclose 2433](/assets/profiles/systeme70/parcloses/parclose-2433.png) |
+| 6147 | 25,5 | 24 | - | ![Parclose 6147](/assets/profiles/systeme70/parcloses/parclose-6147.png) |
+| 2454 | 26 | 24 | - | ![Parclose 2454](/assets/profiles/systeme70/parcloses/parclose-2454.png) |
+| 76516 | 28 | 22 | - | ![Parclose 76516](/assets/profiles/systeme70/parcloses/parclose-76516.png) |
+| 76524 | 27 | 22 | 20 | ![Parclose 76524](/assets/profiles/systeme70/parcloses/parclose-76524.png) |
+| 76512 | 29.5 | 20 | - | ![Parclose 76512](/assets/profiles/systeme70/parcloses/parclose-76512.png) |
+| 76513 | 29.5 | 20 | - | ![Parclose 76513](/assets/profiles/systeme70/parcloses/parclose-76513.png) |
+| 76526 | 29,5 | 20 | - | ![Parclose 76526](/assets/profiles/systeme70/parcloses/parclose-76526.png) |
+| 76533 | 29 | 20 | 20 | ![Parclose 76533](/assets/profiles/systeme70/parcloses/parclose-76533.png) |
+| 76527 | 31,5 | 18 | - | ![Parclose 76527](/assets/profiles/systeme70/parcloses/parclose-76527.png) |
+| 76532 | 31 | 18 | 20 | ![Parclose 76532](/assets/profiles/systeme70/parcloses/parclose-76532.png) |
+| 76501 | 34 | 16 | - | ![Parclose 76501](/assets/profiles/systeme70/parcloses/parclose-76501.png) |
+| 76531 | 33 | 16 | 20 | ![Parclose 76531](/assets/profiles/systeme70/parcloses/parclose-76531.png) |
+| 2453 | 37,5 | 12 | - | ![Parclose 2453](/assets/profiles/systeme70/parcloses/parclose-2453.png) |
+| 2451 | 39,5 | 10 | - | ![Parclose 2451](/assets/profiles/systeme70/parcloses/parclose-2451.png) |
+| 76523 | 41 | 8 | 20 | ![Parclose 76523](/assets/profiles/systeme70/parcloses/parclose-76523.png) |
+| 2452 | 41,5 | 8 | - | ![Parclose 2452](/assets/profiles/systeme70/parcloses/parclose-2452.png) |
+
+(schéma: raw/poster-kommerling-70-complementaires-2025-03.pdf, p. 1, bande inférieure)
+
+Le tableau est rangé par épaisseur de remplissage décroissante ; la planche les dessine de gauche à
+droite dans l'ordre 6146, 6148, 6147, 76512, 76513, 1511, 1512, 76523, 76531, 76532, 76533, 76524,
+76534, 76515, 76509, 76508, 76507, 76506, 76505, 76504, 76503, 2433, 2454, 76516, 76526, 76527,
+76501, 2453, 2451, 2452. Les largeurs des 76512 et 76513 sont écrites avec un point décimal
+(« 29.5 ») ; le « (20*) » du 76512 est en gras. Les 76523, 76531 à 76534 et 76524 sont des
+parcloses à chambre de 20 mm de haut ; les 2453, 2451 et 2452 ont deux chambres.
+
+Ces épaisseurs valent pour la feuillure de 54 mm du système 70 ; les épaisseurs que les mêmes
+références tiennent au système 76 sont dans
+[Tableau de vitrage du système 76](/profiles/systeme-76-tableau-de-vitrage.md) et
+[Parcloses PERFORM76](/profiles/perform76-parcloses.md). Le DTD donne à onze de ces parcloses une
+cote propre différente de la largeur du poster (par exemple 2433 : 24 mm, 76512 et 76513 : 28 mm,
+6148 : 21 mm) [2 p. 21] — entrée **CTR-40** du registre
+[Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
+
+# Accessoires
+
+Pièces dessinées sur la planche, avec leur légende telle qu'elle est écrite.
+
+| Référence | Légende sur la planche | Cotes portées (mm) |
+| --- | --- | --- |
+| 9F42 | Equerre d'angle noyée pour 6149 et 0490 | - |
+| 0490 | Vis plot S075 | 55 de large, 26 de haut |
+| 6149 | Vis plot S073 | 60 de large, 22 de haut, 12 |
+| 9F44 | - | - |
+| 9F49 | Embout à recouvrement pour 6149 | - |
+| G083 | - | 7 de large, 6 de haut |
+| S076 | - | - |
+| S073 | Tête métallique | - |
+| S074 | Tête PVC | - |
+| G081 | - | 2 et 7 de large, 6 de haut |
+| G026 | - | 5 |
+| S075 | - | 9 de large, tête de 4 |
+| M383 | - | - |
+| 9G13 | - | 18,3 de large, 27,5 de haut |
+| 9A39 | - | - |
+| A474 et M569 | - | 21,4 de large, 41,2 de haut |
+| 9856 | - | - |
+| A249 | - | 31,1 de large, 9,2 de haut |
+| 0300 | - | 23 de large, 150 de haut |
+| A503 | - | 40 et 60 |
+| 9287 | Insert de soudure | - |
+| T038 | Outil de serrage | - |
+
+(schéma: raw/poster-kommerling-70-complementaires-2025-03.pdf, p. 1)
+
+La légende « Pour ouvrants 2416 et 2415 » est écrite sous l'insert de soudure 9287 et l'outil
+de serrage T038, dessinés en photographie. Les vis S073 et S074 sont les vis plots du
+6149 ; la S075 celle du 0490.
+
+![Profilés 9F42, 0490, 6149, 9F44 et 9F49](/assets/profiles/systeme70/accessoires/profils-9f42-0490-6149-9f44-9f49.png)
+
+![Pièces G083, S076, S073 et S074](/assets/profiles/systeme70/accessoires/pieces-g083-s076-s073-s074.png)
+
+![Pièces G081, G026 et S075](/assets/profiles/systeme70/accessoires/pieces-g081-g026-s075.png)
+
+![Embout M383](/assets/profiles/systeme70/accessoires/embout-m383.png)
+
+![Profilés 9G13 et 9A39](/assets/profiles/systeme70/accessoires/profil-9g13-9a39.png)
+
+![Demi-capot A474 sur clip M569 et pièce 9856](/assets/profiles/systeme70/accessoires/profil-a474-m569-9856.png)
+
+![Profilé A249](/assets/profiles/systeme70/accessoires/profil-a249.png)
+
+![Profilé 0300](/assets/profiles/systeme70/accessoires/profil-0300.png)
+
+![Profilé A503](/assets/profiles/systeme70/accessoires/profil-a503.png)
+
+![Insert de soudure 9287 et outil de serrage T038](/assets/profiles/systeme70/accessoires/insert-9287-outil-t038.png)
+
+Le 9G13 et l'A474 sur clip M569 sont dessinés clippés chacun sur un profilé en trait fin,
+le 9A39 et le 9856 en perspective à leur droite. Le 0300 est un profilé plat vertical à huit
+chambres. Le demi-capot A474 et son clip M569 figurent aussi sur les dormants — voir
+[Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md).
+
+## Coupe d'assemblage en angle sans légende
+
+Au centre de la planche, sous le demi-capot A474, une coupe en trait fin montre deux profilés
+assemblés à angle droit, entourés d'un profilé en L ; elle ne porte ni référence ni cote.
+
+![Coupe d'assemblage en angle, sans légende](/assets/profiles/systeme70/accessoires/coupe-angle-sans-legende.png)
+
+(schéma: raw/poster-kommerling-70-complementaires-2025-03.pdf, p. 1, au centre)
+
+# Coulisses et tulipes
+
+Quatre coulisses (profilés creux en U), dessinées en coupe, et un tableau qui associe à chacune
+sa tulipe (la pièce d'extrémité dessinée en perspective à côté du tableau).
+
+| Coulisse | Tulipe | Largeur (mm) | Hauteur (mm) | Cotes intérieures (mm) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 0473 | 9428 | 40 | 47 | 27 de fond ; 16 et 21 à droite ; 19 au pied | ![Coulisse 0473](/assets/profiles/systeme70/coulisses/coulisse-0473.png) |
+| 1025 | 9536 | - | 47 | 32 de fond ; 16 et 18 à droite ; 7 en haut ; 30 au pied | ![Coulisse 1025](/assets/profiles/systeme70/coulisses/coulisse-1025.png) |
+| 1084 | 9537 | 43 | 47 | 32 de fond ; 16 et 18 à droite ; 7 en haut ; 18 au pied | ![Coulisse 1084](/assets/profiles/systeme70/coulisses/coulisse-1084.png) |
+| 95003 | M382 | 42 | 47 | 32 de fond ; 19 et 18 à droite ; 18 au pied | ![Coulisse 95003](/assets/profiles/systeme70/coulisses/coulisse-95003.png) |
+| 4131 | 4645 | - | - | - | - |
+
+(schéma: raw/poster-kommerling-70-complementaires-2025-03.pdf, p. 1, coin inférieur droit)
+
+![Tableau tulipe / coulisse et embout M339](/assets/profiles/systeme70/accessoires/tulipes-coulisses-m339.png)
+
+Le tableau est écrit en deux colonnes « Tulipe » et « Coulisse ». La coulisse 4131 n'est pas
+dessinée. L'« Embout M339 pour coulisses 1084 » est dessiné en perspective sous le tableau.
+Le 95003 porte deux joints pointillés dans sa gorge.
+
+# Joints
+
+Les sept joints dessinés sur cette planche (9C32 T, 9C31 T, G342 T, 9045, 9E46, 101000, 9043) sont
+dans [Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md).
+
+# Profilés complémentaires dessinés à l'annexe du DTD
+
+L'annexe du DTD n° DBV-24-6/16-2335_V5 dessine une partie de ces profilés sur ses propres
+planches, avec d'autres cotes que le poster. Elles sont reprises ici telles qu'elles sont portées,
+toutes en mm ; les coupes de la colonne de droite sont celles du poster quand il dessine la même
+référence, et celles du DTD pour les références que le poster ne dessine pas [2 p. 20-23].
+
+## Élargisseurs de dormant du DTD
+
+Une ligne par élargisseur (le profilé qui s'emboîte sous ou à côté du dormant pour l'agrandir) :
+largeur en bas, hauteur à gauche [2 p. 20].
+
+| Élargisseur | Largeur (mm) | Hauteur (mm) |
+| --- | --- | --- |
+| 0204 | 70 | 15 |
+| 0210 | 70 | 25 |
+| 0207.3 | 70 | 50 |
+| 0301 | 70 | 80 |
+| K363 | 70 | 120 |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 20)
+
+Le poster écrit 0207 et dessine le 70703 de 70 × 120 mm, sans K363 (**VER-63**).
+
+## Pièces d'appui du DTD
+
+Une ligne par pièce d'appui PVC ; la largeur hors tout est la cote horizontale la plus longue, la
+hauteur de 14 mm celle de la partie clippée, à droite. Le 6134 porte en plus une cote partielle de
+67 mm, prise en haut depuis le nez ; le 76768 une cote de 136 mm prise au-dessus et
+une cote hors tout de 196 mm en dessous [2 p. 20].
+
+| Pièce d'appui | Largeur hors tout (mm) | Cote partielle (mm) | Hauteur de la partie clippée (mm) |
+| --- | --- | --- | --- |
+| 6137 | 157 | - | 14 |
+| 6136 | 127 | - | 14 |
+| 6134 | 137 | 67 | 14 |
+| 6135 | 167 | - | 14 |
+| 76768 | 196 | 136 | - |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 20)
+
+## Fourrures 3875 et 3874
+
+Deux fourrures (profilés d'épaisseur qui se clippent sur le dormant), dessinées sous le titre
+« Fourrures » : largeur en haut, hauteur à gauche [2 p. 20].
+
+| Fourrure | Largeur (mm) | Hauteur (mm) | Coupe |
+| --- | --- | --- | ---: |
+| 3875 | 44,2 | 35 | ![Fourrure 3875](/assets/profiles/systeme70/tapees-pvc/fourrure-3875.png) |
+| 3874 | 44,2 | 55 | ![Fourrure 3874](/assets/profiles/systeme70/tapees-pvc/fourrure-3874.png) |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 20)
+
+## Fourrures d'épaisseur 6138.1 à 76769
+
+Le DTD appelle « Fourrures » les profilés que le poster dessine comme tapées PVC (tableau *Tapées
+PVC* ci-dessus), avec un suffixe « .1 » sur les cinq premiers. Une ligne par référence : largeur
+de 35 mm en haut, hauteur à gauche [2 p. 21].
+
+| Fourrure (DTD) | Référence au poster | Largeur (mm) | Hauteur (mm) |
+| --- | --- | --- | --- |
+| 6138.1 | 6138 | 35 | 15 |
+| 6139.1 | 6139 | 35 | 35 |
+| 6140.1 | 6140 | 35 | 55 |
+| 6141.1 | 6141 | 35 | 75 |
+| 6142.1 | 6142 | 35 | 95 |
+| 76772 | 76772 | 35 | 115 |
+| 76769 | 76769 | 35 | 135 |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 21)
+
+Le poster porte 15 à 135 mm en largeur et 35 mm en hauteur sur ces mêmes références ; le DTD
+porte 35 mm en largeur et 15 à 135 mm en hauteur.
+
+## Tapées, appuis et habillages aluminium du DTD
+
+La planche « Tapées et appuis – Capotage (alu) » du DTD dessine les tapées aluminium A469 à A473
+(profilés qui prolongent vers l'intérieur un dormant capoté) avec leur largeur en haut et leur
+hauteur à gauche, et les appuis aluminium avec leur seule largeur hors tout [2 p. 22].
+
+| Profilé (DTD) | Famille sur la planche | Largeur (mm) | Hauteur (mm) |
+| --- | --- | --- | --- |
+| A469 | tapée | 31,5 | 30 |
+| A470 | tapée | 35 | 50 |
+| A471 | tapée | 35 | 70 |
+| A472 | tapée | 35 | 90 |
+| A473 | tapée | 35 | 110 |
+| A491 | appui | 57 | - |
+| A475 | appui | 97 | - |
+| A476 | appui | 137 | - |
+| A477 | appui | 77 | - |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 22)
+
+Le poster porte sur ces tapées 30 à 110 mm en largeur et 35 mm (32 pour l'A469) en hauteur ; le
+DTD porte 35 mm (31,5 pour l'A469) en largeur et 30 à 110 mm en hauteur. Les largeurs des quatre
+appuis concordent avec la saillie du poster.
+
+La planche « Habillages » du DTD dessine six profilés d'habillage en L, avec leurs deux ailes
+cotées, en mm ; « (Alu) » ou « (alu) » est écrit à côté de trois d'entre eux [2 p. 22].
+
+| Habillage (DTD) | Matière écrite | Aile horizontale (mm) | Aile verticale (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| 1486 | - | 70 | 90 | - |
+| 1487 | - | 70 | 130 | - |
+| 9621 | Alu | 60 | 108 | ![Habillage 9621](/assets/profiles/systeme70/cornieres/habillage-9621-dtd.png) |
+| 91076 | - | 50 | 100 | - |
+| A502 | alu | 200 | 200 | ![Habillages A502 et A503](/assets/profiles/systeme70/cornieres/habillage-a502-dtd.png) |
+| A503 | alu | 80 | 120 | ![Habillages A502 et A503](/assets/profiles/systeme70/cornieres/habillage-a502-dtd.png) |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 22)
+
+Les 1486, 1487 et 91076 concordent avec le poster (tableau *Cornières et profilés d'habillage*
+ci-dessus). Le 9621 a une aile horizontale inclinée et crantée et deux ergots sur l'aile verticale.
+Les A502 et A503 sont cotés au DTD du système 70 exactement le double des cotes que leur donnent
+le DTA et le DTD du système 76 (A502 100 × 100, A503 40 × 60), et le poster Gamme 70 cote l'A503
+« 40 et 60 » ; les 1486 et 1487 sont cotés 71 × 80 et 71 × 120 au système 76 — entrée **CTR-41**
+du registre [Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
+
+## Embouts à coller dans pièce d'appui et embouts pour dormants larges
+
+L'embout à coller ferme l'extrémité entaillée d'une pièce d'appui PVC ; il est dessiné à côté de
+la pièce d'appui qu'il équipe, montée sous le dormant, en vue de dessus (largeur et hauteurs
+d'extrémité) et en vue de face (hauteur de 60 mm). Une ligne par pièce d'embout, cotes en mm,
+telles qu'elles sont portées [2 p. 25].
+
+| Embout | Pour la pièce d'appui | Nombre de pièces | Largeur (mm) | Autres cotes portées (mm) | Hauteur (mm) |
+| --- | --- | --- | --- | --- | --- |
+| 9F56.1, pièce 1 | 6137 | 2 | 46 | 4,5 ; 9,7 ; 9,5 ; 12 | 60 |
+| 9F56.1, pièce 2 | 6137 | 2 | 42,5 | 12 ; 14,5 | 60 |
+| 9F55.1 | 6136 | 1 | 60,8 | 112 (écrit sans virgule) ; 4,5 ; 9,5 ; 14,5 | 60 |
+| 9F53.1 | 6134 | 1 | 52,8 | 5,7 ; 8,5 | 60 |
+| 9F54.1, pièce 1 | 6135 | 2 | 37,5 | 4 ; 6 | 60 |
+| 9F54.1, pièce 2 | 6135 | 2 | 43,7 | 6,2 ; 8,5 | 60 |
+| M780 | 76768 | - | 31,7 | 4,12 ; 11,4 | 60 |
+| M781 | 76768 | - | 42,5 | 3,5 | 60 |
+| M782 | 76768 | - | 37,7 | 3,5 | 60 |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 25)
+
+![Embout 9F56.1, deux pièces, pour 6137](/assets/profiles/systeme70/accessoires/embout-9f56-1-6137.png)
+
+![Embout 9F55.1, une pièce, pour 6136](/assets/profiles/systeme70/accessoires/embout-9f55-1-6136.png)
+
+![Embout 9F53.1, une pièce, pour 6134](/assets/profiles/systeme70/accessoires/embout-9f53-1-6134.png)
+
+![Embout 9F54.1, deux pièces, pour 6135](/assets/profiles/systeme70/accessoires/embout-9f54-1-6135.png)
+
+![Embouts M780, M781 et M782 pour 76768](/assets/profiles/systeme70/accessoires/embouts-m780-m782-76768.png)
+
+Chaque dessin montre à gauche la pièce d'appui en coupe, hachurée là où l'embout la remplit, vissée
+sous le dormant ; à droite l'embout en vue de dessus (le trait incliné est la pente de la pièce
+d'appui) puis en vue de face. Les M780 à M782 du 76768 sont dessinés pointillés, en trois pièces
+séparées de 3,5 mm. Le poster nomme ces embouts 9F53 à 9F56, sans le suffixe « .1 ».
+
+Sous le titre « Embout pour dormants larges », le DTD dessine en perspective les embouts MA013,
+MA014, M850 et M851, sans cote ni attribution à un dormant [2 p. 25].
+
+![Embouts pour dormants larges MA013, MA014, M850 et M851](/assets/profiles/systeme70/accessoires/embouts-dormants-larges-ma013-m851.png)
+
+## Parcloses du DTD
+
+Une ligne par parclose : largeur en haut, hauteur à droite, en mm. Les trois dernières sont
+rangées sous « KBE e.MOTION ». Le DTD ne donne pas l'épaisseur de remplissage [2 p. 21].
+
+| Parclose (DTD) | Largeur (mm) | Hauteur (mm) |
+| --- | --- | --- |
+| 1511.1 | 17 | 20 |
+| 1512.1 | 21 | 20 |
+| 2433 | 24 | 20 |
+| 2454 | 26 | 17,5 |
+| 76501 | 34 | 17,5 |
+| 76503 | 22 | 17,5 |
+| 76504 | 20 | 17,5 |
+| 76505 | 18 | 17,5 |
+| 76506 | 16 | 17,5 |
+| 76507 | 14 | 17,5 |
+| 76508 | 12 | 17,5 |
+| 76509 | 11 | 17,5 |
+| 76512 | 28 | 17,5 |
+| 76513 | 28 | 17,5 |
+| 76515 | 9 | 17,5 |
+| 76516 | 28 | 17,5 |
+| 76524 | 28 | 17,5 |
+| 76526 | 30 | 17,5 |
+| 76527 | 32 | 17,5 |
+| 6146 | 17 | 20 |
+| 6147 | 25 | 20 |
+| 6148 | 21 | 20 |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 21)
+
+Sur la planche du DTD, la cote de largeur part du trait vertical tiré depuis la lèvre gauche de
+la parclose. Les largeurs de onze de ces parcloses diffèrent de celles du poster (**CTR-40**) ; le
+76513 est dessiné avec deux joints hachurés sur sa face gauche.
+
+# Profilés complémentaires du manuel de mise en œuvre
+
+Au registre 2.1.3 « Profilés complémentaires & accessoires » du manuel de mise en œuvre, chaque
+profilé complémentaire a sa planche : un titre (référence et désignation), une coupe cotée et,
+quand il y en a, un tableau d'accessoires. Les tableaux
+ci-dessous reprennent une ligne par profilé, le titre tel qu'il est imprimé et les cotes relevées
+sur la coupe, en mm. Les accessoires de chaque planche (renforts, embouts, patins, vis, clips)
+sont dans [Renforts et accessoires par profilé du système 70](/profiles/systeme-70-accessoires-par-profile.md) ; les cotes que le poster et
+le DTD donnent aux mêmes références sont dans les sections précédentes de cette page, et les
+écarts entre documents font l'objet de l'entrée **VER-72** du registre
+[Informations à vérifier](/anomalies/informations-a-verifier.md) [3 p. 42-56].
+
+## Élargisseurs du manuel
+
+L'élargisseur se clippe sous ou à côté d'un dormant pour en augmenter la cote ; il est
+dessiné sous le dormant, en trait fin. Le 0303 reçoit un renfort et un assemblage en T comme un
+profilé principal ; le 93025 est titré « Elargisseur de feuillure de 16mm » [3 p. 42-44, 53].
+
+| Profilé | Titre de la planche | Cotes portées sur la coupe (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | ---: |
+| 0303 | 0303 Elargisseur | 70 en haut ; à gauche 94 ; à droite 20 + 90 | 42 | ![0303 Elargisseur](/assets/profiles/systeme70/elargisseurs/elargisseur-0303-moe.png) |
+| 0204 | 0204 Elargisseur 15 mm | 70 de large ; 15 de haut | 43 | ![0204 Elargisseur 15 mm](/assets/profiles/systeme70/elargisseurs/elargisseur-0204-moe.png) |
+| 0204B | 0204 B Elargisseur 15 mm sous seuil | 70 de large ; 15 de haut | 43 | ![0204 B Elargisseur 15 mm sous seuil](/assets/profiles/systeme70/elargisseurs/elargisseur-0204b-moe.png) |
+| 0210 | 0210 Elargisseur 25 mm | 70 de large ; 25 de haut | 43 | ![0210 Elargisseur 25 mm](/assets/profiles/systeme70/elargisseurs/elargisseur-0210-moe.png) |
+| 0207 | 0207 Elargisseur 50 mm | 70 de large ; 50 de haut | 43 | ![0207 Elargisseur 50 mm](/assets/profiles/systeme70/elargisseurs/elargisseur-0207-moe.png) |
+| 0301 | 0301 Elargisseur 80 mm | 70 de large ; 80 de haut | 44 | ![0301 Elargisseur 80 mm](/assets/profiles/systeme70/elargisseurs/elargisseur-0301-moe.png) |
+| 0302 | 0302 Elargisseur 40 mm | 70 de large ; 40 de haut, dont 28 | 44 | ![0302 Elargisseur 40 mm](/assets/profiles/systeme70/elargisseurs/elargisseur-0302-moe.png) |
+| 70703 | 70703 Elargisseur 120 mm | 70 de large ; 120 de haut ; renfort V287 dessiné dans la chambre haute | 44 | ![70703 Elargisseur 120 mm](/assets/profiles/systeme70/elargisseurs/elargisseur-70703-moe.png) |
+| 93025 | 93025 Elargisseur de feuillure de 16mm | 26.5 de large ; 12 de haut | 53 | ![93025 Elargisseur de feuillure de 16mm](/assets/profiles/systeme70/elargisseurs/elargisseur-93025-moe.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 42, 43, 44, 53)
+
+Le titre du 0204B est « 0204 B Elargisseur 15 mm sous seuil » : il est dessiné sous un seuil
+hachuré, sans référence. Le 70703 est dessiné avec le renfort V287 écrit dans sa chambre haute. La largeur
+du 93025 est écrite avec un point décimal (« 26.5 ») [3 p. 43-44, 53].
+
+### Variantes d'utilisation de l'élargisseur 0303
+
+La planche du 0303 dessine, sous le titre « Variantes d'utilisation », quatre coupes
+d'assemblage d'un ouvrant vitré sur un dormant avec l'élargisseur, sans légende ni cote [3 p. 42].
+
+![Variantes d'utilisation de l'élargisseur 0303](/assets/procedures/moe-systeme-70/profiles-2-1-3/variantes-0303.png)
+
+Les quatre coupes montrent, de gauche à droite, des montages de plus en plus hauts : le
+vitrage en haut, le renfort hachuré dans la chambre de l'ouvrant ; la planche ne nomme ni les
+profilés assemblés ni l'usage de chaque variante (schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 42).
+
+## Profilés de liaison, de jonction et de raccordement du manuel
+
+Profilés qui assemblent deux dormants ou finissent une jonction : l'olive de liaison 1248
+s'engage entre deux dormants coupés (trait brisé), le profilé de liaison dormant CVR 0571 se
+clippe sur un dormant dessiné en trait fin [3 p. 45, 47, 49].
+
+| Profilé | Titre de la planche | Cotes portées sur la coupe (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | ---: |
+| 1248 | 1248 Olive de liaison | 12 de large ; 4 de haut | 45 | ![1248 Olive de liaison](/assets/profiles/systeme70/liaisons/liaison-1248-moe.png) |
+| 0432 | 0432 Profilé de finition | 78 de large ; 5 | 45 | ![0432 Profilé de finition](/assets/profiles/systeme70/liaisons/liaison-0432-moe.png) |
+| 70601 | 70601 Profilé de liaison | 78 de large ; 5 | 45 | ![70601 Profilé de liaison](/assets/profiles/systeme70/liaisons/liaison-70601-moe.png) |
+| 0571 | 0571 Profilé de liaison dormant CVR | 97 de large ; 20,5 à gauche ; 11 à droite | 45 | ![0571 Profilé de liaison dormant CVR](/assets/profiles/systeme70/liaisons/liaison-0571-moe.png) |
+| 70602 | 70602 Profilé de jonction | 48 en haut ; 46 en bas ; 98 et 70 à gauche ; 20 entre les parois centrales | 47 | ![70602 Profilé de jonction](/assets/profiles/systeme70/liaisons/liaison-70602-moe.png) |
+| 0827 | 0827 Profilé de raccordement | 68,5 de large | 49 | ![0827 Profilé de raccordement](/assets/profiles/systeme70/liaisons/liaison-0827-moe.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 45, 47, 49)
+
+Le sigle « CVR » n'est pas développé sur la planche. Le joint 9036 est l'accessoire du 0571
+[3 p. 45].
+
+## Poteaux d'angle et de contreventement du manuel
+
+Le poteau assemble deux châssis en angle : le 70603 à 90°, le 70604 et le 70605 à angle
+variable. Les poteaux de contreventement 91133 et 91134 sont des tubes PVC qui reçoivent un
+renfort acier du commerce [3 p. 46, 48].
+
+| Profilé | Titre de la planche | Cotes portées sur la coupe (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | ---: |
+| 70603 | 70603 Poteau d'angle à 90° | 87 en haut ; 87 à gauche ; 70 à droite ; 70 en bas | 46 | ![70603 Poteau d'angle à 90°](/assets/profiles/systeme70/poteaux/poteau-70603-moe.png) |
+| 70604 | 70604 Poteau à angle variable | 97.4 en haut ; 75,5 et 70 à gauche | 46 | ![70604 Poteau à angle variable](/assets/profiles/systeme70/poteaux/poteau-70604-moe.png) |
+| 70605 | 70605 Profil pour angle variable | 47.7 en haut ; 70 à droite | 46 | ![70605 Profil pour angle variable](/assets/profiles/systeme70/poteaux/poteau-70605-moe.png) |
+| 91133 | 91133 Poteau de contreventement de 60 x 40 mm | 40 de large ; 60 de haut | 48 | ![91133 Poteau de contreventement de 60 x 40 mm](/assets/profiles/systeme70/poteaux/poteau-91133-moe.png) |
+| 91134 | 91134 Poteau de contreventement de 120 x 60 mm | 60 de large ; 120 de haut | 48 | ![91134 Poteau de contreventement de 120 x 60 mm](/assets/profiles/systeme70/poteaux/poteau-91134-moe.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 46, 48)
+
+Sous les coupes des poteaux 91133 et 91134, les références imprimées en gras sont 93133 et
+93134 — entrée **INC-105** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md). Les cotes « 97.4 » du 70604 et
+« 47.7 » du 70605 sont écrites avec un point décimal [3 p. 46, 48].
+
+## Habillages du manuel
+
+Les habillages de contreventement 93000 et 93002 coiffent la jonction de deux châssis ; les
+profilés d'habillage rénovation 0490 et 6149 sont titrés comme tels [3 p. 47-48, 52].
+
+| Profilé | Titre de la planche | Cotes portées sur la coupe (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | ---: |
+| 93000 | 93000 Habillage de contreventement | 25 en haut ; 45 en bas ; 57 à droite | 47 | ![93000 Habillage de contreventement](/assets/profiles/systeme70/habillages/habillage-93000-moe.png) |
+| 93002 | 93002 Habillage de contreventement | 52 de large ; 65 de haut | 48 | ![93002 Habillage de contreventement](/assets/profiles/systeme70/habillages/habillage-93002-moe.png) |
+| 0490 | 0490 Profilé d'habillage rénovation | 55 de large ; 26 de haut | 52 | ![0490 Profilé d'habillage rénovation](/assets/profiles/systeme70/habillages/habillage-0490-moe.png) |
+| 6149 | 6149 Profilé d'habillage rénovation | 60 de large ; 22 et 12 à gauche | 52 | ![6149 Profilé d'habillage rénovation](/assets/profiles/systeme70/habillages/habillage-6149-moe.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 47, 48, 52)
+
+### Assemblage de l'habillage 93000 avec le renfort V250
+
+La planche du 93000 dessine, à droite, la coupe de deux dormants assemblés par le renfort V250,
+coiffés par l'habillage 93000 et fermés par le joint G176 [3 p. 47].
+
+![Assemblage de l'habillage 93000 avec le renfort V250](/assets/procedures/moe-systeme-70/profiles-2-1-3/assemblage-93000-v250.png)
+
+Les deux profilés sont dessinés de part et d'autre du renfort V250 hachuré, traversés chacun par
+une vis ; le joint G176 est en haut, l'habillage 93000 en bas (schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 47). La planche
+ne cote pas cet assemblage.
+
+## Réhausses du manuel
+
+La réhausse est dessinée clippée sous un dormant [3 p. 49].
+
+| Profilé | Titre de la planche | Cotes portées sur la coupe (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | ---: |
+| 0374 | 0374 Réhausse de 50 mm | 35 en haut ; 50 à gauche ; 12,5 au pied | 49 | ![0374 Réhausse de 50 mm](/assets/profiles/systeme70/rehausses/rehausse-0374-moe.png) |
+| 0379 | 0379 Réhausse de 35 mm | 22 en haut ; 42,8 et 35 à gauche ; 12 au pied | 49 | ![0379 Réhausse de 35 mm](/assets/profiles/systeme70/rehausses/rehausse-0379-moe.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 49)
+
+### Montages des réhausses 0374 et 0379
+
+La planche dessine à droite de chaque réhausse son montage, sans cote : la réhausse 0374 clippée
+sous un dormant ; la réhausse 0379 dans trois montages — deux réhausses 0379 superposées, puis
+une réhausse sous un dormant, à gauche puis à droite du dormant [3 p. 49].
+
+![Réhausse 0374 sous un dormant](/assets/procedures/moe-systeme-70/profiles-2-1-3/rehausse-0374-sous-dormant.png)
+
+![Montages de la réhausse 0379](/assets/procedures/moe-systeme-70/profiles-2-1-3/rehausse-0379-montages.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 49)
+
+## Battements intérieurs du manuel
+
+Le battement intérieur est le battement posé côté intérieur ; chaque coupe porte sa largeur en haut et sa hauteur à gauche [3 p. 50].
+
+| Profilé | Titre de la planche | Cotes portées sur la coupe (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | ---: |
+| 1547 | 1547 Battement intérieur 60 mm | 60 de large ; 12,7 de haut | 50 | ![1547 Battement intérieur 60 mm](/assets/profiles/systeme70/battements/battement-1547-moe.png) |
+| 6131 | 6131 Battement intérieur 54 mm | 54 de large ; 12,6 de haut | 50 | ![6131 Battement intérieur 54 mm](/assets/profiles/systeme70/battements/battement-6131-moe.png) |
+| 6133 | 6133 Battement intérieur 54 mm | 54 de large ; 12 de haut | 50 | ![6133 Battement intérieur 54 mm](/assets/profiles/systeme70/battements/battement-6133-moe.png) |
+| 6129 | 6129 Battement intérieur 58 mm | 58 de large ; 11,9 de haut | 50 | ![6129 Battement intérieur 58 mm](/assets/profiles/systeme70/battements/battement-6129-moe.png) |
+| 76833 | 76833 Battement intérieur 48 mm | 48 de large ; 12 de haut | 50 | ![76833 Battement intérieur 48 mm](/assets/profiles/systeme70/battements/battement-76833-moe.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 50)
+
+## Pièces d'appui PVC du manuel
+
+La pièce d'appui se clippe sous le dormant bas et rejette l'eau vers l'extérieur ; chaque
+coupe porte la largeur hors tout en haut (et, sur trois d'entre elles, une largeur partielle
+prise depuis le nez) et la hauteur de 14 mm de la partie clippée à droite. Le prolongateur
+4319 se clippe sous le nez d'une pièce d'appui [3 p. 51-52].
+
+| Profilé | Titre de la planche | Cotes portées sur la coupe (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | ---: |
+| 6134 | 6134 Pièce d'appui 137 mm | 137 de large ; 14 à droite | 51 | ![6134 Pièce d'appui 137 mm](/assets/profiles/systeme70/appuis/appui-6134-moe.png) |
+| 6135 | 6135 Pièce d'appui 167 mm | 167 de large ; 14 à droite | 51 | ![6135 Pièce d'appui 167 mm](/assets/profiles/systeme70/appuis/appui-6135-moe.png) |
+| 6136 | 6136 Pièce d'appui 127 mm | 127 de large, dont 67 ; 14 à droite | 51 | ![6136 Pièce d'appui 127 mm](/assets/profiles/systeme70/appuis/appui-6136-moe.png) |
+| 6137 | 6137 Pièce d'appui 157 mm | 157 de large, dont 97 ; 14 à droite | 51 | ![6137 Pièce d'appui 157 mm](/assets/profiles/systeme70/appuis/appui-6137-moe.png) |
+| 76768 | 76768 Pièce d'appui 196 mm | 196 de large, dont 136 ; 14 à droite | 51 | ![76768 Pièce d'appui 196 mm](/assets/profiles/systeme70/appuis/appui-76768-moe.png) |
+| 76766 | 76766 Pièce d'appui 62 mm | 62 de large ; 35 de haut | 52 | ![76766 Pièce d'appui 62 mm](/assets/profiles/systeme70/appuis/appui-76766-moe.png) |
+| 4319 | 4319 Prolongateur pour pièce d'appui | 18 de haut | 52 | ![4319 Prolongateur pour pièce d'appui](/assets/profiles/systeme70/appuis/appui-4319-moe.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 51, 52)
+
+![Prolongateur 4319 sous une pièce d'appui](/assets/procedures/moe-systeme-70/profiles-2-1-3/prolongateur-4319-sous-appui.png)
+
+Le dessin montre le prolongateur 4319 clippé sous le nez d'une pièce d'appui dessinée coupée,
+sans cote (schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 52).
+
+## Compensations réno du manuel
+
+Les compensations réno 6144 et 6143 sont dessinées seules, sans accessoire ; le clip 9F44 de
+la planche du 6149 fixe la 6144 sur le dormant 6106 [3 p. 52].
+
+| Profilé | Titre de la planche | Cotes portées sur la coupe (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | ---: |
+| 6144 | 6144 Compensation réno 12x16 mm | 12 de large ; 16 de haut | 52 | ![6144 Compensation réno 12x16 mm](/assets/profiles/systeme70/compensations/compensation-6144-moe.png) |
+| 6143 | 6143 Compensation réno 19x29 mm | 19 de large ; 29 de haut | 52 | ![6143 Compensation réno 19x29 mm](/assets/profiles/systeme70/compensations/compensation-6143-moe.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 52)
+
+## Tapées PVC du manuel
+
+La tapée prolonge le dormant vers l'intérieur jusqu'au nu du doublage ; chaque coupe porte la
+largeur en haut et la hauteur de 35 mm à gauche [3 p. 54].
+
+| Profilé | Titre de la planche | Cotes portées sur la coupe (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | ---: |
+| 6138 | 6138 Tapée de 15 mm | 15 de large ; 35 de haut | 54 | ![6138 Tapée de 15 mm](/assets/profiles/systeme70/tapees-pvc/tapee-6138-moe.png) |
+| 6139 | 6139 Tapée de 35 mm | 35 de large ; 35 de haut | 54 | ![6139 Tapée de 35 mm](/assets/profiles/systeme70/tapees-pvc/tapee-6139-moe.png) |
+| 6140 | 6140 Tapée de 55 mm | 55 de large ; 35 de haut | 54 | ![6140 Tapée de 55 mm](/assets/profiles/systeme70/tapees-pvc/tapee-6140-moe.png) |
+| 6141 | 6141 Tapée de 75 mm | 95 de large (cote portée) ; 35 de haut | 54 | ![6141 Tapée de 75 mm](/assets/profiles/systeme70/tapees-pvc/tapee-6141-moe.png) |
+| 6142 | 6142 Tapée de 95 mm | 95 de large ; 35 de haut | 54 | ![6142 Tapée de 95 mm](/assets/profiles/systeme70/tapees-pvc/tapee-6142-moe.png) |
+| 76772 | 76772 Tapée de 115 mm | 115 de large ; 35 de haut | 54 | ![76772 Tapée de 115 mm](/assets/profiles/systeme70/tapees-pvc/tapee-76772-moe.png) |
+| 76769 | 76769 Tapée de 135 mm | 135 de large ; 35 de haut | 54 | ![76769 Tapée de 135 mm](/assets/profiles/systeme70/tapees-pvc/tapee-76769-moe.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 54)
+
+La planche titre la tapée 6141 « Tapée de 75 mm » et la cote 95 sur sa coupe, comme la
+6142 — entrée **INC-106** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md). Le patin d'étanchéité est le
+M298 pour les tapées 6138 à 6142 et le M613 pour les 76769 et 76772 [3 p. 54].
+
+## Tapées aluminium du manuel
+
+Les tapées aluminium, dessinées hachurées, prolongent vers l'intérieur un dormant capoté ;
+chaque titre donne la largeur de la tapée et l'épaisseur de doublage pour laquelle elle est
+prévue [3 p. 55].
+
+| Profilé | Titre de la planche | Cotes portées sur la coupe (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | ---: |
+| A469 | A469 Tapée alu de 30 pour doublage de 100 mm | 30 de large ; 32 de haut | 55 | ![A469 Tapée alu de 30 pour doublage de 100 mm](/assets/profiles/systeme70/tapees-alu/tapee-alu-a469-moe.png) |
+| A470 | A470 Tapée alu de 50 pour doublage de 120 mm | 50 de large ; 35 de haut | 55 | ![A470 Tapée alu de 50 pour doublage de 120 mm](/assets/profiles/systeme70/tapees-alu/tapee-alu-a470-moe.png) |
+| A471 | A471 Tapée alu de 70 pour doublage de 140 mm | 70 de large ; 35 de haut | 55 | ![A471 Tapée alu de 70 pour doublage de 140 mm](/assets/profiles/systeme70/tapees-alu/tapee-alu-a471-moe.png) |
+| A472 | A472 Tapée alu de 90 pour doublage de 160 mm | 90 de large ; 35 de haut | 55 | ![A472 Tapée alu de 90 pour doublage de 160 mm](/assets/profiles/systeme70/tapees-alu/tapee-alu-a472-moe.png) |
+| A473 | A473 Tapée alu de 110 pour doublage de 180 mm | 110 de large ; 35 de haut | 55 | ![A473 Tapée alu de 110 pour doublage de 180 mm](/assets/profiles/systeme70/tapees-alu/tapee-alu-a473-moe.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 55)
+
+## Pièces d'appui aluminium du manuel
+
+Pièces d'appui aluminium, dessinées hachurées ; chaque coupe porte la largeur en haut et la
+hauteur de 19,7 mm à gauche [3 p. 56].
+
+| Profilé | Titre de la planche | Cotes portées sur la coupe (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | ---: |
+| A491 | A491 Pièce d'appui alu 57 mm | 57 de large ; 19,7 de haut | 56 | ![A491 Pièce d'appui alu 57 mm](/assets/profiles/systeme70/appuis/appui-a491-moe.png) |
+| A475 | A475 Pièce d'appui alu 97 mm | 97 de large ; 19,7 de haut | 56 | ![A475 Pièce d'appui alu 97 mm](/assets/profiles/systeme70/appuis/appui-a475-moe.png) |
+| A476 | A476 Pièce d'appui alu 137 mm | 137 de large ; 19,7 de haut | 56 | ![A476 Pièce d'appui alu 137 mm](/assets/profiles/systeme70/appuis/appui-a476-moe.png) |
+| A477 | A477 Pièce d'appui alu 77 mm | 77 de large ; 19,7 de haut | 56 | ![A477 Pièce d'appui alu 77 mm](/assets/profiles/systeme70/appuis/appui-a477-moe.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 56)
+
+Le poster cote ces pièces d'appui par leur saillie et une hauteur de nez de 20 mm (27 mm pour
+l'A477) ; le manuel porte 19,7 mm sur les quatre (**VER-72**).
+
+## Renforts des profilés complémentaires
+
+Renforts admis par profilé complémentaire, relevés sur les planches du manuel ; IG est
+l'inertie vis-à-vis du poids, IW l'inertie dans la direction du vent, en cm⁴ ; un tiret
+signifie une valeur non imprimée [3 p. 42-48].
+
+| Profilé | Renfort | Désignation sur la planche | Épaisseur d'acier (mm) | IG (cm⁴) | IW (cm⁴) |
+| --- | --- | --- | --- | --- | --- |
+| 0303 | V045 | Renfort 1,25 mm | 1,25 | 1,7 | 2,7 |
+| 0303 | V30 | Renfort 1,5 mm | 1,5 | 4,0 | 4,5 |
+| 0303 | V031 | Renfort 1,5 mm | 1,5 | 5,6 | 5,3 |
+| 0207 | V045 | Renfort 1,25 mm | 1,25 | 1,7 | 2,7 |
+| 0301 | V045 | Renfort 1,25 mm | 1,25 | 1,7 | 2,7 |
+| 0302 | V045 | Renfort 1,25 mm | 1,25 | 1,7 | 2,7 |
+| 70703 | V287 | Renfort 1,25 mm | 1,25 | 7,1 | 7,0 |
+| 70603 | V287 | Renfort 2 mm | 2 | 7,1 | 7,0 |
+| 70604 | V265 | Renfort 2 mm | 2 | - | 8,7 |
+| 70605 | 656 | Renfort 2 mm | 2 | 3,5 | 4,4 |
+| 70602 | V288 | Renfort 2 mm | 2 | 0,7 | 20,3 |
+| 93000 | V250 | Renfort 2,5 mm | 2,5 | 5,3 | 71,6 |
+| 93000 | V261 | Renfort 3 mm | 3 | 2,2 | 10,0 |
+| 93002 | V260 | Renfort 2,5 mm | 2,5 | 12,1 | 22,8 |
+| 91133 | Renfort du commerce | Renfort du commerce 2 mm 30 x 50 mm | 2 | - | 9,95 |
+| 91134 | Renfort du commerce | Renfort du commerce 3 mm 100 x 50 mm | 3 | - | 100,6 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 42 à 48)
+
+La planche du 0303 écrit V30 pour le V030 (**INC-104**) et le désigne « Renfort 1,5 mm »,
+comme la planche du 2502 et à la différence de celle du 2418 (**INC-101**). Le V287 est
+désigné « Renfort 1,25 mm » sur le 70703 et « Renfort 2 mm » sur le 70603 (**INC-103**). L'IG du
+V265 et celle des renforts du commerce des 91133 et 91134 ne sont pas imprimées — entrée
+**VER-70** du registre [Informations à vérifier](/anomalies/informations-a-verifier.md). Le
+renfort des poteaux de contreventement est un renfort acier du commerce, « 30 x 50 mm » pour le
+91133 et « 100 x 50 mm » pour le 91134 [3 p. 48].
+
+Les renforts sont dessinés dans leur case avec leurs cotes, en mm ; un tiret signifie une cote
+non portée [3 p. 42-47].
+
+| Renfort | Forme | Cotes portées (mm) | Épaisseur cotée (mm) | Dessin |
+| --- | --- | --- | --- | ---: |
+| V045 | tube trapézoïdal | 38 de large, 27 de haut | 1,25 | ![Renfort V045](/assets/profiles/systeme70/accessoires/moe-v045.png) |
+| V031 | tube | 38 de large, 40 de haut | 1,5 | ![Renfort V031](/assets/profiles/systeme70/accessoires/moe-v031.png) |
+| V30 | profil ouvert | 38 de large, 40 de haut | 1,5 | ![Renfort V30](/assets/profiles/systeme70/accessoires/moe-v30.png) |
+| V287 | tube carré | 40 de large, 40 de haut | 2 | ![Renfort V287](/assets/profiles/systeme70/accessoires/moe-v287.png) |
+| V265 | tube rond | Ø 50 | - | ![Renfort V265](/assets/profiles/systeme70/accessoires/moe-v265.png) |
+| 656 | profil en V | 44 de large, 40 sur l'aile | 2 | ![Renfort 656](/assets/profiles/systeme70/accessoires/moe-656.png) |
+| V288 | profil en C | 80 de large, 13 de haut, retour de 20 | 2 | ![Renfort V288](/assets/profiles/systeme70/accessoires/moe-v288.png) |
+| V250 | double tube | 101 de large hors tout, 50 et 32 ; 20 et 29 de haut | 2,5 | ![Renfort V250](/assets/profiles/systeme70/accessoires/moe-v250.png) |
+| V261 | tube | 20 de large, 50 de haut | 3 | ![Renfort V261](/assets/profiles/systeme70/accessoires/moe-v261.png) |
+| V260 | tube | 60 de large, 40 de haut | 2,5 | ![Renfort V260](/assets/profiles/systeme70/accessoires/moe-v260.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 42 à 48)
+
+La colonne « Forme » décrit le dessin ; la planche ne la nomme pas.
+
+# Profilés complémentaires des plans e.VOLUTION de 2008
+
+Le classeur KÖMMERLING « Système e.VOLUTION, plan des profilés » d'août 2008 (système F 91)
+dessine les profilés complémentaires et leurs accessoires à l'échelle 1:1 ou 1:2 (l'échelle est
+imprimée dans le cartouche de chaque planche), chacun sous sa
+désignation complète : un préfixe (« F00-96- », « F91-75- ») suivi de la référence en gras.
+Les cotes sont en mm et ne sont pas nommées sur les planches : elles sont reprises ici par leur
+position sur le dessin. Une légende imprimée sous une référence est reprise telle quelle ; un
+tiret signifie qu'aucune cote ou légende n'est imprimée [4 p. 7].
+
+## Accessoires des dormants de rénovation (2008)
+
+La planche « Accessoires Dormants rénovation » (registre 1.1) réunit les profilés et les pièces
+qui habillent ou complètent un dormant de rénovation, c'est-à-dire un dormant posé sur l'ancien
+bâti conservé, dont l'aile vient recouvrir la menuiserie déposée. Deux coupes de dormant de
+rénovation sans référence sont dessinées en trait fin, à gauche et en bas à droite, pour situer
+les pièces ; trois pièces sont dessinées en perspective en haut [4 p. 7].
+
+![Planche des accessoires des dormants de rénovation, 2008](/assets/profiles/systeme70/accessoires/planche-accessoires-dormants-renovation-evo2008.png)
+
+La planche entière : en haut, les pièces 9F45 et 9F49 en perspective et, à droite, une
+perspective sans légende de deux profilés coupés d'onglet ; au centre, le clip 9F44 et les
+profilés 6145 et 6149 ; en bas, les profilés 0209, 6144, 0490 et 6143 ; dans la colonne de
+droite, les vis 9419, 9870 et 9B04 et la pièce 9447 avec son gabarit 9905 (schéma:
+raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 7).
+
+| Référence | Désignation complète | Légende sur la planche | Cotes portées (mm) | Dessin |
+| --- | --- | --- | --- | ---: |
+| 6145 | F00-96- 6145 | - | 22,1 de large hors tout en haut, dont 12 pour le retour supérieur ; 60 de haut à droite ; 25,6 de haut pour la partie basse, à gauche | ![Profilé 6145](/assets/profiles/systeme70/compensations/compensation-6145-evo2008.png) |
+| 6149 | F00-96- 6149 | - | 21,3 de large hors tout en haut, dont 11,2 pour le retour supérieur ; 60 de haut à droite ; 26,2 de haut pour la partie basse, à gauche | ![Profilé 6149](/assets/profiles/systeme70/compensations/compensation-6149-evo2008.png) |
+| 0209 | F00-62- 0209 | - | 54,4 de large ; 14 de haut | ![Profilé 0209](/assets/profiles/systeme70/compensations/compensation-0209-evo2008.png) |
+| 6144 | F90-96- 6144 | - | 12 de large ; 16 de haut | ![Profilé 6144](/assets/profiles/systeme70/compensations/compensation-6144-evo2008.png) |
+| 0490 | F44-96- 0490 | - | 55 de large ; 26 de haut | ![Profilé 0490 et équerre K490](/assets/profiles/systeme70/compensations/compensation-0490-evo2008.png) |
+| 6143 | F90-96- 6143 | - | 19 de large ; 29 de haut | ![Profilé 6143](/assets/profiles/systeme70/compensations/compensation-6143-evo2008.png) |
+| K490 | F00-84- K490 | Equerre de position pour 0490 | - | ![Profilé 0490 et équerre K490](/assets/profiles/systeme70/compensations/compensation-0490-evo2008.png) |
+| 9F45 | F91-75- 9F45 | - | - | ![Pièce 9F45](/assets/profiles/systeme70/accessoires/accessoire-9f45-evo2008.png) |
+| 9F49 | F91-75- 9F49 | - | - | ![Pièce 9F49](/assets/profiles/systeme70/accessoires/accessoire-9f49-evo2008.png) |
+| 9F44 | F91-75- 9F44 | - | - | ![Clip 9F44](/assets/profiles/systeme70/accessoires/accessoire-9f44-evo2008.png) |
+| 9419 | F00-83- 9419 | Tête PVC | - | ![Vis 9419](/assets/profiles/systeme70/accessoires/vis-9419-evo2008.png) |
+| 9870 | F00-83- 9870 | Tête metallique | - | ![Vis 9870](/assets/profiles/systeme70/accessoires/vis-9870-evo2008.png) |
+| 9447 | F00-75- 9447 | - | - | ![Pièce 9447 et gabarit 9905](/assets/profiles/systeme70/accessoires/accessoire-9447-9905-evo2008.png) |
+| 9905 | F00-70- 9905 | Gabarit de perçage | - | ![Pièce 9447 et gabarit 9905](/assets/profiles/systeme70/accessoires/accessoire-9447-9905-evo2008.png) |
+| 9B04 | F00-83- 9B04 | - | - | ![Vis 9B04](/assets/profiles/systeme70/accessoires/vis-9b04-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 7)
+
+La légende « Equerre de position pour 0490 » de la K490 est imprimée à l'intérieur du dessin du
+0490 ; la légende « Gabarit de perçage » du 9905 est imprimée sous la pièce 9447, qui est la
+seule dessinée. Les deux vis 9419 et 9870 sont dessinées à tête bombée et pointe foreuse, la
+9B04 à tête cruciforme [4 p. 7].
+
+Les 6143, 6144, 0490 et 6149 portent au manuel de mise en œuvre les titres « Compensation réno »
+(6143, 6144) et « Profilé d'habillage rénovation » (0490, 6149) — voir *Habillages du manuel* et
+*Compensations réno du manuel* ci-dessus. Le poster légende les vis plots du 6149 S073 (Tête
+métallique) et S074 (Tête PVC), références différentes des 9870 et 9419 de 2008. Les cotes du
+6149 ne sont pas les mêmes : 21,3 et 11,2 mm en 2008, 22 et 12 mm au poster et au manuel —
+entrée **CTR-68** du registre [Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
+Les profilés 6145 et 0209, la pièce 9F45 et la vis 9B04 ne sont dessinés ni au poster, ni au
+manuel, ni au DTD.
+
+## Parcloses des plans de 2008
+
+Les trois planches « Parcloses » du registre 1.5 (échelle 1:2) dessinent chaque parclose en
+coupe avec deux cotes seulement : sa largeur en haut et sa hauteur à droite. **Elles ne donnent
+pas l'épaisseur de vitrage que chaque parclose tient** ; cette épaisseur, pour la feuillure de
+54 mm, est dans le tableau *Parcloses* ci-dessus (poster de 2025). Les parcloses de la p. 26 sont dessinées avec leur joint de vitrage en gris, sans
+préfixe de désignation. Une ligne par parclose, cotes en mm ; un tiret signifie que la cote n'est
+pas portée [4 p. 24-26].
+
+| Parclose (plans 2008) | Désignation complète | Largeur (mm) | Hauteur (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 2419 | F00-35- 2419 | 11 | 22 | 24 | ![Parclose 2419](/assets/profiles/systeme70/parcloses/parclose-2419-evo2008.png) |
+| 2428 | F00-35- 2428 | 13 | 20 | 24 | ![Parclose 2428](/assets/profiles/systeme70/parcloses/parclose-2428-evo2008.png) |
+| 2429 | F00-35- 2429 | 15 | 20 | 24 | ![Parclose 2429](/assets/profiles/systeme70/parcloses/parclose-2429-evo2008.png) |
+| 2430 | F00-35- 2430 | 17 | 20 | 24 | ![Parclose 2430](/assets/profiles/systeme70/parcloses/parclose-2430-evo2008.png) |
+| 2431 | F00-35- 2431 | 19 | 20 | 24 | ![Parclose 2431](/assets/profiles/systeme70/parcloses/parclose-2431-evo2008.png) |
+| 2432 | F00-35- 2432 | 21 | 20 | 24 | ![Parclose 2432](/assets/profiles/systeme70/parcloses/parclose-2432-evo2008.png) |
+| 2433 | F00-35- 2433 | 23 | 20 | 24 | ![Parclose 2433](/assets/profiles/systeme70/parcloses/parclose-2433-evo2008.png) |
+| 2435 | F00-35- 2435 | 25 | 20 | 24 | ![Parclose 2435](/assets/profiles/systeme70/parcloses/parclose-2435-evo2008.png) |
+| 2434 | F00-35- 2434 | 27 | 20 | 24 | ![Parclose 2434](/assets/profiles/systeme70/parcloses/parclose-2434-evo2008.png) |
+| 2437 | F00-35- 2437 | 29 | 20 | 24 | ![Parclose 2437](/assets/profiles/systeme70/parcloses/parclose-2437-evo2008.png) |
+| 2438 | F00-35- 2438 | 31 | 20 | 24 | ![Parclose 2438](/assets/profiles/systeme70/parcloses/parclose-2438-evo2008.png) |
+| 2436 | F00-35- 2436 | 33 | 20 | 24 | ![Parclose 2436](/assets/profiles/systeme70/parcloses/parclose-2436-evo2008.png) |
+| 1436.1 | F00-35- 1436.1 | 35 | 22 | 24 | ![Parclose 1436.1](/assets/profiles/systeme70/parcloses/parclose-1436-1-evo2008.png) |
+| 1511.1 | F86-38- 1511.1 | 17 | 20 | 25 | ![Parclose 1511.1](/assets/profiles/systeme70/parcloses/parclose-1511-1-evo2008.png) |
+| 1512.1 | F86-38- 1512.1 | 21 | 20 | 25 | ![Parclose 1512.1](/assets/profiles/systeme70/parcloses/parclose-1512-1-evo2008.png) |
+| 1438.1 | F00-38- 1438.1 | 15 | 22 | 25 | ![Parclose 1438.1](/assets/profiles/systeme70/parcloses/parclose-1438-1-evo2008.png) |
+| 1480.1 | F75-38- 1480.1 | 11 | 19 | 25 | ![Parclose 1480.1](/assets/profiles/systeme70/parcloses/parclose-1480-1-evo2008.png) |
+| 1535 | F00-35- 1535 | 17 | 20 | 25 | ![Parclose 1535](/assets/profiles/systeme70/parcloses/parclose-1535-evo2008.png) |
+| 0132 | F00-35- 0132 | 19 | 20 | 25 | ![Parclose 0132](/assets/profiles/systeme70/parcloses/parclose-0132-evo2008.png) |
+| 0135.N | F00-35- 0135.N | 21 | 20 | 25 | ![Parclose 0135.N](/assets/profiles/systeme70/parcloses/parclose-0135-n-evo2008.png) |
+| 0133.1 | F00-35- 0133.1 | 23 | 22 | 25 | ![Parclose 0133.1](/assets/profiles/systeme70/parcloses/parclose-0133-1-evo2008.png) |
+| 0136 | F00-35- 0136 | 25 | 20 | 25 | ![Parclose 0136](/assets/profiles/systeme70/parcloses/parclose-0136-evo2008.png) |
+| 0134 | F00-35- 0134 | 27 | 22 | 25 | ![Parclose 0134](/assets/profiles/systeme70/parcloses/parclose-0134-evo2008.png) |
+| 008.04 | 008.04 | 12 | - | 26 | ![Parclose 008.04](/assets/profiles/systeme70/parcloses/parclose-008-04-evo2008.png) |
+| 012.04 | 012.04 | 16 | - | 26 | ![Parclose 012.04](/assets/profiles/systeme70/parcloses/parclose-012-04-evo2008.png) |
+| 014.04 | 014.04 | 18 | - | 26 | ![Parclose 014.04](/assets/profiles/systeme70/parcloses/parclose-014-04-evo2008.png) |
+| 016.04 | 016.04 | 20 | - | 26 | ![Parclose 016.04](/assets/profiles/systeme70/parcloses/parclose-016-04-evo2008.png) |
+| 029.04 | 029.04 | 33 | - | 26 | ![Parclose 029.04](/assets/profiles/systeme70/parcloses/parclose-029-04-evo2008.png) |
+| 033.04 | 033.04 | 37 | - | 26 | ![Parclose 033.04](/assets/profiles/systeme70/parcloses/parclose-033-04-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 24 à 26)
+
+Les parcloses 2419 à 2438 et 1436.1 ont toutes deux lèvres de joint à gauche et un pied de
+clippage ; la 1436.1 a deux chambres. Les 1511.1, 1512.1, 1438.1 et 1480.1 ont une face
+moulurée, les 0132 à 0136 une face arrondie. Des parcloses du poster de 2025, seules les 2433
+(largeur 23 mm en 2008, 23,5 au poster, 24 au DTD — **CTR-40**) et, sous une référence sans le
+suffixe « .1 », les 1511 et 1512 (17,5 et 21,5 mm au poster) figurent dans ces planches [4 p. 24-26].
+
+### Élargisseur de parclose 728
+
+![Élargisseur 728 posé sur un ouvrant](/assets/profiles/systeme70/elargisseurs/elargisseur-728-evo2008.png)
+
+Au bas de la planche p. 26, le profilé **728** est dessiné clippé à l'extrémité de la feuillure
+d'un ouvrant coupé ; la seule cote portée est « +16 », en mm, prise sur le 728 lui-même
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf,
+p. 26).
+
+## Appuis des plans de 2008
+
+Les deux planches « Appuis » p. 27 et 28 (échelle 1:2) dessinent chaque pièce d'appui en coupe,
+avec son embout écrit sous la référence, et, pour cinq d'entre elles, à droite, un petit schéma
+de la pièce d'appui clippée sous un dormant de 70 mm, qui donne sa saillie devant le dormant.
+Une ligne par pièce d'appui ; cotes en mm, reprises par leur position sur le dessin [4 p. 27-28].
+
+| Pièce d'appui | Désignation complète | Largeur hors tout (mm) | Autres cotes horizontales (mm) | Cotes verticales (mm) | Pente portée | Embout écrit | Saillie devant le dormant de 70 mm, schéma de pose (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| 0339 | F00-72- 0339 | 180 | 50 pour la partie clippée, en haut à droite ; 10 pour le retour du nez, en bas à gauche | à gauche 15 + 31, et 4 pour la lèvre du nez ; à droite 37,5, 53,5 hors tout et 16 | 5° | F00-75- 9843 Embouts | 110 et 122, deux schémas | 27 | ![Pièce d'appui 0339](/assets/profiles/systeme70/appuis/appui-0339-evo2008.png) |
+| 0278 | F90-72- 0278 | 138 | 62 pour la partie clippée | à gauche 20 et 10 ; à droite 20 | 5° | F00-88- 9B78 Embouts | 68 | 27 | ![Pièce d'appui 0278](/assets/profiles/systeme70/appuis/appui-0278-evo2008.png) |
+| 0996 | F00-72- 0996 | 148 | 36,7 en bas à droite ; 10 et 15 au pied du nez | à gauche 40 et 20 ; à droite 14 et 20 | - | F00-88- 9A92 Embouts | 100 | 27 | ![Pièce d'appui 0996](/assets/profiles/systeme70/appuis/appui-0996-evo2008.png) |
+| 6134 | F90-72- 6134 | 137 | - | à gauche 17,5 ; à droite 14 | - | F91-75- 9F53 Embouts de remplissage | 68 | 28 | ![Pièce d'appui 6134](/assets/profiles/systeme70/appuis/appui-6134-evo2008.png) |
+| 6135 | F90-72- 6135 | 167 | - | à gauche 17,5 ; à droite 14 | - | F91-75- 9F54 Embouts de remplissage | - | 28 | ![Pièce d'appui 6135](/assets/profiles/systeme70/appuis/appui-6135-evo2008.png) |
+| 6136 | F90-72- 6136 | 127 | - | à gauche 23,5 ; à droite 20 | - | F91-75- 9F55 Embouts de remplissage | 68 | 28 | ![Pièce d'appui 6136](/assets/profiles/systeme70/appuis/appui-6136-evo2008.png) |
+| 6137 | F90-72- 6137 | 157 | - | à gauche 23,5 ; à droite 20 | - | F91-75- 9F56 Embouts de remplissage | - | 28 | ![Pièce d'appui 6137](/assets/profiles/systeme70/appuis/appui-6137-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 27 et 28)
+
+Les largeurs hors tout des 6134 (137), 6135 (167), 6136 (127) et 6137 (157) sont celles du DTD ;
+le poster cote la saillie (67 ou 97 mm) et non la largeur (voir *Pièces d'appui PVC* ci-dessus).
+Sur les schémas de pose, la saillie des 6134 et 6136 est de 68 mm devant un dormant de 70 mm.
+Les pièces d'appui 0339, 0278 et 0996 et leurs embouts 9843, 9B78 et 9A92 ne sont dessinés ni au
+poster, ni au manuel, ni au DTD [4 p. 27-28].
+
+### Schémas de pose des pièces d'appui de 2008
+
+Chaque schéma montre, à la même échelle que la coupe, la pièce d'appui clippée sous la traverse
+basse d'un dormant, le dormant dessiné en trait fin au-dessus. La cote de gauche est la saillie
+de la pièce d'appui devant la face du dormant, la cote de droite l'épaisseur de 70 mm du dormant.
+
+![Pièce d'appui 0339 sous un dormant, saillies de 110 et 122 mm](/assets/profiles/systeme70/appuis/pose-appui-0339-evo2008.png)
+
+La pièce d'appui 0339 est dessinée deux fois sous le dormant : en haut, saillie de 110 mm ; en
+bas, décalée vers l'extérieur, saillie de 122 mm (schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 27).
+
+![Pièce d'appui 0278 sous un dormant](/assets/profiles/systeme70/appuis/pose-appui-0278-evo2008.png)
+
+Pièce d'appui 0278 : saillie de 68 mm, dormant de 70 mm (schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 27).
+
+![Pièce d'appui 0996 sous un dormant](/assets/profiles/systeme70/appuis/pose-appui-0996-evo2008.png)
+
+Pièce d'appui 0996 : saillie de 100 mm, dormant de 70 mm ; la pièce d'appui passe sous le pied
+du dormant (schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 27).
+
+![Pièce d'appui 6134 sous un dormant](/assets/profiles/systeme70/appuis/pose-appui-6134-evo2008.png)
+
+Pièce d'appui 6134 : saillie de 68 mm, dormant de 70 mm (schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 28).
+
+![Pièce d'appui 6136 sous un dormant](/assets/profiles/systeme70/appuis/pose-appui-6136-evo2008.png)
+
+Pièce d'appui 6136 : saillie de 68 mm, dormant de 70 mm (schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 28).
+
+### Profilés 0691 et 0692
+
+Deux profilés en équerre sont dessinés en bas à droite de la planche p. 28, sans légende de
+fonction : un retour horizontal de 11,5 mm en haut, un talon de 5,4 mm, et une aile verticale de
+20 mm (0691) ou 45 mm (0692) [4 p. 28].
+
+| Profilé | Désignation complète | Retour horizontal en haut (mm) | Talon, en haut à gauche (mm) | Aile verticale (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 0691 | F00-73- 0691 | 11,5 | 5,4 | 20 | 28 | ![Profilé 0691](/assets/profiles/systeme70/cornieres/profil-0691-evo2008.png) |
+| 0692 | F00-73- 0692 | 11,5 | 5,4 | 45 | 28 | ![Profilé 0692](/assets/profiles/systeme70/cornieres/profil-0692-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 28)
+
+Le poster cote le 0692 12 mm de large et 45 de haut (voir *Cornières et profilés d'habillage*
+ci-dessus) — entrée **CTR-72** du registre
+[Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
+
+## Tapées 6138 à 6142 et profilé 0300 des plans de 2008
+
+La troisième planche « Appuis » (p. 29, échelle 1:2) dessine cinq profilés de 35 mm de haut,
+de largeur croissante, chacun avec le patin d'étanchéité 9F32 écrit sous sa référence, et le
+profilé plat 0300. Le poster les dessine comme tapées PVC, le DTD les appelle « Fourrures »
+(voir *Tapées PVC* et *Fourrures d'épaisseur 6138.1 à 76769* ci-dessus) [4 p. 29].
+
+| Profilé | Désignation complète | Largeur, en haut (mm) | Hauteur, à gauche (mm) | Pièce écrite sous la référence | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 6138 | F90-96- 6138 | 15 | 35 | F90-75- 9F32 Patin d'étancheité | 29 | ![Profilé 6138](/assets/profiles/systeme70/tapees-pvc/tapee-6138-evo2008.png) |
+| 6139 | F90-96- 6139 | 35 | 35 | F90-75- 9F32 Patin d'étancheité | 29 | ![Profilé 6139](/assets/profiles/systeme70/tapees-pvc/tapee-6139-evo2008.png) |
+| 6140 | F90-96- 6140 | 55 | 35 | F90-75- 9F32 Patin d'étancheité | 29 | ![Profilé 6140](/assets/profiles/systeme70/tapees-pvc/tapee-6140-evo2008.png) |
+| 6141 | F90-96- 6141 | 75 | 35 | F91-75- 9F32 Patin d'étancheité | 29 | ![Profilé 6141](/assets/profiles/systeme70/tapees-pvc/tapee-6141-evo2008.png) |
+| 6142 | F90-96- 6142 | 95 | 35 | F90-75- 9F32 Patin d'étancheité | 29 | ![Profilé 6142](/assets/profiles/systeme70/tapees-pvc/tapee-6142-evo2008.png) |
+| 0300 | F00-65- 0300 | 150 | 23 | - | 29 | ![Profilé 0300](/assets/profiles/systeme70/accessoires/profil-0300-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 29)
+
+Les largeurs et hauteurs sont celles du poster (15 à 95 mm de large, 35 mm de haut) ; le DTD les
+porte dans l'autre sens. Le patin 9F32 est écrit avec le préfixe F91-75- sous le 6141 et F90-75-
+sous les quatre autres. Le 0300 est coté 150 × 23 mm, comme au poster [4 p. 29].
+
+## Élargisseurs des plans de 2008
+
+La planche « Elargisseurs » (p. 30, échelle 1:2) dessine les élargisseurs de dormant, profilés
+de 70 mm de large qui se clippent sous le dormant pour en augmenter la hauteur, chacun avec la
+hauteur ajoutée à gauche et, pour trois d'entre eux, le tableau « Renfort | Iz » [4 p. 30].
+
+| Élargisseur | Désignation complète | Largeur (mm) | Hauteur ajoutée (mm) | Renfort du tableau | Iz (cm⁴) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| 0204.1 | F00-95- 0204.1 | 70 | 15 | - | - | 30 | ![Élargisseur 0204.1](/assets/profiles/systeme70/elargisseurs/elargisseur-0204-1-evo2008.png) |
+| 0210.2 | F00-95- 0210.2 | 70 | 25 | - | - | 30 | ![Élargisseur 0210.2](/assets/profiles/systeme70/elargisseurs/elargisseur-0210-2-evo2008.png) |
+| 0207.3 | F00-95- 0207.3 | 70 | 50 | V045 | 2,70 | 30 | ![Élargisseur 0207.3](/assets/profiles/systeme70/elargisseurs/elargisseur-0207-3-evo2008.png) |
+| 0301.1 | F90-95- 0301.1 | 70 | 80 | V045, dessiné dans les deux chambres | 2,70 | 30 | ![Élargisseur 0301.1](/assets/profiles/systeme70/elargisseurs/elargisseur-0301-1-evo2008.png) |
+| 0432 | F90-61- 0432 | 70 | 3,5 | - | - | 30 | ![Profilé 0432 sous un dormant](/assets/profiles/systeme70/elargisseurs/elargisseur-0432-evo2008.png) |
+| K363 | K363 | 70 | 120 | K655 | 7,00 | 30 | ![Élargisseur K363](/assets/profiles/systeme70/elargisseurs/elargisseur-k363-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 30)
+
+Le profilé 0432 est dessiné clippé sous un dormant coupé, la cote de 3,5 mm prise sous le
+dormant ; le K363 a trois chambres superposées, le renfort K655 dans la chambre haute. Les 0204,
+0210, 0207 et 0301 du poster et du DTD portent les mêmes hauteurs, sans les suffixes « .1 »,
+« .2 », « .3 » ; le DTD cote aussi un K363 de 120 mm, que le poster et le manuel ne dessinent pas
+(**VER-63**, ci-dessus) [4 p. 30].
+
+![Élargisseur clippé sous un dormant](/assets/profiles/systeme70/elargisseurs/pose-elargisseur-sous-dormant-evo2008.png)
+
+En haut à droite de la planche, un élargisseur sans référence, de la forme du 0210.2, est dessiné
+clippé sous le pied d'un dormant coupé, dessiné en trait fin, ses deux crochets supérieurs
+engagés dans les gorges du dormant
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 30).
+
+## Accouplements des plans de 2008
+
+Les trois planches « Accouplements » (p. 31 à 33, échelle 1:2) dessinent les profilés qui
+assemblent deux châssis côte à côte ou en angle, presque tous dessinés engagés dans un dormant
+coupé, en trait fin, dont la hauteur de 70 mm est cotée. Les renforts acier sont hachurés ;
+« Renfort du commerce » désigne un tube acier du commerce de la section indiquée. Une ligne par
+profilé ; cotes en mm, reprises par leur position sur le dessin [4 p. 31-33].
+
+| Profilé | Désignation complète | Cotes portées (mm) | Angle porté | Renfort | Iz (cm⁴) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| K340 et K341 | F00-71- K340, F00-71- K341 | 70 sur le dormant | - | K640 | 8,70 | 31 | ![Liaison K340 et K341](/assets/profiles/systeme70/liaisons/liaison-k340-k341-evo2008.png) |
+| K355 | K355 | 74,5 de large, 74,5 de haut ; 70 sur le dormant | - | K655 | 7,00 | 31 | ![Liaison K355](/assets/profiles/systeme70/liaisons/liaison-k355-evo2008.png) |
+| 6356 | F90-71- 6356 | 35 et 35 sur les deux pans ; 70 sur le dormant | 135° | 656 | 3,50 | 31 | ![Poteau 6356](/assets/profiles/systeme70/liaisons/liaison-6356-evo2008.png) |
+| K352 | F00-94- K352 | 48 en haut, 46 en bas ; 98 à gauche, 70 et 70 ; 20 au centre | - | K208 | 20,3 | 32 | ![Profilé K352](/assets/profiles/systeme70/liaisons/liaison-k352-evo2008.png) |
+| 154 | 154 | 52 de large, 65 de haut | - | Renfort du commerce (40 x 50 mm) | - | 32 | ![Profilé 154](/assets/profiles/systeme70/liaisons/liaison-154-evo2008.png) |
+| 1184 | F00-94- 1184 | 35 × 35 pour la chambre haute ; 25 et 26 pour la chambre basse ; 10 et 1,75 pour l'âme ; 70 sur le dormant | - | 9109 | 98,7 | 32 | ![Profilé 1184](/assets/profiles/systeme70/liaisons/liaison-1184-evo2008.png) |
+| 9076 | F00-45- 9076 | 28 de large dont 14 au centre ; 18 de haut | - | - | - | 32 | ![Profilé 9076](/assets/profiles/systeme70/liaisons/liaison-9076-evo2008.png) |
+| 1338 | F00-96- 1338 | 23,5 de large, 52,5 de haut | - | - | - | 32 | ![Profilé 1338](/assets/profiles/systeme70/liaisons/liaison-1338-evo2008.png) |
+| 1114 | F00-96- 1114 | 45 en haut, 25 en bas ; 57 de haut | - | - | - | 32 | ![Profilé 1114](/assets/profiles/systeme70/liaisons/liaison-1114-evo2008.png) |
+| 350 | 350 | 70 sur le dormant | - | - | - | 32 | ![Profilé 350 sous un dormant](/assets/profiles/systeme70/liaisons/liaison-350-evo2008.png) |
+| 0481 | F00-94- 0481 | 30,3 et 15,3 en haut ; 10 intérieur ; 32 et 24 à gauche | - | Renfort du commerce (10 x 80 mm) | 42,7 | 33 | ![Profilé 0481](/assets/profiles/systeme70/liaisons/liaison-0481-evo2008.png) |
+| 0205 | F00-94- 0205 | 11 en haut ; 105 de haut, 82 intérieur ; 18,5 et 24 en bas ; 70 sur le dormant | - | Renfort du commerce (10 x 80 mm) | 42,7 | 33 | ![Profilé 0205](/assets/profiles/systeme70/liaisons/liaison-0205-evo2008.png) |
+| 1067 | F00-65- 1067 | 40 de large, 60 de haut | - | Renfort du commerce (30 x 50 mm) | 4,50 | 33 | ![Profilé 1067](/assets/profiles/systeme70/liaisons/liaison-1067-evo2008.png) |
+| 1182 | F00-65- 1182 | 60 de large, 120 de haut | - | Renfort du commerce (50 x 100 mm) | 106,0 | 33 | ![Profilé 1182](/assets/profiles/systeme70/liaisons/liaison-1182-evo2008.png) |
+| 0441 | F00-94- 0441 | 20 de large, 1,5 d'âme ; 13,5 de haut | - | - | - | 33 | ![Profilé 0441 sur un dormant](/assets/profiles/systeme70/liaisons/liaison-0441-evo2008.png) |
+| 1248 | F00-94- 1248 | 12 de large, 4 de haut | - | - | - | 33 | ![Profilé 1248 sur un dormant](/assets/profiles/systeme70/liaisons/liaison-1248-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 31 à 33)
+
+Les deux renforts acier de la p. 32 sont dessinés seuls, avec leur inertie :
+
+| Renfort | Désignation complète | Cotes portées (mm) | Iz (cm⁴) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| V250 | F00-40- V250 | 29 de large, 101 de haut ; 32 pour le tube haut, 50 pour le tube bas, 20 en pied ; 2,5 d'épaisseur | 71,6 | 32 | ![Renfort V250](/assets/profiles/systeme70/renforts/renfort-v250-evo2008.png) |
+| 9120 | F00-40- 9120 | 20 de large, 50 de haut ; 3 d'épaisseur | 10,0 | 32 | ![Renfort 9120](/assets/profiles/systeme70/renforts/renfort-9120-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 32)
+
+Le K340, à pans, est dessiné emboîté sur le K341 rond, qui porte le renfort K640 ; les deux
+références sont écrites sur le même dessin. Le 1184 a deux chambres reliées par une âme mince, chacune engagée dans un dormant ; le
+renfort 9109 est écrit à côté. Le 0441 et le 1248 sont dessinés clippés sur le chant d'un
+dormant, le 350 sous un dormant, comme un élargisseur [4 p. 31-33].
+
+Le V250 porte l'IW de 71,6 cm⁴ du manuel ; le 656 du poteau 6356 porte Iz 3,50 cm⁴, l'IG du
+manuel pour ce renfort (son IW y est de 4,4) ; le 1248 a les cotes du poster. Le profilé 1182
+(60 × 120 mm, renfort du commerce 50 × 100, Iz 106,0) a les cotes et l'inertie du 91134 du
+poster ; le 1067 (40 × 60 mm, renfort du commerce 30 × 50) porte Iz 4,50 cm⁴ là où le 91133
+du poster (60 × 40 mm, même renfort) porte 9,95 — entrée **CTR-73** du registre
+[Contradictions entre sources](/anomalies/contradictions-entre-sources.md) [4 p. 31-33].
+
+### Schémas d'accouplement de la p. 32
+
+Au bas de la p. 32, quatre schémas sans légende montrent deux dormants accouplés de part et
+d'autre d'un profilé de liaison, dessinés en trait fin, les renforts hachurés. La cote de 70 mm
+est l'épaisseur des dormants.
+
+![Accouplement par le renfort V250 et le profilé 9076](/assets/profiles/systeme70/liaisons/accouplement-v250-9076-evo2008.png)
+
+Deux dormants vissés de part et d'autre du renfort V250, le profilé 9076 clippé dans la gorge
+supérieure ; le tube bas du V250 dépasse sous les dormants (schéma:
+raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 32).
+
+![Accouplement par le renfort V250 habillé du 1114](/assets/profiles/systeme70/liaisons/accouplement-v250-1114-evo2008.png)
+
+Même montage, le tube bas du V250 habillé par le profilé 1114 (schéma:
+raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 32).
+
+![Accouplement par le renfort 9120](/assets/profiles/systeme70/liaisons/accouplement-9120-evo2008.png)
+
+Un dormant avec, sous lui, le renfort 9120 dessiné nu (schéma:
+raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 32).
+
+![Accouplement par le renfort 9120 habillé du 1114](/assets/profiles/systeme70/liaisons/accouplement-9120-1114-evo2008.png)
+
+Le même renfort 9120 logé dans le profilé 1114 sous le dormant (schéma:
+raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 32).
+
+Les renforts sont identifiés sur ces quatre schémas par leur forme, identique à celle des coupes
+cotées de la même planche ; les schémas eux-mêmes ne portent aucune référence.
+
+## Profilés divers des plans de 2008
+
+Les planches p. 34 et 35, titrées « Profilés complémentaires » sans sous-titre (échelle 1:2),
+dessinent des profilés de finition et de raccord, plusieurs d'entre eux engagés dans un dormant
+coupé ou contre un panneau hachuré (le panneau n'a pas de référence). Aucune légende de fonction
+n'est imprimée. Cotes en mm [4 p. 34-35].
+
+| Profilé | Désignation complète | Cotes portées (mm) | Dessiné avec | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 0691 | F00-73- 0691 | 11,5 ; 5,4 ; 20 | - | 34 | ![Profilé 0691](/assets/profiles/systeme70/cornieres/profil-0691-evo2008.png) |
+| 0692 | F00-73- 0692 | 11,5 ; 5,4 ; 45 | - | 34 | ![Profilé 0692](/assets/profiles/systeme70/cornieres/profil-0692-evo2008.png) |
+| 0693 | F00-73- 0693 | 18 de large ; 20 de haut, et 5,4 pour le talon | - | 34 | ![Profilé 0693](/assets/profiles/systeme70/cornieres/profil-0693-evo2008.png) |
+| 0381 | F00-61- 0381 | 9 de large ; 26 de haut ; 12 pour le retour | - | 34 | ![Profilé 0381](/assets/profiles/systeme70/cornieres/profil-0381-evo2008.png) |
+| 0380 | F00-61- 0380 | 16 en haut et en bas ; 80 de haut | - | 34 | ![Profilé 0380](/assets/profiles/systeme70/profils-plats/profil-0380-evo2008.png) |
+| 0914 | F00-61- 0914 | 5 | un dormant, dans la gorge haute duquel il est logé | 34 | ![Profilé 0914 dans un dormant](/assets/profiles/systeme70/profils-plats/profil-0914-evo2008.png) |
+| 1207 | F00-61- 1207 | 10,6 en haut ; 26 et 36 de haut ; 5,3 en bas | - | 34 | ![Profilé 1207](/assets/profiles/systeme70/profils-plats/profil-1207-evo2008.png) |
+| 0856 | F00-63- 0856 | 50 et 24 de large ; 25 de haut ; « 19 -20 mm » pour le panneau | un dormant et un panneau | 34 | ![Profilé 0856 sous un dormant](/assets/profiles/systeme70/profils-plats/profil-0856-evo2008.png) |
+| 0827 | F00-63- 0827 | 70 sur le dormant ; 26,2 et 18,8 aux extrémités ; 68,5 de large ; 2 d'épaisseur | un dormant | 34 | ![Profilé 0827 sous un dormant](/assets/profiles/systeme70/profils-plats/profil-0827-evo2008.png) |
+| 0484 | F90-63- 0484 | 70 sur le dormant ; 56,5 de large ; 12,3 de haut ; 11 pour le panneau | un dormant et un panneau | 34 | ![Profilé 0484 sous un dormant](/assets/profiles/systeme70/profils-plats/profil-0484-evo2008.png) |
+| 0373 | F00-63- 0373 | 40 en haut, 20 en bas ; 25 de haut ; 3 pour la lèvre | un panneau | 35 | ![Profilé 0373](/assets/profiles/systeme70/profils-plats/profil-0373-evo2008.png) |
+| 0828 | F00-63- 0828 | 16,5 en haut, 22,5 en bas ; 20 de haut ; « 7.5 » pour le panneau | un panneau | 35 | ![Profilé 0828](/assets/profiles/systeme70/profils-plats/profil-0828-evo2008.png) |
+| 1076 | F00-71- 1076 | 32 × 32 ; 11 et 2 au pied | un panneau | 35 | ![Profilé 1076](/assets/profiles/systeme70/profils-plats/profil-1076-evo2008.png) |
+| 0505 | F00-65- 0505 | 34 de large, 20 de haut | - | 35 | ![Profilé 0505](/assets/profiles/systeme70/profils-plats/profil-0505-evo2008.png) |
+| 0395 | F00-62- 0395 | 36 de large, 3 de haut | - | 35 | ![Profilé 0395](/assets/profiles/systeme70/profils-plats/profil-0395-evo2008.png) |
+| 1395 | F00-62- 1395 | 42 de large, 12 de haut | - | 35 | ![Profilé 1395](/assets/profiles/systeme70/profils-plats/profil-1395-evo2008.png) |
+| 0391 | F00-65- 0391 | Ø 8 | - | 35 | ![Profilé 0391](/assets/profiles/systeme70/profils-plats/profil-0391-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 34 et 35)
+
+Les 0691 et 0692 sont dessinés une seconde fois p. 34, avec les mêmes cotes qu'en p. 28 (dessins
+repris de la p. 28 dans le tableau). La cote du panneau du 0828 est écrite avec un point
+décimal (« 7.5 »). Le 0827 est coté 70 en haut, 69 en bas, 26,2 et 19 aux extrémités et 4,5 de
+haut au poster, 68,5, 18,8 et 2 en 2008 (**CTR-73**) [4 p. 34-35].
+
+![Profilé 1207 clippé sur un dormant](/assets/profiles/systeme70/profils-plats/pose-1207-evo2008.png)
+
+À droite du 1207, un schéma sans légende le montre clippé sur la face d'un dormant coupé et
+appliqué contre un matériau dessiné en pointillé, que la planche ne nomme pas (schéma:
+raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 34).
+
+## Profilés plats des plans de 2008
+
+La planche p. 36 (« Profilés complémentaires », échelle 1:2) dessine des profilés plats, cotés
+par leur largeur et leur épaisseur. Les références suffixées « .T » ou « T » portent sous leur
+face une bande hachurée, sans légende. Le 1152 porte en son milieu un motif de croisillons, sans
+légende [4 p. 36].
+
+| Profilé | Désignation complète | Largeur (mm) | Épaisseur (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| 0401 | F00-61- 0401 | 30 | 2,5 | ![Profilé 0401](/assets/profiles/systeme70/profils-plats/profil-0401-evo2008.png) |
+| 0402 | F00-61- 0402 | 40 | 2,5 | ![Profilé 0402](/assets/profiles/systeme70/profils-plats/profil-0402-evo2008.png) |
+| 0403 | F00-61- 0403 | 50 | 2,5 | ![Profilé 0403](/assets/profiles/systeme70/profils-plats/profil-0403-evo2008.png) |
+| 0400.T | F00-61- 0400.T | 20 | 2,5 | ![Profilé 0400.T](/assets/profiles/systeme70/profils-plats/profil-0400-t-evo2008.png) |
+| 0401.T | F00-61- 0401.T | 30 | 2,5 | ![Profilé 0401.T](/assets/profiles/systeme70/profils-plats/profil-0401-t-evo2008.png) |
+| 0402.T | F00-61- 0402.T | 40 | 2,5 | ![Profilé 0402.T](/assets/profiles/systeme70/profils-plats/profil-0402-t-evo2008.png) |
+| 0403.T | F00-61- 0403.T | 50 | 2,5 | ![Profilé 0403.T](/assets/profiles/systeme70/profils-plats/profil-0403-t-evo2008.png) |
+| 0727T | F00-62- 0727T | 20 | 7 | ![Profilé 0727T](/assets/profiles/systeme70/profils-plats/profil-0727t-evo2008.png) |
+| 0728T | F00-62- 0728T | 30 | 7 | ![Profilé 0728T](/assets/profiles/systeme70/profils-plats/profil-0728t-evo2008.png) |
+| 0729T | F00-62- 0729T | 40 | 7 | ![Profilé 0729T](/assets/profiles/systeme70/profils-plats/profil-0729t-evo2008.png) |
+| 0730T | F00-62- 0730T | 50 | 7 | ![Profilé 0730T](/assets/profiles/systeme70/profils-plats/profil-0730t-evo2008.png) |
+| 0731T | F00-62- 0731T | 60 | 7 | ![Profilé 0731T](/assets/profiles/systeme70/profils-plats/profil-0731t-evo2008.png) |
+| 0405 | F00-61- 0405 | 80 | 3 | ![Profilé 0405](/assets/profiles/systeme70/profils-plats/profil-0405-evo2008.png) |
+| 0406 | F00-61- 0406 | 100 | 3 | ![Profilé 0406](/assets/profiles/systeme70/profils-plats/profil-0406-evo2008.png) |
+| 1152 | F00-71- 1152 | 130 | 3 | ![Profilé 1152](/assets/profiles/systeme70/profils-plats/profil-1152-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 36)
+
+Les 0727T à 0731T ont une ou deux chambres ; le 0406 porte un pli en V au milieu de sa face. Le
+poster dessine des profilés plats de mêmes largeurs sous d'autres références (91000 à 91043 T,
+tableau *Profilés plats* ci-dessus) [4 p. 36].
+
+## Cornières des plans de 2008
+
+La planche « Cornières » (p. 37, échelle 1:2) dessine treize cornières, chacune cotée par ses
+deux ailes et son épaisseur. Une ligne par cornière, cotes en mm [4 p. 37].
+
+| Cornière | Désignation complète | Aile horizontale (mm) | Aile verticale (mm) | Épaisseur (mm) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 0423 | F00-98- 0423 | 8 | 20 | 2 | ![Cornière 0423](/assets/profiles/systeme70/cornieres/corniere-0423-evo2008.png) |
+| 0577 | F00-71- 0577 | 20 | 20 | 2,5 | ![Cornière 0577](/assets/profiles/systeme70/cornieres/corniere-0577-evo2008.png) |
+| 0581 | F00-71- 0581 | 40 | 20 | 2,5 | ![Cornière 0581](/assets/profiles/systeme70/cornieres/corniere-0581-evo2008.png) |
+| 0587 | F00-71- 0587 | 50 | 30 | 2,5 | ![Cornière 0587](/assets/profiles/systeme70/cornieres/corniere-0587-evo2008.png) |
+| 0579 | F00-71- 0579 | 30 | 30 | 2,5 | ![Cornière 0579](/assets/profiles/systeme70/cornieres/corniere-0579-evo2008.png) |
+| 0574 | F00-98- 0574 | 35 | 35 | 2,5 | ![Cornière 0574](/assets/profiles/systeme70/cornieres/corniere-0574-evo2008.png) |
+| 0583 | F00-71- 0583 | 50 | 50 | 2,5 | ![Cornière 0583](/assets/profiles/systeme70/cornieres/corniere-0583-evo2008.png) |
+| 1331 | F00-96- 1331 | 25,5 | 70 | 3,4 | ![Cornière 1331](/assets/profiles/systeme70/cornieres/corniere-1331-evo2008.png) |
+| 0733 | F00-98- 0733 | 50 | 100 | 3 | ![Cornière 0733](/assets/profiles/systeme70/cornieres/corniere-0733-evo2008.png) |
+| 0584 | F00-71- 0584 | 60 | 60 | 2,5 | ![Cornière 0584](/assets/profiles/systeme70/cornieres/corniere-0584-evo2008.png) |
+| 0642 | F00-98- 0642 | 100 | 100 | - | ![Cornière 0642](/assets/profiles/systeme70/cornieres/corniere-0642-evo2008.png) |
+| W703570 | W703570 | 95, dont 25 en pan coupé | 95, dont 25 en pan coupé | 2 | ![Cornière W703570](/assets/profiles/systeme70/cornieres/corniere-w703570-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 37)
+
+La 1331 a une aile verticale au bord biseauté et un angle arrondi ; la 0642 ne porte pas
+d'épaisseur. La W703570 est une cornière à pan coupé : ses deux ailes de 95 mm sont
+reliées par un pan de 25 × 25 mm [4 p. 37].
+
+## Habillages et cornières à rejet de la p. 38
+
+La planche p. 38 dessine deux habillages de 100 mm de haut à retour incliné de 60 mm, chacun avec
+son plot de clippage, puis deux cornières à aile inclinée. Sous les habillages est écrit :
+« **9471** Plot de clippage pour 5072/9621 » et « **9914** Gabarit de perçage pour plot de
+clippage » [4 p. 38].
+
+| Profilé | Désignation complète | Retour incliné, en haut (mm) | Hauteur (mm) | Épaisseur (mm) | Pièce dessinée | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 5072 | F00-69- 5072 | 60 | 100 | 5 | deux plots F00-75- 9471 | ![Habillage 5072](/assets/profiles/systeme70/habillages/habillage-5072-evo2008.png) |
+| 9621 | F00-57- 9621 | 60 | 100 | 1,6 | deux plots F00-75- 9471 | ![Habillage 9621](/assets/profiles/systeme70/habillages/habillage-9621-evo2008.png) |
+| 1487.2 | F00-68- 1487.2 | 70 | 130 | 3 | - | ![Cornière 1487.2](/assets/profiles/systeme70/cornieres/corniere-1487-2-evo2008.png) |
+| 1486.2 | F00-68- 1486.2 | 70 | 90 | 3 | - | ![Cornière 1486.2](/assets/profiles/systeme70/cornieres/corniere-1486-2-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 38)
+
+Le 5072 est dessiné hachuré (plein), le 9621 en tôle mince à face nervurée. Les 1487.2 et
+1486.2 portent les cotes des cornières 1487 et 1486 du poster (70 × 130 et 70 × 90, épaisseur
+3) [4 p. 38].
+
+![Habillage clippé sur un bâti bois existant](/assets/profiles/systeme70/habillages/pose-habillage-9621-evo2008.png)
+
+À droite, une perspective sans légende montre un angle de menuiserie : un dormant PVC posé
+contre un bâti en bois (dessiné avec ses cernes), dont la face est habillée d'un profilé retenu
+par deux plots vissés dans le bois (schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf,
+p. 38). Le profilé et les plots n'y sont pas référencés.
+
+## Profilés d'adaptation 1347, 1389, 0379 et 1074
+
+La planche p. 39 dessine quatre profilés verticaux, chacun coté seul à gauche puis dessiné à
+droite, sans cote, sous trois ou quatre dormants coupés en trait fin, en différentes positions :
+à gauche, au centre, à droite du pied du dormant [4 p. 39].
+
+| Profilé | Désignation complète | Largeur (mm) | Hauteur hors tout (mm) | Autres cotes (mm) | Coupe et positions |
+| --- | --- | --- | --- | --- | ---: |
+| 1347 | F00-73- 1347 | 24 | 27,5 | 20 pour la chambre | ![Profilé 1347 et ses positions sous le dormant](/assets/profiles/systeme70/tapees-pvc/profil-1347-evo2008.png) |
+| 1389 | F00-73- 1389 | 24 | 42,8 | 35,5 pour les chambres | ![Profilé 1389 et ses positions sous le dormant](/assets/profiles/systeme70/tapees-pvc/profil-1389-evo2008.png) |
+| 0379 | F00-73- 0379 | 22 en haut, 12 en bas | 42,8 | 35 pour les chambres | ![Profilé 0379 et ses positions](/assets/profiles/systeme70/tapees-pvc/profil-0379-evo2008.png) |
+| 1074 | F00-73- 1074 | 22 en haut, 12,5 en bas | 57 | 50 pour les chambres | ![Profilé 1074 et ses positions sous le dormant](/assets/profiles/systeme70/tapees-pvc/profil-1074-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 39)
+
+Le 0379 est dessiné une fois de plus seul, debout, à gauche des trois dormants. Le poster et le
+manuel cotent le 0379 « 43 et 35 à gauche ; 12 et 22 au pied » (tableau *Liaisons d'angle,
+poteaux et profilés de couplage* ci-dessus) ; le classeur de 2008 porte 42,8 [4 p. 39].
+
+## Accessoires de volet roulant des plans de 2008
+
+La planche « Accessoires Volet Roulant » (p. 40, échelle 1:2) dessine sept profilés, trois
+d'entre eux clippés sur un dormant coupé dessiné en trait fin ; aucune légende de fonction n'est
+imprimée [4 p. 40].
+
+| Profilé | Désignation complète | Cotes portées (mm) | Iz ou renfort | Coupe |
+| --- | --- | --- | --- | ---: |
+| 5071 | F00-76- 5071 | 100 de large, 10 d'épaisseur, bout arrondi ; dessiné hachuré | - | ![Profilé 5071](/assets/profiles/systeme70/coulisses/profil-5071-evo2008.png) |
+| 1058 | F00-78- 1058 | 19 et 13,5 en haut ; 15 de haut | - | ![Profilés 1058 et 1387 sur un dormant](/assets/profiles/systeme70/coulisses/profil-1058-1387-evo2008.png) |
+| 1387 | F00-63- 1387 | 33 en haut, 18 en bas ; 10,5 de haut | - | ![Profilés 1058 et 1387 sur un dormant](/assets/profiles/systeme70/coulisses/profil-1058-1387-evo2008.png) |
+| 4808 | F02-67- 4808 | 96,06 de large, 2 d'épaisseur ; dessiné hachuré | Iz = 18,3 | ![Profilé 4808 et joint 9036](/assets/profiles/systeme70/coulisses/profil-4808-9036-evo2008.png) |
+| 9036 | F00-45- 9036 | - | - | ![Profilé 4808 et joint 9036](/assets/profiles/systeme70/coulisses/profil-4808-9036-evo2008.png) |
+| 0571 | F00-78- 0571 | 97 de large, 31,5 à droite ; 20,5 et 11 de haut ; 70 sur le dormant | - | ![Profilé 0571 sur un dormant](/assets/profiles/systeme70/coulisses/profil-0571-evo2008.png) |
+| 0569 | F00-78- 0569 | 93 de large, 36,5 à droite ; 23 et 12 de haut | Renfort du commerce 8 x 40 mm | ![Profilé 0569 sur un dormant](/assets/profiles/systeme70/coulisses/profil-0569-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 40)
+
+Le 1058 est un profilé à bourrelet arrondi, clippé à gauche de la face du dormant, le 1387 un
+profilé en T clippé à droite. Le poster dessine le 0571 avec la lèvre 9036, 97 mm de large dont
+32 à droite, 21 et 11 de haut (tableau *Profilés de liaison et profilés plats de jonction*
+ci-dessus) ; le 31,5 et le 20,5 de 2008 sont portés tels quels [4 p. 40].
+
+## Coulisses des plans de 2008
+
+Les coulisses sont les profilés verticaux en U dans lesquels glisse le tablier d'un volet
+roulant. La planche « Coulisses » (p. 41, échelle 1:2) dessine cinq coulisses de 47 mm de haut,
+deux joints de coulisse, les pièces de fixation et deux encadrés : le tableau des tulipes (la pièce
+d'extrémité de la coulisse, dessinée en perspective dans l'encadré) et l'embout de coulisse [4 p. 41].
+
+| Coulisse | Désignation complète | Largeur (mm) | Hauteur (mm) | Cotes intérieures (mm) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 1083.G | F00-79- 1083.G | 43 | 47 | 32 de fond ; 12,5 et 18 à droite ; 4,7 et 7 en haut ; 18 au pied | ![Coulisse 1083.G](/assets/profiles/systeme70/coulisses/coulisse-1083-g-evo2008.png) |
+| 1084 | F00-79- 1084 | 43 | 47 | 32 de fond ; 16 et 18 à droite ; 4,7 et 7 en haut ; 18 au pied | ![Coulisse 1084](/assets/profiles/systeme70/coulisses/coulisse-1084-evo2008.png) |
+| 0473.2 | F00-79- 0473.2 | 40 | 47 | 27 de fond ; 16 et 20,5 à droite ; 19,1 au pied | ![Coulisse 0473.2](/assets/profiles/systeme70/coulisses/coulisse-0473-2-evo2008.png) |
+| 1064.G | F00-79- 1064.G | 42 | 47 | 32 de fond ; 19 et 18 à droite ; 18 au pied | ![Coulisse 1064.G](/assets/profiles/systeme70/coulisses/coulisse-1064-g-evo2008.png) |
+| 1025 | F00-79- 1025 | 63 | 47 | 32 de fond ; 16 et 18 à droite ; 4,7 et 7 en haut ; 30 au pied | ![Coulisse 1025](/assets/profiles/systeme70/coulisses/coulisse-1025-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 41)
+
+Les 1083.G et 1064.G portent dans leur gorge deux joints dessinés en gris. Joints et pièces
+dessinés à côté [4 p. 41] :
+
+| Référence | Désignation complète | Légende sur la planche | Cotes portées (mm) |
+| --- | --- | --- | --- |
+| 9017 | F00-45- 9017 | - | 2,4 de tête ; 5,9 de haut ; 7 de pied |
+| 9014 | F00-46- 9014 | - | 5,7 de haut ; 7 de pied ; dessiné en brosse |
+| 9447 | F00-75- 9447 | F00-70- 9905 Gabarit de perçage | - |
+| 9419 | F00-83- 9419 | Tête PVC | - |
+| 9870 | F00-83- 9870 | Tête metallique | - |
+| 4999 | F00-75- 4999 | Embout pour coulisses F00-79- 1084 | - |
+
+![Joints de coulisse 9017 et 9014](/assets/profiles/systeme70/coulisses/joints-9017-9014-evo2008.png)
+
+La planche « Coulisses » du registre 5.5 du même classeur cote le joint 9014 à 6 mm de haut
+([Montage des profilés complémentaires du système 70, 2008](/procedures/montage-profiles-complementaires-systeme-70-evo2008.md#coulisses-et-tulipes-vr-pages-imprimées-3-et-4), **INC-243**) [4 p. 256].
+
+Le tableau de l'encadré de gauche associe une tulipe à chaque coulisse, une ligne par couple, dans
+l'ordre de la planche :
+
+| Tulipe | Coulisse |
+| --- | --- |
+| F00-75- 9428 | F00-79- 0473 |
+| F00-75- 9536 | F00-79- 1025 |
+| F00-75- 9445 | F00-79- 1083 |
+| F00-75- 9537 | F00-79- 1084 |
+| R00-75- 4644 | F00-79- 1064 |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 41)
+
+![Tableau tulipe / coulisse, 2008](/assets/profiles/systeme70/coulisses/tulipes-coulisses-evo2008.png)
+
+![Embout 4999 pour coulisses 1084](/assets/profiles/systeme70/coulisses/embout-4999-evo2008.png)
+
+L'encadré de droite dessine l'embout 4999 en perspective sous l'extrémité d'une coulisse. Le
+tableau de 2008 et celui du poster donnent les mêmes tulipes aux coulisses 0473 (9428), 1025
+(9536) et 1084 (9537) ; le poster n'a pas de 1083 ni de 1064 et associe la 95003 à la M382 et la
+4131 à la 4645 ; il dessine l'embout M339 là où le classeur de 2008 dessine le 4999 pour la même
+coulisse 1084 — entrée **CTR-74** du registre
+[Contradictions entre sources](/anomalies/contradictions-entre-sources.md) [4 p. 41].
+
+## Profilés 0767, 1846 et 4339 de la planche « Rejet d'eau + Remplissage » (2008)
+
+Un [rejet d'eau](/reference/glossaire.md) est un profilé qui écarte l'eau ; un remplissage est
+l'élément plein (panneau) qui occupe un cadre à la place d'un vitrage. La planche titrée
+« Profilés complémentaires — Rejet d'eau + Remplissage » (p. 42, échelle 1:2) dessine deux
+profilés, chacun avec son embout dessiné en perspective à côté de l'extrémité du profilé ; les
+pièces 9447, 9419 et 9B00 ; et un profilé de 301 mm de large, le 4339. La planche n'attribue le
+nom de rejet d'eau ni celui de remplissage à un profilé en particulier. Cotes en mm [4 p. 42].
+
+| Profilé | Désignation complète | Embout | Largeur, en haut (mm) | Hauteur, à gauche (mm) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 0767 | F00-97- 0767 | F00-75- 9439 Embouts | 16 | 34,5 | ![Profilé 0767 et embout 9439](/assets/profiles/systeme70/complementaires/profil-0767-embout-9439-evo2008.png) |
+| 1846 | F00-97- 1846 | F00-88- 9603 Embouts | 16 | 27,5 | ![Profilé 1846 et embout 9603](/assets/profiles/systeme70/complementaires/profil-1846-embout-9603-evo2008.png) |
+| 4339 | K42-20- 4339 | - | 301 | 24 | ![Profilé 4339](/assets/profiles/systeme70/complementaires/profil-4339-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 42)
+
+Le 0767 est un profilé creux à une chambre ; le 1846 a une face supérieure en pente et deux
+crochets en pied. Le 4339 est un profilé plat alvéolé de onze chambres, avec à gauche une rainure
+en C et à droite deux languettes. Le 1846 est dessiné avec les mêmes cotes, 16 × 27,5 mm, comme
+rejet d'eau PVC « 1846 (93051) » du système 76 (voir
+[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md))
+[4 p. 42].
+
+Pièces dessinées sous les profilés, avec leur légende [4 p. 42] :
+
+| Référence | Désignation complète | Légende sur la planche | Coupe |
+| --- | --- | --- | ---: |
+| 9447 | F00-75- 9447 | F00-70- 9905 Gabarit de perçage | ![9447 et gabarit 9905](/assets/profiles/systeme70/accessoires/accessoire-9447-9905-evo2008.png) |
+| 9419 | F00-83- 9419 | Tête PVC | ![Vis 9419](/assets/profiles/systeme70/accessoires/vis-9419-evo2008.png) |
+| 9B00 | F00-56- 9B00 | - | ![Profilé 9B00](/assets/profiles/systeme70/accessoires/profil-9b00-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 42)
+
+Ces trois pièces sont dessinées de la même façon sur les planches des dormants de rénovation et
+des battements (p. 7 et 18 à 21) ; les coupes ci-dessus sont celles de ces planches.
+
+## Petits bois des plans de 2008
+
+Le [petit bois](/reference/glossaire.md) est la baguette qui partage visuellement un vitrage en
+carreaux. La planche « Profilés complémentaires — Petit bois » (p. 43, échelle 1:2) dessine
+dix-sept petits bois en coupe. Chaque coupe porte en haut sa largeur (sa saillie, de la face
+plane au sommet) et à droite sa hauteur (sa largeur vue de face). Les sept premiers portent de
+chaque côté une lèvre souple dessinée en trait fin ; tous sauf le 1130 portent sur leur face plane
+une bande hachurée. La planche ne donne ni leur matière ni leur usage. Cotes en mm [4 p. 43].
+
+| Petit bois | Désignation complète | Largeur, en haut (mm) | Hauteur, à droite (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| 0724.T | F00-90- 0724.T | 11 | 20 | ![Petit bois 0724.T](/assets/profiles/systeme70/petits-bois/petit-bois-0724-t-evo2008.png) |
+| 0986.T | F40-90- 0986.T | 12 | 25 | ![Petit bois 0986.T](/assets/profiles/systeme70/petits-bois/petit-bois-0986-t-evo2008.png) |
+| 0725.T | F00-90- 0725.T | 11 | 30 | ![Petit bois 0725.T](/assets/profiles/systeme70/petits-bois/petit-bois-0725-t-evo2008.png) |
+| 1130 | F01-90- 1130 | 10 | 23 (16 sur la face de gauche) | ![Petit bois 1130 et adhésifs 9463 / 9464](/assets/profiles/systeme70/petits-bois/petit-bois-1130-adhesif-9463-9464-evo2008.png) |
+| 1448.T | F40-90- 1448.T | 12,1 | 40 | ![Petit bois 1448.T](/assets/profiles/systeme70/petits-bois/petit-bois-1448-t-evo2008.png) |
+| 0726.T | F00-90- 0726.T | 11 | 40 | ![Petit bois 0726.T](/assets/profiles/systeme70/petits-bois/petit-bois-0726-t-evo2008.png) |
+| 0734.T | F00-90- 0734.T | 12 | 40 | ![Petit bois 0734.T](/assets/profiles/systeme70/petits-bois/petit-bois-0734-t-evo2008.png) |
+| 9B63 | 9B63 | 8,7 | 27 | ![Petit bois 9B63](/assets/profiles/systeme70/petits-bois/petit-bois-9b63-evo2008.png) |
+| 9B64 | 9B64 | 11,2 | 27 | ![Petit bois 9B64](/assets/profiles/systeme70/petits-bois/petit-bois-9b64-evo2008.png) |
+| 9B65 | 9B65 | 8,7 | 35 | ![Petit bois 9B65](/assets/profiles/systeme70/petits-bois/petit-bois-9b65-evo2008.png) |
+| 9B66 | 9B66 | 11,2 | 35 | ![Petit bois 9B66](/assets/profiles/systeme70/petits-bois/petit-bois-9b66-evo2008.png) |
+| 9B67 | 9B67 | 14 | 50 | ![Petit bois 9B67](/assets/profiles/systeme70/petits-bois/petit-bois-9b67-evo2008.png) |
+| 0063 | 0063 | 10,3 | 26 | ![Petit bois 0063](/assets/profiles/systeme70/petits-bois/petit-bois-0063-evo2008.png) |
+| 0064 | 0064 | 12 | 26 | ![Petit bois 0064](/assets/profiles/systeme70/petits-bois/petit-bois-0064-evo2008.png) |
+| 0065 | 0065 | 10,3 | 35 | ![Petit bois 0065](/assets/profiles/systeme70/petits-bois/petit-bois-0065-evo2008.png) |
+| 0066 | 0066 | 12 | 35 | ![Petit bois 0066](/assets/profiles/systeme70/petits-bois/petit-bois-0066-evo2008.png) |
+| 0067 | 0067 | 12 | 50 | ![Petit bois 0067](/assets/profiles/systeme70/petits-bois/petit-bois-0067-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 43)
+
+À côté du 1130, la planche dessine une bande mince légendée « Adhésif double face F01-88- 9463
+blanc, F01-88- 9464 noir ». Le 0726.T est le seul petit bois à deux chambres. Les 9B63 à 9B67
+portent au milieu de leur face plane une encoche, en V sur les 9B63 et 9B65, arrondie sur les
+9B64, 9B66 et 9B67 ; les 0063 à 0067 ont une face plane sans encoche. Les 9B63 à 9B67 et 0063 à
+0067 sont écrits sans préfixe de désignation [4 p. 43]. Le petit bois collé du manuel de mise en
+œuvre de 2023 est décrit dans
+[Mise en œuvre des profilés complémentaires du système 70](/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md).
+
+La pose, le débit et les combinaisons de ces petits bois collés sur le vitrage (registre 5.6 du
+même classeur) sont sur [Montage des profilés complémentaires du système 70, 2008](/procedures/montage-profiles-complementaires-systeme-70-evo2008.md#petits-bois-rapportés-collés-registre-56) ;
+la liste de ce registre écrit F01-90 le préfixe des 0724.T, 0725.T, 0726.T, 0986.T et 1448.T
+(**INC-244**) [4 p. 262].
+
+## Profilé 5078 des plans de 2008
+
+La planche « Profilés complémentaires » (p. 44, échelle 1:2) dessine le profilé **5078**, un
+profilé plein en L dessiné hachuré, et à côté une coupe où il est légendé avec le profilé 0484.
+La planche ne donne ni sa matière ni sa fonction. Cotes en mm [4 p. 44].
+
+| Profilé | Désignation complète | Hauteur totale, à gauche (mm) | Largeur de l'aile haute (mm) | Épaisseur (mm) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 5078 | F00-69- 5078 | 230 | 85 | 10 | ![Profilé 5078](/assets/profiles/systeme70/complementaires/profil-5078-evo2008.png) |
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 44)
+
+L'aile haute du 5078 se termine par un bec arrondi, avec un redan en sous-face.
+
+### Coupe du 5078 avec le 0484
+
+La coupe ci-dessous montre le 5078 debout, son aile haute retournée par-dessus un mur, et le
+profilé 0484 à son pied, contre un dormant coupé ; elle ne porte ni titre ni texte autre que les
+deux références et une cote.
+
+![Profilé 5078 dessiné avec le profilé 0484 et un dormant](/assets/profiles/systeme70/complementaires/pose-5078-0484-evo2008.png)
+
+À gauche, le dormant, dessiné en trait fin et coupé par des lignes de rupture, avec la cote
+verticale de 70 mm portée à côté du 0484 ; sous lui, un bloc quadrillé posé sur une maçonnerie
+pointillée. À droite du 5078 : une couche dessinée en zigzag (isolant), puis le mur hachuré ; en
+pied, une seconde couche en zigzag horizontale. Le 0484 est décrit au tableau *Profilés divers
+des plans de 2008* ci-dessus [4 p. 44].
+
+(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 44)
+
+# Ce que la source ne donne pas
+
+Le poster ne donne pas la fonction des élargisseurs, profilés de liaison, cornières, profilés
+plats, profilés A243 T à 92010 TL et des pièces sans légende ; elle ne dit pas sur quel ouvrant ni
+quel dormant chaque parclose se monte, ni l'inertie des renforts V045, V250, V260, V261, V265,
+V287, V288 et 656 ; le manuel de mise en œuvre donne ces inerties, sauf l'IG du V265 (tableau
+*Renforts des profilés complémentaires* ci-dessus).
+
+# Citations
+
+[1] [Poster Kömmerling Gamme 70, profilés complémentaires, mars 2025](raw/poster-kommerling-70-complementaires-2025-03.pdf), p. 1
+
+[2] DTD n° DBV-24-6/16-2335_V5, système e.XCLUSIVE, e.MOTION, e.VOLUTION —
+`raw/dtd-6-16-2335-v5-e-volution.pdf`, p. 20 et 21
+
+[3] [Mise en œuvre Système 70 Plateforme, profine, version septembre 2023](raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf), p. 42-56
+
+[4] [Système e.VOLUTION, plan des profilés, système F 91, édition août 2008](raw/profine-plans-profiles-e-volution-2008-08.pdf), p. 7 et 24-44
+
+# Voir aussi
+
+- [Posters Gamme 70 KÖMMERLING](/sources/posters-kommerling-70.md)
+- [Plans des profilés e.VOLUTION, 2008](/sources/plans-profiles-e-volution-2008.md)
+- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
+- [Renforts et accessoires par profilé du système 70](/profiles/systeme-70-accessoires-par-profile.md)
+- [Mise en œuvre Système 70 Plateforme](/sources/profine-mise-en-oeuvre-systeme-70.md)
+- [Assemblages du système 70](/profiles/systeme-70-assemblages.md)
+- [Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md)
+- [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md)
+- [DTD n° DBV-24-6/16-2335_V5](/sources/dtd-6-16-2335.md)
+- [KÖMMERLING](/fournisseurs/kommerling.md)
+
+===== PAGE 2 : /profiles/perform76-tapees-et-isolation.md =====
+# Une tapée ne donne pas la même isolation selon le dormant
+
+Quand le mur est doublé d'un isolant à l'intérieur, la fenêtre doit arriver jusqu'au nu de cet
+isolant. La **tapée** est le profil PVC rapporté sur le dormant qui prolonge la menuiserie de
+l'épaisseur nécessaire : plus l'isolant est épais, plus la tapée est haute. Cette page donne, pour
+chaque dormant et chaque épaisseur d'isolation, la tapée, la patte de pose et l'appui à monter,
+avec les coupes du cahier technique.
+
+Montée sur un dormant **76171**, une tapée PERFORM76 donne **15 mm d'isolant de plus** que le même
+profil monté sur un 76177, un 76185 ou un 76180. L'épaisseur d'isolation se lit donc dans la
+colonne du dormant réellement employé.
+
+Trois familles de pièces se lisent dans les colonnes voisines d'un même tableau et ne se
+substituent pas :
+
+| Famille | Rôle | Références |
+| --- | --- | --- |
+| Tapée | donne l'épaisseur d'isolation | 6138 à 6142, 76772, 76769 |
+| Appui | reçoit le rejet d'eau sous le dormant | 6136, 6137, 76758, 76768 |
+| Patte de pose | fixe le dormant dans le gros œuvre | NT1939 à NT1953 |
+
+# Cotes des tapées par dormant
+
+Épaisseur d'isolation permise par chaque tapée PERFORM76, en mm, selon le dormant support.
+
+| Tapée | Cote propre (mm) | Iso sur 76177 et 76185 (mm) | Iso sur 76180 (mm) | Iso sur 76171 (mm) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| sans tapée | - | 65 | 65 | 80 | - |
+| 6138 | 15 | 80 | 80 | 95 | ![Tapée 6138](/assets/profiles/perform76/tapees/tapee-6138.png) |
+| 6139 | 35 | 100 | 100 | 115 | ![Tapée 6139](/assets/profiles/perform76/tapees/tapee-6139.png) |
+| 6140 | 55 | 120 | 120 | 135 | ![Tapée 6140](/assets/profiles/perform76/tapees/tapee-6140.png) |
+| 6141 | 75 | 140 | 140 | 155 | ![Tapée 6141](/assets/profiles/perform76/tapees/tapee-6141.png) |
+| 6142 | 95 | 160 | 160 | 175 | ![Tapée 6142](/assets/profiles/perform76/tapees/tapee-6142.png) |
+| 76772 | 115 | 180 | 180 | 195 | ![Tapée 76772](/assets/profiles/perform76/tapees/tapee-76772.png) |
+| 76769 | 135 | 200 | 200 | 215 | ![Tapée 76769](/assets/profiles/perform76/tapees/tapee-76769.png) |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 17, 19 et 24)
+
+**Sur un dormant 76171, les seules épaisseurs d'isolation qui existent sont 80, 95, 115, 135, 155,
+175, 195 et 215 mm.** Une demande à 140 mm sur ce dormant se traite en 135 ou en 155 mm : le
+140 mm appartient au 76180 et aux dormants rénovation.
+
+Dans le DTD et le DTA du système, quatre de ces tapées portent le suffixe **.1** et une épaisseur
+propre supérieure de 0,5 mm : 6139.1, 6140.1, 6141.1 et 6142.1 pour 35,5, 55,5, 75,5 et 95,5 mm,
+76772 et 76769 pour 115,5 et 135,5 mm, contre 35, 55, 75, 95, 115 et 135 mm au cahier technique
+[2 p. 4]. Les sept tapées y sont dessinées sous le nom de **fourrures d'épaisseur PVC** [3 p. 17] [2 p. 16].
+L'isolation obtenue par dormant est celle du tableau ci-dessus, relevée sur le cahier technique.
+
+# Correspondance avec les pièces d'appui
+
+Une **pièce d'appui** PVC se visse dans les alvéovis (logements de vis) du nez de la tapée ; ses
+chambres doivent correspondre au nez de la tapée, et toutes les tapées n'ont pas de
+correspondance avec les quatre pièces d'appui du système. Le tableau des correspondances des
+chambres des pièces d'appui avec les nez des fourrures d'épaisseur se lit par ligne : une tapée,
+son épaisseur, puis un `X` sous chaque pièce d'appui qui lui correspond ; une case vide (`-`)
+marque l'absence de correspondance.
+
+| Tapée | Épaisseur tapée (mm) | Pièce d'appui 6137 | Pièce d'appui 6136 | Pièce d'appui 76758 | Pièce d'appui 76768 |
+| --- | --- | --- | --- | --- | --- |
+| 6138 | 15 | X | X | X | X |
+| 6139.1 | 35,5 | X | X | X | X |
+| 6140.1 | 55,5 | X | X | X | X |
+| 6141.1 | 75,5 | X | - | X | X |
+| 6142.1 | 95,5 | X | - | - | X |
+| 76772 | 115,5 | - | - | - | X |
+| 76769 | 135,5 | - | - | - | X |
+
+(schéma: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 4)
+
+**Les tapées 76772 et 76769 ne correspondent qu'à la pièce d'appui 76768.** La 6141.1 ne
+correspond pas à la 6136 ; la 6142.1 ne correspond qu'aux 6137 et 76768 [2 p. 4].
+
+L'étanchéité pièce d'appui / tapée est assurée par la pièce M298 ou M613 comprimée lors du vissage
+de la pièce d'appui dans les alvéovis de la fourrure d'épaisseur ; les fourrures sont clippées et
+vissées avec un entraxe maximum de 300 mm (DTD § 2.2.3.1.3, sur
+[DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md)) [2 p. 4].
+
+# Embouts des pièces d'appui
+
+L'obturation des chambres de pièces d'appui, quelle que soit la correspondance entre les parois de
+la pièce d'appui et le nez de la fourrure d'épaisseur, est réalisée par des embouts ajustés en PVC
+expansé [2 p. 4]. Chaque embout est une cale pentée qui suit la pente de la pièce d'appui : il se
+glisse dans les chambres de la pièce d'appui, au droit du nez de la fourrure d'épaisseur. Une ligne
+par pièce d'embout, de gauche à droite sur la planche : sa largeur (cote horizontale), sa longueur
+de 60 mm (profondeur d'insertion), son épaisseur à chaque extrémité de la pente, et, sur les 9F55.1
+et 9F56.1, la feuillure de 4,5 × 9,5 mm taillée sous l'extrémité mince [2 p. 23].
+
+| Pièce d'appui | Embout | Nombre de pièces | Pièce | Largeur (mm) | Longueur (mm) | Épaisseur, extrémité mince (mm) | Épaisseur, extrémité épaisse (mm) | Feuillure (mm) | Coupe |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| 6136 | 9F55.1 | 1 | unique | 60,8 | 60 | 11,3 | 14,5 | 4,5 × 9,5 | ![Embout 9F55.1 pour 6136](/assets/profiles/systeme76/appuis/embout-9f55-1.png) |
+| 6137 | 9F56.1 | 2 | première | 46 | 60 | 9,7 | 12,1 | 4,5 × 9,5 | ![Embout 9F56.1 pour 6137](/assets/profiles/systeme76/appuis/embout-9f56-1.png) |
+| 6137 | 9F56.1 | 2 | seconde | 42,5 | 60 | 12,3 | 14,5 | - | ![Embout 9F56.1 pour 6137](/assets/profiles/systeme76/appuis/embout-9f56-1.png) |
+| 76758 | AC011 | 3 | première | 23 | 60 | 1,5 | 3,5 | - | ![Embout AC011 pour 76758](/assets/profiles/systeme76/appuis/embout-ac011.png) |
+| 76758 | AC011 | 3 | deuxième | 18,5 | 60 | 3,5 | 5,5 | - | ![Embout AC011 pour 76758](/assets/profiles/systeme76/appuis/embout-ac011.png) |
+| 76758 | AC011 | 3 | troisième | 18,5 | 60 | 5,5 | 7 | - | ![Embout AC011 pour 76758](/assets/profiles/systeme76/appuis/embout-ac011.png) |
+| 76768 | M780 | - | M780 | - | 60 | - | - | - | ![Embouts M780, M781, M782 pour 76768](/assets/profiles/systeme76/appuis/embouts-m780-m781-m782-76768.png) |
+| 76768 | M781 | - | M781 | - | 60 | - | - | - | ![Embouts M780, M781, M782 pour 76768](/assets/profiles/systeme76/appuis/embouts-m780-m781-m782-76768.png) |
+| 76768 | M782 | - | M782 | - | 60 | - | - | - | ![Embouts M780, M781, M782 pour 76768](/assets/profiles/systeme76/appuis/embouts-m780-m781-m782-76768.png) |
+
+(schéma: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 23)
+
+Chaque coupe montre à gauche le dormant, la pièce d'appui vissée sous lui et, hachurées dans ses
+chambres, les pièces d'embout ; à droite, chaque pièce d'embout de profil (la pente) puis de face
+(le rectangle de 60 mm). Les embouts M780, M781 et M782 de la pièce d'appui 76768 sont dessinés en
+trois références distinctes, en PVC expansé (hachure pointillée), avec leur seule longueur de
+60 mm : leur largeur et leurs épaisseurs ne sont pas cotées, et la planche ne porte pas de nombre
+de pièces pour eux. La planche est titrée « Embouts de pièces d'appui (PVC expansé) » ; les légendes
+sont « EMBOUT 9F55.1 POUR 6136 (1 PIECE) », « EMBOUT 9F56.1 POUR 6137 (2 PIECES) », « EMBOUT AC011
+POUR 76758 (3 PIECES) », « M780, M781, M782 EMBOUTS POUR 76768 » [2 p. 23]. Le texte du § 2.2.3.1.3
+ne cite que les 9F55.1, 9F56.1 et AC011 [2 p. 4]. La coupe « Assemblage fourrure et pièce d'appui PVC » écrit l'embout du 6137
+« 9F56 », sans suffixe — entrée **INC-25**.
+
+La cote propre est la hauteur de la tapée, constante quel que soit le dormant. Les cotes de
+montage varient : **35 / 16** sur les dormants rénovation, **35 / 39** sur le 76180, **35 / 45**
+sur le 76171, à l'exception de la tapée 76769 qui y est cotée 35 / 39.
+
+# La contrainte du 76171 au-delà de 155 mm
+
+Sur un dormant 76171, **au-delà de 155 mm d'isolant le dormant bas devient un 76180 à aile de
+20 mm**.
+
+| Iso sur 76171 (mm) | Appui | Dormant bas |
+| --- | --- | --- |
+| 80 | 76758 | 76171 |
+| 95 | 76758 | 76171 |
+| 115 | 76758 | 76171 |
+| 135 | 76758 | 76171 |
+| 155 | 76758 | 76171 |
+| 175 | 6137 | **76180, aile de 20 mm** |
+| 195 | 76768 | **76180, aile de 20 mm** |
+| 215 | 76768 | **76180, aile de 20 mm** |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 24)
+
+C'est une contrainte de conception : elle change la nomenclature du châssis, et se vérifie au
+chiffrage d'un projet en isolation renforcée.
+
+# Appuis sur dormants 76177 et 76185
+
+Sur les deux dormants rénovation, l'épaisseur d'isolation choisit la tapée et l'appui (le profil
+penté posé sous le dormant bas, qui rejette l'eau). Une ligne se lit : pour cette épaisseur
+d'isolation, monter cette tapée et cet appui.
+
+| Épaisseur d'isolation (mm) | Tapée | Appui |
+| --- | --- | --- |
+| 60 | - | 6136 |
+| 80 | 6138 | 6136 |
+| 100 | 6139 | 6136 |
+| 120 | 6140 | 6136 |
+| 140 | 6141 | 6137 |
+| 160 | 6142 | 6137 |
+| 180 | 76772 | 76768 |
+| 200 | 76769 | 76768 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 17)
+
+La colonne *Tapée* est relevée sur la planche des tapées de la même page, où chaque coupe porte
+son épaisseur d'isolation (« Iso de 80 » pour la 6138, et ainsi de suite).
+
+Aucune patte de pose n'est affectée à ces deux dormants rénovation : la fixation suit les
+principes de pose rénovation, décrits dans
+[Pose de la PERFORM76](/procedures/pose-perform76.md).
+
+Ce tableau part de 60 mm alors que la planche de tapées dessine « Iso de 65 » sans tapée — entrée
+**INC-06** du registre [Incohérences internes](/anomalies/incoherences-internes.md).
+
+## Coupes des tapées sur dormants 76177 et 76185
+
+Chaque coupe montre le dormant rénovation vu en tranche et la tapée posée au-dessus. Trois cotes
+sont portées : à gauche une hauteur verticale, en haut la tapée elle-même (35 de large et 16 de
+retour), à droite sa hauteur propre ; l'étiquette verticale « Iso de … » donne l'épaisseur
+d'isolation. Cotes en mm :
+
+| Tapée | Hauteur cotée à gauche (mm) | Largeur de la tapée / retour (mm) | Hauteur propre de la tapée (mm) | Iso de (mm) |
+| --- | --- | --- | --- | --- |
+| sans tapée | 60 | largeur de dormant 51 | - | 65 |
+| 6138 | 75 | 35 / 16 | 15 | 80 |
+| 6139 | 95 | 35 / 16 | 35 | 100 |
+| 6140 | 115 | 35 / 16 | 55 | 120 |
+| 6141 | 135 | 35 / 16 | 75 | 140 |
+| 6142 | 155 | 35 / 16 | 95 | 160 |
+| 76772 | 175 | 35 / 16 | 115 | 180 |
+| 76769 | 195 | 35 / 16 | 135 | 200 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 17)
+
+### Isolation 65 mm, sans tapée
+
+![Isolation 65 mm, sans tapée](/assets/profiles/perform76/isolation/76177-76185-sans-tapee.png)
+
+Tapée : sans tapée ; épaisseur d'isolation : 65 mm.
+
+### Isolation 80 mm, tapée 6138
+
+![Isolation 80 mm, tapée 6138](/assets/profiles/perform76/isolation/76177-76185-6138.png)
+
+Tapée : 6138 ; épaisseur d'isolation : 80 mm.
+
+### Isolation 100 mm, tapée 6139
+
+![Isolation 100 mm, tapée 6139](/assets/profiles/perform76/isolation/76177-76185-6139.png)
+
+Tapée : 6139 ; épaisseur d'isolation : 100 mm.
+
+### Isolation 120 mm, tapée 6140
+
+![Isolation 120 mm, tapée 6140](/assets/profiles/perform76/isolation/76177-76185-6140.png)
+
+Tapée : 6140 ; épaisseur d'isolation : 120 mm.
+
+### Isolation 140 mm, tapée 6141
+
+![Isolation 140 mm, tapée 6141](/assets/profiles/perform76/isolation/76177-76185-6141.png)
+
+Tapée : 6141 ; épaisseur d'isolation : 140 mm.
+
+### Isolation 160 mm, tapée 6142
+
+![Isolation 160 mm, tapée 6142](/assets/profiles/perform76/isolation/76177-76185-6142.png)
+
+Tapée : 6142 ; épaisseur d'isolation : 160 mm.
+
+### Isolation 180 mm, tapée 76772
+
+![Isolation 180 mm, tapée 76772](/assets/profiles/perform76/isolation/76177-76185-76772.png)
+
+Tapée : 76772 ; épaisseur d'isolation : 180 mm.
+
+### Isolation 200 mm, tapée 76769
+
+![Isolation 200 mm, tapée 76769](/assets/profiles/perform76/isolation/76177-76185-76769.png)
+
+Tapée : 76769 ; épaisseur d'isolation : 200 mm.
+
+# Appuis et pattes de pose sur dormant 76180
+
+Sur le dormant neuf 76180, l'épaisseur d'isolation choisit la tapée, la **patte de pose** (la
+pièce métallique qui fixe le dormant au mur à travers l'isolant) et l'appui. La patte s'accroche
+au dormant par le clameau réf. **CP14GGOM0012**, **sans cale**.
+
+| Épaisseur d'isolation (mm) | Tapée | Patte de pose | Appui |
+| --- | --- | --- | --- |
+| 60 | - | NT1939 | 6136 |
+| 80 | 6138 | NT1939 | 6136 |
+| 100 | 6139 | NT1943 | 6136 |
+| 120 | 6140 | NT1945 | 6136 |
+| 140 | 6141 | NT1947 | 6137 |
+| 160 | 6142 | NT1949 | 6137 |
+| 180 | 76772 | NT1951 | 76768 |
+| 200 | 76769 | NT1953 | 76768 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 19)
+
+Comme pour les dormants rénovation, le tableau part de 60 mm alors que la coupe sans tapée porte
+« Iso de 65 » (**INC-06**).
+
+## Coupes des tapées et pattes sur dormant 76180
+
+Chaque coupe montre le dormant 76180, la tapée au-dessus et la patte de pose en gris, qui part
+vers la gauche le long de l'isolant ; la patte porte sa référence gravée. En haut, les cotes
+horizontales : la patte, puis la tapée (35), puis le dormant (39, ou 74 sans tapée). À gauche,
+la hauteur, égale à l'épaisseur d'isolation. Cotes en mm :
+
+| Épaisseur d'isolation (mm) | Tapée | Cotes horizontales en haut (mm) | Hauteur propre de la tapée (mm) |
+| --- | --- | --- | --- |
+| 65 | sans tapée | 70 / 74 | - |
+| 80 | 6138 | 55 / 35 / 39 | 15 |
+| 100 | 6139 | 80 / 35 / 39 | 35 |
+| 120 | 6140 | 80 / 35 / 39 | 55 |
+| 140 | 6141 | 80 / 35 / 39 | 75 |
+| 160 | 6142 | 80 / 35 / 39 | 95 |
+| 180 | 76772 | 80 / 35 / 39 | 115 |
+| 200 | 76769 | 80 / 35 / 39 | 135 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 19)
+
+### Isolation 65 mm, sans tapée
+
+![Isolation 65 mm, sans tapée](/assets/profiles/perform76/isolation/76180-sans-tapee.png)
+
+Tapée : sans tapée ; épaisseur d'isolation : 65 mm ; cotes en haut : 70 / 74 mm.
+
+### Isolation 80 mm, tapée 6138
+
+![Isolation 80 mm, tapée 6138](/assets/profiles/perform76/isolation/76180-6138.png)
+
+Tapée : 6138 ; épaisseur d'isolation : 80 mm ; cotes en haut : 55 / 35 / 39 mm.
+
+### Isolation 100 mm, tapée 6139
+
+![Isolation 100 mm, tapée 6139](/assets/profiles/perform76/isolation/76180-6139.png)
+
+Tapée : 6139 ; épaisseur d'isolation : 100 mm ; cotes en haut : 80 / 35 / 39 mm.
+
+### Isolation 120 mm, tapée 6140
+
+![Isolation 120 mm, tapée 6140](/assets/profiles/perform76/isolation/76180-6140.png)
+
+Tapée : 6140 ; épaisseur d'isolation : 120 mm ; cotes en haut : 80 / 35 / 39 mm.
+
+### Isolation 140 mm, tapée 6141
+
+![Isolation 140 mm, tapée 6141](/assets/profiles/perform76/isolation/76180-6141.png)
+
+Tapée : 6141 ; épaisseur d'isolation : 140 mm ; cotes en haut : 80 / 35 / 39 mm.
+
+### Isolation 160 mm, tapée 6142
+
+![Isolation 160 mm, tapée 6142](/assets/profiles/perform76/isolation/76180-6142.png)
+
+Tapée : 6142 ; épaisseur d'isolation : 160 mm ; cotes en haut : 80 / 35 / 39 mm.
+
+### Isolation 180 mm, tapée 76772
+
+![Isolation 180 mm, tapée 76772](/assets/profiles/perform76/isolation/76180-76772.png)
+
+Tapée : 76772 ; épaisseur d'isolation : 180 mm ; cotes en haut : 80 / 35 / 39 mm.
+
+### Isolation 200 mm, tapée 76769
+
+![Isolation 200 mm, tapée 76769](/assets/profiles/perform76/isolation/76180-76769.png)
+
+Tapée : 76769 ; épaisseur d'isolation : 200 mm ; cotes en haut : 80 / 35 / 39 mm.
+
+# Appuis et pattes de pose sur dormant 76171
+
+Sur le dormant neuf sans aile 76171, même principe, avec en plus une **cale** réf.
+**CTHNT0030**, sauf à 80 mm d'isolation. Clameau réf. **CP14GGOM0012**.
+
+| Épaisseur d'isolation (mm) | Tapée | Patte de pose | Appui | Cale |
+| --- | --- | --- | --- | --- |
+| 80 | - | NT1939 | 76758 | **sans cale** |
+| 95 | 6138 | NT1939 | 76758 | CTHNT0030 |
+| 115 | 6139 | NT1943 | 76758 | CTHNT0030 |
+| 135 | 6140 | NT1945 | 76758 | CTHNT0030 |
+| 155 | 6141 | NT1947 | 76758 | CTHNT0030 |
+| 175 | 6142 | NT1949 | 6137 | CTHNT0030 |
+| 195 | 76772 | NT1951 | 76768 | CTHNT0030 |
+| 215 | 76769 | NT1953 | 76768 | CTHNT0030 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 24)
+
+Le cas à 80 mm est le seul **sans cale** du tableau. Les trois dernières lignes imposent le
+dormant bas 76180 (astérisque de la planche : « Dormant en partie basse 76180 aile de 20 mm »).
+
+## Coupes des tapées et pattes sur dormant 76171
+
+Mêmes coupes que sur le 76180, avec la cote du dormant à 45 mm au lieu de 39 (74 sans tapée), et
+une cote rouge de **6 mm** au pied de la patte sur toutes les coupes sauf celle sans tapée — qui
+est aussi la seule configuration sans cale. Cotes en mm :
+
+| Épaisseur d'isolation (mm) | Tapée | Cotes horizontales en haut (mm) | Hauteur propre de la tapée (mm) | Cote rouge au pied (mm) |
+| --- | --- | --- | --- | --- |
+| 80 | sans tapée | 70 / 74 | - | - |
+| 95 | 6138 | 55 / 35 / 45 | 15 | 6 |
+| 115 | 6139 | 80 / 35 / 45 | 35 | 6 |
+| 135 | 6140 | 80 / 35 / 45 | 55 | 6 |
+| 155 | 6141 | 80 / 35 / 45 | 75 | 6 |
+| 175 | 6142 | 80 / 35 / 45 | 95 | 6 |
+| 195 | 76772 | 80 / 35 / 45 | 115 | 6 |
+| 215 | 76769 | 80 / 35 / 39 | 135 | 6 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 24)
+
+### Isolation 80 mm, sans tapée
+
+![Isolation 80 mm, sans tapée](/assets/profiles/perform76/isolation/76171-sans-tapee.png)
+
+Tapée : sans tapée ; épaisseur d'isolation : 80 mm ; cotes en haut : 70 / 74 mm.
+
+### Isolation 95 mm, tapée 6138
+
+![Isolation 95 mm, tapée 6138](/assets/profiles/perform76/isolation/76171-6138.png)
+
+Tapée : 6138 ; épaisseur d'isolation : 95 mm ; cotes en haut : 55 / 35 / 45 mm.
+
+### Isolation 115 mm, tapée 6139
+
+![Isolation 115 mm, tapée 6139](/assets/profiles/perform76/isolation/76171-6139.png)
+
+Tapée : 6139 ; épaisseur d'isolation : 115 mm ; cotes en haut : 80 / 35 / 45 mm.
+
+### Isolation 135 mm, tapée 6140
+
+![Isolation 135 mm, tapée 6140](/assets/profiles/perform76/isolation/76171-6140.png)
+
+Tapée : 6140 ; épaisseur d'isolation : 135 mm ; cotes en haut : 80 / 35 / 45 mm.
+
+### Isolation 155 mm, tapée 6141
+
+![Isolation 155 mm, tapée 6141](/assets/profiles/perform76/isolation/76171-6141.png)
+
+Tapée : 6141 ; épaisseur d'isolation : 155 mm ; cotes en haut : 80 / 35 / 45 mm.
+
+### Isolation 175 mm, tapée 6142
+
+![Isolation 175 mm, tapée 6142](/assets/profiles/perform76/isolation/76171-6142.png)
+
+Tapée : 6142 ; épaisseur d'isolation : 175 mm ; cotes en haut : 80 / 35 / 45 mm.
+
+### Isolation 195 mm, tapée 76772
+
+![Isolation 195 mm, tapée 76772](/assets/profiles/perform76/isolation/76171-76772.png)
+
+Tapée : 76772 ; épaisseur d'isolation : 195 mm ; cotes en haut : 80 / 35 / 45 mm.
+
+### Isolation 215 mm, tapée 76769
+
+![Isolation 215 mm, tapée 76769](/assets/profiles/perform76/isolation/76171-76769.png)
+
+Tapée : 76769 ; épaisseur d'isolation : 215 mm ; cotes en haut : 80 / 35 / 39 mm.
+
+# Compatibilités des pattes de pose
+
+Une ligne par couple patte et dormant : une même patte dessert les deux dormants neufs à des
+épaisseurs d'isolation différentes.
+
+| Patte | Dormant | Épaisseur d'isolation (mm) |
+| --- | --- | --- |
+| NT1939 | 76180 | 60 |
+| NT1939 | 76180 | 80 |
+| NT1939 | 76171 | 80 |
+| NT1939 | 76171 | 95 |
+| NT1943 | 76180 | 100 |
+| NT1943 | 76171 | 115 |
+| NT1945 | 76180 | 120 |
+| NT1945 | 76171 | 135 |
+| NT1947 | 76180 | 140 |
+| NT1947 | 76171 | 155 |
+| NT1949 | 76180 | 160 |
+| NT1949 | 76171 | 175 |
+| NT1951 | 76180 | 180 |
+| NT1951 | 76171 | 195 |
+| NT1953 | 76180 | 200 |
+| NT1953 | 76171 | 215 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 19 et 24)
+
+**Aucune épaisseur intermédiaire n'existe** : les valeurs de ce tableau sont les seules
+documentées.
+
+# Tapées aluminium sur dormant capoté
+
+Un dormant habillé d'un capot aluminium (variante AluClip) reçoit des tapées **aluminium** A469 à
+A473, et non les tapées PVC ci-dessus. Leurs cotes sont dans
+[Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md#pièces-dappui-et-tapées-aluminium),
+leur mise en œuvre et leurs cotes de débit dans
+[Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md#tapées-et-appuis-aluminium-sur-dormant-capoté).
+
+# Ce que la source ne donne pas
+
+- Aucune **planche de tapées pour le dormant 76172**.
+- Le **nom des cotes** portées sur les coupes (hauteur de gauche, cote de la patte, cote rouge
+  de 6 mm) : elles sont relevées sans légende.
+- Aucune patte de pose pour les dormants rénovation 76177 et 76185.
+
+# Citations
+
+[1] Cahier technique PERFORM76, version 02/09/2026 CC03 —
+`raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, pages du PDF 17, 19 et 24
+
+[2] DTD n° DBV-25-6/16-2334_V5, système 76 Advanced —
+`raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf`, p. 4, 16 et 23
+
+[3] [DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED](raw/dta-trocal-76-advanced-6-16-2334-v5.pdf)
+
+# Voir aussi
+
+- [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md)
+- [Dormants PERFORM76](/profiles/perform76-dormants.md)
+- [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md)
+- [Pose de la PERFORM76](/procedures/pose-perform76.md)
+- [Cahier technique PERFORM76](/sources/cahier-technique-perform76.md)
+- [DTD n° DBV-25-6/16-2334_V5](/sources/dtd-6-16-2334.md)
+
+===== PAGE 3 : /procedures/drainage-decompression-ventilation-systeme-70.md =====
+# Ce que fait cette procédure
+
+Elle situe, profilé par profilé, les usinages qui laissent sortir l'eau et l'air d'une fenêtre du
+système 70 Plateforme de [profine](/fournisseurs/profine.md) (KÖMMERLING e.VOLUTION, KBE
+e.MOTION, TROCAL e.XCLUSIVE) :
+
+- le drainage est le trou oblong qui évacue vers l'extérieur l'eau entrée dans la feuillure
+  (le logement du vitrage ou de l'ouvrant) ;
+- la décompression est l'ouverture qui équilibre la pression d'air entre la feuillure et
+  l'extérieur, pour que l'eau ne soit pas retenue ; elle se fait par un perçage ou en coupant le
+  joint de frappe (le joint contre lequel l'ouvrant vient se fermer) ;
+- la ventilation est le perçage des préchambres extérieures (les chambres du profilé côté
+  extérieur) des profilés de couleur, pour qu'elles n'accumulent pas la chaleur du soleil.
+
+« Les positions des usinages figurent dans le registre 1.3.1 » : les distances aux coins, les
+entraxes et le nombre de trous le long des barres sont sur
+[Drainage, décompression et vitrage, directives générales profine](/procedures/drainage-et-vitrage-generaux.md).
+Cette page donne ce que la gamme 70 ajoute : les angles de perçage, les cotes qui placent chaque
+trou sur la coupe, les chambres à ne pas percer et les perçages de ventilation
+[1 p. 191]. Les planches de principe du DTD du système 70 (drainages, décompressions, couleurs
+sombres) sont sur [Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md).
+
+# Conditions et interdictions
+
+« Sur la gamme 70, veillez aux détails suivants » [1 p. 191] :
+
+- Sur le dormant, l'ouvrant et le meneau, la chambre repérée en gris sur chaque coupe **« ne doit
+  pas être endommagée par l'usinage du trou de drainage »**.
+- Alternative drainage : « le trou oblong de 5 x 25mm peut-être remplacé par un trou Ø 8 ».
+- « Pour éviter toute accumulation de chaleur, les préchambres extérieures des profilés de
+  couleur, laqués ou filmés 2 faces ou 1 face extérieure doivent impérativement être ventilées,
+  trou mini Ø 5. » Sur les coupes, les préchambres concernées sont marquées d'un astérisque
+  [1 p. 192-195, 198-199, 203-204, 206, 211-212].
+- Ventilation de la traverse haute, alternative : « un trou oblong par cadre qui devra ouvrir
+  toutes les chambres exposées » [1 p. 202-203].
+- « La décompression du dormant peut se faire au milieu de l'ouvrant ! » [1 p. 211]
+
+Le seuil de clarté (L\* inférieur à 82) qui rend la ventilation obligatoire au sens du DTD est
+sur [DTD n° DBV-24-6/16-2335_V5](/certifications/dtd-6-16-2335.md) ; les planches du manuel
+parlent de « profilés de couleur, laqués ou filmés ».
+
+# Étapes
+
+Tous les dessins sont en coupe, côté extérieur à gauche. Les trous sont en gris foncé ; le trait
+fin qui prolonge un trou incliné est l'axe du perçage ; les astérisques repèrent les préchambres à
+ventiler sur un profilé de couleur. Le pictogramme de fenêtre en haut à droite de chaque planche
+situe la coupe (deux flèches sur la traverse concernée). Toutes les planches portent « Dessin non à
+l'échelle » : les positions se lisent aux cotes.
+
+## Chambre à ne pas percer
+
+Quatre coupes sans référence : un dormant dessiné deux fois (« Drainage par l'avant » et
+« Drainage par le bas »), un ouvrant et un meneau. Sur chacune, la chambre grisée, en biais contre
+le fond de feuillure, « ne doit pas être endommagée par l'usinage du trou de drainage »
+[1 p. 191].
+
+![Chambre à ne pas endommager, dormant, drainage par l'avant et par le bas](/assets/procedures/moe-systeme-70/drainage/drainage-chambre-a-preserver-dormant.png)
+
+![Chambre à ne pas endommager, ouvrant](/assets/procedures/moe-systeme-70/drainage/drainage-chambre-a-preserver-ouvrant.png)
+
+![Chambre à ne pas endommager, meneau](/assets/procedures/moe-systeme-70/drainage/drainage-chambre-a-preserver-meneau.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 191)
+
+## Drainage du dormant
+
+La traverse basse du dormant se draine par un premier trou oblong de 5 × 25 mm percé en biais à
+50° depuis la feuillure, qui débouche soit par l'avant (trou oblong horizontal de 5 × 25 mm
+sur la face extérieure), soit par le bas (trou oblong vertical de 5 × 25 mm sous le dormant).
+Pour le drainage par l'avant, la cote verticale est portée entre le haut du profilé et le trou
+avant ; pour le drainage par le bas, la cote de 6 mm est portée entre la face extérieure et le
+trou, et la cote verticale le long du trou [1 p. 192-195].
+
+| Dormant | Perçage en biais | Par l'avant : cote depuis le haut (mm) | Par l'avant : trou | Par le bas : cote depuis la face (mm) | Par le bas : cote le long du trou (mm) | Par le bas : trou | Préchambres marquées * | Page PDF |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 6100 | 50°, 5 × 25 mm | 36 | 5 × 25 mm | 6 | 18 | 5 × 25 mm | 1 | 192 |
+| 6101 | 50°, 5 × 25 mm | 36 | 5 × 25 mm | 6 | 27 | 5 × 25 mm | 1 | 192 |
+| 2502 | 50°, 5 × 25 mm | 57,5 | 5 × 25 mm | 6 | 27 | 5 × 25 mm | 1 | 192 |
+| 6102 | 50°, 5 × 25 mm | 35,5 | 5 × 25 mm | - | - | - | aucune | 193 |
+| 6155 | 50°, 5 × 25 mm | 35,5 | 5 × 25 mm | - | - | - | aucune | 193 |
+| 6104 | 50°, 5 × 25 mm | 35,5 | 5 × 25 mm | - | - | - | 1 | 193 |
+| 6106 | 50°, 5 × 25 mm | 35,5 | 5 × 25 mm | - | - | - | 1 | 193 |
+| 6105 | 50°, 5 × 25 mm | 35,5 | 5 × 25 mm | - | - | - | aucune | 193 |
+| 6107 | 50°, 5 × 25 mm | 35,5 | 5 × 25 mm | - | - | - | aucune | 193 |
+| 6156 | 50°, 5 × 25 mm | 35,5 | 5 × 25 mm | - | - | - | aucune | 194 |
+| 6108 | 50°, 5 × 25 mm | 35,5 | 5 × 25 mm | - | - | - | 2 | 194 |
+| 6109 | 50°, 5 × 25 mm | 35,5 | 5 × 25 mm | - | - | - | 3 | 194 |
+| 6110 | 50°, 5 × 25 mm | 35,5 | 5 × 25 mm | - | - | - | 4 | 195 |
+| 6111 | 50°, 5 × 25 mm | 35,5 | 5 × 25 mm | - | - | - | 5 | 195 |
+| 6158 | 50°, 5 × 25 mm | 35,5 | 5 × 25 mm | - | - | - | 7 | 195 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 192-195)
+
+Seuls les dormants 6100, 6101 et 2502 sont dessinés avec le drainage par le bas ; les autres
+dormants ne sont dessinés qu'avec le drainage par l'avant, et la planche ne donne pas pour eux de
+cote de drainage par le bas. Sur les dormants larges 6108, 6109, 6110, 6111 et 6158, les
+astérisques marquent les chambres de l'aile et la chambre sous le trou de drainage.
+
+![Drainage du dormant 6100, par l'avant et par le bas](/assets/procedures/moe-systeme-70/drainage/drainage-dormant-6100.png)
+
+![Drainage du dormant 6101, par l'avant et par le bas](/assets/procedures/moe-systeme-70/drainage/drainage-dormant-6101.png)
+
+![Drainage du dormant 2502, par l'avant et par le bas](/assets/procedures/moe-systeme-70/drainage/drainage-dormant-2502.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 192)
+
+![Drainage par l'avant du dormant 6102](/assets/procedures/moe-systeme-70/drainage/drainage-dormant-6102.png)
+
+![Drainage par l'avant du dormant 6155](/assets/procedures/moe-systeme-70/drainage/drainage-dormant-6155.png)
+
+![Drainage par l'avant du dormant 6104](/assets/procedures/moe-systeme-70/drainage/drainage-dormant-6104.png)
+
+![Drainage par l'avant du dormant 6106](/assets/procedures/moe-systeme-70/drainage/drainage-dormant-6106.png)
+
+![Drainage par l'avant du dormant 6105](/assets/procedures/moe-systeme-70/drainage/drainage-dormant-6105.png)
+
+![Drainage par l'avant du dormant 6107](/assets/procedures/moe-systeme-70/drainage/drainage-dormant-6107.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 193)
+
+![Drainage par l'avant du dormant 6156](/assets/procedures/moe-systeme-70/drainage/drainage-dormant-6156.png)
+
+![Drainage par l'avant du dormant large 6108](/assets/procedures/moe-systeme-70/drainage/drainage-dormant-6108.png)
+
+![Drainage par l'avant du dormant large 6109](/assets/procedures/moe-systeme-70/drainage/drainage-dormant-6109.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 194)
+
+![Drainage par l'avant du dormant large 6110](/assets/procedures/moe-systeme-70/drainage/drainage-dormant-6110.png)
+
+![Drainage par l'avant du dormant large 6111](/assets/procedures/moe-systeme-70/drainage/drainage-dormant-6111.png)
+
+![Drainage par l'avant du dormant large 6158](/assets/procedures/moe-systeme-70/drainage/drainage-dormant-6158.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 195)
+
+## Drainage de l'ouvrant
+
+« Ouvrant, drainage et ventilation profilé sombre » : la traverse basse de l'ouvrant se draine
+par un trou oblong de 5 × 25 mm percé en biais à 50° depuis la feuillure, puis par un trou
+oblong vertical de 5 × 25 mm débouchant sous l'ouvrant, à 6 mm de la face extérieure. La cote
+verticale est portée le long du trou vertical. Aucune préchambre n'est marquée d'un astérisque sur
+les coupes d'ouvrant [1 p. 196].
+
+| Ouvrant | Profilés dessinés sur la même coupe | Perçage en biais | Cote depuis la face (mm) | Cote le long du trou vertical (mm) | Trou vertical | Page PDF |
+| --- | --- | --- | --- | --- | --- | --- |
+| 6112 | 6113, 6121, 6122, 6117, 6118, 6150, 6151 | 50°, 5 × 25 mm | 6 | 8 | 5 × 25 mm | 196 |
+| 6115 | 6116, 6123, 6124, 6119, 6120, 6152, 6153 | 50°, 5 × 25 mm | 6 | 8 | 5 × 25 mm | 196 |
+| 2418 | - | 50°, 5 × 25 mm | 6 | 42 | 5 × 25 mm | 196 |
+| 2416 | - | 50°, 5 × 25 mm | 6 | 37 | 5 × 25 mm | 196 |
+| 2415 | - | 50°, 5 × 25 mm | 6 | 58 | 5 × 25 mm | 196 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 196)
+
+![Drainage des ouvrants 6112, 6113, 6121, 6122, 6117, 6118, 6150 et 6151](/assets/procedures/moe-systeme-70/drainage/drainage-ouvrants-6112-6113-6121-6122-6117-6118-6150-6151.png)
+
+![Drainage des ouvrants 6115, 6116, 6123, 6124, 6119, 6120, 6152 et 6153](/assets/procedures/moe-systeme-70/drainage/drainage-ouvrants-6115-6116-6123-6124-6119-6120-6152-6153.png)
+
+![Drainage de l'ouvrant 2418](/assets/procedures/moe-systeme-70/drainage/drainage-ouvrant-2418.png)
+
+![Drainage de l'ouvrant 2416](/assets/procedures/moe-systeme-70/drainage/drainage-ouvrant-2416.png)
+
+![Drainage de l'ouvrant 2415](/assets/procedures/moe-systeme-70/drainage/drainage-ouvrant-2415.png)
+
+## Drainage de la traverse de dormant
+
+La traverse intermédiaire de dormant, entre deux ouvrants superposés (pictogramme : ouvrant à
+soufflet au-dessus d'un ouvrant), se draine comme le dormant : perçage en biais à 50°,
+5 × 25 mm, puis par l'avant (trou oblong de 5 × 25 mm, cote depuis le haut du profilé) ou
+par le bas (trou oblong de 5 × 25 mm à 6 mm de la face extérieure, cote portée le long du
+trou) [1 p. 197-198].
+
+| Traverse | Perçage en biais | Par l'avant : cote depuis le haut (mm) | Par l'avant : trou | Par le bas : cote depuis la face (mm) | Par le bas : cote le long du trou (mm) | Par le bas : trou | Préchambres marquées * | Page PDF |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 6127 | 50°, 5 × 25 mm | 46,5 | 5 × 25 mm | 6 | 30 | 5 × 25 mm | 1 | 197 |
+| 6157 | 50°, 5 × 25 mm | 36 | 5 × 25 mm | 6 | 30 | 5 × 25 mm | 2 | 197 |
+| 2425 | 50°, 5 × 25 mm | 53 | 5 × 25 mm | 6 | 33 | 5 × 25 mm | 1 | 198 |
+| 2427 | 50°, 5 × 25 mm | 78 | 5 × 25 mm | 6 | 33 | 5 × 25 mm | 1 | 198 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 197-198)
+
+Sur la coupe du drainage par le bas de la 2427, l'angle n'est imprimé qu'en partie (le « 5 » de
+« 50° » est tronqué) ; le dessin est le même que celui de la 2425.
+
+![Drainage de la traverse 6127, par l'avant et par le bas](/assets/procedures/moe-systeme-70/drainage/drainage-traverse-6127.png)
+
+![Drainage de la traverse 6157, par l'avant et par le bas](/assets/procedures/moe-systeme-70/drainage/drainage-traverse-6157.png)
+
+![Drainage de la traverse 2425, par l'avant et par le bas](/assets/procedures/moe-systeme-70/drainage/drainage-traverse-2425.png)
+
+![Drainage de la traverse 2427, par l'avant et par le bas](/assets/procedures/moe-systeme-70/drainage/drainage-traverse-2427.png)
+
+## Drainage, décompression et ventilation du profilé 0303
+
+L'élargisseur d'ouvrant 0303 (voir
+[Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)) se
+draine par un trou oblong de 5 × 25 mm percé en biais à 50°, puis par l'avant (trou oblong
+de 5 × 25 mm, cote de 38,5 mm depuis le haut du profilé ; deux préchambres marquées d'un
+astérisque) ou par le bas (trou oblong de 5 × 25 mm à 6 mm de la face extérieure, sans cote
+le long du trou) [1 p. 199].
+
+![Drainage du profilé 0303, par l'avant et par le bas](/assets/procedures/moe-systeme-70/drainage/drainage-0303.png)
+
+« Décompression, ventilation profilé sombre, traverse haute » : en traverse haute, le 0303 porte
+deux trous oblongs verticaux de 5 × 25 mm à 6 mm de la face extérieure, l'un en haut et
+l'autre en bas de la coupe, et un trou oblong de 5 × 25 mm percé à 50° qui rejoint le trou du
+bas [1 p. 199].
+
+![Décompression et ventilation du profilé 0303 en traverse haute](/assets/procedures/moe-systeme-70/drainage/decompression-ventilation-traverse-haute-0303.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 199)
+
+## Ventilation de la traverse haute du dormant sombre
+
+« Dormant, ventilation profilé sombre, traverse haute » : en traverse haute (pictogramme : flèches
+en haut du dormant), la coupe du dormant est dessinée retournée, la feuillure vers le bas. La
+préchambre extérieure est ouverte par un trou oblong vertical de 5 × 25 mm à 6 mm de la face
+extérieure, relié à la feuillure par un trou oblong de 5 × 25 mm percé à 50°. Sur les dormants
+larges, l'aile porte en plus des perçages de Ø 5 mm dans ses chambres [1 p. 200-203].
+
+Certaines coupes ne portent que le perçage à 50°, sans le trou vertical débouchant sur la face :
+la seconde coupe du 6100 (p. 200), la seconde coupe du 6105 (p. 201), la seconde coupe du 6108 et
+la coupe du 6104 (p. 202). La mention « Si décompression par retrait de joint » est imprimée une
+fois par page : sous les deux coupes du 6100 (p. 200), sous la seconde coupe du 6105 (p. 201) et
+sous la coupe du 6104 (p. 202).
+
+| Dormant (traverse haute) | Trou vertical vers l'extérieur | Cote depuis la face (mm) | Perçage à 50° | Cote verticale (mm) | Perçages Ø 5 dans l'aile | Coupe sans trou vertical | Page PDF |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 6100 | 5 × 25 mm | 6 | 5 × 25 mm | - | - | oui, perçage à 50° seul | 200 |
+| 6101 | 5 × 25 mm | 6 | 5 × 25 mm | - | - | - | 200 |
+| 2502 | 5 × 25 mm | 6 | 5 × 25 mm | 57,5 | - | - | 200 |
+| 6156 | 5 × 25 mm | 6 | 5 × 25 mm | - | - | - | 201 |
+| 6107 | 5 × 25 mm | 6 | 5 × 25 mm | - | - | - | 201 |
+| 6105 | 5 × 25 mm | 6 | 5 × 25 mm | - | - | oui, perçage à 50° seul | 201 |
+| 6106 | 5 × 25 mm | 6 | 5 × 25 mm | - | - | - | 201 |
+| 6102 | 5 × 25 mm | 6 | 5 × 25 mm | - | - | - | 201 |
+| 6155 | 5 × 25 mm | 6 | 5 × 25 mm | - | - | - | 201 |
+| 6109 | 5 × 25 mm | 6 | 5 × 25 mm | - | 2 | - | 202 |
+| 6108 | 5 × 25 mm | 6 | 5 × 25 mm | - | 1 | oui, perçage à 50° et un Ø 5 dans l'aile | 202 |
+| 6104 | - | - | 5 × 25 mm | - | - | oui, perçage à 50° seul | 202 |
+| 6158 | 5 × 25 mm | 6 | 5 × 25 mm | - | 4 | - | 203 |
+| 6111 | 5 × 25 mm | 6 | 5 × 25 mm | - | 3 | - | 203 |
+| 6110 | 5 × 25 mm | 6 | 5 × 25 mm | - | 2 | - | 203 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 200-203)
+
+La cote de 57,5 mm du 2502 est portée entre le trou vertical et la paroi haute de la coupe
+retournée. Sur la p. 202, une troisième coupe légendée 6108 est dessinée sans l'aile du
+dormant large, avec le même contour que la coupe 6104 voisine, un trou vertical de 5 × 25 mm à
+6 mm et un perçage à 50° — entrée **INC-150** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md). Sur la p. 203, la légende
+« 5x25 mm » du trou vertical du 6110 est recouverte en partie par la note de bas de page.
+
+Alternative : « un trou oblong par cadre qui devra ouvrir toutes les chambres exposées » : la
+vue de face de la p. 202 montre ce trou oblong horizontal traversant les chambres de l'aile ; la
+p. 203 renvoie à cette coupe (« Voir coupe page 12 », registre 2.4.2, p. 12 = PDF p. 202)
+[1 p. 202-203].
+
+![Ventilation de la traverse haute des dormants 6100, avec et sans trou vertical](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-haute-dormant-6100.png)
+
+![Ventilation de la traverse haute du dormant 6101](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-haute-dormant-6101.png)
+
+![Ventilation de la traverse haute du dormant 2502](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-haute-dormant-2502.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 200)
+
+![Ventilation de la traverse haute du dormant 6156](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-haute-dormant-6156.png)
+
+![Ventilation de la traverse haute du dormant 6107](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-haute-dormant-6107.png)
+
+![Ventilation de la traverse haute du dormant 6105](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-haute-dormant-6105.png)
+
+![Ventilation de la traverse haute du dormant 6106](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-haute-dormant-6106.png)
+
+![Traverse haute du dormant 6105, si décompression par retrait de joint](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-haute-dormant-6105-retrait-de-joint.png)
+
+![Ventilation de la traverse haute du dormant 6102](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-haute-dormant-6102.png)
+
+![Ventilation de la traverse haute du dormant 6155](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-haute-dormant-6155.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 201)
+
+![Ventilation de la traverse haute du dormant large 6109 et alternative du trou oblong par cadre](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-haute-dormant-6109-alternative-trou-oblong.png)
+
+![Ventilation de la traverse haute du dormant large 6108, avec et sans trou vertical](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-haute-dormant-6108.png)
+
+![Coupe légendée 6108 sans aile et coupe 6104, si décompression par retrait de joint](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-haute-dormant-6108-6104.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 202)
+
+![Ventilation de la traverse haute du dormant large 6158](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-haute-dormant-6158.png)
+
+![Ventilation de la traverse haute du dormant large 6111](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-haute-dormant-6111.png)
+
+![Ventilation de la traverse haute du dormant large 6110](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-haute-dormant-6110.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 203)
+
+## Ventilation du meneau sombre
+
+« Meneau, ventilation profilé sombre » : sur un meneau de couleur (pictogramme : meneau entre deux
+vantaux, flèches en haut du meneau), les deux préchambres extérieures du 2425 sont ventilées
+par des trous oblongs de 5 × 25 mm percés à 50°, un de chaque côté de la coupe. Le long du
+meneau, vu de face, les deux trous oblongs sont faits côte à côte, la cote de 200 mm étant
+portée entre la traverse haute et les trous [1 p. 204].
+
+![Ventilation du meneau 2425, profilé sombre](/assets/procedures/moe-systeme-70/drainage/ventilation-meneau-2425.png)
+
+| Meneau | Usinage | Angle | Cote depuis la traverse (mm) | Trous par position |
+| --- | --- | --- | --- | --- |
+| 2425 | trou oblong 5 × 25 mm | 50° | 200 | 2 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 204)
+
+La planche ne dessine pas de perçage au pied du meneau : la vue de face est interrompue au milieu,
+et seule la cote du haut est portée.
+
+## Drainage de la traverse d'ouvrant
+
+« Traverse d'ouvrant, drainage » : la traverse d'ouvrant, qui recoupe un ouvrant en plusieurs
+champs vitrés (pictogramme : fenêtre à croisillons), se draine par un trou oblong de 5 × 25 mm
+percé à 50°, puis par un trou vertical de 5 × 25 mm à 6 mm de la face extérieure, la cote
+étant portée le long du trou vertical [1 p. 205].
+
+| Traverse d'ouvrant | Perçage en biais | Cote depuis la face (mm) | Cote le long du trou vertical (mm) | Trou vertical | Page PDF |
+| --- | --- | --- | --- | --- | --- |
+| 6126 | 50°, 5 × 25 mm | 6 | 31,5 | 5 × 25 mm | 205 |
+| 6127 | 50°, 5 × 25 mm | 6 | 30 | 5 × 25 mm | 205 |
+| 6157 | 50°, 5 × 25 mm | 6 | 41 | 5 × 25 mm | 205 |
+| 2425 | 50°, 5 × 25 mm | 6 | 33 | 5 × 25 mm | 205 |
+| 2427 | 50°, 5 × 25 mm | 6 | 33 | 5 × 25 mm | 205 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 205)
+
+Le 6157 est coté 30 mm en traverse de dormant (p. 197) et 41 mm en traverse d'ouvrant (p. 205) :
+ce sont deux coupes différentes, le trou vertical ne partant pas de la même chambre.
+
+![Drainage de la traverse d'ouvrant 6126](/assets/procedures/moe-systeme-70/drainage/drainage-traverse-ouvrant-6126.png)
+
+![Drainage de la traverse d'ouvrant 6127](/assets/procedures/moe-systeme-70/drainage/drainage-traverse-ouvrant-6127.png)
+
+![Drainage de la traverse d'ouvrant 6157](/assets/procedures/moe-systeme-70/drainage/drainage-traverse-ouvrant-6157.png)
+
+![Drainage de la traverse d'ouvrant 2425](/assets/procedures/moe-systeme-70/drainage/drainage-traverse-ouvrant-2425.png)
+
+![Drainage de la traverse d'ouvrant 2427](/assets/procedures/moe-systeme-70/drainage/drainage-traverse-ouvrant-2427.png)
+
+## Ventilation de la traverse d'ouvrant sombre
+
+« Traverse d'ouvrant, ventilation profilé sombre » : sur une traverse d'ouvrant de couleur
+(pictogramme : flèches en haut de la traverse verticale d'une fenêtre à croisillons), les deux
+préchambres extérieures sont ventilées par des trous oblongs de 5 × 25 mm percés à 50°, un de
+chaque côté de la coupe, sur les 6126, 6157 / 6127 et 2425. Vu de face, les deux trous
+oblongs sont faits côte à côte, la cote de 200 mm étant portée entre la traverse haute et les
+trous [1 p. 206].
+
+![Ventilation de la traverse d'ouvrant, vue de face](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-ouvrant-vue-de-face.png)
+
+![Ventilation de la traverse d'ouvrant 6126](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-ouvrant-6126.png)
+
+![Ventilation des traverses d'ouvrant 6157 et 6127](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-ouvrant-6157-6127.png)
+
+![Ventilation de la traverse d'ouvrant 2425](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-ouvrant-2425.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 206)
+
+La traverse d'ouvrant 2427 de couleur se ventile par les mêmes trous oblongs de 5 × 25 mm à
+50°, côte à côte à 200 mm de la traverse haute, et demande en plus une mise à l'air de ses
+chambres en bout, selon l'une de deux variantes [1 p. 207] :
+
+Variante 1 — usinage en bout. Un fraisage de 5 × 5 × ~75 mm est fait en bout de la
+traverse, sur la face coupée, en travers des chambres (bande grise de la vue en bout ; coupe A-A
+repérée sur la coupe transversale). La coupe B-B, légendée « Usinage traverse d'ouvrant 2427 »,
+cote ce fraisage : 5 mm de profondeur, 5 mm de largeur, à 4 mm du bord. Sur la vue de face, le
+fraisage est dessiné en pointillé aux deux extrémités de la traverse.
+
+![Ventilation de la traverse d'ouvrant 2427, variante 1, usinage en bout](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-ouvrant-2427-variante-1-usinage-en-bout.png)
+
+Variante 2 — perçage en bout. « Perçage Ø 5 mm sous 40° jusqu'au milieu du profilé » : depuis
+l'extrémité de la traverse, deux perçages de Ø 5 mm inclinés à 40° remontent dans le profilé,
+sur 50 mm de long, jusqu'à se rejoindre au milieu (coupe A-A). Sur la vue de face, ils sont
+dessinés en biais aux deux extrémités.
+
+![Ventilation de la traverse d'ouvrant 2427, variante 2, perçage en bout](/assets/procedures/moe-systeme-70/drainage/ventilation-traverse-ouvrant-2427-variante-2-percage-en-bout.png)
+
+| Traverse d'ouvrant, profilé sombre | Usinage | Cotes (mm) | Angle | Page PDF |
+| --- | --- | --- | --- | --- |
+| 6126 | trous oblongs 5 × 25, par paires | 200 depuis la traverse haute | 50° | 206 |
+| 6157 / 6127 | trous oblongs 5 × 25, par paires | 200 depuis la traverse haute | 50° | 206 |
+| 2425 | trous oblongs 5 × 25, par paires | 200 depuis la traverse haute | 50° | 206 |
+| 2427, préchambres | trous oblongs 5 × 25, par paires | 200 depuis la traverse haute | 50° | 207 |
+| 2427, variante 1 | fraisage en bout 5 × 5 × ~75 | à 4 du bord | - | 207 |
+| 2427, variante 2 | perçage en bout Ø 5, jusqu'au milieu du profilé | 50 de long | 40° | 207 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 206-207)
+
+## Ventilation du battement 0140 sombre
+
+« Battement, ventilation profilé sombre » : sur le battement 0140 de couleur (pictogramme :
+fenêtre à deux vantaux, flèches en haut du battement), la chambre extérieure du battement est
+ouverte par un trou oblong de 5 × 25 mm percé à 50°. Le long du battement, vu de face, le trou
+oblong est fait à 50 mm de la traverse haute. La coupe A-A montre, au pied du battement, un
+fraisage de 5 × 5 × ~22 mm [1 p. 208].
+
+« A noter : Alternative au fraisage et trou oblong, percer l'embout bas comme indiqué
+ci-dessous. » Le dessin placé dessous est la coupe du 0140 avec trois trous ronds dans ses
+chambres supérieures ; leur diamètre n'est pas coté [1 p. 208].
+
+![Ventilation du battement 0140, trou oblong à 50° et fraisage en pied](/assets/procedures/moe-systeme-70/drainage/ventilation-battement-0140.png)
+
+![Ventilation du battement 0140, alternative par perçage de l'embout bas](/assets/procedures/moe-systeme-70/drainage/ventilation-battement-0140-alternative-embout-bas.png)
+
+| Battement, profilé sombre | Usinage | Cotes (mm) | Angle |
+| --- | --- | --- | --- |
+| 0140 | trou oblong 5 × 25 | 50 depuis la traverse haute | 50° |
+| 0140 | fraisage en pied 5 × 5 × ~22 | - | - |
+| 0140, alternative | perçage de l'embout bas, trois trous | - | - |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 208)
+
+## Ventilation des pièces d'appui sombres
+
+« Pièce d'appui, ventilation profilé sombre » : la pièce d'appui (le profilé rapporté sous la
+traverse basse du dormant, qui rejette l'eau vers l'extérieur) de couleur est ventilée par des
+perçages de Ø 5 mm dans ses chambres, par la paroi basse [1 p. 209].
+
+| Pièce d'appui | Perçages Ø 5 verticaux | Perçages Ø 5 obliques |
+| --- | --- | --- |
+| 6136 | 1 | 0 |
+| 6134 | 1 | 0 |
+| 6137 | 2 | 0 |
+| 6135 | 2 | 0 |
+| 76768 | 2 | 1 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 209)
+
+L'angle du perçage oblique du 76768 n'est pas coté.
+
+![Ventilation de la pièce d'appui 6136](/assets/procedures/moe-systeme-70/drainage/ventilation-piece-appui-6136.png)
+
+![Ventilation de la pièce d'appui 6134](/assets/procedures/moe-systeme-70/drainage/ventilation-piece-appui-6134.png)
+
+![Ventilation de la pièce d'appui 6137](/assets/procedures/moe-systeme-70/drainage/ventilation-piece-appui-6137.png)
+
+![Ventilation de la pièce d'appui 6135](/assets/procedures/moe-systeme-70/drainage/ventilation-piece-appui-6135.png)
+
+![Ventilation de la pièce d'appui 76768](/assets/procedures/moe-systeme-70/drainage/ventilation-piece-appui-76768.png)
+
+## Ventilation des tapées rapportées sombres
+
+« Tapée rapportée, ventilation profilé sombre » : la tapée (le profilé rapporté sur le dormant pour
+l'adapter à l'épaisseur de l'isolation du mur) de couleur est ventilée par des perçages de
+Ø 5 mm dans ses chambres, par la paroi basse [1 p. 210].
+
+| Tapée | Perçages Ø 5 |
+| --- | --- |
+| 6138 | 1 |
+| 6139 | 1 |
+| 6140 | 1 |
+| 6141 | 1 |
+| 6142 | 2 |
+| 76772 | 2 |
+| 76769 | 2 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 210)
+
+![Ventilation de la tapée 6138](/assets/procedures/moe-systeme-70/drainage/ventilation-tapee-6138.png)
+
+![Ventilation de la tapée 6139](/assets/procedures/moe-systeme-70/drainage/ventilation-tapee-6139.png)
+
+![Ventilation de la tapée 6140](/assets/procedures/moe-systeme-70/drainage/ventilation-tapee-6140.png)
+
+![Ventilation de la tapée 6141](/assets/procedures/moe-systeme-70/drainage/ventilation-tapee-6141.png)
+
+![Ventilation de la tapée 6142](/assets/procedures/moe-systeme-70/drainage/ventilation-tapee-6142.png)
+
+![Ventilation de la tapée 76772](/assets/procedures/moe-systeme-70/drainage/ventilation-tapee-76772.png)
+
+![Ventilation de la tapée 76769](/assets/procedures/moe-systeme-70/drainage/ventilation-tapee-76769.png)
+
+## Décompression du dormant et du joint de frappe
+
+Sur une fenêtre à deux ouvrants superposés (pictogramme : ouvrant à soufflet au-dessus d'un
+ouvrant), la coupe A-A est prise en traverse haute du dormant, la coupe B-B au droit de la
+traverse intermédiaire. La décompression se fait en coupant le joint de frappe : le détail
+« Décompression (Couper le joint) » montre la gorge du joint vide, à côté du détail « Joint de
+frappe » où le joint est en place. « A noter : La décompression du dormant peut se faire au
+milieu de l'ouvrant ! » Les astérisques repèrent les préchambres à ventiler : trois en traverse
+haute du dormant (coupe A-A), une dans la traverse intermédiaire (coupe B-B) [1 p. 211].
+
+![Décompression du dormant, coupes A-A et B-B, joint de frappe coupé](/assets/procedures/moe-systeme-70/drainage/decompression-dormant-coupes-a-a-b-b.png)
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 211)
+
+Sur un vitrage fixe, la décompression est une « Décompression fixe » : un perçage de
+Ø 6 mm au travers du profilé, sous le joint de vitrage, côté extérieur. Face à un ouvrant, elle
+reste la découpe du joint de frappe (« Décompression (couper le joint) »). La planche le montre sur
+deux fenêtres : à gauche un ouvrant au-dessus d'un fixe, à droite un fixe au-dessus d'un ouvrant ;
+les astérisques repèrent les préchambres à ventiler des dormants haut et bas et de la traverse
+[1 p. 212].
+
+![Décompression fixe Ø 6 et découpe du joint de frappe](/assets/procedures/moe-systeme-70/drainage/decompression-fixe-et-joint-de-frappe.png)
+
+| Élément | Décompression | Cote (mm) | Position |
+| --- | --- | --- | --- |
+| Dormant, face à un ouvrant | joint de frappe coupé | - | peut se faire au milieu de l'ouvrant |
+| Vitrage fixe | décompression fixe, perçage | Ø 6 | côté extérieur, sous le joint de vitrage |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 211-212)
+
+## Règles de drainage et de décompression du classeur de 2008
+
+Les règles générales du classeur KÖMMERLING e.VOLUTION d'août 2008 (nombre de trous, entraxe de
+600 mm maxi, plage de 20 à 200 mm depuis les angles, décalage de 50 mm entre les trous de feuillure
+et de préchambre, variantes de décompression, ventilation des profilés filmés) sont sur
+[Directives générales de fabrication du système 70, 2008](/procedures/directives-generales-systeme-70-evo2008.md#drainage-et-décompression-registre-52).
+
+# Ce que le document ne dit pas
+
+- La cote de drainage par le bas des dormants autres que 6100, 6101 et 2502, dessinés seulement
+  avec le drainage par l'avant.
+- La longueur de joint à couper pour la décompression par retrait de joint ; la largeur de
+  suppression du joint portée par le DTD est sur
+  [Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md).
+- Le diamètre des trois trous de l'embout bas du battement 0140 et l'angle du perçage oblique de la
+  pièce d'appui 76768.
+
+# Citations
+
+[1] Mise en œuvre Système 70 Plateforme, profine, version septembre 2023 —
+`raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf`, registre 2.4.2 « Drainage, décompression,
+ventilation profilé sombre », p. 1 à 22 (PDF p. 191 à 212)
+
+# Voir aussi
+
+- [Drainage, décompression et vitrage, directives générales profine](/procedures/drainage-et-vitrage-generaux.md)
+- [Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md)
+- [Mise en œuvre des renforts du système 70](/procedures/mise-en-oeuvre-renforts-systeme-70.md)
+- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
+- [Drainage, décompression et ventilation du système 76 Advanced](/procedures/drainage-decompression-ventilation-systeme-76.md)
+- [Mise en œuvre Système 70 Plateforme](/sources/profine-mise-en-oeuvre-systeme-70.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /sources/dtd-6-16-2335.md | Document source | DTD n° DBV-24-6/16-2335_V5, système e.XCLUSIVE, e.MOTION, e.VOLUTION | dtd, cstb, dta, profine, kommerling, trocal | Dossier Technique Détaillé de 53 pages du second système profine certifié en références 6xxx (Gamme 70), portant les prescriptions de fabrication, profilés, renforts, assemblages dormants/seuils/traverses, quincailleries et le critère L* < 82. | BE e.MOTION (CTR-40) ; fourrures 6138.1 à 6142.1, 76772, 76769 / transcrit / [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-co |
+| /procedures/fabrication-systeme-70.md | Procédure | Fabrication et assemblage du système 70 | systeme-70, e-volution, profine, assemblage, soudure, seuil | Les schémas d'atelier et les plans de mise en œuvre du DTD du système 70 de profine (e.XCLUSIVE, e.MOTION, e.VOLUTION) — assemblages de meneau et traverse, soudure à plat du 6127, élargisseurs et rehausseurs, seuils, capotage aluminium, tapées et appuis alu, drainages, couleurs sombres, coupes et plans de pose. | 5 / 200 / 69 / 62 / / 6121 + meneau 2425 + 6121 / 180 / 45 / 90 / / 6112C + meneau 6127 + 6112C / 170 / 45 / 80 / / 6121 + meneau 2427 + 6121 / 205 / |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/contradictions-entre-sources.md :
+| CTR-40 | Cote propre de onze parcloses du système 70 | Poster Kömmerling Gamme 70, profilés complémentaires, mars 2025 (réf. PROFINE/73/POSTERPLANA0/PRINC/COMP/2024), p. 1, relu en image à 500-600 dpi le 28/09/2026, largeur portée en haut de chaque parclose : 2433 **23,5** ; 76512 et 76513 **29.5** ; 76515 **9,5** ; 76524 **27** ; 76526 **29,5** ; 76527 **31,5** ; 1511 **17,5** ; 1512 **21,5** ; 6146 **17,5** ; 6147 **25,5** ; 6148 **22** (mm). Les 2454 (26), 76501 (34), 76503 (22), 76504 (20), 76505 (18), 76506 (16), 76507 (14), 76508 (12), 76509 (11) et 76516 (28) concordent. Système e.VOLUTION, plan des profilés, système F 91, août 2008, PDF p. 24-25, relues en image le 29/09/2026 : 2433 **23** × 20 ; 1511.1 **17** × 20 et 1512.1 **21** × 20 (références suffixées « .1 ») | DTD n° DBV-24-6/16-2335_V5, p. 21, **relue en image à 500 dpi le 28/09/2026** : 2433 (24), 76512 (28), 76513 (28), 76515 (9), 76524 (28), 76526 (30), 76527 (32), 1511.1 (17), 1512.1 (21), 6146 (17), 6147 (25), 6148 (21) — les douze valeurs sont **confirmées** ; les autres parcloses concordent avec le poster (2454 26, 76501 34, 76503 22, 76504 20, 76505 18, 76506 16, 76507 14, 76508 12, 76509 11, 76516 28). Sur la planche du DTD, la cote de largeur part du trait vertical tiré depuis la lèvre gauche de la parclose ; la hauteur est de 20 mm (1511.1, 1512.1, 2433, 6146 à 6148) ou 17,5 mm (les autres) | aucune arbitrée : les deux jeux de cotes sont portés sur [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md) | parclose identifiée ou contrôlée sur une cote qui ne correspond pas au profilé livré |
+/anomalies/contradictions-entre-sources.md :
+| CTR-63 | Tulipe de la coulisse 1025 | Mise en œuvre Système 70 Plateforme, septembre 2023, registre 2.5.1.7, PDF p. 294, relue en image le 28/09/2026 : « **95336** » | Poster Kömmerling Gamme 70, profilés complémentaires, mars 2025, tel que le porte [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md) : « **9536** » | aucune arbitrée | mauvaise tulipe commandée |
+/anomalies/contradictions-entre-sources.md :
+| CTR-64 | Cotes des petits bois A243 T à 92003 T | Mise en œuvre Système 70 Plateforme, septembre 2023, registre 2.5.1.8, PDF p. 299, relue en image le 28/09/2026 : A243 T 27 × 11,2 ; A244 T 27 × 8,7 ; A245 T 35 × 11,2 ; A246 T 35 × 8,7 ; 92000 T 26 × 12 ; 92001 T 26 × 10,3 ; 92002 T 35 × 12 ; 92003 T 35 × 10,3 (mm) | Poster Kömmerling Gamme 70, profilés complémentaires, mars 2025, tel que le porte [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md) : petites cotes 9 / 11 / 9 / 11 et 10 / 12 / 10 / 12, largeur et hauteur dans l'ordre inverse | aucune arbitrée ; les deux jeux sont portés sur leur page | mauvais profil de petit bois choisi |
+/anomalies/contradictions-entre-sources.md :
+| CTR-68 | Cotes du profilé d'habillage rénovation 6149 du système 70 | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008, PDF p. 7 (registre 1.1, « Accessoires Dormants rénovation »), relue en image à 200 dpi le 29/09/2026 : « F00-96- 6149 », largeur hors tout **21,3** mm, retour supérieur **11,2** mm, hauteur 60 mm, partie basse 26,2 mm. Le 6145 dessiné à côté porte 22,1 / 12 / 60 / 25,6 | Mise en œuvre Système 70 Plateforme, septembre 2023, PDF p. 52 : « 6149 Profilé d'habillage rénovation », 60 de large, **22 et 12** à gauche. Poster Kömmerling Gamme 70, profilés complémentaires, mars 2025, p. 1 : 6149, 60, **22**, 12 | Les deux jeux de valeurs sont portés sur [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md), chacun avec son document ; aucun n'est retenu seul | Un habillage choisi sur les cotes d'une édition peut ne pas correspondre au profilé livré ; en SAV, une menuiserie de 2008 peut porter un 6149 de l'ancienne géométrie |

@@ -1,0 +1,8 @@
+{
+  "id": "G09",
+  "reponse": "La **PPU01PROF** est le panneau de porte d'entrée **ARPÈGE PP** de la collection Lumière (panneau verrier VERRISSIMA) : elle est présentée en **DIN droite** dans le catalogue portes d'entrée PROFERM de mars 2024 (p. 107) (/portes/collection-lumiere.md).\n\nLe DIN indiqué est le sens d'ouverture imprimé dans la légende du modèle ; le wiki ne dit pas si le même panneau se commande dans l'autre sens.\n\nÀ ne pas confondre avec les autres versions du motif ARPÈGE, qui n'ont pas le même DIN au catalogue :\n\n| Modèle | Référence | DIN |\n| --- | --- | --- |\n| ARPÈGE PS | PS01PROF | Gauche |\n| ARPÈGE ML | PS01MLPROF | Droite |\n| ARPÈGE PP | PPU01PROF | Droite |\n\nL'ARPÈGE PP est en impression numérique gris anthracite sur vitrage dépoli acide, verre trempé, Warm Edge noir, sans transparence. Il est réalisable en HYBRIDE, LUMINE et TEXTURAL (pas en PERFORM).",
+  "pages_citees": ["/portes/collection-lumiere.md"],
+  "appels": 1,
+  "trouve": "oui",
+  "navigation": "Requête « PPU01PROF DIN gauche droite », avec la référence seule en tête puisqu'une référence se cherche en texte intégral. La page /portes/collection-lumiere.md est sortie en première position ; son tableau des modèles PS, ML et PP donne PPU01PROF = ARPÈGE PP, DIN Droite, et la section « Comment lire les tables » précise que le DIN est celui de la légende. Les deux autres pages livrées (compas Roto NX, gâches Roto NX) ont été ramenées par les mots « DIN gauche droite », qui abondent dans les tableaux Roto : c'est du bruit, et aucune anomalie injectée (INC-293 à 296, VER-113, CTR-118, toutes Roto NX) ne concerne ce panneau. Une requête sur la référence seule aurait évité ces 2 000 lignes de bruit."
+}

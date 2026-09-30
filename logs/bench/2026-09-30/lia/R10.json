@@ -1,0 +1,67 @@
+{
+  "question": "donne moi les differente chicane lumine 55",
+  "pages_lues": [
+    "/coloris/coloris-lumine.md",
+    "/gammes/lumine.md",
+    "/commercial/lumine.md",
+    "/profiles/soleal-gy-dormants-et-rails.md",
+    "/gammes/coulissants-aluminium.md",
+    "/profiles/askey-coulissant-65-nv-dormants-et-ouvrants.md",
+    "/profiles/lumeal-ga-dormants-et-ouvrants.md",
+    "/profiles/soleal-fy-dormants-et-ouvrants.md"
+  ],
+  "anomalies": [
+    "CTR-27",
+    "INC-167",
+    "INC-42",
+    "VER-50",
+    "VER-52"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "chicane LUMINE55",
+        "gamme": "LUMINE"
+      },
+      "pages_nouvelles": [
+        "/coloris/coloris-lumine.md",
+        "/gammes/lumine.md",
+        "/commercial/lumine.md"
+      ],
+      "caracteres": 48437
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "chicane montant central coulissant SOLEAL 55"
+      },
+      "pages_nouvelles": [
+        "/profiles/soleal-gy-dormants-et-rails.md",
+        "/gammes/coulissants-aluminium.md",
+        "/profiles/askey-coulissant-65-nv-dormants-et-ouvrants.md"
+      ],
+      "caracteres": 41336
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/profiles/lumeal-ga-dormants-et-ouvrants.md"
+      },
+      "pages_nouvelles": [
+        "/profiles/lumeal-ga-dormants-et-ouvrants.md"
+      ],
+      "caracteres": 10959
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/profiles/soleal-fy-dormants-et-ouvrants.md"
+      },
+      "pages_nouvelles": [
+        "/profiles/soleal-fy-dormants-et-ouvrants.md"
+      ],
+      "caracteres": 15530
+    }
+  ]
+}

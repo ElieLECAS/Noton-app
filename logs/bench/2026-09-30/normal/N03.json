@@ -1,0 +1,23 @@
+{
+ "id": "N03",
+ "reponse": "Le wiki ne donne pas de référence de clé pompier. Pour la fermeture pompier TGY3731 du coulissant Technal SOLEAL GY 55, il donne seulement : fournie avec les vis de fixation T770059 ; compatible uniquement avec les montants simples TGY1202 et TGY1300 ; conforme à l'arrêté du 25 juin 1980 et à l'article CO3 modifié du 28 avril 2016 (ERP) ; « permet l'ouverture d'urgence depuis l'extérieur à l'aide d'une clé spéciale pompier » ; passage libre minimum H = 1 800 mm × L = 900 mm. La clé elle-même n'est ni référencée ni décrite (pas de type triangle / carré). À demander à Technal ; les pages 86-103 du catalogue de conception SOLEAL GY (réf. 5744.005) sont encore « à faire » au registre de couverture.",
+ "dans_le_wiki": "non",
+ "preuves": [
+  {"page": "/quincaillerie/soleal-gy-roulements-et-fermetures.md", "extrait": "- Référence : **TGY3731** (avec vis de fixation T770059)."},
+  {"page": "/quincaillerie/soleal-gy-roulements-et-fermetures.md", "extrait": "- Permet l'ouverture d'urgence depuis l'extérieur à l'aide d'une clé spéciale pompier."},
+  {"page": "/sources/technal-soleal-gy-conception.md", "extrait": "| 86-103 | Roulettes (T401011 à TGY3872), crémones 1 à 4 points, cylindres, organes de manœuvre (cuvettes, poignées tirage, réversibilité TGY3606, fermeture pompier ERP TGY3731, gâches réglables, centreurs TGY3832) | à faire |"}
+ ],
+ "ambiguite": "",
+ "outils": 3,
+ "comment_trouve": "Grep insensible à la casse « pompier|TGY3731|clé spéciale|clé triangle|clé carrée|triangle » : la TGY3731 n'apparaît que sur la page SOLEAL GY roulements et fermetures et dans la fiche source (registre « à faire »), les « triangle » sont des pictogrammes sans rapport. Grep « clé » sur toutes les pages SOLEAL GY : clés Allen de réglage, crémones à clé, verrou central TGY3622, jamais de référence de clé pompier.",
+ "formulations": [
+  "Quelle clé pour ouvrir la fermeture pompier d'un coulissant SOLEAL GY ?",
+  "Clé pompier TGY3731 ?",
+  "Sur un coulissant alu en ERP, quelle clé pompier commander avec la fermeture de secours ?"
+ ],
+ "defauts_wiki": [
+  "Absence de donnée : la page mentionne « une clé spéciale pompier » sans référence ni type ; la source (catalogue de conception SOLEAL GY, p. 86-103) est encore à l'état « à faire » au registre, donc la donnée peut exister dans le PDF sans avoir été transcrite.",
+  "La section fermeture pompier est en puces sans tableau ni localisateur (schéma: …) ni citation de page ; la page n'a pas de source_pages.",
+  "Le type de clé pompier (triangle, carré) n'est défini nulle part dans le wiki, pas même au glossaire."
+ ]
+}

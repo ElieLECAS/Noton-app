@@ -1,0 +1,445 @@
+===== PAGE 1 : /quincaillerie/soleal-gy-roulements-et-fermetures.md =====
+# Chariots de roulement et calage
+
+Les chariots SOLEAL GY 55 sont logés dans la traverse basse d'ouvrant (T141015 ou T141021). Leur corps en matériau isolant conserve la continuité de la rupture thermique de la traverse basse.
+
+### 1. Tableau de choix des roulettes et charges admissibles
+
+| Type de chariot | Référence | Réglage | Galets / Bandage | Poids maxi par vantail | Compatible Rail Alu T341000 | Compatible Rail Inox TGY4007 |
+| --- | --- | --- | --- | --- | --- | --- |
+| **Simple fixe** | **T401011** | Non réglable | Polyamide sur roulements à aiguilles | **100 kg** | Oui | Oui |
+| **Double fixe** | **T401012** | Non réglable | Polyamide sur roulements à aiguilles | **200 kg** | Oui | Oui |
+| **Double fixe Inox** | **TGY3873** | Non réglable | Galets 100% Inox | **200 kg** | **NON (Incompatible)** | **OUI** |
+| **Simple réglable** | **T441003** | Réglable en hauteur | Polyamide sur aiguilles | **100 kg** | Oui | Oui |
+| **Double réglable** | **T441004** | Réglable en hauteur | Polyamide sur aiguilles | **200 kg** | Oui | Oui |
+| **Double réglable Inox** | **TGY3872** | Réglable en hauteur | Galets 100% Inox | **200 kg** | **NON (Incompatible)** | **OUI** |
+
+> [!WARNING]
+> **Interdiction absolue** d'associer des chariots à roulettes inox (**TGY3872** / **TGY3873**) sur le chemin de roulement en aluminium **T341000**. L'inox détruirait par écrouissage le rail aluminium sous forte charge. L'utilisation du rail rapporté en acier inoxydable **TGY4007** est impérative avec les galets inox.
+
+### 2. Prescription de calage sous traverse : Cale TGA3817
+Pour transmettre directement la charge du vitrage vers les roulettes sans solliciter la rupture thermique des traverses :
+- **Prise de vitrage 29-32 mm (profilé T141021)** : Cale **TGA3817** obligatoire au droit de chaque roulette de manière systématique.
+- **Prise de vitrage 24-28 mm (profilé T141015)** : Cale **TGA3817** (zone sécable raccourcie) obligatoire si la largeur du vantail dépasse **1,50 m** OU si le poids du vantail dépasse **120 kg**.
+- La cale se fixe sur la traverse avec un point de colle avant vitrage.
+
+### 3. Réglage en hauteur des roulettes réglables
+- Les chariots réglables (T441003, T441004, TGY3872) sont ajustables en hauteur **sans dégonder le vantail** au moyen d'une clé Allen introduite par le chant latéral du montant d'ouvrant à travers l'orifice prévu à **25 mm** de hauteur.
+- Lors du réglage, il est obligatoire de soulager le vantail à l'aide de ventouses de vitrier pour éviter d'endommager la vis micrométrique de réglage sous la charge.
+
+---
+
+# Systèmes de fermeture et verrouillage
+
+La condamnation s'effectue par des mécanismes encastrés à têtière filante en acier inox (grade 3 anticorrosion NF EN 1670) :
+
+### 1. Gamme de crémones encastrées
+
+| Référence | Points de fermeture | Condamnation clé | Hauteur min. châssis | Hauteur min. poignée $Hp$ | Fixation |
+| --- | --- | --- | --- | --- | --- |
+| **TGY3700** | 1 point simple | Non | 395 mm | 219 mm | 2 vis TGY3723 |
+| **TGY3701** | 1 point à clé | Oui (cylindre) | 525 mm | 346 mm | 4 vis TGY3723 |
+| **TGY3702** | 3 points | Non | 1 292 mm | 721 mm | 6 vis TGY3723 |
+| **TGY3703** | 3 points à clé | Oui (cylindre) | 1 292 mm | 721 mm | 8 vis TGY3723 |
+| **TGY3704** | Rallonge 4ème point | Raccordée à TGY3702/03 | Pour très grandes hauteurs | — | 2 vis TGY3723 |
+| **TKG025** | Fermeture 1 point coquille | Non | 395 mm | 219 mm | Encastrée + pêne déporté TGY6006 |
+
+### 2. Cylindres et barillets européens
+- Montants latéraux standard TGY1202 et TGY1303 : Cylindre européen **30 x 30 mm** (Réf. **T1040**).
+- Montants latéraux à renfort tube TGY1301 et TGY1302 : Cylindre européen décentré **40 x 30 mm** (Réf. **T1044**).
+- Rosettes inox de protection de cylindre : Réf. **T960013** ou **TPY6003**.
+
+### 3. Fermeture pompier (Établissements Recevant du Public - ERP)
+Conforme à l'Arrêté du 25 juin 1980 et à l'article CO3 modifié du 28 avril 2016 :
+- Référence : **TGY3731** (avec vis de fixation T770059).
+- Compatible uniquement avec les montants simples **TGY1202** et **TGY1300**.
+- Permet l'ouverture d'urgence depuis l'extérieur à l'aide d'une clé spéciale pompier.
+- Exigence dimensionnelle réglementaire : passage libre minimum de **$H = 1\,800\text{ mm} \times L = 900\text{ mm}$**.
+
+### 4. Verrou central à clé TGY3622
+- Placé à la croisée centrale des vantaux en partie basse.
+- Montage sur cale **TGY3640** avec perçage Ø7 mm et écrou à sertir taraudé M5.
+- Vis de fixation CHc M5x16 et M5x25.
+- En cas d'utilisation du verrou central, les roulettes doivent être décalées à **62 mm** et les cales de vitrage à **71 mm** du chant du montant pour ne pas entrer en conflit avec le perçage Ø11 mm de la pièce de blocage.
+
+---
+
+# Organes de manœuvre et poignées
+
+### 1. Tableau de compatibilité des poignées selon les montants
+
+| Organe de manœuvre | Type | Réf. Laquée | Réf. Anodisée | Compatible Montant Standard (TGY1202/1300) | Compatible Montant Tube (TGY1301/1302) | Compatible Montant Lame (TGY1200/1201) | Compatible Montant Bilame (TGY1220) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **Cuvette encastrée** | Intérieure | **TGY3712** | **TGY3719** | Oui (OS / SF) | Oui (OS / SF) | Non | Oui |
+| **Bouton sur plaque** | Intérieure | **TGY3713** | **TGY3714** | Non | Non | **Oui (OS / SF)** | Oui |
+| **Poignée tirage Technal** | Intérieure | **TGY3717** | — | **Oui (OS / SF\*)** | **Oui (OS / SF\*)** | Non | Non |
+| **Poignée tirage extérieure**| Extérieure | **TGY3718** | — | Oui (OS / SF) | Oui (OS / SF) | Non | Non |
+| **Poignée fixe de tirage** | Int/Ext | **TGY3732 / TGY3733** | — | Oui (avec TGY3716) | Oui (avec TGY3716) | Oui | Oui |
+| **Poignée design droit** | Intérieure | **TGY3606** | — | Oui (OS) | Oui (OS) | Non | Non |
+| **Poignée anse galbée** | Intérieure | **TGY6004** | — | Oui (OS / SF) | Non | Non | Non |
+| **Cuvette à levier** | Intérieure | **TGY6003** | — | Oui (OS / SF) | Non | Non | Non |
+| **Béquille à carré de 7 mm**| Intérieure | **T960030 / TCZ61051**| — | Oui (avec kit TGY3721) | Non | Non | Non |
+
+*\*Note : Pour croiser les vantaux sans heurt avec la poignée TGY3717 sur semi-fixe, prévoir la butée TCG021.*
+
+### 2. Réversibilité de la poignée Design Droit TGY3606
+La poignée TGY3606 est réversible pour vantail de service à gauche ou à droite :
+1. Présenter la poignée en position ouverte.
+2. Retirer les 4 vis d'assemblage du corps arrière.
+3. Retirer la butée et le corps de fixation.
+4. Tourner le bras de manœuvre à 180°.
+5. Remonter la butée et visser.
+6. Retourner le corps arrière de 180° (les 2 logements de vis doivent être orientés côté serrure pour fixation par vis TGY3723).
+7. Revisser l'ensemble.
+
+---
+
+# Gâches, centreurs et accessoires de guidage
+
+### 1. Gâches de condamnation
+- **Gâche dormant périphérique TGY3705** : Se visse directement dans la gorge du dormant aluminium sans fraisage ni découpe du profilé à l'aide de vis Torx TGY3723.
+- **Gâche pour percussion centrale TGY3711** : Se visse en applique sur le profilé de percussion centrale TGY1204 ou de percussion d'angle TGY1206.
+- **Gâche renforcée anti-effraction TGY3742** : Équipée de vis de pré-positionnement et d'un contre-clameau en aluminium pour retard à l'effraction sur dormant 55 mm.
+- **Réglage micrométrique de la gâche** : La serrure Technal intègre un gabarit plastique réversible. En position horizontale, il sert de pige d'épaisseur pour aligner la gâche à exactement **6 mm** du boîtier de fermeture avant serrage définitif des vis.
+
+### 2. Centreurs d'ouvrants et guidage
+- **Centreur d'ouvrant TGY3832** : Se clipse par rotation au milieu du montant d'ouvrant. Garantit l'alignement parfait des vantaux en position fermée et le plaquage des joints brosses contre le vent.
+  - *Règle bilame :* Dans le cas d'une menuiserie soumise aux risques de bilame, poser obligatoirement **2 centreurs TGY3832** répartis sur la hauteur.
+- **Compensateur de centreur TGY3833** : Se monte face au centreur TGY3832 sur le profilé de percussion TGY1204 à l'aide d'une vis TGY3723.
+- **Guides de montants centraux TGY3883** : Se clipsent en tête et pied de chaque montant central après gondage des vantaux. Verrouillage par rotation des flèches à l'aide d'une clé Allen de 4 mm. Mousse d'étanchéité positionnée à fleur de profilé.
+- **Pièces anti-dégondage TGY3885** : Se montent sur chaque montant latéral après réglage des roulettes pour empêcher le soulèvement frauduleux de l'ouvrant.
+
+---
+
+# Voir aussi
+
+- [Profilés dormants et rails SOLEAL GY 55](/profiles/soleal-gy-dormants-et-rails.md)
+- [Cotes de débit SOLEAL GY 55](/profiles/soleal-gy-cotes-de-debit.md)
+- [Pose et galandage SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md)
+- [Fournisseur Technal](/fournisseurs/technal.md)
+
+===== PAGE 2 : /quincaillerie/ferrures-approuvees-profine.md =====
+La **ferrure** est l'ensemble des pièces métalliques qui font tourner, basculer ou coulisser un
+ouvrant et le verrouillent dans son dormant : paumelles ou pivots, compas, crémone, gâches, points
+de verrouillage. Cette page porte le registre 1.3.4 « Ferrure » des directives générales profine,
+commun aux systèmes 70 et 76 : les règles de choix et de fixation, puis les marques de
+quincaillerie approuvées par type d'ouvrant [1 p. 87].
+
+# Caractéristiques
+
+## Informations générales
+
+**Attention — choix, montage et vissage incorrects des éléments de ferrure : danger d'accidents
+graves avec danger de mort** [1 p. 87].
+
+- Utilisez uniquement les ferrures qui sont adaptées au système de profilés (système de
+  fenêtres).
+- Adaptez les pièces de ferrure portantes aux poids des ouvrants.
+- Pour le montage et surtout pour la fixation, respectez la documentation spécifique du fabricant
+  de ferrures et les instructions du fabricant de profilés.
+
+*En votre qualité de fabricant de fenêtres et de portes, vous êtes responsable pour le choix et la
+fixation corrects des éléments de ferrure sur le matériau du cadre (ouvrant et dormant) et pour
+assurer les exigences indiquées ici !* [1 p. 87]
+
+Pour assurer la fonctionnalité durable et donc la sécurité d'utilisation des fenêtres et portes
+pendant leur durée de vie, la fixation des éléments de ferrure de sécurité doit être réalisée avec
+un soin particulier. C'est le cas pour les éléments portants comme, par exemple, les pivots et les
+compas. Les fabricants de ferrures indiqués ci-dessous fournissent ces produits [1 p. 87].
+
+Dans le cadre du test ITT (essai de type initial), le fournisseur du système détermine les poids
+d'ouvrants maximaux admissibles. Ces résultats de test reflètent une fabrication de fenêtres selon
+l'état de l'art ; selon l'utilisation de composants différents, de ferrures ou de moyens de
+fixation, il peut y avoir des écarts importants entre les résultats de test. Les forces indiquées
+dans la directive doivent être vérifiées par le fabricant de fenêtres et de portes en fonction du
+poids d'ouvrant. profine recommande une vérification des fenêtres et composants par un test selon
+des consignes de la TBDK [1 p. 87].
+
+Les contenus de cette directive doivent être implémentés dans le contrôle de production du
+fabricant de fenêtres et de portes ; d'autres indications au sujet du contrôle de production de
+l'entreprise se trouvent entre autres dans la norme EN 14351-1 (voir
+[Conditions d'utilisation des directives profine](/normes/directives-profine-conditions-d-utilisation.md)).
+Les prescriptions des fabricants de ferrures et en plus les prescriptions de profine doivent être
+respectées pour le traitement [1 p. 87].
+
+**Remarque** : cette directive décrit tous les thèmes importants pour l'utilisateur final au sujet
+des ferrures de fenêtres et de portes-fenêtres [1 p. 87].
+
+## Points de verrouillage
+
+Les points de verrouillage doivent répondre aux exigences suivantes [1 p. 87] :
+
+- le nombre de points de verrouillage côté paumelle doit correspondre à celui côté fermeture ;
+- **les points de verrouillage (côté de paumelle, ou ferrure, etc.) ne doivent pas être distancés
+  de plus de 80 cm.**
+
+## Contrôle de fonctionnement, gabarits, joint de frappe
+
+- **Contrôle de fonctionnement** : après le montage de la ferrure sur le dormant et l'ouvrant, il
+  faut contrôler le fonctionnement de la fenêtre.
+- **Gabarits de perçage** : les gabarits de perçage nécessaires pour le montage de la ferrure sont
+  fournis par le fabricant de ferrure.
+- **Joint de frappe** : afin de maintenir l'étanchéité, profine recommande de ne pas entailler le
+  joint de frappe de l'ouvrant. Le compas d'OB (oscillo-battant) peut occasionner une surépaisseur
+  du recouvrement.
+
+[1 p. 88]
+
+La maintenance des ferrures et les consignes de sécurité du même registre (§ 6 et 7) sont sur
+[Usage, nettoyage et entretien d'une menuiserie profine](/entretien/usage-nettoyage-entretien-menuiseries-profine.md).
+
+# Compatibilités
+
+Marques de quincaillerie approuvées par profine, une ligne par type de fenêtre, de porte ou
+d'accessoire, dans l'ordre des planches du registre ; les marques sont écrites comme la source les
+écrit. **Contacter votre fournisseur de ferrure pour des informations plus détaillées** [1 p. 90-93].
+
+## Fenêtres et portes-fenêtres
+
+| Type d'ouvrant | Quincaillerie approuvée |
+| --- | --- |
+| OB1 fenêtre / porte-fenêtre (oscillo-battant, 1 vantail) | AUBI, Fuhr, GU, Hautau, MACO, Roto, Schüring, Siegenia, Winkhaus |
+| OF1 fenêtre / porte-fenêtre (ouvrant à la française, 1 vantail) | AUBI, Fuhr, GU, MACO, Roto, Schüring, Siegenia, Winkhaus |
+| Porte 1 vantail avec serrure | AUBI, Fuhr, GU, MACO, Roto, Schüring, Siegenia, Winkhaus |
+| Soufflet | AUBI, Fuhr, GU, MACO, Roto, Schüring, Siegenia, Winkhaus |
+| Fenêtre 2 vantaux, verrouillage du semi-fixe par crémone apparente | AUBI, GU, MACO, Roto, Winkhaus |
+| Fenêtre 2 vantaux, verrouillage du semi-fixe par crémone cachée | Fuhr, GU, MACO, Roto, Schüring, Siegenia, Winkhaus |
+| Fenêtre 2 vantaux, verrouillage du semi-fixe par crémone apparente avec renvoi d'angle | AUBI, Fuhr, GU, Roto, Schüring, Winkhaus |
+| Fenêtre 2 vantaux, verrouillage du semi-fixe par verrou | AUBI, GU, MACO, Roto, Schüring, Siegenia, Winkhaus |
+| Fenêtre 2 vantaux, verrouillage du semi-fixe par houssette | AUBI, GU, MACO, Roto, Schüring, Siegenia, Winkhaus |
+| Fenêtre 2 vantaux, verrouillage du semi-fixe par poignée | AUBI, GU, Roto, Schüring, Siegenia |
+| Fenêtre basculante | GU, Hautau |
+| OF ouverture extérieure | AUBI, Fuhr, Roto, Siegenia, Winkhaus |
+
+(schéma: raw/profine-directives-generales-2023-01.pdf, p. 90 et 91)
+
+Le semi-fixe est le vantail d'une fenêtre à deux vantaux qui ne porte pas la poignée ; il se
+verrouille par l'un des six moyens listés. Chaque colonne des planches porte le nom du type
+d'ouvrant, son pictogramme d'ouverture et la liste des marques.
+
+![Marques approuvées : OB1-OF1, porte 1 vantail, soufflet](/assets/reference/directives-profine/quincailleries-approuvees-ob-of-porte-soufflet.png)
+
+![Marques approuvées : fenêtres 2 vantaux, crémone apparente, cachée, avec renvoi d'angle, verrou](/assets/reference/directives-profine/quincailleries-approuvees-fenetre-2-vantaux.png)
+
+![Marques approuvées : houssette, poignée, fenêtre basculante, OF ouverture extérieure](/assets/reference/directives-profine/quincailleries-approuvees-housette-poignee-basculante-of-exterieure.png)
+
+(schéma: raw/profine-directives-generales-2023-01.pdf, p. 90 et 91)
+
+## Portes
+
+| Type de porte ou d'élément | Quincaillerie approuvée |
+| --- | --- |
+| Porte coulissante à déport | AUBI, GU, Hautau, MACO, Roto, Schüring, Siegenia, Winkhaus |
+| Porte accordéon | AUBI, Fuhr, GU, Roto, Schüring, Siegenia |
+| Levant-coulissant | Siegenia, GU, Hautau |
+| Porte d'entrée | BKS, Fuhr, GU, KFV, KIMA, Schlechtendahl, Schüring, Winkhaus |
+| Porte d'entrée 2 vantaux | Fuhr, GU, Maco, Roto, Schüring, Winkhaus |
+| Seuil porte d'entrée | Alumat, BKV, Schüring |
+| Étanchéité automatique de porte | Alumat, Athmer, Elton, Dr. Hahn |
+| Ferme-porte en applique | Dorma, GEZE, GU-BKS |
+| Ferme-porte au sol | Dorma, GEZE, GU-BKS |
+| Boîte aux lettres | Normbau |
+| Paumelle fenêtre | Anuba, BKV, Breuer & Schmitz, Haps & Sohn, MACO, Schüring, Simonswerk, Winkhaus |
+| Paumelle porte d'entrée | Anuba, BKV, Breuer & Schmitz, Dr. Hahn, Haps & Sohn, MACO, Schüring, Simonswerk, Winkhaus |
+
+(schéma: raw/profine-directives-generales-2023-01.pdf, p. 91 et 92)
+
+![Marques approuvées : porte coulissante à déport, accordéon, levant-coulissant, porte d'entrée](/assets/reference/directives-profine/quincailleries-approuvees-coulissants-accordeon-porte-entree.png)
+
+![Marques approuvées : porte d'entrée 2 vantaux, seuil, étanchéité automatique, ferme-porte en applique](/assets/reference/directives-profine/quincailleries-approuvees-porte-2-vantaux-seuil-ferme-porte.png)
+
+Les éléments de la seconde moitié du tableau (seuil, étanchéité, ferme-portes, boîte aux lettres,
+paumelles) n'ont pas de pictogramme sur la planche.
+
+(schéma: raw/profine-directives-generales-2023-01.pdf, p. 91 et 92)
+
+## Petits accessoires
+
+| Accessoire | Quincaillerie approuvée |
+| --- | --- |
+| Cale de jeu / transport en matière plastique | KÖMMERLING |
+| Ouverture d'imposte | GEZE, GU, Hautau, Schüring |
+| Aérateur à entrebâillement | AUBI, Fuhr, GU, MACO, Roto, Siegenia, Winkhaus |
+| Aérateur réglable insonorisé | GU, Hautau, Siegenia, Frank KG |
+
+(schéma: raw/profine-directives-generales-2023-01.pdf, p. 93)
+
+**FERCO ne figure dans aucune des listes du registre 1.3.4**, alors que les avis techniques des
+systèmes 70 et 76 nomment FERCO — voir [FERCO](/quincaillerie/ferco.md) et **VER-20** [1 p. 90-93].
+
+# Ce que la source ne donne pas
+
+- Aucune force, aucun poids d'ouvrant admissible : ils relèvent du test ITT du fournisseur de
+  système et de la documentation du fabricant de ferrures. Pour la Roto NX, voir
+  [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md).
+- Aucune gamme ni référence de ferrure : la liste nomme des marques.
+
+# Citations
+
+[1] [Directives générales profine, version janvier 2023](raw/profine-directives-generales-2023-01.pdf),
+registre 1.3.4 « Ferrure », p. 1 à 7 imprimées (PDF p. 87 à 93, versions janvier 2016 et février
+2023)
+
+# Voir aussi
+
+- [ROTO](/fournisseurs/roto.md)
+- [FERCO](/quincaillerie/ferco.md)
+- [Siegenia](/quincaillerie/siegenia.md)
+- [Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md)
+- [Directives générales profine](/sources/profine-directives-generales.md)
+
+===== PAGE 3 : /quincaillerie/askey-coulissant-65-nv-quincaillerie.md =====
+# Quincaillerie et accessoires ASKEY Coulissant 65 NV
+
+La quincaillerie et les accessoires du **Coulissant 65 NV ASKEY** intègrent les organes de roulement, les verrouillages multipoints, les organes de manœuvre ainsi que les composants d'étanchéité à l'air et à l'eau [1 p. 81, 109].
+
+---
+
+# Caractéristiques
+
+### Chariots de roulement
+
+Les chariots sont certifiés en classe 6 (200 000 cycles d'ouverture) selon la norme européenne, montés sur roulements à aiguilles anticorrosion avec axes inox et chapes polyamide isolantes [1 p. 9, 110, 124] :
+
+| Référence | Désignation | Type de galet | Axe (mm) | Charge max / roulette | Charge max / vantail | Compatibilité rail |
+| --- | --- | --- | --- | --- | --- | --- |
+| **W6050150** | Roulette simple fixe | Polyamide | 6 | 40 kg | **80 kg** | Alu (W3041224) ou inox (W4000158) |
+| **W6050151** | Roulette simple réglable | Polyamide | 6 | 40 kg | **80 kg** | Alu (W3041224) ou inox (W4000158) |
+| **W6050152** | Roulette double fixe | Polyamide | 6 | 80 kg | **160 kg** | Alu (W3041224) ou inox (W4000158) |
+| **W6050153** | Roulette double réglable | Polyamide | 6 | 80 kg | **160 kg** | Alu (W3041224) ou inox (W4000158) |
+| **W6050155** | Roulette double réglable renforcée | Polyamide | 8 | 110 kg | **220 kg** | Inox W4000158 obligatoire |
+| **W6000025** | Roulette double charges lourdes | Acier trempé | - | 125 kg | **250 kg** | Inox W4000158 obligatoire (ouvrant 32) |
+| **W6050149** | Cale d'adaptation roulette 32 | Polyamide | - | - | - | Traverse W1041274 |
+
+(schéma: raw/askey1.pdf, p. 110, 111, 124)
+
+### Serrures et crémones de fermeture
+
+Têtière de 16 mm, axe à 43 mm, fouillot carré de 7 mm [1 p. 10, 111, 112] :
+
+| Référence | Désignation | Points de fermeture | Mode de pose | Fonction spécifique |
+| --- | --- | --- | --- | --- |
+| **W6050100** | Fermeture 1 point | 1 crochet réglable | À visser | Système anti-fausse manœuvre |
+| **W6050102** | Fermeture 2 points | 1 crochet réglable + 1 fixe | À clamer | Fournie avec clameaux |
+| **W6050103** | Fermeture 3 points | 1 réglable + 2 fixes | À clamer | Verrouillage par cylindre européen |
+| **W6050104** | Fermeture 3 points à clé | 1 réglable + 2 fixes | À clamer | Cylindre traversant ouvrant |
+| **W6050111** | Bloc verrou encastré | 1 pêne à bascule | À encastrer | Verrouillage supplémentaire de vantail |
+| **W6050085** | Gâche à clamer | - | À clamer | Fournie avec vis de serrage |
+| **W6050083** | Clameau pour fermeture | - | À glisser | Maintien de têtière dans la gorge |
+
+(schéma: raw/askey1.pdf, p. 111, 112)
+
+### Organes de manœuvre et poignées
+
+| Référence | Désignation | Type de fixation | Application vantail |
+| --- | --- | --- | --- |
+| **W6050120** | Grande poignée de manœuvre | Rivets taraudés W6060386 | Vantail principal 24 ou 32 mm |
+| **W6050125** | Poignée standard | Rivets taraudés W6060387 | Vantail principal ou secondaire |
+| **W6050130** | Petite commande compacte | Rivets taraudés W6060385 | Vantail semi-fixe ou secondaire |
+| **W6050126** | Gâchette allongée | Remplacement sur poignée | Manœuvre adoucie / PMR |
+| **W6050127** | Bouchon de manœuvre poignée | Obturation | Transforme la poignée en poignée fixe de tirage |
+| **W6050133** | Coquille à carré vantail 24 mm | Encastrée | Croisement total des vantaux de 24 mm |
+| **W6050134** | Coquille à carré vantail 32 mm | Encastrée | Croisement total des vantaux de 32 mm |
+| **W6050284** | Verrou à levier extra-plat | Encastré | Ouvrants de 24 et 32 mm |
+
+(schéma: raw/askey1.pdf, p. 113, 114, 117, 119)
+
+### Carrés de manœuvre (carré de 7 mm)
+
+Longueur nominale de la tige carrée en fonction de la section de profilé et du ferrage [1 p. 116, 121, 122] :
+
+| Référence | Longueur $L$ (mm) | Type d'ouvrant | Face de manœuvre |
+| --- | --- | --- | --- |
+| **W4070492** | 32 | Vantail 24 mm non renforcé | Face intérieure seule |
+| **W4070493** | 35 | Vantail 24 mm non renforcé | Poignées intérieure et extérieure |
+| **W4070494** | 41 | Vantail 32 mm non renforcé | Face intérieure ou deux faces |
+| **W4070496** | 53 | Vantail 24 mm renforcé carré | Poignées sur les deux faces |
+| **W4070495** | 56 | Vantail 24 mm renforcé W1041261 | Poignées sur une ou deux faces |
+| **W4070497** | 59 | Vantail 32 mm renforcé carré | Face intérieure seule |
+| **W4070498** | 62 | Vantail 32 mm renforcé carré | Poignées intérieure et extérieure |
+
+(schéma: raw/askey1.pdf, p. 116)
+
+---
+
+# Champs d'application
+
+### Hauteur de poignée et limites de châssis
+
+Dimensions minimales hors-tout d'ouvrant ($Ho$) et hauteur minimale de poignée ($hp$) en millimètres selon le type de fermeture [1 p. 125] :
+
+| Type de fermeture | Référence | $Ho$ mini (mm) | $hp$ mini (mm) | Plage hauteur traverse intermédiaire ($HTr$) |
+| --- | --- | --- | --- | --- |
+| 1 point | W6050100 | **500** | 250 | $HP - 162 < HTr < HP + 90$ |
+| 2 points | W6050102 | **965** | 425 | $HP - 162 < HTr < HP + 52$ |
+| 3 points | W6050103 | **1 297** | 755 | $HP - 162 < HTr < HP + 52$ |
+| 3 points avec cylindre | W6050104 | **1 297** | 755 | $HP - 252 < HTr < HP + 52$ |
+| 1 point à coulisse | W6050111 | - | - | $HP - 106 < HTr < HP + 106$ |
+
+(schéma: raw/askey1.pdf, p. 125)
+
+Relation hauteur hors-tout châssis et ouvrant :
+$$\text{Hors tout châssis} = Ho + 2 \times \text{hauteur dormant} - 16\text{ mm}$$
+
+---
+
+# Compatibilités
+
+* **Cale de roulette W6050149** : Obligatoire pour monter les chariots W6050150 à W6050155 dans la gorge de traverse d'ouvrant 32 mm W1041274 [1 p. 110].
+* **Crochet de bloc verrou** : Le bloc verrou W6050111 nécessite le crochet **W6050112** sur ouvrant 24 mm et le crochet **W6050117** sur ouvrant 32 mm [1 p. 112, 113].
+* **Sélection des poignées sur ouvrants renforcés** : Les poignées à coquille W6050133 et W6050134 sont conçues pour s'effacer lors du croisement complet des vantaux en baies de 3 et 4 vantaux [1 p. 114].
+
+---
+
+# Ce que la source ne donne pas
+
+* La source ne précise pas la référence de la clé de manœuvre d'urgence pour le bloc verrou W6050111 en l'absence de cylindre européen.
+
+---
+
+# Citations
+
+[1] [Coulissant 65 NV ASKEY - Conception](raw/askey1.pdf), p. 81, 109-127
+[2] [Coulissant 65 NV ASKEY - Fabrication](raw/askey5.pdf), p. 38-53, 98-114
+
+---
+
+# Voir aussi
+
+- [Gamme Coulissant 65 NV](/gammes/askey-coulissant-65-nv.md)
+- [Profilés dormants et ouvrants Coulissant 65 NV](/profiles/askey-coulissant-65-nv-dormants-et-ouvrants.md)
+- [Cotes de débit Coulissant 65 NV](/profiles/askey-coulissant-65-nv-cotes-de-debit.md)
+- [Fabrication Coulissant 65 NV](/procedures/fabrication-coulissant-askey-65-nv.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /quincaillerie/lumeal-ga-roulements-et-fermetures.md | Quincaillerie | Roulements et fermetures Technal LUMEAL GA | technal, lumeal, lumeal-ga, coulissant, roulettes, ferrures | Chariots de roulement simples, doubles et triples jusqu'à 300 kg, ferrures de verrouillage 1 à 3 points, poignées de tirage et équipements de retard à l'effraction classe RC3 du coulissant minimal LUMEAL GA de Technal. | anes de roulement, de fermeture et de sécurité du coulissant **LUMEAL GA** intègrent des chariots de roulement à rupture thermique supportant jusqu'à |
+| /procedures/fabrication-coulissant-askey-65-nv.md | Procédure | Procédure de fabrication ASKEY Coulissant 65 NV | procédure, atelier, fabrication, coulissant, drainage, usinage | Méthode d'atelier pour l'usinage, le poinçonnage, le drainage caché, l'assemblage des dormants coupe droite et le montage des ouvrants du Coulissant 65 NV ASKEY. | tage des ferrures et poignées** : * Glisser la crémone 1, 2 ou 3 points (W6050100 à 104) dans la gorge du montant latéral. * Poser les rivets ta |
+| /portes/soleal-py-cotes-de-debit.md | Porte d'entrée | Cotes de débit et formules de calcul des portes Technal SOLEAL PY 55 | technal, soleal, soleal-py, porte, debit, formules | Recueil exhaustif des formules de débit, déductions de profilés (dormants, ouvrants en T/Z, plinthes, traverses FPI, seuils PMR PY1100), dimensionnement des vitrages et formules de coupe des tringles de crémone pour la porte SOLEAL PY 55 de TECHNAL. | clips). --- # Formules de débit des tringles de crémone (T525058) Les tringles plates en aluminium **T525058** actionnent les pênes hauts et bas à |
+| /quincaillerie/roto-patio-inowa.md | Quincaillerie | Roto Patio Inowa | roto, patio-inowa, innoslide, coulissant, verrouilleur, etancheite | Quincaillerie ROTO du coulissant INNOSLIDE, à commande active de tous les points de fermeture, sans soulèvement de l'ouvrant. | lerie [ROTO](/fournisseurs/roto.md) qui équipe le coulissant PVC à frappe [INNOSLIDE](/gammes/innoslide.md) : « Pour assurer une sécurité et une fiabi |
+| /reference/terminologie-et-legendes-profine.md | Référence | Terminologie, légendes et calcul d'une cote d'élément, directives profine | profine, terminologie, legende, reperes, dht, ccd | Les planches de terminologie des directives générales profine (repères A à R, DHT, CCD, CCO, CCV, détails X, Y, Z) pour les fenêtres à joint de frappe et à joint central et pour les coulissants, la règle qui transforme une cote extérieure d'ouvrant maximale en cote d'élément, et les tailles d'ouvrants minimales en oscillo-battant et en soufflet. | / / B / Ouvrant / / C / Parclose / / D / Rainure crémone / / E / Dos de dormant / / F / Chambre des renforts / / G / Rainure parclose / / H / Feuillu |
+| /sources/profine-directives-generales.md | Document source | Directives générales profine, version janvier 2023 | profine, directives, terminologie, mise-en-oeuvre, dimensions, manuel | Manuel de mise en œuvre de 113 pages de profine, commun aux systèmes 70 et 76, qui couvre la terminologie, livraison et stockage, fabrication, surfaces, drainage et vitrage, exigences statiques et classification A*E*V*, ferrure, couplages, montage, entrées d'air, usage et entretien ; retraité en entier en image. | joints soudables, renforts ; fraisage, boîtier de crémone ; perçage (p. 30, un paragraphe) / transcrit / [Fabrication des profilés PVC](/procedures/fa |
+| /quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md | Quincaillerie | Quincaillerie visible et cachée SOLEAL FY | technal, soleal, soleal-fy, quincaillerie, paumelle, ferrure | Systèmes de ferrures, paumelles apparentes 2 et 3 lames, paumelles sur pivot, quincaillerie cachée (QC 180°), crémones, serrures et organes de verrouillage pour menuiseries aluminium TECHNAL SOLEAL FY 55 et FY 65. | s visibles (OF, OB, BO, Soufflet) * **Boîtier de crémone encastré T940046** : boîtier monodirectionnel pour carré de 7 mm, manœuvré par poignées HOPP |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/informations-a-verifier.md :
+| VER-20 | La justification de la substitution de quincaillerie ROTO à FERCO | Le DTA nomme FERCO comme quincaillerie du procédé et admet d'autres quincailleries « sur justifications » (p. 9) — relu le 25/09/2026 sur le rendu de la page : « Quincaillerie : FERCO », texte inchangé. Le DTD n° DBV-24-6/16-2335_V5 du système 70, relu en image le 28/09/2026, écrit de même « quincaillerie : FERCO, d'autres quincailleries sont possibles sur justifications » et « quincaillerie PSK200 Portal de Siegenia pour l'oscillo-coulissant » (p. 3, § 2.2.2.2 ; p. 6, § 2.2.3.6). PROFERM emploie ROTO et revendique le Label ROTO Performance | **Un premier élément trouvé le 19/09/2026** : les Directives générales profine, registre 1.3.4, listent ROTO comme quincaillerie approuvée pour la quasi-totalité des configurations de fenêtre et plusieurs portes, mais pas pour la porte d'entrée à un vantail seule, les seuils ni les ferme-portes — voir [ROTO](/fournisseurs/roto.md). Ce document ne cite aucun DTA et ne se présente pas explicitement comme la justification exigée. **Le DTD n° DBV-25-6/16-2334_V5, révisé au GS6 du 13 mars 2025, nomme encore FERCO en deux endroits** avec la même réserve « sur justifications » : la pièce la plus récente de la chaîne réglementaire n'a toujours pas enregistré le changement par son nom. **Relecture en image du registre 1.3.4 le 28/09/2026** (PDF p. 90-93) : ROTO est approuvé pour l'OB1, l'OF1, la porte 1 vantail avec serrure, le soufflet, les six verrouillages de semi-fixe, l'OF ouverture extérieure, la porte coulissante à déport, la porte accordéon, la porte d'entrée 2 vantaux et l'aérateur à entrebâillement ; **FERCO n'apparaît dans aucune des 28 listes** du registre. Table complète : [Ferrures des fenêtres et portes profine](/quincaillerie/ferrures-approuvees-profine.md) |
+/anomalies/incoherences-internes.md :
+| INC-10 | Mise en œuvre Système 76 Advanced | registre 2.3.3, p. 3 vs p. 5 | Deux distances maximales entre points de verrouillage dans le même registre : « les points de verrouillage (paumelle) ne doivent pas être distants de plus de 70 cm » p. 3, « les points de verrouillage (galets etc.) ne doivent pas être distants de plus de 80 cm » p. 5 (PDF p. 100 et 102, relus en image le 25/09/2026 : texte confirmé, « (paumelle ) » écrit avec une espace avant la parenthèse) | Les deux phrases visent probablement des organes différents — paumelles d'un côté, galets de crémone de l'autre. Le manuel ne le dit pas : à faire préciser, et retenir 70 cm en attendant | Entraxe de verrouillage surestimé de 10 cm, donc un point de fermeture en moins sur un grand ouvrant |
+/anomalies/contradictions-entre-sources.md :
+| CTR-12 | Nom de la poignée encastrée de coulissant | Brochure LUMINE65, p. 3 : « Poignée encastrée **MLINI** — En option. Disponible en inox, blanc ou noir », sur le coulissant LUMINE65 ; la photo montre une poignée argent à levier incliné | Catalogue général, p. 17 : « **DEHLI** — En option. Poignée encastrée. Disponible en inox, blanc ou noir », pour tous les coulissants ; la photo montre une cuvette blanche aux bords arrondis. Relu en image le 25/09/2026 : les deux photos ne représentent pas le même objet | **Aucune** — même fonction, même finitions, même position dans la liste, mais deux noms et deux dessins : il peut s'agir de deux poignées distinctes. Les deux sont portées sur [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) | Référence introuvable à la commande, ou poignée livrée qui n'est pas celle montrée au client |
+/anomalies/contradictions-entre-sources.md :
+| CTR-103 | Distance des points de fixation aux angles et aux meneaux | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008, PDF p. 331 et 333 (registre 7.1, pages imprimées 3 et 5), relue(s) en image à 200 dpi le 29/09/2026 : « au moins **10 cm** des angles intérieurs des dormants », « Côte mini E de l'angle intérieur du dormant: **100 mm** », « Point de fixation à **200 mm** du milieu profilé meneau/traverse » | Directives générales profine, version janvier 2023, d'après [Montage au bâtiment, directives générales profine](/procedures/montage-generaux-profine.md), PDF p. 102 et 104 : « 100 - 150 mm de distance par rapport aux coins intérieurs » ; planche : E « env. **150** » du coin intérieur, « env. 150 » pour meneaux et traverses **à partir de la face intérieure du profilé**, « env. **250** » pour profilés non blancs | Aucune : chaque cote reste avec son document ; à confirmer par profine | Fixation près des meneaux mesurée depuis le milieu (200 mm) ou depuis la face (150 mm) ; aucune distance propre aux profilés non blancs en 2008 ; voir [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-115 | Longueurs et galets des crémones OB KSR fouillot 8 mm à hauteur de poignée fixe, galets E et V | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, relues en image le 29/09/2026 : PDF p. 38, « Crémone OB KSR, hauteur poignée fixe, fouillot 8 mm », galet E : 801–1000 → **780** mm, 771920 ; 1001–1200 → 980, 771921 ; 1201–1400 → 1180, 771922 ; 1401–1600 → 1380, 771923 ; 1601–1800 → 1580, 771924 ; 1601–1800 HP 1000 → 1580, 795269 ; 1801–2000 → 1780, 795271 ; 2001–2200 → 1980, 795273 ; 2201–2400 → 2180, 795275 ; la même nomenclature liste un « Prolongateur de 110 mm 1 E » 794225 (repère 3). PDF p. 81, « Crémone OB KSR, hauteur poignée fixe — Galet V » : 780 à 2180 mm pour 771940 à 771944 et 795270 à 795276, et **2001–2200 → 1980 mm, 1000, « 2 V », 795274** | Catalogue Roto NX pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 213, 4.1.1.2 et 4.1.1.3, relue en image à 220 dpi le 29/09/2026 : mêmes références sur les mêmes plages de HFF avec des longueurs de **890**, 1090, 1290, 1490, 1690, 1890, 2090 et 2290 mm, soit 110 mm de plus à chaque ligne ; **795274 : nombre de galets « 3 / – »** ; le même catalogue, p. 245, liste 794225 comme « Raccord de crémone KSR sans sortie de tringle », longueur 110 mm, 1 galet E | Aucune : demander à ROTO si la longueur du catalogue comprend le prolongateur de 110 mm de la nomenclature, et combien de galets porte 795274. Même écart de 110 mm qu'en fouillot 15 mm (**CTR-67**) | Recoupe et choix de plage faussés si la longueur est lue dans le mauvais document ; un point de verrouillage de moins que prévu sur 795274 |
+/anomalies/contradictions-entre-sources.md :
+| CTR-116 | Plages de HFF et références des crémones OB à hauteur de poignée variable, fouillots 8 et 15 mm, premières plages | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, relues en image le 29/09/2026 : PDF p. 81, « Crémone OB, hauteur poignée variable – fouillot 8 mm » : **430– 520⁴⁾** → 500 mm, 190–260, **259764** ; 521–620 → 400 mm, 260–310, **259765** ; 621–800 → 580 mm, 311–400, 1 V, **502024** ; PDF p. 82, fouillot 15 mm galet E : **310–450 ¹⁾** → 430 mm, 155–225, **259717** ; 451–620 ¹⁾ → 400 mm, 225–310, **259718** ; galet V : 540–620 ¹⁾ → 515 mm, 226–315, 1 V, **566500**. Pour 259764, les nomenclatures de l'ouvrant à soufflet donnent aussi 451–520 (p. 62) et 380–520 (p. 76), valeurs de la page *Configurations Roto NX KSR — ouvrant à soufflet*, non relues ce jour | Catalogue Roto NX pour profils PVC, CTL_105_FR_v5, juin 2023, relu en image à 220 dpi le 29/09/2026 : PDF p. 222, 4.2.1.2 : **380 – 620** → 500 mm, zone de recoupe 100 / 100, 190 – 260, **259764** ; pas de 259765 ; p. 223, 4.2.1.3 (sécurité, V) : 621 – 1020 → 800 mm, 311 – 510, 1 V, **840812**, pas de 502024 ; p. 224, 4.2.2.2 et 4.2.2.3 : **310 – 620** → 430 mm, 100 / 100, 155 – 225, **259717** (dans les deux tableaux), pas de 259718 ni de 566500 | Aucune : demander à ROTO la plage d'emploi de 259764 et 259717, et si 259765, 259718, 502024 et 566500 sont toujours livrées | Une crémone choisie hors de sa plage réelle, ou une référence commandée qui n'est plus au catalogue |

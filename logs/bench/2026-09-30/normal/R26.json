@@ -1,0 +1,18 @@
+{
+ "id": "R26",
+ "reponse": "La référence 763392563 n'existe pas dans le wiki : ni écrite telle quelle, ni découpée (« 76339 », « 763392 », « 392563 », « 2563 », « 763 392 563 »…). Le wiki ne contient qu'un seul nombre à neuf chiffres, sans rapport. Les formats de référence du wiki sont différents : profilés profine / KÖMMERLING à 4 ou 5 caractères (6101, 76372), ferrures Roto à 6 chiffres (487206), TECHNAL alphanumériques (TGY3883). Il faut demander d'où vient ce numéro (bon de commande, étiquette de barre, fournisseur, gamme) ; il peut s'agir d'un code article ou d'un code interne qui n'est pas documenté.",
+ "dans_le_wiki": "non",
+ "preuves": [],
+ "ambiguite": "Référence inconnue : demander le fournisseur, le document ou l'étiquette d'où elle vient, et s'il s'agit d'une référence de profilé suivie d'un code couleur ou de longueur.",
+ "outils": 3,
+ "comment_trouve": "Grep de la référence entière puis de fragments (76339, 763392, 392563, 92563, 2563, avec et sans espaces ou tirets) sur tout le wiki hors log : aucun résultat. Liste de tous les nombres à 9 chiffres : un seul (348964446). Liste des références 763xx : seulement 76300 à 76373 (meneaux du système 76), sans lien établi.",
+ "formulations": [
+  "À quoi correspond le code article 763392563 ?",
+  "763392563",
+  "Je trouve ce numéro sur une étiquette de barre, c'est quel profilé ?"
+ ],
+ "defauts_wiki": [
+  "Référence absente du wiki (ni table de codes articles, ni `tarifs/` : le dossier est vide).",
+  "Aucune page ne décrit le format des codes articles des fournisseurs (préfixe, code couleur, longueur), ce qui empêcherait de décoder un numéro composé."
+ ]
+}

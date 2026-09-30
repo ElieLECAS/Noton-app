@@ -1,0 +1,717 @@
+===== PAGE 1 : /quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md =====
+# Deux familles de ferrures SOLEAL FY
+
+La quincaillerie équipant les profilés **SOLEAL FY 55 et FY 65** de [TECHNAL](/fournisseurs/technal.md) (intégrée à la gamme [LUMINE](/gammes/lumine.md) de PROFERM) se divise en deux technologies majeures [1 p. 10, 2 p. 128, 3 p. 4] :
+1. **La quincaillerie visible standard** : paumelles apparentes en feuillure (2 lames, 3 lames, ou sur pivot) et ferrures périphériques ROTO.
+2. **La quincaillerie cachée (QC 180°)** : mécanisme entièrement invisible dissimulé dans la gorge européenne des profilés, commun aux modules 55 mm et 65 mm.
+
+---
+
+# Quincaillerie visible standard
+
+### 1. Paumelles en applique et sur pivot
+
+| Référence | Type d'organe | Charge maximale | Largeur $L_v$ maxi | Règle de répartition par vantail |
+| --- | --- | :---: | :---: | --- |
+| **T940025** | Paumelle 2 lames réglable (RIVALU) | **70 kg** | 1 400 mm | • 2 paumelles si $H_v < 1,20\text{ m}$<br>• 3 paumelles si $H_v < 1,60\text{ m}$<br>• 4 paumelles jusqu'à $H_v = 2,25\text{ m}$ |
+| **T940087** | Paumelle 2 lames ligne Tradition | **70 kg** | 1 400 mm | Même répartition que T940025 |
+| **T940026** | Paumelle 3 lames chemisée | **100 kg** | 1 600 mm | • 2 paumelles jusqu'à 100 kg ($2\,250 \times 1\,275\text{ mm}$)<br>• 3 paumelles au-delà ($1\,800 \times 1\,600\text{ mm}$ / 57 kg) |
+| **T940035** | Paumelle sur pivot non réglable | **100 kg** | 1 600 mm | 1 ensemble haut + bas |
+| **T940023** | Paumelle sur pivot réglable | **130 kg** | 1 600 mm | 1 ensemble haut + bas.<br>Pièce de renfort **T940022 obligatoire** entre 100 et 130 kg. |
+
+> [!CAUTION]
+> - **Sécurité anti-chute de l'ouvrant (prescription DTA CSTB)** : la gorge recevant les contre-plaques des paumelles sur l'ouvrant **n'est jamais délardée dans les angles hauts**. De plus, une **vis de sécurité TAY0047** est obligatoirement vissée à travers le corps et l'insert de chaque paumelle T940025 pour empêcher tout glissement [1 p. 11, 2 p. 119].
+> - **Incompatibilité Seuil PMR** : les paumelles sur pivot (T940035 et T940023) sont **strictement incompatibles** avec le seuil PMR [2 p. 130].
+
+### 2. Ferrures de fenêtres visibles (OF, OB, BO, Soufflet)
+
+* **Boîtier de crémone encastré T940046** : boîtier monodirectionnel pour carré de 7 mm, manœuvré par poignées HOPPE (T960001 sans clé, T960002 avec clé, T960003 pour BO à clé).
+* **Fenêtre à la française (OF)** :
+  * Ferrure à renvoi d'angle **T940034** et gâches/rouleaux **T940031**.
+  * Hauteur mini de poignée : $H_p \ge 260\text{ mm}$ ou $\frac{1}{3} H_v$ en 1 vantail ; $H_p \ge 388\text{ mm}$ en 2 vantaux.
+* **Fenêtre oscillo-battante (OB)** :
+  * Ferrure de base OB < 100 kg : **T940017** (avec paumelle OB **T940011**).
+  * Compas OB en acier inoxydable : petit compas **T940018** ($L_v < 700\text{ mm}$) ; grand compas **T940019** ($700 \le L_v \le 1\,200\text{ mm}$) ; compas additionnel **T940020** ($1\,200 < L_v \le 1\,600\text{ mm}$).
+  * Verrouillage supplémentaire grande hauteur/largeur : **T940021**.
+* **Fenêtre battant-oscillo (BO - sécurité enfant / logique)** :
+  * Ferrure de base BO : **T940013**.
+  * Compas BO : petit compas **T940014** ($L_v < 700\text{ mm}$), grand compas **T940015** ($L_v \ge 700\text{ mm}$), compas additionnel **T940016**.
+* **Fenêtre à soufflet** :
+  * Compas soufflet **T940037** et loqueteau **T960007** (poids maxi 60 kg, dimensions max $800 \times 800$ ou $600 \times 1\,300\text{ mm}$).
+  * Variante soufflet avec boîtier crémone T940046 : jusqu'à $800 \times 1\,600\text{ mm}$.
+* **Châssis à projection et à l'italienne** :
+  * Italienne : compas **T950002** (65 kg) ou **T950004** (100 kg, $L = 570\text{ mm}$), crémone T960009.
+  * Projection : compas **T950008** (poids maxi 80 kg).
+
+(schéma: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf, p. 132-154)
+
+---
+
+# Quincaillerie cachée SOLEAL FY (QC 180°)
+
+Système de ferrure totalement dissimulé dans la gorge de ferrure des profilés, commun à SOLEAL FY 55 et FY 65 [3 p. 4, 94-165] :
+
+### 1. Articulations basses et capacités de charge
+
+| Articulation basse | Réf. Droite | Réf. Gauche | Capacité de charge | Angle d'ouverture admissible |
+| --- | :---: | :---: | :---: | :---: |
+| **Palier 80 kg** | **TFZ60000** | **TFZ60001** | $\le 80\text{ kg}$ | **180°** |
+| **Palier 110 kg** | **TFZ60002** | **TFZ60003** | $\le 110\text{ kg}$ | **180°** |
+| **Palier 160 kg renforcé** | TFZ60002 + TFZ60020 | TFZ60003 + TFZ60020 | **110 à 160 kg** | **90° à 100°** (limiteur obligatoire) |
+
+Le bras de **transfert de charge TFZ60020** permet de franchir le seuil des 110 kg jusqu'à **160 kg par vantail** avec angle d'ouverture bridé à 90°-100° [3 p. 94].
+
+### 2. Organes de quincaillerie cachée (QC)
+
+| Réf. Technal | Désignation de la pièce | Fonction et caractéristiques |
+| --- | --- | --- |
+| **TFZ60030** | Boîtier de crémone encastré | Boîtier plat encastré dans la gorge d'ouvrant, carré de 7 mm |
+| **TFZ60032** | Ferrure d'angle OB | Renvoi d'angle haut et bas pour ouvrant oscillo-battant caché |
+| **TFZ60033** | Ferrure d'angle BO | Renvoi d'angle haut et bas pour ouvrant battant-oscillo caché |
+| **TFZ60006** | Compas OB Droit 500-700 | Compas d'oscillo-battant caché pour largeur $500 \le W_v \le 700\text{ mm}$ |
+| **TFZ60007** | Compas OB Gauche 500-700 | Compas d'oscillo-battant caché gauche pour $500 \le W_v \le 700\text{ mm}$ |
+| **TFZ60008** | Compas OB Droit 701-1200 | Compas standard droit pour $701 \le W_v \le 1\,200\text{ mm}$ |
+| **TFZ60009** | Compas OB Gauche 701-1200 | Compas standard gauche pour $701 \le W_v \le 1\,200\text{ mm}$ |
+| **TFZ60010** | Compas BO Droit 500-700 | Compas logique battant-oscillo droit petit format |
+| **TFZ60011** | Compas BO Gauche 500-700 | Compas logique battant-oscillo gauche petit format |
+| **TFZ60012** | Compas BO Droit 701-1200 | Compas logique battant-oscillo droit moyen format |
+| **TFZ60013** | Compas BO Gauche 701-1200 | Compas logique battant-oscillo gauche moyen format |
+| **TFZ60014** | Compas additionnel OB | Obligatoire pour grandes largeurs $1\,201 \le W_v \le 1\,600\text{ mm}$ |
+| **TFZ60015** | Compas additionnel BO | Compas additionnel battant-oscillo pour $W_v > 1\,200\text{ mm}$ |
+| **TFZ60016** | Articulation haute OF Droite | Palier compas d'ouvrant à la française invisible |
+| **TFZ60017** | Articulation haute OF Gauche | Palier compas d'ouvrant à la française invisible |
+| **TFZ60019** | Compas soufflet | Compas invisible pour châssis soufflet |
+| **TFZ60020** | Bras de transfert de charge | Dispositif de reprise de charge pour vantaux de 110 à 160 kg |
+| **TFZ60021** | Limiteur d'ouverture standard | Limiteur réglable pour $701 \le W_v \le 1\,600\text{ mm}$ |
+| **TFZ60022** | Limiteur d'ouverture avec frein | Limiteur amortisseur pour châssis lourds ou exposés |
+| **TFZ60023** | Limiteur d'ouverture court | Pour vantaux étroits $400 \le W_v \le 700\text{ mm}$ |
+| **TFZ60026** | Ensemble gâche et rouleau | Point de verrouillage périphérique étanche et sécurité |
+| **TFZ60027** | Tremplin de guidage OF | Cale de guidage et anti-affaissement du vantail à la fermeture |
+| **TFZ60028** | Ensemble raidisseur | Raidisseur vertical de feuillure pour montants hauts |
+| **TFZ60029** | Houssette semi-fixe | Dispositif de condamnation de feuillure pour vantail semi-fixe |
+| **TFZ60034** | Renvoi d'angle additionnel | Permet le renvoi d'effort vers les montants et traverses |
+| **TFZ60035** | Kit renvoi complémentaire 2 vtx | Équipe l'ouvrant de service sur fenêtre à 2 vantaux |
+| **TFZ60036** | Renvoi d'angle additionnel OF | Renvoi supérieur/inférieur pour ouvrant à la française |
+| **TFZ60037** | Targette semi-fixe | Verrou de condamnation haut et bas du vantail secondaire |
+| **TFZ60038** | Verrou à bascule semi-fixe | Levier basculant central de condamnation du vantail secondaire |
+
+(schéma: raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf, p. 168-172)
+
+---
+
+# Condamnation des fenêtres à 2 vantaux
+
+Dans les configurations à deux vantaux sans meneau fixe, la fermeture centrale s'effectue sur le battement rapporté (T215186 ou TFY1207) [2 p. 148, 3 p. 158-164] :
+* **Vantail secondaire (semi-fixe)** :
+  * Largeur maximale admissible du semi-fixe : **1 200 mm**.
+  * Verrouillage haut et bas par **targette TFZ60037** ou **verrou à bascule TFZ60038** relié à des tringles d'extrémité en profilé aluminium T131604 / TFY2526.
+  * Dans le cas d'une porte-fenêtre avec seuil PMR, le verrou bas est adapté avec les embouts spéciaux **T740188** (tremplin) et **T940084** (gâche seuil).
+* **Vantail principal (de service)** :
+  * Verrouillage par crémone encastrée (T940046 en visible, TFZ60030 en QC) commandant des galets s'engageant dans les gâches de battement.
+  * Sur les grandes dimensions ($W_v > 1\,200\text{ mm}$ ou $H_v > 1\,600\text{ mm}$), adjonction d'un **kit de renvoi d'angle complémentaire TFZ60035** pour verrouiller les traverses haute et basse.
+
+---
+
+# Serrures de portes-fenêtres
+
+Pour les portes-fenêtres avec serrure à clé et ouvrant de grande inertie (TFY1213) [2 p. 146-149] :
+* **Serrure 1 point** : référence **T920001** (pêne demi-tour réversible).
+* **Serrure 3 points** : référence **TFY3724** (à pênes basculants latéraux haute sécurité), fixée par vis spécifiques **T470044**. Entraxe de verrouillage entre points haut et bas : **457 mm**.
+* **Kits de serrure 3 points** : **T920010** (version avec relevage de béquille) ou **T920011** (version sans relevage, verrouillage direct à la clé).
+* **Cylindre de sûreté** : profil européen $35 \times 55\text{ mm}$ réf. **T960017**.
+* **Béquilles de manœuvre** : béquille double sur rosace carrée **T960010** (carré de 8 mm) ou béquille à saillie réduite **T960022** (saillie de 22 mm spécialement conçue pour ne pas heurter la lame de volet roulant).
+
+---
+
+# Citations
+
+[1] DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm — `raw/DTA 6_12-2016_V5 (1).pdf`, p. 8 à 11
+
+[2] SOLEAL FY 55 évolution, Conception Ouvrant Minimal et Apparent, réf. 6057.003 — `raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf`, p. 119 à 154
+
+[3] SOLEAL FY 55 & 65, Évolution Quincaillerie Cachée, Conception, réf. 6319.003 — `raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf`, p. 92 à 172
+
+# Voir aussi
+
+- [Dormants et ouvrants SOLEAL FY](/profiles/soleal-fy-dormants-et-ouvrants.md)
+- [Cotes de débit SOLEAL FY](/profiles/soleal-fy-cotes-de-debit.md)
+- [Parcloses et vitrages SOLEAL FY](/profiles/soleal-fy-parcloses-et-vitrage.md)
+- [Fabrication et usinage SOLEAL FY](/procedures/fabrication-soleal-fy.md)
+- [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md)
+- [TECHNAL](/fournisseurs/technal.md)
+
+===== PAGE 2 : /quincaillerie/roto-nx-pivots-et-paliers-angle.md =====
+# Pivots et paliers d'angle Roto NX
+
+Le **pivot d'angle** est la ferrure de l'angle bas de l'ouvrant côté paumelles, et le **palier
+d'angle** la ferrure de l'angle bas du dormant sur laquelle se pose le vantail (voir le
+[glossaire](/reference/glossaire.md)). Le chapitre 8 « Pivots d'angle / palier d'angle » du
+catalogue Roto NX PVC les range en tolérance de châssis fixe (8.1), pivots d'angle (8.2), palier
+d'angle (8.3), reports de charge (8.4) et caches (8.5), côté paumelles P et côté paumelles
+Designo (BA 13) [1 p. 333].
+
+Les tableaux ont des pictogrammes en en-tête de colonne, définis dans la légende du catalogue
+([Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md)) :
+système (quatre carrés pleins : ici la version du pivot ou du palier, P 3/130, P 6/130, P 6/150),
+poids d'ouvrant, ergot et perçage ergot (plot carré sur une base hachurée, sans ou avec diamètre
+coté), réglage (étoile de six flèches), système de profil (profil en perspective), traitement de
+surface, DIN gauche / droite, désignation (bulle), type de montage (vis et outil), code couleur
+(palette) et couleur (pinceau), N° de matériel [1 p. 10-12]. Les colonnes oui / non portent
+« J » (**INC-288**). Une valeur imprimée une seule fois pour un groupe de lignes (cellule
+fusionnée) est répétée sur chaque ligne ; une liste de systèmes de profil est reprise sur chaque
+ligne, les noms séparés par « ; ». Les codes couleur Roto (R01.1 …) sont expliqués sur
+[Finitions Roto NX](/quincaillerie/roto-nx-finitions.md).
+
+# Tolérance de châssis fixe
+
+La section 8.1 (p. 334-336) reproduit la tolérance de châssis fixe du chapitre « Compas »
+(p. 278-280) : même coupe, même tableau 130 kg / 150 kg (≥ 21,0 / ≥ 26,5 mm, angle env. 180° /
+env. 150°, recouvrement ≥ 16 mm, espace extérieur 100 mm), mêmes INFO, DANGER et ATTENTION, mêmes
+quatre vues de face et même tableau de neuf lignes côté paumelles Designo (BA 13) ; seuls les
+numéros des notes de l'angle d'ouverture changent ([5] et [6] au lieu de [3] et [4])
+[1 p. 278-280, 334-336]. Valeurs, schémas et anomalie **CTR-118** : section *Tolérance de châssis
+fixe* de [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md).
+
+# Pivot d'angle, côté paumelles P
+
+## Montage et explications, P 6/150
+
+Deux dessins de montage du pivot d'angle P 6/150, « Réglable en hauteur » à gauche et « Réglable
+en hauteur/compression » à droite : une bande grise et une bande rose saumon verticales, les deux
+perçages [C] marqués d'un point rouge sur l'axe mixte des perçages [1 p. 337].
+
+![Montage du pivot d'angle P 6/150, côté paumelles P](/assets/quincaillerie/roto-nx-catalogue/pivots-paliers-angle/pivot-angle-cote-p-montage-p6-150.png)
+
+Cotes portées sur les deux dessins, en mm : entraxe des deux perçages [C] **54** (réglable en
+hauteur) ou **70** (réglable en hauteur/compression) ; **16** entre chaque perçage et le repère en
+croix voisin sur l'axe ; **11**, cote horizontale portée sous le dessin depuis l'axe des perçages ;
+[B] cote verticale sous le perçage bas ; [A] cote verticale au bas du dessin [1 p. 337]. La
+légende des repères, une ligne par repère et par système de profilé (voir
+[Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) pour les systèmes
+12/18-9 à 12/22-13) :
+
+| Repère | Signification | Réglable en hauteur (mm) | Réglable en hauteur/compression (mm) | Système |
+| --- | --- | ---: | ---: | --- |
+| [A] | Largeur de recouvrement | - | - | - |
+| [B] | cote [B] | 40,5 | 24,5 | 12/18-9 ; 12/18-13 |
+| [B] | cote [B] | 42,5 | 26,5 | 12/20-9 ; 12/20-13 |
+| [B] | cote [B] | 43,5 | 27,5 | 12/21-13 |
+| [B] | cote [B] | 44,5 | 28,5 | 12/22-13 |
+| [C] | Pivot d'angle P 6/150, perçage Ø 6 mm, 23 mm de profondeur | - | - | - |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 337)
+
+Le manuel KSR donne la même profondeur de perçage de 23 mm (repère [4]) pour le pivot d'angle
+P6/150, voir la section *Longueurs de palier P3 et P6* de
+[Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) [2 p. 35].
+
+## P 6/150
+
+Section 8.2.1.1 ; types d'ouverture : fenêtre oscillo-battante, fenêtre à la française /
+oscillo-battante à ouvrant semi-fixe, fenêtre plein cintre oscillo-battante, fenêtre inclinée
+oscillo-battante. La colonne système porte « K 6/130 » et « P 6/150 » imprimés l'un sous l'autre
+pour toutes les lignes [1 p. 338].
+
+![Pivot d'angle P 6/150, côté paumelles P](/assets/quincaillerie/roto-nx-catalogue/pivots-paliers-angle/pivot-angle-cote-p-p6-150.png)
+
+| N° de matériel | Système | Poids d'ouvrant (kg) | Ergot | Perçage ergot | Réglage | Traitement de surface |
+| --- | --- | ---: | --- | --- | --- | --- |
+| 263858 | K 6/130 ; P 6/150 | max. 150 | J | 2 x Ø 6 mm | Réglable en hauteur | Roto Sil |
+| 230342 | K 6/130 ; P 6/150 | max. 150 | J | 2 x Ø 6 mm | Réglable en hauteur | Blanc |
+| 795019 | K 6/130 ; P 6/150 | max. 150 | J | 2 x Ø 6 mm | Réglable en hauteur | Titane |
+| 445171 | K 6/130 ; P 6/150 | max. 150 | J | 2 x Ø 6 mm | Réglable en hauteur et en compression | Roto Sil |
+| 639305 | K 6/130 ; P 6/150 | max. 150 | J | 2 x Ø 6 mm | Réglable en hauteur et en compression | Blanc |
+| 788327 | K 6/130 ; P 6/150 | max. 150 | J | 2 x Ø 6 mm | Réglable en hauteur et en compression | Titane |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 338)
+
+Palier d'angle adapté : à partir de la p. 339 (section *Palier d'angle, côté paumelles P*
+ci-dessous) ; caches adaptés : à partir de la p. 344 (section *Caches, côté paumelles P*)
+[1 p. 338]. Le manuel KSR nomme les mêmes pièces « Pivot d'angle P 6/150 » 263858 et « Pivot
+d'angle P 6/150 réglable en compression » 445171 dans la nomenclature de l'oscillo-battant
+Confort [2 p. 66].
+
+# Pivot d'angle, côté paumelles Designo (BA 13)
+
+Section 8.2.2 : une seule référence ; types d'ouverture : fenêtre oscillo-battante, fenêtre
+ouvrant à la française, fenêtre à la française / oscillo-battante à ouvrant semi-fixe, fenêtre à
+trois vantaux [1 p. 12-13, 338].
+
+![Pivot d'angle côté paumelles Designo (BA 13)](/assets/quincaillerie/roto-nx-catalogue/pivots-paliers-angle/pivot-angle-designo-634705.png)
+
+| N° de matériel | Désignation | Traitement de surface |
+| --- | --- | --- |
+| 634705 | Pivot d'angle - côté paumelles Designo (BA 13) | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 338)
+
+Palier d'angle adapté : à partir de la p. 340 ; reports de charge adaptés : à partir de la
+p. 343 [1 p. 338]. C'est le numéro que donnent les nomenclatures NT Designo II du manuel KSR ; le
+pivot Designo « 626594 / 626595 » d'une ancienne version du wiki n'est pas au catalogue, entrée
+**VER-113**.
+
+# Palier d'angle, côté paumelles P
+
+## Montage et explications, P 3/130, P 6/130, P6/150
+
+Dessin de montage du palier d'angle dans l'angle bas, dessiné en une zone grise et une zone rose
+saumon ; les perçages sur une ligne verticale, le haut [D] et le bas [E] marqués d'un point rouge
+[1 p. 339].
+
+![Montage du palier d'angle P 3/130, P 6/130, P6/150, côté paumelles P](/assets/quincaillerie/roto-nx-catalogue/pivots-paliers-angle/palier-angle-cote-p-montage.png)
+
+Cotes portées sur le dessin, en mm : **80** entre les perçages [D] et [E], **48** et **16** entre
+perçages intermédiaires de la même ligne, **12** cote horizontale dans la zone grise, **36** cote
+verticale sous le repère [C] ; [A] et [B] cotes horizontales [1 p. 339]. Légende des repères :
+
+| Repère | Signification | Système |
+| --- | --- | --- |
+| [A] | Largeur de recouvrement | - |
+| [B] | 16,5 mm | 12/18-9 ; 12/18-13 |
+| [B] | 18,5 mm | 12/20-9 ; 12/20-13 |
+| [B] | 19,5 mm | 12/21-13 |
+| [B] | 20,5 mm | 12/22-13 |
+| [C] | Centre de palier d'angle | - |
+| [D] | Palier d'angle P 3/130, perçage Ø 3 mm, 3 mm de profondeur | - |
+| [D] | Palier d'angle P 6/130, perçage Ø 6 mm, 3 mm de profondeur | - |
+| [D] | Palier d'angle P 6/150, perçage en haut Ø 6 mm, 3 mm de profondeur | - |
+| [E] | Palier d'angle P 3/130, perçage Ø 3 mm, 3 mm de profondeur | - |
+| [E] | Palier d'angle P 6/130, perçage Ø 6 mm, 9 mm de profondeur | - |
+| [E] | Palier d'angle P 6/150, perçage Ø 6 mm, 19 mm de profondeur | - |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 339)
+
+Ces profondeurs sont celles des repères [1] à [3] du palier d'angle dans le manuel KSR (3, 3 et 9,
+3 et 19 mm), section *Longueurs de palier P3 et P6* de
+[Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) [2 p. 35].
+
+## P 3/130 et P 6/130
+
+![Palier d'angle P 3/130 et P 6/130, côté paumelles P](/assets/quincaillerie/roto-nx-catalogue/pivots-paliers-angle/palier-angle-cote-p-p3-130-p6-130.png)
+
+| N° de matériel | Système | Poids d'ouvrant (kg) | Réglage | Ergot | Perçage ergot | Traitement de surface |
+| --- | --- | ---: | --- | --- | --- | --- |
+| 787207 | P 3/130 | max. 130 | Réglable latéralement | J | 2 x Ø 3 mm | Roto Sil |
+| 787210 | P 3/130 | max. 130 | Réglable latéralement | J | 2 x Ø 3 mm | Blanc |
+| 795013 | P 3/130 | max. 130 | Réglable latéralement | J | 2 x Ø 3 mm | Titane |
+| 787208 | P 6/130 | max. 130 | Réglable latéralement | J | 2 x Ø 6 mm | Roto Sil |
+| 787211 | P 6/130 | max. 130 | Réglable latéralement | J | 2 x Ø 6 mm | Blanc |
+| 795014 | P 6/130 | max. 130 | Réglable latéralement | J | 2 x Ø 6 mm | Titane |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 339)
+
+## P 6/150
+
+![Palier d'angle P 6/150, côté paumelles P](/assets/quincaillerie/roto-nx-catalogue/pivots-paliers-angle/palier-angle-cote-p-p6-150.png)
+
+| N° de matériel | Système | Poids d'ouvrant (kg) | Réglage | Ergot | Perçage ergot | Traitement de surface |
+| --- | --- | ---: | --- | --- | --- | --- |
+| 787209 | P 6/150 | max. 150 | Réglable latéralement | J | 2 x Ø 6 mm | Roto Sil |
+| 787212 | P 6/150 | max. 150 | Réglable latéralement | J | 2 x Ø 6 mm | Blanc |
+| 788501 | P 6/150 | max. 150 | Réglable latéralement | J | 2 x Ø 6 mm | Titane |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 340)
+
+Pivots d'angle adaptés : à partir de la p. 337 ; caches adaptés : « à partir de la page 345 et
+à partir de la page 345 » (cache standard et patte de fixation, tous deux p. 345) [1 p. 339-340].
+Le manuel KSR donne les mêmes numéros pour les paliers d'angle P 3/130, P 6/130 et P 6/150 (787207,
+787208, 787209) [2 p. 66].
+
+# Palier d'angle, côté paumelles Designo (BA 13)
+
+## Standard
+
+Section 8.3.2.1 : une paire gauche / droite par groupe de systèmes de profil, en Roto Sil ;
+types d'ouverture : fenêtre oscillo-battante, fenêtre ouvrant à la française, fenêtre à la
+française / oscillo-battante à ouvrant semi-fixe [1 p. 340-341].
+
+![Palier d'angle standard, côté paumelles Designo (BA 13)](/assets/quincaillerie/roto-nx-catalogue/pivots-paliers-angle/palier-angle-designo-standard.png)
+
+| N° de matériel | Système de profil | Traitement de surface | DIN gauche / droite |
+| --- | --- | --- | --- |
+| 623974 | Aluplast Ideal 2000 | Roto Sil | Gauche |
+| 623973 | Aluplast Ideal 2000 | Roto Sil | Droite |
+| 628950 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | Roto Sil | Gauche |
+| 628949 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | Roto Sil | Droite |
+| 635235 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 ; Veka Softline 76 AD ; Veka Softline 76 MD | Roto Sil | Gauche |
+| 635234 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander BluEvolution 73 ; Salamander BluEvolution 82 ; Salamander GreenEvolution 76 ; Veka Softline 76 AD ; Veka Softline 76 MD | Roto Sil | Droite |
+| 635402 | Deceuninck Eforte ; Deceuninck Prestige ; Inoutic AD 13 ; Inoutic MD 100 | Roto Sil | Gauche |
+| 635401 | Deceuninck Eforte ; Deceuninck Prestige ; Inoutic AD 13 ; Inoutic MD 100 | Roto Sil | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 340)
+
+| N° de matériel | Système de profil | Traitement de surface | DIN gauche / droite |
+| --- | --- | --- | --- |
+| 757736 | Deceuninck Elegant ; Deceuninck Legend ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | Roto Sil | Gauche |
+| 757735 | Deceuninck Elegant ; Deceuninck Legend ; KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | Roto Sil | Droite |
+| 623953 | Deceuninck Zendow ; KBE 70 AD | Roto Sil | Gauche |
+| 623954 | Deceuninck Zendow ; KBE 70 AD | Roto Sil | Droite |
+| 807528 | Gealan Kubus | Roto Sil | Gauche |
+| 807527 | Gealan Kubus | Roto Sil | Droite |
+| 606343 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | Roto Sil | Gauche |
+| 606341 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | Roto Sil | Droite |
+| 606355 | Kömmerling 88 Plus ; Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | Roto Sil | Gauche |
+| 606354 | Kömmerling 88 Plus ; Kömmerling Eurodur 3S ; Kömmerling Eurofutur Classic ; Kömmerling Eurofutur Elegance | Roto Sil | Droite |
+| 610966 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) | Roto Sil | Gauche |
+| 610965 | Rehau S 735 MD ; Rehau S 788 ; Rehau S 799 Brillant Design (S 730) | Roto Sil | Droite |
+| 606371 | Rehau S 980 Geneo | Roto Sil | Gauche |
+| 606370 | Rehau S 980 Geneo | Roto Sil | Droite |
+| 635616 | Salamander 2D ; Salamander 3D | Roto Sil | Gauche |
+| 635615 | Salamander 2D ; Salamander 3D | Roto Sil | Droite |
+| 635626 | Salamander BluEvolution 92 | Roto Sil | Gauche |
+| 635625 | Salamander BluEvolution 92 | Roto Sil | Droite |
+| 764823 | Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD | Roto Sil | Gauche |
+| 764822 | Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD | Roto Sil | Droite |
+| 606397 | Veka Softline 70 MD | Roto Sil | Gauche |
+| 606396 | Veka Softline 70 MD | Roto Sil | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 341)
+
+Pivots d'angle adaptés : à partir de la p. 338 ; reports de charge adaptés : à partir de la
+p. 343 [1 p. 341]. Aucun palier d'angle Designo « 626590 / 626591 » n'est au catalogue
+(entrée **VER-113**).
+
+## Cache de palier d'angle, côté paumelles Designo
+
+Section 8.3.2.2 ; le type de montage est « A serrer » [1 p. 341].
+
+![Cache de palier d'angle, côté paumelles Designo](/assets/quincaillerie/roto-nx-catalogue/pivots-paliers-angle/cache-palier-angle-designo.png)
+
+| N° de matériel | Désignation | Type de montage | DIN gauche / droite |
+| --- | --- | --- | --- |
+| 799664 | Cache palier d'angle - côté paumelles Designo | A serrer | Gauche |
+| 799789 | Cache palier d'angle - côté paumelles Designo | A serrer | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 341)
+
+## Fenêtre à trois ouvrants (ouvrant central)
+
+Section 8.3.2.3 : palier d'angle de l'ouvrant central d'une fenêtre à trois vantaux (pictogramme
+« fenêtre à trois vantaux »), une paire gauche / droite par groupe de systèmes de profil, en Roto
+Sil [1 p. 13, 342].
+
+![Palier d'angle de fenêtre à trois ouvrants (ouvrant central), côté paumelles Designo](/assets/quincaillerie/roto-nx-catalogue/pivots-paliers-angle/palier-angle-designo-trois-ouvrants.png)
+
+| N° de matériel | Système de profil | Traitement de surface | DIN gauche / droite |
+| --- | --- | --- | --- |
+| 741503 | Aluplast Ideal 2000 ; Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD ; Trocal InnoNova 70.A5 AD ; Trocal InnoNova 70.M5 MD | Roto Sil | Gauche |
+| 741502 | Aluplast Ideal 2000 ; Schüco Corona CT70 AD ; Schüco Corona CT70 MD ; Schüco Corona SI82 MD ; Trocal InnoNova 70.A5 AD ; Trocal InnoNova 70.M5 MD | Roto Sil | Droite |
+| 741517 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona AD ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | Roto Sil | Gauche |
+| 741516 | Aluplast Ideal 4000 ; Aluplast Ideal 5000 ; Aluplast Ideal 8000 ; Schüco Corona AD ; Schüco Corona MD ; Aluplast energeto 5000 view ; Aluplast energeto 7000 ; Aluplast Ideal 7000 | Roto Sil | Droite |
+| 738596 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander GreenEvolution 76 | Roto Sil | Gauche |
+| 738595 | Brügmann AD 13 ; Brügmann MD 13 ; Veka Alphaline 90 ; Veka Softline 70 AD ; Veka Softline 70 MD ; Veka Softline 82 MD ; Veka Topline AD 13 ; Veka Topline MD 13 ; Salamander GreenEvolution 76 | Roto Sil | Droite |
+| 741499 | Deceuninck Eforte ; Deceuninck Prestige AD ; Deceuninck Prestige MD ; Inoutic AD 13 ; Inoutic MD 100 | Roto Sil | Gauche |
+| 741498 | Deceuninck Eforte ; Deceuninck Prestige AD ; Deceuninck Prestige MD ; Inoutic AD 13 ; Inoutic MD 100 | Roto Sil | Droite |
+| 766736 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | Roto Sil | Gauche |
+| 766737 | Gealan S3000 ; Gealan S7000 ; Gealan S8000 | Roto Sil | Droite |
+| 766119 | KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | Roto Sil | Gauche |
+| 766120 | KBE 76 ; KBE 88 MD ; Kömmerling 76 ; Kömmerling 88 MD ; Trocal 76 ; Trocal 88 MD | Roto Sil | Droite |
+| 766740 | Rehau S 730 AD ; Rehau S 735 MD ; Rehau S 799 Brillant Design (S 730) | Roto Sil | Gauche |
+| 766741 | Rehau S 730 AD ; Rehau S 735 MD ; Rehau S 799 Brillant Design (S 730) | Roto Sil | Droite |
+| 766744 | Rehau S 969 Synego ; Rehau S 980 Geneo ; Salamander BluEvolution 92 | Roto Sil | Gauche |
+| 766765 | Rehau S 969 Synego ; Rehau S 980 Geneo ; Salamander BluEvolution 92 | Roto Sil | Droite |
+| 766768 | Salamander 2D ; Salamander 3D ; Salamander Design 3D | Roto Sil | Gauche |
+| 766769 | Salamander 2D ; Salamander 3D ; Salamander Design 3D | Roto Sil | Droite |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 342)
+
+Pivots d'angle adaptés : à partir de la p. 338 [1 p. 342].
+
+# Report de charge, côté paumelles Designo (BA 13)
+
+Section 8.4.1 : deux pièces, un élément d'ouvrant et un composant de dormant, pour un poids
+d'ouvrant de 150 kg au plus ; deux dessins sans lien avec les N° de matériel [1 p. 343]. Le
+montage et le réglage du report de charge sont décrits sur
+[Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md) ; les nomenclatures NT Designo
+II du manuel KSR appellent les mêmes numéros « Kit 150 kg partie ouvrant » (567972) et « Kit 150 kg
+partie dormant » (565254), voir [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md).
+
+![Report de charge, côté paumelles Designo (BA 13)](/assets/quincaillerie/roto-nx-catalogue/pivots-paliers-angle/report-de-charge-designo.png)
+
+| N° de matériel | Désignation | Poids d'ouvrant (kg) | Traitement de surface |
+| --- | --- | ---: | --- |
+| 567972 | Élément d'ouvrant | max. 150 | Roto Sil |
+| 565254 | Composant de dormant | max. 150 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 343)
+
+# Caches, côté paumelles P
+
+Section 8.5.1 : caches de la paumelle d'angle (pivot) et du palier d'angle, un N° de matériel par
+code couleur Roto ; « SF » est la couleur spéciale [1 p. 344-345].
+
+## Paumelle d'angle – standard : caches
+
+![Cache de paumelle d'angle standard P 6/150](/assets/quincaillerie/roto-nx-catalogue/pivots-paliers-angle/cache-paumelle-angle-standard.png)
+
+| N° de matériel | Système | Code couleur Roto | Couleur |
+| --- | --- | --- | --- |
+| 788427 | P 6/150 | R01.1 | Argent naturel |
+| 795971 | P 6/150 | R01.2 | Champagne |
+| 788428 | P 6/150 | R01.3 | Titane |
+| 788429 | P 6/150 | R03.1 | Laiton mat |
+| 795976 | P 6/150 | R03.2 | Laiton brillant |
+| 788430 | P 6/150 | R04.1 | Brun-gris |
+| 795981 | P 6/150 | R04.3 | Brun-olive |
+| 788431 | P 6/150 | R04.4 | Brun-noir |
+| 788432 | P 6/150 | R05.3 | Bronze moyen |
+| 788433 | P 6/150 | R05.5 | Bronze |
+| 821923 | P 6/150 | R06.2 | Noir profond |
+| 788434 | P 6/150 | R07.2 | Blanc trafic |
+| 795986 | P 6/150 | R07.3 | Blanc crème |
+| 840749 | P 6/150 | SF | Couleur spéciale |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 344)
+
+## Paumelle d'angle – standard : bouchon
+
+![Bouchon de paumelle d'angle](/assets/quincaillerie/roto-nx-catalogue/pivots-paliers-angle/bouchon-paumelle-angle.png)
+
+| N° de matériel | Système | Code couleur Roto | Couleur |
+| --- | --- | --- | --- |
+| 642266 | K 3/100 ; K 6/130 ; P 6/150 | R01.1 | Argent naturel |
+| 799287 | K 3/100 ; K 6/130 ; P 6/150 | R01.3 | Titane |
+| 642267 | K 3/100 ; K 6/130 ; P 6/150 | R07.2 | Blanc trafic |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 344)
+
+## Palier d'angle – standard : caches
+
+![Cache de palier d'angle standard](/assets/quincaillerie/roto-nx-catalogue/pivots-paliers-angle/cache-palier-angle-standard.png)
+
+| N° de matériel | Système | Code couleur Roto | Couleur |
+| --- | --- | --- | --- |
+| 788419 | P 3/130 ; P 6/130 ; P 6/150 | R01.1 | Argent naturel |
+| 795973 | P 3/130 ; P 6/130 ; P 6/150 | R01.2 | Champagne |
+| 788420 | P 3/130 ; P 6/130 ; P 6/150 | R01.3 | Titane |
+| 788421 | P 3/130 ; P 6/130 ; P 6/150 | R03.1 | Laiton mat |
+| 795978 | P 3/130 ; P 6/130 ; P 6/150 | R03.2 | Laiton brillant |
+| 788422 | P 3/130 ; P 6/130 ; P 6/150 | R04.1 | Brun-gris |
+| 795983 | P 3/130 ; P 6/130 ; P 6/150 | R04.3 | Brun-olive |
+| 788423 | P 3/130 ; P 6/130 ; P 6/150 | R04.4 | Brun-noir |
+| 788424 | P 3/130 ; P 6/130 ; P 6/150 | R05.3 | Bronze moyen |
+| 788425 | P 3/130 ; P 6/130 ; P 6/150 | R05.5 | Bronze |
+| 821924 | P 3/130 ; P 6/130 ; P 6/150 | R06.2 | Noir profond |
+| 788426 | P 3/130 ; P 6/130 ; P 6/150 | R07.2 | Blanc trafic |
+| 795988 | P 3/130 ; P 6/130 ; P 6/150 | R07.3 | Blanc crème |
+| 840750 | P 3/130 ; P 6/130 ; P 6/150 | SF | Couleur spéciale |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 345)
+
+## Palier d'angle – patte de fixation : caches
+
+![Cache de palier d'angle avec patte de fixation](/assets/quincaillerie/roto-nx-catalogue/pivots-paliers-angle/cache-palier-angle-patte-de-fixation.png)
+
+| N° de matériel | Système | Code couleur Roto | Couleur |
+| --- | --- | --- | --- |
+| 788411 | P 3/130 ; P 6/130 ; P 6/150 | R01.1 | Argent naturel |
+| 795972 | P 3/130 ; P 6/130 ; P 6/150 | R01.2 | Champagne |
+| 788412 | P 3/130 ; P 6/130 ; P 6/150 | R01.3 | Titane |
+| 788413 | P 3/130 ; P 6/130 ; P 6/150 | R03.1 | Laiton mat |
+| 795977 | P 3/130 ; P 6/130 ; P 6/150 | R03.2 | Laiton brillant |
+| 788414 | P 3/130 ; P 6/130 ; P 6/150 | R04.1 | Brun-gris |
+| 795982 | P 3/130 ; P 6/130 ; P 6/150 | R04.3 | Brun-olive |
+| 788415 | P 3/130 ; P 6/130 ; P 6/150 | R04.4 | Brun-noir |
+| 788416 | P 3/130 ; P 6/130 ; P 6/150 | R05.3 | Bronze moyen |
+| 788417 | P 3/130 ; P 6/130 ; P 6/150 | R05.5 | Bronze |
+| 821925 | P 3/130 ; P 6/130 ; P 6/150 | R06.2 | Noir profond |
+| 788418 | P 3/130 ; P 6/130 ; P 6/150 | R07.2 | Blanc trafic |
+| 795987 | P 3/130 ; P 6/130 ; P 6/150 | R07.3 | Blanc crème |
+| 840751 | P 3/130 ; P 6/130 ; P 6/150 | SF | Couleur spéciale |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 345)
+
+# Ce que la source ne donne pas
+
+- Le sens de « K » dans « K 6/130 » (pivot P 6/150, p. 338) et « K 3/100 », « K 6/130 » (bouchon,
+  p. 344) : aucune abréviation « K » dans la légende p. 13-14, entrée **INC-297**.
+- Les couleurs des bandes des dessins de montage du pivot d'angle (p. 337) ne sont pas légendées.
+
+# Citations
+
+[1] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 — `raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 10 à 13 et 333 à 345
+[2] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 35 et 66 (numérotation du PDF)
+
+# Voir aussi
+
+- [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md)
+- [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md)
+- [Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md)
+- [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md)
+- [Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md)
+- [Finitions Roto NX](/quincaillerie/roto-nx-finitions.md)
+- [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md)
+- [Catalogue Roto NX pour profils PVC](/sources/roto-nx-catalogue-pvc.md)
+
+===== PAGE 3 : /procedures/fabrication-soleal-fy.md =====
+# Directives d'atelier et colles de référence
+
+L'usinage et l'assemblage des profilés aluminium à rupture de pont thermique **SOLEAL FY** doivent respecter les normes de fabrication des fenêtres métalliques (**NF P 24-351**, **NF EN 14351-1**) et les prescriptions de TECHNAL [1 p. 13, 2 p. 152] :
+
+| Référence produit | Désignation chimique | Rôle d'atelier |
+| --- | --- | --- |
+| **TW110** | Mastic colle polymère MS (hybride) | Étanchéité de la tranche des coupes d'onglets et des embouts de traverse |
+| **TW201** | Colle polyuréthane/époxy bi-composants alu/alu | Encollage et scellement des équerres d'angle (sertissage et injection) |
+| **TW150** | Mastic à base de caoutchouc butyl | Étanchéité des pièces d'angle de joint central (T440020, TFY3835) |
+| **TW200** | Colle cyanoacrylate | Jonctionnement et collage bout à bout des joints EPDM |
+| **TW118** | Mastic élastomère silicone translucide | Étanchéité sous seuil PMR, calfeutrements entre profilés rapportés |
+| **TW540** | Huile de coupe Perfopack | Lubrification lors du tronçonnage et du fraisage des profilés |
+
+---
+
+# Assemblage des cadres d'onglets (dormants et ouvrants)
+
+L'assemblage des angles à 45° s'effectue soit par **sertissage mécanique**, soit par **goupillage** [2 p. 11-16, 70-81] :
+
+### 1. Assemblage par sertissage
+1. **Équerres d'assemblage** :
+   - Dormant 55 mm : équerre extérieure T750201 (chambre $15 \times 13,7\text{ mm}$) et équerre intérieure T750219 (chambre $15 \times 7,2\text{ mm}$).
+   - Ouvrant Apparent 55 mm : équerre principale T750204 (chambre $15 \times 27,1\text{ mm}$) et équerre T750004 ($10 \times 5,2\text{ mm}$).
+   - Ouvrant Minimal 55 mm : équerre T450007 ($15,5 \times 26,3\text{ mm}$) ou équerre à expansion/injection TFY3608.
+2. **Réglage de la sertisseuse** :
+   - Cote de préréglage : **53 mm** sur chaque couteau de sertissage.
+   - Utiliser des couteaux étagés décalés de **7 mm ou 14 mm** dans le plan vertical pour sertir simultanément les deux chambres en une seule frappe.
+3. **Protocole de collage et étanchéité** :
+   - Enduire la tranche brute coupée à 45° d'un cordon continu de mastic MS polymère **TW110**.
+   - Encoller généreusement les ailes de l'équerre avec la colle bi-composants **TW201**.
+   - En cas d'équerres à injection (T750007, TFY3610, TFY3608), injecter la colle TW201 sous pression à travers les orifices poinçonnés jusqu'à refus.
+
+### 2. Assemblage par goupillage
+1. **Poinçonnage des trous de goupille** :
+   - Diamètre : **Ø 6 mm** situé à **30,5 mm** de la pointe de coupe d'onglet (exécuté sur presse avec cassettes TWU0009, TFY7010 ou TWU0011).
+2. **Goupilles de liaison** :
+   - Goupille à visser sans injection : **TAY0001** (empreinte Torx).
+   - Goupille à visser creuse avec injection : **TAY0002** (permet l'injection de colle TW201 directement par le centre de la vis).
+   - Deux goupilles par équerre (serrage contrôlé).
+3. **Équerres à angle variable (châssis trapézoïdaux / faux-équerres)** :
+   - Équerres articulées T750234 ($15 \times 7,2\text{ mm}$) et T750235 ($15 \times 13,7\text{ mm}$) pour angles de coupe de 22,5° à 67,5°.
+   - Formule de positionnement du perçage depuis l'angle : $D = 60,4 + (\tan A \times 9,5)\text{ mm}$ [2 p. 15].
+
+---
+
+# Épointage des ouvrants
+
+Sur tout ouvrant à frappe (OF, OB, Soufflet), les quatre angles intérieurs de l'ouvrant doivent subir un **épointage d'angle** avant montage du joint de battement TFY5008 [2 p. 48] :
+* Réalisé à l'aide de la cassette d'épointage **TWU0011** (ouvrant apparent) ou **TWU0012** (ouvrant minimal).
+* Enlèvement de matière en biseau : profondeur de **4,5 mm**, largeur de **14 à 19 mm** dans l'angle.
+* Permet le passage sans pincement du joint d'étanchéité dans les angles.
+
+---
+
+# Règles de drainage et d'équilibrage de pression
+
+### 1. Drainage des dormants et traverses
+
+| Configuration du châssis | Largeur du châssis ($L$) | Nombre d'orifices de drainage | Positionnement des lumières |
+| --- | :---: | :---: | --- |
+| **Châssis fixe ou 1 vantail** | $L \le 1\,000\text{ mm}$ | **2 drainages** | À 119 mm – 150 mm de chaque extrémité |
+| **Châssis fixe ou 1 vantail** | $L > 1\,000\text{ mm}$ | **2 + 1 par 500 mm** | Aux extrémités + répartis tous les 500 mm |
+| **Fenêtre / Porte-fenêtre 2 vantaux** | $L \le 1\,000\text{ mm}$ | **2 drainages** | Aux deux extrémités |
+| **Fenêtre / Porte-fenêtre 2 vantaux** | $1\,001 < L \le 1\,700\text{ mm}$ | **4 drainages** | Aux extrémités + 2 au droit du battement central |
+| **Fenêtre / Porte-fenêtre 2 vantaux** | $L > 1\,700\text{ mm}$ | **6 drainages** | Aux extrémités + 2 au centre + 2 intermédiaires |
+
+(schéma: raw/DTA 6_12-2016_V5 (1).pdf, p. 29-30 et 2 p. 5-7)
+
+* **Drainage apparent** : lumières oblongues de **$5 \times 30\text{ mm}$** en façade protégées par le déflecteur clipsable **T3160** (trous de fixation Ø 4,1 mm).
+* **Drainage caché** : lumières oblongues de **$1,5 \times 30\text{ mm}$** (ou $5 \times 30\text{ mm}$) usinées en sous-face de traverse basse dormant (aucun déflecteur visible en façade).
+* **Drainage des traverses intermédiaires** : lumières en feuillure équipées de la **goulotte sécable T740043**, découpée à la hauteur exacte de la cage de traverse (repères sécables 10, 15, 18, 28, 38, 48, 58, 68, 98 mm), étanchée au mastic TW110.
+* **Drainage complémentaire de feuillure** : dès que l'épaisseur du vitrage isolant atteint ou dépasse **27 mm** (prise de volume lourde), un usinage supplémentaire de $4,5 \times 30\text{ mm}$ doit être réalisé dans la gorge porte-parclose au droit de chaque lumière de drainage extérieur [2 p. 5, 6].
+
+### 2. Drainage des ouvrants
+* **Ouvrant Apparent (FYa)** : 2 lumières de $5 \times 20\text{ mm}$ dans la tubulure extérieure basse (à 50 mm et 80 mm des angles), plus 1 supplémentaire au centre si $L > 1\,000\text{ mm}$ [2 p. 49].
+* **Ouvrant Minimal (FYm)** : le drainage est **intégré dans les pièces d'angle moulées TFY3850 / TFY3851** jusqu'à 1 000 mm de largeur sans aucun usinage supplémentaire. Au-delà de $L = 1\,000\text{ mm}$, usiner une lumière oblongue de **$20 \times 6\text{ mm}$** au centre sur le pied de la parclose TPE [2 p. 51].
+* **Ouvrant Minimal avec parcloses à 45°** : lumières oblongues de $20 \times 6\text{ mm}$ usinées à **80 mm** de chaque extrémité de la parclose basse [2 p. 52].
+* **Rejet d'eau de seuil PMR (TFY2115 / T215312)** : usiner des encoches de dégagement de **$25 \times 16\text{ mm}$** aux extrémités (à 67,5 mm du bord) et au centre si $L > 1\,000\text{ mm}$ [2 p. 53-54].
+
+### 3. Équilibrage de pression des feuillures
+* **Sur ouvrant apparent et fixe** : réaliser impérativement une **interruption de 10 mm** du joint d'étanchéité extérieur T410010 en partie haute du cadre [2 p. 25].
+* **Sur ouvrant minimal** : l'équilibrage s'effectue automatiquement par les pièces d'angles TFY3850/3851 ou par une lumière de $20 \times 6\text{ mm}$ située à 80 mm du haut du montant côté paumelles [2 p. 54].
+
+---
+
+# Pose du joint central d'étanchéité (T410009 / TFY5024)
+
+L'étanchéité centrale est le garant de l'imperméabilité A\*4 du système SOLEAL [1 p. 9, 2 p. 26-27] :
+1. **Version avec pièce d'angle vulcanisée TFY3835** :
+   - Clipser les 4 pièces d'angles TFY3835 dans les coins du dormant.
+   - Étancher les faces de contact des pièces d'angles avec le mastic butyl **TW150**.
+   - Couper le joint EPDM en coupe droite et le monter **légèrement en compression** (sur-longueur de 1 %) dans les rainures entre les pièces d'angles.
+2. **Version joint tournant avec pièce d'angle T440020** :
+   - Positionner la pièce d'angle T440020 dans chaque coin.
+   - Enfiler le joint central T410009 en continu en le faisant tourner dans les 4 angles.
+   - Réaliser la jonction en traverse haute au centre et la coller à la colle cyanoacrylate **TW200**.
+   - Injecter du mastic butyl **TW150** dans le canal d'injection de chaque pièce d'angle jusqu'à ce que le mastic reflue visiblement à la pointe de l'angle.
+
+---
+
+# Assemblage du seuil plat PMR (T215309 / TFY1160 / TFY1161)
+
+Pour assurer l'accessibilité handicapés et la conformité au DTA CSTB [1 p. 9, 2 p. 17-18, 91-95] :
+1. **Préparation des montants dormants** : coupe droite 90° en partie basse, usinage de passage pour le seuil (lumière de $30 \times 9,5\text{ mm}$ à 100 mm du bord).
+2. **Étanchéité d'embout** :
+   - Garnir les extrémités du seuil et l'assise du dormant de mastic MS polymère **TW110**.
+   - Emboîter les embouts latéraux spécifiques **T700036** (sur 55) ou **TFY3686** (sur 65).
+   - Introduire l'extrémité du joint central T410009 dans le logement prévu sur l'embout et étancher au butyl **TW150**.
+   - Poser la cale d'étanchéité basse sous dormant **T780034** enduite de TW110.
+3. **Équipement de la traverse basse d'ouvrant** :
+   - Visser le profilé porte-joint bas T215310 avec vis T770022.
+   - Visser le tremplin de guidage **T740188** en traverse basse d'ouvrant (assure le franchissement sans heurt de la butée centrale du seuil).
+   - Monter les embouts d'étanchéité de battement bas **T700033 / T700034** et le rejet d'eau **T700029** étanché au mastic élastomère **TW118**.
+
+---
+
+# Usinage et montage des serrures
+
+1. **Boîtier crémone encastré T940046 (carré de 7 mm)** :
+   - Usinage sur montant d'ouvrant : mortaise de fraisage de **$67 \times 16,3\text{ mm}$** (profondeur 24,3 mm côté apparent, 13,3 mm côté minimal) avec deux trous de fixation Ø 10 mm entraxe 43 mm [2 p. 56].
+   - Couple de serrage maximal des vis de boîtier : **5 N·m** [2 p. 110-111].
+2. **Serrure 3 points à pênes basculants TFY3724** :
+   - Usinée sur ouvrant grande inertie TFY1213 : mortaise centrale pour coffre de serrure et deux mortaises de **$135 \times 18\text{ mm}$** situées à +585 mm et -490 mm de l'axe béquille pour les pênes basculants [2 p. 64].
+   - Recoupe de la têtière selon les formules portées au catalogue : découpe haute maxi 391 mm, découpe basse maxi 245 mm [2 p. 101].
+   - Fixation de la têtière et des gâches à l'aide des vis spécifiques à tête fraisée **T470044** [2 p. 102].
+3. **Paumelles visibles T940025 (prescription de sécurité)** :
+   - Après réglage de l'ouvrant sur dormant, insérer obligatoirement la **vis de sécurité TAY0047** à travers le corps de chaque paumelle et son insert pour verrouiller mécaniquement la position [2 p. 106].
+   - Joint TFY5008 : sur paumelle 2 lames T940025, **entailler** le joint sans le couper ; sur paumelle 3 lames T940026, **délarder** le joint sur la hauteur totale de la paumelle.
+
+---
+
+# Citations
+
+[1] DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm — `raw/DTA 6_12-2016_V5 (1).pdf`, p. 9 à 14
+
+[2] SOLEAL FY 55 évolution, Fabrication Ouvrant Minimal et Apparent, réf. DOC-0001186128 Rév. B — `raw/SOLEAL-FY-55-évo-Fab_DOC-0001186128-Rev.B_Fr.pdf`, p. 4 à 150
+
+[3] SOLEAL FY 55 & 65, Évolution Quincaillerie Cachée, Fabrication, réf. 6320.003 — `raw/SOLEAL-FY-55-65-evolution-QC-catalogue-fabrication-6320-003-042021-FR.pdf`, p. 1 à 68
+
+# Voir aussi
+
+- [Dormants et ouvrants SOLEAL FY](/profiles/soleal-fy-dormants-et-ouvrants.md)
+- [Cotes de débit SOLEAL FY](/profiles/soleal-fy-cotes-de-debit.md)
+- [Parcloses et vitrages SOLEAL FY](/profiles/soleal-fy-parcloses-et-vitrage.md)
+- [Quincaillerie visible et cachée SOLEAL FY](/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md)
+- [TECHNAL](/fournisseurs/technal.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /quincaillerie/ferrures-approuvees-profine.md | Quincaillerie | Ferrures des fenêtres et portes profine, règles générales et marques approuvées | profine, ferrure, quincaillerie, marques-approuvees, points-de-verrouillage, compas | Les règles générales de choix, de fixation et de contrôle des ferrures sur les systèmes profine 70 et 76 (points de verrouillage à 80 cm au plus, gabarits, joint de frappe), et les marques de quincaillerie approuvées par profine pour chaque type de fenêtre, de porte et d'accessoire. | un ouvrant et le verrouillent dans son dormant : paumelles ou pivots, compas, crémone, gâches, points de verrouillage. Cette page porte le registre 1 |
+| /quincaillerie/perform76-poignee-et-pivot.md | Quincaillerie | Poignée et pivot PERFORM76 | perform76, poignee, pivot, charge, reglage, quincaillerie | Positions de poignée par hauteur d'ouvrant sur PERFORM76, position et réglage du pivot bas par dormant, et charge admissible par ouvrant. | m sur le 76171 à 57 mm sur le 76185. # Nombre de paumelles par hauteur d'ouvrant Le système 76 Advanced prévoit **2 paumelles de 50 à 90 cm de haute |
+| /sources/technal-soleal-py-fabrication.md | Document source | Catalogue de fabrication Technal SOLEAL PY 55 | technal, soleal, soleal-py, porte, fabrication, atelier | Guide technique officiel d'atelier et catalogue de fabrication Technal pour les portes à rupture de pont thermique SOLEAL PY 55 (Réf. 4899.007 - 09/2018, 222 pages). | , pose du ferme-porte intégré FPI, réglage 3D des paumelles, retard effraction RC3 / / Nature / Guide opératoire de fabrication en atelier Technal / |
+| /quincaillerie/soleal-py-serrures-et-paumelles.md | Quincaillerie | Paumelles, serrures et ferme-portes Technal SOLEAL PY 55 | technal, soleal, soleal-py, porte, quincaillerie, paumelles | Guide technique complet de la quincaillerie pour porte battante et va-et-vient SOLEAL PY 55 de TECHNAL (paumelles en feuillure 130/150 kg, ferme-porte intégré FPI conforme PMR, serrures 1 à multipoints, retard à l'effraction RC2/RC3, ventouses 300 kg et pivots freins de sol). | # Paumelles en feuillure et articulation Les paumelles SOLEAL PY 55 se montent directement en feuillure dans les gorges d'ouvrant et de dormant au mo |
+| /quincaillerie/roto-nx-compas-et-paliers.md | Quincaillerie | Compas, paliers et pivots Roto NX | roto, roto-nx, compas, palier, pivot, designo | Les références de commande du chapitre « Compas » du catalogue Roto NX PVC — tolérance de châssis fixe, têtières de compas, bras de compas (P et Designo par système de profil), compas articulé confort, équerres de compas OF, bras de compas en feuillure, charnière en feuillure, paumelle de recouvrement, paliers compas, broche, caches par code couleur — et les longueurs de palier P3 / P6 du manuel KSR ; les pivots et paliers d'angle ont leur propre page. | s de compas en feuillure, charnière en feuillure, paumelle de recouvrement, palier compas, broches de palier et caches, côté paumelles P et, pour une |
+| /quincaillerie/roto-nx-ksr-confort-designo.md | Quincaillerie | Configurations Roto NX KSR — Confort et NT Designo II | roto, roto-nx, ksr, confort, designo, designo-ii | La quincaillerie Roto NX KSR de l'oscillo-battant Confort (fouillot 15 mm) et des configurations NT Designo II (oscillo-battant, ouvrant à la française, deux vantaux) — nomenclatures complètes, vues éclatées et positionnement des gâches. | TR-111**, voir [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md). Dans les listes, le chiffre entouré |
+| /sources/roto-nx-ksr-montage.md | Document source | Instructions de montage Roto NX KSR, PVC, novembre 2022 | roto, roto-nx, ksr, ferrure, montage, abaque | Manuel de ferrage de 124 pages de la quincaillerie Roto NX KSR sur menuiseries PVC — consignes et conventions, champs et diagrammes d'application, nomenclatures de ferrage par configuration, positionnement des gâches, montage, réglage et maintenance — avec son registre de couverture page par page. | e / Fenêtres et portes-fenêtres en **PVC**, côtés paumelles **P** et **Designo II** / Document de ferrage de la Roto NX. Son pendant de commande est |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/incoherences-internes.md :
+| INC-297 | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023 | PDF p. 338 (8.2.1.1 « P 6/150 », pivot d'angle côté P) et p. 344 (8.5.1.1, bouchon), relues en image à 110-200 dpi le 29/09/2026, contre la liste des abréviations p. 13-14 | La colonne « système » du pivot d'angle de la section « P 6/150 » porte « K 6/130 » et « P 6/150 » imprimés l'un sous l'autre pour les six références (263858, 230342, 795019, 445171, 639305, 788327) ; celle du bouchon porte « K 3/100 », « K 6/130 », « P 6/150 » ; « K » n'est pas dans les abréviations 1.1.4 et aucun autre tableau du chapitre n'emploie de version « K » (paliers d'angle P 3/130, P 6/130, P 6/150, p. 339-340 ; caches P 6/150 et P 3/130 / P 6/130 / P 6/150, p. 344-345) | Sens de « K » à demander à ROTO ; lecture « K » pour « P » (coquille) non établie | Pivot P 6/150 ou bouchon choisi pour une version de palier « K » que le catalogue ne décrit nulle part ; voir [Pivots et paliers d'angle Roto NX](/quincaillerie/roto-nx-pivots-et-paliers-angle.md) |
+/anomalies/informations-a-verifier.md :
+| VER-113 | Numéro d'article du pivot d'angle NT Designo II | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, PDF p. 68, 70 et 72, relues en image le 29/09/2026 : « Pivot d'angle Designo 634705 » (un seul numéro, sans gauche / droite), « Palier d'angle Designo » et « Compas Designo » renvoyés au fichier gamme. La page [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) porte « Pivot d'angle ouvrant Designo II — 626594 (gauche) / 626595 (droite) », attribués au catalogue CTL_105 (p. 298-312, 344-348), non relu en image dans cette session ; le manuel était cité à tort sous ce tableau (locator retiré). Relire le catalogue en image : si les deux documents diffèrent, ouvrir un CTR ; complément du 29/09/2026 (tranche 6) : le chapitre « Compas » du catalogue, PDF p. 277-312, relu en image en entier, ne porte ni 626594 / 626595, ni les « compas Designo II » 626578 à 626583 que la page attribuait aux p. 298-312 (retirés de la page) ; ses pièces Designo sont des têtières de compas (385393, 385394, 385415, 385416, 450373, 450374, p. 282-283) et des bras de compas par système de profil (p. 290-297, 301-303) ; les pivots d'angle sont au chapitre « Pivots d'angle / palier d'angle », p. 334-349, pas encore relu ; complément du 29/09/2026 (tranche 7) : le chapitre 8 « Pivots d'angle / palier d'angle », PDF p. 333-345, relu en image à 110-250 dpi, porte **« Pivot d'angle - côté paumelles Designo (BA 13) » 634705**, Roto Sil, un seul numéro sans gauche / droite (p. 338), soit le numéro du manuel ; il ne porte ni 626594 / 626595 ni le palier d'angle Designo « 626590 / 626591 » : ses paliers d'angle Designo sont des paires gauche / droite par système de profil (623974 / 623973 … 606397 / 606396, p. 340-341 ; trois ouvrants 741503 / 741502 … 766768 / 766769, p. 342). La table qui portait 626590 / 626591 et 626594 / 626595 est retirée de la page ; ces quatre numéros n'ont plus aucune source dans le corpus relu | ROTO : confirmer que 626594 / 626595 et 626590 / 626591 n'existent pas (ou désignent d'anciennes pièces) ; aucune source du corpus ne les porte ; voir [Pivots et paliers d'angle Roto NX](/quincaillerie/roto-nx-pivots-et-paliers-angle.md) |

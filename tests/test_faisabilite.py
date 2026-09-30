@@ -212,19 +212,27 @@ def test_api_requires_auth(client):
     assert client.post("/api/faisabilite", json={}).status_code == 401
 
 
-def test_api(client, lecteur_headers):
-    o = client.get("/api/faisabilite/options", headers=lecteur_headers)
+def test_api_admin_only(client, lecteur_headers, responsable_headers):
+    for headers in (lecteur_headers, responsable_headers):
+        assert client.get("/api/faisabilite/options", headers=headers).status_code == 403
+        assert client.post("/api/faisabilite", headers=headers, json={}).status_code == 403
+
+
+def test_api(client, admin_headers):
+    o = client.get("/api/faisabilite/options", headers=admin_headers)
     assert o.status_code == 200 and "76173" not in o.json()["dormants"]
-    r = client.post("/api/faisabilite", headers=lecteur_headers, json={
+    r = client.post("/api/faisabilite", headers=admin_headers, json={
         "configuration": "1v_of", "largeur_mm": 900, "hauteur_mm": 1400, "dormant": "76171", "ouvrant": "76281"})
     assert r.status_code == 200 and r.json()["verdict"] == "ok"
-    bad = client.post("/api/faisabilite", headers=lecteur_headers, json={
+    bad = client.post("/api/faisabilite", headers=admin_headers, json={
         "configuration": "1v_of", "largeur_mm": 900, "hauteur_mm": 1400, "dormant": "76171", "ouvrant": "76281",
         "vitrage": "4-16"})
     assert bad.status_code == 422
 
 
-def test_page(client, responsable_headers):
-    assert client.get("/faisabilite", follow_redirects=False).status_code == 303
+def test_page(client, admin_headers, responsable_headers):
+    assert client.get("/faisabilite", follow_redirects=False).headers["location"] == "/login"
     r = client.get("/faisabilite", headers=responsable_headers, follow_redirects=False)
+    assert r.status_code == 303 and r.headers["location"] == "/"
+    r = client.get("/faisabilite", headers=admin_headers, follow_redirects=False)
     assert r.status_code == 200 and "/api/faisabilite" in r.text and 'id="nav-faisabilite"' in r.text

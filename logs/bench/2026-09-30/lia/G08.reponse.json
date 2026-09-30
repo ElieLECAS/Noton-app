@@ -1,0 +1,8 @@
+{
+  "id": "G08",
+  "reponse": "Le double vitrage acoustique **10/14/4** (warm edge faible émissivité, gaz argon) est donné pour **33 dB** d'affaiblissement acoustique par le catalogue PROFERM de janvier 2026 (p. 27) (/vitrages/performances-vitrages.md).\n\nC'est la solution proposée pour les façades sur routes à fort trafic, contre environ 31 dB pour le vitrage de base 6/18/4 des gammes PVC et 40 dB pour le 44.6/14/10 (zones très bruyantes). Le catalogue ne précise pas l'indice de mesure (Rw, Ra,tr…) ni la menuiserie sur laquelle la valeur a été obtenue.\n\nÀ ne pas confondre : sur l'aluminium ASKEY Frappe 65 Ouvrant Caché, un PV FCBA (404/10/71-15) donne **35 dB Ra,tr** pour un **4/14/10**, mesuré sur un OB 1 vantail de 1450 × 1600 mm (/gammes/askey-frappe-65-oc.md). C'est une autre composition (le verre de 10 mm est à l'intérieur) et une autre menuiserie : cette valeur ne s'applique pas au 10/14/4.",
+  "pages_citees": ["/vitrages/performances-vitrages.md", "/gammes/askey-frappe-65-oc.md"],
+  "appels": 1,
+  "trouve": "oui",
+  "navigation": "Une requête « 10/14/4 affaiblissement acoustique dB vitrage Rw » : la page /vitrages/performances-vitrages.md est arrivée en tête avec le tableau des vitrages acoustiques du catalogue général (10/14/4 = 33 dB). La deuxième page livrée, /gammes/askey-frappe-65-oc.md, porte un PV mesuré en 4/14/10 (35 dB Ra,tr) : composition inversée et menuiserie aluminium différente, donc signalée sans être substituée. La page HYBRIDE ne faisait que redonner le 31 dB du vitrage de base. Aucune entrée d'anomalie n'a été injectée, et il n'y avait pas de raison de relancer."
+}

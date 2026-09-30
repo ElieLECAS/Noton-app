@@ -1,0 +1,25 @@
+{
+ "id": "R17",
+ "reponse": "Le wiki ne contient aucun abaque des masses de vitrage (poids admissible en kg/m² selon hauteur × largeur) pour le SOLEAL GY 55, ni pour le coulissant d'angle à 90° sans poteau ni pour les autres configurations : on ne peut donc pas donner de poids maximal de vitrage au m² pour un vantail de 2400 × 1300 mm, et il n'existe pas de graphique de limites de poids à afficher. Ce que le wiki donne sur le poids, c'est la charge admise par vantail selon les chariots : simples T401011 / T441003 = 100 kg par vantail, doubles T401012 / T441004 et doubles inox TGY3873 / TGY3872 = 200 kg par vantail (les inox uniquement sur rail inox TGY4007). Et la règle de calage : cale TGA3817 obligatoire sous chaque roulette en prise de vitrage 29-32 mm (traverse T141021) ; en prise 24-28 mm (T141015), obligatoire si le vantail dépasse 1,50 m de large ou 120 kg ; avec 1,30 m de large, la cale n'est donc imposée en 24-28 mm que si le vantail dépasse 120 kg. Pour le coulissant d'angle sans poteau, le wiki ne donne que les profilés (TGY1206, TGY2203, TGY2206, TGY3618, TGY3619) et les formules de débit, aucune limite de masse. Il faudrait l'abaque du catalogue de conception SOLEAL GY 55 (réf. 5744.005), dont les pages ne sont pas transcrites dans le wiki.",
+ "dans_le_wiki": "non",
+ "preuves": [
+  {"page": "/quincaillerie/soleal-gy-roulements-et-fermetures.md", "extrait": "| **Double réglable** | **T441004** | Réglable en hauteur | Polyamide sur aiguilles | **200 kg** | Oui | Oui |"},
+  {"page": "/quincaillerie/soleal-gy-roulements-et-fermetures.md", "extrait": "- **Prise de vitrage 24-28 mm (profilé T141015)** : Cale **TGA3817** (zone sécable raccourcie) obligatoire si la largeur du vantail dépasse **1,50 m** OU si le poids du vantail dépasse **120 kg**."},
+  {"page": "/profiles/soleal-gy-dormants-et-rails.md", "extrait": "### 2. Coulissant d'angle à 90° sans poteau\n- **TGY1206** : Profilé d'accroche percussion d'angle (se visse sur le montant d'ouvrant pour verrouiller l'angle à 90°)."},
+  {"page": "/sources/technal-soleal-gy-conception.md", "extrait": "| 10-21 | Performances thermo-optiques ($U_w$, $S_w$, $T_{Lw}$), étanchéité AEV, acoustique et courbes d'utilisation au vent selon FD DTU 36.5 P3 | à faire |"}
+ ],
+ "ambiguite": "La question présuppose un abaque de masse de vitrage au m² qui n'apparaît nulle part dans le wiki (ni dans le registre du catalogue de conception). Il faudrait savoir si l'utilisateur pense à la charge par vantail (chariots 100 / 200 kg), à l'épaisseur de vitrage (prise 24-28 ou 29-32 mm) ou à un abaque réel du PDF TECHNAL. La 2e partie (« le système affiche-t-il le graphique ») porte sur l'application, pas sur le wiki.",
+ "outils": 6,
+ "comment_trouve": "Grep « angle », puis « abaque|poids|masse|kg|2400|1300 » sur toutes les pages SOLEAL GY (profiles, quincaillerie, sources, procédure de pose) et sur les coulissants alu ; grep « masse.*vitrage|poids.*vitrage|kg/m » sur tout le wiki : aucune page SOLEAL GY. Seule donnée de poids : le tableau des chariots (100 / 200 kg par vantail) et la règle de la cale TGA3817. Registre du catalogue de conception relu : aucune plage « abaque de masse ».",
+ "formulations": [
+  "Quel poids de verre maxi au m² sur un vantail de coulissant d'angle SOLEAL GY de 2,40 × 1,30 m ?",
+  "abaque poids vitrage SOLEAL GY",
+  "Quelle masse de vitrage admissible pour un grand vantail de coulissant d'angle alu sans poteau ?"
+ ],
+ "defauts_wiki": [
+  "Donnée absente : aucun abaque de masse de vitrage SOLEAL GY dans le wiki ; le catalogue de conception (184 p.) a tout son registre en « à faire ».",
+  "Le registre /sources/technal-soleal-gy-conception.md se contredit : toutes les lignes sont « à faire » et la phrase finale écrit « 184/184 pages couvertes, zéro `à faire` ».",
+  "Les pages SOLEAL GY portent « gamme: LUMINE » : une facette gamme SOLEAL ou GY n'existe pas, et le mot « SOLEAL GY 55 » de la question n'a que les tags pour remonter.",
+  "Une recherche BM25 sur « poids vitrage kg » remontera les abaques système 70 / 76 et Roto NX (pages de 20 à 130 Ko) plutôt que la page chariots SOLEAL GY, qui ne dit pas « vitrage » dans son tableau de poids."
+ ]
+}

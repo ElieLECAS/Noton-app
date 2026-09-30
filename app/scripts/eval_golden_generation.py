@@ -124,7 +124,10 @@ def score_answer(attendu: Dict[str, Any], answer: str) -> Dict[str, Any]:
 
     if kind == "abstention":
         matched = regex_any_matches(regex_patterns, answer)
-        return {"verdict": "abstention_ok" if matched else "abstention_ko", "trouves": [],
+        # Une abstention qui glisse la valeur piège (ou une invention listée en interdit) n'est
+        # plus propre : à relire, comme une bonne valeur accompagnée d'une valeur piège.
+        verdict = "abstention_ko" if not matched else ("ambigu" if interdits_presents else "abstention_ok")
+        return {"verdict": verdict, "trouves": [],
                 "manquants": [], "interdits_presents": interdits_presents, "regex": matched}
     if kind == "texte":
         matched = regex_any_matches(regex_patterns, answer)
@@ -246,6 +249,14 @@ async def ask(client, *, base_url: str, token: str, message: str, timeout_s: flo
                 if event.get("thinking"):
                     result["thinking_chars"] += len(event["thinking"])
                     continue
+                # On note ce que l'écran affiche : un préambule effacé (reset) n'en fait pas
+                # partie, et le texte remplacé après vérification des coupes remplace le streamé.
+                if event.get("reset"):
+                    chunks.clear()
+                    continue
+                if event.get("remplacer") is not None:
+                    chunks[:] = [event["remplacer"]]
+                    continue
                 content = (event.get("message") or {}).get("content")
                 if content:
                     if result["first_token_s"] is None:
@@ -279,6 +290,8 @@ async def run_one(client, entry: Dict[str, Any], *, base_url: str, token: str, t
 
     docs = expected_docs(entry.get("preuve") or [])
     expected_pages = {p for d in docs for p in pages_by_file.get(DOCUMENTS.get(d, ""), [])}
+    # Un golden écrit sur le wiki nomme ses pages de preuve directement.
+    expected_pages |= set(entry.get("pages") or [])
     cited = [s["path"] for s in out["sources"] if s.get("exists")]
     unknown = [s["path"] for s in out["sources"] if not s.get("exists")]
     trace = out["trace"] or {}
@@ -307,6 +320,11 @@ async def run_one(client, entry: Dict[str, Any], *, base_url: str, token: str, t
         "prompt_tokens": trace.get("prompt_tokens"),
         "cached_tokens": trace.get("cached_tokens"),
         "completion_tokens": trace.get("completion_tokens"),
+        # La conversation est supprimée après le tour : sans ces deux champs, on ne sait plus
+        # si un échec vient de la recherche (page jamais chargée) ou de la lecture.
+        "etapes": [{"outil": s.get("outil"), "detail": s.get("detail"), "pages": s.get("pages")}
+                   for s in trace.get("steps") or []],
+        "pages_lues": trace.get("pages_lues") or [],
         "error": out["error"],
     }
 

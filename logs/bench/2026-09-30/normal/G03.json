@@ -1,0 +1,23 @@
+{
+ "id": "G03",
+ "reponse": "Le W4070495 est un carré de manœuvre (carré de 7 mm) du Coulissant 65 NV ASKEY : longueur L = 56 mm. Il s'emploie sur un vantail de 24 mm renforcé W1041261, avec poignées sur une ou deux faces.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/quincaillerie/askey-coulissant-65-nv-quincaillerie.md", "extrait": "| **W4070495** | 56 | Vantail 24 mm renforcé W1041261 | Poignées sur une ou deux faces |"},
+  {"page": "/quincaillerie/askey-coulissant-65-nv-quincaillerie.md", "extrait": "| Référence | Longueur $L$ (mm) | Type d'ouvrant | Face de manœuvre |"}
+ ],
+ "ambiguite": "",
+ "outils": 5,
+ "comment_trouve": "Grep « 4070495 » : une seule ligne, tableau « Carrés de manœuvre (carré de 7 mm) » de la page Quincaillerie ASKEY Coulissant 65 NV. Lecture de la page entière, puis grep « W407049|carrés de manœuvre|tige carrée » pour chercher une autre valeur : aucune, hormis le registre de la fiche source qui laisse ces pages à l'état « à faire ».",
+ "formulations": [
+  "Longueur de la tige carrée pour vantail 24 renforcé sur le coulissant ASKEY ?",
+  "W4070495 longueur ?",
+  "Quel carré de poignée prendre sur un coulissant ASKEY 65 NV à vantail 24 mm renforcé ?"
+ ],
+ "defauts_wiki": [
+  "Tableau hors d'ordre : W4070496 (53 mm) est placé avant W4070495 (56 mm) ; les longueurs croissent mais les références non, ce qui fait soupçonner une inversion des deux lignes. Non vérifiable sans le PDF ; la fiche source garde les pages 114-118 (carrés de manœuvre) à l'état « à faire », donc ce tableau n'a jamais été relu selon le protocole.",
+  "Numérotation incohérente entre la page (tableau des carrés cité p. 116, roulettes p. 110-111) et le registre de couverture (roulettes p. 112-113, carrés dans 114-118) : décalage de pagination probable, localisateur peu fiable.",
+  "La question dit « carré » : le mot figure bien dans le titre de section, mais pas dans la description ni les tags de la page (tags : quincaillerie, roulettes, serrures, poignees…) ; sans la référence, « longueur carré poignée coulissant » dépend du seul texte intégral.",
+  "Page courte (7,7 ko), bien ciblée : pas de problème de taille."
+ ]
+}

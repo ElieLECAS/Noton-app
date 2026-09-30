@@ -1,0 +1,10 @@
+{
+ "id": "S05",
+ "reponse": "La référence **763392** ne figure pas dans le wiki, y compris dans les tableaux de crémones Roto NX (catalogue Roto NX PVC CTL_105 de juin 2023, p. 212 à 261, et nomenclatures de montage KSR) (/quincaillerie/roto-nx-cremones.md).\n\nLes seules références Roto NX en 7631xx qui y figurent sont des **crémones de semi-fixe standard** (vantail secondaire manœuvré par levier) : 763116 à 763120 (hauteur de levier fixe) et 763125 à 763127 (hauteur de levier milieu / variable). Aucune n'est 763392 : je ne peux pas vous dire que c'en est une variante.\n\nPour retrouver la bonne crémone Roto NX, le catalogue la choisit par :\n- la **famille** : crémone OB KSR à hauteur de poignée fixe, crémone OB à poignée centrée / variable, crémone verrou, crémone de semi-fixe (standard, Plus, levier séparé)… ;\n- l'**axe de fouillot** : 8 mm, 15 mm, ou 25 à 50 mm (têtière + boîtier) ;\n- la **hauteur fond de feuillure d'ouvrant (HFF)**, qui donne la longueur et la hauteur de poignée.\n\nVérifiez le numéro sur l'étiquette ou le bon de commande, ou donnez-moi la famille, le fouillot et la HFF : je vous donne la référence correspondante du catalogue.",
+ "pages_citees": [
+  "/quincaillerie/roto-nx-cremones.md"
+ ],
+ "appels": 2,
+ "trouve": "non",
+ "navigation": "Premier appel : chercher « 763392 crémone » avec la facette systeme Roto NX, pour viser la page des crémones ; il a livré en entier /quincaillerie/roto-nx-cremones.md (chapitre Crémone du catalogue p. 212-261 plus les nomenclatures KSR), /quincaillerie/roto-nx-ksr-soufflet.md et /quincaillerie/roto-nx-ksr-oscillo-battant.md, sans que 763392 apparaisse dans aucun tableau (les plus proches : 763116-763120 et 763125-763127, crémones de semi-fixe standard). Deuxième appel : la référence seule, sans facette, pour vérifier le texte intégral de tout le wiki : « Aucune page ne correspond ». La référence est donc absente du wiki. Les entrées d'anomalie injectées (CTR-113, CTR-117, INC-290 à 292, CTR-109) portent sur d'autres références et n'ont pas été signalées. Il aurait fallu une source Roto supplémentaire (autre catalogue, fichier gamme) ou un numéro vérifié par l'utilisateur."
+}

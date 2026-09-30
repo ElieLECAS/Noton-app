@@ -1,0 +1,24 @@
+{
+ "id": "G07",
+ "reponse": "La quincaillerie Siegenia PSK200 Portal, nommée par le DTD n° DBV-24-6/16-2335_V5 du système 70 (e.XCLUSIVE, e.MOTION, e.VOLUTION) pour l'oscillo-coulissant, va jusqu'à 200 kg (§ 2.2.3.6 Ferrage – Verrouillage : « PSK200 Portal de Siegenia jusqu'à 200 kg. D'autres quincailleries sont possibles sur justifications »). Le wiki ne donne aucune dimension admissible de vantail (largeur, hauteur) : seul le poids de 200 kg est écrit. Sur l'oscillo-coulissant, le seuil aluminium est exclu (§ 2.2.3.1.4 du DTD).",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/quincaillerie/siegenia.md", "extrait": "| PSK200 Portal | oscillo-coulissant | 70 (e.XCLUSIVE, e.MOTION, e.VOLUTION) | 200 |"},
+  {"page": "/quincaillerie/siegenia.md", "extrait": "| DTD n° DBV-24-6/16-2335_V5 | 2.2.3.6 Ferrage – Verrouillage | Quincaillerie pour oscillo-coulissant : PSK200 Portal de Siegenia jusqu'à 200 kg. D'autres quincailleries sont possibles sur justifications. |"},
+  {"page": "/certifications/dtd-6-16-2335.md", "extrait": "- Quincaillerie pour oscillo-coulissant : PSK200 Portal de Siegenia jusqu'à 200 kg. D'autres"}
+ ],
+ "ambiguite": "La question dit « poids de vantail » ; le DTD écrit « jusqu'à 200 kg » sans préciser s'il s'agit du poids du vantail ou de l'ouvrant complet — l'en-tête du wiki dit « Poids maximal (kg) ».",
+ "outils": 3,
+ "comment_trouve": "Grep « PSK ?200|PSK » insensible à la casse : page dédiée Siegenia (description et tags explicites psk200, portal, oscillo-coulissant), clause reprise dans la page du DTD 6/16-2335 et dans Fabrication du système 70. Lecture de la page Siegenia ; vérification du registre VER-20 qui cite la même clause sans autre valeur.",
+ "formulations": [
+  "Ferrure oscillo-coulissante Siegenia du système 70 : poids maxi de l'ouvrant ?",
+  "PSK200 Portal poids maxi ?",
+  "Jusqu'à quel poids peut-on faire un oscillo-coulissant en système 70 ?"
+ ],
+ "defauts_wiki": [
+  "Donnée portée par trois pages (siegenia.md, dtd-6-16-2335.md, fabrication-systeme-70.md) et un registre (VER-20) : lexicalement bien servie, mais entorse à « une donnée, une page ».",
+  "La référence est écrite « PSK200 » collée : une saisie « PSK 200 » dépend de la tokenisation ; le tag « psk200 » aide.",
+  "L'en-tête « Poids maximal (kg) » ne précise pas « par vantail » alors que la question porte sur le vantail.",
+  "status: draft sur la page Siegenia."
+ ]
+}

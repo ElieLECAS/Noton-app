@@ -1,0 +1,928 @@
+===== PAGE 1 : /quincaillerie/soleal-gy-roulements-et-fermetures.md =====
+# Chariots de roulement et calage
+
+Les chariots SOLEAL GY 55 sont logés dans la traverse basse d'ouvrant (T141015 ou T141021). Leur corps en matériau isolant conserve la continuité de la rupture thermique de la traverse basse.
+
+### 1. Tableau de choix des roulettes et charges admissibles
+
+| Type de chariot | Référence | Réglage | Galets / Bandage | Poids maxi par vantail | Compatible Rail Alu T341000 | Compatible Rail Inox TGY4007 |
+| --- | --- | --- | --- | --- | --- | --- |
+| **Simple fixe** | **T401011** | Non réglable | Polyamide sur roulements à aiguilles | **100 kg** | Oui | Oui |
+| **Double fixe** | **T401012** | Non réglable | Polyamide sur roulements à aiguilles | **200 kg** | Oui | Oui |
+| **Double fixe Inox** | **TGY3873** | Non réglable | Galets 100% Inox | **200 kg** | **NON (Incompatible)** | **OUI** |
+| **Simple réglable** | **T441003** | Réglable en hauteur | Polyamide sur aiguilles | **100 kg** | Oui | Oui |
+| **Double réglable** | **T441004** | Réglable en hauteur | Polyamide sur aiguilles | **200 kg** | Oui | Oui |
+| **Double réglable Inox** | **TGY3872** | Réglable en hauteur | Galets 100% Inox | **200 kg** | **NON (Incompatible)** | **OUI** |
+
+> [!WARNING]
+> **Interdiction absolue** d'associer des chariots à roulettes inox (**TGY3872** / **TGY3873**) sur le chemin de roulement en aluminium **T341000**. L'inox détruirait par écrouissage le rail aluminium sous forte charge. L'utilisation du rail rapporté en acier inoxydable **TGY4007** est impérative avec les galets inox.
+
+### 2. Prescription de calage sous traverse : Cale TGA3817
+Pour transmettre directement la charge du vitrage vers les roulettes sans solliciter la rupture thermique des traverses :
+- **Prise de vitrage 29-32 mm (profilé T141021)** : Cale **TGA3817** obligatoire au droit de chaque roulette de manière systématique.
+- **Prise de vitrage 24-28 mm (profilé T141015)** : Cale **TGA3817** (zone sécable raccourcie) obligatoire si la largeur du vantail dépasse **1,50 m** OU si le poids du vantail dépasse **120 kg**.
+- La cale se fixe sur la traverse avec un point de colle avant vitrage.
+
+### 3. Réglage en hauteur des roulettes réglables
+- Les chariots réglables (T441003, T441004, TGY3872) sont ajustables en hauteur **sans dégonder le vantail** au moyen d'une clé Allen introduite par le chant latéral du montant d'ouvrant à travers l'orifice prévu à **25 mm** de hauteur.
+- Lors du réglage, il est obligatoire de soulager le vantail à l'aide de ventouses de vitrier pour éviter d'endommager la vis micrométrique de réglage sous la charge.
+
+---
+
+# Systèmes de fermeture et verrouillage
+
+La condamnation s'effectue par des mécanismes encastrés à têtière filante en acier inox (grade 3 anticorrosion NF EN 1670) :
+
+### 1. Gamme de crémones encastrées
+
+| Référence | Points de fermeture | Condamnation clé | Hauteur min. châssis | Hauteur min. poignée $Hp$ | Fixation |
+| --- | --- | --- | --- | --- | --- |
+| **TGY3700** | 1 point simple | Non | 395 mm | 219 mm | 2 vis TGY3723 |
+| **TGY3701** | 1 point à clé | Oui (cylindre) | 525 mm | 346 mm | 4 vis TGY3723 |
+| **TGY3702** | 3 points | Non | 1 292 mm | 721 mm | 6 vis TGY3723 |
+| **TGY3703** | 3 points à clé | Oui (cylindre) | 1 292 mm | 721 mm | 8 vis TGY3723 |
+| **TGY3704** | Rallonge 4ème point | Raccordée à TGY3702/03 | Pour très grandes hauteurs | — | 2 vis TGY3723 |
+| **TKG025** | Fermeture 1 point coquille | Non | 395 mm | 219 mm | Encastrée + pêne déporté TGY6006 |
+
+### 2. Cylindres et barillets européens
+- Montants latéraux standard TGY1202 et TGY1303 : Cylindre européen **30 x 30 mm** (Réf. **T1040**).
+- Montants latéraux à renfort tube TGY1301 et TGY1302 : Cylindre européen décentré **40 x 30 mm** (Réf. **T1044**).
+- Rosettes inox de protection de cylindre : Réf. **T960013** ou **TPY6003**.
+
+### 3. Fermeture pompier (Établissements Recevant du Public - ERP)
+Conforme à l'Arrêté du 25 juin 1980 et à l'article CO3 modifié du 28 avril 2016 :
+- Référence : **TGY3731** (avec vis de fixation T770059).
+- Compatible uniquement avec les montants simples **TGY1202** et **TGY1300**.
+- Permet l'ouverture d'urgence depuis l'extérieur à l'aide d'une clé spéciale pompier.
+- Exigence dimensionnelle réglementaire : passage libre minimum de **$H = 1\,800\text{ mm} \times L = 900\text{ mm}$**.
+
+### 4. Verrou central à clé TGY3622
+- Placé à la croisée centrale des vantaux en partie basse.
+- Montage sur cale **TGY3640** avec perçage Ø7 mm et écrou à sertir taraudé M5.
+- Vis de fixation CHc M5x16 et M5x25.
+- En cas d'utilisation du verrou central, les roulettes doivent être décalées à **62 mm** et les cales de vitrage à **71 mm** du chant du montant pour ne pas entrer en conflit avec le perçage Ø11 mm de la pièce de blocage.
+
+---
+
+# Organes de manœuvre et poignées
+
+### 1. Tableau de compatibilité des poignées selon les montants
+
+| Organe de manœuvre | Type | Réf. Laquée | Réf. Anodisée | Compatible Montant Standard (TGY1202/1300) | Compatible Montant Tube (TGY1301/1302) | Compatible Montant Lame (TGY1200/1201) | Compatible Montant Bilame (TGY1220) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **Cuvette encastrée** | Intérieure | **TGY3712** | **TGY3719** | Oui (OS / SF) | Oui (OS / SF) | Non | Oui |
+| **Bouton sur plaque** | Intérieure | **TGY3713** | **TGY3714** | Non | Non | **Oui (OS / SF)** | Oui |
+| **Poignée tirage Technal** | Intérieure | **TGY3717** | — | **Oui (OS / SF\*)** | **Oui (OS / SF\*)** | Non | Non |
+| **Poignée tirage extérieure**| Extérieure | **TGY3718** | — | Oui (OS / SF) | Oui (OS / SF) | Non | Non |
+| **Poignée fixe de tirage** | Int/Ext | **TGY3732 / TGY3733** | — | Oui (avec TGY3716) | Oui (avec TGY3716) | Oui | Oui |
+| **Poignée design droit** | Intérieure | **TGY3606** | — | Oui (OS) | Oui (OS) | Non | Non |
+| **Poignée anse galbée** | Intérieure | **TGY6004** | — | Oui (OS / SF) | Non | Non | Non |
+| **Cuvette à levier** | Intérieure | **TGY6003** | — | Oui (OS / SF) | Non | Non | Non |
+| **Béquille à carré de 7 mm**| Intérieure | **T960030 / TCZ61051**| — | Oui (avec kit TGY3721) | Non | Non | Non |
+
+*\*Note : Pour croiser les vantaux sans heurt avec la poignée TGY3717 sur semi-fixe, prévoir la butée TCG021.*
+
+### 2. Réversibilité de la poignée Design Droit TGY3606
+La poignée TGY3606 est réversible pour vantail de service à gauche ou à droite :
+1. Présenter la poignée en position ouverte.
+2. Retirer les 4 vis d'assemblage du corps arrière.
+3. Retirer la butée et le corps de fixation.
+4. Tourner le bras de manœuvre à 180°.
+5. Remonter la butée et visser.
+6. Retourner le corps arrière de 180° (les 2 logements de vis doivent être orientés côté serrure pour fixation par vis TGY3723).
+7. Revisser l'ensemble.
+
+---
+
+# Gâches, centreurs et accessoires de guidage
+
+### 1. Gâches de condamnation
+- **Gâche dormant périphérique TGY3705** : Se visse directement dans la gorge du dormant aluminium sans fraisage ni découpe du profilé à l'aide de vis Torx TGY3723.
+- **Gâche pour percussion centrale TGY3711** : Se visse en applique sur le profilé de percussion centrale TGY1204 ou de percussion d'angle TGY1206.
+- **Gâche renforcée anti-effraction TGY3742** : Équipée de vis de pré-positionnement et d'un contre-clameau en aluminium pour retard à l'effraction sur dormant 55 mm.
+- **Réglage micrométrique de la gâche** : La serrure Technal intègre un gabarit plastique réversible. En position horizontale, il sert de pige d'épaisseur pour aligner la gâche à exactement **6 mm** du boîtier de fermeture avant serrage définitif des vis.
+
+### 2. Centreurs d'ouvrants et guidage
+- **Centreur d'ouvrant TGY3832** : Se clipse par rotation au milieu du montant d'ouvrant. Garantit l'alignement parfait des vantaux en position fermée et le plaquage des joints brosses contre le vent.
+  - *Règle bilame :* Dans le cas d'une menuiserie soumise aux risques de bilame, poser obligatoirement **2 centreurs TGY3832** répartis sur la hauteur.
+- **Compensateur de centreur TGY3833** : Se monte face au centreur TGY3832 sur le profilé de percussion TGY1204 à l'aide d'une vis TGY3723.
+- **Guides de montants centraux TGY3883** : Se clipsent en tête et pied de chaque montant central après gondage des vantaux. Verrouillage par rotation des flèches à l'aide d'une clé Allen de 4 mm. Mousse d'étanchéité positionnée à fleur de profilé.
+- **Pièces anti-dégondage TGY3885** : Se montent sur chaque montant latéral après réglage des roulettes pour empêcher le soulèvement frauduleux de l'ouvrant.
+
+---
+
+# Voir aussi
+
+- [Profilés dormants et rails SOLEAL GY 55](/profiles/soleal-gy-dormants-et-rails.md)
+- [Cotes de débit SOLEAL GY 55](/profiles/soleal-gy-cotes-de-debit.md)
+- [Pose et galandage SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md)
+- [Fournisseur Technal](/fournisseurs/technal.md)
+
+===== PAGE 2 : /quincaillerie/poignees-et-croisillons.md =====
+# Ce que couvre cette page
+
+Les accessoires de manœuvre et de décoration des menuiseries PROFERM : la **poignée** qui manœuvre
+une fenêtre ou un coulissant, la **béquille double** (une poignée de chaque côté, sur plaque ou sur
+rosace, avec l'entrée de clé) qui équipe une porte-fenêtre, la **fausse crémone** (tige décorative
+verticale apparente sur l'ouvrant), les **croisillons** (barrettes qui divisent visuellement le
+vitrage) et quelques petits accessoires. Voir le [glossaire](/reference/glossaire.md).
+
+Une ligne par modèle, ou par modèle et par groupe de gammes quand les finitions ou la disponibilité
+diffèrent. « Finitions de série » : les finitions imprimées « disponible en … » ; « finitions en
+option » : celles marquées « en option » ou « sur demande ». La colonne Gammes ne nomme que les
+gammes dont la page du catalogue montre le modèle. L'image est la photo du catalogue.
+**Sécustik®** est la gamme de poignées à sécurité des modèles ATLANTA et TOULON (**VER-11** pour
+son fabricant).
+
+# Poignées de fenêtre
+
+Relevées sur les pages accessoires des gammes PERFORM (p. 7), HYBRIDE (p. 11), LUMINE (p. 15) et
+TEXTURAL (p. 23) [1].
+
+| Modèle | Type | Usage | Finitions de série | Finitions en option | Gammes | Restriction | Image |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| Sécustik® ATLANTA | poignée | fenêtre | blanc, aspect inox, caramel ou laiton | - | PERFORM, HYBRIDE, LUMINE, TEXTURAL | - | ![Sécustik ATLANTA](/assets/quincaillerie/poignees/secustik-atlanta.png) |
+| Sécustik® TOULON | poignée | fenêtre | noir, 7016, aspect inox ou blanc | - | PERFORM, HYBRIDE, LUMINE, TEXTURAL | - | ![Sécustik TOULON](/assets/quincaillerie/poignees/secustik-toulon.png) |
+| TOULON, position décalée | poignée | fenêtre à quincaillerie invisible ou à ouvrant caché | blanc, noir, F9 [2 p. 3] | laquage RAL [2 p. 3] | LUMINE (LUMINE55), PERFORM+, HYBRIDE+ | **seule poignée réalisable sur PERFORM+ et HYBRIDE+**, poignée centrée impossible [2 p. 2-3] | ![Poignée TOULON décalée, PERFORM+ et HYBRIDE+](/assets/quincaillerie/poignees/toulon-decalee.png) |
+| Technal® BERLIN | poignée | fenêtre | inox, blanc, noir ou 7016 | modèle en option ; autres coloris sur demande | LUMINE | - | ![Technal BERLIN](/assets/quincaillerie/poignees/technal-berlin.png) |
+| Technal® ANTIBES | poignée | fenêtre | noir, 7016, aspect inox ou blanc | modèle en option | LUMINE | - | ![Technal ANTIBES](/assets/quincaillerie/poignees/technal-antibes.png) |
+| Sécustik® ATLANTA | poignée | porte-fenêtre LUMINE65 | blanc ou aspect inox [3 p. 4] | - | LUMINE (LUMINE65) | caramel et laiton non cités (**CTR-28**) | ![Sécustik ATLANTA](/assets/quincaillerie/poignees/secustik-atlanta.png) |
+| Sécustik® TOULON | poignée | porte-fenêtre LUMINE65 | noir, 7016, aspect inox ou blanc [3 p. 4] | - | LUMINE (LUMINE65) | - | ![Sécustik TOULON](/assets/quincaillerie/poignees/secustik-toulon.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 7, 11, 15 et 23 ; raw/brochure-lumine65-2025-02.pdf, p. 4)
+
+Sur la fenêtre LUMINE65, les poignées Sécustik® ATLANTA (blanc, aspect inox, caramel ou laiton)
+et Sécustik® TOULON (noir, 7016, aspect inox ou blanc) sont celles des lignes « fenêtre »
+ci-dessus [3 p. 4].
+
+La poignée TOULON est décalée sur la quincaillerie invisible de la LUMINE55 [1 p. 14]. Sur les
+gammes à ouvrant caché PERFORM+ et HYBRIDE+, **la pose de serrures sur porte-fenêtre est exclue**
+[2 p. 2].
+
+# Béquilles doubles et rosaces, pour portes-fenêtres
+
+| Modèle | Type | Usage | Finitions de série | Finitions en option | Gammes | Restriction | Image |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| TOULON sur plaque | béquille double sur plaque | porte-fenêtre | noir, 7016, aspect inox ou blanc | - | PERFORM, LUMINE | - | ![TOULON sur plaque](/assets/quincaillerie/poignees/toulon-sur-plaque.png) |
+| Sécustik® TOULON avec rosace | béquille double sur rosace | porte-fenêtre | noir, 7016, aspect inox ou blanc | - | PERFORM, HYBRIDE, LUMINE, TEXTURAL | - | ![Sécustik TOULON avec rosace](/assets/quincaillerie/poignees/secustik-toulon-rosace.png) |
+| ATLANTA plaque large | béquille double sur plaque | porte-fenêtre | inox ou laiton | - | PERFORM, HYBRIDE, LUMINE, TEXTURAL | - | ![ATLANTA plaque large](/assets/quincaillerie/poignees/atlanta-plaque-large.png) |
+| ATLANTA plaque étroite | béquille double sur plaque | porte-fenêtre | inox, blanc ou laiton | noir et 7016 | PERFORM, HYBRIDE, LUMINE, TEXTURAL | - | ![ATLANTA plaque étroite](/assets/quincaillerie/poignees/atlanta-plaque-etroite.png) |
+| Sécustik® ATLANTA avec rosace | béquille double sur rosace | porte-fenêtre | inox, blanc ou laiton | noir et 7016 | PERFORM, HYBRIDE, LUMINE, TEXTURAL | - | ![Sécustik ATLANTA avec rosace](/assets/quincaillerie/poignees/secustik-atlanta-rosace.png) |
+| Technal® BERLIN | béquille double sur rosace | porte-fenêtre | inox, blanc, noir ou 7016 | modèle en option ; autres coloris sur demande | LUMINE | - | ![Technal BERLIN, béquille](/assets/quincaillerie/poignees/technal-berlin-bequille.png) |
+| ATLANTA plaque étroite | béquille double sur plaque | porte-fenêtre LUMINE65 | blanc ou aspect inox [3 p. 4] | noir et 7016 [3 p. 4] | LUMINE (LUMINE65) | laiton non cité (**CTR-28**) | ![ATLANTA plaque étroite](/assets/quincaillerie/poignees/atlanta-plaque-etroite.png) |
+| Sécustik® ATLANTA avec rosace | béquille double sur rosace | porte-fenêtre LUMINE65, pour oscillo-battant | blanc ou aspect inox [3 p. 4] | noir et 7016 [3 p. 4] | LUMINE (LUMINE65) | laiton non cité (**CTR-28**) | ![Sécustik ATLANTA avec rosace](/assets/quincaillerie/poignees/secustik-atlanta-rosace.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 7, 11, 15 et 23 ; raw/brochure-lumine65-2025-02.pdf, p. 4)
+
+Sur la porte-fenêtre LUMINE65, la béquille double TOULON sur plaque et la Sécustik® TOULON avec
+rosace ont les finitions des lignes ci-dessus (noir, 7016, aspect inox ou blanc) ; les rosaces y
+sont données « pour oscillo-battant » (ouverture à la française et en soufflet par la même
+poignée) [3 p. 4].
+
+# Poignées de coulissant
+
+Les poignées de coulissant dépendent du produit, pas de la gamme ; celles des coulissants
+aluminium se rangent en quatre groupes : tous coulissants, LUMINE65, SOLÉAL & GALANDAGE, LUMÉAL
+[1 p. 17]. Le coulissant PVC [INNOSLIDE](/gammes/innoslide.md) a sa propre poignée, sur la
+dernière ligne [4 p. 3]. Voir
+[Coulissants aluminium](/gammes/coulissants-aluminium.md). « Ouvrant principal » : le vantail qui
+se manœuvre ; « semi-fixe » : le vantail qui ne s'ouvre qu'après lui.
+
+| Modèle | Type | Usage | Finitions de série | Finitions en option | Gammes | Restriction | Image |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| Sécustik® ATLANTA | poignée | tous coulissants | blanc, aspect inox, caramel ou laiton | - | coulissants aluminium | - | ![Sécustik ATLANTA](/assets/quincaillerie/poignees/secustik-atlanta.png) |
+| Sécustik® TOULON | poignée | tous coulissants | noir, 7016, aspect inox ou blanc | - | coulissants aluminium | - | ![Sécustik TOULON](/assets/quincaillerie/poignees/secustik-toulon.png) |
+| SEOUL | cuvette de tirage | tous coulissants | noir, 7016, aspect inox ou blanc | modèle en option | coulissants aluminium | - | ![SEOUL](/assets/quincaillerie/poignees/seoul.png) |
+| DEHLI | poignée encastrée | tous coulissants | inox, blanc ou noir | modèle en option | coulissants aluminium | sur le coulissant LUMINE65, autre nom et autre dessin : **MLINI** (**CTR-12**) | ![DEHLI](/assets/quincaillerie/poignees/dehli.png) |
+| Sécustik® ATLANTA | poignée | coulissant LUMINE65 | blanc ou aspect inox [3 p. 3] | - | LUMINE (coulissant LUMINE65) | caramel et laiton non cités (**CTR-28**) | ![Sécustik ATLANTA](/assets/quincaillerie/poignees/secustik-atlanta.png) |
+| SEOUL | cuvette encastrée | coulissant LUMINE65 | inox, blanc ou noir [3 p. 3] | modèle en option [3 p. 3] | LUMINE (coulissant LUMINE65) | 7016 non cité (**CTR-28**) | ![SEOUL](/assets/quincaillerie/poignees/seoul.png) |
+| MLINI | poignée encastrée | coulissant LUMINE65 | inox, blanc ou noir [3 p. 3] | modèle en option [3 p. 3] | LUMINE (coulissant LUMINE65) | nom et dessin différents de la DEHLI (**CTR-12**) | ![Poignée encastrée MLINI](/assets/quincaillerie/poignees/mlini.png) |
+| SYDNEY | poignée | coulissant LUMINE65, sur ouvrant principal | inox, blanc ou noir | modèle en option | LUMINE (coulissant LUMINE65) | - | ![Poignée SYDNEY](/assets/quincaillerie/poignees/sydney.png) |
+| MILAN | poignée | coulissant LUMINE65, sur semi-fixe | inox, blanc ou noir | modèle en option | LUMINE (coulissant LUMINE65) | - | ![Poignée MILAN](/assets/quincaillerie/poignees/milan.png) |
+| SYDNEY | poignée | SOLÉAL et GALANDAGE, sur ouvrant principal | inox, blanc ou noir | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55) | - | ![Poignée SYDNEY](/assets/quincaillerie/poignees/sydney.png) |
+| Technal® SHANGHAI | poignée | SOLÉAL et GALANDAGE, sur ouvrant principal | inox, blanc, noir ou 7016 | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55) | - | ![Technal SHANGHAI](/assets/quincaillerie/poignees/technal-shanghai.png) |
+| Technal® PEKIN | poignée | SOLÉAL et GALANDAGE, sur ouvrant principal | F9, blanc, noir ou 7016 | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55) | - | ![Technal PEKIN](/assets/quincaillerie/poignees/technal-pekin.png) |
+| MILAN | poignée | SOLÉAL et GALANDAGE, sur semi-fixe | inox, blanc ou noir | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55) | - | ![Poignée MILAN](/assets/quincaillerie/poignees/milan.png) |
+| Technal® GRENADE | poignée | SOLÉAL et GALANDAGE, sur semi-fixe | inox, blanc, noir ou 7016 | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55) | - | ![Technal GRENADE](/assets/quincaillerie/poignees/technal-grenade.png) |
+| Technal® BERLIN | poignée | SOLÉAL, GALANDAGE et LUMÉAL | inox, blanc, noir ou 7016 | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55, LUMÉAL55) | - | ![Technal BERLIN](/assets/quincaillerie/poignees/technal-berlin.png) |
+| Technal® ANTIBES | poignée | SOLÉAL, GALANDAGE et LUMÉAL | noir, 7016, aspect inox ou blanc | modèle en option | LUMINE (SOLÉAL55, GALANDAGE55, LUMÉAL55) | - | ![Technal ANTIBES](/assets/quincaillerie/poignees/technal-antibes.png) |
+| Technal® OSAKA | poignée de tirage | LUMÉAL | inox | - | LUMINE (LUMÉAL55) | - | ![Technal OSAKA](/assets/quincaillerie/poignees/technal-osaka.png) |
+| Technal® KOBE | bouton de manœuvre | LUMÉAL | - | - | LUMINE (LUMÉAL55) | - | ![Technal KOBE](/assets/quincaillerie/poignees/technal-kobe.png) |
+| Technal® TOKYO | poignée droite | LUMÉAL | inox | modèle en option | LUMINE (LUMÉAL55) | - | ![Technal TOKYO](/assets/quincaillerie/poignees/technal-tokyo.png) |
+| Technal® KYOTO | poignée inclinée | LUMÉAL | inox | modèle en option | LUMINE (LUMÉAL55) | - | ![Technal KYOTO](/assets/quincaillerie/poignees/technal-kyoto.png) |
+| Poignée design minimal | poignée | LUMÉAL, dépliants de juin 2023 et d'avril 2026 | - | - | LUMINE (LUMÉAL) | « en standard » [5 p. 3, 6 p. 2] | ![Poignée design minimal, photo de la Technal OSAKA](/assets/quincaillerie/poignees/technal-osaka.png) |
+| Poignée design droit | poignée | LUMÉAL, dépliants de juin 2023 et d'avril 2026 | - | modèle en option [5 p. 3, 6 p. 2] | LUMINE (LUMÉAL) | - | ![Poignée design droit, photo de la Technal TOKYO](/assets/quincaillerie/poignees/technal-tokyo.png) |
+| Poignée inclinée | poignée | LUMÉAL, dépliants de juin 2023 et d'avril 2026 | - | modèle en option [5 p. 3, 6 p. 2] | LUMINE (LUMÉAL) | - | ![Poignée inclinée, photo de la Technal KYOTO](/assets/quincaillerie/poignees/technal-kyoto.png) |
+| Bouton de manoeuvre | bouton de manœuvre | LUMÉAL, dépliants de juin 2023 et d'avril 2026 | - | - | LUMINE (LUMÉAL) | - | ![Bouton de manoeuvre, photo du Technal KOBE](/assets/quincaillerie/poignees/technal-kobe.png) |
+| Poignée du coulissant INNOSLIDE, modèle non nommé | poignée | coulissant INNOSLIDE | blanc, noir ou F9 [4 p. 3] | - | INNOSLIDE | - | ![Poignée du coulissant INNOSLIDE](/assets/quincaillerie/poignees/poignee-innoslide.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 17 ; raw/brochure-lumine65-2025-02.pdf, p. 3 ; raw/depliant-lumeal-2023-06.pdf, p. 3 ; raw/depliant-lumeal-2026-04.pdf, p. 2 ; raw/depliant-innoslide-2024-01-a4-web.pdf, p. 3)
+
+Sur le coulissant LUMINE65, la Sécustik® TOULON (noir, 7016, aspect inox ou blanc), la SYDNEY
+sur ouvrant principal et la MILAN sur semi-fixe (inox, blanc ou noir, en option) ont les finitions
+des lignes ci-dessus [3 p. 3].
+
+Les dépliants LUMÉAL de juin 2023 et d'avril 2026 présentent les quatre mêmes poignées « au design exclusif pour personnaliser
+votre baie coulissante » sans nom de modèle ni finition ; la poignée design minimal y est dite
+« Discrète, elle est préconisée par les architectes » [5 p. 3, 6 p. 2]. Ses quatre photos sont celles des
+Technal® OSAKA, TOKYO, KYOTO et KOBE du groupe LUMÉAL au catalogue général, qui en donne les noms
+et les finitions [1 p. 17] : les images des lignes ci-dessus sont celles du catalogue.
+
+L'image de la poignée INNOSLIDE réunit la photo de la poignée noire seule et deux vues de la
+poignée posée sur l'ouvrant ; le modèle n'est pas nommé [4 p. 3].
+
+Aucune finition n'est imprimée pour le bouton KOBE. OSAKA et KOBE ne portent pas la mention « en
+option », à la différence des autres poignées du groupe LUMÉAL [1 p. 17].
+
+# Poignées de porte d'entrée
+
+Poignées présentées avec la [Sélection Hexa](/portes/selection-hexa.md) ; aucune finition n'est
+imprimée [1 p. 31].
+
+| Modèle | Type | Usage | Finitions de série | Finitions en option | Gammes | Restriction | Image |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| Poignée VIENNE | béquille sur rosace, avec entrée de cylindre | porte d'entrée | - | - | Sélection Hexa (LUMINE, HYBRIDE) | - | ![Poignée VIENNE](/assets/quincaillerie/poignees/vienne.png) |
+| Poignée ROME | béquille sur rosace, avec entrée de cylindre | porte d'entrée | - | - | Sélection Hexa (LUMINE, HYBRIDE) | - | ![Poignée ROME](/assets/quincaillerie/poignees/rome.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 31)
+
+# Fausses crémones
+
+La fausse crémone décorative est proposée en deux finitions sur les gammes PERFORM, HYBRIDE et
+TEXTURAL [1 p. 7, 11, 23].
+
+| Modèle | Type | Usage | Finitions de série | Finitions en option | Gammes | Restriction | Image |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| Fausse crémone décorative | décor | fenêtre, porte-fenêtre | blanc ou fer cémenté | - | PERFORM, HYBRIDE, TEXTURAL | **sauf sur porte-fenêtre avec serrure** | ![Fausse crémone décorative](/assets/quincaillerie/poignees/fausse-cremone.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 7, 11 et 23)
+
+La fausse crémone n'apparaît pas dans les accessoires de la gamme LUMINE ni des coulissants
+[1 p. 15, 17].
+
+# Croisillons
+
+Les croisillons se choisissent par leur largeur, en millimètres ; « sans croix » : les barrettes ne
+se croisent pas. Une ligne par croisillon ; la colonne Gammes nomme les pages qui le montrent
+[1 p. 7, 11, 15, 17, 23].
+
+| Croisillon | Largeur (mm) | Croix | Gammes | Image |
+| --- | --- | --- | --- | ---: |
+| 10 mm | 10 | oui | PERFORM, HYBRIDE, LUMINE, coulissants aluminium, TEXTURAL | ![Croisillon 10 mm](/assets/quincaillerie/croisillons/croisillon-10.png) |
+| 18 mm | 18 | oui | PERFORM, HYBRIDE, LUMINE, coulissants aluminium, TEXTURAL | ![Croisillon 18 mm](/assets/quincaillerie/croisillons/croisillon-18.png) |
+| 26 mm | 26 | oui | PERFORM, HYBRIDE, LUMINE, coulissants aluminium, TEXTURAL | ![Croisillon 26 mm](/assets/quincaillerie/croisillons/croisillon-26.png) |
+| 45 mm | 45 | oui | PERFORM, HYBRIDE, LUMINE, coulissants aluminium, TEXTURAL | ![Croisillon 45 mm](/assets/quincaillerie/croisillons/croisillon-45.png) |
+| Laiton 8 mm | 8 | sans croix | PERFORM, HYBRIDE, LUMINE, coulissants aluminium, TEXTURAL | ![Croisillon laiton 8 mm sans croix](/assets/quincaillerie/croisillons/croisillon-laiton-8.png) |
+| Plomb 8 mm | 8 | sans croix | PERFORM, HYBRIDE, LUMINE, coulissants aluminium, TEXTURAL | ![Croisillon plomb 8 mm sans croix](/assets/quincaillerie/croisillons/croisillon-plomb-8.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 7)
+
+# Autres accessoires
+
+| Accessoire | Description | Gammes | Image |
+| --- | --- | --- | ---: |
+| Moustiquaire | Moustiquaire avec cadre fixe. Possibilité de laisser la fenêtre ouverte, fermée ou ouvrant battant | PERFORM, HYBRIDE, LUMINE, TEXTURAL | ![Moustiquaire avec cadre fixe](/assets/quincaillerie/accessoires/moustiquaire.png) |
+| Soubassement, menuiserie PVC | Soubassement mouluré en option. Existe aussi en plat | PERFORM, HYBRIDE, TEXTURAL | ![Soubassement mouluré, PVC](/assets/quincaillerie/accessoires/soubassement-moulure-pvc.png) |
+| Soubassement, menuiserie aluminium | Soubassement mouluré en option. Existe aussi en plat | LUMINE, coulissants aluminium | ![Soubassement mouluré, aluminium](/assets/quincaillerie/accessoires/soubassement-aluminium.png) |
+| Verrou de sécurité | En option. Disponible en blanc ou noir | coulissants aluminium | ![Verrou de sécurité](/assets/quincaillerie/accessoires/verrou-de-securite.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 7, 15 et 17)
+
+Le soubassement est le panneau plein qui remplace le vitrage en partie basse d'une porte-fenêtre.
+
+# Citations
+
+[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 7, 11, 14, 15, 17, 23 et 31
+[2] [Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023](raw/brochure-perform-plus-hybride-plus-2023-05.pdf), p. 2-3
+[3] [Brochure LUMINE65, édition février 2025](raw/brochure-lumine65-2025-02.pdf), p. 3-4
+[4] [Dépliant INNOSLIDE, édition janvier 2024, version A4 web](raw/depliant-innoslide-2024-01-a4-web.pdf), p. 3
+[5] [Dépliant LUMÉAL, édition juin 2023](raw/depliant-lumeal-2023-06.pdf), p. 3
+[6] [Dépliant LUMÉAL, édition avril 2026](raw/depliant-lumeal-2026-04.pdf), p. 2
+
+# Voir aussi
+
+- [PERFORM](/gammes/perform.md)
+- [HYBRIDE](/gammes/hybride.md)
+- [LUMINE](/gammes/lumine.md)
+- [TEXTURAL](/gammes/textural.md)
+- [Coulissants aluminium](/gammes/coulissants-aluminium.md)
+- [PERFORM+](/gammes/perform-plus.md)
+- [HYBRIDE+](/gammes/hybride-plus.md)
+- [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md)
+- [TECHNAL](/fournisseurs/technal.md)
+- [ROTO](/fournisseurs/roto.md)
+- [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md)
+
+===== PAGE 3 : /quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md =====
+# Renvois d'angle Roto NX
+
+Le **renvoi d'angle** est la pièce d'angle de la ferrure : dessinée en équerre, elle transmet le
+verrouillage d'un côté de l'ouvrant à l'autre (voir le [glossaire](/reference/glossaire.md)). Le
+chapitre 5 « Renvois d'angle » du catalogue Roto NX PVC les range en standard (5.1), court (5.2),
+têtière (5.3 : standard et seuil), seuil (5.4), compas (5.5) et solutions particulières (5.6 :
+cintré, fenêtre inclinée, aération, gâche et sortie de tringle) [1 p. 265].
+
+Chaque tableau a des pictogrammes en en-tête de colonne, définis dans la légende du catalogue
+(voir [Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md)) :
+désignation (bulle), longueur, nombre de galets, type de goujon de verrouillage (galets E, P, V,
+voir [Roto NX](/quincaillerie/roto-nx.md)), position (carré entouré de quatre flèches : haut,
+bas), traitement de surface, N° de matériel, et selon le tableau information (« i »), jeu, axe de
+ferrure, profondeur de feuillure, DIN gauche / droite, sortie de tringle, nombre de gâches
+soudées [1 p. 10-11, 266-272]. Conventions de transcription :
+
+- la **longueur** est imprimée en paire « a / b » (110 / 110, 110 / 10, 180 / 0, 110 / 0) ; le sens
+  des deux nombres n'est pas défini, la paire est reportée telle quelle ;
+- une désignation ou une longueur imprimée une seule fois pour plusieurs lignes (cellule
+  fusionnée) est répétée sur chaque ligne ;
+- une position imprimée « Haut / Bas » sur deux lignes d'une même cellule est reportée
+  « Haut, Bas » ;
+- au-dessus de chaque tableau, le catalogue dessine le ou les renvois d'angle sans relier chaque
+  dessin à un N° de matériel : les dessins sont donc montrés ensemble, au-dessus de leur tableau ;
+- les types d'ouverture sont nommés d'après les pictogrammes de la légende [1 p. 12].
+
+Pour les références de renvois d'angle appelées par les nomenclatures de montage KSR, voir
+[Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md).
+
+## Renvoi d'angle standard
+
+![Renvois d'angle standard](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-standard.png)
+
+Section 5.1 « Standard » : quatre dessins ; types d'ouverture : fenêtre oscillo-battante, fenêtre
+ouvrant à la française, fenêtre basculante, fenêtre à la française / oscillo-battante à ouvrant
+semi-fixe [1 p. 266].
+
+| N° de matériel | Désignation | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Position | Traitement de surface |
+| --- | --- | --- | :---: | :---: | --- | --- |
+| 339785 | Renvoi d'angle standard | 110 / 110 | – | – | Haut | Roto Sil |
+| 260275 | Renvoi d'angle standard | 110 / 110 | 1 | E | Haut | Roto Sil |
+| 260277 | Renvoi d'angle standard | 110 / 110 | 1 | P | Haut, Bas | Roto Sil |
+| 260272 | Renvoi d'angle standard | 110 / 110 | 1 | V | Haut, Bas | Roto Sil |
+| 260274 | Renvoi d'angle standard | 110 / 110 | 2 | V | Haut, Bas | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 266)
+
+## Renvoi d'angle spécial court
+
+![Renvois d'angle spéciaux courts](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-special-court.png)
+
+Section 5.2 « Court » : deux dessins ; types d'ouverture : fenêtre oscillo-battante, fenêtre
+ouvrant à la française, fenêtre à la française / oscillo-battante à ouvrant semi-fixe. C'est le
+« renvoi d'angle spécial court → à partir de la page 267 » des tableaux de combinaisons des
+crémones de semi-fixe, voir [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) [1 p. 249, 267].
+
+| N° de matériel | Désignation | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Position | Traitement de surface |
+| --- | --- | --- | :---: | :---: | --- | --- |
+| 260280 | Renvoi d'angle spécial court | 110 / 10 | 1 | E | Haut | Roto Sil |
+| 260282 | Renvoi d'angle spécial court | 110 / 10 | 1 | P | Haut, Bas | Roto Sil |
+| 281288 | Renvoi d'angle spécial court | 110 / 10 | 1 | V | Haut, Bas | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 267)
+
+## Renvoi d'angle de têtière, standard
+
+![Renvoi d'angle de têtière, standard](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-tetiere-standard.png)
+
+Section 5.3.1 « Standard » du renvoi d'angle de têtière, pour l'ouvrant secondaire ; type
+d'ouverture : fenêtre à la française / oscillo-battante à ouvrant semi-fixe. La colonne
+« information » précise l'usage [1 p. 268].
+
+| N° de matériel | Désignation | Longueur (mm) | Information | Nombre de gâches soudées | Nombre de galets | Type de goujon de verrouillage | Position | Traitement de surface |
+| --- | --- | --- | --- | :---: | :---: | :---: | --- | --- |
+| 313538 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire | 1 | 1 | V | Haut | Roto Sil |
+| 367227 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire | 1 | 1 | V | Bas | Roto Sil |
+| 839223 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire / protection contre les déplacements | 1 | 1 | V | Haut | Roto Sil |
+| 839224 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire / protection contre les déplacements | 1 | 1 | V | Bas | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 268)
+
+## Renvoi d'angle de têtière, seuil
+
+![Renvoi d'angle de têtière, seuil](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-tetiere-seuil.png)
+
+Section 5.3.2 « Seuil » du renvoi d'angle de têtière, dessiné en angle bas ; type d'ouverture :
+fenêtre à la française / oscillo-battante à ouvrant semi-fixe ; la colonne « jeu » (deux profils
+emboîtés, cote fléchée en bas) porte 7 ou 10 mm [1 p. 11, 268].
+
+| N° de matériel | Désignation | Longueur (mm) | Information | Jeu (mm) | Nombre de gâches soudées | Nombre de galets | Type de goujon de verrouillage | Position | Traitement de surface |
+| --- | --- | --- | --- | ---: | :---: | :---: | :---: | --- | --- |
+| 823316 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire / gâche soudée | 7 | 1 | 1 | V | Bas | Roto Sil |
+| 794779 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire / gâche soudée | 10 | 1 | 1 | V | Bas | Roto Sil |
+| 858513 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire / système anti-coulissant intégré | 7 | 1 | 1 | V | Bas | Roto Sil |
+| 858515 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire / gâche soudée | 10 | 1 | 1 | V | Bas | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 268)
+
+## Renvoi d'angle de seuil
+
+![Renvois d'angle de seuil](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-seuil.png)
+
+Section 5.4 « Seuil » : deux dessins en angle bas ; types d'ouverture : fenêtre oscillo-battante,
+fenêtre ouvrant à la française, fenêtre à la française / oscillo-battante à ouvrant semi-fixe,
+fenêtre plein cintre oscillo-battante, fenêtre inclinée oscillo-battante ; pas de colonne
+position [1 p. 269].
+
+| N° de matériel | Désignation | Longueur (mm) | Information | Jeu (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | --- | --- | ---: | :---: | :---: | --- |
+| 642264 | Renvoi d'angle seuil | 110 / 110 | Renvoi d'angle standard, galet rallongé | 7 | 1 | V | Roto Sil |
+| 823317 | Renvoi d'angle seuil | 110 / 110 | Renvoi d'angle standard, galet rallongé | 7 | 2 | V | Roto Sil |
+| 614456 | Renvoi d'angle seuil | 110 / 110 | Renvoi d'angle standard, galet rallongé | 10 | 1 | V | Roto Sil |
+| 794778 | Renvoi d'angle seuil | 110 / 110 | Renvoi d'angle standard, galet rallongé | 10 | 2 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 269)
+
+INFO, « Raccordement des seuils » : une description détaillée du raccordement des seuils au
+système de ferrures Roto NX se trouve dans le document **IMO_347**, auquel renvoie un QR code
+imprimé [1 p. 269]. Ce document n'est pas dans le corpus.
+
+## Compas de renvoi d'angle
+
+![Compas de renvoi d'angle](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-compas.png)
+
+Section 5.5 « Compas » : deux dessins, la pièce montée verticalement avec un retour court en
+haut ; types d'ouverture : fenêtre oscillo-battante, fenêtre à la française / oscillo-battante à
+ouvrant semi-fixe [1 p. 270].
+
+| N° de matériel | Désignation | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | --- | :---: | :---: | --- |
+| 293521 | Compas de renvoi d'angle | 180 / 0 | – | – | Roto Sil |
+| 260286 | Compas de renvoi d'angle | 180 / 0 | 1 | P | Roto Sil |
+| 260284 | Compas de renvoi d'angle | 180 / 0 | 1 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 270)
+
+## Renvoi d'angle cintré
+
+![Renvoi d'angle cintré](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-cintre.png)
+
+Section 5.6.1 « Cintré » (solutions particulières) ; types d'ouverture : fenêtre plein cintre
+oscillo-battante, fenêtre inclinée oscillo-battante [1 p. 271].
+
+| N° de matériel | Désignation | Longueur (mm) | Information | Traitement de surface |
+| --- | --- | --- | --- | --- |
+| 255273 | Renvoi d'angle cintré | 110 / 0 | Standard | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 271)
+
+## Renvoi d'angle de fenêtre inclinée
+
+![Renvois d'angle de fenêtre inclinée](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-fenetre-inclinee.png)
+
+Section 5.6.2 « Fenêtre inclinée » : deux dessins, la branche horizontale montante ; types
+d'ouverture : fenêtre inclinée oscillo-battante, fenêtre triangulaire oscillo-battante
+[1 p. 271].
+
+| N° de matériel | Désignation | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | --- | :---: | :---: | --- |
+| 260279 | Renvoi d'angle fenêtre inclinée | 110 / 110 | 1 | E | Roto Sil |
+| 260278 | Renvoi d'angle fenêtre inclinée | 110 / 110 | 1 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 271)
+
+## Renvoi d'angle aération
+
+![Renvoi d'angle aération](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-aeration.png)
+
+Section 5.6.3 « Aération » ; type d'ouverture : fenêtre oscillo-battante. Colonnes « axe de
+ferrure » (deux profils emboîtés, trait d'axe mixte), « profondeur de feuillure » (angle de
+feuillure, flèche oblique) et « DIN gauche/droite » (deux vantaux) [1 p. 11, 272].
+
+| N° de matériel | Désignation | Longueur (mm) | Axe de ferrure (mm) | Profondeur de feuillure (mm) | Nombre de galets | Type de goujon de verrouillage | DIN gauche / droite | Traitement de surface |
+| --- | --- | --- | ---: | ---: | :---: | :---: | --- | --- |
+| 389819 | Renvoi d'angle aération | 110 / 110 | 9 | 20 | 1 | P | Gauche | Roto Sil |
+| 389818 | Renvoi d'angle aération | 110 / 110 | 9 | 20 | 1 | P | Droite | Roto Sil |
+| 389817 | Renvoi d'angle aération | 110 / 110 | 13 | 30 | 1 | P | Gauche | Roto Sil |
+| 389816 | Renvoi d'angle aération | 110 / 110 | 13 | 30 | 1 | P | Droite | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 272)
+
+INFO : **éléments non utilisables en combinaison avec le côté paumelles P et le côté paumelles
+T** [1 p. 272]. Le « côté paumelles T » n'est défini nulle part dans le catalogue (entrée
+**VER-123**).
+
+## Renvoi d'angle gâche et sortie de tringle
+
+![Renvoi d'angle gâche et sortie de tringle](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-gache-et-sortie-de-tringle.png)
+
+Section 5.6.4 « Gâche et sortie de tringle » ; type d'ouverture : fenêtre à la française /
+oscillo-battante à ouvrant semi-fixe ; colonnes « sortie de tringle » (deux tringles décalées,
+cote fléchée) et « nombre de gâches soudées » [1 p. 11, 272].
+
+| N° de matériel | Désignation | Longueur (mm) | Sortie de tringle (mm) | Nombre de gâches soudées | Traitement de surface |
+| --- | --- | --- | --- | :---: | --- |
+| 484686 | Renvoi d'angle gâche et sortie de tringle | 110 / 10 | – | 1 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 272)
+
+# Verrouilleurs Roto NX
+
+Le **verrouilleur** (VM dans les abréviations du catalogue) est une ferrure dessinée en tringle
+plate, qui porte selon la référence aucun, un ou deux galets de verrouillage, une gâche soudée ou un
+crochet (voir le [glossaire](/reference/glossaire.md)) [1 p. 13, 318-328]. Le chapitre 7
+« Verrouilleurs » du catalogue Roto NX PVC les range
+en plusieurs pièces (7.1 : standard, sécurité, seuils, recoupable, crémone), têtière (7.2), opposé
+(7.3), crochet (7.4), plein cintre (7.5 : standard, élément cintré horizontal, élément cintré
+vertical) et confort (7.6) [1 p. 317].
+
+Les tableaux suivent la même légende de pictogrammes que ceux des renvois d'angle (voir
+[Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md)) :
+**raccordable** (deux barres crantées emboîtées : la pièce s'accouple à une autre, « J » pour oui,
+« N » pour non, **INC-288**), longueur, nombre de galets, type de goujon de verrouillage (galets E,
+P, V, voir [Roto NX](/quincaillerie/roto-nx.md)), information (« i »), traitement de surface, N° de
+matériel ; selon le tableau, jeu, zone de recoupe, position, nombre de gâches soudées, renvoi
+d'angle intégré, largeur (LFF) ou hauteur (HFF) fond de feuillure d'ouvrant [1 p. 10-12, 318-328].
+Conventions de transcription :
+
+- une valeur imprimée une seule fois pour plusieurs lignes (cellule fusionnée) est répétée sur chaque ligne ;
+- les paires « a / b » des verrouilleurs plein cintre (« 2 / – », « E / – », « 1 / 1 », « V / E ») sont
+  reportées telles quelles : le catalogue ne dit pas à quoi correspond chaque membre de la paire ;
+- chaque section dessine le verrouilleur au-dessus de son tableau sans relier le dessin à un N° de
+  matériel : un dessin par section, au-dessus du tableau ;
+- les types d'ouverture sont nommés d'après les pictogrammes de la légende [1 p. 12].
+
+Les mêmes pièces portent d'autres noms dans les nomenclatures du manuel de montage KSR (« allonge »,
+« allonge de semi-fixe », « allonge médian pour châssis cintré », « verrouilleur médian pour châssis
+cintré ») : voir [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md) et
+[Configurations Roto NX KSR — châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md).
+
+## Verrouilleur en plusieurs pièces, standard
+
+Section 7.1.1 « Standard », deux tableaux : raccordable sur un côté et raccordable des deux côtés ;
+types d'ouverture : fenêtre oscillo-battante, fenêtre ouvrant à la française, fenêtre basculante, fenêtre à la française / oscillo-battante à ouvrant semi-fixe, fenêtre inclinée oscillo-battante [1 p. 318].
+
+### Raccordable sur un côté, standard
+
+![Verrouilleur standard raccordable sur un côté](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-standard-raccordable-un-cote.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- | --- |
+| 255280 | N | 400 | 1 | E | – | Roto Sil |
+| 593607 | N | 400 | 1 | E | Position de broche -4 mm | Roto Sil |
+| 255281 | N | 600 | 1 | E | – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 318)
+
+### Raccordable des deux côtés, standard
+
+![Verrouilleur standard raccordable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-standard-raccordable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- | --- |
+| 308267 | J | 200 | – | – | – | Roto Sil |
+| 767639 | J | 200 | – | – | Réception AFM | Roto Sil |
+| 450821 | J | 200 | 1 | E | – | Roto Sil |
+| 297858 | J | 400 | – | – | – | Roto Sil |
+| 280346 | J | 400 | 1 | E | – | Roto Sil |
+| 255282 | J | 600 | 1 | E | – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 318)
+
+AFM : anti-fausse manœuvre, voir le [glossaire](/reference/glossaire.md) [1 p. 13].
+
+## Verrouilleur en plusieurs pièces, sécurité
+
+Section 7.1.2 « Sécurité », deux tableaux ; types d'ouverture : fenêtre oscillo-battante, fenêtre ouvrant à la française, fenêtre basculante, fenêtre à la française / oscillo-battante à ouvrant semi-fixe [1 p. 319].
+
+### Raccordable sur un côté, sécurité
+
+![Verrouilleur sécurité raccordable sur un côté](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-securite-raccordable-un-cote.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- | --- |
+| 255284 | N | 200 | 1 | P | – | Roto Sil |
+| 296853 | N | 200 | 1 | V | – | Roto Sil |
+| 255285 | N | 400 | 1 | P | – | Roto Sil |
+| 593611 | N | 400 | 1 | P | Position de broche -4 mm | Roto Sil |
+| 296854 | N | 400 | 1 | V | – | Roto Sil |
+| 593612 | N | 400 | 1 | V | Position de broche -4 mm | Roto Sil |
+| 255286 | N | 600 | 1 | P | – | Roto Sil |
+| 296855 | N | 600 | 1 | V | – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 319)
+
+### Raccordable des deux côtés, sécurité
+
+![Verrouilleur sécurité raccordable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-securite-raccordable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- | --- |
+| 567456 | J | 130 | 1 | V | – | Roto Sil |
+| 622880 | J | 200 | 1 | P | – | Roto Sil |
+| 337708 | J | 200 | 1 | V | Emballage spécial | Roto Sil |
+| 622881 | J | 400 | 1 | P | – | Roto Sil |
+| 337710 | J | 400 | 1 | V | Emballage spécial | Roto Sil |
+| 622882 | J | 600 | 1 | P | – | Roto Sil |
+| 296852 | J | 600 | 1 | V | – | Roto Sil |
+| 337711 | J | 600 | 1 | V | Emballage spécial | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 319)
+
+## Verrouilleur en plusieurs pièces, seuils
+
+Section 7.1.3 « Seuils », deux tableaux ; types d'ouverture : fenêtre oscillo-battante, fenêtre ouvrant à la française, fenêtre à la française / oscillo-battante à ouvrant semi-fixe. La colonne « jeu »
+(deux profils emboîtés, cote fléchée en bas) porte 7, 10 ou 12 mm ; toutes les pièces ont un galet
+V et l'information « Galet rallongé » [1 p. 10, 320].
+
+### Raccordable sur un côté, seuils
+
+![Verrouilleur de seuil raccordable sur un côté](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-seuil-raccordable-un-cote.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Jeu (mm) | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | ---: | --- | --- |
+| 625214 | N | 200 | 1 | V | 7 | Galet rallongé | Roto Sil |
+| 625225 | N | 400 | 1 | V | 7 | Galet rallongé | Roto Sil |
+| 566651 | N | 400 | 1 | V | 10 | Galet rallongé | Roto Sil |
+| 625226 | N | 600 | 1 | V | 7 | Galet rallongé | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 320)
+
+### Raccordable des deux côtés, seuils
+
+![Verrouilleur de seuil raccordable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-seuil-raccordable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Jeu (mm) | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | ---: | --- | --- |
+| 618552 | J | 200 | 1 | V | 10 | Galet rallongé | Roto Sil |
+| 618554 | J | 400 | 1 | V | 10 | Galet rallongé | Roto Sil |
+| 741408 | J | 400 | 1 | V | 12 | Galet rallongé | Roto Sil |
+| 625227 | J | 600 | 1 | V | 7 | Galet rallongé | Roto Sil |
+| 618553 | J | 600 | 1 | V | 10 | Galet rallongé | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 320)
+
+INFO, « Raccordement des seuils », imprimé sous chacun des deux tableaux : « Vous trouverez dans le
+document suivant une description détaillée du raccordement des seuils au système de ferrures Roto
+NX. » Le document est l'**IMO_347**, auquel renvoie un QR code [1 p. 320].
+
+## Verrouilleur en plusieurs pièces, recoupable
+
+Section 7.1.4 « Recoupable » : la colonne « zone de recoupe » (scie au-dessus d'une barre) donne la
+longueur dont la pièce peut être raccourcie (voir le [glossaire](/reference/glossaire.md)). Deux
+tableaux, recoupable sur un côté et recoupable des deux côtés ; types d'ouverture : fenêtre oscillo-battante, fenêtre ouvrant à la française, fenêtre basculante,
+fenêtre à la française / oscillo-battante à ouvrant semi-fixe [1 p. 10, 321].
+
+### Recoupable sur un côté
+
+![Verrouilleur recoupable sur un côté](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-recoupable-un-cote.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Zone de recoupe (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | ---: | :---: | :---: | --- |
+| 489993 | J | 330 | 200 | – | – | Roto Sil |
+| 861349 | J | 330 | 200 | 1 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 321)
+
+### Recoupable des deux côtés
+
+![Verrouilleur recoupable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-recoupable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Zone de recoupe (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | ---: | :---: | :---: | --- |
+| 610174 | J | 980 | 200 / 200 | 1 | P | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 321)
+
+La zone de recoupe du 610174 est imprimée « 200 / 200 », sans dire à quel bout correspond chaque valeur [1 p. 321].
+
+## Verrouilleur en plusieurs pièces, crémone
+
+Section 7.1.5 « Crémone », deux tableaux : raccordable des deux côtés (types d'ouverture : fenêtre oscillo-battante, fenêtre ouvrant à la française,
+fenêtre à la française / oscillo-battante à ouvrant semi-fixe) et ouvrant secondaire (fenêtre à la française / oscillo-battante à ouvrant semi-fixe) ; ce second tableau a une colonne « nombre de gâches soudées »
+(gâche, signe « # ») au lieu des colonnes de galets [1 p. 11, 321].
+
+### Raccordable des deux côtés, crémone
+
+![Verrouilleur de crémone raccordable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-cremone-raccordable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- | --- |
+| 260193 | J | 400 | 1 | E | – | Roto Sil |
+| 257598 | J | 400 | 1 | V | – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 321)
+
+### Ouvrant secondaire, crémone
+
+![Verrouilleur de crémone d'ouvrant secondaire](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-cremone-ouvrant-secondaire.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de gâches soudées | Information | Traitement de surface |
+| --- | --- | ---: | :---: | --- | --- |
+| 260195 | J | 400 | 1 | Ouvrant secondaire | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 321)
+
+## Verrouilleur de têtière
+
+Section 7.2 « Têtière » : un tableau, par longueur et par position (carré entouré de quatre flèches :
+haut, bas), toutes les pièces raccordables (« J ») avec une gâche soudée ; type d'ouverture : fenêtre à la française / oscillo-battante à ouvrant semi-fixe
+[1 p. 11, 322]. Les mêmes numéros sont les « allonges de semi-fixe en partie haute / basse, sur
+crémone de semi-fixe » du manuel KSR, voir [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md).
+
+![Verrouilleur de têtière](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-tetiere.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Position | Nombre de gâches soudées | Traitement de surface |
+| --- | --- | ---: | --- | :---: | --- |
+| 280342 | J | 200 | Bas | 1 | Roto Sil |
+| 450822 | J | 200 | Haut | 1 | Roto Sil |
+| 280343 | J | 400 | Bas | 1 | Roto Sil |
+| 280345 | J | 400 | Haut | 1 | Roto Sil |
+| 609059 | J | 600 | Bas | 1 | Roto Sil |
+| 280331 | J | 600 | Haut | 1 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 322)
+
+## Verrouilleur opposé
+
+Section 7.3 « Opposé », deux tableaux, chaque pièce à deux galets P ; type d'ouverture : fenêtre oscillo-battante. La
+colonne « information » dit où se pose la cale [1 p. 323].
+
+### Raccordable sur un côté, opposé
+
+![Verrouilleur opposé raccordable sur un côté](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-oppose-raccordable-un-cote.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Information | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | --- | :---: | :---: | --- |
+| 330079 | N | 400 | Cale : horizontal en bas | 2 | P | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 323)
+
+### Raccordable des deux côtés, opposé
+
+![Verrouilleur opposé raccordable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-oppose-raccordable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Information | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | --- | :---: | :---: | --- |
+| 373968 | J | 400 | Cale : horizontal en bas, au-dessus de la hauteur de poignée | 2 | P | Roto Sil |
+| 377263 | J | 400 | Cale : horizontal en haut, sous la hauteur de poignée, côté paumelles | 2 | P | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 323)
+
+## Verrouilleur à crochet
+
+Section 7.4 « Crochet » : verrouilleur dessiné avec un boîtier d'où sort un crochet, en deux
+hauteurs de crochet, 17 mm et 21 mm ; type d'ouverture : fenêtre oscillo-battante ; deux dessins par hauteur, sans
+lien avec les N° de matériel. La colonne « information » dit où se pose la pièce [1 p. 324-325].
+
+### Hauteur du crochet 17 mm
+
+![Verrouilleurs à crochet, hauteur du crochet 17 mm](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-crochet-17-mm.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Information | Traitement de surface |
+| --- | --- | ---: | --- | --- |
+| 821929 | J | 200 | Hauteur de crochet 17 mm ; en bas horizontalement | Roto Sil |
+| 821995 | J | 400 | Hauteur de crochet 17 mm ; en bas horizontalement | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 324)
+
+### Hauteur du crochet 21 mm
+
+![Verrouilleurs à crochet, hauteur du crochet 21 mm](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-crochet-21-mm.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Information | Traitement de surface |
+| --- | --- | ---: | --- | --- |
+| 365299 | J | 200 | Hauteur du crochet 21 mm ; côté crémone en haut verticalement, en bas horizontalement | Roto Sil |
+| 365300 | J | 400 | Hauteur du crochet 21 mm ; côté crémone en bas verticalement, côté paumelles verticalement | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 325)
+
+Sous chacun des deux tableaux du crochet est imprimé le même encadré INFO « Raccordement des
+seuils » que sous les verrouilleurs de seuil (document **IMO_347**, QR code) [1 p. 324-325].
+
+## Verrouilleur plein cintre, standard
+
+Section 7.5.1 « Standard » du verrouilleur plein cintre : pièce cintrée, deux tableaux ; type
+d'ouverture : fenêtre plein cintre oscillo-battante. Nombre de galets et type de goujon sont imprimés en paires « a / b »
+[1 p. 326]. Les numéros 245735 et 245733 sont l'« allonge médian pour châssis cintré » du manuel
+KSR, voir [châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md).
+
+### Raccordable sur un côté, plein cintre
+
+![Verrouilleur plein cintre raccordable sur un côté](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-plein-cintre-raccordable-un-cote.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- |
+| 245736 | N | 750 | 2 / – | E / – | Roto Sil |
+| 245735 | N | 750 | 1 / 1 | V / E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 326)
+
+### Raccordable des deux côtés, plein cintre
+
+![Verrouilleur plein cintre raccordable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-plein-cintre-raccordable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- |
+| 245734 | J | 590 | 2 / – | E / – | Roto Sil |
+| 245733 | J | 590 | 1 / 1 | V / E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 326)
+
+## Élément cintré horizontal
+
+Section 7.5.2 « Élément cintré -horizontal » : pièce droite, choisie par la largeur fond de
+feuillure d'ouvrant (LFF, double flèche horizontale) ; zone de recoupe 200 mm pour toutes ; types
+d'ouverture : fenêtre plein cintre oscillo-battante, fenêtre inclinée oscillo-battante [1 p. 327]. Le 812595 figure aussi, avec la même longueur, dans le
+tableau du verrouilleur confort (section *Verrouilleur confort* ci-dessous) [1 p. 328].
+
+![Élément cintré horizontal](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-element-cintre-horizontal.png)
+
+| N° de matériel | LFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | ---: | :---: | :---: | --- |
+| 812595 | 400 – 500 | 380 | 200 | – | – | Roto Sil |
+| 245729 | 501 – 700 | 480 | 200 | – | – | Roto Sil |
+| 245730 | 701 – 900 | 680 | 200 | 1 | E | Roto Sil |
+| 245731 | 901 – 1100 | 880 | 200 | 1 | E | Roto Sil |
+| 245732 | 1101 – 1300 | 1080 | 200 | 1 | E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 327)
+
+## Élément cintré vertical
+
+Section 7.5.3 « Élément cintré - vertical » : pièce droite, choisie par la hauteur fond de feuillure
+d'ouvrant (HFF, double flèche verticale) ; zone de recoupe 200 mm ; colonne « renvoi d'angle intégré »
+(équerre en L), « J » pour la seule 245715 ; nombre de galets et type de goujon en paires « a / b » ;
+types d'ouverture : fenêtre plein cintre oscillo-battante, fenêtre inclinée oscillo-battante [1 p. 10, 327]. Chaque plage de HFF à partir de 701 mm porte deux
+pièces, l'une imprimée « E / – », l'autre « V / E ».
+
+![Élément cintré vertical](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-element-cintre-vertical.png)
+
+| N° de matériel | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Renvoi d'angle intégré | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | ---: | --- | :---: | :---: | --- |
+| 245715 | 500 – 700 | 420 | 200 | J | – / – | – / – | Roto Sil |
+| 245717 | 701 – 900 | 620 | 200 | N | 1 / – | E / – | Roto Sil |
+| 245716 | 701 – 900 | 620 | 200 | N | 1 / 1 | V / E | Roto Sil |
+| 245719 | 901 – 1100 | 820 | 200 | N | 1 / – | E / – | Roto Sil |
+| 245718 | 901 – 1100 | 820 | 200 | N | 1 / 1 | V / E | Roto Sil |
+| 245721 | 1101 – 1300 | 1020 | 200 | N | 1 / – | E / – | Roto Sil |
+| 245720 | 1101 – 1300 | 1020 | 200 | N | 1 / 1 | V / E | Roto Sil |
+| 245723 | 1301 – 1500 | 1220 | 200 | N | 2 / – | E / – | Roto Sil |
+| 245722 | 1301 – 1500 | 1220 | 200 | N | 1 / 1 | V / E | Roto Sil |
+| 245725 | 1501 – 1700 | 1420 | 200 | N | 2 / – | E / – | Roto Sil |
+| 245724 | 1501 – 1700 | 1420 | 200 | N | 1 / 2 | V / E | Roto Sil |
+| 245727 | 1701 – 1900 | 1620 | 200 | N | 2 / – | E / – | Roto Sil |
+| 245726 | 1701 – 1900 | 1620 | 200 | N | 1 / 2 | V / E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 327)
+
+## Verrouilleur confort
+
+Section 7.6 « Confort » : pièce droite, choisie par la hauteur fond de feuillure d'ouvrant (HFF) ;
+zone de recoupe 200 mm ; type d'ouverture : fenêtre à la française / oscillo-battante à ouvrant semi-fixe [1 p. 328]. Pour l'oscillo-battant Confort, le
+manuel KSR prescrit d'autres numéros (245715 à 245726, « verrouilleur médian pour châssis cintré »),
+**CTR-119**.
+
+![Verrouilleur confort](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-confort.png)
+
+| N° de matériel | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | ---: | :---: | :---: | --- |
+| 812595 | 530 – 600 | 380 | 200 | – | – | Roto Sil |
+| 774165 | 601 – 800 | 690 | 200 | – | – | Roto Sil |
+| 774174 | 801 – 1000 | 890 | 200 | 1 | E | Roto Sil |
+| 774175 | 1001 – 1200 | 1090 | 200 | 1 | E | Roto Sil |
+| 774176 | 1201 – 1400 | 1290 | 200 | 1 | E | Roto Sil |
+| 774177 | 1401 – 1600 | 1490 | 200 | 2 | E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 328)
+
+# Citations
+
+[1] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 — `raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 10 à 13, 249, 265 à 272 et 317 à 328
+
+# Voir aussi
+
+- [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)
+- [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md)
+- [Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md)
+- [Compas et paliers Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md)
+- [Pièces de fermeture et gâches Roto NX](/quincaillerie/roto-nx-pieces-fermeture-gaches.md)
+- [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md)
+- [Roto NX](/quincaillerie/roto-nx.md)
+- [Catalogue Roto NX pour profils PVC](/sources/roto-nx-catalogue-pvc.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /quincaillerie/lumeal-ga-roulements-et-fermetures.md | Quincaillerie | Roulements et fermetures Technal LUMEAL GA | technal, lumeal, lumeal-ga, coulissant, roulettes, ferrures | Chariots de roulement simples, doubles et triples jusqu'à 300 kg, ferrures de verrouillage 1 à 3 points, poignées de tirage et équipements de retard à l'effraction classe RC3 du coulissant minimal LUMEAL GA de Technal. | anes de roulement, de fermeture et de sécurité du coulissant **LUMEAL GA** intègrent des chariots de roulement à rupture thermique supportant jusqu'à |
+| /portes/soleal-py-cotes-de-debit.md | Porte d'entrée | Cotes de débit et formules de calcul des portes Technal SOLEAL PY 55 | technal, soleal, soleal-py, porte, debit, formules | Recueil exhaustif des formules de débit, déductions de profilés (dormants, ouvrants en T/Z, plinthes, traverses FPI, seuils PMR PY1100), dimensionnement des vitrages et formules de coupe des tringles de crémone pour la porte SOLEAL PY 55 de TECHNAL. | clips). --- # Formules de débit des tringles de crémone (T525058) Les tringles plates en aluminium **T525058** actionnent les pênes hauts et bas à |
+| /quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md | Quincaillerie | Quincaillerie visible et cachée SOLEAL FY | technal, soleal, soleal-fy, quincaillerie, paumelle, ferrure | Systèmes de ferrures, paumelles apparentes 2 et 3 lames, paumelles sur pivot, quincaillerie cachée (QC 180°), crémones, serrures et organes de verrouillage pour menuiseries aluminium TECHNAL SOLEAL FY 55 et FY 65. | s visibles (OF, OB, BO, Soufflet) * **Boîtier de crémone encastré T940046** : boîtier monodirectionnel pour carré de 7 mm, manœuvré par poignées HOPP |
+| /quincaillerie/roto-nx-ksr-confort-designo.md | Quincaillerie | Configurations Roto NX KSR — Confort et NT Designo II | roto, roto-nx, ksr, confort, designo, designo-ii | La quincaillerie Roto NX KSR de l'oscillo-battant Confort (fouillot 15 mm) et des configurations NT Designo II (oscillo-battant, ouvrant à la française, deux vantaux) — nomenclatures complètes, vues éclatées et positionnement des gâches. | / / 901 – 1400 ¹⁾ / 690 / 1 E / 307030 / ¹⁾ avec rallonge (11) en bas et rallonge (12) en haut [1 p. 66]. ## Compas P avec manœuvre assistée 12/20-1 |
+| /sources/technal-lumeal-ga-fabrication.md | Document source | Catalogues de fabrication et notices de pose Technal LUMEAL GA | technal, lumeal, lumeal-ga, coulissant, fabrication, atelier | Guide technique officiel d'atelier et catalogue de fabrication Technal (Réf. 5074.007 - 01/2021, 214 pages) et notice officielle de pose chantier (Réf. 5850.002 - 07/2018, 18 pages) pour le coulissant minimal LUMEAL GA. | 8, 18 pages) / / Système visé / **LUMEAL GA** (Le Coulissant Minimal à ouvrant caché) / / Domaines / Usinages dormants/ouvrants, plans de drainage, as |
+| /sources/technal-soleal-gy-fabrication.md | Document source | Catalogue de fabrication Technal SOLEAL GY 55 | technal, soleal, soleal-gy, coulissant, galandage, fabrication | Guide officiel de fabrication et catalogue d'atelier Technal pour le système coulissant et galandage SOLEAL GY 55 (Réf. 5746.003 - 09/2021, 200 pages). | TGY1202/1300/1200/1301/1303, usinage d'entailles crémones et poignées, traverses intermédiaires, drainages traverse basse (Ø8 mm à 150 mm) et équilib |
+| /sources/technal-soleal-gy-conception.md | Document source | Catalogue de conception Technal SOLEAL GY 55 | technal, soleal, soleal-gy, coulissant, galandage, conception | Catalogue technique de conception générale Technal pour la gamme de coulissants universels SOLEAL GY 55 (Réf. 5744.005 - 09/2021, 184 pages). | s.md) / / 86-103 / Roulettes (T401011 à TGY3872), crémones 1 à 4 points, cylindres, organes de manœuvre (cuvettes, poignées tirage, réversibilité TGY3 |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/contradictions-entre-sources.md :
+| CTR-12 | Nom de la poignée encastrée de coulissant | Brochure LUMINE65, p. 3 : « Poignée encastrée **MLINI** — En option. Disponible en inox, blanc ou noir », sur le coulissant LUMINE65 ; la photo montre une poignée argent à levier incliné | Catalogue général, p. 17 : « **DEHLI** — En option. Poignée encastrée. Disponible en inox, blanc ou noir », pour tous les coulissants ; la photo montre une cuvette blanche aux bords arrondis. Relu en image le 25/09/2026 : les deux photos ne représentent pas le même objet | **Aucune** — même fonction, même finitions, même position dans la liste, mais deux noms et deux dessins : il peut s'agir de deux poignées distinctes. Les deux sont portées sur [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) | Référence introuvable à la commande, ou poignée livrée qui n'est pas celle montrée au client |
+/anomalies/contradictions-entre-sources.md :
+| CTR-28 | Finitions de cinq poignées et béquilles sur la LUMINE65 | Brochure LUMINE65, février 2025 : coulissant (p. 3) Sécustik® ATLANTA « blanc ou aspect inox », cuvette encastrée SEOUL « En option. Disponible en inox, blanc ou noir » ; porte-fenêtre (p. 4) poignée Sécustik® ATLANTA « blanc ou aspect inox », béquille ATLANTA plaque étroite et Sécustik® ATLANTA avec rosace « blanc ou aspect inox. Noir et 7016 en option ». La même brochure donne à la Sécustik® ATLANTA de fenêtre « blanc, aspect inox, caramel ou laiton » (p. 4) | Catalogue général, janvier 2026 : Sécustik® ATLANTA de coulissant « blanc, aspect inox, caramel ou laiton », SEOUL « noir, 7016, aspect inox ou blanc » (p. 17) ; ATLANTA plaque étroite et Sécustik® ATLANTA avec rosace « inox, blanc ou laiton », noir et 7016 en option (p. 15) | **aucune** — aucune règle ne départage une liste de finitions ; les deux listes sont portées ligne par ligne sur [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md), avec leur source | Poignée caramel ou laiton, ou SEOUL 7016, promise sur une LUMINE65 où elle n'existe peut-être pas ; ou finition inox refusée à tort |
+/anomalies/contradictions-entre-sources.md :
+| CTR-119 | Verrouilleur de l'oscillo-battant Confort Roto NX | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 66 (imprimée 64, « Oscillo-battant Confort, sécurité de base »), relue en image à 110 dpi le 29/09/2026 : repère 6 « Verrouilleur médian pour châssis cintré », par hauteur HVFF côté fermeture / côté paumelle, 530 – 600 (côté paumelle) → 420, **245715** ²⁾ (« avec renvoi d'angle intégré ») ; 601 – 800 → 620 1 V + 1 E, **245716** ; puis 820, 1020, 1220, 1420, 1620 mm, 245718, 245720, 245722, 245724, 245726 | Catalogue Roto NX pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 328 (7.6 « Confort »), relu en image à 110-200 dpi le 29/09/2026 : par HFF, pictogramme « fenêtre à la française / oscillo-battante à ouvrant semi-fixe », 530 – 600 → 380, **812595** ; 601 – 800 → 690, **774165** ; 801 – 1000 → 890, 1 E, 774174 ; 1001 – 1200 → 1090, 774175 ; 1201 – 1400 → 1290, 774176 ; 1401 – 1600 → 1490, 2 E, 774177 ; zone de recoupe 200. Les numéros 245715 à 245726 du manuel sont, au catalogue, l'« Élément cintré - vertical » (7.5.3, p. 327 : 500 – 700 → 420, 245715, renvoi d'angle intégré « J » ; 701 – 900 → 620, 245716, « 1 / 1 », « V / E » …) | Non arbitré : chaque valeur reste dans sa source ; que la section 7.6 « Confort » du catalogue vise l'oscillo-battant Confort du manuel reste à confirmer (pictogramme à deux vantaux au catalogue) | Verrouilleur d'un vantail Confort commandé sous l'un ou l'autre jeu de références, de longueurs différentes (380 / 690 / 890 … contre 420 / 620 / 820 …) ; voir [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md) et [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md) |
+/anomalies/informations-a-verifier.md :
+| VER-123 | Sens de « côté paumelles T » dans l'encadré INFO du renvoi d'angle aération (389816 à 389819) : « Éléments non utilisables en combinaison avec le côté paumelles P et le côté paumelles T » | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 272 (5.6.3), relu en image à 250 dpi le 29/09/2026 : le catalogue ne traite que le côté paumelles P et le côté paumelles Designo (BA 13) (sommaires p. 53 et 277) ; « côté paumelles T » n'apparaît dans aucune liste d'abréviations ni aucun chapitre lu ; complément du 29/09/2026 (tranche 6) : PDF p. 299 (6.5.1), l'équerre de compas OF 331488 est désignée « Équerre de compas OF côté paumelles P / T / A16 » — deuxième emploi de « T » comme côté paumelles, toujours sans définition ; complément du 29/09/2026 (tranche 8) : PDF p. 380 (10.6 compas d'aération), même encadré « Éléments non utilisables en combinaison avec le côté paumelles P et le côté paumelles T. » ; PDF p. 374 (10.3 limiteur d'ouverture à blocage indexé), tableaux « Côté paumelles P / K / A / A16 » et « Côté paumelles Designo (BA 13), côté paumelles A16 Designo » — côtés K, A, A16 et A16 Designo, eux aussi sans définition (le manuel KSR p. 78 écrit « Côté paumelle K, E5, A », **CTR-120**) ; complément du 29/09/2026 (tranche 9) : PDF p. 397 (11.2.2 aération à plusieurs niveaux), même encadré « Éléments non utilisables en combinaison avec le côté paumelles P et le côté paumelles T. » | ROTO : quel côté paumelles est désigné par « T », et avec quel côté paumelles ces renvois d'angle aération s'emploient ; voir [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md) |

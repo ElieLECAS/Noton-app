@@ -1,0 +1,1389 @@
+===== PAGE 1 : /procedures/fabrication-systeme-76-advanced.md =====
+# Ce que fait cette procédure
+
+Elle rassemble les schémas de fabrication du **système 76 Advanced** de
+[profine](/fournisseurs/profine.md), le système PVC de la [PERFORM](/gammes/perform.md) : comment
+s'assemblent en atelier la fourrure d'épaisseur (la tapée PVC) et l'appui, le seuil et les
+montants, la traverse basse sur le seuil, les capots aluminium, les tapées et appuis aluminium, et
+où se percent les drainages et les décompressions. Ce sont des vues éclatées et des coupes : la
+plupart ne portent que des références de pièces et quelques cotes, reprises sous chaque schéma.
+Les termes du métier sont dans le [glossaire](/reference/glossaire.md).
+
+Les prescriptions écrites qui gouvernent ces schémas — entraxes, diamètres de drainage,
+décompression des couleurs sombres, capot complet réservé à la rénovation — sont dans
+[DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md), sections 2.2.3 à 2.4. Les pièces
+d'assemblage par dormant et par seuil sont dans
+[Assemblages du système 76](/profiles/systeme-76-assemblages.md). Le manuel de mise en œuvre profine
+détaille trois de ces opérations pas à pas : [Assemblage mécanique du meneau et de la traverse du système 76 Advanced](/procedures/assemblage-meneau-traverse-systeme-76.md), [Traitement du battement du système 76 Advanced](/procedures/traitement-du-battement-systeme-76.md) et
+[Drainage, décompression et ventilation du système 76 Advanced](/procedures/drainage-decompression-ventilation-systeme-76.md).
+
+# Conditions et interdictions
+
+- Les cadres dormants et ouvrants sont assemblés par thermosoudure après coupe d'onglet ; les
+  assemblages mécaniques demandent un soin particulier pour que leur étanchéité soit équivalente à
+  celle des assemblages soudés [1 p. 5, 7].
+- Les ouvrants des fenêtres équipées d'un seuil possèdent systématiquement en traverse basse un
+  rejet d'eau équipé de 2 garnitures de joint brosse [1 p. 9].
+- **L'appui A476 ne s'assemble pas avec la tapée A469** [1 p. 9].
+- **Le capot complet en traverse basse de dormant est réservé à la rénovation sur dormant
+  existant** [1 p. 9].
+
+# Étapes
+
+## Assemblage fourrure et pièce d'appui PVC
+
+La fourrure d'épaisseur PVC (la tapée) se pose sur le dormant et l'appui PVC vient sous elle ; à
+la jonction, un patin d'étanchéité est vissé et les embouts de remplissage ferment les chambres de
+l'appui.
+
+![Assemblage fourrure et pièce d'appui PVC](/assets/certifications/dta-6-16-2334/assemblage-fourrure-piece-appui-pvc.png)
+
+À gauche, la vue éclatée : la fourrure debout sur l'appui, le patin **M298 ou M613** posé entre les
+deux, vissé par deux vis par-dessous, et un bloc de remplissage sous l'appui. À droite, la coupe :
+la fourrure **6141** sur le dormant, l'appui **6137**, le **patin d'étanchéité M298** en tête de la
+fourrure et les **embouts de remplissage 9F56** dans l'appui (écrits 9F56.1 dans le texte et sur la
+planche cotée des embouts — entrée **INC-25**). Les correspondances entre fourrures
+et appuis sont dans [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md)
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 22 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 24).
+
+## Assemblage ouvrants différents
+
+Quand deux ouvrants de profils différents se rejoignent en angle, la face du plus épais est
+usinée en arrondi, et un patin d'étanchéité coiffe la jonction.
+
+![Assemblage ouvrants différents](/assets/certifications/dta-6-16-2334/assemblage-ouvrants-differents.png)
+
+À gauche, l'angle des deux ouvrants vu de face, la zone « USINAGE » en arc de cercle, et sous lui
+la même zone en coupe. Au centre, en perspective, l'embout marqué profine, et la pièce
+**M463.R** logée dans l'ouvrant. À droite, le « PATIN
+D'ETANCHEITE » posé sur l'extrémité, en deux vues. Le schéma ne porte pas de cote
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 22 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 24).
+
+## Assemblage meneau / traverse intermédiaire dormant
+
+Le meneau ou la traverse intermédiaire de dormant (**76372 ou 76373**) s'assemble mécaniquement
+sur le dormant : après contre profilage de son extrémité, la pièce de maintien du kit est vissée en
+bout, la pièce d'étanchéité du kit se place dans la contre-feuillure, et le meneau est vissé au
+travers du profilé de dormant. Le profilé qui reçoit le meneau porte soit un renfort, soit une
+**entretoise** (un tube qui empêche la vis d'écraser les chambres du PVC) réf. S048, S049 ou
+S050 ; dans un assemblage en croix, un des deux assemblages se fait avec la pièce J055 (DTD
+§ 2.2.3.1.1, sur [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md)) [2 p. 4].
+
+![Coupe de l'assemblage meneau sur dormant, pièce J055, vis Ø5 × 70 et entretoise S048 ; entretoises S050, S049, S048](/assets/certifications/dtd-6-16-2334/meneau-dormant-coupe-entretoises.png)
+
+En haut, la coupe de l'assemblage : le meneau posé sur le dormant, la pièce **J055** entre les
+deux, la vis **Ø 5 × 70** qui traverse le dormant par-dessous et passe dans l'entretoise **S048**.
+La coupe porte : un perçage **Ø 6** dans la paroi du dormant, un lamage **Ø 11** sous la tête de
+vis, l'axe de la vis à **32,55 mm** de la face du dormant, et, de haut en bas le long du meneau,
+**25 mm** puis **6 mm** au-dessus de la face du dormant, puis la cote **X** jusqu'au dos du
+dormant, non chiffrée. En bas, les trois entretoises dessinées en coupe, de la plus longue à la
+plus courte : **S050, S049, S048** ; la planche ne donne pas leur longueur.
+
+![Assemblage en T du meneau 76372 ou 76373 sur dormant, pièce J055 ou J008](/assets/certifications/dtd-6-16-2334/meneau-dormant-assemblage-t.png)
+
+Assemblage en T : de haut en bas, le meneau « 76372 OU 76373 », la pièce « J055 ou J008 » vissée
+en bout par deux vis, la pièce d'étanchéité, puis le dormant, traversé par-dessous par la vis
+d'assemblage.
+
+![Assemblage en croix des meneaux 76372 ou 76373, pièces J056 ou J009](/assets/certifications/dtd-6-16-2334/meneau-dormant-assemblage-croix.png)
+
+Assemblage en croix : de part et d'autre du meneau vertical, deux traverses « 76372 OU 76373 »,
+chacune avec sa pièce « J056 OU J009 » vissée en bout par deux vis et sa pièce d'étanchéité. Le
+choix de J055 / J008 et de J056 / J009 par traverse est dans *Pièces d'assemblage des traverses*
+de [Assemblages du système 76](/profiles/systeme-76-assemblages.md#pièces-dassemblage-des-traverses)
+(schéma: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 25).
+
+## Assemblage meneau / traverse intermédiaire ouvrant
+
+La traverse intermédiaire d'ouvrant se fixe par la pièce **J050** : la pièce est vissée en bout
+de traverse, puis dans l'ouvrant, et la traverse est vissée au travers de l'ouvrant ; le profilé
+recevant la traverse est muni d'un renfort (DTD § 2.2.3.2.2) [2 p. 5].
+
+![Assemblage traverse intermédiaire ouvrant avec pièce J050, vue éclatée](/assets/certifications/dtd-6-16-2334/traverse-ouvrant-j050-eclate.png)
+
+Vue éclatée, de haut en bas : la traverse, la pièce **J050** avec ses vis **3,9 × 19** (quatre,
+en haut) et **4,8 × 38** (deux, en dessous), puis le profilé d'ouvrant, traversé par-dessous par
+**2** vis **4,8 × 38** (repère ②).
+
+![Assemblage traverse intermédiaire ouvrant avec pièce J050, coupes](/assets/certifications/dtd-6-16-2334/traverse-ouvrant-j050-coupes.png)
+
+À droite, deux vues : en haut la coupe A-A, qui montre la J050 entre la traverse et l'ouvrant avec
+ses vis 4,8 × 38 et 3,9 × 19 ; en bas la vue de face de la jonction, avec le repère de coupe A-A
+(schéma: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 26).
+
+## Assemblage traverse complémentaire
+
+La **traverse complémentaire 76299** se met en place sur la traverse haute ou basse d'un ouvrant
+(DTD § 2.2.3.2.2) [2 p. 5].
+
+![Coupe de la traverse complémentaire 76299 renforcée V323 sur l'ouvrant 76281](/assets/certifications/dtd-6-16-2334/traverse-complementaire-76299-coupe.png)
+
+La coupe montre la traverse complémentaire **76299**, renforcée par le **V323** dans sa grande
+chambre, posée sur l'ouvrant **76281**, lui-même renforcé (renfort non légendé).
+
+![Assemblage traverse complémentaire, vue éclatée](/assets/certifications/dtd-6-16-2334/traverse-complementaire-76299-eclate.png)
+
+Vue éclatée : à gauche le montant d'ouvrant, au centre la pièce d'assemblage vissée par deux vis
+dans la traverse et une vis dans le montant, à droite la traverse complémentaire. La pièce n'est
+pas légendée et le schéma ne porte pas de cote
+(schéma: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 26).
+
+Le V323 figure parmi les renforts dessinés dans la 76299 sur la planche des profilés principaux ;
+la planche des renforts ne cite, elle, que les 76303 et 76373 pour le V323 — voir
+[Renforts du système 76](/profiles/systeme-76-renforts.md), entrée **CTR-21**.
+
+## Assemblage seuil
+
+Le montant de dormant se fixe sur le seuil aluminium par une pièce d'assemblage vissée, sous un
+bloc de remplissage **M170**. Deux pièces sont possibles, et le seuil A075 se monte avec contre
+profilage du montant.
+
+![Assemblage seuil avec pièce M154 ou M150, et contre profilage sur seuil A075](/assets/certifications/dta-6-16-2334/assemblage-seuil-m154-m150-a075.png)
+
+À gauche, « Avec pièce M154 » : de haut en bas, le montant, le bloc M170 vissé latéralement, la
+pièce **M154** en deux parties vissées l'une sur l'autre, puis le seuil, vissé par-dessous. À
+droite, « Avec pièce M150 » : le montant, le bloc M170, la pièce **M150** vissée, puis le seuil
+avec sa garniture ; en bas à droite, le seuil **A075** et son bouchon d'about **G067**, sous la
+mention « AVEC CONTRE PROFILAGE SUR SEUIL A075 ». Aucune cote n'est portée
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 23 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 27).
+
+Le détail, dormant par dormant, des sets, des perçages et du montage sur seuil est dans
+[Mise en œuvre du seuil du système 76 Advanced](/procedures/mise-en-oeuvre-seuil-systeme-76.md).
+
+## Assemblage du rejet d'eau pour seuil
+
+Le rejet d'eau de l'ouvrant, en bas, se termine sur le seuil par des embouts vissés ; ce ne sont
+pas les mêmes selon le seuil.
+
+![Assemblage rejet d'eau pour seuils A076, A077 et A343](/assets/certifications/dta-6-16-2334/rejet-eau-seuils-a076-a077-a343.png)
+
+Seuils **A076, A077 et A343** : à gauche, l'embout **M261** à l'extrémité du rejet d'eau et la
+pièce **M163** vissée sur le seuil ; au centre, la coupe du rejet d'eau avec ses deux joints
+brosses ; à droite, l'embout **M178** vissé en bout de seuil, sous le montant
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 24 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 28).
+
+![Assemblage rejet d'eau pour seuil A075](/assets/certifications/dta-6-16-2334/rejet-eau-seuil-a075.png)
+
+Seuil **A075** : l'embout **M261** à l'extrémité du rejet d'eau ; au centre, la coupe montre le
+rejet d'eau vissé dans l'ouvrant au-dessus du seuil A075, avec un seul joint brosse ; à droite, la
+vue assemblée (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 24 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 28).
+
+## Montage de la pièce M175
+
+![Montage pièce M175](/assets/certifications/dta-6-16-2334/montage-piece-m175.png)
+
+La pièce **M175** se visse sur le seuil contre le montant ; la loupe à gauche la montre avant
+vissage. Le montage est coté **55 mm** de haut, mesurés verticalement le long du montant
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 24 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 28).
+
+## Assemblage traverse basse sur seuil
+
+Vue éclatée d'un dormant de porte-fenêtre sur seuil : deux montants, un meneau et le seuil.
+
+![Assemblage traverse basse sur seuil](/assets/certifications/dta-6-16-2334/assemblage-traverse-basse-sur-seuil.png)
+
+En haut, la traverse assemblée sur le montant gauche par une pièce d'assemblage vissée par deux
+longues vis au travers du montant ; en bas, le seuil, sur lequel sont posées une bande d'étanchéité
+(en noir) et des cales, vissé par-dessous par une rangée de vis et, en extrémité, par deux vis
+latérales dans la pièce d'about. Le schéma ne porte ni référence ni cote
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 25 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 29).
+
+## Assemblage des capots sur traverse de dormant
+
+Le **capot aluminium** se clippe sur la face extérieure du profilé PVC ; ses assemblages d'angle
+sont étanchés au joint à la pompe (mastic injecté au pistolet) et, en extrémité de traverse,
+l'espace entre capot et dormant est étanché au mastic [1 p. 8].
+
+![Assemblage des capots : clippage en deux temps](/assets/certifications/dta-6-16-2334/assemblage-capots-clippage.png)
+
+Trois coupes, ouvrant, dormant et meneau : le capot s'accroche d'abord par son pied (**1.**), puis
+se rabat et se clippe en tête (**2.**), où un « JOINT A LA POMPE » est déposé sous le capot du
+dormant et du meneau (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 26 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 30).
+
+![Assemblage des capots : coupe droite ou d'onglet, étanchéité aux extrémités](/assets/certifications/dta-6-16-2334/assemblage-capots-coupe-et-extremites.png)
+
+À gauche, un cadre capoté dont les capots se rejoignent en « Coupe droite ou d'onglet » dans les
+angles. À droite, un cadre dont les capots de traverse sont filants, avec l'« ETANCHEITE AUX
+EXTREMITES » (traits noirs) aux quatre bouts des capots de traverse
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 26 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 30).
+
+![Assemblage des capots : joint à la pompe sur traverse basse et montant](/assets/certifications/dta-6-16-2334/assemblage-capots-joint-a-la-pompe.png)
+
+Trois vues éclatées d'angles capotés : le « Joint à la pompe sur traverse basse et montant
+dormant » (hachures) suit l'angle intérieur entre traverse basse et montant, sous les capots ; au
+centre et à droite, le « Joint à la pompe » à la jonction d'une traverse et d'un montant ou d'un
+meneau (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 26 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 30).
+
+La planche des capots est reproduite deux fois à l'identique, au DTA (p. 26 et 27) comme au DTD
+(p. 30 et 31) — entrée **INC-23** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md).
+
+## Usinage des capots
+
+Les capots se débitent en coupe droite puis se grugent en bout à l'outillage de poinçonnage
+[1 p. 8]. Le grugeage d'extrémité est coté ci-dessous.
+
+![Usinage capot](/assets/certifications/dta-6-16-2334/usinage-capot.png)
+
+En vue de face, l'extrémité du capot est découpée en biais à **105°** avec un rayon **R3** ; la
+cote portée sous la découpe dépend du capot. En coupe, le retour du capot est entaillé sur **16 mm** avec
+un angle de **15°**. À droite, les capots grugés en perspective, un capot de montant recevant un
+capot de traverse.
+
+| Capot | Cote portée sous la découpe (mm) |
+| --- | --- |
+| A048 | 102,2 |
+| A033 | 77,3 |
+| A034 | 95,3 |
+| A035 | 107,3 |
+
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 28 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 32)
+
+Le manuel de mise en œuvre profine donne les mêmes cotes pour ces quatre capots et cote en plus
+les découpes des A385, A386, des capots d'ouvrant et de traverse d'ouvrant — voir
+[Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md#poinçonnage-des-capots).
+
+## Drainage avec capot complet, manchon G008
+
+Quand la traverse basse porte un **capot complet**, l'eau de la feuillure doit traverser à la fois
+le dormant et le capot : un manchon **G008** relie les deux perçages et une busette **M450** le
+ferme. Le perçage de Ø 13,8 mm se fait simultanément dans le capot et le dormant [1 p. 8].
+
+![Drainage avec capot complet, manchon G008](/assets/certifications/dta-6-16-2334/drainage-capot-complet-g008.png)
+
+Trois temps, numérotés sur le schéma : **1.** « perçage du capot et du dormant », à 90°, positionné
+par les cotes X (verticale, depuis le haut du capot) et Y (horizontale), avec une cote de
+**7,1 mm** portée à droite du perçage ; **2.** « introduire mastic entre capot et dormant » ; **3.** « introduire tube puis
+busette ». Les X et Y ne sont pas chiffrés. Cotes des deux pièces, en mm :
+
+| Pièce | Diamètre (mm) | Autres cotes (mm) |
+| --- | --- | --- |
+| G008, manchon | 14 | - |
+| M450, busette | 15,5 (tête), 10 (tige) | 7,5 de tête, 14 de tige |
+
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 28 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 32)
+
+Le surplus de mastic doit être enlevé avant la mise en place du G008, afin de ne pas obstruer
+l'orifice de drainage [1 p. 8].
+
+## Montage du demi-capot en traverse basse
+
+Le **demi-capot A385** habille la traverse basse sans la recouvrir entièrement ; il se clippe sur
+des clips **M569** vissés inox sur la traverse [1 p. 8].
+
+![Montage du demi-capot : clips M569 et gabarit de perçage](/assets/certifications/dta-6-16-2334/demi-capot-clips-m569-entraxes.png)
+
+En haut, le clip **M569**, sa vis, et le **gabarit de perçage T073**, qui porte deux repères de
+perçage marqués **A385** et **A386**. En dessous, la traverse basse vue de face avec trois clips :
+le premier et le dernier à **150 mm** des extrémités, les suivants à **400 mm maximum** l'un de
+l'autre (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 29 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 33).
+
+![Demi-capot A385 sur dormant 76171](/assets/certifications/dta-6-16-2334/demi-capot-a385-coupes.png)
+
+Deux coupes du dormant **76171** renforcé **V306** : à gauche, le demi-capot **A385** clippé sur le
+clip **M569**, fixé par « vis inox », avec le « Joint à la pompe sur traverse basse » en tête ; à
+droite, le clip seul vissé, avant pose du capot
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 29 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 33).
+
+![Demi-capot : drainage, mousse G251 et étanchéité sous capot](/assets/certifications/dta-6-16-2334/demi-capot-drainage-et-etancheite.png)
+
+À gauche, la traverse basse demi-capotée posée sur un appui : « vis inox » du clip, mousse
+**G251** entre capot et appui, drainage « 5X25 OU Ø8 ». À droite, en coupe horizontale, les
+« Etanchéité sous capot alu » (en noir) de part et d'autre du dormant
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 29 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 33).
+
+## Montage des tapées et appuis aluminium avec demi-capot en traverse basse
+
+Les dormants capotés reçoivent des **tapées aluminium** (pour épaissir la menuiserie jusqu'au nu
+de l'isolant) et des **appuis aluminium**, vissés avec un entraxe maximum de 400 mm et étanchés au
+dormant par mastic écrasé ; l'embout de tapée **M646** et sa plaquette en mousse assurent
+l'étanchéité entre appui et tapée, l'embout **M643** ferme les extrémités d'appui, et la mousse
+**G251** se pose dans les angles bas, étanchée au mastic [1 p. 8]. Les coupes des pièces sont dans
+[Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md#pièces-dappui-et-tapées-aluminium).
+
+![Tapées aluminium A469 à A473 sur dormant demi-capoté, embout M646](/assets/certifications/dta-6-16-2334/tapees-alu-a469-a473-m646.png)
+
+Les cinq tapées **A469, A470, A471, A472 et A473** sont dessinées superposées contre le dormant,
+de la plus étroite (A469, contre le dormant) à la plus large (A473) ; l'embout **M646** les coiffe,
+et une « Etanchéité » est portée entre tapée et dormant
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 30 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 34).
+
+![Appuis aluminium A491 et A476 sous dormant demi-capoté, embout M643](/assets/certifications/dta-6-16-2334/appuis-alu-a491-a476-m643.png)
+
+Deux appuis vissés sous la traverse basse demi-capotée : l'appui **A491**, puis l'appui **A476**,
+chacun avec « vis inox » du demi-capot, mousse **G251**, « Etancheite de fil » entre appui et
+dormant, drainage « 5X25 OU Ø8 », et sous chacun son embout d'extrémité **M643** en vue de face
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 30 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 34).
+
+![Appuis aluminium A477 et A475 sous capots A313 et A314](/assets/certifications/dta-6-16-2334/appuis-alu-a477-a475-capots-a313-a314.png)
+
+À gauche, l'appui **A477** sous un dormant rénovation capoté **A313**, avec un drainage coté
+**8 mm** et une vis traversant l'appui ; à droite, l'appui **A475** sous un dormant capoté
+**A314**, avec « Etancheite de fil » (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 30 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 34).
+L'appui A477 est réservé à la rénovation sur dormant existant [1 p. 10].
+
+![Montage tapées et appui alu, demi-capot en traverse basse : vue éclatée](/assets/certifications/dta-6-16-2334/tapees-appui-alu-eclate.png)
+
+Vue éclatée du même montage : en haut à gauche, la fenêtre complète avec son appui ; en haut à
+droite, l'angle bas avec une loupe sur l'« Etanchéité » (en noir) coté **31 mm** ; au centre, le
+bloc de mousse **G251** à glisser dans l'angle ; en bas, la tapée percée (cote **30,5 mm**), l'embout
+**M646** vissé, les tapées dont l'about est étanché (en noir) et l'appui vissé
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 31 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 35).
+
+![Montage tapées et appui alu : embout M643 recoupé](/assets/certifications/dta-6-16-2334/tapees-appui-alu-m643-recoupe.png)
+
+En haut à gauche, la coupe de l'appui sous le dormant ; en haut à droite, l'appui glissé sous la
+traverse, l'étanchéité en noir ; à gauche, l'embout « M643 recoupé et étanché avant montage »,
+vissé en bout d'appui à une cote x ; à droite, l'appui en place vissé latéralement
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 32 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 36).
+
+![Montage tapées et appui alu : vissage et étanchéité de fil](/assets/certifications/dta-6-16-2334/tapee-appui-alu-vissage-etancheite.png)
+
+Coupe de l'angle bas : la tapée fixée par « 1 vis tous les 300 mm », « Etancheite de fil » entre
+tapée et dormant et entre appui **A491** et dormant, « G251 sous Tapée », drainage « 5X25 OU Ø8 »,
+et un orifice oblong placé entre **20 et 200 mm** du bord
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 32 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 36).
+
+## Mise en place et étanchéité du capot dans le cas d'un seuil PMR
+
+Sur un dormant capoté posé sur un **seuil PMR** (seuil surbaissé accessible aux personnes à
+mobilité réduite), une étanchéité au mastic sur le seuil est réalisée avant la mise en place du
+capotage aluminium [1 p. 8].
+
+![Seuil PMR capoté : vue éclatée](/assets/certifications/dta-6-16-2334/seuil-pmr-capot-eclate.png)
+
+De haut en bas : le capot, le montant, le bloc **M170**, la pièce d'assemblage en deux parties,
+puis le seuil avec l'« Etanchéité avant pose capot alu ». Le détail à gauche cote le grugeage du
+capot : rayon **R1,2**, angle **84°**, **3,52 mm** et **0,4 mm**
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 33 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 37).
+
+![Seuil PMR capoté : dormant 76180, capot A314, seuils A076 et A077](/assets/certifications/dta-6-16-2334/seuil-pmr-capot-a314-coupes.png)
+
+À gauche, le dormant **76180** capoté **A314** avec la tapée **A471**, son embout **M646** et la
+pièce **M509**, sur le seuil **A076** ; à droite, le même dormant avec la tapée **A469** et la
+pièce **M509**. En bas, les vues de face correspondantes : sur le seuil **A076** à gauche, sur le
+seuil **A077** avec le profilé **91030** à droite
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 33 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 37).
+
+## Assemblage traverse basse sur seuil, compribande et pièce M506
+
+Coupes verticales de la traverse basse posée sur le seuil : la jonction entre dormant et seuil est
+garnie d'une **compribande** (mousse imprégnée précomprimée, hachurée sur le dessin).
+
+![Traverse basse sur seuil : compribande et pièce M506](/assets/certifications/dta-6-16-2334/traverse-basse-sur-seuil-compribande-m506.png)
+
+En haut, deux coupes du dormant **76171** : à gauche posé directement sur le seuil, hauteur totale
+**86 mm** ; à droite surélevé par la pièce **M506**, hauteur totale **94 mm** ; la « COMPRIBANDE »
+est posée dans les deux cas. En bas, deux coupes du meneau **76372** « déligné » (recoupé) posé sur
+le seuil, avec la compribande (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 34 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 38).
+
+## Assemblage du rehausseur de parclose
+
+![Assemblage rehausseur de parclose](/assets/certifications/dta-6-16-2334/rehausseur-de-parclose-mastic.png)
+
+Le rehausseur de parclose **76570** se pose sous la parclose, en fond de feuillure (profil noir
+sur la coupe). Prescription portée sur le schéma : « mastic aux angles inférieurs avant pose des
+parcloses pour assurer la continuité de la garde à l'eau »
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 34 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 38).
+
+## Drainages et décompressions
+
+Le **drainage** évacue vers l'extérieur l'eau entrée en feuillure ; la **décompression**
+(équilibrage de pression) met la feuillure à la pression extérieure pour que l'eau s'écoule. Les
+orifices sont en noir sur les coupes. Deux planches : châssis sans capot, variante équilibrage de
+pression, puis châssis capoté.
+
+![Drainages et décompressions, variante équilibrage de pression](/assets/certifications/dta-6-16-2334/drainages-decompressions-equilibrage-pression.png)
+
+Deux coupes verticales complètes d'une fenêtre à traverse intermédiaire. Les orifices portés, du
+haut vers le bas :
+
+| Emplacement sur la coupe | Orifice |
+| --- | --- |
+| traverse haute de dormant, décompression | Ø 6 ou 5 × 25 mm à chaque extrémité |
+| feuillures d'ouvrant | Ø 8 ou 5 × 25 mm entre 20 et 200 mm des extrémités, entraxe maxi 600 |
+| joint de vitrage bas de l'ouvrant haut | interruption sur 10 mm à chaque extrémité |
+| traverse intermédiaire, face intérieure | Ø 8 ou 5 × 25 mm entre 20 et 200 mm des extrémités, entraxe maxi 600 |
+| traverse intermédiaire, face extérieure | Ø 8 ou 5 × 25 mm décalé d'environ 50 mm des précédents |
+| ouvrant bas, traverse haute | perçage Ø 6 à chaque extrémité |
+| ouvrant bas, rejet d'eau | grugeage 25 mm aux extrémités |
+| traverse basse d'ouvrant | Ø 8 ou 5 × 25 mm entre 20 et 200 mm des extrémités, entraxe maxi 600 |
+| traverse basse de dormant | Ø 8 ou 5 × 25 mm décalé d'environ 50 mm des précédents |
+
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 35 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 39)
+
+La loupe du haut montre la variante d'équilibrage de pression : la lèvre du joint est supprimée
+« sur **100 mm** minimum ». Le texte du dossier technique demande 300 mm minimum pour la
+suppression de la lèvre du joint (voir [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md),
+section 2.2.3.3.4) — entrée **INC-24** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md).
+
+![Drainages et décompressions avec capotage](/assets/certifications/dta-6-16-2334/drainages-decompressions-avec-capotage.png)
+
+Même fenêtre avec capotage aluminium : mêmes orifices et mêmes cotes que ci-dessus (Ø 6 ou
+5 × 25 mm en traverse haute ; Ø 8 ou 5 × 25 mm entre 20 et 200 mm des extrémités, entraxe maxi
+600 ; interruption sur 10 mm ; décalage d'environ 50 mm ; perçage Ø 6 ; grugeage 25 mm). La loupe
+« Décompression Variante 2 » montre le capot entaillé « sur **300 mm** minimum ». En bas à droite,
+la traverse basse capotée sur son appui, avec l'« orifice Ø8 (passage busette) » coté **8 mm**
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 36 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 40).
+
+## Assemblage de l'élargisseur de dormant
+
+L'**élargisseur** de dormant, accolé au dormant pour élargir la menuiserie, se ferme en bout par
+des embouts collés à la colle PVC, dans un usinage d'extrémité.
+
+![Assemblage élargisseur dormant : embouts et usinage](/assets/certifications/dta-6-16-2334/elargisseur-dormant-embouts-usinage.png)
+
+À gauche, quatre vues de l'angle : « Les embouts sont collés à la colle PVC ». À droite,
+« Usinage pour embouts » : entaille de **71 mm** de long sur **8,5 mm** de profondeur, à **2,5 mm**
+de chaque bord, sur la largeur de **76 mm** du profilé
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 37 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 41).
+
+![Assemblage élargisseur dormant : coupe](/assets/certifications/dta-6-16-2334/elargisseur-dormant-coupe.png)
+
+Coupe de l'élargisseur sous le dormant avec son appui : « Etanchéité au mastic sur toute la
+longueur » entre élargisseur et dormant ; « Usinage en extrémité » des profilés ; « Embout en
+extrémité d'élargisseur latéral (colle PVC) » ; « Embout en extrémité de pièce d'appui et de
+réhausseur (colle PVC) » (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 37 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 41).
+
+## Prise de volume
+
+La **prise de volume** est l'épaisseur de vitrage que la feuillure peut recevoir.
+
+![Prise de volume](/assets/certifications/dta-6-16-2334/prise-de-volume.png)
+
+Trois coupes de traverse basse vitrée, un triple vitrage dessiné dans chacune : sur un ouvrant,
+**50 mm** avec le joint **G048** ; sur un dormant, **50 mm** avec le joint **G048** ; sur un dormant
+avec le rehausseur de parclose, **44 mm** (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf,
+p. 38 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 42). Le vitrage isolant admis va jusqu'à 50 mm d'épaisseur — voir
+[DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md), section 2.2.3.6.
+
+## Coupes de principe
+
+Coupes horizontales et verticales de la menuiserie assemblée, sans capot. Les cotes sont en mm.
+
+![Coupe de principe : dormant 76171 et ouvrant](/assets/certifications/dta-6-16-2334/coupe-principe-dormant-76171-ouvrant.png)
+
+Dormant **76171** et ouvrant, vitrage de **44 mm** : épaisseur **76**, hauteur totale **108**, dont
+**74** pour le dormant et **70** pour l'ouvrant ; recouvrement de l'ouvrant sur le dormant **5** ;
+détail de la feuillure de quincaillerie **13**, **12**, **8** et **3,5**
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 39 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 43).
+
+![Coupe de principe : battement de 128 mm](/assets/certifications/dta-6-16-2334/coupe-principe-battement-128.png)
+
+Deux ouvrants à battement : largeur totale **128**, battement de **62**, jeu de **8** entre les
+ouvrants ; le battement est collé à la « Colle pvc » en deux points
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 39 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 43).
+
+![Coupe de principe : battement 76473 de 112 mm](/assets/certifications/dta-6-16-2334/coupe-principe-battement-112-76473.png)
+
+Deux ouvrants avec le battement **76473** : largeur totale **112**, battement de **46**, collé à la
+« Colle pvc » (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 39 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 43).
+
+![Coupe de principe : traverse basse d'ouvrant sur seuil](/assets/certifications/dta-6-16-2334/coupe-principe-traverse-basse-seuil.png)
+
+Traverse basse d'ouvrant sur seuil, avec son rejet d'eau et un joint brosse ; pas de cote
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 39 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 43).
+
+![Coupe de principe : seuil large et rejet d'eau à deux joints brosses](/assets/certifications/dta-6-16-2334/coupe-principe-seuil-rejet-eau.png)
+
+Traverse basse d'ouvrant sur un seuil large, rejet d'eau à **deux joints brosses** ; pas de cote
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 39 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 43).
+
+![Coupe de principe : battement 112 mm avec renfort inox VSF01](/assets/certifications/dta-6-16-2334/coupe-principe-battement-112-vsf01.png)
+
+Battement de **112** (battement de **46**) renforcé à l'extérieur par le renfort inox **VSF01**,
+vissé par « vis inox A2 (4.1 x 40) tous les 250 mm », battement collé à la « Colle pvc »
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 39 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 43).
+
+## Coupes de principe avec capotage
+
+Les mêmes coupes avec capotage aluminium ; le capot élargit la menuiserie.
+
+![Coupe de principe capotée : battement de 118 mm](/assets/certifications/dta-6-16-2334/coupe-principe-capote-battement-118.png)
+
+Battement capoté : largeur totale **118**, capot de battement de **51**
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 40 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 44).
+
+![Coupe de principe capotée : battement de 134 mm](/assets/certifications/dta-6-16-2334/coupe-principe-capote-battement-134.png)
+
+Battement capoté : largeur totale **134**, capot de **68**
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 40 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 44).
+
+![Coupe de principe capotée : meneau de 172 mm](/assets/certifications/dta-6-16-2334/coupe-principe-capote-battement-172.png)
+
+Deux ouvrants sur meneau renforcé et capoté : largeur totale **172**, capot de **104**
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 40 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 44).
+
+![Coupe de principe capotée : dormant rénovation](/assets/certifications/dta-6-16-2334/coupe-principe-capote-dormant-renovation.png)
+
+![Coupe de principe capotée : traverse basse sur appui](/assets/certifications/dta-6-16-2334/coupe-principe-capote-appui.png)
+
+![Coupe de principe capotée : traverse haute](/assets/certifications/dta-6-16-2334/coupe-principe-capote-traverse-haute.png)
+
+Dormant rénovation capoté sur l'ancien bâti ; traverse basse capotée sur un appui aluminium ;
+traverse haute capotée, vitrage dessous. Ces trois coupes ne portent pas de cote
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 40 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 44).
+
+![Coupe de principe capotée : ouvrant et fixe de 158 mm](/assets/certifications/dta-6-16-2334/coupe-principe-capote-ouvrant-158.png)
+
+Ouvrant et partie fixe capotés : largeur totale **158**, capot de battement de **51**
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 41 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 45).
+
+## Coupe de principe, élargisseur d'ouvrant
+
+L'élargisseur d'ouvrant aluminium **EO20545** se visse sur l'ouvrant et reçoit un isolant.
+
+![Coupe de principe : élargisseur d'ouvrant EO20545](/assets/certifications/dta-6-16-2334/coupe-principe-elargisseur-ouvrant-eo20545.png)
+
+En haut, coupe horizontale : largeur totale **174**, battement de **46** collé à la « Colle pvc » ;
+l'élargisseur **EO20545** rempli de l'isolant **ISO53X30**, fixé par « vis 3.9 x 80 tous les 600
+mm ». En bas, vue de face de l'angle : « Etanchéité dans rainure de parclose sur la largeur de
+l'élargisseur et remontée sur 150 MM aux 2 extrémités » (en noir), cotée **150** de haut et
+**61,5** de large (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 41 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 45).
+
+## Montage de la bavette DT100
+
+La **bavette DT100** est un appui aluminium rapporté sous la traverse basse, qui rejette l'eau
+au-delà du nu de la maçonnerie.
+
+![Montage bavette DT100](/assets/certifications/dta-6-16-2334/montage-bavette-dt100.png)
+
+La bavette **DT100** est vissée par-dessous sur le rejingot et, côté dormant, glissée sous la
+traverse basse vissée ; une « cornière alu 15 x 15 » ferme son extrémité latérale, vissée à la
+bavette (détail « Coupe A-A », cornière de **15 mm** de haut). Un bloc d'étanchéité (en noir) est
+posé sur la bavette contre le dormant (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 42 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 46).
+
+## Profilé complémentaire G026 pour dormant et pour seuil
+
+Le **G026** se pose en dos de dormant en pose en tableau pour garantir une surface de
+calfeutrement minimale de 10 mm — voir [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md),
+remarque 1.3 n° 5.
+
+![Profilé complémentaire G026 pour dormant](/assets/certifications/dta-6-16-2334/g026-pour-dormant.png)
+
+Le **G026** clippé sous le dormant **76171**, contre le calfeutrement, le dormant posé en tableau
+sur la maçonnerie (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 42 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 46).
+
+![Profilé complémentaire G026 pour seuil](/assets/certifications/dta-6-16-2334/g026-pour-seuil.png)
+
+Le **G026** clippé sous le seuil, entre le seuil et le calfeutrement, le seuil vissé sur la dalle
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 42 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 46).
+
+## Nez d'appui en pose avec ITE
+
+En applique extérieure avec isolation par l'extérieur (ITE), le profilé **76579** forme la goutte
+d'eau au bord de l'appui PVC ; il doit être collé à l'appui à la colle PVC [1 p. 6].
+
+![Nez appui, pose avec ITE, profilé 76579](/assets/certifications/dta-6-16-2334/nez-appui-pose-ite-76579.png)
+
+L'appui PVC sous la traverse basse, posé sur l'isolant extérieur ; le **76579** au bord de l'appui,
+repéré « colle pvc » (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 42 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 46).
+
+## Drainage et décompression des couleurs sombres
+
+Les chambres des profilés filmés ou laqués de clarté L\* inférieure à 82 (teintes sombres) dont
+les parois sont en communication avec l'extérieur se décompressent par des orifices de Ø 5 mm
+minimum [1 p. 7]. Trois planches donnent l'emplacement des orifices, profilé par profilé. Légende
+commune, reprise telle qu'écrite :
+
+| Motif sur le dessin | Signification |
+| --- | --- |
+| quadrillage en losanges | décompression : trou oblong 5 × 25 ou trou Ø 6 |
+| aplat noir | drainage : trou oblong 5 × 25 ou trou Ø 8 |
+| motif triangulé (losanges barrés d'horizontales) | décompression couleur sombre Ø 5 mini |
+
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 43-45 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 47-49)
+
+![Drainage et décompression couleur sombre : dormants, ouvrants et meneau](/assets/certifications/dta-6-16-2334/drainage-decompression-sombre-dormants-ouvrants.png)
+
+Une ligne par groupe de profilés, traverse haute à gauche, traverse basse à droite :
+
+| Profilés concernés | Traverse haute | Traverse basse |
+| --- | --- | --- |
+| 76171, 76172, 76179, 76180 | décompression couleur sombre dans les deux chambres extérieures du haut, décompression dans la chambre extérieure du bas, et un tracé en croix au travers de la chambre voisine | drainage en biais au travers du dormant, décompression couleur sombre dans la chambre extérieure du bas |
+| 76177, 76178 | décompression dans la chambre extérieure, drainage en biais | drainage en biais au travers du dormant |
+| 76271, 76272, 78275, 76279, 76281 | drainage en biais et vertical | drainage en biais et vertical |
+| 76372 (montants) | décompression en biais des deux côtés, sous le capot | - |
+
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 43 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 47)
+
+La liste des ouvrants porte **78275**, référence inconnue, au lieu du 76275 — entrée **INC-14**.
+Le dormant **76179** n'est décrit par aucune autre page du système.
+
+![Drainage et décompression couleur sombre : montants et traverses d'ouvrant](/assets/certifications/dta-6-16-2334/drainage-decompression-sombre-traverses.png)
+
+| Profilés concernés | Emplacement | Orifice |
+| --- | --- | --- |
+| 76300, 76301, 76303 | montant | quatre perçages ronds en face extérieure du montant ; décompression couleur sombre sur la vue latérale ; « Autre possibilité d'aération du montant par perçage des contre feuillures des traverses hautes et basses » |
+| 76299 | traverse | drainage en biais et vertical |
+| 76301, 76302, 76303, 76372 | traverse | drainage en biais et vertical |
+
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 44 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 48)
+
+La référence **76302** n'est décrite par aucune autre page du système.
+
+![Drainage et décompression couleur sombre : pièces d'appui](/assets/certifications/dta-6-16-2334/drainage-decompression-sombre-appuis.png)
+
+Profilés complémentaires : décompression couleur sombre Ø 5 mini (motif triangulé) dans les
+chambres, par le dessous : **deux** orifices sur l'appui **76758**, **un** sur le **6137**, **un** sur
+le **6136**, **deux** sur le **76768** (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 45 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 49).
+
+# Plans de pose
+
+Onze plans de pose types du système 76 Advanced, un par configuration du domaine d'emploi
+(voir [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md), section 1.1.2). Sur les coupes,
+le béton est pointillé de triangles, l'isolant dessiné en nids d'abeille, les blocs de monomur
+en alvéoles rectangulaires. La mise en œuvre suit le NF DTU 36.5 ; les principes de pose de la
+PERFORM76 sont dans [Pose de la PERFORM76](/procedures/pose-perform76.md).
+
+## Pose en neuf, applique intérieure, isolation intérieure, rejingot aligné avec capotage
+
+![Pose en neuf, applique intérieure, isolation intérieure, rejingot aligné avec capotage](/assets/certifications/dta-6-16-2334/pose-neuf-applique-interieure-rejingot-aligne-capotage.png)
+
+Le dormant capoté est fixé en applique contre la face intérieure du mur, l'isolant intérieur contre lui ; le rejingot (le ressaut de la maçonnerie sous l'appui) est aligné avec le mur. Coupe verticale à droite, coupe horizontale du tableau à gauche : l'isolant intérieur fait **100 mm** sur les deux coupes, l'habillage est vissé en tête, l'appui PVC repose sur le rejingot avec un calfeutrement. (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 46 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 50)
+
+## Pose en neuf, applique intérieure, isolation intérieure, rejingot déporté sur monomur avec capotage
+
+![Pose en neuf, applique intérieure, isolation intérieure, rejingot déporté sur monomur avec capotage](/assets/certifications/dta-6-16-2334/pose-neuf-applique-interieure-rejingot-deporte-monomur-capotage.png)
+
+Même pose sur un mur en blocs isolants (monomur), le rejingot déporté vers l'intérieur : le dormant capoté en applique intérieure, l'isolant intérieur, l'appui sur le rejingot. Pas de cote. (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 47 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 51)
+
+## Pose en tunnel avec capotage
+
+![Pose en tunnel avec capotage](/assets/certifications/dta-6-16-2334/pose-tunnel-capotage.png)
+
+Le dormant capoté est posé dans l'épaisseur de la baie (en tunnel), calfeutré sur ses quatre côtés contre la maçonnerie. Coupe verticale et « Coupe A-A » horizontale. Pas de cote. (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 48 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 52)
+
+## Pose en rénovation sur dormant bois existant de 36 mm avec capotage
+
+![Pose en rénovation sur dormant bois existant de 36 mm avec capotage](/assets/certifications/dta-6-16-2334/pose-renovation-dormant-bois-36-capotage.png)
+
+Le dormant rénovation capoté est vissé sur l'ancien dormant bois conservé, de 36 mm, qui est dessiné en trait gras en haut, en bas et sur le côté. Le capot complet en traverse basse n'est admis qu'en rénovation sur dormant existant. Pas de cote. (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 49 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 53)
+
+## Pose en neuf avec appui décalé et seuil PMR
+
+![Pose en neuf avec appui décalé et seuil PMR](/assets/certifications/dta-6-16-2334/pose-neuf-appui-decale-seuil-pmr.png)
+
+Porte-fenêtre posée en neuf sur un seuil PMR (surbaissé, accessible aux personnes à mobilité réduite), l'appui décalé ; une grille (caillebotis) devant le seuil ; coupe du tableau à gauche. Pas de cote. (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 50 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 54)
+
+## Pose en neuf avec appui décalé et seuil PMR avec capotage
+
+![Pose en neuf avec appui décalé et seuil PMR avec capotage](/assets/certifications/dta-6-16-2334/pose-neuf-appui-decale-seuil-pmr-capotage.png)
+
+Même pose, dormant capoté ; le profilé **91030** est repéré à l'avant du seuil. Pas d'autre cote. (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 51 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 55)
+
+## Pose en applique extérieure
+
+![Pose en applique extérieure](/assets/certifications/dta-6-16-2334/pose-applique-exterieure.png)
+
+Le dormant est fixé contre la face extérieure du mur, dans l'épaisseur de l'isolation par l'extérieur. Repères : « Retombée latérale membrane d'étanchéité » de **100 mm** en tête ; en pied, l'appui PVC avec sa goutte d'eau, un « Plat alu 20 x 2 » et une cote de **16 mm** ; « COUPE A-A » horizontale du tableau. (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 52 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 56)
+
+## Pose en applique extérieure sur monomur avec capotage
+
+![Pose en applique extérieure sur monomur avec capotage](/assets/certifications/dta-6-16-2334/pose-applique-exterieure-monomur-capotage.png)
+
+Même pose sur monomur, dormant capoté : retombée de membrane de **100 mm** en tête, « Plat alu 20 x 2 » en pied avec une cote de **31 mm**, « COUPE A-A ». (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 53 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 57)
+
+## Pose côté extérieur calfeutrement en tunnel et fixation en tableau avec capotage
+
+![Pose côté extérieur calfeutrement en tunnel et fixation en tableau avec capotage](/assets/certifications/dta-6-16-2334/pose-exterieur-tunnel-tableau-capotage.png)
+
+Légende de la planche : 1. calfeutrement de la fenêtre ; 2. dispositif de désolidarisation de l'ETICS (isolation extérieure sous enduit) ; 3. rehausseur ; 4. dormant ; 5. bavette ; 6. profilé goutte d'eau. Coupe verticale, « COUPE A-A » et « COUPE B-B » horizontales. (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 54 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 58)
+
+## Pose côté extérieur calfeutrement en tunnel et fixation en tableau avec capotage sur monomur
+
+![Pose côté extérieur calfeutrement en tunnel et fixation en tableau avec capotage sur monomur](/assets/certifications/dta-6-16-2334/pose-exterieur-tunnel-tableau-capotage-monomur.png)
+
+Même pose sur monomur : coupe verticale et coupe horizontale du tableau. Pas de repère ni de cote. (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 55 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 59)
+
+## Pose côté intérieur calfeutrement en tunnel et fixation en applique avec capotage
+
+![Pose côté intérieur calfeutrement en tunnel et fixation en applique avec capotage](/assets/certifications/dta-6-16-2334/pose-interieur-tunnel-applique-capotage.png)
+
+Légende de la planche : 1. calfeutrement de la fenêtre ; 2. dispositif de désolidarisation de l'ETICS ; 3. dormant ; 4. patte ; 5. profilé goutte d'eau. Coupe verticale et coupe horizontale « A ». (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 56 ; même planche : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 60)
+
+# Citations
+
+[1] [DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED](raw/dta-trocal-76-advanced-6-16-2334-v5.pdf)
+
+[2] [DTD n° DBV-25-6/16-2334_V5, système 76 Advanced](raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf)
+
+# Voir aussi
+
+- [Assemblage mécanique du meneau et de la traverse du système 76 Advanced](/procedures/assemblage-meneau-traverse-systeme-76.md)
+- [Traitement du battement du système 76 Advanced](/procedures/traitement-du-battement-systeme-76.md)
+- [Drainage, décompression et ventilation du système 76 Advanced](/procedures/drainage-decompression-ventilation-systeme-76.md)
+- [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md)
+- [Assemblages du système 76](/profiles/systeme-76-assemblages.md)
+- [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md)
+- [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md)
+- [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md)
+- [Fabrication des profilés PVC, directives profine](/procedures/fabrication-profiles-pvc.md)
+
+===== PAGE 2 : /equipements/screen-exterieur-screenamax.md =====
+# Définition et principe technique
+
+Le screen extérieur zippé **SCREENAMAX** de [SOPROFEN](/fournisseurs/soprofen.md) est une protection solaire textile extérieure motorisée pour fenêtres, baies vitrées, vérandas et pergolas [1 p. 1]. Il filtre jusqu'à **97 % des rayons solaires** avant qu'ils n'atteignent le vitrage, assurant une efficacité thermique 6 fois supérieure à un store intérieur tout en préservant la vue vers l'extérieur et l'intimité contre les regards indiscrets [1 p. 1]. Grâce à sa toile verrouillée dans des coulisses zippées, il fait également office de **moustiquaire hermétique intégrale** en position fermée [1 p. 1].
+
+# Cotes et limites dimensionnelles
+
+Limites dimensionnelles d'exécution, cotes en millimètres relevées sur la fiche produit DOC83100 [1 p. 2] :
+
+| Paramètre | Cote minimale (mm) | Cote maximale (mm) | Condition de réalisation |
+| --- | --- | --- | --- |
+| Largeur de baie | 625 | 7000 | Selon le modèle de coffre et de toile |
+| Hauteur de baie | 500 | 4000 | Selon le modèle de coffre et de toile |
+
+(schéma: raw/moustiquaires/Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR.pdf, p. 2)
+
+## Caissons d'enroulement en aluminium extrudé
+
+Les caissons compacts en aluminium extrudé se déclinent en deux tailles selon les dimensions de la baie [1 p. 1-2] :
+
+| Taille de caisson (mm) | Largeur maximale de baie (mm) | Hauteur maximale de baie (mm) | Rôle et spécificité |
+| --- | --- | --- | --- |
+| 85 | 6000 | 2300 | Plus petit caisson screen zip du marché à 6 mètres de large |
+| 100 | 7000 | 4000 | Grandes baies vitrées et très hautes baies jusqu'à 4 mètres |
+
+(schéma: raw/moustiquaires/Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR.pdf, p. 2)
+
+## Profilés de coulisses
+
+Deux types de coulisses latérales en aluminium extrudé assurent le guidage zippé [1 p. 2] :
+
+| Type de coulisse | Largeur de face (mm) | Mode de fixation préconisé |
+| --- | --- | --- |
+| Coulisse fine | 22 | Pose en tableau, intégration discrète sans vis apparentes |
+| Coulisse large | 42 | Pose en applique de face / façade |
+
+(schéma: raw/moustiquaires/Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR.pdf, p. 2)
+
+# Conception mécanique et tenue au vent
+
+* **Maîtrise de la flexion (technologie Zoom Tech)** : sur les grandes portées, la flèche de l'axe d'enroulement est éliminée par l'intégration d'un **second axe interne précontraint**, prévenant tout plissement ou gondolage de la toile [1 p. 1].
+* **Guidage par système zip** : glissière continue soudée sur les lisières de la toile, guidée dans les coulisses pour une résistance extrême au vent sans déboîtement [1 p. 1].
+* **Barre de charge profilée** : profilé de maintien de la barre de charge sans soudure visible sur la face extérieure de la toile [1 p. 1].
+
+# Motorisations et solution solaire autonome
+
+Le screen SCREENAMAX est exclusivement motorisé [1 p. 2] :
+
+| Motorisation | Technologie / Alimentation | Caractéristiques opérationnelles |
+| --- | --- | --- |
+| Radio solaire [SOMFY](/fournisseurs/somfy.md) | Panneau photovoltaïque + batterie intégrée au coffre | Moteur Sunea DC Somfy, émetteur Smoove, panneau 7 mm sans rivet/vis apparente, autonomie 45 jours sans soleil, fonctionnement de -20°C à +70°C |
+| Radio IO [SOMFY](/fournisseurs/somfy.md) | 230 V filaire, commande radio io-homecontrol | Compatible domotique TaHoma |
+| Radio RTS [SOMFY](/fournisseurs/somfy.md) | 230 V filaire, commande radio RTS | Télécommandes Somfy RTS |
+| Filaire [SOMFY](/fournisseurs/somfy.md) | 230 V filaire standard | Commande individuelle filaire |
+| Radio M-SOFT² SOPROFEN | 230 V filaire, commande radio SOPROFEN | Protocole radio propre SOPROFEN |
+| Filaire M-SOFT² SOPROFEN | 230 V filaire | Commande filaire propre SOPROFEN |
+
+(schéma: raw/moustiquaires/Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR.pdf, p. 2)
+
+Pour la motorisation solaire, le panneau photovoltaïque doit être disposé de telle sorte que le ciel s'y reflète intégralement sans masque d'ombre porté (bâtiments, toits, balcons ou végétation) [1 p. 1].
+
+# Toiles techniques microperforées
+
+Gamme de toiles de protection solaire [1 p. 2] :
+
+| Gamme de toile | Référence fournisseur | Statut de commercialisation |
+| --- | --- | --- |
+| Standard | Alkenz Duralex 4000 QM | Toile microperforée de série |
+| Option | Mermet Satiné 5500 | Tissu de verre enduit haute performance |
+| Option | Copaco Sergé 600 | Tissu sergé fibre de verre enduite PVC |
+| Option | Sattler Twilight Comfort 262 | Toile polyester haute ténacité |
+| Option | Serge Ferrari Veozip | Toile membrane composite respirante |
+| Spéciales | Autres toiles (occultantes, Cristal Plus, etc.) | Sur demande |
+
+(schéma: raw/moustiquaires/Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR.pdf, p. 2)
+
+Les toiles techniques bénéficient d'une **garantie de 7 ans** (réduite à 2 ans pour la toile transparente Cristal Plus) [1 p. 2].
+
+# Nuancier d'encadrement et finitions
+
+L'encadrement (coffre, coulisses et barre de charge) est disponible en 15 teintes standard et 3 finitions (lisse-satiné, lisse-mat, structuré-mat) [1 p. 2] :
+* Teintes disponibles : Ivoire clair RAL 1015, Gris anthracite RAL 7016, Gris noir RAL 7021, Gris terre d'ombre RAL 7022, Gris clair RAL 7035, Gris quartz RAL 7039, Brun gris RAL 8019, Blanc crème RAL 9001, Noir foncé RAL 9005, Aluminium blanc RAL 9006, Aluminium gris RAL 9007, Blanc pur RAL 9010, Blanc signalisation RAL 9016.
+* Teintes texturées exclusives : Gris sablé 2900 et Noir sablé 2100 (disponibles en finition structuré mat uniquement) [1 p. 2].
+* Laquage sur-mesure : toutes teintes du nuancier RAL en option [1 p. 2].
+
+## Option haute résistance bord de mer
+
+Traitement spécifique anti-corrosion proposé en option selon l'éloignement côtier [1 p. 2] :
+* Zone de **0 à 10 km** du littoral.
+* Zone **au-delà de 10 km** du littoral.
+
+# Mise en œuvre
+
+* **Neuf** : intégration sous isolation thermique intérieure en linteau [1 p. 2].
+* **Rénovation** : pose sous linteau ou applique extérieure en façade [1 p. 2].
+
+# Conformité et normes
+
+* Fabrication française avec marquage CE [1 p. 1-2].
+* Conformité à la norme européenne **NF EN 13561** [1 p. 2].
+* Garanties appliquées selon les conditions précisées dans le Carnet d'Assistance et de Garanties SOPROFEN [1 p. 2].
+
+# Citations
+
+[1] [Fiche produit Screen Extérieur zip SCREENAMAX SOPROFEN FR, réf. DOC83100 Version 062025](raw/moustiquaires/Fiche%20produit%20Screen%20Ext%C3%A9rieur%20SCREENAMAX%202025%20SOPROFEN%20FR.pdf), p. 1 et 2
+
+# Voir aussi
+
+- [SOPROFEN](/fournisseurs/soprofen.md)
+- [SOMFY](/fournisseurs/somfy.md)
+- [Stores intégrés](/equipements/stores-integres.md)
+- [Volets roulants](/equipements/volets-roulants.md)
+- [Garanties par composant](/garanties/garanties-par-composant.md)
+- [Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR](/sources/soprofen-screen-exterieur-screenamax-2025.md)
+
+===== PAGE 3 : /procedures/fabrication-systeme-70.md =====
+# Ce que fait cette procédure
+
+Elle rassemble les planches de méthode de l'annexe du DTD du **système 70** de
+[profine](/fournisseurs/profine.md) (TROCAL e.XCLUSIVE, KBE e.MOTION, KÖMMERLING e.VOLUTION) :
+comment s'assemblent en atelier les meneaux et traverses, la soudure à plat du meneau 6127, les
+élargisseurs et rehausseurs, les seuils, les capots aluminium, les tapées et appuis aluminium, et
+où se percent les drainages et décompressions ; puis les coupes de principe et les plans de mise
+en œuvre. Ce sont des vues éclatées et des coupes : elles portent surtout des références de pièces,
+des légendes et quelques cotes, reprises sous chaque schéma. Les termes du métier sont dans le
+[glossaire](/reference/glossaire.md).
+
+Les prescriptions écrites qui gouvernent ces schémas (quatre types d'assemblage mécanique,
+drainages, capotage, couleurs sombres) sont dans
+[DTD n° DBV-24-6/16-2335_V5](/certifications/dtd-6-16-2335.md) ; les tableaux d'assemblage par
+profilé et les pièces dans [Assemblages du système 70](/profiles/systeme-70-assemblages.md).
+
+# Conditions et interdictions
+
+- Les soudures à plat doivent être réservées aux fabrications certifiées et validées pour chaque
+  type de machine de façon que le cordon de soudure rende étanche les chambres de renfort des
+  profilés assemblés ; elles concernent l'assemblage du meneau réf. 6127 [1 p. 9].
+- La tête des vis des assemblages mécaniques repose sur un renfort d'une longueur minimum de
+  250 mm [1 p. 5].
+- **La mise en place du capot complet en traverse basse de dormant est limitée à une utilisation
+  sur fenêtre mise en œuvre en rénovation sur dormant existant** [1 p. 7].
+
+# Étapes
+
+## Assemblage meneau / traverse intermédiaire
+
+Planche de vues éclatées des assemblages mécaniques en T d'un meneau ou d'une traverse
+intermédiaire sur le profilé qui le reçoit ; les quatre types d'assemblage et leurs perçages sont
+écrits au § 2.2.3.3 du DTD [1 p. 5, 26].
+
+![Assemblage meneau / traverse intermédiaire, sets en T 9F76, 9F75 et 9F73](/assets/certifications/dtd-6-16-2335/assemblage-meneau-traverse-sets-en-t.png)
+
+![Assemblage meneau / traverse intermédiaire, set 9B51, pièce J216, patins 9B56, M299 et 9718](/assets/certifications/dtd-6-16-2335/assemblage-meneau-traverse-9b51-j216-patins.png)
+
+Lecture, de gauche à droite et de haut en bas : meneau **6127** avec le set **9F76** vissé par
+quatre vis dans le profilé qui le reçoit, avec goupille et bouchons ; traverse **6126** avec le set
+**9F75** ; meneau **2425** avec le set **9F73** ; traverse **6126** sur ouvrant **6112** avec la
+pièce **M384** et le patin **M299** ; meneau **6127** avec le set **9F76** vissé à travers deux
+profilés superposés ; profilé **2427** sur dormant **6104** avec le **Set 9B51** ; pièce **J216**
+vissée entre deux profilés ; traverse **6126** sur ouvrant **6112** avec le patin **9B56** ;
+meneau **6127** sur dormant **6104** avec le patin **M299** puis avec le patin **9718**, serrés par
+deux vis longues. L'astérisque renvoie à la note « Etanchéité dans la rainure à parclose au droit
+du meneau / traverse intermédiaire » [1 p. 26].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 26)
+
+## Soudure à plat du meneau 6127
+
+La planche « Soudure à plat » montre le meneau 6127 soudé à plat sur le profilé qui le reçoit,
+les zones à étancher et l'usinage de la traverse avant soudure [1 p. 27].
+
+![Soudure à plat du meneau 6127, zones à étancher, zone soudée et équerres 9714 L+R](/assets/certifications/dtd-6-16-2335/soudure-a-plat-6127.png)
+
+Lecture : en haut à gauche, la coupe du profilé récepteur avec, en noir, les « Zones a étancher » ;
+en haut à droite, la vue de face de l'assemblage. En bas à gauche, la coupe du 6127 avec la légende
+« Zone soudée inertie : X : 8,43 cm4 Y : 5,39 cm4 » et la cote « e = 20 mm » ; au centre la coupe
+de l'assemblage soudé ; à droite l'assemblage en perspective et les équerres **9714 L+R**, avec la
+note : « L'assemblage par soudure est complété par l'ajout des équerres ci dessus dont les plots de
+centrage ont été supprimés » [1 p. 27].
+
+![Usinage de la traverse avant soudure](/assets/certifications/dtd-6-16-2335/usinage-traverse-avant-soudure.png)
+
+Le schéma « Usinage traverse avant soudure » donne le contour à usiner en bout de la traverse
+6127 avant la soudure à plat, en mm ; à droite, la coupe de principe du « surplus de soudure 4 mm »,
+avec le Ø fraise et la longueur de débit [1 p. 27].
+
+| Cote portée | Valeur (mm) |
+| --- | --- |
+| largeur totale, entre parenthèses | 70 |
+| partie gauche | 16,5 |
+| partie droite | 53,5 |
+| hauteurs à gauche | 31,97 ; 27,55 ; 0,5 |
+| hauteurs au centre | 4 ; 4,5 |
+| cotes horizontales au pied | 6 ; 11,5 |
+| hauteurs à droite | 3,73 ; 7,26 ; 11,76 |
+| angle | 85° |
+| surplus de soudure | 4 |
+| cote sous le Ø fraise | 11,76 |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 27)
+
+Les deux cas de soudure à plat (parements intérieurs soudés ou non), l'aspect qualitatif, l'aspect
+matériel et la restriction à la traverse d'ouvrant (**CTR-89**) du classeur e.VOLUTION de 2008 sont sur
+[Directives générales de fabrication du système 70, 2008](/procedures/directives-generales-systeme-70-evo2008.md#soudure-à-plat-registre-510).
+
+## Assemblage dormant et élargisseurs
+
+Un élargisseur se visse sous le dormant pour l'agrandir ; un rehausseur est un élargisseur posé
+sous la traverse basse [1 p. 28].
+
+![Assemblage dormant et élargisseurs](/assets/certifications/dtd-6-16-2335/assemblage-dormant-elargisseurs.png)
+
+Lecture : dormant et deux élargisseurs en coupe. Légendes : « Etanché au mastic sur toute la
+longueur » (en noir, à gauche) ; « Garniture d'étanchéité coextrudée » ; « Vissage tous les 400 mm
+pour le blanc et 300 mm pour la couleur ». À droite : « Les rehausses peuvent être montées
+indiféremment joint côté intérieur ou extérieur » [1 p. 28].
+
+## Assemblage d'élargisseurs et rehausseur avec une pièce d'appui
+
+![Assemblage d'élargisseurs et rehausseur avec une pièce d'appui](/assets/certifications/dtd-6-16-2335/assemblage-elargisseurs-piece-appui.png)
+
+Lecture : pièce d'appui clippée sous un rehausseur, vue en coupe, la partie hachurée figurant les
+embouts. Légendes : « Etanchéité au mastic sur toute la longueur » ; « embout en extrémité
+d'élargisseur latéral (colle PVC) » ; « usinage en extrémité » ; « embout en extrémité de pièce
+d'appui et de réhausseur (colle PVC) » ; loupe « Délignage de la partie avant de la réhausse ». À
+droite, l'usinage en extrémité est coté **64,3** de large sur **10,4** de haut [1 p. 28].
+
+## Assemblage de rehausseur avec un seuil PMR
+
+![Assemblage de rehausseur avec un seuil PMR](/assets/certifications/dtd-6-16-2335/assemblage-rehausseur-seuil-pmr.png)
+
+Lecture : rehausseur vissé sous un seuil, en coupe. Légendes : « bouchon réf. M002 » ;
+« Etanchéité au mastic sur toute la longueur » ; loupe « Délignage de la partie avant de la
+réhausse » ; « embout en extrémité de pièce d'appui et de réhausseur (colle PVC) » [1 p. 28].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 28)
+
+## Assemblage de l'élargisseur 0303
+
+![Assemblage de l'élargisseur 0303, coupes verticale et horizontale](/assets/certifications/dtd-6-16-2335/assemblage-elargisseur-0303.png)
+
+Lecture : à gauche la coupe verticale, l'élargisseur 0303 posé sur l'ouvrant **6115**, légende
+« Assemblage équerre 9714 » ; à droite la coupe horizontale, légendes « Fixation de l'élément
+supérieur » et « Renfort sur 250 mm mini » [1 p. 29].
+
+## Mise en place des bouchons d'élargisseurs
+
+![Mise en place bouchon d'élargisseurs, cas 1 et cas 2 élargisseurs](/assets/certifications/dtd-6-16-2335/bouchons-elargisseurs.png)
+
+1. Usinage en bout de l'élargisseur : **64,3** mm de large sur **10,4** mm de haut.
+2. Cas 1 élargisseur : collage du bouchon à la colle PVC.
+3. Cas 2 élargisseurs, étape n° 1 : collage du bouchon à la colle PVC sur le premier élargisseur.
+4. Cas 2 élargisseurs, étape n° 2 : collage du bouchon à la colle PVC sur le second.
+
+[1 p. 29]
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 29)
+
+## Assemblages seuils
+
+Le seuil aluminium remplace la traverse basse du dormant d'une porte-fenêtre ; il s'assemble aux
+montants par une pièce d'assemblage. Le mode opératoire écrit est au § 2.2.3.1.4 du
+[DTD](/certifications/dtd-6-16-2335.md) ; les pièces par dormant au tableau 4, sur
+[Assemblages du système 70](/profiles/systeme-70-assemblages.md) [1 p. 4, 13, 30].
+
+![Assemblages seuils : seuil 9F67 avec dormant 6100 et embout 9F72, seuil 9F68 avec dormant 6101 et embout 9F71](/assets/certifications/dtd-6-16-2335/assemblage-seuils-9f67-9f68.png)
+
+Lecture : en haut, deux vues éclatées légendées « Seuil 9F67 - dormant 6100 - embout 9F72 » et
+« Seuil 9F68 - dormant 6101 - embout 9F71 », chacune avec la pièce introduite dans la chambre de
+renfort du montant, les pistolets à mastic et l'« Embout M002 » ; en bas, les mêmes seuils avec le
+« Set d'assemblage » vissé, légendes « Vis Ø4x50 », « Vis Ø4x30 », « Vis autoforeuses Ø4x20 »,
+« Patin d'étanchéité », « Seuil 9F67 », « Seuil 9F68 » [1 p. 30].
+
+![Assemblage seuil avec capot](/assets/certifications/dtd-6-16-2335/assemblage-seuil-avec-capot.png)
+
+« Avec capot » : même assemblage sur seuil 9F67 d'un dormant capoté, avec la légende « Etanchéité
+au mastic entre capot et seuil après clippage » [1 p. 30].
+
+![Assemblage seuil avec dormant large, pièces 9F08, 9F71 et M325](/assets/certifications/dtd-6-16-2335/assemblage-seuil-dormant-large.png)
+
+« Avec dormant large » : le dormant large sur le seuil avec la pièce **9F08** sous son aile, le set
+**9F71** et la pièce **M325** [1 p. 30].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 30)
+
+## Assemblage seuils partie fixe
+
+Sur une partie fixe équipée du seuil 9F67 ou Z043, le vitrage se prend soit dans une traverse PVC
+rapportée sur le seuil, soit dans une contre-feuillure reconstituée par la parclose extérieure
+A271 sur le support de cale A272 [1 p. 4, 31].
+
+![Assemblage seuil partie fixe avec traverse rapportée 6101, jonc 1248 et équerre 9714](/assets/certifications/dtd-6-16-2335/seuil-partie-fixe-traverse-rapportee.png)
+
+« Avec traverse rapportée » : le dormant **6101** monté sur le seuil, le profilé **1248** logé
+entre les deux, la traverse fixée par l'« Equerre de fixation 9714 » ; une flèche d'angle de 15°
+est portée entre la traverse et le montant ; à droite, « Etancheité avant montage équerre »
+(hachures) [1 p. 31].
+
+![Assemblage seuil partie fixe avec reconstitution de la contre-feuillure, A271 et A272](/assets/certifications/dtd-6-16-2335/seuil-partie-fixe-contre-feuillure.png)
+
+« Avec reconstitution de la contre feuillure » : le vitrage pris entre la parclose **A271** et le
+seuil, sur le support **A272 (entraxe maxi = 800 mm)**, avec la légende « Callage suivant NF DTU
+39 » [1 p. 31].
+
+## Assemblage fourrure et pièce d'appui
+
+![Assemblage fourrure et pièce d'appui, patin M298 ou M613](/assets/certifications/dtd-6-16-2335/assemblage-fourrure-piece-appui.png)
+
+La fourrure (tapée) et la pièce d'appui se vissent sous le dormant, le patin **M298 ou M613**
+écrasé entre elles, avec un embout en about de la pièce d'appui [1 p. 4, 31].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 31)
+
+## Capotage aluminium
+
+Le capotage est l'habillage aluminium clippé sur la face extérieure des profilés PVC ; les
+prescriptions écrites sont au § 2.2.3.5 du [DTD](/certifications/dtd-6-16-2335.md) [1 p. 6, 32].
+
+![Capotage : assemblage, joint à la pompe, meneau / traverse, montage rénovation capot complet](/assets/certifications/dtd-6-16-2335/capotage-assemblage-renovation-meneau.png)
+
+Lecture : « Assemblage » (capot clippé sur le dormant, coupe), « Joint à la pompe » (joint injecté
+à l'angle du capot sur le dormant) ; au milieu, un cadre à capots en coupe droite et un cadre à
+capots d'onglet ; à droite « Meneau/traverse » avec « Joint à la pompe », deux montages dessinés
+et reliés par « ou » ; en bas « Montage rénovation - capot complet », légendes « Etanchéité aux
+extrémités » et « Joint à la pompe sur montants et traverses » [1 p. 32].
+
+![Capotage : demi-capot en traverse basse, bouchons G250](/assets/certifications/dtd-6-16-2335/capotage-demi-capot-traverse-basse.png)
+
+« Demi-capot en traverse basse » : légendes « Etanchéité aux extrémités », « Etanchéité aux
+extrémités et bouchons G250 », « G250 », « Joint à la pompe » [1 p. 32].
+
+![Usinage des capots, angles de 105° et rayon R1](/assets/certifications/dtd-6-16-2335/usinage-capots.png)
+
+« Usinage capots » : grugeage en bout du capot, cotes **R1**, **105°** et **17,5** mm, sur deux
+profils de capot [1 p. 32].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 32)
+
+## Drainage avec capot complet sur dormant rénovation
+
+![Drainage du capot complet sur dormant rénovation, busette M450 et manchon G008](/assets/certifications/dtd-6-16-2335/drainage-capot-complet-renovation.png)
+
+1. Perçage du capot et du dormant, à 90°, Ø 13,8 mm, aux cotes X et Y (non chiffrées sur la
+   planche).
+2. Introduire mastic entre capot et dormant.
+3. Introduire tube puis busette.
+
+La busette **M450** est cotée Ø 15,5 et Ø 10 mm, longueurs 7,5 et 14 mm ; le manchon **G008**
+Ø 14 mm [1 p. 33]. La clause écrite (surplus de mastic à enlever avant la mise en place du G008)
+est au § 2.2.3.5.1 du [DTD](/certifications/dtd-6-16-2335.md) [1 p. 6].
+
+## Demi-capot A474 en traverse basse
+
+![Mise en place du demi-capot A474 avec clip M569, gabarit T127, entraxes 150 et max. 400 mm](/assets/certifications/dtd-6-16-2335/demi-capot-a474-clip-m569.png)
+
+« Mise en place du capot A474 avec clip M569 », au moyen du « Gabarit de perçage T127 » : les clips
+sont vissés sur la traverse basse à **150 mm** de chaque extrémité puis à **max. 400 mm** d'entraxe.
+Coupes : « Joint a la pompe sur traverse basse », « Vis inox » (clip vissé), et, avec une pièce
+d'appui, « Vis inox » et « G250 » [1 p. 33].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 33)
+
+## Assemblage tapées / fourrures avec capotage
+
+Sur un dormant capoté, les tapées aluminium A469 à A473 et les appuis aluminium se vissent sur le
+dormant ; la clause écrite (entraxe maximum de 300 mm, M646, M643, G250, A476 avec A471 à A473) est
+au § 2.2.3.5.4 du [DTD](/certifications/dtd-6-16-2335.md) [1 p. 6, 34].
+
+![Assemblage tapées / fourrures, capotage : A469 à A473, A491, A476, A477 en rénovation](/assets/certifications/dtd-6-16-2335/tapees-appuis-alu-capotage.png)
+
+Lecture, de haut en bas : les cinq tapées **A473, A472, A471, A470, A469** superposées avec
+l'embout **M646** et la légende « Etancheité » ; l'appui **A491** avec « vis inox », « G250 »,
+« Etancheite de fil » et l'orifice « 5X25 OU Ø8 » ; l'appui **A476** avec les mêmes légendes ;
+l'appui **A477** en « Montage rénovation » [1 p. 34].
+
+![Entrée d'air avec capotage](/assets/certifications/dtd-6-16-2335/entree-air-avec-capotage.png)
+
+« Entrée d'air avec capotage » : coupe d'une traverse capotée traversée par une entrée d'air, les
+cordons de mastic en noir ; le § 2.2.3.5.1 prescrit un cordon de mastic entre le profilé PVC et le
+capotage aluminium dans le cas des entrées d'air [1 p. 6, 34].
+
+![Montage appui A477 avec capot complet, pour montage rénovation](/assets/certifications/dtd-6-16-2335/appui-a477-capot-complet-renovation.png)
+
+« Montage appui A477 avec capot complet (pour montage rénovation) » : l'appui A477 sous un dormant à
+capot complet, en coupe [1 p. 34].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 34)
+
+## Montage tapées, appui alu, demi-capot en traverse basse
+
+Deux planches de vues éclatées montrent le montage des tapées aluminium et de l'appui aluminium
+sous un dormant capoté d'un demi-capot en traverse basse [1 p. 35-36].
+
+![Montage tapées, appui alu, demi-capot en traverse basse, planche 1](/assets/certifications/dtd-6-16-2335/montage-tapees-appui-alu-demi-capot-1.png)
+
+Planche 1 : vue d'ensemble de la fenêtre ; angle bas avec loupe « Etanchéité » cotée **31** mm ;
+mousse **G250** ; tapée cotée **30,5** mm ; embout **M646** vissé ; embouts d'appui et pièce d'appui
+vissée [1 p. 35].
+
+![Montage tapées, appui alu, demi-capot en traverse basse, planche 2](/assets/certifications/dtd-6-16-2335/montage-tapees-appui-alu-demi-capot-2.png)
+
+Planche 2 : coupe de l'appui sous le dormant ; « M643 recoupé et étanché avant montage » (cote X
+non chiffrée) ; vue en plan avec « 1vis tous les 300 mm », « Etanchéité de fil » (deux fois),
+« G250 sous tapée » et l'orifice oblong à **20-200** mm de l'extrémité [1 p. 36].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 35 et 36)
+
+## Tapée sur seuil PMR
+
+![Tapée sur seuil PMR, première variante, cordon de mastic](/assets/certifications/dtd-6-16-2335/tapee-sur-seuil-pmr-1.png)
+
+![Tapée sur seuil PMR, seconde variante, tapée A470, patin M298, dormant 6104, seuil Z043](/assets/certifications/dtd-6-16-2335/tapee-sur-seuil-pmr-2-a470-6104-z043.png)
+
+La planche « Tapée sur seuil PMR » montre deux montages, chacun en élévation, en coupe A et en
+perspective : le premier avec la légende « Cordon de mastic » et une pièce marquée « M646-R » ; le second avec la
+tapée **A470**, le patin **M298**, le dormant **6104** et le seuil **Z043** [1 p. 37].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 37)
+
+## Drainages et décompressions
+
+Le drainage évacue l'eau entrée en feuillure ; la décompression (équilibrage de pression) ouvre
+la chambre en partie haute. Les prescriptions écrites sont aux § 2.2.3.1.2 et 2.2.3.2.3 du
+[DTD](/certifications/dtd-6-16-2335.md) [1 p. 4-5, 38].
+
+![Drainages du châssis sans capotage, quatre variantes de décompression](/assets/certifications/dtd-6-16-2335/drainages-chassis-nu.png)
+
+Lecture : à gauche, coupe verticale d'une fenêtre avec « DECOMPRESSION VARIANTE 1 » à « VARIANTE
+4 », « DRAINAGE DE FACE » et « DRAINAGE PAR LE BAS » ; au centre, l'élargisseur **0303** sur
+l'ouvrant **6112C** ; à droite, une fenêtre à meneau **6127**, ouvrants **6121**, traverse **2425**
+et dormant **6104**. Notes : « Décompression réalisée soit par un perçage diamètre 6 mm soit par la
+suppression du joint en traverse haute sur une largeur de 100 mm » ; « Les drainages sont réalisés
+soit par un perçage diamètre 8 mm soit par un trou oblong de 5 X 25 mm » [1 p. 38].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 38)
+
+![Drainages avec capotage, variante rénovation capot complet](/assets/certifications/dtd-6-16-2335/drainages-avec-capotage.png)
+
+« DRAINAGES avec Capotage » : « Décompression réalisée soit par un perçage diamètre 6 mm soit par
+la suppression du joint en traverse haute sur une largeur de 300 mm » ; « Les drainages sont
+réalisés soit par un perçage diamètre 8 mm soit par un trou oblong de 5 X 25 mm » ; « Variante
+rénovation capot complet » : « orifice diamètre 8 mm (passage busette) ». La largeur de suppression
+du joint est de 100 mm sans capotage et de 300 mm avec capotage, comme au § 2.2.3.5.1. Un
+caractère « & » isolé est imprimé en bas à gauche de la planche [1 p. 6, 39].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 39)
+
+## Masses centrales
+
+La masse centrale est la largeur vue au centre d'une fenêtre à deux vantaux : les deux ouvrants
+et le battement ou le meneau qui les sépare. Une ligne par combinaison dessinée ; cotes en mm,
+portées au-dessus de chaque coupe [1 p. 40].
+
+| Combinaison dessinée | Masse centrale (mm) | Cote partielle de gauche (mm) | Cote du profilé central (mm) |
+| --- | --- | --- | --- |
+| 6122 + battement 6132 + 6121, battement intérieur 6131 | 118 | 39 | 40 |
+| 6124 + battement 6132 + 6123, battement intérieur 6131 | 166 | 63 | 40 |
+| 6115 + battement 0140 + 6115 | 200 | 69 | 62 |
+| 6121 + meneau 2425 + 6121 | 180 | 45 | 90 |
+| 6112C + meneau 6127 + 6112C | 170 | 45 | 80 |
+| 6121 + meneau 2427 + 6121 | 205 | 45 | 115 |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 40)
+
+![Masses centrales à battement et à meneau 2425](/assets/certifications/dtd-6-16-2335/masses-centrales-1.png)
+
+![Masses centrales à meneau 6127 et 2427](/assets/certifications/dtd-6-16-2335/masses-centrales-2.png)
+
+## Coupes horizontales et verticales
+
+![Coupe des dormants larges 6108 à 6158 avec l'ouvrant 6112C](/assets/certifications/dtd-6-16-2335/coupes-dormants-larges-6158-6112c.png)
+
+Dormants larges superposés sur une même coupe, cotes verticales de l'aile au pied : **6158** 200,
+**6111** 155, **6110** 135, **6109** 115, **6108** 95 mm ; au pied, **56** (dormant), **53**
+(ouvrant **6112C**) et **20** mm [1 p. 41]. Ces cotes sont celles du tableau des dormants larges
+du DTD (**CTR-20**).
+
+![Coupe de l'ouvrant 6112C sur le dormant de rénovation 6106](/assets/certifications/dtd-6-16-2335/coupe-6106-6112c.png)
+
+Dormant **6106** et ouvrant **6112C** : cotes **100** et **55** en haut, **40** (aile), **67**, **53**
+(indice du 6112C) et **20** mm au pied [1 p. 41].
+
+![Coupes du dormant 6101 avec l'ouvrant 6112C et la parclose 76515](/assets/certifications/dtd-6-16-2335/coupes-6101-6112c-76515.png)
+
+À gauche, dormant **6101**, ouvrant **6112C** et parclose **76515** avec un vitrage de **42** mm ; à
+droite, la coupe cotée du 6101 et du 6112C [1 p. 41] :
+
+| Cote portée sur la coupe 6101 / 6112C | Valeur (mm) |
+| --- | --- |
+| hauteur totale | 109 |
+| hauteur du dormant | 64 |
+| décomposition droite, de haut en bas | 20 ; 53 ; 36 |
+| cotes intermédiaires à droite | 12 ; 8 |
+| cotes horizontales | 3,5 (en haut) ; 13 ; 3,5 ; 19,5 |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 41)
+
+## Coupes avec capotage
+
+![Coupes avec capotage : battement A176, dormants 6101 et 6155, seuil avec appui A475](/assets/certifications/dtd-6-16-2335/coupes-avec-capotage.png)
+
+Quatre coupes de profilés capotés, capots légendés [1 p. 42] :
+
+| Coupe | Profilés PVC | Capots et pièces aluminium légendés |
+| --- | --- | --- |
+| battement de fenêtre 2 vantaux | ouvrants 6113 et 6112C, battement intérieur 6129 | A170 (deux), battement A176 |
+| dormant standard | dormant 6101, ouvrant 6112C | A107 (dormant), A170 (ouvrant) |
+| dormant de rénovation | dormant 6155, ouvrant 6112C | A109 (dormant), A170 (ouvrant) |
+| traverse basse sur appui | ouvrant, appui A475 | A170, demi-capot A474, G250 |
+
+Le capot légendé sur le dormant **6101** de cette coupe est l'**A107**, alors que la planche des
+dormants du DTD (p. 14) dessine l'A108 à côté du même 6101 (**CTR-37**, **INC-85**) [1 p. 14, 42].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 42)
+
+## Oscillo-coulissant
+
+![Oscillo-coulissant : dormant 2502, ouvrants 6115, meneau 2425, profilé 2428, cornière alu 20 × 20 × 2](/assets/certifications/dtd-6-16-2335/oscillo-coulissant.png)
+
+Coupe verticale et coupe horizontale d'un oscillo-coulissant : dormant **2502**, ouvrants
+**6115**, meneau **2425**, profilé **2428** en pied, et la « Cornière alu 20 X 20 X 2 » vissée en
+traverse basse du dormant. La quincaillerie PSK200 Portal de Siegenia est celle du § 2.2.3.6 ; le
+seuil aluminium est exclu sur l'oscillo-coulissant (§ 2.2.3.1.4) [1 p. 4, 6, 43].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 43)
+
+## Coupes avec seuil
+
+![Coupes avec seuil 9F68 et 9F67, rejets d'eau 93051 et A465](/assets/certifications/dtd-6-16-2335/coupes-avec-seuil-9f68-9f67.png)
+
+Trois coupes cotées, en mm : « Seuil 9F68 » (largeur 70, hauteur 36, cote 8) ; « Seuil 9F67 » avec
+l'ouvrant **6115** et le « Rejet d'eau 93051 » (70, 20, 8) ; « Seuil 9F67 » avec l'ouvrant
+**6123** et le « Rejet d'eau A465 » (70, 20, 8). Note : « Trous de drainage à 50 mm de chaque
+extrémité (5X25) », sur le rejet d'eau [1 p. 44].
+
+![Coupes avec seuil, rejets d'eau A465, A466 et JA701-02, joint brosse G256](/assets/certifications/dtd-6-16-2335/coupes-avec-seuil-rejets-deau.png)
+
+Coupes des rejets d'eau sur seuil : « Rejet d'eau A465 » avec **G256** (deux coupes), « Rejet
+d'eau A466 » avec **G256**, « Rejet d'eau JA701-02 » avec son joint brosse [1 p. 44]. Le § 2.3
+rend le rejet d'eau obligatoire en traverse basse des ouvrants des fenêtres équipées du seuil [1 p. 7].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 44)
+
+## Décompression, drainage et ventilation des couleurs sombres
+
+Pour les profilés filmés ou laqués dont la clarté L* est inférieure à 82 ou non définie, les
+chambres sont mises en communication avec l'extérieur par des orifices de Ø 5 mm minimum selon ces
+schémas (§ 2.2.3) [1 p. 4, 45-46].
+
+La légende est la même sur les deux planches : trait noir « DECOMPRESSION : TROU OBLONG 5 X 25 OU
+TROU DIAM 6 » ; trait noir « DRAINAGE : TROU OBLONG 5 X 25 OU TROU DIAM 8 » ; trait gris
+« VENTILATION COULEUR SOMBRE Ø 5 MINI ». Une ligne par groupe de profilés, dans l'ordre des
+planches [1 p. 45-46].
+
+| Profilés concernés | Emplacements dessinés |
+| --- | --- |
+| dormants 6100, 6101, 6104, 2502 | traverse haute : décompression ; « si décompression par retrait de joint » : ventilation ; traverse basse : drainage et ventilation |
+| dormants 6102, 6105, 6106, 6107, 6159 | traverse haute : décompression ; « si décompression par retrait de joint » : ventilation ; traverse basse : drainage |
+| dormants larges 6108, 6109, 6110, 6111, 6158 | traverse haute : décompression et deux perçages dans l'aile ; « si décompression par retrait de joint » : ventilation (trois perçages dans l'aile et un en feuillure) ; traverse basse : drainage et deux ventilations dans l'aile |
+| ouvrants 2416, 6112C, 6115, 6121, 6123, 6117, 6119, 6150, 6152 | traverse haute : décompression ; traverse basse : drainage |
+| montants 6127, 2425, 2427, 6157 | « Autre possibilité d'aération du montant par perçage des contre feuillures des traverses hautes et basses » (trois trous) ; traverse basse : deux drainages |
+| appuis | une ventilation et une ventilation oblique |
+| traverse basse 0303 | décompression et drainage |
+| traverse 6127, 6126, 6157, 2425, 2427 | drainage (deux) et décompression |
+
+« Ventilation couleur sombre : Au minimum un trou oblong par cadre. Ce trou oblong devra ouvrir les
+chambres exposées » [1 p. 45].
+
+![Couleurs sombres, dormants](/assets/certifications/dtd-6-16-2335/couleur-sombre-dormants.png)
+
+![Couleurs sombres, ouvrants, montants, appuis, traverses](/assets/certifications/dtd-6-16-2335/couleur-sombre-ouvrants-meneaux-appuis.png)
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 45 et 46)
+
+# Plans de mise en œuvre
+
+Sept plans de pose clôturent l'annexe du DTD. Ce sont des coupes (verticale, et horizontale ou
+coupe A-A) de la fenêtre dans le mur, sans cote sauf mention ; le béton est dessiné pointillé
+avec des triangles, l'isolant en alvéoles hexagonales, les briques à alvéoles en blocs creux. Les
+fenêtres doivent être mises en œuvre conformément au NF DTU 36.5 (§ 2.4 du
+[DTD](/certifications/dtd-6-16-2335.md)) [1 p. 7, 47-53].
+
+## Mise en œuvre en applique intérieure sur monomur
+
+![Mise en œuvre en applique intérieure sur monomur, dormants larges 6109 et 6111](/assets/certifications/dtd-6-16-2335/pose-applique-interieure-monomur.png)
+
+Le dormant large **6109** (en haut) et le dormant large **6111** (en bas, sur l'appui béton) posés
+contre la face intérieure d'un mur monomur, avec l'isolant côté intérieur [1 p. 47].
+
+## Pose seuil PMR
+
+![Pose seuil PMR, ouvrant 6115, caillebotis, embout M325, patte de fixation, sol fini](/assets/certifications/dtd-6-16-2335/pose-seuil-pmr.png)
+
+Porte-fenêtre à ouvrants **6115** sur seuil, légendes « Etancheite », « Caillebotis », « Embout
+M325 », « Patte de fixation », « Sol fini » [1 p. 48].
+
+## Pose côté extérieur, calfeutrement en tunnel et fixation en tableau
+
+![Pose côté extérieur, calfeutrement en tunnel et fixation en tableau, planche 1](/assets/certifications/dtd-6-16-2335/pose-cote-exterieur-tunnel-tableau-1.png)
+
+Coupe verticale et « Coupe A-A » d'une fenêtre posée côté extérieur d'un mur en briques à
+alvéoles avec isolant extérieur [1 p. 49].
+
+![Pose côté extérieur, calfeutrement en tunnel et fixation en tableau, planche 2](/assets/certifications/dtd-6-16-2335/pose-cote-exterieur-tunnel-tableau-2.png)
+
+Même titre, second plan : coupe verticale et « Coupe A-A » d'une fenêtre posée côté extérieur
+d'un mur béton avec isolant extérieur [1 p. 53].
+
+## Pose en applique extérieure sur monomur
+
+![Pose en applique extérieure sur monomur](/assets/certifications/dtd-6-16-2335/pose-applique-exterieure-monomur.png)
+
+Coupe verticale, coupe horizontale et « Coupe A-A » d'une fenêtre en applique extérieure sur un
+mur monomur. Le titre est imprimé « P0SE » avec un zéro [1 p. 50].
+
+## Mise en œuvre en applique intérieure avec doublage de 180 mm, rejingot déporté avec capotage
+
+![Mise en œuvre en applique intérieure avec doublage de 180 mm, rejingot déporté avec capotage](/assets/certifications/dtd-6-16-2335/pose-applique-interieure-doublage-180.png)
+
+Fenêtre capotée en applique intérieure sur un doublage coté **180 mm** [1 p. 51].
+
+## Mise en œuvre en tableau sans ébrasement ni feuillure dans le mur
+
+![Mise en œuvre située en tableau sans ébrasement ni feuillure dans le mur, calfeutrée en tunnel et fixée en tableau](/assets/certifications/dtd-6-16-2335/pose-tableau-sans-ebrasement.png)
+
+« Mise en oeuvre située en tableau sans ébrasement ni feuillure dans le mur, calfeutrée en tunnel
+et fixée en tableau » : coupe verticale et « Coupe A-A », le dormant vissé dans le béton en
+tableau, haut et bas [1 p. 52].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 47 à 53)
+
+# Citations
+
+[1] [DTD n° DBV-24-6/16-2335_V5, système TROCAL e.XCLUSIVE, KBE e.MOTION, KÖMMERLING e.VOLUTION](raw/dtd-6-16-2335-v5-e-volution.pdf)
+
+# Voir aussi
+
+- [DTD n° DBV-24-6/16-2335_V5](/certifications/dtd-6-16-2335.md)
+- [Assemblages du système 70](/profiles/systeme-70-assemblages.md)
+- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
+- [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md)
+- [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md)
+- [Fiche source du DTD](/sources/dtd-6-16-2335.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /sources/technal-dta-lumeal-ga.md | Document source | DTA n° 6/14-2166_V2, procédé LUMEAL Minimal Ga | technal, lumeal, lumeal-ga, coulissant, ouvrant-cache, dta | Document Technique d'Application CSTB de 36 pages pour le coulissant aluminium à rupture de pont thermique et ouvrant caché LUMEAL Minimal Ga de Technal (valide jusqu'au 31 juillet 2029). | Groupe Spécialisé : domaine d'emploi (neuf, ITE, monomur, exclusion dormant existant), étanchéité air/eau, perméabilité classe A*4 ($0,35\text{ m}^3/ |
+| /procedures/mise-en-oeuvre-systeme-70-evo2008.md | Procédure | Mise en œuvre du système 70, classeur e.VOLUTION de 2008 | profine, kommerling, e-volution, systeme-70, mise-en-oeuvre, pose | Le registre 7.1 « Mise en oeuvre » du classeur KÖMMERLING e.VOLUTION d'août 2008 (système 70, système F 91), pages imprimées 1 à 45 : contraintes et joints de raccordement, protection, stockage, tolérances du gros œuvre, fixation (100 mm des angles, 700 mm d'entraxe, 600 mm en coulissant), largeur et bourrage du joint, points de fixation, calcul des jeux de dilatation, référentiel UFPVC de pose en applique et en tunnel, symboles, instructions de pose, gros œuvre (appuis, rejingots, linteaux), types de pose, réservations maçonnerie, coupes de principe (feuillure, doublages de 100 à 160 mm, porte d'entrée, ouverture à l'anglaise) et exemples de pose en neuf avec volet roulant. | veau du sol (porte-fenêtre) [1 p. 348]. Fenêtre. Retombée de linteau conseillée : 250 à 300 mm. L'appui a une pente de 10 % et un rejingot de 25 mm d |
+| /sources/technal-dta-soleal-gy.md | Document source | DTA n° 6/15-2261_V3 et V1, procédé Soleal GY | technal, soleal, soleal-gy, coulissant, dta, cstb | Document Technique d'Application CSTB du système de fenêtres et portes-fenêtres coulissantes en aluminium à rupture de pont thermique SOLEAL GY de TECHNAL (validité jusqu'au 31 juillet 2029). | seuil PMR sur doublage 120 mm, pose en tableau et monomur, pose applique extérieure avec ITE (T401022, TAZ0318, TGY3725) / à faire / [Pose et galandag |
+| /sources/dta-trocal-76-advanced.md | Document source | DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED | dta, cstb, profine, trocal, systeme-76-advanced, pose | Document Technique d'Application CSTB de 56 pages du système PVC 76 Advanced de profine, premier document réglementaire du wiki. | / onze plans de pose types : applique intérieure, monomur, tunnel, rénovation bois 36 mm, seuil PMR, applique extérieure, tunnel et tableau ou appliqu |
+| /sources/dtd-6-16-2335.md | Document source | DTD n° DBV-24-6/16-2335_V5, système e.XCLUSIVE, e.MOTION, e.VOLUTION | dtd, cstb, dta, profine, kommerling, trocal | Dossier Technique Détaillé de 53 pages du second système profine certifié en références 6xxx (Gamme 70), portant les prescriptions de fabrication, profilés, renforts, assemblages dormants/seuils/traverses, quincailleries et le critère L* < 82. | plans de mise en œuvre : applique intérieure sur monomur (6109, 6111) ; pose seuil PMR (6115, caillebotis, embout M325, patte de fixation, sol fini) |
+| /profiles/perform76-appuis-et-seuils.md | Profilé | Appuis et seuils PERFORM76 | perform76, appui, seuil, nez-d-appui, compensateur, rejet-d-eau | Les sept appuis PERFORM76, le nez d'appui 4319, les quatre seuils aluminium A075 à A343 et les deux compensateurs de rénovation, avec leur affectation par dormant quand elle est connue. | / Largeur (mm) / Longueur (mm) / Épaisseur (mm) / Retombée (mm) / Nez d'appui 4319 / Coupe / / --- / --- / --- / --- / --- / --- / ---: / / 6136 / 67 |
+| /profiles/perform76-elargisseurs-et-assemblage.md | Profilé | Élargisseurs et assemblage PERFORM76 | perform76, elargisseur, poteau-angle, assemblage, renfort, profile | Les quatre élargisseurs PERFORM76, les profils d'assemblage et les trois poteaux d'angle, réservés aux dormants sans aile 76171 et 76172. | angle à 135° / 135° / 8356 / 54 × 88 (onglet 45°, retombée 31) / V262 (2,0 mm) / $I_W = 7,6$ / $I_G = 7,6$ / Isolant I041, clameau S082 / / Poteau d'a |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/incoherences-internes.md :
+| INC-22 | DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED | 6, 19 et 20 | La référence **76579** est une parclose de 48 mm sur la planche « Parcloses PVC » (p. 19, quatrième ligne, avec 76578 à 46 mm) et un profilé « Pose ITE (PVC) » d'une autre forme sur la planche « Profilés complémentaires » (p. 20) ; la remarque 1.3 (p. 6) parle du « profilé PVC réf. 76579 formant goutte d'eau en cas de mise en œuvre en applique extérieure » | Une des deux pièces porte une autre référence ; la parclose 76579 est aussi celle du cahier technique PERFORM76, ce qui désigne le profilé « Pose ITE » comme le plus probablement mal référencé, sans que le document permette de le trancher | Profilé goutte d'eau commandé sous 76579 et livré en parclose, ou l'inverse ; prescription 1.3 appliquée à la mauvaise pièce |

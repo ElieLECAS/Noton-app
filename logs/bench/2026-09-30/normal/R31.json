@@ -1,0 +1,25 @@
+{
+ "id": "R31",
+ "reponse": "La parclose 2452 existe dans les deux systèmes KÖMMERLING/profine, et l'épaisseur de vitrage dépend du système (donc de la gamme) :\n\n1) PERFORM76 (système 76 Advanced) — parclose d'OUVRANT : vitrage de 16 mm (épaisseur de la parclose 41,5 mm), pour une feuillure de 62 mm avec joint post-extrudé (cahier technique PERFORM76 p. 8). Le manuel profine 76 Advanced précise : 16 mm avec un joint A de 4 mm, 18 mm avec un joint B de 2 mm, tolérance +1,0 / −0,5 mm ; mêmes valeurs en dormant et meneau avec le compensateur de parclose 76570. C'est la plus mince des parcloses d'ouvrant PERFORM76 (la série va de 16 à 50 mm) ; elle ne se monte pas sur les dormants (sans compensateur, aucune parclose de dormant PERFORM76 sous 28 mm). Source : /profiles/perform76-parcloses.md et /profiles/systeme-76-tableau-de-vitrage.md.\n\n2) Système 70 (PERFORM70, manuel profine Système 70 Plateforme 2023) : feuillure de 54 mm → vitrage 8 mm (7,5 à 9 mm admis) ; feuillure de 70 mm avec l'élargisseur 93025 → 24 mm (23,5 à 25 mm). La 76523 est donnée pour les mêmes épaisseurs. Source : /profiles/systeme-70-tableau-de-vitrage.md.\n\n(Le classeur e.VOLUTION de 2008 donne aussi pour la 2452 : joint PCE 9C32/9B58 — 8 mm en feuillure 54, 24 mm en 70 avec élargisseur 728, 16 mm en 62, 32 mm en 78 ; joint EPDM 9044.1 — 6, 22, 14 et 30 mm.)\n\nSans précision, pour une PERFORM76 : 16 mm.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/profiles/perform76-parcloses.md", "extrait": "| 2452 | 16 | 41,5 | ![Parclose 2452](/assets/profiles/perform76/parcloses/parclose-2452.png) |"},
+  {"page": "/profiles/systeme-76-tableau-de-vitrage.md", "extrait": "| 2452 | 16 | 18 | +1,0 / −0,5 | ![Parclose 2452](/assets/profiles/systeme76/tableau-vitrage/ouvrant-2452.png) |"},
+  {"page": "/profiles/systeme-70-tableau-de-vitrage.md", "extrait": "| 2452 | en gras | 8 | 7,5 | 9 | ![Parclose 2452](/assets/profiles/systeme70/tableau-vitrage/feuillure-54-parclose-2452.png) |"},
+  {"page": "/profiles/systeme-70-tableau-de-vitrage.md", "extrait": "| 2452 | en gras | 24 | 23,5 | 25 | ![Parclose 2452, feuillure 70](/assets/profiles/systeme70/tableau-vitrage/feuillure-70-parclose-2452.png) |"}
+ ],
+ "ambiguite": "Gamme / système non précisé : 16 mm en PERFORM76 (système 76, feuillure 62) contre 8 mm en système 70 feuillure 54 (24 mm avec élargisseur 93025). Il faudrait demander : PERFORM76 ou PERFORM70 (système 70) ? ouvrant ou dormant ? joint 4 mm ou 2 mm ?",
+ "outils": 9,
+ "comment_trouve": "Grep « 2452 » sur tout le wiki : 8 pages. Lecture de perform76-parcloses.md, systeme-76-tableau-de-vitrage.md et systeme-70-tableau-de-vitrage.md (sections feuillure 54 / 70 et tableaux 2008), puis des lignes des posters (profilés complémentaires 70 et 76) pour recouper. Aucun échec : la référence est écrite en clair dans chaque tableau.",
+ "formulations": [
+  "quelle épaisseur de verre prend la parclose 2452 en feuillure 62 ?",
+  "parclose 2452 vitrage ?",
+  "quelle est la parclose la plus fine pour un double vitrage de 16 mm en PERFORM76 ?"
+ ],
+ "defauts_wiki": [
+  "La référence 2452 porte des épaisseurs différentes selon le système (16 mm en 76, 8 / 24 mm en 70, 6 à 32 mm dans le classeur 2008) : une recherche qui ne livre que 3 pages peut rendre une seule valeur sans signaler l'autre système.",
+  "systeme-70-tableau-de-vitrage.md fait 53 ko et contient la 2452 dix fois (2023 + 2008, quatre feuillures, deux joints) : page trop longue, forte chance que la mauvaise ligne soit lue.",
+  "systeme-70-profiles-complementaires.md (117 ko) et systeme-76-profiles-complementaires.md (62 ko) portent aussi la 2452 : pages très longues qui peuvent occuper le top-3 à la place du tableau de vitrage.",
+  "Aucune page ne dit en toutes lettres « la 2452 vaut 16 mm en PERFORM76 et 8 mm en PERFORM70 » : le rapprochement gamme ↔ système (PERFORM70 = système 70) est implicite."
+ ]
+}

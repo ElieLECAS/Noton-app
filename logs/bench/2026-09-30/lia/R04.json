@@ -1,0 +1,32 @@
+{
+  "question": "sur un chassis alu lumine55, j'ai un remplissage de 24mm peux tu me donner la parclose et le joint à utiliser ?",
+  "pages_lues": [
+    "/profiles/soleal-fy-parcloses-et-vitrage.md",
+    "/profiles/systeme-70-profiles-complementaires.md",
+    "/profiles/systeme-76-profiles-complementaires.md"
+  ],
+  "anomalies": [
+    "CTR-23",
+    "CTR-24",
+    "CTR-32",
+    "CTR-36",
+    "CTR-40",
+    "CTR-41"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "parclose joint remplissage 24 mm",
+        "gamme": "LUMINE",
+        "tags": "parclose"
+      },
+      "pages_nouvelles": [
+        "/profiles/soleal-fy-parcloses-et-vitrage.md",
+        "/profiles/systeme-70-profiles-complementaires.md",
+        "/profiles/systeme-76-profiles-complementaires.md"
+      ],
+      "caracteres": 194632
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "question": "Quelle charge maxi pour la T940023 ?",
+  "pages_lues": [
+    "/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md",
+    "/profiles/systeme-76-abaques-dimensionnels.md",
+    "/quincaillerie/roto-nx-champs-application.md",
+    "/quincaillerie/roto-nx-pivots-et-paliers-angle.md",
+    "/procedures/fabrication-soleal-fy.md"
+  ],
+  "anomalies": [
+    "CTR-106",
+    "CTR-107",
+    "CTR-108",
+    "CTR-118",
+    "INC-297",
+    "VER-113",
+    "VER-121",
+    "VER-34"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "T940023 charge maxi"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md",
+        "/profiles/systeme-76-abaques-dimensionnels.md",
+        "/quincaillerie/roto-nx-champs-application.md"
+      ],
+      "caracteres": 126307
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "T940023 T940022 paumelle sur pivot",
+        "systeme": "SOLEAL FY"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/roto-nx-pivots-et-paliers-angle.md",
+        "/procedures/fabrication-soleal-fy.md"
+      ],
+      "caracteres": 54996
+    }
+  ]
+}

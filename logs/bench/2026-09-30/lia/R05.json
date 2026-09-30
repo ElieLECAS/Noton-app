@@ -1,0 +1,84 @@
+{
+  "question": "un oeil de boeuf pvc combien de diametre max ?",
+  "pages_lues": [
+    "/procedures/percage-coulisses-lame-serrure-soprofen.md",
+    "/procedures/directives-generales-systeme-70-evo2008.md",
+    "/procedures/chassis-cintres-trapezoidaux-systeme-70.md",
+    "/gammes/perform.md",
+    "/procedures/drainage-et-vitrage-generaux.md",
+    "/reference/glossaire.md",
+    "/portes/systeme-76-advanced-porte-d-entree.md",
+    "/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md",
+    "/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md",
+    "/quincaillerie/roto-nx-champs-application.md"
+  ],
+  "anomalies": [
+    "CTR-106",
+    "CTR-107",
+    "CTR-108",
+    "CTR-112",
+    "CTR-118",
+    "CTR-119",
+    "VER-123"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "oeil de boeuf rond diamètre maximum PVC châssis circulaire"
+      },
+      "pages_nouvelles": [
+        "/procedures/percage-coulisses-lame-serrure-soprofen.md",
+        "/procedures/directives-generales-systeme-70-evo2008.md",
+        "/procedures/chassis-cintres-trapezoidaux-systeme-70.md"
+      ],
+      "caracteres": 100066
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "œil de bœuf formes spéciales rond cintre dimensions maximales"
+      },
+      "pages_nouvelles": [
+        "/gammes/perform.md",
+        "/procedures/drainage-et-vitrage-generaux.md",
+        "/reference/glossaire.md"
+      ],
+      "caracteres": 109608
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "œil de bœuf",
+        "limite": 8
+      },
+      "pages_nouvelles": [
+        "/portes/systeme-76-advanced-porte-d-entree.md"
+      ],
+      "caracteres": 130129
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "châssis cintré plein cintre diamètre rayon dimension maximale fixe",
+        "systeme": "70",
+        "tags": "cintre"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md",
+        "/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md"
+      ],
+      "caracteres": 68469
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/quincaillerie/roto-nx-champs-application.md"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/roto-nx-champs-application.md"
+      ],
+      "caracteres": 67170
+    }
+  ]
+}

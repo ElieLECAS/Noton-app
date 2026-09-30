@@ -1,0 +1,366 @@
+===== PAGE 1 : /quincaillerie/soleal-gy-roulements-et-fermetures.md =====
+# Chariots de roulement et calage
+
+Les chariots SOLEAL GY 55 sont logés dans la traverse basse d'ouvrant (T141015 ou T141021). Leur corps en matériau isolant conserve la continuité de la rupture thermique de la traverse basse.
+
+### 1. Tableau de choix des roulettes et charges admissibles
+
+| Type de chariot | Référence | Réglage | Galets / Bandage | Poids maxi par vantail | Compatible Rail Alu T341000 | Compatible Rail Inox TGY4007 |
+| --- | --- | --- | --- | --- | --- | --- |
+| **Simple fixe** | **T401011** | Non réglable | Polyamide sur roulements à aiguilles | **100 kg** | Oui | Oui |
+| **Double fixe** | **T401012** | Non réglable | Polyamide sur roulements à aiguilles | **200 kg** | Oui | Oui |
+| **Double fixe Inox** | **TGY3873** | Non réglable | Galets 100% Inox | **200 kg** | **NON (Incompatible)** | **OUI** |
+| **Simple réglable** | **T441003** | Réglable en hauteur | Polyamide sur aiguilles | **100 kg** | Oui | Oui |
+| **Double réglable** | **T441004** | Réglable en hauteur | Polyamide sur aiguilles | **200 kg** | Oui | Oui |
+| **Double réglable Inox** | **TGY3872** | Réglable en hauteur | Galets 100% Inox | **200 kg** | **NON (Incompatible)** | **OUI** |
+
+> [!WARNING]
+> **Interdiction absolue** d'associer des chariots à roulettes inox (**TGY3872** / **TGY3873**) sur le chemin de roulement en aluminium **T341000**. L'inox détruirait par écrouissage le rail aluminium sous forte charge. L'utilisation du rail rapporté en acier inoxydable **TGY4007** est impérative avec les galets inox.
+
+### 2. Prescription de calage sous traverse : Cale TGA3817
+Pour transmettre directement la charge du vitrage vers les roulettes sans solliciter la rupture thermique des traverses :
+- **Prise de vitrage 29-32 mm (profilé T141021)** : Cale **TGA3817** obligatoire au droit de chaque roulette de manière systématique.
+- **Prise de vitrage 24-28 mm (profilé T141015)** : Cale **TGA3817** (zone sécable raccourcie) obligatoire si la largeur du vantail dépasse **1,50 m** OU si le poids du vantail dépasse **120 kg**.
+- La cale se fixe sur la traverse avec un point de colle avant vitrage.
+
+### 3. Réglage en hauteur des roulettes réglables
+- Les chariots réglables (T441003, T441004, TGY3872) sont ajustables en hauteur **sans dégonder le vantail** au moyen d'une clé Allen introduite par le chant latéral du montant d'ouvrant à travers l'orifice prévu à **25 mm** de hauteur.
+- Lors du réglage, il est obligatoire de soulager le vantail à l'aide de ventouses de vitrier pour éviter d'endommager la vis micrométrique de réglage sous la charge.
+
+---
+
+# Systèmes de fermeture et verrouillage
+
+La condamnation s'effectue par des mécanismes encastrés à têtière filante en acier inox (grade 3 anticorrosion NF EN 1670) :
+
+### 1. Gamme de crémones encastrées
+
+| Référence | Points de fermeture | Condamnation clé | Hauteur min. châssis | Hauteur min. poignée $Hp$ | Fixation |
+| --- | --- | --- | --- | --- | --- |
+| **TGY3700** | 1 point simple | Non | 395 mm | 219 mm | 2 vis TGY3723 |
+| **TGY3701** | 1 point à clé | Oui (cylindre) | 525 mm | 346 mm | 4 vis TGY3723 |
+| **TGY3702** | 3 points | Non | 1 292 mm | 721 mm | 6 vis TGY3723 |
+| **TGY3703** | 3 points à clé | Oui (cylindre) | 1 292 mm | 721 mm | 8 vis TGY3723 |
+| **TGY3704** | Rallonge 4ème point | Raccordée à TGY3702/03 | Pour très grandes hauteurs | — | 2 vis TGY3723 |
+| **TKG025** | Fermeture 1 point coquille | Non | 395 mm | 219 mm | Encastrée + pêne déporté TGY6006 |
+
+### 2. Cylindres et barillets européens
+- Montants latéraux standard TGY1202 et TGY1303 : Cylindre européen **30 x 30 mm** (Réf. **T1040**).
+- Montants latéraux à renfort tube TGY1301 et TGY1302 : Cylindre européen décentré **40 x 30 mm** (Réf. **T1044**).
+- Rosettes inox de protection de cylindre : Réf. **T960013** ou **TPY6003**.
+
+### 3. Fermeture pompier (Établissements Recevant du Public - ERP)
+Conforme à l'Arrêté du 25 juin 1980 et à l'article CO3 modifié du 28 avril 2016 :
+- Référence : **TGY3731** (avec vis de fixation T770059).
+- Compatible uniquement avec les montants simples **TGY1202** et **TGY1300**.
+- Permet l'ouverture d'urgence depuis l'extérieur à l'aide d'une clé spéciale pompier.
+- Exigence dimensionnelle réglementaire : passage libre minimum de **$H = 1\,800\text{ mm} \times L = 900\text{ mm}$**.
+
+### 4. Verrou central à clé TGY3622
+- Placé à la croisée centrale des vantaux en partie basse.
+- Montage sur cale **TGY3640** avec perçage Ø7 mm et écrou à sertir taraudé M5.
+- Vis de fixation CHc M5x16 et M5x25.
+- En cas d'utilisation du verrou central, les roulettes doivent être décalées à **62 mm** et les cales de vitrage à **71 mm** du chant du montant pour ne pas entrer en conflit avec le perçage Ø11 mm de la pièce de blocage.
+
+---
+
+# Organes de manœuvre et poignées
+
+### 1. Tableau de compatibilité des poignées selon les montants
+
+| Organe de manœuvre | Type | Réf. Laquée | Réf. Anodisée | Compatible Montant Standard (TGY1202/1300) | Compatible Montant Tube (TGY1301/1302) | Compatible Montant Lame (TGY1200/1201) | Compatible Montant Bilame (TGY1220) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **Cuvette encastrée** | Intérieure | **TGY3712** | **TGY3719** | Oui (OS / SF) | Oui (OS / SF) | Non | Oui |
+| **Bouton sur plaque** | Intérieure | **TGY3713** | **TGY3714** | Non | Non | **Oui (OS / SF)** | Oui |
+| **Poignée tirage Technal** | Intérieure | **TGY3717** | — | **Oui (OS / SF\*)** | **Oui (OS / SF\*)** | Non | Non |
+| **Poignée tirage extérieure**| Extérieure | **TGY3718** | — | Oui (OS / SF) | Oui (OS / SF) | Non | Non |
+| **Poignée fixe de tirage** | Int/Ext | **TGY3732 / TGY3733** | — | Oui (avec TGY3716) | Oui (avec TGY3716) | Oui | Oui |
+| **Poignée design droit** | Intérieure | **TGY3606** | — | Oui (OS) | Oui (OS) | Non | Non |
+| **Poignée anse galbée** | Intérieure | **TGY6004** | — | Oui (OS / SF) | Non | Non | Non |
+| **Cuvette à levier** | Intérieure | **TGY6003** | — | Oui (OS / SF) | Non | Non | Non |
+| **Béquille à carré de 7 mm**| Intérieure | **T960030 / TCZ61051**| — | Oui (avec kit TGY3721) | Non | Non | Non |
+
+*\*Note : Pour croiser les vantaux sans heurt avec la poignée TGY3717 sur semi-fixe, prévoir la butée TCG021.*
+
+### 2. Réversibilité de la poignée Design Droit TGY3606
+La poignée TGY3606 est réversible pour vantail de service à gauche ou à droite :
+1. Présenter la poignée en position ouverte.
+2. Retirer les 4 vis d'assemblage du corps arrière.
+3. Retirer la butée et le corps de fixation.
+4. Tourner le bras de manœuvre à 180°.
+5. Remonter la butée et visser.
+6. Retourner le corps arrière de 180° (les 2 logements de vis doivent être orientés côté serrure pour fixation par vis TGY3723).
+7. Revisser l'ensemble.
+
+---
+
+# Gâches, centreurs et accessoires de guidage
+
+### 1. Gâches de condamnation
+- **Gâche dormant périphérique TGY3705** : Se visse directement dans la gorge du dormant aluminium sans fraisage ni découpe du profilé à l'aide de vis Torx TGY3723.
+- **Gâche pour percussion centrale TGY3711** : Se visse en applique sur le profilé de percussion centrale TGY1204 ou de percussion d'angle TGY1206.
+- **Gâche renforcée anti-effraction TGY3742** : Équipée de vis de pré-positionnement et d'un contre-clameau en aluminium pour retard à l'effraction sur dormant 55 mm.
+- **Réglage micrométrique de la gâche** : La serrure Technal intègre un gabarit plastique réversible. En position horizontale, il sert de pige d'épaisseur pour aligner la gâche à exactement **6 mm** du boîtier de fermeture avant serrage définitif des vis.
+
+### 2. Centreurs d'ouvrants et guidage
+- **Centreur d'ouvrant TGY3832** : Se clipse par rotation au milieu du montant d'ouvrant. Garantit l'alignement parfait des vantaux en position fermée et le plaquage des joints brosses contre le vent.
+  - *Règle bilame :* Dans le cas d'une menuiserie soumise aux risques de bilame, poser obligatoirement **2 centreurs TGY3832** répartis sur la hauteur.
+- **Compensateur de centreur TGY3833** : Se monte face au centreur TGY3832 sur le profilé de percussion TGY1204 à l'aide d'une vis TGY3723.
+- **Guides de montants centraux TGY3883** : Se clipsent en tête et pied de chaque montant central après gondage des vantaux. Verrouillage par rotation des flèches à l'aide d'une clé Allen de 4 mm. Mousse d'étanchéité positionnée à fleur de profilé.
+- **Pièces anti-dégondage TGY3885** : Se montent sur chaque montant latéral après réglage des roulettes pour empêcher le soulèvement frauduleux de l'ouvrant.
+
+---
+
+# Voir aussi
+
+- [Profilés dormants et rails SOLEAL GY 55](/profiles/soleal-gy-dormants-et-rails.md)
+- [Cotes de débit SOLEAL GY 55](/profiles/soleal-gy-cotes-de-debit.md)
+- [Pose et galandage SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md)
+- [Fournisseur Technal](/fournisseurs/technal.md)
+
+===== PAGE 2 : /quincaillerie/askey-coulissant-65-nv-quincaillerie.md =====
+# Quincaillerie et accessoires ASKEY Coulissant 65 NV
+
+La quincaillerie et les accessoires du **Coulissant 65 NV ASKEY** intègrent les organes de roulement, les verrouillages multipoints, les organes de manœuvre ainsi que les composants d'étanchéité à l'air et à l'eau [1 p. 81, 109].
+
+---
+
+# Caractéristiques
+
+### Chariots de roulement
+
+Les chariots sont certifiés en classe 6 (200 000 cycles d'ouverture) selon la norme européenne, montés sur roulements à aiguilles anticorrosion avec axes inox et chapes polyamide isolantes [1 p. 9, 110, 124] :
+
+| Référence | Désignation | Type de galet | Axe (mm) | Charge max / roulette | Charge max / vantail | Compatibilité rail |
+| --- | --- | --- | --- | --- | --- | --- |
+| **W6050150** | Roulette simple fixe | Polyamide | 6 | 40 kg | **80 kg** | Alu (W3041224) ou inox (W4000158) |
+| **W6050151** | Roulette simple réglable | Polyamide | 6 | 40 kg | **80 kg** | Alu (W3041224) ou inox (W4000158) |
+| **W6050152** | Roulette double fixe | Polyamide | 6 | 80 kg | **160 kg** | Alu (W3041224) ou inox (W4000158) |
+| **W6050153** | Roulette double réglable | Polyamide | 6 | 80 kg | **160 kg** | Alu (W3041224) ou inox (W4000158) |
+| **W6050155** | Roulette double réglable renforcée | Polyamide | 8 | 110 kg | **220 kg** | Inox W4000158 obligatoire |
+| **W6000025** | Roulette double charges lourdes | Acier trempé | - | 125 kg | **250 kg** | Inox W4000158 obligatoire (ouvrant 32) |
+| **W6050149** | Cale d'adaptation roulette 32 | Polyamide | - | - | - | Traverse W1041274 |
+
+(schéma: raw/askey1.pdf, p. 110, 111, 124)
+
+### Serrures et crémones de fermeture
+
+Têtière de 16 mm, axe à 43 mm, fouillot carré de 7 mm [1 p. 10, 111, 112] :
+
+| Référence | Désignation | Points de fermeture | Mode de pose | Fonction spécifique |
+| --- | --- | --- | --- | --- |
+| **W6050100** | Fermeture 1 point | 1 crochet réglable | À visser | Système anti-fausse manœuvre |
+| **W6050102** | Fermeture 2 points | 1 crochet réglable + 1 fixe | À clamer | Fournie avec clameaux |
+| **W6050103** | Fermeture 3 points | 1 réglable + 2 fixes | À clamer | Verrouillage par cylindre européen |
+| **W6050104** | Fermeture 3 points à clé | 1 réglable + 2 fixes | À clamer | Cylindre traversant ouvrant |
+| **W6050111** | Bloc verrou encastré | 1 pêne à bascule | À encastrer | Verrouillage supplémentaire de vantail |
+| **W6050085** | Gâche à clamer | - | À clamer | Fournie avec vis de serrage |
+| **W6050083** | Clameau pour fermeture | - | À glisser | Maintien de têtière dans la gorge |
+
+(schéma: raw/askey1.pdf, p. 111, 112)
+
+### Organes de manœuvre et poignées
+
+| Référence | Désignation | Type de fixation | Application vantail |
+| --- | --- | --- | --- |
+| **W6050120** | Grande poignée de manœuvre | Rivets taraudés W6060386 | Vantail principal 24 ou 32 mm |
+| **W6050125** | Poignée standard | Rivets taraudés W6060387 | Vantail principal ou secondaire |
+| **W6050130** | Petite commande compacte | Rivets taraudés W6060385 | Vantail semi-fixe ou secondaire |
+| **W6050126** | Gâchette allongée | Remplacement sur poignée | Manœuvre adoucie / PMR |
+| **W6050127** | Bouchon de manœuvre poignée | Obturation | Transforme la poignée en poignée fixe de tirage |
+| **W6050133** | Coquille à carré vantail 24 mm | Encastrée | Croisement total des vantaux de 24 mm |
+| **W6050134** | Coquille à carré vantail 32 mm | Encastrée | Croisement total des vantaux de 32 mm |
+| **W6050284** | Verrou à levier extra-plat | Encastré | Ouvrants de 24 et 32 mm |
+
+(schéma: raw/askey1.pdf, p. 113, 114, 117, 119)
+
+### Carrés de manœuvre (carré de 7 mm)
+
+Longueur nominale de la tige carrée en fonction de la section de profilé et du ferrage [1 p. 116, 121, 122] :
+
+| Référence | Longueur $L$ (mm) | Type d'ouvrant | Face de manœuvre |
+| --- | --- | --- | --- |
+| **W4070492** | 32 | Vantail 24 mm non renforcé | Face intérieure seule |
+| **W4070493** | 35 | Vantail 24 mm non renforcé | Poignées intérieure et extérieure |
+| **W4070494** | 41 | Vantail 32 mm non renforcé | Face intérieure ou deux faces |
+| **W4070496** | 53 | Vantail 24 mm renforcé carré | Poignées sur les deux faces |
+| **W4070495** | 56 | Vantail 24 mm renforcé W1041261 | Poignées sur une ou deux faces |
+| **W4070497** | 59 | Vantail 32 mm renforcé carré | Face intérieure seule |
+| **W4070498** | 62 | Vantail 32 mm renforcé carré | Poignées intérieure et extérieure |
+
+(schéma: raw/askey1.pdf, p. 116)
+
+---
+
+# Champs d'application
+
+### Hauteur de poignée et limites de châssis
+
+Dimensions minimales hors-tout d'ouvrant ($Ho$) et hauteur minimale de poignée ($hp$) en millimètres selon le type de fermeture [1 p. 125] :
+
+| Type de fermeture | Référence | $Ho$ mini (mm) | $hp$ mini (mm) | Plage hauteur traverse intermédiaire ($HTr$) |
+| --- | --- | --- | --- | --- |
+| 1 point | W6050100 | **500** | 250 | $HP - 162 < HTr < HP + 90$ |
+| 2 points | W6050102 | **965** | 425 | $HP - 162 < HTr < HP + 52$ |
+| 3 points | W6050103 | **1 297** | 755 | $HP - 162 < HTr < HP + 52$ |
+| 3 points avec cylindre | W6050104 | **1 297** | 755 | $HP - 252 < HTr < HP + 52$ |
+| 1 point à coulisse | W6050111 | - | - | $HP - 106 < HTr < HP + 106$ |
+
+(schéma: raw/askey1.pdf, p. 125)
+
+Relation hauteur hors-tout châssis et ouvrant :
+$$\text{Hors tout châssis} = Ho + 2 \times \text{hauteur dormant} - 16\text{ mm}$$
+
+---
+
+# Compatibilités
+
+* **Cale de roulette W6050149** : Obligatoire pour monter les chariots W6050150 à W6050155 dans la gorge de traverse d'ouvrant 32 mm W1041274 [1 p. 110].
+* **Crochet de bloc verrou** : Le bloc verrou W6050111 nécessite le crochet **W6050112** sur ouvrant 24 mm et le crochet **W6050117** sur ouvrant 32 mm [1 p. 112, 113].
+* **Sélection des poignées sur ouvrants renforcés** : Les poignées à coquille W6050133 et W6050134 sont conçues pour s'effacer lors du croisement complet des vantaux en baies de 3 et 4 vantaux [1 p. 114].
+
+---
+
+# Ce que la source ne donne pas
+
+* La source ne précise pas la référence de la clé de manœuvre d'urgence pour le bloc verrou W6050111 en l'absence de cylindre européen.
+
+---
+
+# Citations
+
+[1] [Coulissant 65 NV ASKEY - Conception](raw/askey1.pdf), p. 81, 109-127
+[2] [Coulissant 65 NV ASKEY - Fabrication](raw/askey5.pdf), p. 38-53, 98-114
+
+---
+
+# Voir aussi
+
+- [Gamme Coulissant 65 NV](/gammes/askey-coulissant-65-nv.md)
+- [Profilés dormants et ouvrants Coulissant 65 NV](/profiles/askey-coulissant-65-nv-dormants-et-ouvrants.md)
+- [Cotes de débit Coulissant 65 NV](/profiles/askey-coulissant-65-nv-cotes-de-debit.md)
+- [Fabrication Coulissant 65 NV](/procedures/fabrication-coulissant-askey-65-nv.md)
+
+===== PAGE 3 : /portes/soleal-py-dormants-et-ouvrants.md =====
+# Présentation générale
+
+Le système de porte **SOLEAL PY 55** de **TECHNAL** est un concept de porte lourde à rupture thermique totale, développé en **module de 55 mm** pour le dormant et l'ouvrant. Conforme à la norme européenne produit **NF EN 14351-1** (marquage CE), il répond aux exigences sévères des bâtiments tertiaires, établissements recevant du public (ERP), logements collectifs et maisons individuelles.
+
+La rupture thermique centrée est obtenue par :
+- Une double barrette tubulaire ou plate sertie de **20 mm** en polyamide 6.6 chargé à 25 % de fibres de verre.
+- Une cage d'équerre modulaire commune de **38 mm** ou **15 mm**.
+- Une conception symétrique à 3 chambres permettant la bi-coloration intégrale (teintes intérieures et extérieures distinctes).
+
+---
+
+# Profilés dormants
+
+Les dormants SOLEAL PY 55 se déclinent en deux familles de fixation (lisse sans rainure ou avec rainure BTC pour clippage des tapées et habillages) et en deux épaisseurs de toile d'aluminium (standard et renforcée 3 mm pour trafic intense) :
+
+| Référence | Cage d'équerre | Type de dormant | Toile alu | Utilisation et caractéristiques | Équerre d'angle |
+| --- | --- | --- | --- | --- | --- |
+| **TPY1102** | 15 mm | Sans rainure BTC | Standard | Face vue 52 mm, aile de recouvrement 25 mm, pour pose en tableau ou tunnel | T750201 |
+| **T225011** | 15 mm | Avec rainure BTC | Standard | Face vue 52 mm, permet le clippage des tapées 100 à 160 mm et couvre-joints | T750201 |
+| **T225004** | 38 mm | Sans rainure BTC | Standard | Face vue 75 mm, aile 25 mm, dormant large traditionnel | T750213 |
+| **T225014** | 38 mm | Avec rainure BTC | Standard | Face vue 75 mm, double rainure pour tôle 15/10e et tapées | T750214 |
+| **T225024** | 38 mm | Avec rainure BTC | **Renforcée (3 mm)** | Toile intérieure et extérieure de 3 mm pour portes lourdes jusqu'à $H = 2,60\text{ m}$ | T750214 |
+| **T225034** | 38 mm | Sans rainure, sans battue | Standard | Pour porte double action va-et-vient (VV) sur pivot de sol | T750213 |
+| **T225205** | 60x13,7 mm | Traverse haute FPI | Standard | Profilé tubulaire pour intégration invisible du ferme-porte encastré T920019 | T760201 (embouts) |
+| **T220511** | 15 mm | Sans rainure | Standard | Pour intégration directe dans la structure de mur-rideau GEODE | T750201 |
+| **TPY1105** | 15 mm | Sans rainure (module 65) | Standard | Dormant élargi à 65 mm pour alignement avec fenêtres SOLEAL 65 | T750201 |
+| **TPY1103** | 15 mm | Avec rainure (module 65) | Standard | Dormant élargi à 65 mm avec double rainure BTC | T750201 |
+
+---
+
+# Profilés ouvrants
+
+La gamme permet la réalisation d'ouvrants 3 côtés (avec plinthe basse) ou 4 côtés (ouvrant périphérique avec joint d'étanchéité ou seuil), ainsi que les versions anti-pince doigts :
+
+### 1. Ouvrants battants simple action (Ouverture Intérieure et Extérieure)
+
+| Profilé | Forme | Battue | Toile alu | Rôle et cinématique | Équerre d'angle |
+| --- | --- | --- | --- | --- | --- |
+| **T225114** | Forme en T | Extérieure | Standard | Montant/traverse d'ouvrant battant ouverture extérieure (face vue 100 mm) | T750213 |
+| **T225134** | Forme en T | Extérieure | **Renforcée (3 mm)** | Ouvrant renforcé pour très haute résistance et portes de $H \le 2,60\text{ m}$ | T750213 |
+| **T225104** | Forme en Z | Intérieure | Standard | Montant/traverse d'ouvrant battant ouverture intérieure (face vue 75 mm) | T750213 |
+| **T225124** | Forme en Z | Intérieure | **Renforcée (3 mm)** | Ouvrant renforcé ouverture intérieure pour site exposé ou grand trafic | T750213 |
+| **T700049** | Forme en T | Extérieure | Standard | Traverse haute d'ouvrant intégrant la glissière du ferme-porte intégré FPI | T750237 |
+| **T700110** | Forme en T | Extérieure | **Renforcée (3 mm)** | Traverse haute d'ouvrant FPI renforcée | T750237 |
+| **T700048** | Forme en Z | Intérieure | Standard | Traverse haute d'ouvrant FPI ouverture intérieure | T750237 |
+| **T700109** | Forme en Z | Intérieure | **Renforcée (3 mm)** | Traverse haute d'ouvrant FPI ouverture intérieure renforcée | T750237 |
+
+### 2. Ouvrants Va-et-Vient et Anti-Pince Doigts (APD)
+
+| Profilé | Désignation | Écartement | Caractéristiques techniques |
+| --- | --- | --- | --- |
+| **T225144** | Ouvrant Va-et-Vient (VV) | 23 mm | Profilé tubulaire symétrique sans battue, recevant le joint T710012 ou joint brosse T2883 |
+| **T700050** | Traverse haute VV FPI | 23 mm | Traverse haute symétrique avec glissière pour ferme-porte encastré T920019 |
+| **T225107** | Montant Tube APD | — | Montant tubulaire cylindrique à RPT assurant la rotation sans aucun pincement de doigt |
+| **TPY2505** | Profilé battement APD | 23 mm | Profilé support de joint anti-pince doigts côté paumelle/rotation |
+
+---
+
+# Plinthes, traverses et profilés de renfort
+
+### 1. Plinthes d'ouvrants et traverses basses
+- **T700047** : Plinthe tubulaire basse de **120 mm** de hauteur, assemblée en coupe droite entre montants à l'aide de doubles embouts **T760008** et goupilles **TAY0002**.
+- **T225105** : Plinthe tubulaire basse symétrique de **120 mm** avec double rainure pour porte va-et-vient.
+- **T525051** : Profilé porte-brosse aluminium clippé en sous-face de la plinthe T700047 ou T225105 pour recevoir le joint brosse d'étanchéité basse.
+
+### 2. Traverses intermédiaires
+Assemblées en coupe droite à 90° entre montants avec embouts **T760003** à **T760012** :
+- **T215202** : Traverse intermédiaire de 77 mm ($I_x = 9,07\text{ cm}^4$).
+- **T215204** : Traverse intermédiaire de 90 mm ($I_x = 10,26\text{ cm}^4$).
+- **T215205** : Traverse intermédiaire de 100 mm ($I_x = 11,04\text{ cm}^4$).
+- **T215207** : Traverse intermédiaire de 120 mm ($I_x = 12,45\text{ cm}^4$).
+- **T215208** : Traverse intermédiaire de 130 mm ($I_x = 13,09\text{ cm}^4$).
+- **T215211** : Traverse intermédiaire de 160 mm ($I_x = 15,17\text{ cm}^4$).
+
+### 3. Poteaux et meneaux d'inertie renforcée
+- **T215252** : Meneau renforcé avec chambre recevant un plat acier de **$10 \times 45\text{ mm}$** ($I_x = 63,19\text{ cm}^4$).
+- **T215261** : Poteau d'angle/meneau recevant un tube acier de **$60 \times 40 \times 3\text{ mm}$** ($I_x = 162,57\text{ cm}^4$).
+- **T215268** : Grand poteau de structure recevant un tube acier de **$60 \times 60 \times 3\text{ mm}$** ($I_x = 207,03\text{ cm}^4$).
+
+---
+
+# Moments d'inertie des profilés SOLEAL PY 55 (NF EN 14024)
+
+| Profilé | $I_x$ à $1\,200\text{ mm}$ | $I_x$ à $1\,600\text{ mm}$ | $I_x$ à $2\,000\text{ mm}$ | $I_x$ à $2\,250\text{ mm}$ | $I_x$ à $2\,500\text{ mm}$ | $I_x$ à $3\,000\text{ mm}$ | $I_y$ (axe fixe) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **T225004** (Dormant 38) | 10,67 | 13,52 | 15,75 | 16,85 | 17,77 | 19,16 | 24,81 |
+| **T225005** (Dormant 38) | 10,76 | 13,76 | 16,15 | 17,35 | 18,35 | 19,89 | 33,85 |
+| **T225011** (Dormant BTC 15)| 8,48 | 10,57 | 12,10 | 12,83 | 13,41 | 14,28 | 7,29 |
+| **T225014** (Dormant BTC 38)| 10,55 | 13,41 | 15,65 | 16,76 | 17,68 | 19,09 | 25,34 |
+| **T225024** (Dorm. Renf. 3mm)| 13,75 | 17,79 | 21,10 | 22,80 | 24,23 | 26,48 | 29,83 |
+| **T225034** (Dormant VV) | 10,94 | 13,92 | 16,27 | 17,44 | 18,41 | 19,90 | 24,09 |
+| **T225104** (Ouvrant en Z) | 11,83 | 15,13 | 17,77 | 19,10 | 20,21 | 21,92 | 33,54 |
+| **T225114** (Ouvrant en T) | 11,51 | 14,69 | 17,21 | 18,47 | 19,53 | 21,15 | 36,01 |
+| **T225124** (Ouvr. Z Renf. 3mm)| 15,50 | 20,29 | 24,34 | 26,45 | 28,26 | 31,14 | 42,00 |
+| **T225134** (Ouvr. T Renf. 3mm)| 15,01 | 19,56 | 23,37 | 25,35 | 27,04 | 29,70 | 46,64 |
+| **T225144** (Ouvrant VV) | 11,90 | 15,27 | 17,97 | 19,33 | 20,47 | 22,24 | 34,18 |
+| **T215252** (+ plat acier) | 46,17 | 52,18 | 56,66 | 58,81 | 60,56 | 63,19 | 14,62 |
+| **T215261** (+ tube 60x40x3) | 123,20 | 135,77 | 146,03 | 151,26 | 155,68 | 162,57 | 50,37 |
+| **T215268** (+ tube 60x60x3) | 153,10 | 168,84 | 182,67 | 190,08 | 196,55 | 207,03 | 139,71 |
+
+---
+
+# Voir aussi
+
+- [Cotes de débit des portes SOLEAL PY 55](/portes/soleal-py-cotes-de-debit.md)
+- [Serrures et paumelles SOLEAL PY 55](/quincaillerie/soleal-py-serrures-et-paumelles.md)
+- [Mise en œuvre du seuil PMR PY1100](/procedures/technal-seuil-pmr-py1100.md)
+- [Ouvrants de porte](/portes/ouvrants-de-porte.md)
+- [Fournisseur Technal](/fournisseurs/technal.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /sources/technal-soleal-gy-conception.md | Document source | Catalogue de conception Technal SOLEAL GY 55 | technal, soleal, soleal-gy, coulissant, galandage, conception | Catalogue technique de conception générale Technal pour la gamme de coulissants universels SOLEAL GY 55 (Réf. 5744.005 - 09/2021, 184 pages). | poignées tirage, réversibilité TGY3606, fermeture pompier ERP TGY3731, gâches réglables, centreurs TGY3832) / à faire / [Quincaillerie SOLEAL GY](/qui |
+| /procedures/report-de-charge-roto-nx.md | Procédure | Report de charge ROTO NX | roto-nx, nt-designo, report-de-charge, quincaillerie, palier-d-angle, pivot-d-angle | Montage en cinq étapes et réglage de la tension du ressort du report de charge NT Designo II sur ferrure ROTO NX, vantail ouvert à 90°, clé de 4 mm, jusqu'à ce que les arcs rouge et argent forment un cercle plein. | ot d'angle, dans laquelle s'engage par le haut la clé de réglage du ressort ; - **la pièce dormant du report de charge**, vissée sur le palier d'angle |
+| /quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md | Quincaillerie | Quincaillerie visible et cachée SOLEAL FY | technal, soleal, soleal-fy, quincaillerie, paumelle, ferrure | Systèmes de ferrures, paumelles apparentes 2 et 3 lames, paumelles sur pivot, quincaillerie cachée (QC 180°), crémones, serrures et organes de verrouillage pour menuiseries aluminium TECHNAL SOLEAL FY 55 et FY 65. | e 7 mm, manœuvré par poignées HOPPE (T960001 sans clé, T960002 avec clé, T960003 pour BO à clé). * **Fenêtre à la française (OF)** : * Ferrure à ren |
+| /quincaillerie/roto-nx-accessoires-et-gabarits.md | Quincaillerie | Accessoires et gabarits d'atelier Roto NX | roto, roto-nx, accessoire, loqueteau, aeration, anti-fausse-manoeuvre | Les chapitres 11 « Accessoires » et 12 « Gabarits / Outils » du catalogue Roto NX PVC — loqueteaux, aération, anti-fausse manœuvre, blocages de commutation, limiteurs d'ouverture par pivotement, éléments de sécurité et de raccordement, serrures de condamnation OF, réhausses, supports, verrouilleur médian, divers ; gabarits de perçage, d'insertion et de traçage, presses à estamper, outils, graisse — avec leurs schémas, tableaux et références de commande. | --- / / [A] / Butée / / [B] / Frein réglable avec clé à six pans SW 4 / / [C] / 191 mm / / [D] / Rail de guidage en aluminium sur l'ouvrant / / [E] / |
+| /vitrages/vitrages-decoratifs.md | Vitrage | Vitrages décoratifs | vitrage, decoratif, depoli, chinchilla, listral, delta | Les vitrages décoratifs proposés par PROFERM sur toutes ses menuiseries, photographiés au catalogue 2026 et au nuancier des vitrages, les options de personnalisation, et les vitrages des portes d'entrée — standards, petits bois, impressions numériques, plomb et film, diamant — avec leurs restrictions. | coratifs en photographie sept : Chinchilla clair, Clé de fleur, Delta mat, Delta clair, Dépoli acide, Imprimé 200 et Olivier [2 p. 2-5]. Chaque photo |
+| /reference/glossaire.md | Référence | Glossaire des sigles et des cotes | glossaire, sigle, abreviation, cote, coefficient, vocabulaire | Les sigles, coefficients et repères de cote employés dans la documentation PROFERM et chez ses fournisseurs, avec leur sens et la page qui les utilise. | .md) / / Intercalaire de frappe / cale en bois interposée entre le marteau et le profilé pour répartir le choc lors de la mise en place d'un élément d |
+| /quincaillerie/controle-acces-eneo-cc.md | Quincaillerie | Contrôle d'accès 4 en 1 Roto Safe E Eneo CC | roto, safe-e, eneo-cc, controle-acces, porte-entree, serrure-motorisee | Le contrôle d'accès 4 en 1 et la serrure motorisée Roto Safe E Eneo CC des portes PROFERM — fraisages de la serrure et des gâches, passage de câble, pose du module, plan de câblage, autotest, réinitialisation, télécommande, dépannage et entretien. | ou un **support compatible RFID** (badge ou porte-clés lu sans contact) [1 p. 4]. ![Module de contrôle d'accès 4 en 1, clavier et lecteur d'empreinte |

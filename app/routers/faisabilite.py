@@ -1,4 +1,7 @@
-"""Le vérificateur de faisabilité PERFORM76 : options du formulaire et verdict calculé."""
+"""Le vérificateur de faisabilité PERFORM76 : options du formulaire et verdict calculé.
+
+Réservé au rôle admin : la dépendance est posée sur le routeur, une route ajoutée en hérite.
+"""
 from __future__ import annotations
 
 from typing import Optional
@@ -6,12 +9,12 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
-from app.models.user import UserRead
-from app.routers.auth import get_current_user
+from app.routers.auth import require_role
 from app.services import debit_atelier, faisabilite
 from app.services.wiki_service import WikiUnavailable, get_snapshot
 
-router = APIRouter(prefix="/api/faisabilite", tags=["faisabilite"])
+router = APIRouter(prefix="/api/faisabilite", tags=["faisabilite"],
+                   dependencies=[Depends(require_role("admin"))])
 
 
 class SaisieIn(BaseModel):
@@ -41,7 +44,7 @@ def _snapshot():
 
 
 @router.get("/options")
-async def faisabilite_options(current_user: UserRead = Depends(get_current_user)):
+async def faisabilite_options():
     try:
         return faisabilite.options(_snapshot())
     except faisabilite.DonneeIntrouvable as exc:
@@ -53,7 +56,7 @@ class DebitIn(SaisieIn):
 
 
 @router.post("/debit")
-async def faisabilite_debit(saisie: DebitIn, current_user: UserRead = Depends(get_current_user)):
+async def faisabilite_debit(saisie: DebitIn):
     """La fiche de débit : liste de coupe, nomenclature, accessoires (audit § 9.2)."""
     data = saisie.model_dump()
     surcote = data.pop("surcote_soudure_mm")
@@ -66,7 +69,7 @@ async def faisabilite_debit(saisie: DebitIn, current_user: UserRead = Depends(ge
 
 
 @router.post("")
-async def faisabilite_verifier(saisie: SaisieIn, current_user: UserRead = Depends(get_current_user)):
+async def faisabilite_verifier(saisie: SaisieIn):
     try:
         return faisabilite.verifier(_snapshot(), faisabilite.Saisie(**saisie.model_dump()))
     except faisabilite.DonneeIntrouvable as exc:

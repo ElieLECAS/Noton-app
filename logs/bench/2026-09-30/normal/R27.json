@@ -1,0 +1,36 @@
+{
+ "id": "R27",
+ "reponse": "Sur le coulissant PVC INNOSLIDE de PROFERM, ce sont les fonctions d'amortissement SoftClose et SoftOpen. SoftClose freine doucement l'ouvrant lors de la fermeture et le déplace en position finale ; SoftOpen freine l'ouvrant brièvement après l'ouverture et le déplace en position finale ouverte — SoftOpen n'est présente qu'à partir de 1 970 mm de largeur (pas de SoftOpen en dessous). Elles sont annoncées comme « une protection supplémentaire pour votre coulissant, ainsi que pour celui ou celle qui le manœuvre, pour prévenir les chocs incontrôlés ». Sources : catalogue général 2026 p. 8 et dépliant INNOSLIDE 2024 p. 2. Le wiki ne donne ni référence de pièce, ni réglage, ni condition de poids pour ces mécanismes.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {
+   "page": "/gammes/innoslide.md",
+   "extrait": "* **Fonction SoftClose** : elle freine doucement l'ouvrant lors de la fermeture et le déplace en\n  position finale."
+  },
+  {
+   "page": "/gammes/innoslide.md",
+   "extrait": "* **Fonction SoftOpen** : elle freine l'ouvrant brièvement après l'ouverture et le déplace en\n  position finale ouverte, à partir de 1 970 mm de largeur."
+  },
+  {
+   "page": "/gammes/innoslide.md",
+   "extrait": "| Largeur à partir de laquelle la fonction SoftOpen est présente | 1 970 | - | [1 p. 8, 2 p. 2] |"
+  },
+  {
+   "page": "/commercial/innoslide.md",
+   "extrait": "annoncées comme « une protection supplémentaire pour votre coulissant, ainsi que pour celui ou\ncelle qui le manœuvre, pour prévenir les chocs incontrôlés » [1 p. 8, 2 p. 2]."
+  }
+ ],
+ "ambiguite": "« Coulissant PVC » : le seul coulissant PVC documenté est l'INNOSLIDE (coulissant à frappe, ferrure Roto Patio Inowa). Les autres coulissants (SOLEAL GY, LUMEAL GA, ASKEY 65 NV) sont en aluminium et n'ont pas de fonction d'amortissement documentée.",
+ "outils": 2,
+ "comment_trouve": "Grep « ralenti|amorti|freinage|soft|fermeture douce|en douceur|amortisseur » sur tout le wiki : réponse dans /gammes/innoslide.md (section « Dispositifs d'amortissement ») et /commercial/innoslide.md. Le mot « ralentit » de la question n'apparaît pas ; c'est « freine » et « amortissement » qui portent la donnée.",
+ "formulations": [
+  "Quel amortisseur de fermeture existe sur le coulissant INNOSLIDE ?",
+  "coulissant PVC soft close",
+  "Existe-t-il un frein de fin de course pour éviter que le vantail de la baie coulissante claque ?"
+ ],
+ "defauts_wiki": [
+  "Vocabulaire : « ralentir », « ralentisseur » n'apparaissent pas sur les pages INNOSLIDE (seul « ralentisseur » est employé pour une moustiquaire) ; la donnée est portée par « freine » et « SoftClose », mots que l'utilisateur ne tape pas forcément.",
+  "La page gamme ne porte pas « PVC » dans son titre ; une recherche « coulissant PVC » peut aussi remonter les procédures profine de coulissant ou la terminologie profine.",
+  "Aucune référence Roto Patio Inowa associée à SoftClose / SoftOpen : la page /quincaillerie/roto-patio-inowa.md ne les mentionne pas."
+ ]
+}

@@ -1,0 +1,739 @@
+[
+  {
+    "id": "R01",
+    "attendues": [
+      "/profiles/perform76-parcloses.md",
+      "/profiles/soleal-fy-parcloses-et-vitrage.md",
+      "/profiles/systeme-70-tableau-de-vitrage.md",
+      "/profiles/systeme-76-tableau-de-vitrage.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "R02",
+    "attendues": [
+      "/procedures/transformation-of-en-ob-roto-nx.md"
+    ],
+    "rangs": {
+      "question": 2,
+      "f1": 3,
+      "f2": 1,
+      "f3": 12
+    }
+  },
+  {
+    "id": "R03",
+    "attendues": [
+      "/anomalies/contradictions-entre-sources.md",
+      "/gammes/lumine.md",
+      "/garanties/garanties-par-composant.md"
+    ],
+    "rangs": {
+      "question": 6,
+      "f1": 1,
+      "f2": 1,
+      "f3": 2
+    }
+  },
+  {
+    "id": "R04",
+    "attendues": [
+      "/fournisseurs/technal.md",
+      "/profiles/soleal-fy-parcloses-et-vitrage.md"
+    ],
+    "rangs": {
+      "question": 12,
+      "f1": 9,
+      "f2": 9,
+      "f3": 1
+    }
+  },
+  {
+    "id": "R05",
+    "attendues": [
+      "/gammes/perform.md",
+      "/procedures/chassis-cintres-trapezoidaux-systeme-70.md"
+    ],
+    "rangs": {
+      "question": 9,
+      "f1": null,
+      "f2": 5,
+      "f3": 1
+    }
+  },
+  {
+    "id": "R06",
+    "attendues": [
+      "/fournisseurs/technal.md",
+      "/quincaillerie/poignees-et-croisillons.md"
+    ],
+    "rangs": {
+      "question": 4,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "R07",
+    "attendues": [
+      "/portes/panneaux-et-monoblocs.md",
+      "/procedures/fabrication-profiles-pvc.md",
+      "/profiles/soleal-gy-dormants-et-rails.md",
+      "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+      "/reference/glossaire.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": null
+    }
+  },
+  {
+    "id": "R08",
+    "attendues": [
+      "/gammes/coulissants-aluminium.md",
+      "/quincaillerie/poignees-et-croisillons.md",
+      "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 2,
+      "f3": 1
+    }
+  },
+  {
+    "id": "R09",
+    "attendues": [
+      "/profiles/perform76-elargisseurs-et-assemblage.md",
+      "/profiles/perform76-parcloses.md",
+      "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+    ],
+    "rangs": {
+      "question": 3,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "R10",
+    "attendues": [
+      "/profiles/lumeal-ga-dormants-et-ouvrants.md",
+      "/profiles/soleal-gy-dormants-et-rails.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 8,
+      "f2": 14,
+      "f3": 2
+    }
+  },
+  {
+    "id": "R11",
+    "attendues": [
+      "/procedures/capotage-aluclip-systeme-76.md",
+      "/profiles/perform76-appuis-et-seuils.md",
+      "/profiles/systeme-70-profiles-complementaires.md"
+    ],
+    "rangs": {
+      "question": 2,
+      "f1": 1,
+      "f2": 2,
+      "f3": 2
+    }
+  },
+  {
+    "id": "R12",
+    "attendues": [
+      "/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md",
+      "/profiles/perform76-appuis-et-seuils.md",
+      "/profiles/perform76-dormants.md"
+    ],
+    "rangs": {
+      "question": 2,
+      "f1": 2,
+      "f2": 2,
+      "f3": 2
+    }
+  },
+  {
+    "id": "R13",
+    "attendues": [
+      "/portes/systeme-76-advanced-porte-d-entree.md",
+      "/profiles/systeme-76-accessoires-par-profile.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 4
+    }
+  },
+  {
+    "id": "R14",
+    "attendues": [
+      "/profiles/perform76-parcloses.md",
+      "/profiles/systeme-76-profiles-complementaires.md",
+      "/profiles/systeme-76-tableau-de-vitrage.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "R15",
+    "attendues": [
+      "/profiles/perform76-meneaux.md",
+      "/profiles/systeme-76-profiles-principaux.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "R16",
+    "attendues": [
+      "/profiles/perform76-ouvrants-et-battements.md",
+      "/reference/glossaire.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 2,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "R17",
+    "attendues": [
+      "/profiles/soleal-gy-dormants-et-rails.md",
+      "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+      "/sources/technal-soleal-gy-conception.md"
+    ],
+    "rangs": {
+      "question": 4,
+      "f1": 1,
+      "f2": 1,
+      "f3": 2
+    }
+  },
+  {
+    "id": "R18",
+    "attendues": [
+      "/procedures/fabrication-coulissant-askey-65-nv.md",
+      "/profiles/lumeal-ga-cotes-de-debit.md",
+      "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+      "/sources/askey-coulissant-65-nv-conception.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 3,
+      "f3": 3
+    }
+  },
+  {
+    "id": "R19",
+    "attendues": [
+      "/quincaillerie/soleal-py-serrures-et-paumelles.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 2,
+      "f2": 1,
+      "f3": null
+    }
+  },
+  {
+    "id": "R20",
+    "attendues": [
+      "/procedures/report-de-charge-roto-nx.md",
+      "/quincaillerie/roto-nx-pivots-et-paliers-angle.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "R21",
+    "attendues": [
+      "/quincaillerie/roto-nx-accessoires-et-gabarits.md",
+      "/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "R22",
+    "attendues": [
+      "/commercial/roto-nx.md",
+      "/procedures/percage-montage-roto-nx.md",
+      "/quincaillerie/roto-nx-accessoires-et-gabarits.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 3,
+      "f2": 3,
+      "f3": 1
+    }
+  },
+  {
+    "id": "R23",
+    "attendues": [
+      "/procedures/percage-montage-roto-nx.md",
+      "/quincaillerie/roto-nx-cremones.md"
+    ],
+    "rangs": {
+      "question": 2,
+      "f1": 1,
+      "f2": 1,
+      "f3": 3
+    }
+  },
+  {
+    "id": "R24",
+    "attendues": [
+      "/profiles/systeme-70-profiles-et-renforts.md"
+    ],
+    "rangs": {
+      "question": 2,
+      "f1": 2,
+      "f2": 2,
+      "f3": 2
+    }
+  },
+  {
+    "id": "R25",
+    "attendues": [
+      "/procedures/mise-en-oeuvre-seuil-systeme-70.md",
+      "/procedures/seuil-alu-9c42-systeme-70-evo2008.md",
+      "/profiles/systeme-70-assemblages.md"
+    ],
+    "rangs": {
+      "question": 6,
+      "f1": 1,
+      "f2": 10,
+      "f3": 5
+    }
+  },
+  {
+    "id": "R27",
+    "attendues": [
+      "/commercial/innoslide.md",
+      "/gammes/innoslide.md"
+    ],
+    "rangs": {
+      "question": 3,
+      "f1": 3,
+      "f2": null,
+      "f3": null
+    }
+  },
+  {
+    "id": "R28",
+    "attendues": [
+      "/procedures/mise-en-oeuvre-seuil-systeme-70.md",
+      "/procedures/seuil-alu-9c42-systeme-70-evo2008.md",
+      "/profiles/systeme-70-assemblages.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 3,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "R29",
+    "attendues": [
+      "/commercial/lumine.md",
+      "/gammes/lumine.md",
+      "/sources/brochure-lumine65.md",
+      "/sources/technal-soleal-fy-conception.md"
+    ],
+    "rangs": {
+      "question": 3,
+      "f1": 1,
+      "f2": 1,
+      "f3": 12
+    }
+  },
+  {
+    "id": "R30",
+    "attendues": [
+      "/procedures/fabrication-et-pose-lumeal-ga.md",
+      "/profiles/perform76-tapees-et-isolation.md",
+      "/profiles/soleal-fy-dormants-et-ouvrants.md",
+      "/profiles/systeme-70-profiles-complementaires.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "R31",
+    "attendues": [
+      "/profiles/perform76-parcloses.md",
+      "/profiles/systeme-70-tableau-de-vitrage.md",
+      "/profiles/systeme-76-tableau-de-vitrage.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "R32",
+    "attendues": [
+      "/quincaillerie/controle-acces-eneo-cc.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 2,
+      "f2": 2,
+      "f3": 3
+    }
+  },
+  {
+    "id": "R33",
+    "attendues": [
+      "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": null,
+      "f3": 1
+    }
+  },
+  {
+    "id": "R34",
+    "attendues": [
+      "/coloris/coloris-perform.md",
+      "/coloris/coloris-textural.md"
+    ],
+    "rangs": {
+      "question": 2,
+      "f1": 2,
+      "f2": 2,
+      "f3": 4
+    }
+  },
+  {
+    "id": "R35",
+    "attendues": [
+      "/certifications/dta-6-16-2334.md"
+    ],
+    "rangs": {
+      "question": 2,
+      "f1": 2,
+      "f2": null,
+      "f3": null
+    }
+  },
+  {
+    "id": "R36",
+    "attendues": [
+      "/procedures/fabrication-systeme-70.md",
+      "/procedures/fabrication-systeme-76-advanced.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "S01",
+    "attendues": [
+      "/quincaillerie/lumeal-ga-roulements-et-fermetures.md",
+      "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+    ],
+    "rangs": {
+      "question": null,
+      "f1": 1,
+      "f2": 6,
+      "f3": 10
+    }
+  },
+  {
+    "id": "S02",
+    "attendues": [
+      "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+      "/sources/technal-soleal-gy-fabrication.md"
+    ],
+    "rangs": {
+      "question": 3,
+      "f1": 1,
+      "f2": 3,
+      "f3": 1
+    }
+  },
+  {
+    "id": "S03",
+    "attendues": [
+      "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+    ],
+    "rangs": {
+      "question": 2,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "S04",
+    "attendues": [
+      "/profiles/soleal-fy-dormants-et-ouvrants.md",
+      "/profiles/soleal-fy-parcloses-et-vitrage.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 2,
+      "f2": 1,
+      "f3": 2
+    }
+  },
+  {
+    "id": "S05",
+    "attendues": [
+      "/quincaillerie/roto-nx-cremones.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 2,
+      "f2": null,
+      "f3": 8
+    }
+  },
+  {
+    "id": "S06",
+    "attendues": [
+      "/coloris/coloris-perform.md",
+      "/coloris/coloris-portes-entree.md",
+      "/gammes/perform.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "S07",
+    "attendues": [
+      "/gammes/coulissants-aluminium.md",
+      "/profiles/soleal-fy-dormants-et-ouvrants.md",
+      "/profiles/soleal-gy-dormants-et-rails.md"
+    ],
+    "rangs": {
+      "question": null,
+      "f1": 2,
+      "f2": 2,
+      "f3": 1
+    }
+  },
+  {
+    "id": "G01",
+    "attendues": [
+      "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "G02",
+    "attendues": [
+      "/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "G03",
+    "attendues": [
+      "/quincaillerie/askey-coulissant-65-nv-quincaillerie.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "G04",
+    "attendues": [
+      "/quincaillerie/roto-nx-compas-et-paliers.md",
+      "/quincaillerie/roto-nx-ksr-oscillo-battant.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "G05",
+    "attendues": [
+      "/profiles/systeme-70-profiles-complementaires.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 4
+    }
+  },
+  {
+    "id": "G06",
+    "attendues": [
+      "/profiles/perform76-tapees-et-isolation.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "G07",
+    "attendues": [
+      "/certifications/dtd-6-16-2335.md",
+      "/quincaillerie/siegenia.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 2,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "G08",
+    "attendues": [
+      "/vitrages/performances-vitrages.md"
+    ],
+    "rangs": {
+      "question": 2,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "G09",
+    "attendues": [
+      "/portes/collection-lumiere.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "G10",
+    "attendues": [
+      "/equipements/volets-roulants-chrono-pse2.md",
+      "/sources/soprofen-guide-technique-blocs-baies-2022.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "N01",
+    "attendues": [
+      "/certifications/at-cstb-6-16-2339-coffres-chrono.md",
+      "/portes/soleal-py-dormants-et-ouvrants.md"
+    ],
+    "rangs": {
+      "question": 2,
+      "f1": 2,
+      "f2": 1,
+      "f3": 7
+    }
+  },
+  {
+    "id": "N02",
+    "attendues": [
+      "/equipements/volets-roulants-tradi-premonte.md",
+      "/reference/resistance-au-vent-volets-soprofen.md"
+    ],
+    "rangs": {
+      "question": 3,
+      "f1": 2,
+      "f2": null,
+      "f3": 6
+    }
+  },
+  {
+    "id": "N03",
+    "attendues": [
+      "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+      "/sources/technal-soleal-gy-conception.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  },
+  {
+    "id": "N04",
+    "attendues": [
+      "/procedures/fabrication-coulissant-askey-65-nv.md",
+      "/procedures/fabrication-et-pose-lumeal-ga.md"
+    ],
+    "rangs": {
+      "question": 1,
+      "f1": 1,
+      "f2": 1,
+      "f3": 1
+    }
+  }
+]

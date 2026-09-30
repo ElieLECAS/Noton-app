@@ -1,0 +1,23 @@
+{
+ "id": "G01",
+ "reponse": "La TGY3701 est la crémone encastrée 1 point à clé (condamnation par cylindre) du coulissant Technal SOLEAL GY 55. Hauteur minimale de châssis : 525 mm. La hauteur minimale de poignée Hp associée est de 346 mm ; fixation par 4 vis TGY3723. (Pour comparaison, la TGY3700, 1 point simple sans clé, descend à 395 mm de châssis.)",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/quincaillerie/soleal-gy-roulements-et-fermetures.md", "extrait": "| **TGY3701** | 1 point à clé | Oui (cylindre) | 525 mm | 346 mm | 4 vis TGY3723 |"},
+  {"page": "/quincaillerie/soleal-gy-roulements-et-fermetures.md", "extrait": "| Référence | Points de fermeture | Condamnation clé | Hauteur min. châssis | Hauteur min. poignée $Hp$ | Fixation |"}
+ ],
+ "ambiguite": "",
+ "outils": 3,
+ "comment_trouve": "Grep direct sur « TGY3701 » : une seule occurrence, ligne du tableau « Gamme de crémones encastrées » de la page SOLEAL GY roulements et fermetures. Grep « 3701 » seul pour vérifier qu'aucune autre page ne porte la référence (seule TPY3701, autre produit SOLEAL PY, et des références Roto 37017x sans rapport).",
+ "formulations": [
+  "Crémone 1 point à clé SOLEAL GY : hauteur mini du vantail ?",
+  "TGY3701 hauteur mini ?",
+  "Sur un coulissant SOLEAL GY, à partir de quelle hauteur de châssis peut-on monter une fermeture 1 point à clé ?"
+ ],
+ "defauts_wiki": [
+  "Le tableau met les unités dans les cellules (« 525 mm ») au lieu de l'en-tête, contrairement au protocole.",
+  "Pas de source_pages ni de localisateur (schéma: …) sous le tableau : la valeur n'est pas traçable jusqu'à la page du PDF.",
+  "Référence proche TPY3701 (SOLEAL PY, serrure gauche en poussant) : une recherche sur « 3701 » tronqué ou mal saisi remonte une autre gamme.",
+  "La page (10 ko) mélange chariots, crémones, poignées et gâches : bien trouvable par la référence exacte, moins par « hauteur mini châssis crémone » (le mot « crémone » est écrit « cremona » dans les tags)."
+ ]
+}

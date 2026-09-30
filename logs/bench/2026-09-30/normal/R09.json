@@ -1,0 +1,23 @@
+{
+ "id": "R09",
+ "reponse": "Le wiki ne connaît **aucune parclose 3702**, ni en PERFORM76 ni en PERFORM70 (système 70). Les 27 parcloses PERFORM76 sont : ouvrant 2452, 2451, 2453, 76501, 76527, 76526, 76516, 2454, 2433, 76503, 76504, 76505, 76506, 76507, 76508, 76509, 76515 ; dormant 2634, 2636, 2638, 2640, 76573, 76575, 76576, 76577, 76578, 76579 (plus des parcloses complémentaires 1511, 1512, 76513, 76531 à 76534). Les seules références « 3702 » du wiki ne sont pas des parcloses : **TGY3702** est une fermeture 3 points du coulissant aluminium SOLEAL GY (TECHNAL) et **TPY3702** une pièce de serrure SOLEAL PY ; la **76702** est un élargisseur PERFORM76 de 60 mm. Il faut faire préciser la référence (peut-être une parclose 76503, 2433… ou une référence lue sur un autre document).",
+ "dans_le_wiki": "non",
+ "preuves": [
+  {"page": "/profiles/perform76-parcloses.md", "extrait": "Les 17 parcloses d'ouvrant PERFORM76, par épaisseur de vitrage croissante, cotes en mm."},
+  {"page": "/quincaillerie/soleal-gy-roulements-et-fermetures.md", "extrait": "| **TGY3702** | 3 points | Non | 1 292 mm | 721 mm | 6 vis TGY3723 |"},
+  {"page": "/profiles/perform76-elargisseurs-et-assemblage.md", "extrait": "| 76702 | 60 | 76 | V314.Z (2,0 mm soudé) | $I_W = 5,7$ / $I_G = 8,4$ | M306 / M307 | ![Élargisseur 76702](/assets/profiles/perform76/elargisseurs/elargisseur-76702.png) |"}
+ ],
+ "ambiguite": "Référence inexistante dans le wiki : il faut demander à l'utilisateur la référence exacte (ou l'épaisseur de vitrage, qui suffit à retrouver la parclose PERFORM76).",
+ "outils": 3,
+ "comment_trouve": "Grep « 3702 » : seulement TGY3702 (crémone SOLEAL GY) et TPY3702 (SOLEAL PY) ; grep des références finissant par 702 : 76702 (élargisseur PERFORM76). Vérification de la liste complète des parcloses PERFORM76 (page lue pour R01) et du système 70.",
+ "formulations": [
+  "Donne-moi les cotes de la baguette de vitrage 3702 en PERFORM76",
+  "parclose 3702",
+  "Quelle parclose PERFORM pour quel vitrage ?"
+ ],
+ "defauts_wiki": [
+  "Référence inexistante : une recherche BM25 sur « 3702 » remonte TGY3702 (fermeture de coulissant alu) et risque de faire répondre sur une crémone TECHNAL comme si c'était une parclose PERFORM.",
+  "Les références TECHNAL sont écrites collées au préfixe (TGY3702) : selon le tokeniseur, « 3702 » ne matche pas « TGY3702 », ce qui peut au contraire ne rien remonter du tout.",
+  "Pas de liste « références inconnues / équivalences » pour aider à corriger une référence mal tapée."
+ ]
+}

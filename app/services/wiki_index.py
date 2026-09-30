@@ -1,9 +1,9 @@
 """L'index de navigation du wiki : recherche lexicale et registres d'anomalies.
 
-Le wiki ne tient plus dans une fenêtre de contexte (198 pages). Le prompt permanent ne
-porte donc qu'un **vocabulaire** (types, tags, gammes, systèmes) et un **index des
-anomalies** — identifiant et sujet, sans le détail ; les pages se trouvent par l'outil
-``chercher``, qui interroge cet index.
+Le wiki ne tient plus dans une fenêtre de contexte (297 pages). Le prompt permanent ne
+porte donc qu'un **vocabulaire** (types, tags, gammes, systèmes) ; les pages se trouvent par
+l'outil ``chercher``, qui interroge cet index, et les entrées d'anomalie rapprochées des pages
+lues sont poussées par le serveur.
 
 La recherche est **lexicale** (BM25 sur texte intégral + facettes de métadonnées), pas
 vectorielle : deux pages qui se contredisent doivent toutes les deux remonter, alors qu'un
@@ -14,8 +14,8 @@ top-k sémantique les met en concurrence. Trois choix méritent d'être rappelé
   écartait la page des garanties ;
 * une **référence** (76526, NT1947, A076) vaut trois mots ordinaires : c'est le signal le
   plus sûr de la question d'un menuisier, et elle ne figure dans aucun tag ;
-* ``trier_resultats`` écarte les registres d'``anomalies/`` — leur index est déjà dans le
-  prompt et les entrées utiles sont injectées par le serveur — et fait passer les pages
+* ``trier_resultats`` écarte les registres d'``anomalies/`` — ils se lisent entrée par
+  entrée, et les entrées utiles sont injectées par le serveur — et fait passer les pages
   concept **avant** les pages ``sources/`` : une source résume un document, une page concept
   porte la valeur technique.
 
@@ -265,15 +265,12 @@ class WikiIndex:
             + "\n\nSYSTÈMES : " + ", ".join(systemes)
         )
 
-    def index_anomalies(self) -> str:
-        return "\n".join(sorted(f"{e['id']} | {e['sujet']}" for e in self.anomalies.values()))
-
     def anomalie(self, identifiant: str) -> str:
         entree = self.anomalies.get(str(identifiant).strip().upper())
         if not entree:
             return (
-                f"Aucune entrée {identifiant}. Les identifiants existants sont listés dans "
-                "l'index des anomalies de ton contexte."
+                f"Aucune entrée {identifiant}. N'appelle lire_anomalie que sur un identifiant "
+                "écrit dans une page lue ou dans les entrées qui t'ont été fournies."
             )
         return f"{entree['registre']} :\n{entree['ligne']}"
 
@@ -322,9 +319,9 @@ def trier_resultats(pages: Sequence[Dict[str, Any]], completes: int = 3) -> Tupl
 
     Trois règles, dans cet ordre :
 
-    * les registres d'``anomalies/`` sont **écartés** : leur index complet est déjà dans le
-      prompt permanent et les entrées qui concernent la réponse sont injectées par le
-      serveur. En livrer une revenait à payer des milliers de tokens pour du déjà-présent ;
+    * les registres d'``anomalies/`` sont **écartés** : ils se lisent entrée par entrée
+      (``lire_anomalie``) et celles qui concernent les pages lues sont injectées par le
+      serveur. En livrer un revenait à payer des dizaines de milliers de tokens ;
     * les pages concept passent **avant** les pages ``sources/`` : une page source résume un
       document, une page concept porte la valeur technique ;
     * à catégorie égale, l'ordre du classement est conservé.

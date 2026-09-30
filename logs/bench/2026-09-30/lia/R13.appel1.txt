@@ -1,0 +1,1749 @@
+===== PAGE 1 : /portes/systeme-76-advanced-porte-d-entree.md =====
+# La porte d'entrée du système 76 Advanced
+
+La **porte d'entrée System 76 Advanced** de [profine](/fournisseurs/profine.md) est une porte PVC
+de 76 mm d'épaisseur construite avec ses propres dormants (le cadre fixe scellé dans le mur),
+ouvrants (le vantail mobile), battements (le profilé où se rejoignent les deux vantaux d'une porte
+double), meneaux et traverses (les profilés qui divisent un cadre) et seuils aluminium (la pièce
+basse de la porte, sur laquelle on marche). Les termes sont définis dans le
+[glossaire](/reference/glossaire.md). Toutes les planches de la porte d'entrée sont en version
+d'octobre 2021 [1 p. 2-14].
+
+# Caractéristiques
+
+Performances annoncées pour la porte d'entrée ; une ligne par caractéristique, la valeur est une
+borne supérieure (« jusqu'à ») [1 p. 2].
+
+| Caractéristique | Valeur annoncée |
+| --- | --- |
+| Coefficient de transfert de la chaleur Uf (profilé seul) | jusqu'à Uf = 2,0 W/(m²K) |
+| Résistance au vent | jusqu'à la classe C2 / B2 |
+| Étanchéité à l'eau, version A | jusqu'à 9A |
+| Perméabilité à l'air | jusqu'à la classe 4 |
+
+Caractéristiques du système, dans les termes de la planche [1 p. 2] :
+
+- Profilé hautement isolant, avec une épaisseur de 76 mm
+- Renfort acier de grande dimension avec de hautes performances statiques
+- Joint EPDM ou PCE
+- Mise en œuvre de différentes épaisseurs de vitrage (jusqu'à 48 mm) — la borne du système est
+  discutée à l'entrée **CTR-17** du registre
+  [Contradictions entre sources](/anomalies/contradictions-entre-sources.md)
+- Parclose décalée avec lèvre d'étanchéité co-extrudée pour un aspect plus esthétique et un
+  nettoyage plus facile
+- Drainage rapide et effectif en façade ou invisible par le bas
+- Rainure crémone centrée
+- Seuil PMR (accessible aux personnes à mobilité réduite) à rupture de pont thermique
+- Haute étanchéité par un second niveau de joint en continu
+- Une protection supplémentaire contre la pluie battante par un rejet d'eau aluminium
+- Fixation des paumelles de porte d'entrée directement dans le renfort
+
+## Coupe de principe
+
+La coupe verticale de la porte d'entrée montre, de haut en bas, le vitrage triple, l'ouvrant
+renforcé et, en pied, l'ouvrant posé sur le seuil aluminium avec son rejet d'eau.
+
+![Coupe de principe de la porte d'entrée System 76 Advanced](/assets/procedures/moe-76-advanced/coupe-principe-porte-entree.png)
+
+Cotes portées sur la coupe, en mm : en haut, **94** hors tout, décomposé en **18** (recouvrement
+de l'ouvrant) + **76** (épaisseur du profilé) ; en pied, entre l'ouvrant et le seuil, une hauteur
+de **10** et une largeur de **13** ; à droite, une hauteur de **10** entre la face de l'ouvrant et
+le seuil, et un jeu de **4 +1** (4 mm, tolérance +1 mm) entre l'ouvrant et le seuil. La planche ne
+nomme pas les profilés dessinés (schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 2).
+
+# Joints
+
+La porte d'entrée emploie trois familles de joints, dessinées en coupe dans des médaillons
+[1 p. 3]. La lettre au-dessus de chaque médaillon (X, Y, Z, W) est le repère de la gorge qui le
+reçoit sur les coupes des profilés, au centre de la planche : **X** et **Y** gorges de joint
+universel ou de vitrage, **Z** gorge de joint de frappe (le joint contre lequel l'ouvrant vient
+battre), **W** gorge du joint de battement.
+
+| Joint | Famille sur la planche | Fonction | Matière portée | Gorges |
+| --- | --- | --- | --- | --- |
+| PCE | joint PCE | universel / joint de vitrage | PCE | X, Y |
+| G049.T | joint TPE | universel / joint de vitrage | PVC | X, Y |
+| PCE | joint PCE | joint de frappe | PCE | Z |
+| G050.T | joint TPE | joint de frappe | PVC | Z |
+| PCE | joint PCE | joint de battement | PCE | W |
+| G048 | joint EPDM, noir ou gris clair RAL 7035 | universel / joint de vitrage | EPDM | X, Y |
+| G047 | joint EPDM, noir ou gris clair RAL 7035 | universel / joint de vitrage | EPDM | X, Y |
+| G046 | joint EPDM, noir ou gris clair RAL 7035 | joint de frappe | EPDM | Y, Z |
+| G177 | joint EPDM pour capotage alu, noir ou gris clair RAL 7035 | joint de vitrage | EPDM | X, Y |
+| G178 | joint EPDM pour capotage alu, noir ou gris clair RAL 7035 | joint de vitrage | EPDM | X, Y |
+| G161 | joint EPDM pour capotage alu, noir ou gris clair RAL 7035 | joint de frappe | EPDM | Y |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 3)
+
+Le G049.T et le G050.T sont rangés sous l'en-tête « Joint TPE » et légendés « (PVC) » sous leur
+dessin — entrée **CTR-25** du registre
+[Contradictions entre sources](/anomalies/contradictions-entre-sources.md). La porte d'entrée n'a
+**pas de joint central** (repère V), à la différence de la fenêtre du système — voir
+[Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md).
+
+![Système de joints de la porte d'entrée System 76 Advanced](/assets/procedures/moe-76-advanced/joints-porte-entree.png)
+
+À gauche, les joints PCE et TPE ; à droite, les joints EPDM, dont ceux pour capotage aluminium
+(AluClip) en bas ; au centre, les coupes d'un profilé capoté (à gauche) et d'un profilé nu (à
+droite), en haut en coupe de dormant et d'ouvrant, en bas en coupe de battement, avec les repères
+des gorges. Cotes portées au centre : **1,5** mm entre le capot aluminium et la gorge du profilé
+capoté, **4** mm entre la gorge Y et la face du profilé nu, **4 +1** mm de jeu à la gorge Z.
+
+## Dimensions pour les centres d'usinage
+
+Les trois coupes donnent les cotes des gorges et des feuillures dont un centre d'usinage (la
+machine qui perce et fraise les profilés) a besoin pour se positionner. Angles en degrés, cotes en
+mm [1 p. 3].
+
+![Dimensions du système pour les centres d'usinage, porte d'entrée](/assets/procedures/moe-76-advanced/centres-usinage-porte-entree.png)
+
+| Coupe sur la planche | Cotes horizontales du haut (mm) | Cotes verticales (mm) | Cotes du pied (mm) | Angles |
+| --- | --- | --- | --- | --- |
+| gauche, profilé à deux pieds | 14, 62, 11,5, 4, 4 | 25 | - | 10°, 17° |
+| centre, profilé à feuillure basse, dessiné interrompu | 14, 62, 11,5, 4, 4 | 25, 20 | 9, 21, 14 | 10°, 17° |
+| droite, profilé à aile descendante | 62, 11,5, 4, 4 | 25 | - | 10°, 17° |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 3)
+
+Les cotes de la fenêtre à joint central, qui diffèrent sur la coupe centrale (19,5 au lieu de 21)
+et sur les coupes gauche et droite (27,5 et 32), sont dans
+[Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md#dimensions-pour-les-centres-dusinage).
+
+# Profilés
+
+Les onze profilés de la porte d'entrée, avec leur désignation et la page de la planche qui les
+détaille. La coupe de chaque profilé est celle de sa planche, dessinée seule avec ses cotes ; les
+cotes elles-mêmes (épaisseur, hauteurs et décompositions) sont tabulées dans
+[Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md) [1 p. 4].
+
+| Profilé | Famille | Désignation sur la planche | Page PDF | Coupe |
+| --- | --- | --- | --- | ---: |
+| 76101 | dormant | Dormant de 67 mm | 5 | ![Dormant 76101](/assets/profiles/systeme76/porte-entree/dormant-76101.png) |
+| 76102 | dormant | Dormant de 85 mm | 6 | ![Dormant 76102](/assets/profiles/systeme76/porte-entree/dormant-76102.png) |
+| 76201 | ouvrant | Ouvrant de 78 mm | 8 | ![Ouvrant 76201](/assets/profiles/systeme76/porte-entree/ouvrant-76201.png) |
+| 76206 | ouvrant | Ouvrant de 126 mm | 9 | ![Ouvrant 76206](/assets/profiles/systeme76/porte-entree/ouvrant-76206.png) |
+| 76207 | ouvrant | Ouvrant de 126 mm ; « Ouvrant extérieur 126 mm » en titre de sa planche | 10 | ![Ouvrant 76207](/assets/profiles/systeme76/porte-entree/ouvrant-76207.png) |
+| 76401 | battement | Battement de 48 mm | 11 | ![Battement 76401](/assets/profiles/systeme76/porte-entree/battement-76401.png) |
+| 76402 | battement | Battement de 66 mm | 11 | ![Battement 76402](/assets/profiles/systeme76/porte-entree/battement-76402.png) |
+| 76301 | meneau / traverse | Meneau de 84 mm | 12 | ![Meneau 76301](/assets/profiles/systeme76/porte-entree/meneau-76301.png) |
+| 76303 | meneau / traverse | Meneau de 110 mm | 13 | ![Meneau 76303](/assets/profiles/systeme76/porte-entree/meneau-76303.png) |
+| 76300 | traverse d'ouvrant | Traverse d'ouvrant de 68 mm | 12 | ![Traverse 76300](/assets/profiles/systeme76/porte-entree/traverse-76300.png) |
+| A076 | seuil | seuil aluminium | 7 | ![Seuil A076](/assets/profiles/systeme76/seuils/seuil-a076.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 4 à 13)
+
+Le **battement 76401** est coté **94,1 mm** de large sur sa planche, contre 94,5 mm sur le poster
+des profilés principaux — entrée **CTR-26** du registre
+[Contradictions entre sources](/anomalies/contradictions-entre-sources.md). Les dormants **76101
+et 76102** sont ici des dormants de porte d'entrée, alors que le DTA des fenêtres et
+portes-fenêtres les réserve exclusivement aux cadres fixes — entrée **VER-48**. Les **76301 et 76303** sont désignés « Meneau » et reçoivent des sets d'assemblage sur
+seuil, là où d'autres documents les classent en traverse d'ouvrant — entrée **VER-47** du registre
+[Informations à vérifier](/anomalies/informations-a-verifier.md).
+
+## Seuils
+
+Les quatre seuils aluminium de la porte d'entrée, dessinés seuls, cotés en largeur (en haut) et en
+hauteur de la partie PVC (à droite, 20 mm pour les quatre) [1 p. 7]. Leurs coupes, leur hauteur
+hors tout et leur montage sont dans
+[Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md).
+
+| Seuil | Largeur (mm) | Hauteur cotée à droite (mm) |
+| --- | --- | --- |
+| A076 | 76 | 20 |
+| A077 | 123 | 20 |
+| A343 | 135 | 20 |
+| A075 | 76 | 20 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 7)
+
+Sur le A075, la cote de 20 mm ne prend que la partie PVC, à droite ; le nez aluminium, à gauche,
+dépasse au-dessus et n'est pas coté sur cette planche.
+
+# Nomenclature des renforts et accessoires par profilé
+
+Chaque planche de profilé porte, à droite, un tableau « Accessoires » : une case par référence,
+avec sa désignation, son dessin et, pour certaines, des valeurs. Le tableau ci-dessous en reprend
+une ligne par référence et par profilé, dans l'ordre de la planche.
+
+- Les **renforts** acier y sont donnés avec l'épaisseur de leur tôle ; leurs sections et leurs
+  inerties IG et IW, identiques à celles de la fenêtre, sont dans
+  [Renforts du système 76](/profiles/systeme-76-renforts.md)
+- Les **capots aluminium** (principe AluClip, capot clippé sur la face extérieure) portent deux
+  valeurs, **E** et **S**, en mm, que la planche ne définit pas — entrée **VER-46** ; elles sont
+  tabulées pour tous les capots du système dans
+  [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md#valeurs-e-et-s-des-capots)
+- Les dimensions des pièces de remplissage (M528 : 30 x 40 x 70 mm sur la planche du 76102) sont
+  dans [Renforts et accessoires par profilé du système 76](/profiles/systeme-76-accessoires-par-profile.md#dimensions-des-pièces-de-remplissage)
+- Les pièces déjà dessinées ailleurs dans le wiki gardent leur dessin d'origine
+
+## Dormant 76101
+
+| Référence | Désignation | Dessin |
+| --- | --- | ---: |
+| V306.Z | Renfort 1,5 mm | ![Renfort V306.Z](/assets/profiles/systeme76/renforts/renfort-v306z.png) |
+| V307.Z | Renfort 2,0 mm | ![Renfort V307.Z](/assets/profiles/systeme76/renforts/renfort-v307z.png) |
+| V308 | Renfort 2,5 mm | ![Renfort V308](/assets/profiles/systeme76/renforts/renfort-v308.png) |
+| V309.Z | Renfort 1,5 mm | ![Renfort V309.Z](/assets/profiles/systeme76/renforts/renfort-v309z.png) |
+| V310 | Renfort 2,0 mm | ![Renfort V310](/assets/profiles/systeme76/renforts/renfort-v310.png) |
+| A066.T | Seuil de protection | ![A066.T](/assets/profiles/systeme76/accessoires/a066t.png) |
+| A030 | Capot Alu | ![Capot A030](/assets/profiles/systeme76/dormants/capot-a030.png) |
+| A385 | Demi capot Alu | ![Capot A385](/assets/profiles/systeme76/dormants/capot-a385.png) |
+| M170 | Pièce de remplissage pour assemblage seuil | ![M170](/assets/profiles/systeme76/accessoires/m170.png) |
+| M527 | Pièce de remplissage pour V309 | ![M527](/assets/profiles/systeme76/accessoires/m527.png) |
+| M137 | Support cales de vitrage | ![M137](/assets/profiles/systeme76/accessoires/m137.png) |
+| M529 | Clip de montage pour demi capot | ![M529, dessiné en clip](/assets/profiles/systeme76/accessoires/m529-clip.png) |
+| A065 | Profilé alu pour seuil ouverture extérieure | ![A065](/assets/profiles/systeme76/accessoires/a065.png) |
+| M150 | Pièce d'assemblage pour tous seuil | ![M150](/assets/profiles/systeme76/accessoires/m150.png) |
+| M151 | Pièce d'assemblage pour A076/A077 | ![M151](/assets/profiles/systeme76/accessoires/m151.png) |
+| J061 | Patin d'étanchéité pour A076/A077 | ![J061](/assets/profiles/systeme76/accessoires/j061.png) |
+| G067 | Bloc d'étanchéité pour A075 | ![G067](/assets/profiles/systeme76/seuils/bouchon-g067.png) |
+| G023 | Insert de compensation pour aluClip dormant | ![G023](/assets/profiles/systeme76/accessoires/g023.png) |
+| S048 | Douille de montage | ![S048](/assets/profiles/systeme76/accessoires/s048.png) |
+| T021 | Gabarit de perçage pour A076/A077 | ![T021](/assets/profiles/systeme76/accessoires/t021.png) |
+| T022 | Gabarit de perçage pour A075 | ![T022](/assets/profiles/systeme76/accessoires/t022.png) |
+| T073 | Gabarit de perçage pour M569 | ![T073](/assets/profiles/systeme76/accessoires/t073.png) |
+| A506T | profilé Alu protection recouvrement dormant | ![A506T](/assets/profiles/systeme76/dormants/capot-a506t.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 5)
+
+Le **M529** est désigné « Clip de montage pour demi capot » et dessiné en clip sur cette planche,
+alors que la planche du dormant 76102 désigne le M529 « Pièce de remplissage pour V325 » et donne
+le « Clip de montage pour demi capot » au **M569** — entrée **INC-26** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md).
+
+## Dormant 76102
+
+| Référence | Désignation | Dessin |
+| --- | --- | ---: |
+| V314.Z | Renfort 2,0 mm | ![Renfort V314.Z](/assets/profiles/systeme76/renforts/renfort-v314z.png) |
+| V325 | Renfort 2,0 mm | ![Renfort V325](/assets/profiles/systeme76/renforts/renfort-v325.png) |
+| V353 | Renfort 1,5 mm | ![Renfort V353](/assets/profiles/systeme76/renforts/renfort-v353.png) |
+| A385 | Demi capot Alu | ![Capot A385](/assets/profiles/systeme76/dormants/capot-a385.png) |
+| A066.T | Seuil de protection | ![A066.T](/assets/profiles/systeme76/accessoires/a066t.png) |
+| A031 | Capot Alu | ![Capot A031](/assets/profiles/systeme76/dormants/capot-a031.png) |
+| A073 | Capot Alu | ![Capot A073](/assets/profiles/systeme76/dormants/capot-a073.png) |
+| M173 | Pièce d'assemblage pour A076/A077 | ![M173](/assets/profiles/systeme76/accessoires/m173.png) |
+| M137 | Support cales de vitrage | ![M137](/assets/profiles/systeme76/accessoires/m137.png) |
+| M171 | Pièce de remplissage pour assemblage seuil | ![M171](/assets/profiles/systeme76/accessoires/m171.png) |
+| M528 | Pièce de remplissage pour V314 | ![M528](/assets/profiles/systeme76/accessoires/m528.png) |
+| M529 | Pièce de remplissage pour V325 | ![M529](/assets/profiles/systeme76/accessoires/m529.png) |
+| S049 | Douille de montage | ![S049](/assets/profiles/systeme76/accessoires/s049.png) |
+| A065 | Profilé alu pour seuil ouverture extérieure | ![A065](/assets/profiles/systeme76/accessoires/a065.png) |
+| M152 | Pièce d'assemblage pour tous seuil | ![M152](/assets/profiles/systeme76/accessoires/m152.png) |
+| M569 | Clip de montage pour demi capot | ![M569](/assets/profiles/systeme76/dormants/clip-m569.png) |
+| J062 | Patin d'étanchéité pour A076/A077 | ![J062](/assets/profiles/systeme76/accessoires/j062.png) |
+| G067 | Bloc d'étanchéité pour A075 | ![G067](/assets/profiles/systeme76/seuils/bouchon-g067.png) |
+| T021 | Gabarit de perçage pour A076/A077 | ![T021](/assets/profiles/systeme76/accessoires/t021.png) |
+| T022 | Gabarit de perçage pour A075 | ![T022](/assets/profiles/systeme76/accessoires/t022.png) |
+| G023 | Insert de compensation pour aluClip dormant | ![G023](/assets/profiles/systeme76/accessoires/g023.png) |
+| T073 | Gabarit de perçage pour M569 | ![T073](/assets/profiles/systeme76/accessoires/t073.png) |
+| A506T | profilé Alu protection recouvrement dormant | ![A506T](/assets/profiles/systeme76/dormants/capot-a506t.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 6)
+
+Les capots **A073** et **A506T** sont rattachés ici au dormant 76102 (et l'A506T aussi au 76101),
+ce que le poster des profilés principaux ne dit pas — entrée **VER-43**.
+
+## Seuils A076, A077, A343 et A075
+
+| Référence | Désignation | Valeur portée | Dessin |
+| --- | --- | --- | ---: |
+| A061 | Rejet d'eau alu pour A076/A077/A343 | - | ![A061](/assets/profiles/systeme76/accessoires/a061.png) |
+| G060 | Joint pour rejet d'eau alu | pour A062, A064 | ![G060](/assets/profiles/systeme76/accessoires/g060.png) |
+| G229 | Joint brosse pour A062 | pour A062, A064 | ![G229](/assets/profiles/systeme76/accessoires/g229.png) |
+| M162 | Embout rejet d'eau pour A061 | - | ![M162](/assets/profiles/systeme76/accessoires/m162.png) |
+| M175 | Windstop dormant | - | ![M175](/assets/profiles/systeme76/accessoires/m175.png) |
+| M177 | Embout pour rejet d'eau A061 avec battement | - | ![M177](/assets/profiles/systeme76/accessoires/m177.png) |
+| M179 | Windstop ouvrant battement central | - | ![M179](/assets/profiles/systeme76/accessoires/m179.png) |
+| M261 | Windstop ouvrant | - | ![M261](/assets/profiles/systeme76/accessoires/m261.png) |
+| G067 | Embout d'étanchéité pour A075 | - | ![G067](/assets/profiles/systeme76/seuils/bouchon-g067.png) |
+| A063 | Rejet d'eau alu pour A075 | - | ![A063](/assets/profiles/systeme76/accessoires/a063.png) |
+| G056 | Joint pour rejet d'eau A064 | - | ![G056](/assets/profiles/systeme76/joints/joint-g056.png) |
+| M179 | Windstopp | - | ![M179](/assets/profiles/systeme76/accessoires/m179.png) |
+| A065 | profilé Alu pour ouverture extérieure pour A076 | - | ![A065](/assets/profiles/systeme76/accessoires/a065.png) |
+| Z151 | Protection seuil chantier pour A076 | - | ![Z151](/assets/profiles/systeme76/accessoires/z151.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 7)
+
+Le **M179** figure deux fois sur la planche, « Windstop ouvrant battement central » puis
+« Windstopp », avec le même dessin. Le G067 est désigné « Bloc d'étanchéité » sur les planches des
+dormants et « Embout d'étanchéité » sur celle des seuils. Les rejets d'eau et leurs joints sont
+détaillés dans [Assemblages du système 76](/profiles/systeme-76-assemblages.md).
+
+## Ouvrant 76201
+
+| Référence | Désignation | Dessin |
+| --- | --- | ---: |
+| V306 Z | Renfort 1,5 mm | ![Renfort V306.Z](/assets/profiles/systeme76/renforts/renfort-v306z.png) |
+| V307 Z | Renfort 2,0 mm | ![Renfort V307.Z](/assets/profiles/systeme76/renforts/renfort-v307z.png) |
+| V308\*\* | Renfort 2,5 mm | ![Renfort V308](/assets/profiles/systeme76/renforts/renfort-v308.png) |
+| A037 | Capot alu | ![Capot A037](/assets/profiles/systeme76/autres/capot-a037.png) |
+| G024 | Insert de compensation pour AluClip ouvrant | ![G024](/assets/profiles/systeme76/accessoires/g024.png) |
+| M137 | Support cales de vitrage | ![M137](/assets/profiles/systeme76/accessoires/m137.png) |
+| M165 | Compensation de rainure crémone | ![M165](/assets/profiles/systeme76/accessoires/m165.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 8)
+
+Le V308 est marqué de deux astérisques, **sans renvoi sur la planche** du 76201 — entrée
+**INC-27**. Sur les planches des 76206 et 76207, les deux astérisques renvoient aux serrures Maco
+et Winkhaus (voir ci-dessous).
+
+## Ouvrants 76206 et 76207
+
+Les deux ouvrants de 126 mm reçoivent des **renforts usinés** pour la serrure, selon la marque de
+serrure et la hauteur de poignée [1 p. 9, 10] :
+
+- **\*** (V333R/L) : pour serrure KFV, GU, Roto et Fuhr avec hauteur de poignée de 1020 mm
+- **\*\*** (V335R/L) : pour serrure Maco et Winkhaus avec hauteur de poignée de 1050 mm
+
+| Profilé | Référence | Désignation | Dessin |
+| --- | --- | --- | ---: |
+| 76206 | V260 | Renfort 2,5 mm | ![Renfort V260](/assets/profiles/systeme76/renforts/renfort-v260.png) |
+| 76206 | V333R/L\* | Renfort 2,5 mm, usiné | ![Renfort V333/V335 R/L](/assets/profiles/systeme76/renforts/renfort-v333-v335.png) |
+| 76206 | V335R/L\*\* | Renfort 2,5 mm, usiné | ![Renfort V333/V335 R/L](/assets/profiles/systeme76/renforts/renfort-v333-v335.png) |
+| 76206 | M335 | Insert de soudure | ![M335](/assets/profiles/systeme76/autres/embout-m335.png) |
+| 76206 | A040 | Capot alu | ![Capot A040](/assets/profiles/systeme76/autres/capot-a040.png) |
+| 76206 | M137 | Support cales de vitrage | ![M137](/assets/profiles/systeme76/accessoires/m137.png) |
+| 76206 | M257 | Noyau de remplissage | ![M257](/assets/profiles/systeme76/accessoires/m257.png) |
+| 76206 | M161 | Compensation de rainure crémone | ![M161](/assets/profiles/systeme76/accessoires/m161.png) |
+| 76206 | G024 | Insert de compensation pour AluClip ouvrant | ![G024](/assets/profiles/systeme76/accessoires/g024.png) |
+| 76206 | T038 | Levier pour M335 | ![T038](/assets/profiles/systeme76/ouvrants/piece-t038.png) |
+| 76207 | V260 | Renfort 2,5 mm | ![Renfort V260](/assets/profiles/systeme76/renforts/renfort-v260.png) |
+| 76207 | V333R/L\* | Renfort 2,5 mm, soudé | ![Renfort V333/V335 R/L](/assets/profiles/systeme76/renforts/renfort-v333-v335.png) |
+| 76207 | V335R/L\*\* | Renfort 2,5 mm, soudé | ![Renfort V333/V335 R/L](/assets/profiles/systeme76/renforts/renfort-v333-v335.png) |
+| 76207 | M335 | Insert de coin soudé | ![M335](/assets/profiles/systeme76/autres/embout-m335.png) |
+| 76207 | A041 | Capot alu | ![Capot A041](/assets/profiles/systeme76/autres/capot-a041.png) |
+| 76207 | M137 | Support cales de vitrage | ![M137](/assets/profiles/systeme76/accessoires/m137.png) |
+| 76207 | T038 | Levier pour M335 | ![T038](/assets/profiles/systeme76/ouvrants/piece-t038.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 9 et 10)
+
+Les V333R/L et V335R/L sont dits « usiné » sur la planche du 76206 et « soudé » sur celle du
+76207, sous le même titre « Renforts usinés » ; le M335 est un « Insert de soudure » sur la
+première, un « Insert de coin soudé » sur la seconde. Le levier **T038** est dessiné en photo,
+outil à manche en bois.
+
+## Battements 76401 et 76402
+
+| Profilé | Référence | Désignation | Dessin |
+| --- | --- | --- | ---: |
+| 76401 | V316 | Renfort 1,5 mm | ![Renfort V316](/assets/profiles/systeme76/renforts/renfort-v316.png) |
+| 76401 | A049 | Capot Alu | ![Capot A049](/assets/profiles/systeme76/autres/capot-a049.png) |
+| 76401 | M279 | Set d'embout recouvrant | ![Set M279](/assets/profiles/systeme76/embouts/set-m279.png) |
+| 76401 | M280 | Set d'embout pour AluClip | ![Set M280](/assets/profiles/systeme76/embouts/set-m280.png) |
+| 76401 | M281 | Set d'embout affleurant | ![Set M281](/assets/profiles/systeme76/accessoires/m281.png) |
+| 76401 | M100 | Embout battement avec vis | ![M100](/assets/profiles/systeme76/embouts/embout-m100.png) |
+| 76401 | M101 | Embout de battement recouvrant ext. | ![M101](/assets/profiles/systeme76/embouts/embout-m101.png) |
+| 76401 | M102 | Set d'embout extérieur pour AluClip | ![M102](/assets/profiles/systeme76/embouts/embout-m102.png) |
+| 76402 | V310 | Renfort 2,0 mm | ![Renfort V310](/assets/profiles/systeme76/renforts/renfort-v310.png) |
+| 76402 | A050 | Capot Alu | ![Capot A050](/assets/profiles/systeme76/autres/capot-a050.png) |
+| 76402 | M282 | Set d'embout recouvrant | ![Set M282](/assets/profiles/systeme76/embouts/set-m282.png) |
+| 76402 | M283 | Set d'embout pour AluClip | ![Set M283](/assets/profiles/systeme76/embouts/set-m283.png) |
+| 76402 | M284 | Set d'embout affleurant | ![Set M284](/assets/profiles/systeme76/accessoires/m284.png) |
+| 76402 | M103 | Embout battement avec vis | ![M103](/assets/profiles/systeme76/embouts/embout-m103.png) |
+| 76402 | M104 | Embout de battement recouvrant ext. | ![M104](/assets/profiles/systeme76/embouts/embout-m104.png) |
+| 76402 | M105 | Set d'embout extérieur pour AluClip | ![M105](/assets/profiles/systeme76/embouts/embout-m105.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 11)
+
+Les sets **M281** et **M284** (embout affleurant) complètent ceux du poster des profilés
+principaux, qui ne dessine que les sets recouvrant et AluClip. Le M100 et le M103 y sont légendés
+« partie int. », le M101 et le M104 « partie ext. ».
+
+## Traverse d'ouvrant 76300, meneaux 76301 et 76303
+
+| Profilé | Référence | Désignation | Dessin |
+| --- | --- | --- | ---: |
+| 76300 | V312.Z | Renfort 1,5 mm | ![Renfort V312.Z](/assets/profiles/systeme76/renforts/renfort-v312z.png) |
+| 76300 | A045 | Capot Alu | ![Capot A045](/assets/profiles/systeme76/meneaux/capot-a045.png) |
+| 76300 | M137 | Support de cale de vitrage | ![M137](/assets/profiles/systeme76/accessoires/m137.png) |
+| 76300 | J050 | Assemblage mécanique en T et en X | ![J050](/assets/profiles/systeme76/accessoires/j050.png) |
+| 76300 | T020 | Gabarit de perçage | ![T020](/assets/profiles/systeme76/accessoires/t020.png) |
+| 76301 | V320.Z | Renfort 1,5 mm | ![Renfort V320.Z](/assets/profiles/systeme76/renforts/renfort-v320z.png) |
+| 76301 | A046 | Capot Alu | ![Capot A046](/assets/profiles/systeme76/meneaux/capot-a046.png) |
+| 76301 | A069 | Capot Alu | ![Capot A069](/assets/profiles/systeme76/meneaux/capot-a069.png) |
+| 76301 | J051 | Assemblage mécanique | ![J051](/assets/profiles/systeme76/accessoires/j051.png) |
+| 76301 | M137 | Support de cale de vitrage | ![M137](/assets/profiles/systeme76/accessoires/m137.png) |
+| 76301 | M156 | Set d'assemblage seuil pour A076/A077 | ![M156](/assets/profiles/systeme76/accessoires/m156.png) |
+| 76301 | J066 | Patin d'étanchéité pour A076/A077 | ![J066](/assets/profiles/systeme76/accessoires/j066.png) |
+| 76301 | J052 | Assemblage mécanique en X | ![J052](/assets/profiles/systeme76/accessoires/j052.png) |
+| 76301 | T018 | Gabarit de perçage | ![T018](/assets/profiles/systeme76/accessoires/t018.png) |
+| 76303 | V323.Z | Renfort 1,5 mm | ![Renfort V323.Z](/assets/profiles/systeme76/renforts/renfort-v323z.png) |
+| 76303 | V322 | Renfort 2,5 mm | ![Renfort V322](/assets/profiles/systeme76/renforts/renfort-v322.png) |
+| 76303 | A047 | Capot Alu | ![Capot A047](/assets/profiles/systeme76/meneaux/capot-a047.png) |
+| 76303 | J067 | Patin d'étanchéité pour A076/A077 | ![J067](/assets/profiles/systeme76/accessoires/j067.png) |
+| 76303 | A070 | Capot Alu | ![Capot A070](/assets/profiles/systeme76/meneaux/capot-a070.png) |
+| 76303 | M137 | Support de cale de vitrage | ![M137](/assets/profiles/systeme76/accessoires/m137.png) |
+| 76303 | M157 | Set d'assemblage seuil pour A076/A077 | ![M157](/assets/profiles/systeme76/accessoires/m157.png) |
+| 76303 | T018 | Gabarit de perçage | ![T018](/assets/profiles/systeme76/accessoires/t018.png) |
+| 76303 | J053 | Assemblage mécanique | ![J053](/assets/profiles/systeme76/accessoires/j053.png) |
+| 76303 | J054 | Assemblage méccanque en X | ![J054](/assets/profiles/systeme76/accessoires/j054.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 12 et 13)
+
+Les meneaux **76301 et 76303 reçoivent chacun deux capots** : A046 et A069 pour le 76301, A047 et
+A070 pour le 76303 ; la planche ne dit pas lequel s'emploie dans quel cas. La désignation du J054
+est reprise telle qu'elle est écrite.
+
+# Accessoires de drainage et de montage
+
+La planche des accessoires de drainage et de montage de la porte d'entrée [1 p. 14] porte les
+mêmes références, désignations et dessins que celle de la fenêtre, tabulée avec les neuf longueurs
+des vis S059 à S067 dans
+[Renforts et accessoires par profilé du système 76](/profiles/systeme-76-accessoires-par-profile.md#accessoires-de-drainage-et-de-montage),
+à trois différences près :
+
+| Référence | Porte d'entrée | Fenêtre | Dessin |
+| --- | --- | --- | ---: |
+| M336 | Pare tempête | - | ![M336](/assets/profiles/systeme76/accessoires/m336.png) |
+| M459 | - | Pare tempête | ![M459](/assets/profiles/systeme76/accessoires/m459.png) |
+| M488 | - | Cale de contrôle pour battement | ![M488](/assets/profiles/systeme76/accessoires/m488.png) |
+| M682 | Cache vis | Cache vis pou S059-S067 | ![M682](/assets/profiles/systeme76/accessoires/m682.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 14 ; fenêtre : p. 36)
+
+Le pare-tempête **M336** de la porte et le **M459** de la fenêtre sont dessinés de la même façon.
+Les autres accessoires de la planche de la porte : buse de drainage 697010 pour AluClip 10 x 14 mm,
+son joint G008 et son foret T005 ; cales de transport M323 et M342 ; adaptateur de fixation M136,
+« utilisation avec vis de montage S059 bis S067 » (« bis » : « à » en allemand) ; vis de montage
+sans tête S059 à S067 ; patte de fixation S041 ; profilé de finition G026 ; renfort d'angle de
+feuillure J079 ; vis S055, S056, S057, S111 et S112.
+
+# Ce que la source ne donne pas
+
+- Le sens des valeurs **E** et **S** des capots — **VER-46**
+- Le choix entre les deux capots de chaque meneau, et entre les renforts admis dans un même
+  profilé
+- Les cotes de débit, les abaques et les poids admissibles de la porte d'entrée : les registres
+  2.2 à 2.6 du manuel traitent de la fenêtre à joint central
+
+# Citations
+
+[1] Mise en œuvre Système 76 Advanced, profine —
+`raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`, registre 2.1.1 « System 76 Advanced Porte
+d'entrée », p. 2 à 14 du PDF (pages imprimées 1 à 13), version d'octobre 2021
+
+# Voir aussi
+
+- [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md)
+- [Renforts du système 76](/profiles/systeme-76-renforts.md)
+- [Assemblages du système 76](/profiles/systeme-76-assemblages.md)
+- [Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md)
+- [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md)
+- [Ouvrants de porte d'entrée](/portes/ouvrants-de-porte.md)
+- [Mise en œuvre Système 76 Advanced](/sources/profine-mise-en-oeuvre-76-advanced.md)
+
+===== PAGE 2 : /profiles/systeme-76-profiles-principaux.md =====
+# Le système 76 Advanced et ses profilés principaux
+
+Le **système 76 Advanced** de [profine](/fournisseurs/profine.md) est le système PVC de 76 mm
+d'épaisseur, à joint central, sur lequel PROFERM fabrique la [PERFORM76](/gammes/perform.md). Ses
+**profilés principaux** sont ceux qui forment le cadre de la fenêtre : le **dormant** (le cadre
+fixe, scellé dans le mur), le **cadre fixe** (un dormant qui reçoit directement le vitrage, sans
+ouvrant), l'**ouvrant** (le cadre mobile qui porte le vitrage), le **meneau** et la **traverse**
+(les profilés qui divisent un cadre) et le **battement** (le profilé où se rejoignent deux
+ouvrants). Les termes sont définis dans le [glossaire](/reference/glossaire.md).
+
+Chaque profilé PVC peut recevoir, côté extérieur, un **capot aluminium** clippé : c'est le principe
+AluClip, qui donne une face extérieure en aluminium à une menuiserie PVC. Le capot de chaque
+profilé est donné dans les tableaux ci-dessous, à côté de la coupe du profilé.
+
+Les renforts acier logés dans la chambre centrale de chaque profilé, avec leurs sections et leurs
+inerties, sont dans [Renforts du système 76](/profiles/systeme-76-renforts.md). Les pièces qui
+assemblent les profilés entre eux et sur les seuils sont dans
+[Assemblages du système 76](/profiles/systeme-76-assemblages.md).
+
+Toutes les cotes sont en mm. Les coupes sont dessinées à l'échelle, extérieur en bas et vitrage en
+haut ; la planche ne donne pas de nom aux cotes, elles sont reprises ici par leur position sur le
+dessin [1 p. 1].
+
+# Caractéristiques du système 76 Advanced à joint central
+
+Performances annoncées par profine pour la fenêtre du système 76 Advanced à joint central ; chaque
+valeur est une borne supérieure (« jusqu'à ») [4 p. 15]. Les classements obtenus par la
+PERFORM76 sont dans [Labels et certifications](/certifications/labels-et-certifications.md), le
+domaine d'emploi dans [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md).
+
+| Caractéristique | Valeur annoncée |
+| --- | --- |
+| Coefficient de transfert de la chaleur Uf (profilé seul) | jusqu'à Uf = 1,0 W/(m²K) |
+| Résistance au vent | jusqu'à la classe C5 / B5 |
+| Étanchéité à l'eau, version A | jusqu'à 9A |
+| Perméabilité à l'air | jusqu'à la classe 4 |
+| Isolation acoustique | jusqu'à 48 dB |
+| Anti-effraction | jusqu'à RC 2 |
+
+Caractéristiques du système, dans les termes de la planche, version de janvier 2016 [4 p. 15] :
+
+- Système à joint central de 76 mm dans un design moderne
+- Joint EPDM ou PCE noir, gris ou brun
+- Haute stabilité thermique grâce à la conception des chambres intérieures
+- Drainage rapide et effectif en façade ou invisible par le bas
+- Montage simple et professionnel grâce à un vaste choix d'accessoires et de profilés
+  complémentaires
+- Mise en œuvre de différentes épaisseurs de vitrage ou panneau de remplissage de 16 à 48 mm —
+  borne discutée à l'entrée **CTR-17** du registre
+  [Contradictions entre sources](/anomalies/contradictions-entre-sources.md)
+- Montage simple et efficace grâce à des picots et des parois plus épaisses dans les canaux de
+  vissage
+- Isolation thermique accrue par rajout d'un joint en feuillure de vitrage ouvrant
+- Isolation thermique élevée par rapport à l'épaisseur du système
+
+![Coupe de principe de la fenêtre System 76 Advanced à joint central](/assets/procedures/moe-76-advanced/coupe-principe-fenetre-joint-central.png)
+
+La coupe montre un dormant et son ouvrant, triple vitrage en bleu, renforts acier en trait épais
+dans les chambres centrales. Cotes portées, en mm : en haut, **94** hors tout décomposé en
+**18 +1** (recouvrement de l'ouvrant, tolérance +1) et **76** (épaisseur) ; en bas, **76** et
+**18 +1** ; à gauche, **4** et **5** au droit du joint de frappe ; au centre, **12 +1** ; à droite,
+**8** et un jeu de **4 +1** (schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 15).
+
+La porte d'entrée du même système a ses propres performances — voir
+[Porte d'entrée du système 76 Advanced](/portes/systeme-76-advanced-porte-d-entree.md).
+
+## Dimensions pour les centres d'usinage
+
+Les trois coupes donnent les cotes des gorges et des feuillures dont un centre d'usinage (la
+machine qui perce et fraise les profilés) a besoin pour se positionner. Angles en degrés, cotes en
+mm, version de janvier 2021 [4 p. 16].
+
+![Dimensions du système pour les centres d'usinage, fenêtre à joint central](/assets/procedures/moe-76-advanced/centres-usinage-fenetre-joint-central.png)
+
+| Coupe sur la planche | Cotes horizontales du haut (mm) | Cotes verticales (mm) | Cotes du pied (mm) | Angles |
+| --- | --- | --- | --- | --- |
+| gauche, profilé à deux pieds | 14, 62, 27,5, 11,5, 4, 4 | 32 | - | 10°, 17° |
+| centre, profilé à feuillure basse | 14, 62, 11,5, 4, 4 | 25, 20 | 9, 19,5, 14 | 10°, 17° |
+| droite, profilé à aile descendante | 14, 62, 27,5, 11,5, 4, 4 | 32 | - | 10°, 17° |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 16)
+
+Les coupes gauche et droite portent en plus une cote horizontale de **27,5 mm** et une hauteur de
+**32 mm**, absentes des coupes de la porte d'entrée, qui donnent aussi 21 mm au lieu de 19,5 au
+pied de la coupe centrale — voir
+[Porte d'entrée du système 76 Advanced](/portes/systeme-76-advanced-porte-d-entree.md#dimensions-pour-les-centres-dusinage).
+
+## Désignations du manuel de mise en œuvre
+
+Le sommaire des plans de profilés du manuel désigne chaque profilé principal de la fenêtre par sa
+famille et sa cote principale, et renvoie à la page de sa planche (version octobre 2021)
+[4 p. 17-18]. Une ligne par profilé ; la page est celle du PDF.
+
+| Profilé | Désignation au sommaire | Page PDF de la planche |
+| --- | --- | --- |
+| 76171 | Dormant de 74 mm | 19 |
+| 76172 | Dormant de 92 mm | 20 |
+| 76173 | Dormant de 104 mm | 21 |
+| 76180 | Dormant de 94 mm | 22 |
+| 76177 | Dormant de 91 mm | 23 |
+| 76178 | Dormant de 121 mm | 24 |
+| 76185 | Dormant de 111 mm | 25 |
+| 76281 | Ouvrant de 70 mm | 27 |
+| 76275 | Ouvrant de 70 mm | 27 |
+| 76271 | Ouvrant de 78 mm | 28 |
+| 76272 | Ouvrant de 110 mm | 29 |
+| 76279 | Ouvrant de 110 mm | 29 |
+| 76283 | Ouvrant de 110 mm | 30 |
+| 76274 | Ouvrant réduit de 50 mm | 31 |
+| 76276 | Ouvrant réduit de 50 mm | 31 |
+| 76473 | Battement de 46 mm | 32 |
+| 76471 | Battement de 62 mm | 32 |
+| 76472 | Battement de 80 mm | 32 |
+| 76372 | Meneau de 98 mm, Traverse | 33 |
+| 76373 | Meneau de 110 mm, Traverse | 33 |
+| 76301 | Meneau de 84 mm, Traverse | 34 |
+| 76303 | Meneau de 110 mm, Traverse | 34 |
+| 76300 | Croisillon d'ouvrant de 68 mm | 35 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 17 et 18)
+
+Les ouvrants réduits 76274 et 76276 sont rangés sous le titre « Battement » ; les 76301, 76303 et
+76300 sous « Meneau/Traverse et traverse d'ouvrant ». Le sommaire donne **110 mm au meneau
+76373**, que sa coupe cote 124 mm — entrée **INC-09** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md).
+
+# Cotes des dormants
+
+Les sept dormants du système 76 Advanced. Chaque coupe montre le dormant en tranche : en haut,
+l'**épaisseur** de 76 mm, cote horizontale commune aux sept ; à gauche, la **cote verticale
+gauche**, hauteur totale de la face du dormant, décomposée sur les dormants à aile entre le corps
+du dormant et l'**aile** (le rebord qui recouvre le mur ou l'ancien bâti) ; à droite, la **cote
+verticale droite**, décomposée en une part haute de 28 mm, commune aux sept, et une part basse ;
+en bas, sur les dormants à aile, la **largeur du pied de l'aile**.
+
+| Dormant | Épaisseur (mm) | Cote verticale gauche, totale (mm) | Décomposition gauche, corps + aile (mm) | Cote verticale droite, part haute (mm) | Cote verticale droite, part basse (mm) | Largeur du pied d'aile (mm) | Coupe |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| 76171 | 76 | 74 | - | 28 | 46 | - | ![Dormant 76171](/assets/profiles/systeme76/dormants/dormant-76171.png) |
+| 76172 | 76 | 92 | - | 28 | 64 | - | ![Dormant 76172](/assets/profiles/systeme76/dormants/dormant-76172.png) |
+| 76173 | 76 | 104 | - | 28 | 76 | - | ![Dormant 76173](/assets/profiles/systeme76/dormants/dormant-76173.png) |
+| 76180 | 76 | 94 | 74 + 20 | 28 | 66 | 16 | ![Dormant 76180](/assets/profiles/systeme76/dormants/dormant-76180.png) |
+| 76177 | 76 | 91 | 51 + 40 | 28 | 63 | 16 | ![Dormant 76177](/assets/profiles/systeme76/dormants/dormant-76177.png) |
+| 76185 | 76 | 111 | 51 + 60 | 28 | 83 | 16 | ![Dormant 76185](/assets/profiles/systeme76/dormants/dormant-76185.png) |
+| 76178 | 76 | 121 | 51 + 70 | 28 | 93 | 28 | ![Dormant 76178](/assets/profiles/systeme76/dormants/dormant-76178.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1, bande supérieure ; mêmes cotes
+sur les planches du manuel de mise en œuvre : raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf,
+p. 19 à 25)
+
+Le dormant **76171** porte en plus, sous l'épaisseur de 76 mm, une seconde cote horizontale de
+**62 mm**, alignée à droite sur la face du dormant ; c'est le seul des sept où elle est portée.
+Le 76171 porte en outre, à l'intérieur du profilé, deux cotes verticales prises depuis le haut
+du dormant : **21 mm** et **32 mm** ; ses 62 mm y sont la seule cote horizontale. Les parts
+basses de la cote verticale droite des 76171, 76172, 76173, 76177, 76178 et 76180 (46, 64, 76,
+63, 93 et 66 mm) sont redonnées à l'identique sur la même coupe ; le 76185 y est dessiné sans
+cote [3 p. 13] [2 p. 12].
+Le dormant **76173** a deux chambres de renfort superposées, chacune dessinée avec sa
+propre liste de renforts.
+
+Le **76178** a la plus grande aile des sept, 70 mm, terminée par un pied oblique de 28 mm. Le
+profilé **95 38 00**, de 7,4 × 11,3 mm, est dessiné dans le bloc du 76178, sans légende de
+fonction.
+
+![Profilé 95 38 00](/assets/profiles/systeme76/dormants/profil-953800.png)
+
+Le dessin montre le profilé 95 38 00 en coupe, avec sa largeur de 7,4 mm (cote horizontale) et
+sa hauteur de 11,3 mm (cote verticale). Le même profilé, écrit **953800**, est légendé « Cache rainure PVC » parmi les profilés
+complémentaires, avec sa hauteur de 11,3 mm [3 p. 20].
+
+Les cotes des cinq dormants proposés en PERFORM76 (76171, 76172, 76177, 76180, 76185), leurs
+compatibilités et leurs schémas de pose sont dans
+[Dormants PERFORM76](/profiles/perform76-dormants.md) ; les **76173** et **76178** n'y figurent
+pas. Leurs cotes de débit sont dans
+[Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md).
+
+## Capots aluminium des dormants
+
+Le capot habille la face extérieure du dormant. Chaque capot est dessiné à gauche du dormant
+qu'il habille, avec deux cotes : la **largeur du retour** (cote horizontale en haut, 20,2 ou
+20,3 mm) et la **hauteur** (cote verticale).
+
+| Capot | Dormant habillé | Largeur du retour (mm) | Hauteur (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| A033 | 76171 | 20,3 | 78,2 | ![Capot A033](/assets/profiles/systeme76/dormants/capot-a033.png) |
+| A385 | 76171, demi-capot | 20,2 | 51 | ![Capot A385](/assets/profiles/systeme76/dormants/capot-a385.png) |
+| A385 | 76180, demi-capot | - | - | ![Capot A385](/assets/profiles/systeme76/dormants/capot-a385.png) |
+| A034 | 76172 | 20,3 | 96,2 | ![Capot A034](/assets/profiles/systeme76/dormants/capot-a034.png) |
+| A035 | 76173 | 20,3 | 108,2 | ![Capot A035](/assets/profiles/systeme76/dormants/capot-a035.png) |
+| A073 | - | 16,7, pied | 65,3 | ![Capot A073](/assets/profiles/systeme76/dormants/capot-a073.png) |
+| A506T | - | - | - | ![Capot A506T](/assets/profiles/systeme76/dormants/capot-a506t.png) |
+| A314 | 76180 | 20,3 | 72 | ![Capot A314](/assets/profiles/systeme76/dormants/capot-a314.png) |
+| A313 | 76177, 76185, 76178 | 20,3 | 49 | ![Capot A313](/assets/profiles/systeme76/dormants/capot-a313.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1, bande supérieure ; raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 13)
+
+Le demi-capot **A385** et son clip **M569** sont dessinés à côté de deux dormants : le 76171,
+avec le capot complet A033, et le **76180**, avec le capot A314, sans cote de capot [3 p. 13] [2 p. 12]. Le capot complet de traverse basse est l'une des trois références A033,
+A313 ou A314.
+
+Les trois dormants rénovation **76177, 76185 et 76178 reçoivent le même capot A313**, de 49 mm.
+Le **A385** est un demi-capot, de 51 mm,
+qui se pose en traverse basse sur les clips **M569** vissés inox [2 p. 33] ; il est dessiné avec
+son clip dans le bloc du dormant 76171.
+
+![Clip M569](/assets/profiles/systeme76/dormants/clip-m569.png)
+
+Le clip **M569** est une plaquette percée d'un trou fraisé, sur laquelle le demi-capot A385 vient
+se clipper. L'entraxe des clips est dans
+[DTA n° 6/16-2334](/certifications/dta-6-16-2334.md).
+
+Les **A073** et **A506T** sont dessinés entre le capot A034 du 76172 et le capot A035 du 76173,
+sans cote pour l'A506T ; la planche ne dit pas quel dormant ils complètent. Le **A073** est
+dessiné une seconde fois, avec les mêmes cotes, à côté du profilé 76201 (voir *Autres profilés
+dessinés sur la planche*) — entrée **VER-43** du registre
+[Informations à vérifier](/anomalies/informations-a-verifier.md).
+
+## Cadres fixes 76101 et 76102
+
+Les **cadres fixes** 76101 et 76102 sont des dormants qui reçoivent directement le vitrage, sans
+ouvrant ; ce sont les dormants réservés aux cadres fixes [2 p. 4]. Leur coupe se lit comme celle d'un
+dormant, avec une part haute de 21 mm au lieu de 28 mm.
+
+| Cadre fixe | Épaisseur (mm) | Cote verticale gauche, totale (mm) | Cote verticale droite, part haute (mm) | Cote verticale droite, part basse (mm) | Capot | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 76101 | 76 | 67 | 21 | 46 | A030 | ![Cadre fixe 76101](/assets/profiles/systeme76/dormants/cadre-fixe-76101.png) |
+| 76102 | 76 | 85 | 21 | 64 | A031 | ![Cadre fixe 76102](/assets/profiles/systeme76/dormants/cadre-fixe-76102.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1, quatrième bande, au centre)
+
+Le **76101** porte, comme le dormant 76171, une seconde cote horizontale de **62 mm** sous
+l'épaisseur. Le 76101 porte aussi une cote verticale intérieure de **25 mm** prise depuis le haut du
+profilé ; les 21 + 46 mm du 76101 et les 64 mm du 76102 sont redonnés à l'identique sur la même
+coupe [3 p. 14] [2 p. 13]. **Les profilés 76101 et 76102 doivent être exclusivement utilisés pour la réalisation
+de cadres fixes** — voir [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md).
+Les mêmes 76101 et 76102 sont les **dormants de la porte d'entrée** du système, « Dormant de
+67 mm » et « Dormant de 85 mm » [4 p. 4] — entrée **VER-48** du registre
+[Informations à vérifier](/anomalies/informations-a-verifier.md) ; leur nomenclature est
+dans [Porte d'entrée du système 76 Advanced](/portes/systeme-76-advanced-porte-d-entree.md).
+
+| Capot | Cadre fixe habillé | Largeur du retour (mm) | Hauteur (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| A030 | 76101 | 20,3 | 71,3 | ![Capot A030](/assets/profiles/systeme76/dormants/capot-a030.png) |
+| A031 | 76102 | 20,3 | 89,3 | ![Capot A031](/assets/profiles/systeme76/dormants/capot-a031.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1)
+
+# Cotes des ouvrants
+
+Les huit ouvrants du système 76 Advanced. L'**ouvrant droit** a une face de 76 mm d'épaisseur,
+l'**ouvrant galbé** une face arrondie qui porte l'épaisseur à 83 mm. Chaque coupe porte : en haut,
+l'**épaisseur** ; à gauche, la **hauteur totale** du profilé et sa décomposition de haut en bas ;
+à droite, une seconde décomposition de la même hauteur, dont la part haute de 21 mm est commune
+aux huit.
+
+| Ouvrant | Profil | Épaisseur (mm) | Hauteur totale (mm) | Décomposition gauche, de haut en bas (mm) | Décomposition droite, de haut en bas (mm) | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 76281 | droit | 76 | 70 | 39 + 11 + 20 | 21 + 49 | ![Ouvrant 76281](/assets/profiles/systeme76/ouvrants/ouvrant-76281.png) |
+| 76275 | galbé | 83 | 70 | 39 + 11 + 20 | 21 + 49 | ![Ouvrant 76275](/assets/profiles/systeme76/ouvrants/ouvrant-76275.png) |
+| 76274 | droit | 76 | 50 | 39 + 11 | 21 + 17 + 12 | ![Ouvrant 76274](/assets/profiles/systeme76/ouvrants/ouvrant-76274.png) |
+| 76276 | galbé | 83 | 50 | 39 + 11 | 21 + 17 + 12 | ![Ouvrant 76276](/assets/profiles/systeme76/ouvrants/ouvrant-76276.png) |
+| 76271 | droit | 76 | 78 | 47 + 11 + 20 | 21 + 57 | ![Ouvrant 76271](/assets/profiles/systeme76/ouvrants/ouvrant-76271.png) |
+| 76272 | droit | 76 | 110 | 79 + 11 + 20 | 21 + 89 | ![Ouvrant 76272](/assets/profiles/systeme76/ouvrants/ouvrant-76272.png) |
+| 76279 | galbé | 83 | 110 | 79 + 11 + 20 | 21 + 89 | ![Ouvrant 76279](/assets/profiles/systeme76/ouvrants/ouvrant-76279.png) |
+| 76283 | droit | 76 | 110 | - | 21 + 58 + 11 + 20 | ![Ouvrant 76283](/assets/profiles/systeme76/ouvrants/ouvrant-76283.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1, deuxième et troisième bandes)
+
+L'ouvrant **76281** porte en plus, sous l'épaisseur de 76 mm, une seconde cote horizontale de
+**62 mm**, comme le dormant 76171. Le **76271** n'a pas de décomposition à droite sur le poster ;
+une autre coupe du même ouvrant porte à droite une part basse de **57 mm**, sans la part haute
+[3 p. 15] [2 p. 14], et sa planche du manuel de mise en œuvre donne à droite **21 + 57** [4 p. 28].
+Les coupes des huit ouvrants du manuel portent les mêmes cotes que le tableau ; les galbés 76275,
+76279 et 76276 y sont titrés « Ouvrant Design », le 76283 « Ouvrant extérieur 110 mm », les 76274
+et 76276 « Ouvrant de gauche » [4 p. 27-31]. Le **76283**
+n'a de décomposition qu'à droite, 21 + 58 + 11 + 20, différente de celle des 76272 et 76279 de
+même hauteur.
+
+Les ouvrants **76274 et 76276**, de 50 mm, sont les ouvrants réduits du battement ; ils ont la
+même décomposition gauche que les 76281 et 76275 (39 + 11), sans la part basse de 20 mm.
+
+Les cotes des quatre ouvrants proposés en PERFORM76 (76272, 76275, 76279, 76281) et leurs
+compatibilités sont dans
+[Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md).
+
+## Capots aluminium des ouvrants
+
+| Capot | Ouvrant habillé | Largeur du retour (mm) | Hauteur (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| A042 | 76281 | 16,5 | 43,5 | ![Capot A042, à côté du 76281](/assets/profiles/systeme76/ouvrants/capot-a042-76281.png) |
+| A042 | 76274 | 16,5 | 43 | ![Capot A042, à côté du 76274](/assets/profiles/systeme76/ouvrants/capot-a042-76274.png) |
+| A072 | 76271 | 37,3 | 52 | ![Capot A072](/assets/profiles/systeme76/ouvrants/capot-a072.png) |
+| A043 | - | 16,5 | 51,3 | ![Capot A043](/assets/profiles/systeme76/ouvrants/capot-a043.png) |
+| A044 | 76272 | 16,5 | 83,3 | ![Capot A044](/assets/profiles/systeme76/ouvrants/capot-a044.png) |
+| A039 | 76283 | 16,5 | 114,3 | ![Capot A039](/assets/profiles/systeme76/ouvrants/capot-a039.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1, deuxième et troisième bandes)
+
+Le **capot A042 est dessiné deux fois, avec deux hauteurs différentes** : 43,5 mm à côté de
+l'ouvrant 76281, 43 mm à côté de l'ouvrant 76274 — entrée **INC-18** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md).
+
+Le **A072** est le capot épais de la variante AluClip Pro, qui dispense l'ouvrant 76271 de renfort
+acier — voir [Renforts du système 76](/profiles/systeme-76-renforts.md). Le **A043** est dessiné
+entre l'ouvrant galbé 76275 et l'ouvrant 76271, sans rattachement lisible, et aucun capot n'est
+dessiné à côté des ouvrants galbés 76275, 76276 et 76279 — entrée **VER-43**. Sur une seconde planche des ouvrants, le capot **A043** est dessiné à gauche de
+l'ouvrant **76271**, sans cote, et les ouvrants 76281 et 76274 reçoivent le A042, le 76272 le
+A044 ; les ouvrants galbés 76275, 76276 et 76279 y sont aussi dessinés sans capot [3 p. 15] [2 p. 14].
+
+## Embouts et accessoires dessinés avec les ouvrants
+
+| Référence | Légende sur la planche | Position sur la planche | Dessin |
+| --- | --- | --- | ---: |
+| M564 | « Avec agraffe » | sous les ouvrants 76281 et 76275 | ![M564](/assets/profiles/systeme76/ouvrants/embout-m564.png) |
+| M463 | - | sous l'ouvrant 76275 | ![M463](/assets/profiles/systeme76/ouvrants/embout-m463.png) |
+| M164 | - | à côté de l'ouvrant 76279 | ![M164](/assets/profiles/systeme76/ouvrants/embout-m164.png) |
+| T038 | - | à côté de l'ouvrant 76283 | ![T038](/assets/profiles/systeme76/ouvrants/piece-t038.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1, deuxième bande)
+
+La planche dessine ces pièces en perspective, sans cote ni fonction, hormis la mention « Avec
+agraffe » du M564. Le M463 est l'embout d'ouvrant de la nomenclature du DTD [2 p. 21].
+
+# Cotes des meneaux de dormant
+
+Le **meneau de dormant** divise le cadre fixe en deux parties. Chaque coupe porte l'épaisseur de
+76 mm en haut et, à droite, la largeur du meneau décomposée en aile + clair + aile ; la largeur
+totale est portée à gauche.
+
+| Meneau | Épaisseur (mm) | Largeur totale (mm) | Décomposition, aile + clair + aile (mm) | Capot | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 76372 | 76 | 98 | 28 + 42 + 28 | A048 | ![Meneau 76372](/assets/profiles/systeme76/meneaux/meneau-76372.png) |
+| 76373 | 76 | 124 | 28 + 68 + 28 | A346 | ![Meneau 76373](/assets/profiles/systeme76/meneaux/meneau-76373.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1, deuxième et troisième bandes, à droite)
+
+Les planches du manuel de mise en œuvre donnent les mêmes cotes au 76372 (76, 98 = 28 + 42 + 28)
+et au 76373 (76, 124 = 28 + 68 + 28), titrés « Meneau/Traverse » ; le sommaire du manuel donne
+110 mm au 76373 — entrée **INC-09** [4 p. 17, 33].
+
+Sur une seconde coupe du 76372, deux cotes verticales intérieures, prises depuis le haut
+du meneau, s'ajoutent : **21 mm** et **32 mm** ; les 76 mm d'épaisseur, les 28 + 42 mm du 76372,
+les 124 et 68 mm du 76373 et les capots A048 et A346 y sont les mêmes [3 p. 15] [2 p. 14].
+
+| Capot | Meneau habillé | Largeur du retour (mm) | Hauteur (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| A048 | 76372 | 19,8 | 103,8 | ![Capot A048](/assets/profiles/systeme76/meneaux/capot-a048.png) |
+| A346 | 76373 | 19,7 | 130 | ![Capot A346](/assets/profiles/systeme76/meneaux/capot-a346.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1)
+
+Le capot de meneau est **à deux retours**, un de chaque côté, là où le capot de dormant n'en a
+qu'un. Les cotes et compositions des meneaux 76372 et 76373 avec leurs ouvrants sont dans
+[Meneaux PERFORM76](/profiles/perform76-meneaux.md).
+
+## Embouts dessinés à droite des meneaux
+
+Dix embouts sont dessinés en perspective dans la colonne à droite des meneaux 76372 et 76373, en
+deux groupes de cinq. Les références et les légendes (« recouvrant », « AluClip », « partie
+ext. », « partie int. ») sont reprises telles qu'elles sont écrites sur la planche.
+
+| Référence | Légende sur la planche | Groupe | Dessin |
+| --- | --- | --- | ---: |
+| Set M285D/L | recouvrant | à côté du 76372 | ![Set M285D/L](/assets/profiles/systeme76/embouts/set-m285.png) |
+| Set M286D/L | AluClip | à côté du 76372 | ![Set M286D/L](/assets/profiles/systeme76/embouts/set-m286.png) |
+| M107 | partie ext. | à côté du 76372 | ![M107](/assets/profiles/systeme76/embouts/embout-m107.png) |
+| M106D/L | partie int. | à côté du 76372 | ![M106D/L](/assets/profiles/systeme76/embouts/embout-m106.png) |
+| M108 | partie ext. AluClip | à côté du 76372 | ![M108](/assets/profiles/systeme76/embouts/embout-m108.png) |
+| Set M288D/L | recouvrant | à côté du 76373 | ![Set M288D/L](/assets/profiles/systeme76/embouts/set-m288.png) |
+| Set M289D/L | AluClip | à côté du 76373 | ![Set M289D/L](/assets/profiles/systeme76/embouts/set-m289.png) |
+| M110 | partie ext. | à côté du 76373 | ![M110](/assets/profiles/systeme76/embouts/embout-m110.png) |
+| M109D/L | partie int. | à côté du 76373 | ![M109D/L](/assets/profiles/systeme76/embouts/embout-m109.png) |
+| M111 | partie ext. AluClip | à côté du 76373 | ![M111](/assets/profiles/systeme76/embouts/embout-m111.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1, colonne de droite)
+
+La planche ne nomme pas le profilé que ces embouts ferment. Les embouts M285 et M288 sont ceux du
+traitement du battement dans le manuel de mise en œuvre — voir
+[Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md#débit-du-battement-lui-même-et-de-son-renfort).
+
+# Cotes des battements
+
+Le **battement** est le profilé fixé sur l'un des deux ouvrants d'une fenêtre à deux vantaux, qui
+recouvre la jonction avec l'autre ouvrant. Chaque coupe porte en haut la largeur, à gauche la
+hauteur, à droite sa décomposition, et en bas une cote de 17,5 mm sur les 76471 et 76472.
+
+| Battement | Largeur (mm) | Hauteur (mm) | Décomposition droite, de haut en bas (mm) | Cote basse (mm) | Capot | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 76471 | 94,5 | 62 | 29 + 16 + 17 | 17,5 | A051 | ![Battement 76471](/assets/profiles/systeme76/battements/battement-76471.png) |
+| 76472 | 75 | 80 | 29 + 34 + 17 | 17,5 | A052 | ![Battement 76472](/assets/profiles/systeme76/battements/battement-76472.png) |
+| 76473 | 31 | 46 | - | - | A318 | ![Battement 76473](/assets/profiles/systeme76/battements/battement-76473.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1, troisième bande)
+
+**Les planches du manuel de mise en œuvre ne cotent pas les battements comme le poster** : le
+**76471** y fait **94,1 mm** de large pour 62 mm de haut, décomposés 22 + 21 + 19, sans cote basse ;
+le **76472** 75 mm pour 80 mm, décomposés 22 + 41 + 17 ; le **76473** 31 mm pour 46 mm, comme
+ci-dessus [4 p. 32] — entrée **CTR-26** du registre
+[Contradictions entre sources](/anomalies/contradictions-entre-sources.md). Le tableau garde les
+valeurs du poster, les deux jeux de cotes étant portés avec leur source.
+
+| Capot | Battement habillé | Largeur du retour (mm) | Hauteur (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| A051 | 76471 | 19,9 | 67,9 | ![Capot A051](/assets/profiles/systeme76/battements/capot-a051.png) |
+| A052 | 76472 | 19,9 | 85,7 | ![Capot A052](/assets/profiles/systeme76/battements/capot-a052.png) |
+| A318 | 76473 | 10,8 | 50,8 | ![Capot A318](/assets/profiles/systeme76/battements/capot-a318.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1, troisième bande)
+
+Le battement **76473** est dessiné avec deux embouts au-dessus de lui : **M462** et **M501**, ce
+dernier marqué « AluClip ». Le M462 est l'embout bas dont dépend la formule de débit du 76473 —
+voir [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md#débit-du-battement-lui-même-et-de-son-renfort).
+
+| Référence | Légende sur la planche | Dessin |
+| --- | --- | ---: |
+| M462 | - | ![M462](/assets/profiles/systeme76/battements/embout-m462.png) |
+| M501 | AluClip | ![M501](/assets/profiles/systeme76/battements/embout-m501.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1, deuxième bande)
+
+Les assemblages de battement retenus en PERFORM76 sont dans
+[Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md).
+
+# Cotes des traverses d'ouvrant
+
+La **traverse d'ouvrant** (appelée aussi meneau d'ouvrant) divise un ouvrant ; elle ne se monte
+pas sur un dormant — voir [Meneaux PERFORM76](/profiles/perform76-meneaux.md). Chaque coupe porte
+l'épaisseur de 76 mm en haut, la largeur totale à gauche et, à droite, sa décomposition en
+aile + clair + aile, ailes de 21 mm.
+
+| Traverse | Épaisseur (mm) | Largeur totale (mm) | Décomposition droite (mm) | Capot | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 76300 | 76 | 68 | 21 + 26 + 21 | A045 | ![Traverse 76300](/assets/profiles/systeme76/meneaux/traverse-76300.png) |
+| 76301 | 76 | 84 | 21 + 42 + 21 | A069 | ![Traverse 76301](/assets/profiles/systeme76/meneaux/traverse-76301.png) |
+| 76303 | 76 | 110 | 21 + 68 + 21 | A070 | ![Traverse 76303](/assets/profiles/systeme76/meneaux/traverse-76303.png) |
+| 76299 | 76 | 99,4 | 21 + 97 | A055 | ![Traverse 76299](/assets/profiles/systeme76/meneaux/traverse-76299.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1, quatrième et cinquième bandes, à gauche)
+
+Les planches du manuel de mise en œuvre donnent les mêmes cotes aux 76300 (68 = 21 + 26 + 21),
+76301 (84 = 21 + 42 + 21) et 76303 (110 = 21 + 68 + 21), titrés « Traverse d'ouvrant » ; le titre
+du 76303 annonce 119 mm — entrée **INC-09** [4 p. 34-35].
+
+Le **76299** n'est pas symétrique : il n'a qu'une aile de 21 mm, et sa décomposition droite
+(21 + 97 = 118 mm) dépasse la cote gauche de 99,4 mm, le profilé descendant sous la face
+cotée à gauche. Le 76299 est la traverse complémentaire d'ouvrant, de 97 mm [2 p. 15].
+
+Les quatre traverses sont redessinées avec leur capot sur les planches « Traverse complémentaire
+d'ouvrant » et « Meneau / traverse intermédiaire ouvrant », avec les mêmes
+capots (A055, A045, A069, A070) et les mêmes clairs (97, 26, 42 et 68 mm). La coupe du **76300**
+y porte en plus une cote verticale intérieure de **25 mm** prise depuis le haut de la traverse
+[3 p. 16] [2 p. 15].
+
+## Élargisseur d'ouvrant EO20545
+
+L'**élargisseur d'ouvrant EO20545** est un profilé aluminium à rupture de pont thermique : deux
+coques aluminium reliées par des barrettes en polyamide 6.6 (légende « Alu - PA66 »), qui se
+rapporte sur un cadre ouvrant pour l'élargir. La faible conductivité du polyamide lui confère une
+isolation thermique limitant la condensation superficielle et les déperditions ; ses prescriptions
+de qualité et de marquage (marque QB 49) sont dans
+[DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md) [3 p. 5, 16].
+
+| Référence | Matière | Cotes | Coupe |
+| --- | --- | --- | ---: |
+| EO20545 | aluminium et polyamide PA66 | - | ![Élargisseur ouvrant EO20545](/assets/profiles/systeme76/elargisseurs/elargisseur-ouvrant-eo20545.png) |
+
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 16)
+
+La coupe n'est pas cotée. La référence est écrite **E020545** (chiffre zéro) sur la planche et
+**EO20545** (lettre O) dans le texte, au DTA comme au DTD [2 p. 3, 5, 15] — entrée **INC-21** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md).
+
+| Capot | Traverse habillée | Largeur du retour (mm) | Hauteur (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| A045 | 76300 | 16,2 | 74 | ![Capot A045](/assets/profiles/systeme76/meneaux/capot-a045.png) |
+| A069 | 76301 | 16,3 | 89,8 | ![Capot A069](/assets/profiles/systeme76/meneaux/capot-a069.png) |
+| A046 | - | 19,7 | 90 | ![Capot A046](/assets/profiles/systeme76/meneaux/capot-a046.png) |
+| A070 | 76303 | 16,3 | 116 | ![Capot A070](/assets/profiles/systeme76/meneaux/capot-a070.png) |
+| A047 | - | 19,7 | 116 | ![Capot A047](/assets/profiles/systeme76/meneaux/capot-a047.png) |
+| A055 | 76299 | 16,3 | 100,5 | ![Capot A055](/assets/profiles/systeme76/meneaux/capot-a055.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1)
+
+Les capots **A046** (19,7 × 90 mm) et **A047** (19,7 × 116 mm) sont dessinés à gauche des
+capots A069 et A070, avec la largeur de retour de 19,7 mm des capots de meneau de dormant ; la
+planche ne dit pas quel profilé ils habillent — entrée **VER-43**.
+
+Sous les capots A047 et A070 sont dessinées trois pièces pleines, dessinées hachurées, **M527**, **M528** et
+**M529**, sans cote ni légende.
+
+| Référence | Dessin |
+| --- | ---: |
+| M527 | ![M527](/assets/profiles/systeme76/accessoires/m527.png) |
+| M528 | ![M528](/assets/profiles/systeme76/accessoires/m528.png) |
+| M529 | ![M529](/assets/profiles/systeme76/accessoires/m529.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1, coin inférieur gauche)
+
+# Capots de la variante AluClip, planches du manuel de mise en œuvre
+
+La **variante AluClip** du système 76 Advanced habille la face extérieure de chaque profilé PVC
+d'un **capot aluminium** clippé. Le registre 2.6.2 du manuel de mise en œuvre redessine chaque
+profilé principal avec, à sa gauche, le ou les capots qui l'habillent, cotés de deux cotes : la
+**largeur du retour** (cote horizontale en haut) et la **hauteur** du capot (cote verticale). Le
+**demi-capot A385** est dessiné à côté de chaque dormant, en plus du capot complet. Une ligne par
+capot et par profilé habillé, dans l'ordre des planches ; l'image de la colonne Coupe est celle
+du même capot découpée sur le poster [4 p. 305-311].
+
+| Capot | Profilé habillé | Largeur du retour (mm) | Hauteur (mm) | Page PDF | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| A385 | dormants 76171, 76172, 76173, 76180, 76177, 76185, 76178, demi-capot | 20,3 | 51 | 305, 306 | ![Capot A385](/assets/profiles/systeme76/dormants/capot-a385.png) |
+| A033 | dormant 76171 | 20,3 | 78,2 | 305 | ![Capot A033](/assets/profiles/systeme76/dormants/capot-a033.png) |
+| A034 | dormant 76172 | 20,3 | 96,2 | 305 | ![Capot A034](/assets/profiles/systeme76/dormants/capot-a034.png) |
+| A035 | dormant 76173 | 20,3 | 107,9 | 305 | ![Capot A035](/assets/profiles/systeme76/dormants/capot-a035.png) |
+| A314 | dormant 76180 | 20,3 | 72,3 | 306 | ![Capot A314](/assets/profiles/systeme76/dormants/capot-a314.png) |
+| A313 | dormants rénovation 76177, 76185, 76178 | 20,3 | 49 | 306 | ![Capot A313](/assets/profiles/systeme76/dormants/capot-a313.png) |
+| A042 | ouvrant 76281 | 16,5 | 43,5 | 307 | ![Capot A042, à côté du 76281](/assets/profiles/systeme76/ouvrants/capot-a042-76281.png) |
+| A043 | ouvrant 76271 | 16,5 | 51,3 | 307 | ![Capot A043](/assets/profiles/systeme76/ouvrants/capot-a043.png) |
+| A044 | ouvrant 76272 | 16,5 | 83,3 | 307 | ![Capot A044](/assets/profiles/systeme76/ouvrants/capot-a044.png) |
+| A048 | meneau 76372 | 19,8 | 103,8 | 308 | ![Capot A048](/assets/profiles/systeme76/meneaux/capot-a048.png) |
+| A346 | meneau 76373 | 19,8 | 130 | 308 | ![Capot A346](/assets/profiles/systeme76/meneaux/capot-a346.png) |
+| A069 | traverse d'ouvrant 76301, « pour traverse ouvrant » | 16,3 | 89,8 | 309 | ![Capot A069](/assets/profiles/systeme76/meneaux/capot-a069.png) |
+| A070 | traverse d'ouvrant 76303, « pour traverse d'ouvrant » | 16,3 | 115,8 | 309 | ![Capot A070](/assets/profiles/systeme76/meneaux/capot-a070.png) |
+| A045 | traverse d'ouvrant 76300 | 16,3 | 73,8 | 309 | ![Capot A045](/assets/profiles/systeme76/meneaux/capot-a045.png) |
+| A051 | battement 76471 | 19,8 | 67,9 | 310 | ![Capot A051](/assets/profiles/systeme76/battements/capot-a051.png) |
+| A052 | battement 76472 | 19,8 | 85,9 | 310 | ![Capot A052](/assets/profiles/systeme76/battements/capot-a052.png) |
+| A120 | élargisseur 76701 | 12,3 | 34 | 311 | ![Capot A120](/assets/profiles/systeme76/elargisseurs/capot-a120.png) |
+| A121 | élargisseur 76702 | 12,3 | 64 | 311 | ![Capot A121](/assets/profiles/systeme76/elargisseurs/capot-a121.png) |
+| A124 | élargisseur 76703 | 12,3 | 124 | 311 | ![Capot A124](/assets/profiles/systeme76/elargisseurs/capot-a124.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 305 à 311, registre 2.6.2, p. 1 à 7, versions décembre 2016 et mars 2021)
+
+Les hauteurs des A069 et A070 sont écrites avec un point décimal (« 89.8 », « 115.8 »). **Huit
+capots ne sont pas cotés comme sur le poster des profilés principaux** : A385 (retour 20,3 contre
+20,2 mm), A035 (107,9 contre 108,2 mm), A314 (72,3 contre 72 mm), A346 (retour 19,8 contre
+19,7 mm), A045 (16,3 × 73,8 contre 16,2 × 74 mm), A070 (115,8 contre 116 mm), A051 (retour 19,8
+contre 19,9 mm) et A052 (19,8 × 85,9 contre 19,9 × 85,7 mm) — entrée **CTR-35** du registre
+[Contradictions entre sources](/anomalies/contradictions-entre-sources.md). Les tableaux des
+sections précédentes gardent les valeurs du poster ; celui-ci porte celles du manuel. Le capot
+A043 est ici rattaché à l'ouvrant 76271 (entrée VER-43) ; les capots A072, A073, A506T, A039,
+A318, A055, A046 et A047 ne sont pas dessinés sur ces planches. Les cotes des élargisseurs 76701
+à 76703 sont dans
+[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md).
+
+## Accessoires dessinés avec les profilés capotés
+
+Les planches AluClip dessinent aussi, à côté des profilés capotés, les pièces qui leur sont
+propres, avec leur légende [4 p. 305-310] :
+
+| Référence | Légende sur la planche | Profilé à côté duquel elle est dessinée | Page PDF |
+| --- | --- | --- | --- |
+| G023 | Insert de compensation dormant | dormant 76171 | 305 |
+| M450 / G008 | Mise en oeuvre pour dormant et traverse dans le cas de drainage vers l'avant | dormants 76171 à 76173 | 305 |
+| M450 / G008 | Mise en oeuvre pour dormant et traverse dans le cas de drainage en façade | dormants 76180, 76177, 76185, 76178 | 306 |
+| G024 | Insert de compensation ouvrant | ouvrant 76281 | 307 |
+| T019 | - | meneau 76372 | 308 |
+| T018 | Gabarit de perçage | traverse 76301 | 309 |
+| T020 | Gabarit | traverse 76300 | 309 |
+| M286S/L | Embout de battement | battement 76471 | 310 |
+| M261 | - | entre les battements 76471 et 76472 | 310 |
+| M289S/L | Embout de battement | battement 76472 | 310 |
+| A062 | Rejet d'eau, avec joints G060/G229 | - | 310 |
+| A064 | Rejet d'eau, avec joint G056 et joints G060/G229 | - | 310 |
+| A076 | Seuil, 76 × 20 mm | - | 310 |
+| A077 | Seuil, 123 × 20 mm | - | 310 |
+| A343 | Seuil, 135 × 20 mm | - | 310 |
+| A075 | Seuil, 76 × 26 mm | - | 310 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 305 à 310)
+
+Les embouts de battement sont écrits **M286S/L** et **M289S/L** sur la planche AluClip, « Set
+M286D/L » et « Set M289D/L » sur le poster (tableau *Embouts dessinés à droite des meneaux*). Les
+gabarits T018, T019 et T020 servent aux assemblages mécaniques des meneaux et traverses — voir
+[Assemblage mécanique du meneau et de la traverse du système 76 Advanced](/procedures/assemblage-meneau-traverse-systeme-76.md) ;
+les seuils et rejets d'eau sont dans
+[Mise en œuvre du seuil du système 76 Advanced](/procedures/mise-en-oeuvre-seuil-systeme-76.md).
+
+L'**insert de compensation G023** est dessiné hachuré dans la gorge extérieure basse du dormant,
+contre le pied du capot ; le **G024** de même sur l'ouvrant. Le capot est à gauche, le profilé en
+trait fin :
+
+![Insert de compensation G023 sur le dormant](/assets/procedures/moe-76-advanced/aluclip-insert-g023-dormant.png)
+
+![Insert de compensation G024 sur l'ouvrant](/assets/procedures/moe-76-advanced/aluclip-insert-g024-ouvrant.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 305 et 307)
+
+La **busette M450** (la pièce qui ferme le trou de drainage côté extérieur) et le **manchon G008**
+se mettent en œuvre sur un dormant ou une traverse capotés, dans le cas de drainage vers l'avant
+(p. 305) ou en façade (p. 306). Le dessin montre, de gauche à droite, la busette M450, le manchon
+G008, puis les deux en place dans le perçage qui traverse le capot et la paroi du profilé ; les
+joints du manchon sont dessinés en noir.
+
+![Busette M450 et manchon G008 sur un dormant capoté](/assets/procedures/moe-76-advanced/aluclip-busette-m450-manchon-g008.png)
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 305 et 306)
+
+# Valeurs E et S des capots
+
+Dans les tableaux d'accessoires du manuel de mise en œuvre, chaque capot aluminium, demi-capot et
+profilé de protection porte deux valeurs, « E » et « S », en mm, que le manuel ne définit pas —
+entrée **VER-46** du registre [Informations à vérifier](/anomalies/informations-a-verifier.md).
+Une ligne par capot et par planche qui le cote ; la colonne « Profilé » nomme le profilé de la
+planche [4 p. 5-35].
+
+| Capot | Profilé de la planche | E (mm) | S (mm) | Page PDF |
+| --- | --- | --- | --- | --- |
+| A030 | dormant de porte 76101 | 222 | 107 | 5 |
+| A031 | dormant de porte 76102 | 266 | 125 | 6 |
+| A033 | dormants 76171 et 76173 | 235,3 | 113 | 19, 21 |
+| A034 | dormant 76172 | 279,4 | 131 | 20 |
+| A073 | dormant de porte 76102, dormant 76172 | 178,6 | 87 | 6, 20 |
+| A314 | dormant 76180 | 212,2 | 104 | 22 |
+| A313 | dormants 76177, 76178 et 76185 | 166,2 | 80 | 23 à 25 |
+| A385 | dormants 76101, 76102, 76171 à 76185 | 156,3 | 80 | 5, 6, 19 à 25 |
+| A506T | dormants 76101, 76102, 76171 à 76185 | 80,6 | 51,3 | 5, 6, 19 à 25 |
+| A066.T | dormants 76101, 76102, 76171 à 76185 | 64 | 34 | 5, 6, 19 à 25 |
+| A042 | ouvrant 76281 | 126,9 | 68 | 27 |
+| A042 | ouvrant 76274 | 126,8 | 68 | 31 |
+| A072 | ouvrant 76271 | 217 | 112 | 28 |
+| A043 | ouvrant 76271 | 142,9 | 76 | 28 |
+| A044 | ouvrants 76272 et 76279 | 207,4 | 108 | 29 |
+| A037 | ouvrant de porte 76201 | 158 | 84 | 8 |
+| A040 | ouvrant de porte 76206 | 254,4 | 132 | 9 |
+| A041 | ouvrant de porte 76207 | 326,9 | 168 | 10 |
+| A049 | battement de porte 76401 | 195,9 | 94 | 11 |
+| A050 | battement de porte 76402 | 231,9 | 112 | 11 |
+| A318 | battement 76473 | 139 | 74 | 32 |
+| A051 | battement 76471 | 220 | 107 | 32 |
+| A052 | battement 76472 | 257,6 | 125 | 32 |
+| A048 | meneau 76372 | 287,1 | 143 | 33 |
+| A346 | meneau 76373 | 340,4 | 169,3 | 33 |
+| A045 | traverse 76300 | 206,2 | 108 | 12, 35 |
+| A046 | meneau de porte 76301 | 263,2 | 132 | 12 |
+| A069 | traverse 76301 | 238,2 | 124 | 12, 34 |
+| A047 | meneau de porte 76303 | 319,2 | 156 | 13 |
+| A070 | traverse 76303 | 290,4 | 150 | 13, 34 |
+| A055 | traverse complémentaire 76299, titrée « Compensateur » | 242,1 | 126 | 38 |
+| A249 | liaison 76605, poteaux 8340, 8341, 8355, 8356 | 112 | 34 | 50, 52, 53 |
+| A054 | liaison aluminium A250 | 146,2 | 38,0 | 52 |
+| A225 | poteau d'angle 8355 | 472,1 | 235,7 | 53 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 5 à 13, 19 à 35, 38 et 50 à 53)
+
+L'E de l'A318 est écrit « 139, mm », sans décimale après la virgule. L'**A042** est coté E 126,9 à
+côté du 76281 et 126,8 à côté du 76274, comme ses deux hauteurs diffèrent sur le poster — entrée
+**INC-18** du registre [Incohérences internes](/anomalies/incoherences-internes.md). Le manuel
+rattache à un profilé plusieurs capots que le poster laisse sans rattachement : A073 aux dormants
+76102 et 76172 (« Capot Alu dormant ouverture extérieure ou élargisseur »), A043 à l'ouvrant
+76271, A044 à l'ouvrant galbé 76279, A046 et A047 aux meneaux de porte — entrée **VER-43**. La
+nomenclature de chaque profilé est dans
+[Renforts et accessoires par profilé du système 76](/profiles/systeme-76-accessoires-par-profile.md).
+
+# Profilés de la porte d'entrée
+
+Six profilés sont dessinés sur le poster sans désignation de famille. Le manuel de mise en œuvre
+en fait, pour cinq d'entre eux, des profilés de la **porte d'entrée** du système : **76201**
+« Ouvrant de 78 mm », **76206** « Ouvrant de 126 mm », **76207** « Ouvrant extérieur 126 mm »,
+**76401** « Battement de 48 mm », **76402** « Battement de 66 mm » [4 p. 4]. Le **76404** n'y
+figure pas. Leurs renforts, capots et accessoires sont dans
+[Porte d'entrée du système 76 Advanced](/portes/systeme-76-advanced-porte-d-entree.md).
+
+| Profilé | Largeur, cote du haut (mm) | Cote verticale gauche (mm) | Décomposition gauche, de haut en bas (mm) | Décomposition droite, de haut en bas (mm) | Capot | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 76201 | 76 | - | 54 + 4 + 20 | 21 + 57 | A037 | ![Profilé 76201](/assets/profiles/systeme76/autres/profil-76201.png) |
+| 76206 | 76 | 126 | 102 + 4 + 20 | 21 + 105 | A040 | ![Profilé 76206](/assets/profiles/systeme76/autres/profil-76206.png) |
+| 76207 | 76 | - | - | 21 + 81 + 4 + 20 | A041 | ![Profilé 76207](/assets/profiles/systeme76/autres/profil-76207.png) |
+| 76401 | 94,5 | 48 | - | 22 + 16 + 10 | A049 | ![Profilé 76401](/assets/profiles/systeme76/autres/profil-76401.png) |
+| 76402 | 75 | 66 | - | 22 + 34 + 10 | A050 | ![Profilé 76402 et 76404](/assets/profiles/systeme76/autres/profil-76402-76404.png) |
+| 76404 | 75 | 66 | - | 22 + 34 + 10 | A050 | ![Profilé 76402 et 76404](/assets/profiles/systeme76/autres/profil-76402-76404.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1, quatrième à sixième bandes, au centre et à droite)
+
+Les **76402** et **76404** partagent le même dessin ; le 76404 est légendé « Sans pied de
+clippage ». Le **76206** est dessiné avec l'embout **M335**. Le **76401** est coté **94,5 mm** de
+large sur le poster et **94,1 mm** sur sa planche du manuel de mise en œuvre [4 p. 11] — entrée
+**CTR-26** du registre [Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
+Les autres cotes des cinq profilés de porte sont les mêmes sur les deux documents [4 p. 8-11].
+
+| Capot | Profilé habillé | Largeur du retour (mm) | Hauteur (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| A037 | 76201 | 16,4 | 58,2 | ![Capot A037](/assets/profiles/systeme76/autres/capot-a037.png) |
+| A073 | - | 16,7, pied | 65,3 | ![Capot A073](/assets/profiles/systeme76/autres/capot-a073-76201.png) |
+| A040 | 76206 | 16,5 | 106,2 | ![Capot A040](/assets/profiles/systeme76/autres/capot-a040.png) |
+| A041 | 76207 | 16,5 | 130,3 | ![Capot A041](/assets/profiles/systeme76/autres/capot-a041.png) |
+| A049 | 76401 | 19,9 | 54,2 | ![Capot A049](/assets/profiles/systeme76/autres/capot-a049.png) |
+| A050 | 76402, 76404 | 19,9 | 72,2 | ![Capot A050](/assets/profiles/systeme76/autres/capot-a050.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1)
+
+| Référence | Légende sur la planche | Dessin |
+| --- | --- | ---: |
+| M335 | - | ![M335](/assets/profiles/systeme76/autres/embout-m335.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1)
+
+## Embouts dessinés à droite des profilés 76201, 76401 et 76402
+
+Dix embouts sont dessinés en perspective dans la colonne à droite des profilés 76201, 76401 et
+76402, en deux groupes, sur le même modèle que ceux des meneaux (voir *Embouts dessinés à droite
+des meneaux*). Les références et les légendes sont reprises telles qu'elles sont écrites.
+
+| Référence | Légende sur la planche | Groupe | Dessin |
+| --- | --- | --- | ---: |
+| Set M279 | recouvrant | à côté du 76401 | ![Set M279](/assets/profiles/systeme76/embouts/set-m279.png) |
+| Set M280 | AluClip | à côté du 76401 | ![Set M280](/assets/profiles/systeme76/embouts/set-m280.png) |
+| M101 | partie ext. | à côté du 76401 | ![M101](/assets/profiles/systeme76/embouts/embout-m101.png) |
+| M100 | partie int. | à côté du 76401 | ![M100](/assets/profiles/systeme76/embouts/embout-m100.png) |
+| M102 | partie ext. AluClip | à côté du 76401 | ![M102](/assets/profiles/systeme76/embouts/embout-m102.png) |
+| Set M282 | recouvrant | à côté du 76402 | ![Set M282](/assets/profiles/systeme76/embouts/set-m282.png) |
+| Set M283 | AluClip | à côté du 76402 | ![Set M283](/assets/profiles/systeme76/embouts/set-m283.png) |
+| M104 | partie ext. | à côté du 76402 | ![M104](/assets/profiles/systeme76/embouts/embout-m104.png) |
+| M103 | partie int. | à côté du 76402 | ![M103](/assets/profiles/systeme76/embouts/embout-m103.png) |
+| M105 | partie ext. AluClip | à côté du 76402 | ![M105](/assets/profiles/systeme76/embouts/embout-m105.png) |
+
+(schéma: raw/poster-systeme-76-advanced-principaux-2022.pdf, p. 1, colonne de droite)
+
+Les sets M279 à M283 sont écrits sans le suffixe « D/L » des sets M285 à M289.
+
+# Citations
+
+[1] [Poster Système 76 Advanced, profilés principaux, 2022](raw/poster-systeme-76-advanced-principaux-2022.pdf), p. 1
+
+[2] [DTD n° DBV-25-6/16-2334_V5, système 76 Advanced](raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf)
+
+[3] [DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED](raw/dta-trocal-76-advanced-6-16-2334-v5.pdf)
+
+[4] Mise en œuvre Système 76 Advanced, profine — `raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`,
+registre 2.1.1 (p. 4 à 16 du PDF), registre 2.1.2 (p. 17 et suivantes) et registre 2.6.2
+« AluClip, Profilés principaux et accessoires » (p. 305 à 311 du PDF, pages imprimées 1 à 7)
+
+# Voir aussi
+
+- [Renforts du système 76](/profiles/systeme-76-renforts.md)
+- [Assemblages du système 76](/profiles/systeme-76-assemblages.md)
+- [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md)
+- [Dormants PERFORM76](/profiles/perform76-dormants.md)
+- [Posters Système 76 Advanced](/sources/posters-systeme-76-advanced.md)
+- [Porte d'entrée du système 76 Advanced](/portes/systeme-76-advanced-porte-d-entree.md)
+- [Mise en œuvre Système 76 Advanced](/sources/profine-mise-en-oeuvre-76-advanced.md)
+
+===== PAGE 3 : /profiles/systeme-76-accessoires-par-profile.md =====
+# La nomenclature par profilé
+
+Chaque planche de profilé principal de la fenêtre **76 Advanced à joint central** de
+[profine](/fournisseurs/profine.md) porte, à côté de la coupe cotée du profilé, un tableau
+« Accessoires » : une case par référence, avec sa désignation, son dessin et parfois des valeurs.
+C'est la liste de ce qu'il faut commander avec ce profilé : ses **renforts** (profils acier glissés
+dans la chambre centrale), son **capot** aluminium (principe AluClip, capot clippé sur la face
+extérieure), ses **pièces d'assemblage sur seuil** (pour poser un montant de dormant sur un seuil
+aluminium), ses **supports de cale de vitrage**, ses **embouts** et ses **gabarits de perçage**
+[1 p. 19-37]. Les termes sont définis dans le [glossaire](/reference/glossaire.md). Toutes les
+planches sont en version d'octobre 2021.
+
+Les tableaux ci-dessous reprennent une ligne par référence, dans l'ordre de la planche, avec la
+désignation telle qu'elle y est écrite : une même pièce peut être désignée autrement d'une planche à
+l'autre. Les valeurs sont sur leurs pages propres :
+
+- les sections et inerties IG et IW des renforts, dans
+  [Renforts du système 76](/profiles/systeme-76-renforts.md) ;
+- les valeurs E et S des capots, dans
+  [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md#valeurs-e-et-s-des-capots) ;
+- les dimensions des pièces de remplissage, plus bas dans cette page ;
+- les cotes des profilés eux-mêmes, dans
+  [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md).
+
+La porte d'entrée du système a sa propre nomenclature, dans
+[Porte d'entrée du système 76 Advanced](/portes/systeme-76-advanced-porte-d-entree.md).
+
+# Dormants
+
+## Dormant 76171, « Dormant 74 mm »
+
+| Référence | Désignation | Dessin |
+| --- | --- | ---: |
+| V306.Z | Renfort 1,5 mm | ![Renfort V306.Z](/assets/profiles/systeme76/renforts/renfort-v306z.png) |
+| V307.Z | Renfort 2,0 mm | ![Renfort V307.Z](/assets/profiles/systeme76/renforts/renfort-v307z.png) |
+| V308 | Renfort 2,5 mm | ![Renfort V308](/assets/profiles/systeme76/renforts/renfort-v308.png) |
+| V309.Z | Renfort 1,5 mm | ![Renfort V309.Z](/assets/profiles/systeme76/renforts/renfort-v309z.png) |
+| V310 | Renfort 2,0 mm | ![Renfort V310](/assets/profiles/systeme76/renforts/renfort-v310.png) |
+| A066.T | Profilé Alu à coller pour protéger le dormant | ![A066.T](/assets/profiles/systeme76/accessoires/a066t.png) |
+| A033 | Capot Alu | ![Capot A033](/assets/profiles/systeme76/dormants/capot-a033.png) |
+| A385 | Demi capot Alu | ![Capot A385](/assets/profiles/systeme76/dormants/capot-a385.png) |
+| A506T | Profilé Alu à coller pour protéger le dormant | ![A506T](/assets/profiles/systeme76/dormants/capot-a506t.png) |
+| M170 | Pièce de remplissage pour assemblage seuil | ![M170](/assets/profiles/systeme76/accessoires/m170.png) |
+| M527 | Pièce de remplissage pour V309 | ![M527](/assets/profiles/systeme76/accessoires/m527.png) |
+| M138 | support cale de vitrage pareclose haute | ![M138](/assets/profiles/systeme76/accessoires/m138.png) |
+| M139 | Support cale de vitrage pour adaptateur | ![M139](/assets/profiles/systeme76/accessoires/m139.png) |
+| M150 | Pièce d'assmeblage pour tous seuil | ![M150](/assets/profiles/systeme76/accessoires/m150.png) |
+| M154 | Set d'assemblage seuil pour A076/A077 | ![M154](/assets/profiles/systeme76/accessoires/m154.png) |
+| J064 | Patin d'étanchéité pour A076/A077 | ![J064](/assets/profiles/systeme76/accessoires/j064.png) |
+| G023 | Insert de compensation pour aluClip dormant | ![G023](/assets/profiles/systeme76/accessoires/g023.png) |
+| M569 | Clip de montage pour demi capot | ![M569](/assets/profiles/systeme76/dormants/clip-m569.png) |
+| J156 | Set d'assemblage pour 76171 sur seuil | ![J156](/assets/profiles/systeme76/accessoires/j156.png) |
+| S048 | Douille de montage | ![S048](/assets/profiles/systeme76/accessoires/s048.png) |
+| M546 | Set d'assemblage sur A075 grugé | ![M546](/assets/profiles/systeme76/accessoires/m546.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 19)
+
+## Dormant 76172, « Dormant 92 mm »
+
+| Référence | Désignation | Dessin |
+| --- | --- | ---: |
+| V314.Z | Renfort 2,0 mm, soudé | ![Renfort V314.Z](/assets/profiles/systeme76/renforts/renfort-v314z.png) |
+| V325 | Renfort 2,0 mm | ![Renfort V325](/assets/profiles/systeme76/renforts/renfort-v325.png) |
+| V353 | Renfort 1,5 mm, soudé | ![Renfort V353](/assets/profiles/systeme76/renforts/renfort-v353.png) |
+| A506T | profilé Alu protection recouvrement dormant | ![A506T](/assets/profiles/systeme76/dormants/capot-a506t.png) |
+| A066.T | Profilé Alu à coller pour protéger le dormant | ![A066.T](/assets/profiles/systeme76/accessoires/a066t.png) |
+| A034 | Capot Alu | ![Capot A034](/assets/profiles/systeme76/dormants/capot-a034.png) |
+| A073 | Capot Alu dormant ouverture extérieure ou élargisseur | ![Capot A073](/assets/profiles/systeme76/dormants/capot-a073.png) |
+| A385 | Demi capot Alu | ![Capot A385](/assets/profiles/systeme76/dormants/capot-a385.png) |
+| M171 | Pièce de remplissage pour assemblage seuil | ![M171](/assets/profiles/systeme76/accessoires/m171.png) |
+| M528 | Pièce de remplissage pour V314 | ![M528](/assets/profiles/systeme76/accessoires/m528.png) |
+| M529 | Pièce de remplissage pour V325 | ![M529](/assets/profiles/systeme76/accessoires/m529.png) |
+| M569 | Clip de montage pour demi capot | ![M569](/assets/profiles/systeme76/dormants/clip-m569.png) |
+| M138 | support cale de vitrage pareclose haute | ![M138](/assets/profiles/systeme76/accessoires/m138.png) |
+| M139 | Support cale de vitrage pour adaptateur | ![M139](/assets/profiles/systeme76/accessoires/m139.png) |
+| M547 | Set d'assemblage sur A075 grugé | ![M547](/assets/profiles/systeme76/accessoires/m547.png) |
+| S049 | Douille de montage | ![S049](/assets/profiles/systeme76/accessoires/s049.png) |
+| G023 | Insert de compensation pour aluClip dormant | ![G023](/assets/profiles/systeme76/accessoires/g023.png) |
+| M155 | Set d'assemblage seuil pour A076/A077 | ![M155](/assets/profiles/systeme76/accessoires/m155.png) |
+| M173 | Pièce d'assmeblage pour tous seuil | ![M173](/assets/profiles/systeme76/accessoires/m173.png) |
+| J065 | Patin d'étanchéité pour A076/A077 | ![J065](/assets/profiles/systeme76/accessoires/j065.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 20)
+
+Le capot **A073** est désigné ici « Capot Alu dormant ouverture extérieure ou élargisseur », ce
+qui répond en partie à l'entrée **VER-43** du registre
+[Informations à vérifier](/anomalies/informations-a-verifier.md).
+
+## Dormant 76173, « Dormant 104 mm »
+
+| Référence | Désignation | Dessin |
+| --- | --- | ---: |
+| V306.Z | Renfort 1,5 mm | ![Renfort V306.Z](/assets/profiles/systeme76/renforts/renfort-v306z.png) |
+| V307.Z | Renfort 2,0 mm | ![Renfort V307.Z](/assets/profiles/systeme76/renforts/renfort-v307z.png) |
+| V308 | Renfort 2,5 mm | ![Renfort V308](/assets/profiles/systeme76/renforts/renfort-v308.png) |
+| V309.Z | Renfort 1,5 mm | ![Renfort V309.Z](/assets/profiles/systeme76/renforts/renfort-v309z.png) |
+| V310 | Renfort 2,0 mm | ![Renfort V310](/assets/profiles/systeme76/renforts/renfort-v310.png) |
+| A066.T | Profilé Alu à coller pour protéger le dormant | ![A066.T](/assets/profiles/systeme76/accessoires/a066t.png) |
+| A033 | Capot Alu | ![Capot A033](/assets/profiles/systeme76/dormants/capot-a033.png) |
+| A385 | Demi capot Alu | ![Capot A385](/assets/profiles/systeme76/dormants/capot-a385.png) |
+| A506T | profilé Alu protection recouvrement dormant | ![A506T](/assets/profiles/systeme76/dormants/capot-a506t.png) |
+| M170 | Pièce de remplissage pour assemblage seui | ![M170](/assets/profiles/systeme76/accessoires/m170.png) |
+| M527 | Pièce de remplissage pour V309 | ![M527](/assets/profiles/systeme76/accessoires/m527.png) |
+| M138 | support cale de vitrage pareclose haute | ![M138](/assets/profiles/systeme76/accessoires/m138.png) |
+| M139 | Support cale de vitrage pour adaptateur | ![M139](/assets/profiles/systeme76/accessoires/m139.png) |
+| M174 | Pièce d'assmeblage pour tous seuil | ![M174](/assets/profiles/systeme76/accessoires/m174.png) |
+| M159 | Set d'assemblage seuil pour A076/A077 | ![M159](/assets/profiles/systeme76/accessoires/m159.png) |
+| J069 | Patin d'étanchéité pour A076/A077 | ![J069](/assets/profiles/systeme76/accessoires/j069.png) |
+| M548 | Set d'assemblage sur A075 grugé | ![M548](/assets/profiles/systeme76/accessoires/m548.png) |
+| M569 | Clip de montage pour demi capot | ![M569](/assets/profiles/systeme76/dormants/clip-m569.png) |
+| S050 | Insert de compensation pour aluClip dormant | ![S050](/assets/profiles/systeme76/accessoires/s050.png) |
+| G023 | Gabarit de perçage pour A076/A077 | ![G023](/assets/profiles/systeme76/accessoires/g023.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 21)
+
+Sur cette planche, le **S050** est désigné « Insert de compensation pour aluClip dormant » et
+dessiné en douille, le **G023** désigné « Gabarit de perçage pour A076/A077 » et dessiné en insert
+— entrée **INC-28** du registre [Incohérences internes](/anomalies/incoherences-internes.md).
+
+## Dormant 76180, « Dormant 94 mm »
+
+| Référence | Désignation | Dessin |
+| --- | --- | ---: |
+| V306.Z | Renfort 1,5 mm | ![Renfort V306.Z](/assets/profiles/systeme76/renforts/renfort-v306z.png) |
+| V307.Z | Renfort 2,0 mm | ![Renfort V307.Z](/assets/profiles/systeme76/renforts/renfort-v307z.png) |
+| V308 | Renfort 2,5 mm | ![Renfort V308](/assets/profiles/systeme76/renforts/renfort-v308.png) |
+| V310 | Renfort 2,0 mm | ![Renfort V310](/assets/profiles/systeme76/renforts/renfort-v310.png) |
+| V309.Z | Renfort 1,5 mm | ![Renfort V309.Z](/assets/profiles/systeme76/renforts/renfort-v309z.png) |
+| A066.T | Profilé Alu à coller pour protéger le dormant | ![A066.T](/assets/profiles/systeme76/accessoires/a066t.png) |
+| A314 | Capot Alu | ![Capot A314](/assets/profiles/systeme76/dormants/capot-a314.png) |
+| A385 | Demi capot Alu | ![Capot A385](/assets/profiles/systeme76/dormants/capot-a385.png) |
+| M509 | Set d'assemblage pour A076. A077, A343 | ![M509](/assets/profiles/systeme76/accessoires/m509.png) |
+| M520 | Set d'assemblage pour A076, A077, A343 grugé | ![M520](/assets/profiles/systeme76/accessoires/m520.png) |
+| M525 | Set d'assemblage pour A075 grugé | ![M525](/assets/profiles/systeme76/accessoires/m525.png) |
+| M569 | Clip de montage pour demi capot | ![M569](/assets/profiles/systeme76/dormants/clip-m569.png) |
+| M138 | support cale de vitrage pareclose haute | ![M138](/assets/profiles/systeme76/accessoires/m138.png) |
+| M139 | Support cale de vitrage pour adaptateur | ![M139](/assets/profiles/systeme76/accessoires/m139.png) |
+| S048 | Douille de montage | ![S048](/assets/profiles/systeme76/accessoires/s048.png) |
+| A506T | profilé Alu protection recouvrement dormant | ![A506T](/assets/profiles/systeme76/dormants/capot-a506t.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 22)
+
+## Dormants rénovation 76177, 76178 et 76185
+
+Les trois dormants à aile de rénovation ont la même nomenclature, à trois sets d'assemblage près :
+le renfort **V291.Z**, le capot **A313**, le profilé **A066.T**, le demi-capot **A385**, son clip
+**M569**, les supports de cale **M138** et **M139** et le profilé de protection **A506T**. Seuls
+les sets d'assemblage sur seuil changent, un par dormant et par seuil [1 p. 23-25].
+
+| Référence | Désignation | Dessin |
+| --- | --- | ---: |
+| V291.Z | Renfort 1,5 mm | ![Renfort V291.Z](/assets/profiles/systeme76/renforts/renfort-v291z.png) |
+| A313 | Capot Alu | ![Capot A313](/assets/profiles/systeme76/dormants/capot-a313.png) |
+| A066.T | Profilé Alu à coller pour protéger le dormant | ![A066.T](/assets/profiles/systeme76/accessoires/a066t.png) |
+| A385 | Demi capot Alu | ![Capot A385](/assets/profiles/systeme76/dormants/capot-a385.png) |
+| M569 | Clip de montage pour demi capot | ![M569](/assets/profiles/systeme76/dormants/clip-m569.png) |
+| M138 | support cale de vitrage pareclose haute | ![M138](/assets/profiles/systeme76/accessoires/m138.png) |
+| M139 | Support cale de vitrage pour adaptateur | ![M139](/assets/profiles/systeme76/accessoires/m139.png) |
+| A506T | profilé Alu protection recouvrement dormant | ![A506T](/assets/profiles/systeme76/dormants/capot-a506t.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 23, 24 et 25)
+
+Sets d'assemblage sur seuil des trois dormants rénovation, une ligne par dormant et par seuil ; la
+désignation de la planche est celle de la colonne « Seuils et préparation ».
+
+| Dormant | Seuils et préparation | Set | Dessin |
+| --- | --- | --- | ---: |
+| 76177 | pour A076. A077, A343 | M513 | ![M513](/assets/profiles/systeme76/accessoires/m513.png) |
+| 76177 | pour A076, A077, A343 grugé | M517 | ![M517](/assets/profiles/systeme76/accessoires/m517.png) |
+| 76177 | pour A075 grugé | M522 | ![M522](/assets/profiles/systeme76/accessoires/m522.png) |
+| 76178 | pour A076. A077, A343 | M514 | ![M514](/assets/profiles/systeme76/accessoires/m514.png) |
+| 76178 | pour A076, A077, A343 grugé | M518 | ![M518](/assets/profiles/systeme76/accessoires/m518.png) |
+| 76178 | pour A075 grugé | M523 | ![M523](/assets/profiles/systeme76/accessoires/m523.png) |
+| 76185 | pour A076. A077, A343 | M609 | ![M609](/assets/profiles/systeme76/accessoires/m609.png) |
+| 76185 | pour A076, A077, A343 grugé | M610 | ![M610](/assets/profiles/systeme76/accessoires/m610.png) |
+| 76185 | pour A075 grugé | M611 | ![M611](/assets/profiles/systeme76/accessoires/m611.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 23, 24 et 25)
+
+Les sets **M609, M610 et M611 du dormant 76185** manquent au poster des profilés principaux —
+entrée **VER-44** du registre [Informations à vérifier](/anomalies/informations-a-verifier.md). Les
+autres sets par dormant et par seuil sont tabulés, avec leurs pièces, dans
+[Assemblages du système 76](/profiles/systeme-76-assemblages.md).
+
+## Seuils A076, A077, A343 et A075
+
+Accessoires des seuils aluminium, en deux groupes sur la planche : ceux des seuils A076, A077 et
+A343, puis ceux du A075 ; les windstops, en bas de la planche, sont des « Accessoires communs »
+[1 p. 26]. Les coupes et le montage des seuils sont dans
+[Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md), leurs largeurs et hauteurs
+dans [Porte d'entrée du système 76 Advanced](/portes/systeme-76-advanced-porte-d-entree.md#seuils),
+où la planche est la même.
+
+| Référence | Groupe sur la planche | Désignation | Valeur portée | Dessin |
+| --- | --- | --- | --- | ---: |
+| A062 | A076, A077, A343 | Rejet d'eau alu pour A076/A077 | - | ![A062](/assets/profiles/systeme76/rejets/rejet-a062.png) |
+| G060 | A076, A077, A343 | Joint pour rejet d'eau alu | pour A062, A064 | ![G060](/assets/profiles/systeme76/accessoires/g060.png) |
+| G229 | A076, A077, A343 | Joint brosse pour A062 | pour A062, A064 | ![G229](/assets/profiles/systeme76/accessoires/g229.png) |
+| M163 | A076, A077, A343 | Embout rejet d'eau pour A062 | - | ![M163](/assets/profiles/systeme76/accessoires/m163.png) |
+| M178 | A076, A077, A343 | Embout pour A062 | - | ![M178](/assets/profiles/systeme76/accessoires/m178.png) |
+| A065 | A076, A077, A343 | profilé Alu pour ouverture extérieure pour A076 | - | ![A065](/assets/profiles/systeme76/accessoires/a065.png) |
+| Z151 | A076, A077, A343 | Protection seuil chantier pour A076 | - | ![Z151](/assets/profiles/systeme76/accessoires/z151.png) |
+| G067 | A075 | Embout d'étanchéité pour A075 | - | ![G067](/assets/profiles/systeme76/seuils/bouchon-g067.png) |
+| A064 | A075 | Rejet d'eau alu pour A075 | - | ![A064](/assets/profiles/systeme76/rejets/rejet-a064.png) |
+| G056 | A075 | Joint pour rejet d'eau A064 | - | ![G056](/assets/profiles/systeme76/joints/joint-g056.png) |
+| M259 | A075 | Capot pour seuil | - | ![M259](/assets/profiles/systeme76/accessoires/m259.png) |
+| M175 | accessoires communs | Windstop dormant | - | ![M175](/assets/profiles/systeme76/accessoires/m175.png) |
+| M179 | accessoires communs | Windstop ouvrant battement central | - | ![M179](/assets/profiles/systeme76/accessoires/m179.png) |
+| M261 | accessoires communs | Windstop ouvrant battement central | - | ![M261](/assets/profiles/systeme76/accessoires/m261.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 26)
+
+**La fenêtre et la porte d'entrée n'emploient pas les mêmes rejets d'eau** : A062 (A076/A077) et
+A064 (A075) pour la fenêtre, A061 (A076/A077/A343) et A063 (A075) pour la porte d'entrée, avec
+les embouts M163 et M178 d'un côté, M162 et M177 de l'autre. Le M261 est désigné « Windstop
+ouvrant battement central » ici et « Windstop ouvrant » sur la planche des seuils de la porte.
+
+# Ouvrants
+
+## Ouvrants 76281 et 76275, de 70 mm
+
+| Ouvrant | Référence | Désignation | Dessin |
+| --- | --- | --- | ---: |
+| 76281 | V266.Z | Renfort 2,0 mm | ![Renfort V266.Z](/assets/profiles/systeme76/renforts/renfort-v266z.png) |
+| 76281 | A042 | Capot Alu | ![Capot A042](/assets/profiles/systeme76/ouvrants/capot-a042-76281.png) |
+| 76281 | M137 | Support de cale de vitrage | ![M137](/assets/profiles/systeme76/accessoires/m137.png) |
+| 76281 | M165 | Compensation de rainure crémone | ![M165](/assets/profiles/systeme76/accessoires/m165.png) |
+| 76281 | G024 | Insert de compensation pour AluClip ouvrant | ![G024](/assets/profiles/systeme76/accessoires/g024.png) |
+| 76275 | V266.Z | Renfort 2,0 mm | ![Renfort V266.Z](/assets/profiles/systeme76/renforts/renfort-v266z.png) |
+| 76275 | M137 | Support de cale de vitrage | ![M137](/assets/profiles/systeme76/accessoires/m137.png) |
+| 76275 | M165 | Compensation de rainure crémone | ![M165](/assets/profiles/systeme76/accessoires/m165.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 27)
+
+Le 76275 est titré « Ouvrant Design 70 mm » ; sa nomenclature ne porte **ni capot ni insert
+G024**.
+
+## Ouvrant 76271, « Ouvrant 78 mm »
+
+| Référence | Désignation | Dessin |
+| --- | --- | ---: |
+| V306.Z | Renfort 1,5 mm | ![Renfort V306.Z](/assets/profiles/systeme76/renforts/renfort-v306z.png) |
+| V307.Z | Renfort 2,0 mm | ![Renfort V307.Z](/assets/profiles/systeme76/renforts/renfort-v307z.png) |
+| V308 | Renfort 2,5 mm | ![Renfort V308](/assets/profiles/systeme76/renforts/renfort-v308.png) |
+| A072 | Capot Alu | ![Capot A072](/assets/profiles/systeme76/ouvrants/capot-a072.png) |
+| A043 | Capot Alu | ![Capot A043](/assets/profiles/systeme76/ouvrants/capot-a043.png) |
+| M137 | Support de cale de vitrage | ![M137](/assets/profiles/systeme76/accessoires/m137.png) |
+| M165 | Compensation de rainure crémone | ![M165](/assets/profiles/systeme76/accessoires/m165.png) |
+| G024 | Insert de compensation pour AluClip ouvrant | ![G024](/assets/profiles/systeme76/accessoires/g024.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 28)
+
+Le 76271 reçoit **deux capots**, A072 et A043, sans que la planche dise lequel s'emploie dans quel
+cas.
+
+## Ouvrants 76272, 76279 et 76283, de 110 mm
+
+| Ouvrant | Référence | Désignation | Dessin |
+| --- | --- | --- | ---: |
+| 76272 | V314.Z | Renfort 2,0 mm soudé | ![Renfort V314.Z](/assets/profiles/systeme76/renforts/renfort-v314z.png) |
+| 76272 | V326.Z | Renfort 2,0 mm | ![Renfort V326.Z](/assets/profiles/systeme76/renforts/renfort-v326z.png) |
+| 76272 | V337 R/L | Renfort 2,0 mm soudé | ![Renfort V337 R/L](/assets/profiles/systeme76/renforts/renfort-v337-v339.png) |
+| 76272 | V339 R/L | Renfort 2,0 mm soudé | ![Renfort V339 R/L](/assets/profiles/systeme76/renforts/renfort-v337-v339.png) |
+| 76272 | V353 | Renfort 1,5 mm soudé | ![Renfort V353](/assets/profiles/systeme76/renforts/renfort-v353.png) |
+| 76272 | M164 | Insert de coin soudé | ![M164](/assets/profiles/systeme76/ouvrants/embout-m164.png) |
+| 76272 | A044 | Capot Alu | ![Capot A044](/assets/profiles/systeme76/ouvrants/capot-a044.png) |
+| 76272 | M137 | Support de cale de vitrage | ![M137](/assets/profiles/systeme76/accessoires/m137.png) |
+| 76272 | M165 | Compensation de rainure crémone | ![M165](/assets/profiles/systeme76/accessoires/m165.png) |
+| 76272 | G024 | Insert de compensation pour AluClip ouvrant | ![G024](/assets/profiles/systeme76/accessoires/g024.png) |
+| 76272 | T038 | Outil de serrage pour insert | ![T038](/assets/profiles/systeme76/ouvrants/piece-t038.png) |
+| 76279 | V314.Z | Renfort 2,0 mm, soudé | ![Renfort V314.Z](/assets/profiles/systeme76/renforts/renfort-v314z.png) |
+| 76279 | V326.Z | Renfort 2,0 mm | ![Renfort V326.Z](/assets/profiles/systeme76/renforts/renfort-v326z.png) |
+| 76279 | V337 R/L | Renfort 2,0 mm, soudé | ![Renfort V337 R/L](/assets/profiles/systeme76/renforts/renfort-v337-v339.png) |
+| 76279 | V339 R/L | Renfort 2,0 mm, soudé | ![Renfort V339 R/L](/assets/profiles/systeme76/renforts/renfort-v337-v339.png) |
+| 76279 | V353 | Renfort 1,5 mm, soudé | ![Renfort V353](/assets/profiles/systeme76/renforts/renfort-v353.png) |
+| 76279 | M164 | Insert de coin soudé | ![M164](/assets/profiles/systeme76/ouvrants/embout-m164.png) |
+| 76279 | A044 | Capot Alu | ![Capot A044](/assets/profiles/systeme76/ouvrants/capot-a044.png) |
+| 76279 | M137 | Support de cale de vitrage | ![M137](/assets/profiles/systeme76/accessoires/m137.png) |
+| 76279 | M165 | Compensation de rainure crémone | ![M165](/assets/profiles/systeme76/accessoires/m165.png) |
+| 76279 | T038 | Outil de serrage pour insert | ![T038](/assets/profiles/systeme76/ouvrants/piece-t038.png) |
+| 76283 | V314.Z | Renfort 2,0 mm, soudé | ![Renfort V314.Z](/assets/profiles/systeme76/renforts/renfort-v314z.png) |
+| 76283 | V326.Z | Renfort 2,0 mm | ![Renfort V326.Z](/assets/profiles/systeme76/renforts/renfort-v326z.png) |
+| 76283 | V337 R/L | Renfort 2,0 mm, soudé | ![Renfort V337 R/L](/assets/profiles/systeme76/renforts/renfort-v337-v339.png) |
+| 76283 | V339 R/L | Renfort 2,0 mm, soudé | ![Renfort V339 R/L](/assets/profiles/systeme76/renforts/renfort-v337-v339.png) |
+| 76283 | V353 | Renfort 1,5 mm, soudé | ![Renfort V353](/assets/profiles/systeme76/renforts/renfort-v353.png) |
+| 76283 | M164 | Insert de coin soudé | ![M164](/assets/profiles/systeme76/ouvrants/embout-m164.png) |
+| 76283 | M137 | Support de cale de vitrage | ![M137](/assets/profiles/systeme76/accessoires/m137.png) |
+| 76283 | M165 | Compensation de rainure crémone | ![M165](/assets/profiles/systeme76/accessoires/m165.png) |
+| 76283 | G024 | Insert de compensation pour AluClip ouvrant | ![G024](/assets/profiles/systeme76/accessoires/g024.png) |
+| 76283 | T038 | Outil de serrage pour insert | ![T038](/assets/profiles/systeme76/ouvrants/piece-t038.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 29 et 30)
+
+Le 76279 est titré « Ouvrant Design 110 mm » et reçoit le capot **A044** comme le 76272 ; le
+**76283**, « Ouvrant extérieur 110 mm », n'a **pas de capot** dans sa nomenclature. Le T038 est
+dessiné en photo, outil à manche en bois ; il est désigné « Levier pour M335 » sur les planches de
+la porte d'entrée.
+
+## Ouvrants réduits 76274 et 76276, de 50 mm
+
+Les deux ouvrants de 50 mm sont titrés « Ouvrant de gauche 50 mm » (76274) et « Ouvrant de gauche
+Design 50 mm » (76276) ; leur nomenclature comprend le **battement 76473** [1 p. 31].
+
+| Ouvrant | Référence | Désignation | Dessin |
+| --- | --- | --- | ---: |
+| 76274 | V266.Z | Renfort 2,0 mm | ![Renfort V266.Z](/assets/profiles/systeme76/renforts/renfort-v266z.png) |
+| 76274 | A042 | Capot Alu | ![Capot A042](/assets/profiles/systeme76/ouvrants/capot-a042-76274.png) |
+| 76274 | M137 | Support de cale de vitrage | ![M137](/assets/profiles/systeme76/accessoires/m137.png) |
+| 76274 | M165 | Compensation de rainure crémone | ![M165](/assets/profiles/systeme76/accessoires/m165.png) |
+| 76274 | G024 | Insert de compensation pour AluClip ouvrant | ![G024](/assets/profiles/systeme76/accessoires/g024.png) |
+| 76274 | 76473 | Battement 46 mm | ![Battement 76473](/assets/profiles/systeme76/battements/battement-76473.png) |
+| 76276 | V266.Z | Renfort 2,0 mm | ![Renfort V266.Z](/assets/profiles/systeme76/renforts/renfort-v266z.png) |
+| 76276 | M137 | Support de cale de vitrage | ![M137](/assets/profiles/systeme76/accessoires/m137.png) |
+| 76276 | M165 | Compensation de rainure crémone | ![M165](/assets/profiles/systeme76/accessoires/m165.png) |
+| 76276 | 76473 | Battement 46 mm | ![Battement 76473](/assets/profiles/systeme76/battements/battement-76473.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 31)
+
+# Battements
+
+| Battement | Référence | Désignation | Dessin |
+| --- | --- | --- | ---: |
+| 76473 | A318 | Capot Alu | ![Capot A318](/assets/profiles/systeme76/battements/capot-a318.png) |
+| 76473 | M462 | Embout battement | ![M462](/assets/profiles/systeme76/battements/embout-m462.png) |
+| 76473 | M501 | Set d'embout de battement pour AluClip | ![M501](/assets/profiles/systeme76/battements/embout-m501.png) |
+| 76471 | V316 | Renfort 1,5 mm | ![Renfort V316](/assets/profiles/systeme76/renforts/renfort-v316.png) |
+| 76471 | A051 | Capot Alu | ![Capot A051](/assets/profiles/systeme76/battements/capot-a051.png) |
+| 76471 | M285S/L | Set d'embout battement | ![Set M285](/assets/profiles/systeme76/embouts/set-m285.png) |
+| 76471 | M286S/L | Set d'embout battement AluClip | ![Set M286](/assets/profiles/systeme76/embouts/set-m286.png) |
+| 76471 | M106 | Embout de battement int.avec vis | ![M106](/assets/profiles/systeme76/embouts/embout-m106.png) |
+| 76471 | M107 | Embout de battement recouvrant ext. | ![M107](/assets/profiles/systeme76/embouts/embout-m107.png) |
+| 76471 | M108 | Embout de battement recouvrant ext.pour AluClip | ![M108](/assets/profiles/systeme76/embouts/embout-m108.png) |
+| 76471 | M488 | Cale de contrôle de jeu pour battement | ![M488](/assets/profiles/systeme76/accessoires/m488.png) |
+| 76472 | V317 | Renfort 2,0 mm | ![Renfort V317](/assets/profiles/systeme76/renforts/renfort-v317.png) |
+| 76472 | A052 | Capot Alu | ![Capot A052](/assets/profiles/systeme76/battements/capot-a052.png) |
+| 76472 | M288S/L | Set d'embout battement | ![Set M288](/assets/profiles/systeme76/embouts/set-m288.png) |
+| 76472 | M289S/L | Set d'embout battement AluClip | ![Set M289](/assets/profiles/systeme76/embouts/set-m289.png) |
+| 76472 | M109 | Embout de battement int.avec vis | ![M109](/assets/profiles/systeme76/embouts/embout-m109.png) |
+| 76472 | M110 | Embout de battement recouvrant ext. | ![M110](/assets/profiles/systeme76/embouts/embout-m110.png) |
+| 76472 | M111 | Embout de battement recouvrant ext.pour AluClip | ![M111](/assets/profiles/systeme76/embouts/embout-m111.png) |
+| 76472 | M488 | Cale de contrôle de jeu pour battement | ![M488](/assets/profiles/systeme76/accessoires/m488.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 32)
+
+Le 76473 est titré « Battement extérieur 46 mm » et n'a **pas de renfort** dans sa nomenclature.
+Les sets d'embout sont écrits **M285S/L à M289S/L** ici et M285D/L à M289D/L sur le poster des
+profilés principaux ; les embouts M106 à M111 y sont légendés « partie int. », « partie ext. » et
+« partie ext. AluClip ». Au registre du traitement du battement, les sets sont déclarés
+« disponibles en .L (joint gris clair), .S (joint noir) ou .B (joint brun) » [1 p. 148]. La
+composition de chaque set, le débit et le montage des battements sont dans
+[Traitement du battement du système 76 Advanced](/procedures/traitement-du-battement-systeme-76.md) ; leurs cotes de débit dans
+[Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md).
+
+# Meneaux et traverses
+
+## Meneaux 76372 et 76373
+
+Les deux planches sont titrées « Meneau/Traverse » [1 p. 33].
+
+| Meneau | Référence | Désignation | Dessin |
+| --- | --- | --- | ---: |
+| 76372 | V318.Z | Renfort 2,0 mm | ![Renfort V318.Z](/assets/profiles/systeme76/renforts/renfort-v318z.png) |
+| 76372 | V319 | Renfort 2,5 mm | ![Renfort V319](/assets/profiles/systeme76/renforts/renfort-v319.png) |
+| 76372 | A048 | Capot Alu | ![Capot A048](/assets/profiles/systeme76/meneaux/capot-a048.png) |
+| 76372 | J068 | Patin d'étanchéité pour A076/A077 | ![J068](/assets/profiles/systeme76/accessoires/j068.png) |
+| 76372 | M138 | Support cales de vitrage pareclose haute | ![M138](/assets/profiles/systeme76/accessoires/m138.png) |
+| 76372 | M139 | Support cales de vitrage pour adaptateur | ![M139](/assets/profiles/systeme76/accessoires/m139.png) |
+| 76372 | M158 | Set d'assemblage seuil pour A076/A077 | ![M158](/assets/profiles/systeme76/accessoires/m158.png) |
+| 76372 | M160 | Pièce de remplissage | ![M160](/assets/profiles/systeme76/accessoires/m160.png) |
+| 76372 | J055 | Assemblage en T | ![J055](/assets/profiles/systeme76/accessoires/j055.png) |
+| 76372 | J056 | Assemblage en croix | ![J056](/assets/profiles/systeme76/accessoires/j056.png) |
+| 76373 | V323.Z | Renfort 1,5 mm | ![Renfort V323.Z](/assets/profiles/systeme76/renforts/renfort-v323z.png) |
+| 76373 | V322 | Renfort 2,5 mm | ![Renfort V322](/assets/profiles/systeme76/renforts/renfort-v322.png) |
+| 76373 | V324 | Capot Alu | ![Renfort V324](/assets/profiles/systeme76/renforts/renfort-v324.png) |
+| 76373 | A346 | Capot Alu | ![Capot A346](/assets/profiles/systeme76/meneaux/capot-a346.png) |
+| 76373 | M138 | Support cales de vitrage pareclose haute | ![M138](/assets/profiles/systeme76/accessoires/m138.png) |
+| 76373 | M139 | Support cales de vitrage pour adaptateur | ![M139](/assets/profiles/systeme76/accessoires/m139.png) |
+| 76373 | M575 | Set d'assemblage seuil pour A076/A077 | ![M575](/assets/profiles/systeme76/accessoires/m575.png) |
+| 76373 | M654 | Pièce de remplissage | ![M654](/assets/profiles/systeme76/accessoires/m654.png) |
+| 76373 | J008 | Assemblage en T | ![J008](/assets/profiles/systeme76/accessoires/j008.png) |
+| 76373 | J009 | Assemblage en X | ![J009](/assets/profiles/systeme76/accessoires/j009.png) |
+| 76373 | J010 | Patin d'étanchéité pour A076/A077 | ![J010](/assets/profiles/systeme76/accessoires/j010.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 33)
+
+Le **V324** est désigné « Capot Alu » sur la planche du 76373, alors que son dessin est celui d'un
+renfort en L de 2,5 mm avec ses inerties — entrée **INC-30** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md). Le patin d'étanchéité **J010**
+pour A076/A077 figure dans la nomenclature du 76373, alors que le poster ne donne à ce meneau
+aucune pièce de grugeage sur A076 et A077 (voir
+[Assemblages du système 76](/profiles/systeme-76-assemblages.md)).
+
+## Traverses d'ouvrant 76301, 76303 et croisillon 76300
+
+Les planches de la fenêtre titrent le **76301 « Traverse d'ouvrant 84 mm »**, le **76303
+« Traverse d'ouvrant 119 mm »** et le **76300 « Traverse d'ouvrant 68 mm »** ; le sommaire
+désigne le 76300 « Croisillon d'ouvrant de 68 mm » [1 p. 18, 34, 35].
+
+| Traverse | Référence | Désignation | Dessin |
+| --- | --- | --- | ---: |
+| 76301 | V320.Z | Renfort 1,5 mm | ![Renfort V320.Z](/assets/profiles/systeme76/renforts/renfort-v320z.png) |
+| 76301 | A069 | Capot Alu | ![Capot A069](/assets/profiles/systeme76/meneaux/capot-a069.png) |
+| 76301 | M137 | Support de cale de vitrage | ![M137](/assets/profiles/systeme76/accessoires/m137.png) |
+| 76301 | M655 | Pièce de remplissage | ![M655](/assets/profiles/systeme76/accessoires/m655.png) |
+| 76301 | J052 | Assemblage mécanique en X | ![J052](/assets/profiles/systeme76/accessoires/j052.png) |
+| 76301 | J175 | Assemblage mécanique en X | ![J175](/assets/profiles/systeme76/accessoires/j175.png) |
+| 76303 | V323.Z | Renfort 1,5 mm | ![Renfort V323.Z](/assets/profiles/systeme76/renforts/renfort-v323z.png) |
+| 76303 | V322 | Renfort 2,5 mm | ![Renfort V322](/assets/profiles/systeme76/renforts/renfort-v322.png) |
+| 76303 | V324 | Renfort 2,5 mm | ![Renfort V324](/assets/profiles/systeme76/renforts/renfort-v324.png) |
+| 76303 | A070 | Capot Alu | ![Capot A070](/assets/profiles/systeme76/meneaux/capot-a070.png) |
+| 76303 | M137 | Support de cale de vitrage | ![M137](/assets/profiles/systeme76/accessoires/m137.png) |
+| 76303 | J054 | Assemblage mécanique | ![J054](/assets/profiles/systeme76/accessoires/j054.png) |
+| 76303 | M654 | Pièce de remplissage | ![M654](/assets/profiles/systeme76/accessoires/m654.png) |
+| 76300 | V312.Z | Renfort 1,5 mm | ![Renfort V312.Z](/assets/profiles/systeme76/renforts/renfort-v312z.png) |
+| 76300 | A045 | Capot Alu | ![Capot A045](/assets/profiles/systeme76/meneaux/capot-a045.png) |
+| 76300 | M137 | Support de cale de vitrage | ![M137](/assets/profiles/systeme76/accessoires/m137.png) |
+| 76300 | J050 | Assemblage mécanique | ![J050](/assets/profiles/systeme76/accessoires/j050.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 34 et 35)
+
+Le titre « Traverse d'ouvrant **119 mm** » du 76303 ne concorde pas avec sa coupe, cotée 110 mm,
+ni avec le sommaire (« Meneau de 110 mm ») — entrée **INC-09**. Le **V324** du 76303 porte dans sa
+case « Valeurs » les valeurs E et S du capot A070 voisin au lieu de ses inerties — entrée
+**INC-30**. En fenêtre, le 76301 et le 76303 n'ont **ni set d'assemblage sur seuil ni patin**,
+contrairement à leur nomenclature de porte d'entrée — entrée **VER-47**.
+
+# Dimensions des pièces de remplissage
+
+Les pièces de remplissage sont des blocs qui comblent la chambre du profilé à l'endroit de
+l'assemblage sur seuil ou du renfort. Leurs dimensions sont portées dans la case « Valeurs » de la
+planche ; une ligne par pièce et par planche qui la cote, en mm.
+
+| Pièce | Désignation | Dimensions portées (mm) | Planche |
+| --- | --- | --- | --- |
+| M170 | Pièce de remplissage pour assemblage seuil | 8 x 32 x 70 | dormant 76171, p. 19 |
+| M170 | Pièce de remplissage pour assemblage seui | 28 x 32 x 70 | dormant 76173, p. 21 |
+| M527 | Pièce de remplissage pour V309 | 28,5 x 24 x 70 | dormants 76171 et 76173, p. 19 et 21 |
+| M171 | Pièce de remplissage pour assemblage seuil | 35 x 45 x 70 | dormant 76172, p. 20 |
+| M528 | Pièce de remplissage pour V314 | 30 x 40 x 70 | dormant 76172, p. 20 ; dormant de porte 76102, p. 6 |
+| M529 | Pièce de remplissage pour V325 | 20 x 40 x 70 | dormant 76172, p. 20 |
+| M654 | Pièce de remplissage | 43,7 x 54,6 | meneau 76373 et traverse 76303, p. 33 et 34 |
+| M655 | Pièce de remplissage | 28,6 x 35,6 | traverse 76301, p. 34 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 19 à 21, 33 et 34)
+
+La **M170** est cotée **8 x 32 x 70 mm** sur la planche du 76171 et **28 x 32 x 70 mm** sur celle du
+76173 — entrée **INC-29**. La M160, la M257 et la M170 des planches de la porte d'entrée ne
+portent pas de dimensions.
+
+# Accessoires de drainage et de montage
+
+Accessoires communs aux profilés de la fenêtre, chacun avec son utilisation [1 p. 36].
+
+| Référence | Groupe | Utilisation | Dessin |
+| --- | --- | --- | ---: |
+| M459 | drainage | Pare tempête | ![M459](/assets/profiles/systeme76/accessoires/m459.png) |
+| 697010 | drainage | Buse de drainage pour AluClip 10 x 14mm | ![697010](/assets/profiles/systeme76/accessoires/697010.png) |
+| G008 | drainage | Joint pour buse 697010 | ![G008](/assets/profiles/systeme76/accessoires/g008.png) |
+| T005 | drainage | Foret pour G008 | ![T005](/assets/profiles/systeme76/accessoires/t005.png) |
+| M323 | montage | Cale de transport avec contrôleur de recouvrement | ![M323](/assets/profiles/systeme76/accessoires/m323.png) |
+| M342 | montage | Cale de transport | ![M342](/assets/profiles/systeme76/accessoires/m342.png) |
+| M136 | montage | Adaptateur de fixation ; utilisation avec vis de montage S059 à S067 | ![M136](/assets/profiles/systeme76/accessoires/m136.png) |
+| S059 - S067 | montage | Vis de montage sans tête, pour adaptateur de fixation M 136 | ![S059 - S067](/assets/profiles/systeme76/accessoires/s059-s067.png) |
+| S041 | montage | patte de fixation | ![S041](/assets/profiles/systeme76/accessoires/s041.png) |
+| G026 | montage | Profilé de finition | ![G026](/assets/profiles/systeme76/accessoires/g026.png) |
+| J079 | montage | renfort d'angle de feuillure | ![J079](/assets/profiles/systeme76/accessoires/j079.png) |
+| M488 | montage | Cale de contrôle pour battement | ![M488](/assets/profiles/systeme76/accessoires/m488.png) |
+| M682 | montage | Cache vis pou S059-S067 | ![M682](/assets/profiles/systeme76/accessoires/m682.png) |
+| S055 | montage | Vis 5,0 x 70 mm pour assemblage mécanique en T | ![S055](/assets/profiles/systeme76/accessoires/s055.png) |
+| S056 | montage | Vis 5,0 x 90 mm pour assemblage mécanique en T | ![S056](/assets/profiles/systeme76/accessoires/s056.png) |
+| S057 | montage | Vis tête fraisée 4,8 x 38 mm pour assemblage mécanique en T et en X | ![S057](/assets/profiles/systeme76/accessoires/s057.png) |
+| S111 | montage | Vis de fixation système 76, Ø 5 x 35 mm | ![S111](/assets/profiles/systeme76/accessoires/s111.png) |
+| S112 | montage | Vis de fixation système 76 Ø 5 x 50 mm | ![S112](/assets/profiles/systeme76/accessoires/s112.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 36)
+
+Les vis de montage sans tête **S059 à S067** existent en neuf longueurs, toutes de 7,5 mm de
+diamètre [1 p. 36] :
+
+| Vis | Diamètre (mm) | Longueur (mm) |
+| --- | --- | --- |
+| S059 | 7,5 | 82 |
+| S060 | 7,5 | 102 |
+| S061 | 7,5 | 122 |
+| S062 | 7,5 | 132 |
+| S063 | 7,5 | 152 |
+| S064 | 7,5 | 182 |
+| S065 | 7,5 | 212 |
+| S066 | 7,5 | 252 |
+| S067 | 7,5 | 302 |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 36)
+
+La porte d'entrée emploie les mêmes accessoires, à trois différences près : son pare-tempête est
+le **M336**, dessiné comme le M459 ; elle n'a pas de M488 ; son M682 est un « Cache vis » sans
+mention des vis — voir
+[Porte d'entrée du système 76 Advanced](/portes/systeme-76-advanced-porte-d-entree.md#accessoires-de-drainage-et-de-montage).
+
+# Gabarits de perçage
+
+Les gabarits de perçage positionnent les trous d'une pièce d'assemblage mécanique ou d'un set sur
+seuil ; chacun sert les pièces ou les dormants nommés dans son utilisation [1 p. 37].
+
+| Gabarit | Utilisation | Dessin |
+| --- | --- | ---: |
+| T018 | Gabarit de perçage pour assemblage mécanique en T et en X J051/J052/J175 - J053/J054 | ![T018](/assets/profiles/systeme76/accessoires/t018.png) |
+| T019 | Gabarit de perçage pour assemblage mécanique en T- et en X J055/J056, J008/J009 | ![T019](/assets/profiles/systeme76/accessoires/t019.png) |
+| T020 | Gabarit de perçage pour assemblage mécanique J050 et J057 | ![T020](/assets/profiles/systeme76/accessoires/t020.png) |
+| T021 | Gabarit de perçage pour A076/A077/A343 | ![T021](/assets/profiles/systeme76/accessoires/t021.png) |
+| T022 | Gabarit de perçage pour A075 | ![T022](/assets/profiles/systeme76/accessoires/t022.png) |
+| T064 | Gabarit de perçage pour A076/A077/A343 avec dormants 76177, 76178, 76180, 76185 | ![T064](/assets/profiles/systeme76/accessoires/t064.png) |
+| T070 | Gabarit de perçage pour A075 avec dormants 76177, 76178, 76180, 76185 | ![T070](/assets/profiles/systeme76/accessoires/t070.png) |
+| T073 | Gabarit de perçage pour clip de montage M569 | ![T073](/assets/profiles/systeme76/accessoires/t073.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 37)
+
+Sous « Autres accessoires », la même planche donne le profilé **G255**, « Couvre joinr pour rainure
+crémone » — voir [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md), où sa coupe
+est dessinée à côté du seuil A077.
+
+# Ce que la source ne donne pas
+
+- Le choix entre plusieurs renforts admis dans un même profilé, et entre les deux capots du 76271
+- Le sens des valeurs E et S des capots — entrée **VER-46**
+- Les dimensions de la M160 et de la M257
+
+# Citations
+
+[1] Mise en œuvre Système 76 Advanced, profine —
+`raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`, registre 2.1.2 « Plans des profilés »,
+p. 17 à 37 du PDF (pages imprimées 1 à 21), version d'octobre 2021
+
+# Voir aussi
+
+- [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md)
+- [Renforts du système 76](/profiles/systeme-76-renforts.md)
+- [Assemblages du système 76](/profiles/systeme-76-assemblages.md)
+- [Porte d'entrée du système 76 Advanced](/portes/systeme-76-advanced-porte-d-entree.md)
+- [Mise en œuvre Système 76 Advanced](/sources/profine-mise-en-oeuvre-76-advanced.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /sources/posters-systeme-76-advanced.md | Document source | Posters Système 76 Advanced, 2022 | poster, profine, systeme-76-advanced, profile, reference, renforts | Deux planches profine recensant l'intégralité des profilés principaux et complémentaires du système 76 Advanced, avec leurs capots aluminium, renforts acier associés, accessoires et kits d'assemblage. | apots A037, A073, A040, A041, A049, A050 ; embout M335 ; embouts Set M279, M280, M282, M283, M100 à M105 / transcrit / [Profilés principaux du système |
+| /quincaillerie/roto-nx-legende-catalogue.md | Quincaillerie | Légende des tableaux du catalogue Roto NX PVC | roto, roto-nx, catalogue, pictogramme, legende, abreviation | Les pictogrammes qui servent d'en-têtes de colonne aux tableaux de commande du catalogue Roto NX PVC de juin 2023, les pictogrammes des types d'ouverture et les abréviations du catalogue, avec le dessin de chaque pictogramme. | ogue/pictogrammes/information.png) / / Hauteur de levier fixe / levier sur un montant, flèche vers le haut / ![Hauteur de levier fixe](/assets/quincai |
+| /quincaillerie/roto-nx-cremones.md | Quincaillerie | Crémones Roto NX | roto, roto-nx, cremone, quincaillerie, reference, pictogramme | Les références de commande des crémones Roto NX — crémones OB KSR à hauteur de poignée fixe et crémones OB à hauteur de poignée centrée / variable par fouillot (8, 15, 25 à 50 mm, têtières et boîtiers), crémone adaptée OB, crémone OB Confort, crémones verrou, raccords de crémone, crémones de semi-fixe standard, Plus et à levier séparé avec leurs tableaux de combinaisons, verrous d'arête, schémas de perçage et de fraisage — et les nomenclatures des instructions de montage KSR (fouillot -6, sortie de tringle, EasyMix, serrures H100). | re d'une fenêtre à deux vantaux, manœuvrée par un levier ; le vantail **semi-fixe** est celui qui ne s'ouvre qu'après l'ouvrant principal (voir le [gl |
+| /quincaillerie/roto-nx-ksr-oscillo-battant.md | Quincaillerie | Configurations Roto NX KSR — oscillo-battant | roto, roto-nx, ksr, oscillo-battant, ob, quincaillerie | Les champs d'application, la quincaillerie et le positionnement des gâches de l'oscillo-battant Roto NX KSR, sécurité de base et RC1, à un vantail et à deux vantaux — têtière de compas, compas P, verrouilleur médian, crémone de semi-fixe et gabarits de montage. | mone, dite crémone de semi-fixe, manœuvrée par un levier ; les deux vantaux se rejoignent au *battement* (voir le [glossaire](/reference/glossaire.md) |
+| /procedures/percage-montage-roto-nx.md | Procédure | Perçage et montage de la ferrure Roto NX | roto, roto-nx, ksr, percage, gabarit, montage | Les cotes d'usinage et le montage de la ferrure Roto NX KSR sur PVC — coupe du profilé de vantail, perçage et montage de la poignée, perçage du dormant et de l'ouvrant avec gabarits, découpe et montage de la ferrure, crémone de semi-fixe, bras de compas et anti-rabattement, vissage, accrochage et réglage des galets. | ens inverse** [1 p. 92]. Deux photos montrent le levier de la crémone de semi-fixe dans deux positions : levier à l'horizontale (à gauche), levier in |
+| /gammes/perform.md | Gamme | PERFORM | pvc, fenetre, perform, kommerling | Gamme de fenêtres et portes PVC de PROFERM, déclinée en profilés de 70 et 76 mm sur profilés KÖMMERLING GREENLINE. | ffraction / / 6 / Système anti-fausse manœuvre et levier de vantail / / 7 / Soudure finition grain d'orge. Assemblage en coupe d'onglet / / 8 / Câle a |
+| /quincaillerie/roto-nx-ksr-confort-designo.md | Quincaillerie | Configurations Roto NX KSR — Confort et NT Designo II | roto, roto-nx, ksr, confort, designo, designo-ii | La quincaillerie Roto NX KSR de l'oscillo-battant Confort (fouillot 15 mm) et des configurations NT Designo II (oscillo-battant, ouvrant à la française, deux vantaux) — nomenclatures complètes, vues éclatées et positionnement des gâches. | lle par une crémone de semi-fixe manœuvrée par un levier (voir le [glossaire](/reference/glossaire.md)). Le manuel en donne la liste des pièces et la |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/contradictions-entre-sources.md :
+| CTR-26 | Cotes des battements 76401, 76471 et 76472 | Mise en œuvre Système 76 Advanced : planche « 76401 Battement 48 mm » de la porte d'entrée (registre 2.1.1, PDF p. 11), largeur **94,1** ; planche « 76471 Battement 62 mm » de la fenêtre (registre 2.1.2, PDF p. 32), largeur **94,1**, hauteur 62 décomposée **22 + 21 + 19**, sans cote basse ; planche « 76472 Battement 80 mm » (même page), 75 × 80 décomposé **22 + 41 + 17**. Relu à 400 et 500 dpi | Poster Système 76 Advanced, profilés principaux, 2022, p. 1, relevé porté sur [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md) : 76401 **94,5** (48 = 22 + 16 + 10, comme au manuel) ; 76471 **94,5**, 62 = **29 + 16 + 17**, cote basse 17,5 ; 76472 80 = **29 + 34 + 17**, cote basse 17,5 | **aucune** — les deux jeux de cotes sont portés avec leur source ; les décompositions peuvent être prises à des points différents, ce qu'aucun document ne dit | 0,4 mm d'écart sur la largeur hors tout d'un battement, et une décomposition de hauteur reprise sur le mauvais document pour un usinage |
+/anomalies/contradictions-entre-sources.md :
+| CTR-35 | Cotes de huit capots aluminium AluClip du système 76 | Poster Système 76 Advanced, profilés principaux, 2022, p. 1 : A385 retour **20,2** × 51 ; A035 20,3 × **108,2** ; A314 20,3 × **72** ; A346 retour **19,7** × 130 ; A045 **16,2 × 74** ; A070 16,3 × **116** ; A051 retour **19,9** × 67,9 ; A052 **19,9 × 85,7** (mm) | Mise en œuvre Système 76 Advanced, registre 2.6.2 « AluClip, Profilés principaux et accessoires », p. 1 à 6 imprimées (PDF p. 305 à 310, versions décembre 2016 et mars 2021, relues en image le 25/09/2026) : A385 retour **20,3** × 51 (sur les sept dormants) ; A035 20,3 × **107,9** ; A314 20,3 × **72,3** ; A346 retour **19,8** × 130 ; A045 **16,3 × 73,8** ; A070 16,3 × « **115.8** » ; A051 retour **19,8** × 67,9 ; A052 **19,8 × 85,9**. Les autres capots cotés sur les deux documents (A033, A034, A313, A042 avec 76281, A043, A044, A048, A069) ont les mêmes cotes | aucune arbitrée : les tableaux de [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md) portent les deux jeux, chacun avec sa source | contrôle et commande des capots : une cote relevée sur un document ne se retrouve pas sur l'autre (écarts de 0,1 à 0,3 mm) |
+/anomalies/informations-a-verifier.md :
+| VER-47 | Famille des profilés 76301 et 76303 : meneau ou traverse d'ouvrant | Mise en œuvre Système 76 Advanced : « 76301 Meneau 84 mm », « 76303 Meneau 110 mm » sur les planches de la porte d'entrée (PDF p. 12 et 13), avec des sets d'assemblage sur seuil A076/A077 (M156, M157) et des patins d'étanchéité de seuil (J066, J067) ; « Meneau de 84 mm / Traverse » et « Meneau de 110 mm / Traverse », sous le titre « Meneau/Traverse et traverse d'ouvrant », au sommaire de la fenêtre (PDF p. 18). Le cahier technique PERFORM76 les appelle meneaux d'ouvrant, [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md) les range en traverses d'ouvrant. Sur les planches de la fenêtre (registre 2.1.2, PDF p. 34), les 76301 et 76303 sont titrés « Traverse d'ouvrant 84 mm » et « Traverse d'ouvrant 119 mm », sans set d'assemblage sur seuil ni patin dans leur nomenclature | profine — savoir si les 76301 et 76303 se montent en meneau de dormant (sur seuil) en porte d'entrée seulement, ou aussi en fenêtre |
+/anomalies/contradictions-entre-sources.md :
+| CTR-12 | Nom de la poignée encastrée de coulissant | Brochure LUMINE65, p. 3 : « Poignée encastrée **MLINI** — En option. Disponible en inox, blanc ou noir », sur le coulissant LUMINE65 ; la photo montre une poignée argent à levier incliné | Catalogue général, p. 17 : « **DEHLI** — En option. Poignée encastrée. Disponible en inox, blanc ou noir », pour tous les coulissants ; la photo montre une cuvette blanche aux bords arrondis. Relu en image le 25/09/2026 : les deux photos ne représentent pas le même objet | **Aucune** — même fonction, même finitions, même position dans la liste, mais deux noms et deux dessins : il peut s'agir de deux poignées distinctes. Les deux sont portées sur [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) | Référence introuvable à la commande, ou poignée livrée qui n'est pas celle montrée au client |
+/anomalies/contradictions-entre-sources.md :
+| CTR-21 | Renforts admis dans plusieurs profilés du système 76 | Poster Système 76 Advanced, profilés principaux, 2022, p. 1 (renforts écrits dans la chambre de chaque coupe) : **76206** V260, V333R/L, V335R/L ; **76102** V314.Z, V325, V353 ; **76101** V306.Z, V307.Z, V308, V309.Z, V310 ; **76303** V323.Z, V322 ; **76172** V314.Z, V325, V353 ; **76283** V314.Z, V326.Z, V337 R/L, V339 R/L, V353 | Mise en œuvre Système 76 Advanced, registres 2.1.2 et 2.1.3 : **76206** V323.Z, V322 (planche relue en image le 25/09/2026, PDF p. 38 : ces deux renforts sont dans le tableau d'accessoires du **76299**, titré « Compensateur », et le 76206 n'y est nommé que dans le cadre « utilisé avec » ; l'attribution au 76206 venait d'une lecture antérieure — le manuel ne donne au 76206 que V260, V333R/L et V335R/L, PDF p. 9, comme le poster) ; **76303** V323.Z, V322 **et V324** ; **76172** V314.Z (soudé), V325, V353 (soudé) ; **76283** V314.Z, V326.Z, V337 R/L, V339 R/L, V353 (planches relues en image le 25/09/2026, PDF p. 20 et 30 : l'ancienne lecture « V325 seul », « V326.Z seul » venait de la couche texte ; sur ces deux profilés le manuel concorde avec le poster) ; aucun **V329** dans le manuel, qui donne au **76101** de porte d'entrée V306.Z, V307.Z, V308, V309.Z, V310 (PDF p. 5). DTD n° DBV-25-6/16-2334_V5 : **76102** V314 ou **V326** ; **76101** V306, V307, V309 ou **V329**. DTA n° 6/16-2334_V5, p. 21 (« Pour profilé(s) » sous chaque renfort) : **76172** V314 ou V326 ; **76102** V314 ou V326 ; **76101** V306, V307, V309 ou V329 ; **V329** aussi pour 76171, 76173, 76180 ; **V306 et V307** aussi pour l'ouvrant **76271** ; **76303** V323 seul ; V308, V310, V319, V322, V324, V325, V353 non dessinés. Même planche au DTD, p. 20 ; la coupe « Assemblage traverse complémentaire » du DTD (p. 26) dessine le **V323** dans la traverse complémentaire **76299**, que la liste « Pour profilé(s) » du V323 ne nomme pas | **aucune** — les deux listes sont reportées sur [Renforts du système 76](/profiles/systeme-76-renforts.md) avec leur source. Le cas du 76206 n'est pas un écart de liste mais deux familles de renfort sans référence commune | Renfort commandé qui n'entre pas dans la chambre, ou calcul statique fait avec l'inertie d'un renfort non admis par l'autre document |
+/anomalies/contradictions-entre-sources.md :
+| CTR-32 | Référence de la réhausse de 35 mm cotée 35 / 21 + 46 / 26,5 et 43 | Poster Système 76 Advanced, profilés complémentaires, 2022, p. 1 : la coupe porte, écrite dans le profilé, la référence **76776** | Mise en œuvre Système 76 Advanced, registre 2.1.3, p. 8 (PDF p. 46, relu en image à 400 dpi le 25/09/2026) : même coupe, mêmes cotes, titrée « **76753** Réhausse de 35 mm » ; le cahier technique PERFORM76 range un appui **76753** de 35 mm, 21 / 46 sur 76, parmi les appuis des dormants 76171 et 76172 | **aucune** — les deux références sont portées sur [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) avec leur source ; le manuel et le cahier concordent, le poster est seul | Réhausse commandée sous une référence qui n'est pas celle du profilé voulu, ou refusée faute de la trouver au tarif |

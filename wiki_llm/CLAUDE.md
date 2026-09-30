@@ -23,7 +23,8 @@ It has two consumers, and they pull in the same direction:
 - **A navigation tool**, which selects pages by their metadata and hands them to a model. The
   finished wiki is far larger than any context window, so a page is reached through its `type`,
   its `systeme` and its `gamme`, its `source_pages` -- never by putting the whole bundle in a
-  prompt. Much of what reads as fussy formatting in this file -- one row per reference, units in
+  prompt -- and by a lexical search on its full text, whose rules are in *Writing to be found*.
+  Much of what reads as fussy formatting in this file -- one row per reference, units in
   the header, pages that stand alone -- is there so that a page still means something when it
   arrives alone
 
@@ -530,9 +531,12 @@ Field notes:
   `Profilé`, `Quincaillerie`, `Vitrage`, `Équipement`, `Porte d'entrée`, `Garantie`,
   `Procédure`, `Certification`, `Anomalie`, `Référence`, `Document source`, and, opened by the
   exhaustive protocol: `Norme`, `Tarif`, `Machine`, `Entretien`, `Commercial`, `Coloris`
-- `title` -- human-readable name; may be omitted when the filename says it
-- `description` -- one sentence. This is the line that gets copied into `index.md`, and it must
-  match it exactly
+- `title` (required) -- what the page holds, in the words of the trade, 90 characters at most.
+  See *Writing to be found*
+- `description` -- one sentence of 300 characters at most, saying which questions the page
+  answers. This is the line that gets copied into `index.md`, and it must match it exactly
+- `tags` -- four to ten words of the trade, taken from the closed list, singular, lowercase and
+  unaccented (`parclose`, `cremone`). See *Writing to be found*
 - `resource` -- canonical URI of the real-world asset (supplier site, product page). Omit for
   abstract concepts
 - `sources` -- provenance for the claims in the body
@@ -550,7 +554,10 @@ Field notes:
   Nothing of this navigation is ever written into a page body -- no hub page, no link list, no
   breadcrumb line: it would duplicate the frontmatter, drift from it, and a hub listing every
   SOLEAL FY title would outrank the real pages in the lexical search. Fill what applies, omit
-  the rest; adding them afterwards means reopening every page, so they are written at creation.
+  the rest -- but a page that describes a product carries `fournisseur` whenever the source names
+  a maker, at least one of `gamme` and `systeme`, and `usage` unless it is useful to everyone:
+  a page with neither `gamme` nor `systeme` is on no dashboard and in no breadcrumb. Adding them
+  afterwards means reopening every page, so they are written at creation.
   All of them accept a list (`gamme: [PERFORM+, HYBRIDE+]`).
   - `gamme` -- the PROFERM commercial offer the page serves, **spelled exactly as the `gamme`
     field of its `gammes/` page** (`PERFORM`, `PERFORM+`, `HYBRIDE`, `HYBRIDE+`, `TEXTURAL`,
@@ -585,6 +592,82 @@ Field notes:
 - **`status: draft` -- only when the page depends on an open anomaly.** « The source is only a
   brochure » is not a draft; that reads from `sources`
 - Custom keys are allowed (`owner`, `chantier`, ...) and must be preserved when editing a page
+
+---
+
+## Writing to be found
+
+The search of the application (`app/services/wiki_index.py`) ranks pages on their **full text**,
+matching whole words once lowercased and stripped of accents. It does not stem and knows no
+synonym: `parclose` does not find `parcloses`, « crémone » does not find « rallonge 4ème
+point ». The title, the tags and the description weigh five, four and three times the body, and
+a reference typed in the question counts triple. The first three results come back **whole**;
+the following ones come back as a line -- title, tags, description, an extract. A page must
+therefore rank for the words a menuisier types, and cost little when it arrives next to two
+others.
+
+Six rules make both true. They complete *One datum, one page* and never contradict it.
+
+1. **A page holds about 20 000 characters at most** (body, frontmatter excluded). Three pages
+   come back whole with every search: a page of 140 000 characters costs as much as seven
+   ordinary ones and buries the row that answers under all the rows that do not. Cut along an
+   axis of the source itself -- a family of parts, a usage, a system, a table -- never at an
+   arbitrary line: a manual of 150 000 characters becomes one page per family it documents, each
+   of them standing alone.
+   - **Cutting is moving, not rewriting.** Every row and every sentence goes to exactly one
+     part; the inventory of references and table rows before and after shows no loss
+   - **The part that keeps the family's name keeps the old path** -- a path is a permanent ID.
+     Links to what moved are updated, `index.md` lists every part, and the gamme, système and
+     fournisseur pages that sent the reader to the old page send them to the right part
+   - **No page is written to stitch the parts together.** A part links another where it leans on
+     it; the axes of the frontmatter build the navigation (see the field notes)
+   - Two things stay whole: a single table or abaque that cannot be split without breaking its
+     reading, and the `sources/` cards and `anomalies/` registers, which are read row by row.
+     A page listed in *Pages read by the application* is cut together with the tool that reads it
+2. **The title names what the page holds, in the words of the trade, and the product it
+   serves.** Objects first, then the product or the system, then the supplier if the product is
+   PROFERM's own: « Chariots, crémones, poignées et gâches du coulissant SOLEAL GY 55
+   (SOLÉAL55) » -- not « Roulements, fermetures et manœuvres Technal SOLEAL GY 55 », which is the
+   rubric of the catalogue and names no crémone. A title is one line, 90 characters at most: it
+   is what a citation shows.
+3. **The description says which questions the page answers.** The families it covers, the range
+   of references, the kind of value it carries (cote, charge, compatibilité, épaisseur de
+   vitrage): « Références, hauteurs minimales de châssis et de poignée des crémones TGY3700 à
+   TGY3704 (dont la rallonge 4ème point), avec les chariots, poignées et gâches du coulissant
+   SOLEAL GY 55. » -- not « Guide technique exhaustif de la quincaillerie … ». A range is fine in
+   a description; each reference of it is written whole in its table (rule 6).
+4. **Tags come from a closed list and use the words of the trade.** Lowercase, unaccented,
+   hyphenated, singular: `parclose`, `renfort`, `cremone`, `soleal-gy`. A tag names an object or
+   a notion the page documents, and it is where the trade's word goes when the source uses
+   another one: `cremone` on the page of the « rallonge 4ème point ». Four to ten per page. No
+   reference number as a tag: the text carries it and the search finds it there. The 60 most
+   frequent tags are handed to the model as its vocabulary, so `parclose` next to `parcloses`
+   splits a count and halves a word. The list is `wiki_llm/tags.md`, one tag per line with the
+   spellings it absorbs; **a tag is added to the list before it is used**. Until that file
+   exists, the list is the set of tags already in use: search them before creating one
+5. **Say each thing under the name of the source and under the name the trade uses.**
+   - **PROFERM product and supplier system.** The page of a supplier system names in its opening
+     sentence the PROFERM product built on it, and the page of a gamme names its systems: « La
+     LUMINE55 est fabriquée sur le système TECHNAL SOLEAL FY 55. » A menuisier asks for the
+     product, the source names the system; without both names on the page, the question finds
+     the wrong one. One spelling per name, the one of the `gammes/` page
+   - **Label of the source and word of the trade.** Where a source labels a part in a way nobody
+     types (« Rallonge 4ème point », « Sécurité de fin de course »), the opening sentence of its
+     section carries the word the trade uses as well (« crémone 4 points », « limiteur
+     d'ouverture »), once
+   - **Only an equivalence the wiki can source is written.** A source states it, or a page of
+     the wiki does; a doubtful one is a `VER-` entry, never a helpful sentence (*Explaining is
+     not inventing*). The glossary keeps abbreviations, this rule keeps names
+6. **A reference is written whole and in one piece.** `TGY3703`, never `TGY3702/03`: the search
+   reads `tgy3702` and `03`, and the row of the TGY3703 does not exist. Digits are not grouped by
+   a space or a dot -- `487206`, not `487 206`: it is a printing habit, not a spelling, and the
+   two forms are two different words for the search. Letters and dashes stay as the source
+   writes them (`Parclose 76507`, `F00-62- 0729T`). A range (`TGY3700 à TGY3704`) is fine in a
+   sentence; every reference of it still has its own row.
+
+Two more rules live where they belong: the frontmatter axes, in the field notes of *Page
+format*, and the link from an anomaly to the pages it concerns, in *Anomalies*. The lint checks
+all of them (*Lint*, findability).
 
 ---
 
@@ -793,7 +876,8 @@ one row per reference. A hundred one-line files is not a wiki, it is a heap.
 - **One page per family**, named after the family and the gamme it belongs to:
   `profiles/perform76-parcloses.md`, `profiles/perform76-dormants.md`
 - **One row per reference** in that page's `# Cotes` table, the reference in the first column,
-  written as the source writes it (`Parclose 76507`, `Seuil A076`)
+  written as the source writes it (`Parclose 76507`, `Seuil A076`), digits in one piece
+  (`487206`, not `487 206`) -- see *Writing to be found*
 - **A `# Compatibilités` table** saying what each reference mounts with, and what it excludes.
   The exclusions carry more weight than the inclusions -- « montage uniquement compatible avec
   les ouvrants » is the line that prevents a bad order
@@ -808,7 +892,8 @@ one row per reference. A hundred one-line files is not a wiki, it is a heap.
 - **Never infer a missing dimension.** Absent is `-`, plus a line in the body stating that the
   source does not give it
 - Split a family that exceeds ~30 rows by usage or by gamme, not arbitrarily -- parcloses
-  d'ouvrant and parcloses de dormant are two tables, not one of 27 rows
+  d'ouvrant and parcloses de dormant are two tables, not one of 27 rows. A page that passes
+  ~20 000 characters is cut as well (*Writing to be found*)
 
 ## Marketing documents
 
@@ -854,6 +939,12 @@ Rules for filing one:
   The concept page carries the retained value and the identifier, in one sentence
 - **The anomaly is recorded twice**: in `anomalies/`, and inline on the page where it matters.
   A reader of the parclose page must see the problem without knowing `anomalies/` exists
+- **Every entry links the wiki pages it concerns.** The first table of each register ends with a
+  column `Pages du wiki`, holding a markdown link to every page that carries the disputed value
+  (`[Parcloses PERFORM76](/profiles/perform76-parcloses.md)`) -- not the number of the PDF
+  page, which stays in `Source` and `Page`. The application reads the links of an entry: when one
+  of those pages is opened, the entry is handed to the model with it. An entry with no link
+  reaches the reader only by chance of its words
 - **Never mark an anomaly resolved on your own.** Only the human closes one, after checking with
   the service technique or the fournisseur
 - A page carrying an unresolved contradiction is `status: draft`
@@ -1000,6 +1091,21 @@ When the user asks you to lint or audit the wiki:
 - A markdown table faking a two-level header by repeating column names, or having dropped one --
   that table belongs in HTML
 - A source table shortened to fit under ~30 rows instead of being split along one of its own axes
+
+**Findability** (*Writing to be found*)
+
+- An assertive page over ~20 000 characters of body that is not one indivisible table
+- A missing `title`, a title over 90 characters, or one that repeats a rubric of the catalogue
+  and names none of the objects of the page
+- A `description` over 300 characters, or one that names no object of the page
+- A tag outside the closed list, in the plural, accented, holding a reference number; a page
+  with fewer than four or more than ten tags
+- A reference written with grouped digits (`487 206`) or abbreviated (`TGY3702/03`)
+- The page of a supplier system that never names the PROFERM product built on it, or the page of
+  a gamme that never names its systems
+- A page that describes a product and carries neither `gamme` nor `systeme`
+- A register entry with no link to a wiki page in its `Pages du wiki` column
+- A `sources/` card that says « zéro à faire » while its register still holds `à faire` rows
 
 **Coverage -- the primary measure. It runs against `raw/`, not against the wiki alone**
 

@@ -1,0 +1,58 @@
+{
+  "question": "Je prépare le débit et le montage d'une crémone Roto NX KSR pour une fenêtre PVC. Je bloque sur le positionnement du boîtier de crémone par rapport au fond de feuillure. Quelle est la cote millimétrée exacte ou la formule de calcul indiquée pour usiner l'emplacement de ce boîtier sans me louper ?",
+  "pages_lues": [
+    "/quincaillerie/roto-nx-cremones.md",
+    "/procedures/percage-montage-roto-nx.md",
+    "/quincaillerie/roto-nx-finitions.md",
+    "/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md",
+    "/quincaillerie/roto-nx-ksr-oscillo-battant.md"
+  ],
+  "anomalies": [
+    "CTR-104",
+    "CTR-108",
+    "CTR-110",
+    "CTR-112",
+    "CTR-113",
+    "CTR-117",
+    "INC-290",
+    "INC-291",
+    "INC-292"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "fraisage boîtier de crémone axe fouillot fond de feuillure cote usinage",
+        "systeme": "Roto NX",
+        "limite": 3
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/roto-nx-cremones.md",
+        "/procedures/percage-montage-roto-nx.md",
+        "/quincaillerie/roto-nx-finitions.md"
+      ],
+      "caracteres": 190067
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "hauteur de poignée distance bas du vantail en feuillure axe de la poignée crémone OB KSR",
+        "systeme": "Roto NX",
+        "limite": 3
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md",
+        "/quincaillerie/roto-nx-ksr-oscillo-battant.md"
+      ],
+      "caracteres": 200571
+    },
+    {
+      "outil": "lire_anomalie",
+      "args": {
+        "identifiant": "CTR-115"
+      },
+      "pages_nouvelles": [],
+      "caracteres": 1643
+    }
+  ]
+}

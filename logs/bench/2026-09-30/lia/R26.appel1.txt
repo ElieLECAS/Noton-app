@@ -1,0 +1,11 @@
+Aucune page ne correspond. Élargis la requête : retire une facette, ou cherche la référence seule.
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/incoherences-internes.md :
+| INC-22 | DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED | 6, 19 et 20 | La référence **76579** est une parclose de 48 mm sur la planche « Parcloses PVC » (p. 19, quatrième ligne, avec 76578 à 46 mm) et un profilé « Pose ITE (PVC) » d'une autre forme sur la planche « Profilés complémentaires » (p. 20) ; la remarque 1.3 (p. 6) parle du « profilé PVC réf. 76579 formant goutte d'eau en cas de mise en œuvre en applique extérieure » | Une des deux pièces porte une autre référence ; la parclose 76579 est aussi celle du cahier technique PERFORM76, ce qui désigne le profilé « Pose ITE » comme le plus probablement mal référencé, sans que le document permette de le trancher | Profilé goutte d'eau commandé sous 76579 et livré en parclose, ou l'inverse ; prescription 1.3 appliquée à la mauvaise pièce |

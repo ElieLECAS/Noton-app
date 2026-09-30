@@ -1,0 +1,75 @@
+{
+  "question": "Je fabrique un coulissant d'angle Soleal GY 55 (sans poteau maçonné). Le vantail principal mesure 2400 mm de haut pour 1300 mm de large. D'après l'abaque des masses de vitrage, quel est le poids maximum de vitrage autorisé au $m^2$ pour cette configuration spécifique, et le système affiche-t-il le graphique des limites de poids pour validation ?",
+  "pages_lues": [
+    "/gammes/coulissants-aluminium.md",
+    "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+    "/profiles/soleal-gy-cotes-de-debit.md",
+    "/fournisseurs/technal.md",
+    "/profiles/soleal-gy-dormants-et-rails.md",
+    "/procedures/pose-soleal-gy-galandage.md",
+    "/sources/technal-soleal-gy-conception.md"
+  ],
+  "anomalies": [
+    "CTR-82",
+    "INC-193",
+    "INC-194",
+    "INC-205",
+    "INC-285",
+    "VER-52"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "abaque masse vitrage coulissant angle sans poteau vantail poids kg/m²",
+        "systeme": "SOLEAL GY"
+      },
+      "pages_nouvelles": [
+        "/gammes/coulissants-aluminium.md",
+        "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+        "/profiles/soleal-gy-cotes-de-debit.md"
+      ],
+      "caracteres": 48900
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "SOLEAL GY abaque masse vitrage kg/m² angle 90° sans poteau hauteur largeur vantail"
+      },
+      "pages_nouvelles": [
+        "/fournisseurs/technal.md"
+      ],
+      "caracteres": 37842
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/profiles/soleal-gy-dormants-et-rails.md"
+      },
+      "pages_nouvelles": [
+        "/profiles/soleal-gy-dormants-et-rails.md"
+      ],
+      "caracteres": 12810
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/procedures/pose-soleal-gy-galandage.md"
+      },
+      "pages_nouvelles": [
+        "/procedures/pose-soleal-gy-galandage.md"
+      ],
+      "caracteres": 8686
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/sources/technal-soleal-gy-conception.md"
+      },
+      "pages_nouvelles": [
+        "/sources/technal-soleal-gy-conception.md"
+      ],
+      "caracteres": 6311
+    }
+  ]
+}

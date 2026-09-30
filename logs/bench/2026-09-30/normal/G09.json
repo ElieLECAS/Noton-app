@@ -1,0 +1,23 @@
+{
+ "id": "G09",
+ "reponse": "La PPU01PROF est la porte d'entrée ARPÈGE PP de la collection Lumière (panneau verrier VERRISSIMA, impression numérique gris anthracite sur vitrage dépoli acide, verre trempé, Warm Edge noir, pas de transparence ; gammes HYBRIDE, LUMINE, TEXTURAL ; présentée en RAL 7016 ; prix ★★★). Sens DIN : droite. Nuance : la colonne DIN reprend le sens d'ouverture imprimé dans la légende du catalogue portes d'entrée de mars 2024 ; le wiki ne dit pas si le modèle existe aussi dans l'autre main.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/portes/collection-lumiere.md", "extrait": "| ARPÈGE PP | PPU01PROF | Droite | Impression numérique gris anthracite sur vitrage dépoli acide ; verre trempé ; Warm Edge noir ; pas de transparence | très forte | HYBRIDE, LUMINE, TEXTURAL | RAL 7016 | ★★★ |"},
+  {"page": "/portes/collection-lumiere.md", "extrait": "« DIN » est le sens d'ouverture imprimé dans la légende, gauche ou droite, selon la norme DIN."}
+ ],
+ "ambiguite": "Le sens DIN est celui imprimé dans la légende du modèle présenté ; le wiki ne dit pas si le modèle est limité à cette main ou si c'est seulement la version photographiée.",
+ "outils": 4,
+ "comment_trouve": "Grep « PPU01|PPU ?01 ?PROF » : une seule ligne, tableau « Modèles PS, ML et PP » de la page Collection Lumière. Lecture de la page (section « Comment lire les tables » pour le sens de la colonne DIN) et du glossaire (DIN 107).",
+ "formulations": [
+  "Porte ARPÈGE PP de la collection Lumière, main gauche ou droite ?",
+  "PPU01PROF sens d'ouverture ?",
+  "La porte Arpège en impression numérique, elle est tirant droit ou tirant gauche ?"
+ ],
+ "defauts_wiki": [
+  "Les références se ressemblent beaucoup (PPU01PROF, PS01PROF, PS01MLPROF, AMPSG01PROF, AMART01PROF) et n'ont pas le même sens DIN : une recherche partielle (« 01PROF », « ARPÈGE ») remonte les lignes voisines, dont ARPÈGE PS en Gauche.",
+  "Le motif ARPÈGE existe sous cinq références (PS, ML, PP, PS CA, MA) dans quatre tableaux de la même page : une question formulée par le nom du modèle sans le suffixe est ambiguë.",
+  "La colonne DIN ne dit pas si c'est la seule main disponible ou la main photographiée.",
+  "Page de 24,3 ko ; status: draft."
+ ]
+}

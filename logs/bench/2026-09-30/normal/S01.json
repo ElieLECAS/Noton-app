@@ -1,0 +1,22 @@
+{
+ "id": "S01",
+ "reponse": "(Relance comprise comme : « je cherche la crémone 4 points chez TECHNAL », et non une rallonge.) Le wiki ne connaît aucune crémone 4 points d'un seul tenant chez TECHNAL. Les références TGY sont celles du coulissant TECHNAL SOLEAL GY 55 (gamme LUMINE) : TGY3700 1 point simple, TGY3701 1 point à clé, TGY3702 3 points, TGY3703 3 points à clé, et TGY3704 « Rallonge 4ème point », raccordée à la TGY3702 ou à la TGY3703 (2 vis TGY3723, pour très grandes hauteurs). Le 4e point se fait donc avec TGY3702 (ou TGY3703) + TGY3704 : c'est bien la référence TECHNAL. L'autre coulissant TECHNAL du wiki, le LUMEAL GA, s'arrête à 3 points (T621001 1 point, T621002 2 points, T621003 3 points, T621005 serrure extérieure à clé). Sources : /quincaillerie/soleal-gy-roulements-et-fermetures.md, /quincaillerie/lumeal-ga-roulements-et-fermetures.md.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/quincaillerie/soleal-gy-roulements-et-fermetures.md", "extrait": "| **TGY3704** | Rallonge 4ème point | Raccordée à TGY3702/03 | Pour très grandes hauteurs | — | 2 vis TGY3723 |"},
+  {"page": "/quincaillerie/lumeal-ga-roulements-et-fermetures.md", "extrait": "| **T621003** | 3 points de verrouillage | $H \\ge 1\\,800\\text{ mm}$ | 3 pênes réglables (standard porte-fenêtre) |"}
+ ],
+ "ambiguite": "La relance est mal tapée (« chez la crémone chez technal ») : sans doute « je cherche la crémone [4 points] chez Technal ». Si l'utilisateur veut une crémone 4 points monobloc, le wiki n'en a pas ; il faudrait demander s'il parle bien du SOLEAL GY (préfixe TGY) ou d'un autre coulissant TECHNAL (LUMEAL GA).",
+ "outils": 3,
+ "comment_trouve": "Réutilisé le tableau des crémones SOLEAL GY (déjà lu pour R33), puis grep « crémone / points » sur lumeal-ga-roulements-et-fermetures.md et askey-coulissant-65-nv-quincaillerie.md pour vérifier qu'aucun autre coulissant n'a de 4 points.",
+ "formulations": [
+  "référence Technal d'une fermeture 4 points pour coulissant SOLEAL",
+  "crémone 4 points Technal",
+  "existe-t-il chez Technal une crémone quatre points complète pour baie coulissante, pas une rallonge ?"
+ ],
+ "defauts_wiki": [
+  "Relance sans référence : une recherche lexicale sur « crémone technal » tombe sur toutes les pages TECHNAL (SOLEAL FY, GY, PY, LUMEAL) ; la page SOLEAL GY n'a pas « crémone 4 points » écrit, seulement « Rallonge 4ème point ».",
+  "Aucune page ne dit explicitement « il n'existe pas de crémone 4 points monobloc » : l'absence se déduit de deux tableaux sur deux pages.",
+  "Le tag « cremona » (sic) de la page SOLEAL GY ne correspond pas à « crémone »."
+ ]
+}

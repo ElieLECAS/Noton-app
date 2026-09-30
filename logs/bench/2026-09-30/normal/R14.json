@@ -1,0 +1,25 @@
+{
+ "id": "R14",
+ "reponse": "La **76576** est une **parclose de dormant** PERFORM76 (système 76 Advanced, KÖMMERLING) : elle tient un **vitrage de 42 mm** (feuillure de 62 mm, joint post-extrudé ou équivalent) et la parclose fait **16 mm** d'épaisseur. Parclose arrondie, de la famille dormant : elle se monte sur les cinq dormants PERFORM76 76171, 76172, 76177, 76180, 76185 et **ne se monte pas sur les ouvrants** (qui prennent la 76506 pour 42 mm).\nAu tableau de vitrage du manuel profine (dormant et meneau sans compensateur) : 42 mm avec le joint A de 4 mm, **44 mm avec le joint B de 2 mm**, tolérance +1,0 / −0,5 mm. Le poster des profilés complémentaires la donne « largeur 16, remplissage 42 » ; le DTA la dessine en ligne 4 de sa planche des parcloses, 42 mm.\n\nCoupe (cahier technique PERFORM76, p. 8 — épaisseur de vitrage 42 en bleu, parclose 16 en noir) : ![Parclose 76576](/assets/profiles/perform76/parcloses/parclose-76576.png)\nCoupe du manuel profine : ![Parclose 76576](/assets/profiles/systeme76/tableau-vitrage/dormant-76576.png)",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/profiles/perform76-parcloses.md", "extrait": "| 76576 | 42 | 16 | ![Parclose 76576](/assets/profiles/perform76/parcloses/parclose-76576.png) |"},
+  {"page": "/profiles/perform76-parcloses.md", "extrait": "| Série dormant, 2634 à 76579 | les cinq dormants 76171, 76172, 76177, 76180, 76185 | les ouvrants |"},
+  {"page": "/profiles/systeme-76-tableau-de-vitrage.md", "extrait": "| 76576 | 42 | 44 | +1,0 / −0,5 | ![Parclose 76576](/assets/profiles/systeme76/tableau-vitrage/dormant-76576.png) |"},
+  {"page": "/profiles/systeme-76-profiles-complementaires.md", "extrait": "| 76576 | 16 | 42 |"}
+ ],
+ "ambiguite": "",
+ "outils": 3,
+ "comment_trouve": "Grep « 76576 » : 4 lignes sur 3 pages (perform76-parcloses, systeme-76-tableau-de-vitrage, systeme-76-profiles-complementaires) ; coupe vérifiée à l'œil (label Parclose 76576, cotes 42 bleu / 16 noir).",
+ "formulations": [
+  "Pour quel vitrage est la parclose de dormant 76576 ?",
+  "76576",
+  "Quelle parclose de dormant PERFORM76 pour un vitrage de 42 mm ?"
+ ],
+ "defauts_wiki": [
+  "La question ne dit pas que c'est une parclose : la recherche repose uniquement sur le numéro, présent sur trois pages ; bon cas pour BM25.",
+  "Deux lectures de l'épaisseur selon le joint (42 en A, 44 en B) sur systeme-76-tableau-de-vitrage.md : un lecteur qui prend la mauvaise colonne donne 44.",
+  "Deux coupes différentes pour la même référence (assets perform76/parcloses et systeme76/tableau-vitrage).",
+  "systeme-76-profiles-complementaires.md fait 62 Ko pour une ligne utile."
+ ]
+}

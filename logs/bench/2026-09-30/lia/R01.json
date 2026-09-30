@@ -1,0 +1,41 @@
+{
+  "question": "Quelle parclose pour un vitrage de 44 mm ?",
+  "pages_lues": [
+    "/profiles/systeme-76-tableau-de-vitrage.md",
+    "/profiles/perform76-parcloses.md",
+    "/profiles/systeme-70-tableau-de-vitrage.md",
+    "/profiles/soleal-fy-parcloses-et-vitrage.md"
+  ],
+  "anomalies": [
+    "CTR-02",
+    "CTR-17",
+    "CTR-19",
+    "CTR-92",
+    "INC-242",
+    "INC-52"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "parclose vitrage 44 mm épaisseur"
+      },
+      "pages_nouvelles": [
+        "/profiles/systeme-76-tableau-de-vitrage.md",
+        "/profiles/perform76-parcloses.md",
+        "/profiles/systeme-70-tableau-de-vitrage.md"
+      ],
+      "caracteres": 90914
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/profiles/soleal-fy-parcloses-et-vitrage.md"
+      },
+      "pages_nouvelles": [
+        "/profiles/soleal-fy-parcloses-et-vitrage.md"
+      ],
+      "caracteres": 11319
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+ "id": "S07",
+ "reponse": "Compris comme : quel couple (paire) de chicanes pour un coulissant SOLÉAL55 (TECHNAL SOLEAL GY 55, gamme LUMINE) de 2000 mm de large × 2150 mm de haut, 2 vantaux. Le wiki ne contient pas d'abaque qui donne la chicane selon les dimensions et la pression de vent : impossible de dire quelle paire est le minimum pour 2000 × 2150. Ce qu'il donne :\n- Montants centraux (chicanes) SOLEAL GY, face vue 32,8 mm ; inertie Ix donnée pour 1 200 à 3 000 mm. Vitrage 24-28 mm : TGY1207 standard (Ix 6,12 cm⁴), TGY1208 renfort tubulaire (23,00), TGY1209 grande inertie (54,45), TGY1210 renfort lame extérieure (21,98, 4 vantaux percussion), TGY1211 galbé Design (25,26). Vitrage 29-32 mm : TGY1213 (5,96), TGY1214 (23,00), TGY1215 (54,26), TGY1216 (21,98), TGY1217 (25,26).\n- Couples : TGY1207 + TGY1207 = 12,24 cm⁴ ; TGY1207 + TGY1208 = 29,12 ; TGY1207 + TGY1209 = 60,57 ; TGY1208 + TGY1208 = 46,00 ; TGY1208 + TGY1209 = 77,45 ; TGY1209 + TGY1209 = 108,90 cm⁴ (en 29-32 mm : 11,92 / 28,96 / 60,22).\n- Seule règle dimensionnelle écrite : TGY1209 + TGY1209 (108,90 cm⁴) permet des baies jusqu'à H 2,50 m et L 3,00 m en 2 vantaux sous vent de 1 200 Pa (classe A3). Une baie de 2000 × 2150 est donc dans ce domaine avec ce couple, mais le wiki ne dit pas si un couple plus faible suffit.\n- Largeur : le SOLÉAL55 2 vantaux va de 800 à 3 500 mm (2000 mm possible) ; la hauteur maximale n'est pas donnée.\n- Pour un vantail d'environ 1 000 mm de large en vitrage 24-28 mm (traverse T141015), la cale TGA3817 n'est obligatoire que si le vantail dépasse 1,50 m de large ou 120 kg.\nSi « soleal » désigne la fenêtre à frappe SOLEAL FY 55 (LUMINE55, l'historique parlait de ses battements) : battement central T215186, Ix 12,89 cm⁴ à L = 2 000 mm, sans abaque de dimensions non plus. Sources : /profiles/soleal-gy-dormants-et-rails.md, /gammes/coulissants-aluminium.md, /quincaillerie/soleal-gy-roulements-et-fermetures.md, /profiles/soleal-fy-dormants-et-ouvrants.md.",
+ "dans_le_wiki": "partiel",
+ "preuves": [
+  {"page": "/profiles/soleal-gy-dormants-et-rails.md", "extrait": "- TGY1209 + TGY1209 = **$108,90\\text{ cm}^4$** (permet des baies jusqu'à $H = 2,50\\text{ m}$ et $L = 3,00\\text{ m}$ en 2 vantaux sous vent 1 200 Pa Classe A3)."},
+  {"page": "/profiles/soleal-gy-dormants-et-rails.md", "extrait": "| **TGY1207** | 24-28 mm | Standard chicane | $6,12\\text{ cm}^4$ | $1,96\\text{ cm}^4$ | TGY1207 + TGY1207 ($I = 12,24\\text{ cm}^4$) |"},
+  {"page": "/gammes/coulissants-aluminium.md", "extrait": "| 2 vantaux | 800 | 3 500 |"},
+  {"page": "/profiles/soleal-fy-dormants-et-ouvrants.md", "extrait": "| **T215186** | Battement central standard | Fenêtre 2 vantaux (masse visible 137 mm en apparent, 66 mm en minimal) | 12,89 cm⁴ | 7,51 cm⁴ |"}
+ ],
+ "ambiguite": "Relance très ambiguë : (1) « couple » = paire de chicanes (lecture retenue) ou couple de serrage (lecture de l'assistant dans l'historique, pour laquelle le wiki n'a que 5 N·m sur les vis de boîtier de crémone SOLEAL FY, sans lien avec les dimensions) ; (2) « soleal » = coulissant SOLÉAL55 / SOLEAL GY (le mot chicane est un terme de coulissant) ou fenêtre SOLEAL FY 55 (LUMINE55, battement central) ; (3) 2000 × 2150 : largeur × hauteur supposé, nombre de vantaux, épaisseur de vitrage et exposition au vent (pression) inconnus. Il faudrait demander : coulissant ou frappe, L × H, nombre de vantaux, vitrage, région / exposition au vent.",
+ "outils": 9,
+ "comment_trouve": "Grep « chicane » : pages ASKEY et SOLEAL GY (galandage, chicanes fixes) ; la section « Montants centraux (Chicanes) » de soleal-gy-dormants-et-rails.md porte les inerties et la seule règle dimensionnelle (108,90 cm⁴). Grep « abaque / dimensions / 2150 / couple » dans les pages SOLEAL FY et GY : aucun abaque de dimensionnement des chicanes ou battements ; les pages sources (DTA SOLEAL GY p. 7-10 et 15-17, conception p. 29-35) sont « à faire ». Limites de largeur dans gammes/coulissants-aluminium.md.",
+ "formulations": [
+  "quelle paire de montants centraux SOLEAL GY pour une baie coulissante de 2000 de large sur 2150 de haut ?",
+  "chicane soleal 2000x2150",
+  "pour un coulissant alu 2 vantaux de 2 m sur 2,15 m, quel renfort de chicane faut-il ?"
+ ],
+ "defauts_wiki": [
+  "Aucun abaque de choix des chicanes selon largeur, hauteur et pression de vent pour le SOLEAL GY (ni du battement central SOLEAL FY) : la question « selon dimensions » n'a pas de réponse ; les pages sources concernées (DTA SOLEAL GY p. 7-10, 15-17 ; catalogue de conception p. 29-35) sont encore « à faire ».",
+  "« SOLÉAL55 » (nom PROFERM, gammes/coulissants-aluminium.md) et « SOLEAL GY 55 » (nom TECHNAL, pages profilés) désignent le même coulissant sans que les pages de profilés écrivent SOLÉAL55 : la correspondance n'est pas lexicale.",
+  "Le mot « couple » est ambigu (paire de chicanes / couple de serrage) ; les pages écrivent « Combinaisons courantes », jamais « couple de chicanes ».",
+  "La seule règle dimensionnelle (TGY1209 + TGY1209 → 2,50 × 3,00 m à 1 200 Pa) est une puce sous le tableau, sans locator de page source.",
+  "L'historique citait T591022 et une masse visible de 66 mm pour le T215186 ; le wiki écrit T510022 et 137 mm en apparent / 66 mm en minimal : la réponse précédente ne correspondait pas exactement au wiki."
+ ]
+}

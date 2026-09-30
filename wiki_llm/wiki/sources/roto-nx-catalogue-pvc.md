@@ -16,7 +16,7 @@ generated:
   at: 2026-09-19T20:30:00Z
 source_pages:
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
-    pages: 1-247
+    pages: 1-451
 ---
 
 # Identité
@@ -41,15 +41,15 @@ Table des matières de la p. 7, un onglet de couleur par chapitre :
 | 1 Informations | 9-32 (sommaire p. 9) |
 | 2 Diagrammes d'applications | 33-52 (sommaire p. 33) |
 | 3 Aperçu des ferrures | 53-211 (sommaire p. 53) |
-| Crémone | 212-265 |
-| Renvois d'angle | 266-277 |
-| Compas | 278-317 |
-| Verrouilleurs | 318-333 |
-| Pivots d'angle / palier d'angle | 334-349 |
-| Pièces de fermeture | 350-369 |
-| Compas (seconde section) | 370-387 |
-| Accessoires | 388-435 |
-| Gabarits / Outils | 436-451 |
+| Crémone | 212-261 (ouverture et sommaire p. 208-211) |
+| Renvois d'angle | 266-272 (ouverture et sommaire p. 262-265) |
+| Compas | 278-312 (ouverture et sommaire p. 274-277) |
+| Verrouilleurs | 318-328 (ouverture et sommaire p. 314-317) |
+| Pivots d'angle / palier d'angle | 334-345 (ouverture et sommaire p. 330-333) |
+| Pièces de fermeture | 350-365 (ouverture et sommaire p. 346-349) |
+| Compas (chapitre 10) | 370-382 (ouverture et sommaire p. 366-369) |
+| 11 Accessoires | 388-431 (ouverture et sommaire p. 384-387) |
+| 12 Gabarits / Outils | 436-450 (ouverture et sommaire p. 432-435) ; quatrième de couverture p. 451 |
 
 # Registre de couverture
 
@@ -143,71 +143,72 @@ La pagination du catalogue est celle du PDF, sans décalage : relevé sur les pi
 | 231-236 | 4.3 crémone OB solutions spéciales : 4.3.1 crémone adaptée OB (schémas non verrouillable et verrouillable, configuration, têtière 799011, boîtiers de crémone et de serrure), 4.3.2 crémone OB Confort (schéma, fouillot 15 mm par LFF, INC-289) ; bas des p. 234-236 vide | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
 | 237-244 | 4.4 crémone verrou : fouillot 8 mm (schéma, hauteur de poignée constante, centrale / variable), fouillot 15 mm (schéma, constante, centrale / variable, hauteur de poignée en bas), fouillots 25 à 50 mm (schéma non verrouillable, configuration, têtière, boîtier de crémone) (VER-122) | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
 | 245-247 | 4.5 raccord de crémone : KSR, sortie de tringle, ouvrant basculant, oscillo-battant latéral, plein cintre, ouvrant semi-fixe | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
-| 248-265 | 4.6 crémone de semi-fixe (standard, Plus, levier séparé), 4.7 verrou d'arête (d'après le sommaire p. 211 et la p. 248 vue en tête ; non encore transcrit) | à faire | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
-| 266-277 | Nomenclatures et cotes des renvois d'angle standards et TiltSafe | à faire | [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md) |
-| 278-317 | Compas oscillo-battants côté P et compas invisibles Designo II | à faire | [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) |
-| 318-333 | Verrouilleurs médians horizontaux et verticaux, prolongateurs | à faire | [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md) |
-| 334-349 | Paliers d'angle, pivots d'angle et paliers de compas | à faire | [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) |
-| 350-369 | Pièces de fermeture et gâches de sécurité galets E, P, V et TiltSafe | à faire | [Pièces de fermeture et gâches Roto NX](/quincaillerie/roto-nx-pieces-fermeture-gaches.md) |
-| 370-387 | Compas 2e série, compas d'angles variables et châssis cintrés | à faire | [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md), [châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md) |
-| 388-435 | Accessoires (anti-fausse manœuvre, réhausseurs, loqueteaux, caches) | à faire | [Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md) |
-| 436-451 | Gabarits de perçage, outillage d'atelier et clés de réglage | à faire | [Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md) |
+| 248-253 | 4.6 crémone de semi-fixe, 4.6.1 standard : KSR hauteur de poignée fixe (vue des combinaisons, détermination, tableaux de combinaisons 8 mm et 15 mm et plus, INC-290 ; tableau des références fouillot 8 à 50 mm), position de poignée centrée / variable (vue, détermination, tableaux de combinaisons, INC-291 ; tableau des références) | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 254-259 | 4.6.2 crémone de semi-fixe Plus : KSR hauteur de poignée fixe (vue, détermination, tableaux de combinaisons INC-292, tableau des références p. 256), poignée centrée / variable (vue, détermination, tableaux de combinaisons, tableau des références p. 259) ; 4.6.3 levier séparé, 4.6.3.1 hauteur de poignée constante (début du tableau) | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 260 | 4.6.3.1 (suite du tableau), 4.6.3.2 hauteur de poignée centrale / variable, 4.6.3.3 levier séparé 291743 | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 261 | 4.7 verrou d'arête : rainure de battement standard (633419, 618666, 305638 ; CTR-117) et KSR (628710), feuillure Euro (260189) | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 262-263 | ouverture du chapitre « Renvois d'angle » : pictogramme d'onglet et photographie en double page d'un angle de vantail ferré, sans texte ni légende | sans contenu propre | - |
+| 264 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 265 | sommaire du chapitre « Renvois d'angle » : standard p. 266, court p. 267, têtière (standard, seuil) p. 268, seuil p. 269, compas p. 270, solutions particulières (cintré, fenêtre inclinée p. 271 ; aération, gâche et sortie de tringle p. 272) | sans contenu propre | - |
+| 266-272 | 5 Renvois d'angle : 5.1 standard, 5.2 court, 5.3 têtière (standard, seuil), 5.4 seuil (INFO raccordement des seuils, document IMO_347), 5.5 compas, 5.6 solutions particulières (cintré, fenêtre inclinée, aération VER-123, gâche et sortie de tringle) : dessins, pictogrammes de type d'ouverture, tableaux de références | transcrit | [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md) |
+| 273 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 274-275 | ouverture du chapitre « Compas » : pictogramme d'onglet et photographie en double page d'un angle de vantail et de sa paumelle, sans texte ni légende | sans contenu propre | - |
+| 276 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 277 | sommaire du chapitre « Compas » : tolérance de châssis fixe (p. 278 ; Designo p. 280), têtière de compas (P p. 281, Designo p. 282), bras de compas (P p. 285, Designo p. 290), compas articulé à commande forcée (P p. 298), équerre de compas OF (P et Designo p. 299), bras de compas en feuillure (P p. 300, Designo p. 301), charnière en feuillure de vantail oscillo-battant (P p. 304), paumelle de recouvrement d'ouvrant oscillo-battant (P p. 305), palier compas (P p. 306, broches de palier de compas p. 308), caches (P p. 309) | sans contenu propre | - |
+| 278-280 | 6 Compas, 6.1 tolérance de châssis fixe : côté paumelles P (coupe, tableau 130 / 150 kg, notes [3] [4], INFO, DANGER, ATTENTION, quatre vues de face 130 kg, 150 kg, cintré, soufflet, CTR-118), côté paumelles Designo (BA 13) (coupe, tableau de neuf lignes à 90°) | transcrit | [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md), [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) (renvoi p. 278) |
+| 281-284 | 6.2 têtière de compas : côté P sécurité de base – CDR 1 N, CDR 2 / CDR 2 N, CDR 3, vantail pivotant (INC-293) ; côté Designo sécurité de base, sécurité, fenêtre OF (crémone de semi-fixe standard et Plus) ; dessins, pictogrammes d'ouverture, tableaux, INFO | transcrit | [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) |
+| 285-289 | 6.3.1 bras de compas côté P : standard (12/18-9 à 12/22-13, Roto Sil, blanc, titane), TiltFirst (INC-294), fenêtre inclinée ; renvois palier / caches / pièce d'extrémité, INFO HFF < 500 mm | transcrit | [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) |
+| 290-297 | 6.3.1.4 bras de compas côté P cintré (INC-296, deux INFO) ; 6.3.2 bras de compas côté Designo par système de profil : standard 250 (INC-295), 350, 500, TiltFirst 250, 350, 500 ; bas de la p. 297 vide | transcrit | [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) |
+| 298-299 | 6.4 compas articulé à commande forcée, confort (INC-293) ; 6.5 équerre de compas OF côté P (VER-123), cale vantail abattant 230651, équerre de compas OF côté Designo | transcrit | [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) |
+| 300-303 | 6.6 bras de compas en feuillure : côté P, côté Designo standard, fenêtre à trois ouvrants (ouvrant central) ; reste de la p. 303 vide | transcrit | [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) |
+| 304-305 | 6.7 charnière en feuillure de vantail oscillo-battant côté P (INFO ouvrants pivotants) ; 6.8 paumelle de recouvrement d'ouvrant oscillo-battant : schéma de montage et affectations [A] [B], paumelle 787400 | transcrit | [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) |
+| 306-308 | 6.9 palier compas côté P : deux schémas de montage et leurs repères, standard P 3/130 / P 6/130, P 6/150, réglage latéral P 3/100 / P 6/100 ; 6.9.2 broche 834705 | transcrit | [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) |
+| 309-312 | 6.10 caches côté P : palier de compas standard (caches, bouchon), réglable latéral, bras de compas avec et sans patte de fixation (INFO), paumelle de recouvrement | transcrit | [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) |
+| 313 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 314-315 | ouverture du chapitre « Verrouilleurs » : pictogramme d'onglet et photographie en double page d'un vantail ferré, sans texte ni légende | sans contenu propre | - |
+| 316 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 317 | sommaire du chapitre « Verrouilleurs » : en plusieurs pièces (standard p. 318, sécurité p. 319, seuils p. 320, recoupable p. 321, crémone p. 321) ; têtière p. 322 ; opposé p. 323 ; crochet p. 324 ; plein cintre (standard p. 326, élément cintré horizontal p. 327, élément cintré vertical p. 327) ; confort p. 328 | sans contenu propre | - |
+| 318-322 | 7 Verrouilleurs, 7.1 en plusieurs pièces : standard, sécurité, seuils (INFO IMO_347), recoupable, crémone (raccordable des deux côtés, ouvrant secondaire) ; 7.2 têtière : dessins, pictogrammes de type d'ouverture, tableaux | transcrit | [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md) |
+| 323-328 | 7.3 opposé, 7.4 crochet 17 mm et 21 mm (INFO IMO_347), 7.5 plein cintre (standard, élément cintré horizontal, élément cintré vertical), 7.6 confort (CTR-119) | transcrit | [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md) |
+| 329 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 330-331 | ouverture du chapitre « Pivots d'angle / palier d'angle » : pictogramme d'onglet et photographie en double page de l'angle bas d'un vantail ouvert et ferré, sans texte ni légende | sans contenu propre | - |
+| 332 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 333 | sommaire du chapitre « Pivots d'angle / palier d'angle » : tolérance de châssis fixe (p. 334 ; Designo p. 336), pivots d'angle (P p. 337, Designo p. 338), palier d'angle (P p. 339, Designo p. 340), reports de charge (Designo p. 343), caches (P p. 344) | sans contenu propre | - |
+| 334-336 | 8.1 tolérance de châssis fixe : reprise des p. 278-280 (coupe, tableau 130 / 150 kg, notes [5] [6], INFO, DANGER, ATTENTION, quatre vues de face, tableau Designo), relue en image, identique sauf la numérotation des notes | transcrit | [Pivots et paliers d'angle Roto NX](/quincaillerie/roto-nx-pivots-et-paliers-angle.md) (renvoi), [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) |
+| 337-340 | 8.2 pivots d'angle : côté P (montage P 6/150 et repères, P 6/150 INC-297), côté Designo 634705 (VER-113) ; 8.3 palier d'angle côté P (montage et repères, P 3/130, P 6/130, P 6/150) ; début du palier d'angle Designo standard | transcrit | [Pivots et paliers d'angle Roto NX](/quincaillerie/roto-nx-pivots-et-paliers-angle.md) |
+| 341-345 | fin du palier d'angle Designo standard, cache de palier d'angle Designo, fenêtre à trois ouvrants ; 8.4 report de charge Designo ; 8.5 caches côté P (paumelle d'angle, bouchon INC-297, palier d'angle standard, patte de fixation) | transcrit | [Pivots et paliers d'angle Roto NX](/quincaillerie/roto-nx-pivots-et-paliers-angle.md) |
+| 346-347 | ouverture du chapitre « Pièces de fermeture » : pictogramme d'onglet et photographie en double page d'un vantail entrouvert et de sa ferrure, sans texte ni légende | sans contenu propre | - |
+| 348 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 349 | sommaire du chapitre « Pièces de fermeture » : gâche de basculement (standard p. 350, TiltFirst p. 353, seuils p. 355, oscillo-battant latéral p. 355) ; gâches (standard p. 356, sécurité p. 357, deux vantaux p. 362, têtière p. 364, crochet p. 364) | sans contenu propre | - |
+| 350-355 | 9 Pièces de fermeture, 9.1 gâche de basculement : standard zinc (repères avec sol / sans sol, VER-124, INC-288) et acier (axe 9 / 13 mm), TiltFirst (palier oscillant), seuils (INFO IMO_347), oscillo-battant latéral ; tableaux par système de profil, INFO « Autres versions sur demande » | transcrit | [Pièces de fermeture et gâches Roto NX](/quincaillerie/roto-nx-pieces-fermeture-gaches.md) |
+| 356-365 | 9.2 gâches : standard, sécurité zinc (avec sol / sans sol) et acier (symétrique, gauche / droite), aération par ouverture à soufflet TiltSafe et support de sécurité 816934 (INFO CDR 2 / CDR 2 N), deux vantaux, têtière (260359, 339395), crochet (réglable en compression) ; bas de la p. 365 vide | transcrit | [Pièces de fermeture et gâches Roto NX](/quincaillerie/roto-nx-pieces-fermeture-gaches.md) |
+| 366-367 | ouverture du chapitre 10 « Compas » : pictogramme d'onglet et photographie en double page d'un bras monté entre dormant et vantail ouvert, sans texte ni légende | sans contenu propre | - |
+| 368 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 369 | sommaire du chapitre 10 « Compas » : 2ème compas (standard p. 370, TiltFirst et plein cintre p. 371) ; compas d'arrêt (pièces dormantes et d'ouvrant p. 372, kits et vis de montage p. 373) ; limiteurs d'ouverture à blocage indexé (pièces de dormant p. 375, d'ouvrant p. 376) ; releveur d'ouvrant p. 377 ; compas d'entrebâillement et de nettoyage (pièces de dormant et d'ouvrant p. 378, documents p. 379, INC-299) ; compas d'aération (pièces dormantes p. 381, d'ouvrant p. 382) | sans contenu propre | - |
+| 370-373 | 10 Compas, 10.1 2ème compas : montage et explications (cotes 417 / 200, repères [A] à [D]), standard 255237, TiltFirst 292022, plein cintre 245764 ; 10.2 compas d'arrêt : pièce dormant 451477, pièces d'ouvrant 451432 / 451431, kits 482823 / 494389, vis 567995 ; renvois support p. 417 et vis p. 373 | transcrit | [Deuxième compas, compas d'arrêt, limiteurs et compas d'aération Roto NX](/quincaillerie/roto-nx-compas-complementaires.md) |
+| 374-377 | 10.3 limiteurs d'ouverture à blocage indexé : INFO élément de confort (DIN EN 13126-5), montage et repères [A] à [E], tableaux côté P / K / A / A16 et Designo / A16 Designo (CTR-120, VER-123), INFO releveur / anti-fausse manœuvre, pièces de dormant par système de profil (INC-298), pièces d'ouvrant compas n° 1-3, bras n° 1-3, butée ; 10.4 releveur d'ouvrant 795925 | transcrit | [Deuxième compas, compas d'arrêt, limiteurs et compas d'aération Roto NX](/quincaillerie/roto-nx-compas-complementaires.md) |
+| 378-382 | 10.5 compas d'entrebâillement et de nettoyage : pièce dormant par HFF, paliers d'ouvrant, sous-cales titrées « Documents » (INC-299) ; 10.6 compas d'aération : INFO côté paumelles P et T (VER-123), montage et cotes, coupes [A] à [D] et éléments d'encliquetage, deux INFO (INC-300), choix par HFF, pièces dormantes par système de profil, pièces d'ouvrant (éléments d'arrêt n° 1-4, cache d'écartement) | transcrit | [Deuxième compas, compas d'arrêt, limiteurs et compas d'aération Roto NX](/quincaillerie/roto-nx-compas-complementaires.md) |
+| 383 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 384-385 | ouverture du chapitre 11 « Accessoires » : pictogramme d'onglet et photographie en double page d'une fenêtre ouverte et de sa poignée, sans texte ni légende | sans contenu propre | - |
+| 386 | page blanche (bandeau et pied de page seuls) | sans contenu propre | - |
+| 387 | sommaire du chapitre 11 « Accessoires » : loqueteau (standard p. 388, aimant p. 390, NTi p. 394) ; aération (à un étage p. 396, à plusieurs niveaux p. 397) ; anti-fausse manœuvre (pièces de dormant p. 399, têtière et pièces d'ouvrant p. 401) ; blocages de commutation p. 402 ; limiteur d'ouverture par pivotement (191 p. 403, 335 / 355 p. 405, A p. 407, 198 p. 409) ; éléments de sécurité (protection de perçage fouillots 8 à 15 mm et 25 à 50 mm, têtière p. 410, pièces d'ouvrant et sécurité anti-dégondage p. 411) ; éléments de raccordement (coupleurs, plaques de maintien, plaquettes de liaison p. 412) ; serrures de condamnation OF (standard et vérin p. 413, documents p. 414) ; réhausses p. 415 ; supports p. 417 ; verrouilleur médian (côté P p. 418, Designo p. 422) ; divers (limitation de course, cache têtière, pièce de terminaison têtière de compas pour fenêtre inclinée, sécurité de fin de course p. 424, set de caches côté P et caches échantillons de couleurs p. 425, Infoclips p. 426, limiteur d'ouverture pivotante TurnPlus p. 427, protège-tempête p. 428, Duo-Drill raccords d'angle à souder p. 430) | sans contenu propre | - |
+| 388-395 | 11 Accessoires, 11.1 loqueteau : standard (pièces de dormant, têtière, pièces d'ouvrant), aimant (pièces dormantes, têtière, pièces d'ouvrant, deux INFO), NTi (pièces de dormant, INFO montage à 180°, têtière, galets) (CTR-121) | transcrit | [Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md), [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md) (renvoi CTR-121) |
+| 396-398 | 11.2 aération : à un étage (pièces dormant, INFO renvoi d'angle galet P ou V), à plusieurs niveaux (INFO côtés paumelles P et T, VER-123 ; pièces dormantes INC-301, têtière, renvoi p. 272) ; bas de la p. 398 vide | transcrit | [Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md) |
+| 399-402 | 11.3 anti-fausse manœuvre : pièces de dormant, élément enfichable (INFO gâche SEC), têtières, pièce d'ouvrant ; 11.4 blocages de commutation ; bas de la p. 402 vide | transcrit | [Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md) |
+| 403-409 | 11.5 limiteurs d'ouverture par pivotement : 191 (montage, repères, note [7] INC-302, LVFF INC-293), 335 / 355 (montage, repères, note [8], INFO), A (montage, intervalle par système), 198 (montage, VER-125) ; pièces de dormant et d'ouvrant, renvois p. 337, 339, 375, 417 | transcrit | [Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md) |
+| 410-412 | 11.6 éléments de sécurité (protections de perçage, pince de sécurité, élément de blocage, éléments de sécurité d'ouvrant, sécurité anti-dégondage) ; 11.7 éléments de raccordement (coupleurs, plaques de maintien, plaquette de liaison) | transcrit | [Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md) |
+| 413-416 | 11.8 serrures de condamnation OF : standard, vérin, « Documents » (INC-299) ; 11.9 réhausses : pièces d'ouvrant (INFO crémone OB confort), compressions de feuillure de dormant (renvois, INFO gâche SEC) | transcrit | [Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md) |
+| 417-423 | 11.10 supports ; 11.11 verrouilleur médian côté paumelles P (caché VER-126, à visser, caches d'ouvrant et de dormant) et côté Designo (BA 13) (caché réglable et non réglable) | transcrit | [Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md) |
+| 424-431 | 11.12 divers : limitation de course, cache têtière, pièce de terminaison têtière de compas, sécurité de fin de course, set de caches côté P (INC-304), caches échantillons, Infoclips (INC-303, couleurs RAL), limiteur TurnPlus, protège-tempête, Duo-Drill (raccord d'angle à souder, outil de montage) ; bas des p. 425, 427, 429 et 431 vide | transcrit | [Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md) |
+| 432-433 | ouverture du chapitre 12 « Gabarits / Outils » : pictogramme d'onglet et photographie en double page d'un gabarit de perçage rouge, sans texte ni légende | sans contenu propre | - |
+| 434 | page blanche (pied de page seul) | sans contenu propre | - |
+| 435 | sommaire du chapitre 12 « Gabarits / Outils » : gabarits de perçage (palier de compas standard et palier d'angle, palier de compas réglable, pivots d'angle p. 436 ; paumelle de recouvrement d'ouvrant oscillant-battant p. 437) ; gabarits d'insertion (crémone OB hauteur de poignée fixe p. 438, centrée / variable p. 441, crémone verrou p. 444) ; gabarit de traçage p. 445 ; presses à estamper (DUO p. 446, PS 100 et HS p. 447) ; outils (outils de réglage, clé six-pans, poignée de tirage p. 448, clé à fourches doubles p. 449) ; graisse Roto NX / NT p. 450 | sans contenu propre | - |
+| 436-437 | 12 Gabarits / Outils, 12.1 gabarits de perçage : palier de compas standard et palier d'angle, palier de compas réglable, pivots d'angle (VER-114), paumelle de recouvrement d'ouvrant ; bas de la p. 437 vide | transcrit | [Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md) |
+| 438-444 | 12.2 gabarits d'insertion : crémone OB hauteur de poignée fixe et centrée / variable (vues d'ensemble, tableaux d'affectation INC-305, INC-306, gabarits individuels, INFO), crémone verrou (vue, tableau, gabarits) | transcrit | [Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md) |
+| 445-450 | 12.3 gabarit de traçage (INFO) ; 12.4 presses à estamper DUO, PS 100, HS et accessoires ; 12.5 outils ; 12.6 graisse Roto NX / NT ; bas des p. 445, 449 et 450 vide | transcrit | [Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md) |
+| 451 | quatrième de couverture : Roto Frank Ferrures S.A.S., adresse, téléphone, fax, courriel, site ; « Des ferrures pour relever n'importe quels défis » et les quatre gammes Roto Window, Sliding, Door, Equipment | transcrit | [ROTO](/fournisseurs/roto.md) |
 
-Les contenus des lignes 266 à 451 sont ceux de l'ingestion antérieure, non encore vérifiés en image ; les chapitres de la table des matières (ci-dessus) font foi pour les limites.
-
-**Registre : 1-247 traités (206 pages `transcrit`, 41 `sans contenu propre`) ; 9 plages `à faire`, pages 248 à 451.**
-
-# Note de reprise
-
-Tranches 1 (p. 1-33), 2 (p. 34-54), 3 (p. 55-135), 4 (p. 136-211) et 5 (p. 212-247, chapitre 4
-« Crémone » jusqu'à la fin de 4.5 « Raccord de crémone »), 29/09/2026. Reprendre à la **p. 248**
-(4.6 crémone de semi-fixe, 4.6.1 standard, 4.6.1.1 KSR hauteur de poignée fixe, 4.6.1.1.1
-possibilités de combinaisons : vue [1]-[6] et « Détermination de la crémone », étapes 1 à 3…),
-puis 4.7 verrou d'arête, jusqu'à la p. 265 ; ensuite « Renvois d'angle » p. 266-277.
-
-- **Rendu** : PyMuPDF `get_pixmap` 110 dpi pour la lecture de page, 220-250 dpi en `clip=` pour
-  chaque tableau de références (chiffres nets), 280-300 dpi pour les schémas cotés et les
-  pictogrammes d'en-tête douteux ; découpes à 200 dpi. Image seulement, jamais de couche texte ;
-  pagination du PDF = pagination imprimée.
-- **Page en cours** : [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md). Les sections du
-  catalogue (chapitre 4, dans son ordre) sont insérées **avant** la section *Crémones OB KSR,
-  fouillot 8 mm, hauteur de poignée fixe*, qui ouvre les tables des nomenclatures de montage KSR
-  (gardées, avec un renvoi CTR sous chaque table de catalogue). Continuer de même pour 4.6-4.7 ;
-  la crémone de semi-fixe du manuel (fouillot -6, sortie de tringle) est déjà plus bas sur la
-  page : comparer et renvoyer.
-- **Conventions de transcription** posées en tête de page : référence en première colonne ; J / N
-  reportés tels quels (**INC-288**) ; paires « a / b » de galets, goujons et zones de recoupe
-  reportées sans interprétation ; plage et longueur des cellules fusionnées répétées sur chaque
-  ligne ; types d'ouverture nommés d'après les pictogrammes de la p. 12 ; un schéma identique à un
-  schéma déjà découpé (mêmes cotes) est relié, pas redécoupé ; tableau > 30 lignes scindé selon le
-  type de goujon (p. 240).
-- **Scripts** (scratchpad, à recréer) : `render.py dpi pages…` ; `crop.py dpi page x0 y0 x1 y1
-  out` (fractions de page) ; `cropc.py specs.txt` (découpes 200 dpi dans
-  `assets/quincaillerie/roto-nx-catalogue/cremones/`, pixels sombres sur les bords, planche
-  contact empilée `r/sheet.png`) ; `tab.py` / `tabv.py` / `tabp.py` (tables markdown depuis des
-  lignes « réf plage longueur zone hp … », fixe, variable, avec colonne « position du
-  ventilateur »).
-- **Découpes** : 37 dans `assets/quincaillerie/roto-nx-catalogue/cremones/`.
-- **Anomalies de la tranche 5** : **INC-288** (« J » non défini), **INC-289** (OB Confort : note en
-  HFF sur un tableau en LFF), **CTR-115** (fouillot 8 mm : longueurs +110 mm au catalogue, 795274
-  à 2 ou 3 galets ; 794225 = raccord KSR de 110 mm au catalogue), **CTR-116** (259764, 259717 :
-  plages de HFF ; 259765, 259718, 502024, 566500 absents du catalogue ; 840812), **VER-122**
-  (colonne « position du ventilateur » des crémones verrou) ; **CTR-67** complété (galet V p. 216,
-  838324 / 794640 ; 795282 à 3 galets au manuel, « 2 / – » au catalogue), laissé ouvert.
-  Prochains identifiants à vérifier dans les registres avant usage : INC-290, CTR-117, VER-123.
-- **À vérifier au chapitre 4 (reste)** : le sommaire p. 211 place la crémone de semi-fixe Plus à
-  la p. 254 et le levier séparé à la p. 259, alors que les listes de positions renvoient la
-  « Crémone de semi-fixe Plus KSR - hauteur de poignée fixe » à la p. 256 et la « Crémone de
-  semi-fixe Plus - hauteur de poignée milieu/variable » à la p. 259 (p. 161, 197). Au chapitre
-  « Compas » : le bras de compas [38] renvoie à « → 290 » côté Designo (côté P : 285) ; la têtière
-  de compas sécurité de base à 282 côté Designo (281 côté P).
-- **Autres chapitres** : p. 266-277 et 318-333 → renvois d'angle et verrouilleurs ; p. 278-317,
-  334-349, 370-387 → compas et paliers (**VER-113**) ; p. 350-369 → pièces de fermeture (gâche OB
-  TiltFirst p. 353, gâche de ventilation basculante p. 361) ; p. 388-451 → accessoires et gabarits
-  (**VER-114** ; plaque de maintien [80] p. 412, report de charge p. 343, limiteur d'ouverture 198
-  p. 409, rehausse avec blocage de commutation p. 415) ; verrouilleur raccordable p. 318,
-  verrouilleur crémone p. 321, verrouilleur de têtière p. 322 (renvois de la p. 233 et 248).
-- **Tranches proposées** : 5 bis = p. 248-277 ; 6 = p. 278-349 ; 7 = p. 350-435 ; 8 = p. 436-451.
+**Registre : pages 1 à 451 traitées, aucune plage `à faire` (374 pages `transcrit`, 77 `sans contenu propre`).**
 
 # Citations
 
@@ -220,6 +221,8 @@ puis 4.7 verrou d'arête, jusqu'à la p. 265 ; ensuite « Renvois d'angle » p. 
 - [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)
 - [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md)
 - [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md)
+- [Deuxième compas, compas d'arrêt, limiteurs et compas d'aération Roto NX](/quincaillerie/roto-nx-compas-complementaires.md)
+- [Pivots et paliers d'angle Roto NX](/quincaillerie/roto-nx-pivots-et-paliers-angle.md)
 - [Pièces de fermeture et gâches Roto NX](/quincaillerie/roto-nx-pieces-fermeture-gaches.md)
 - [Accessoires et gabarits d'atelier Roto NX](/quincaillerie/roto-nx-accessoires-et-gabarits.md)
 - [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md)

@@ -1,0 +1,50 @@
+{
+  "question": "peut on faire du carbone noir dans avec Perform ?",
+  "pages_lues": [
+    "/coloris/coloris-portes-entree.md",
+    "/commercial/proferm.md",
+    "/quincaillerie/poignees-et-croisillons.md",
+    "/coloris/coloris-perform.md",
+    "/coloris/coloris-textural.md"
+  ],
+  "anomalies": [
+    "CTR-12",
+    "CTR-28",
+    "INC-36"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "carbone noir coloris PERFORM",
+        "gamme": "PERFORM"
+      },
+      "pages_nouvelles": [
+        "/coloris/coloris-portes-entree.md",
+        "/commercial/proferm.md",
+        "/quincaillerie/poignees-et-croisillons.md"
+      ],
+      "caracteres": 55436
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/coloris/coloris-perform.md"
+      },
+      "pages_nouvelles": [
+        "/coloris/coloris-perform.md"
+      ],
+      "caracteres": 6495
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/coloris/coloris-textural.md"
+      },
+      "pages_nouvelles": [
+        "/coloris/coloris-textural.md"
+      ],
+      "caracteres": 11390
+    }
+  ]
+}

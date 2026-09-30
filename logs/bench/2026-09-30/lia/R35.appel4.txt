@@ -1,0 +1,1836 @@
+===== PAGE 1 : /certifications/dta-6-16-2334.md =====
+Le **Document Technique d'Application n° 6/16-2334_V5** est l'avis du Groupe Spécialisé n° 06 du
+CSTB (Centre Scientifique et Technique du Bâtiment), « Composants de baies et vitrages », sur le
+procédé **TROCAL 76 ADVANCED, KBE 76 ADVANCED, KÖMMERLING 76 ADVANCED** de la société PROFINE
+France — le système PVC sur lequel repose la gamme [PERFORM](/gammes/perform.md) de PROFERM. Il
+est **valide jusqu'au 31 juillet 2028**. Famille de produit : fenêtre à la française, oscillo
+battante ou à soufflet en PVC [1 p. 1].
+
+Un Avis Technique donne des éléments d'appréciation sur l'aptitude à l'emploi d'un procédé dont
+la constitution ou l'emploi ne relève pas des savoir-faire et pratiques traditionnels. Il n'est
+pas un document de conformité à la réglementation ou à un référentiel d'une « marque de
+qualité » ; sa validité est décidée indépendamment de celle des pièces justificatives du dossier
+technique. Il ne change en rien la répartition des responsabilités des acteurs de la
+construction : pour chaque ouvrage, les acteurs doivent fournir ou demander, en fonction de leurs
+rôles, les justificatifs requis. Pour les aspects conformes à des règles de l'art reconnues, un
+renvoi à ces règles suffit [1 p. 1].
+
+Le DTA s'accompagne d'un Dossier Technique Détaillé, le
+[DTD n° DBV-25-6/16-2334_V5](/sources/dtd-6-16-2334.md), que la société Profine doit remettre aux
+entreprises souhaitant se prévaloir du DTA (voir *1.2.2.1 Fabrication et contrôle*). Le DTD est
+issu des éléments fournis par le titulaire et des prescriptions du Groupe Spécialisé n° 6
+acceptées par le titulaire [2 p. 1]. Il reprend le chapitre 2 avec la même numérotation et le
+complète : là où le chapitre 2 du DTA écrit « pas de particularité par rapport aux fenêtres
+classiques », le DTD décrit la disposition. Ces compléments sont portés ci-dessous sous la clause
+qu'ils complètent, avec la référence [2]. Les termes du métier employés ici sont expliqués dans le
+[glossaire](/reference/glossaire.md).
+
+# Versions et descripteur
+
+| Version | Description | Rapporteur | Président |
+| --- | --- | --- | --- |
+| V4 | présentée au GS6 du 17/03/2022 ; intègre entre autres l'ajout de la possibilité de tapée sur fenêtre capotée et seuil PMR | Yann FAISANT | Pierre MARTIN |
+| V5 | annule et remplace l'Avis Technique 6/16-2334_V4 ; présentée au GS6 du 13/03/2025 ; intègre les modifications parcloses et renfort | Yann FAISANT | Pierre MARTIN |
+
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 2)
+
+**Descripteur.** Ce système permet de réaliser des fenêtres et portes-fenêtres à 1, 2 ou 3
+vantaux, soit à la française ou à soufflet, soit oscillo-battante, dont les cadres tant dormants
+qu'ouvrants sont réalisés avec des profilés extrudés en PVC rigide de coloris blanc, beige ou
+gris, ou bien en PVC de coloris blanc, brun ou caramel, revêtus sur la face extérieure et/ou
+intérieure d'un film coloré. Les profilés en PVC blanc, beige ou gris peuvent également être
+revêtus d'une laque sur la face extérieure et/ou intérieure. Certains profilés peuvent être
+habillés extérieurement d'un capotage en aluminium laqué. Il s'agit d'un système de fenêtre à
+joint central et à capotage [1 p. 2].
+
+# Domaine d'emploi
+
+Le procédé décrit au chapitre 2 « Dossier Technique » a été examiné par le Groupe Spécialisé, qui
+a conclu favorablement à son aptitude à l'emploi dans les conditions définies ci-après [1 p. 4].
+
+## 1.1.1 Zone géographique
+
+La zone géographique visée est la **France métropolitaine** [1 p. 4].
+
+## 1.1.2 Ouvrages visés
+
+Le domaine d'emploi est prévu pour les dimensions indiquées au paragraphe 2.2.3.7 « Dimensions
+maximales » (voir la section 2.2.3.7 plus bas). Pour les fabrications
+certifiées, des dimensions supérieures peuvent être envisagées ; elles sont alors précisées dans
+le Certificat de Qualification attribué au menuisier [1 p. 4].
+
+Pour des conditions de conception conformes au chapitre 2 « Dossier technique », la fenêtre
+extérieure est mise en œuvre dans les configurations suivantes. Le **capot** (ou capotage) est
+l'habillage aluminium clippé sur la face extérieure du dormant ; la **pose en applique** place
+le dormant contre la face du mur, la **pose en tableau** dans l'épaisseur de la baie ; l'**ITE**
+est l'isolation thermique par l'extérieur (enduit sur isolant et/ou bardage) ; un **monomur** est
+un mur en blocs isolants porteurs posé sans doublage [1 p. 4].
+
+Cas des fenêtres **sans capot** : une ligne par configuration, avec les supports admis tels que
+le DTA les énumère.
+
+| Configuration de pose | Supports admis |
+| --- | --- |
+| en applique intérieure et isolation intérieure | murs en maçonnerie ou en béton, ossatures bois |
+| en tableau et isolation intérieure | murs en maçonnerie ou en béton, ossatures bois ou métallique, monomurs |
+| en rénovation sur dormant existant | - |
+| en tableau avec isolation par l'extérieur (enduit sur isolant et/ou bardage) | murs en maçonnerie ou en béton, ossatures métallique, monomurs |
+| en applique extérieure avec isolation par l'extérieur (enduit sur isolant et/ou bardage) | murs en maçonnerie ou en béton, monomurs, **à l'exclusion des ouvrages prévus dans les préconisations du guide « Protection contre l'incendie des façades béton ou maçonnerie revêtues de systèmes d'isolation thermique extérieure par bardage rapporté ventilé – Septembre 2017 »** |
+
+Cas des fenêtres **avec capot** : le capot complet et le demi-capot n'ont pas le même domaine.
+
+| Capotage de la traverse basse de dormant | Configuration de pose | Supports admis |
+| --- | --- | --- |
+| capot complet | **en rénovation sur dormant existant uniquement** | - |
+| demi-capot | en applique intérieure avec tapée et isolation intérieure | murs en maçonnerie ou en béton, monomurs, ossatures bois |
+| demi-capot | en tableau et isolation intérieure | murs en maçonnerie ou en béton, ossatures bois |
+| demi-capot | en tableau avec isolation par l'extérieur (enduit sur isolant et/ou bardage) | murs en maçonnerie ou en béton, monomurs, ossatures métalliques |
+| demi-capot | en applique extérieure avec isolation par l'extérieur (enduit sur isolant et/ou bardage) | murs en maçonnerie ou en béton, monomurs, **à l'exclusion des ouvrages prévus dans les préconisations du guide « Protection contre l'incendie des façades béton ou maçonnerie revêtues de systèmes d'isolation thermique extérieure par bardage rapporté ventilé – Septembre 2017 »** |
+
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 4)
+
+Le profilé réf. **G026** doit être utilisé en dos de dormant lors d'une pose en tableau afin de
+garantir une surface de calfeutrement minimale de **10 mm** [1 p. 4].
+
+# Prescriptions
+
+## 1.2 Appréciation — 1.2.1 Aptitude à l'emploi du procédé
+
+**1.2.1.1 Stabilité.** Ce système présente une résistance mécanique permettant de satisfaire à la
+seule disposition spécifique aux fenêtres figurant dans les lois et règlements et relative à la
+résistance sous les charges dues au vent. Pour la pose en tableau et en applique extérieure, il
+conviendra de mettre en place, en feuillure, des **limiteurs d'ouverture** [1 p. 4].
+
+**1.2.1.2 Sécurité.** Ce système de fenêtres ne présente pas de particularité par rapport aux
+fenêtres classiques. La sécurité aux chutes des personnes n'est pas évaluée dans le DTA ; il
+conviendra de l'évaluer au cas par cas [1 p. 4].
+
+**1.2.1.3 Sécurité en cas d'incendie.** Elle est à examiner selon la réglementation et le
+classement du bâtiment compte tenu du classement de réaction au feu des profilés (voir 1.2.1.4)
+[1 p. 4].
+
+**1.2.1.4 Réaction au feu.** Le classement se lit par état de surface du profilé ; le rapport
+d'essai (RE) du CSTB est celui qui l'établit.
+
+| Profilé | Classement de réaction au feu | Rapport d'essai |
+| --- | --- | --- |
+| profilés PVC | M2 | RE CSTB RA23-0161 |
+| profilés revêtus d'un film | **M3** | RE CSTB RA21-0231 |
+| profilés PVC laqués | M2 | RE CSTB RA22-0074 |
+
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 4-5)
+
+Pour les produits classés M3 ou M4, il est important de s'assurer de leur conformité vis-à-vis de
+la réglementation de sécurité incendie [1 p. 5].
+
+**1.2.1.5 Prévention des accidents lors de la mise en œuvre.** Le procédé ne dispose pas d'une
+Fiche de Données de Sécurité (FDS). L'objet de la FDS est d'informer l'utilisateur de ce procédé
+sur les dangers liés à son utilisation et sur les mesures préventives à adopter pour les éviter,
+notamment par le port d'équipements de protection individuelle (EPI) [1 p. 5].
+
+**1.2.1.6 Pose en zones sismiques.** Le système ne présentant pas d'éléments de remplissage
+supérieurs à 4 m², il n'y a pas lieu d'apporter de justifications particulières (conformément au
+« Guide de dimensionnement parasismique des éléments non structuraux du cadre bâti » de
+septembre 2014) [1 p. 5].
+
+**1.2.1.7 Isolation thermique.** La faible conductivité du PVC et les alvéoles multiples
+confèrent à la fenêtre une isolation thermique permettant de limiter l'apparition des phénomènes
+de condensation superficielle. La faible conductivité du polyamide assurant la coupure thermique
+confère aux cadres ouvrants avec l'élargisseur **EO20545** une isolation thermique permettant de
+limiter l'apparition des phénomènes de condensation superficielle et les déperditions au droit
+des profilés [1 p. 5].
+
+**1.2.1.8 Étanchéité à l'air et à l'eau.** Elles sont normalement assurées par les fenêtres de
+ce système. Au regard des risques d'infiltration, la soudure des assemblages constitue une
+sécurité supplémentaire. L'exécution des assemblages mécaniques prévus au Dossier Technique
+nécessite un soin particulier pour que leur étanchéité puisse être considérée comme équivalente à
+celle des assemblages soudés [1 p. 5].
+
+**1.2.1.9 Perméabilité à l'air des bâtiments.** En fonction du classement vis-à-vis de la
+perméabilité à l'air des fenêtres, établi selon la NF EN 12207, le débit de fuite maximum sous
+une différence de pression de 4 Pa obtenu par extrapolation est le suivant ; une ligne par classe
+A\* (voir [Labels et certifications](/certifications/labels-et-certifications.md) pour les
+classements revendiqués).
+
+| Classe de perméabilité à l'air | Débit de fuite maximum sous 4 Pa (m³/h.m²) |
+| --- | --- |
+| A\*2 | 3,16 |
+| A\*3 | 1,05 |
+| A\*4 | 0,35 |
+
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 5)
+
+Ces débits sont à mettre en regard des exigences de perméabilité à l'air de l'enveloppe, définies
+dans les réglementations en vigueur relatives à la performance énergétique des bâtiments (en
+particulier RT2012, RE2020, RT existant globale) [1 p. 5].
+
+**1.2.1.10 Aspects sanitaires.** L'avis est formulé au regard de l'engagement écrit du titulaire
+de respecter la réglementation, et notamment l'ensemble des obligations réglementaires relatives
+aux produits pouvant contenir des substances dangereuses, pour leur fabrication, leur intégration
+dans les ouvrages du domaine d'emploi accepté et l'exploitation de ceux-ci. Le contrôle des
+informations et déclarations délivrées en application des réglementations en vigueur n'entre pas
+dans le champ de l'avis. Le titulaire conserve l'entière responsabilité de ces informations et
+déclarations [1 p. 5].
+
+**1.2.1.11 Accessibilité aux handicapés.** Ce système dispose d'une solution de seuil qui, sans
+avoir recours à une rampe amovible intérieure, permet l'accès aux handicapés au sens de l'arrêté
+du 30 novembre 2007 [1 p. 5]. Le seuil PMR (personne à mobilité réduite) est décrit en 2.2.3.1.4.
+
+**1.2.1.12 Entrée d'air.** Ce système de fenêtre permet la réalisation des types d'entailles
+conformes aux dispositions du e-cahier du CSTB 3376_V3 pour l'intégration d'entrée d'air
+(certifiées ou sous Avis Technique). De ce fait, ce système permet de satisfaire l'exigence de
+l'article 12 de l'arrêté du 3 mai 2007 relatif aux caractéristiques thermiques et à la
+performance énergétique des bâtiments [1 p. 5].
+
+**1.2.1.13 Performances thermo-optiques.** Les performances thermo-optiques du système ont fait
+l'objet d'une évaluation notamment au regard de la RT existante à partir des calculs thermiques
+cités au paragraphe 2.9.1 « Résultats expérimentaux » [1 p. 5].
+
+## 1.2.2 Durabilité
+
+La composition vinylique employée et la qualité de la fabrication des profilés, régulièrement
+autocontrôlée, sont de nature à permettre la réalisation de fenêtres durables avec un entretien
+réduit. La qualité de soudure des profilés entre eux n'est pas altérée par la présence du film.
+Il n'a pas été relevé de problème de compatibilité entre les matériaux adjacents utilisés lors de
+la fabrication ou de la mise en œuvre des fenêtres (profilés d'étanchéité ou mastic) au contact du
+film. La durabilité des films de recouvrement / des laques est évaluée dans le cadre de la marque
+de qualité « Profilés Revêtus (QB 33) » [1 p. 5].
+
+La qualité des matières employées pour la coupure thermique de l'élargisseur EO20545 et leur mise
+en œuvre dans le profilé, régulièrement autocontrôlée, sont de nature à permettre la réalisation
+de fenêtres dont le comportement dans le temps est équivalent à celui des fenêtres
+traditionnelles en aluminium avec les mêmes sujétions d'entretien [1 p. 6].
+
+Les fenêtres de ce système sont en mesure de résister aux sollicitations résultant de l'emploi et
+les éléments susceptibles d'usure (quincailleries, profilés complémentaires d'étanchéité) sont
+aisément remplaçables. **Le joint central étant porté par le dormant, il existe un risque d'usure
+prématurée dans le cas des portes-fenêtres, dû au passage, pouvant entraîner des baisses de
+performance à l'air et à l'eau** [1 p. 6].
+
+### 1.2.2.1 Fabrication et contrôle
+
+Cet avis est formulé en prenant en compte les contrôles et modes de vérifications de fabrication
+décrits au chapitre 2 « Dossier technique » [1 p. 6].
+
+**Profilés.** Les dispositions prises dans le cadre de la marque de qualité « QB-Profilés de
+fenêtres en PVC (QB 59) » sont propres à assurer la constance de qualité des profilés.
+L'autocontrôle de fabrication et le marquage des profilés de coloris caramel et brun font l'objet
+d'un suivi par le CSTB. Les dispositions prises dans le cadre de la marque de qualité
+« QB-Profilés aluminium à rupture de pont thermique (QB 49) » pour le profilé réf. EO20545 avec
+rupture de pont thermique sont propres à assurer la constance de qualité des profilés [1 p. 6].
+
+**Profilés revêtus.** Les profilés PVC filmés / laqués bénéficient de la marque de qualité
+« Profilés Revêtus (QB 33) » et sont marqués à la fabrication, selon les prescriptions de
+marquage précisées dans le référentiel de cette marque de qualité [1 p. 6].
+
+**Fenêtres.** Les fenêtres sont assemblées par des entreprises assistées techniquement selon le
+DTD et les prescriptions de la société Profine. Le DTD, référencé au paragraphe 2.9.2 « Document
+Technique Détaillé », doit être remis par la société Profine aux entreprises souhaitant se
+prévaloir du DTA. Chaque unité de fabrication peut bénéficier d'un Certificat de Qualification
+constatant la conformité du produit à la description qui en est faite dans le Dossier Technique
+et précisant les caractéristiques A\*E\*V\* (perméabilité à l'air, étanchéité à l'eau,
+résistance au vent) complétées, dans le cas du Certificat ACOTHERM, par les performances
+thermiques et acoustiques des fenêtres fabriquées [1 p. 6].
+
+Les fenêtres certifiées portent sur la traverse haute du dormant les marques de qualité, les
+références de marquage ainsi que les classements attribués, selon les deux modèles ci-dessous.
+
+![Modèles de marquage des fenêtres certifiées](/assets/certifications/dta-6-16-2334/marquage-fenetres-certifiees.png)
+
+Premier modèle : « usine-gamme », logo NF Fenêtres PVC, mention « Certifié CSTB Certified » et
+classement A\* E\* V\*. Second modèle, dans le cas des produits certifiés ACOTHERM : les mêmes
+éléments suivis du logo Acotherm et de la mention « AC *x* Th *y* », *x* et *y* selon les
+tableaux ACOTHERM (schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 6).
+
+Pour les fenêtres destinées à être mises sur le marché, les contrôles de production usine (CPU)
+doivent être exécutés conformément au paragraphe 7.3 de la NF EN 14351-1+A2. Les fenêtres
+certifiées par le CSTB satisfont aux exigences liées à ces contrôles [1 p. 6].
+
+## 1.2.3 Impacts environnementaux
+
+**1.2.3.1 Données environnementales.** Ces données n'ont pas été examinées par le Groupe
+Spécialisé dans le cadre de cet avis. Le système TROCAL 76 ADVANCED, KBE 76 ADVANCED, KÖMMERLING
+76 ADVANCED fait l'objet d'une Déclaration Environnementale (DE) collective, établie le
+12 décembre 2019 par l'Union des Fabricants de Menuiseries Extérieures (UFME) et le Syndicat
+National de l'Extrusion Plastique (SNEP). Elle a fait l'objet d'une vérification par tierce
+partie indépendante selon l'arrêté du 31 août 2015 et est déposée sur le site www.inies.fr. Les
+données issues des DE ont notamment pour objet de servir au calcul des impacts environnementaux
+des ouvrages dans lesquels le procédé visé est susceptible d'être intégré [1 p. 6].
+
+## 1.3 Remarques complémentaires du Groupe Spécialisé
+
+Cinq remarques, dans l'ordre du DTA [1 p. 6] :
+
+1. Les profilés réf. **76101 et 76102 doivent être exclusivement utilisés pour la réalisation de
+   cadres fixes** (dormants qui reçoivent directement le vitrage, sans ouvrant).
+2. La réalisation du drainage avec manchon **G008** nécessite une attention particulière lors de
+   la mise en place du mastic d'étanchéité entre capotage aluminium et dormant, afin qu'il
+   n'obstrue pas l'orifice de drainage.
+3. La mise en place du **capot complet en traverse basse de dormant est limitée à une utilisation
+   sur fenêtre mise en œuvre en rénovation sur dormant existant**.
+4. Le profilé PVC réf. **76579** formant goutte d'eau en cas de mise en œuvre en applique
+   extérieure doit être rendu solidaire de l'appui PVC par collage avec de la colle PVC.
+5. Le profilé réf. **G026** doit être utilisé en dos de dormant lors d'une pose en tableau afin de
+   garantir une surface de calfeutrement minimale de 10 mm.
+
+## 2.1 Mode de commercialisation
+
+Le chapitre 2 « Dossier Technique » est issu des éléments fournis par le titulaire et des
+prescriptions du Groupe Spécialisé acceptées par le titulaire [1 p. 7].
+
+Les sections 2.1 à 2.2.2.1 sont les mêmes au DTD [2 p. 3].
+
+**2.1.1 Coordonnées.** Le procédé est commercialisé par le titulaire : PROFINE France, ZI de
+Gutleutfeld, FR-67440 Marmoutier, tél. 03 88 71 50 51 (voir [profine](/fournisseurs/profine.md))
+[1 p. 7].
+
+**2.1.2 Mise sur le marché.** Les produits doivent faire l'objet d'une déclaration des
+performances (DdP) lors de leur mise sur le marché conformément au règlement (UE) n° 305/2011
+article 4.1. Les produits conformes à cette DdP sont identifiés par le marquage CE [1 p. 7].
+
+**2.1.3.1 Identification des profilés.** Les profilés PVC sont marqués à la fabrication, selon
+les prescriptions de marquage précisées dans les règles de certification « QB-Profilés de
+fenêtres en PVC (QB 59) ». Les profilés en PVC brun et caramel extrudés par la Société Profine à
+Pirmasens (DE), Berlin (DE), Zivinice (Bosnie) et Marmoutier (FR) sont marqués à la fabrication
+d'un repère indiquant l'année, le jour de fabrication et le lieu d'extrusion ainsi que le sigle
+CSTB. Les profilés revêtus d'un film / d'une laque sont marqués à la fabrication, outre le
+marquage relatif aux profilés lui-même, selon les prescriptions de marquage précisées dans le
+référentiel de la marque de qualité « Profilés Revêtus (QB 33) ». Les profilés avec coupure
+thermique en polyamide réf. EO20545 sont marqués à la fabrication selon les prescriptions de
+marquage des règles de certification « QB-Profilés aluminium à rupture de pont thermique
+(QB 49) » [1 p. 7].
+
+**2.1.3.2 Identification des fenêtres.** Les fabrications certifiées sont identifiées par le
+marquage de certification, les autres n'ont pas d'identification prévue [1 p. 7].
+
+## 2.2 Description
+
+**2.2.1 Principe.** Ce système permet de réaliser des fenêtres et portes-fenêtres à 1, 2 ou 3
+vantaux à la française, à soufflet, ou oscillo-battante, dont les cadres tant dormants qu'ouvrants
+sont réalisés avec des profilés extrudés en PVC rigide de coloris blanc, beige ou gris ou bien de
+coloris blanc, brun ou caramel, revêtus sur la face extérieure et/ou intérieure d'un film coloré.
+Les profilés en PVC blanc, beige ou gris peuvent également être revêtus d'une laque sur la face
+extérieure et/ou intérieure. Certains profilés peuvent être habillés extérieurement d'un
+capotage en aluminium. Il s'agit d'un système de fenêtre à joint central et à capotage. Les
+dimensions maximales sont définies, pour les fabrications non certifiées, dans le paragraphe
+2.2.3.7 « Dimensions maximales », et pour les fabrications certifiées, dans le Certificat de
+Qualification [1 p. 7].
+
+**2.2.2 Caractéristiques des composants.** Les différents composants (profilés, accessoires, …)
+sont représentés au paragraphe 2.10 « Annexe du Dossier Technique ». **2.2.2.1 Films de
+recouvrement / laques** : les films de recouvrement / laques utilisés sont ceux cités dans les
+certificats de la marque de qualité « Profilés Revêtus (QB 33) » et référencés pour ce système
+[1 p. 7].
+
+**2.2.2.2 Quincaillerie.** En aluminium ou acier protégé contre la corrosion (grade 3 selon
+EN 1670). Quincaillerie : FERCO ; d'autres quincailleries sont possibles sur justifications.
+Gâches en zamack [2 p. 3]. La quincaillerie ROTO que monte PROFERM est l'entrée **VER-20**.
+
+### 2.2.3 Éléments
+
+Les cadres dormants et ouvrants sont assemblés par thermosoudure après coupe d'onglet. **Les
+chambres des profilés filmés ou laqués dont la caractéristique colorimétrique L\* est inférieure
+à 82 dont les parois sont en communication avec l'extérieur sont à décompresser au moyen
+d'orifices de Ø 5 mm minimum** selon les schémas du dossier technique. L\* est la clarté
+colorimétrique du revêtement : plus elle est basse, plus la teinte est sombre [1 p. 7]
+[2 p. 4].
+
+**2.2.3.1 Cadre dormant.** Ce système de fenêtres ne présente pas de particularité par rapport
+aux fenêtres classiques [1 p. 7].
+
+Lorsque la traverse basse du dormant n'est pas un dormant large, elle peut être complétée par une
+**pièce d'appui** (le profilé rapporté sous la traverse basse, qui rejette l'eau devant le mur)
+vissée et clippée, une étanchéité de fil étant réalisée avec du mastic élastomère. Les extrémités
+de cette pièce d'appui sont complétées par des embouts. Les profilés réf. 76101 et 76102 sont
+exclusivement utilisés pour la réalisation de cadres fixes. Des élargisseurs de dormant peuvent
+être mis en place ; dans ce cas, les extrémités sont systématiquement bouchées par les bouchons
+prévus à cet effet [2 p. 4].
+
+**2.2.3.1.1 Meneau - traverse.** Pas de particularité par rapport aux fenêtres classiques
+[1 p. 7]. Le cadre dormant peut recevoir un meneau - traverse intermédiaire assemblé
+mécaniquement. Après contre profilage du meneau / traverse intermédiaire (usinage de son extrémité
+à la forme du profilé qui le reçoit), la pièce de maintien du kit réf. J056 ou J009, ou J055 ou
+J008 est vissée en extrémité. La pièce d'étanchéité du kit est mise en place dans la
+contre-feuillure et le meneau / traverse intermédiaire est vissé au travers du profilé de dormant.
+Le profilé recevant le meneau (ou la traverse intermédiaire) est muni, soit d'un renfort, soit
+d'une entretoise réf. S048, S049 ou S050. Dans le cas d'un assemblage en croix, un des deux
+assemblages est réalisé avec la pièce J055 [2 p. 4]. Les pièces sont sur
+[Assemblages du système 76](/profiles/systeme-76-assemblages.md).
+
+**2.2.3.1.2 Drainage et équilibrage de pression.** Les détails des drainages et de l'équilibrage
+de pression sont présentés dans les schémas du paragraphe 2.10 [1 p. 7]. Pour le dormant
+[2 p. 4] :
+
+- en fond de feuillure : 1 lumière de 5 × 25 mm ou un perçage Ø 8 mm située entre 20 et 200 mm de
+  chaque extrémité, puis des lumières ou perçages supplémentaires pour un entraxe maximum de
+  600 mm ;
+- sur la face extérieure ou en sous face : un nombre identique d'orifices de 5 × 25 (ou de perçage
+  Ø 8 mm minimum) décalés d'environ 50 mm par rapport aux précédents ;
+- dans le cas d'une partie fixe, le porte joint central est grugé sur 25 mm aux extrémités.
+
+L'équilibrage de pressions est assuré en traverse haute ou intermédiaire par, au choix : un
+perçage Ø 6 mm ou oblongs 5 × 25 mm à chaque extrémité ; la mise en place d'un joint plat 9043
+sur une longueur de **100 mm minimum** ; la suppression de la lèvre du joint sur une longueur de
+**100 mm minimum** [2 p. 4]. Sur dormant capoté, ces deux longueurs sont de 300 mm minimum
+(2.2.3.3.4 ci-dessous) ; l'écart entre texte et planches est l'entrée **INC-24**.
+
+**2.2.3.1.3 Fourrures d'épaisseurs PVC et tapée aluminium et pièces d'appui.** Pas de
+particularité par rapport aux fenêtres classiques ; le détail de l'assemblage est présenté dans
+les schémas du paragraphe 2.10 [1 p. 8]. La **fourrure d'épaisseur** est la tapée PVC qui
+prolonge le dormant vers l'intérieur. Les dormants peuvent recevoir des fourrures d'épaisseur
+clippées et vissées avec un entraxe maximum de 300 mm. L'étanchéité avec le montant du dormant
+est assurée par une lèvre coextrudée pouvant être complétée par mastic écrasé. L'étanchéité pièce
+d'appui / tapée est assurée par la pièce M298 ou M613 comprimée lors du vissage de la pièce
+d'appui dans les alvéovis de la fourrure d'épaisseur. L'obturation des chambres de pièces d'appui
+(quelle que soit la correspondance entre les parois de la pièce d'appui et le nez de la fourrure
+d'épaisseur) est réalisée par des embouts ajustés en PVC expansé (réf. 9F55.1, 9F56.1, AC011)
+[2 p. 4]. Le tableau des correspondances des chambres des pièces d'appui avec les nez des
+fourrures d'épaisseur est sur
+[Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md).
+
+**2.2.3.1.4 Seuil PMR.** Pas de particularité par rapport aux seuils PMR classiques [1 p. 8]. Le
+**seuil PMR** est le seuil aluminium bas, franchissable par une personne à mobilité réduite ; le
+**contre-profilage** est l'usinage de l'extrémité du montant à la forme du seuil. Montage
+[2 p. 5] :
+
+- *Cas du seuil A076 ou A077 ou A343* — montage sans contre-profilage du montant : le bloc de
+  vissage est inséré et vissé en extrémité du montant. L'équerre M154 est vissée sur le seuil puis
+  la pièce de compensation est verrouillée dans l'équerre. Le montant est monté sur la pièce de
+  compensation et vissé au travers de l'équerre. Montage avec contre-profilage du montant : le
+  montant est contre-profilé. Le bloc de vissage est inséré et vissé en extrémité du montant.
+  L'équerre M150 est vissée sur le seuil puis la pièce d'étanchéité J064 est montée. Le montant
+  est monté sur la pièce de compensation et vissé au travers de l'équerre.
+- *Cas du seuil A075* — montage avec contre-profilage du montant : le montant est contre-profilé.
+  Le bloc de vissage est inséré et vissé en extrémité du montant. L'équerre M150 est vissée sur le
+  seuil puis la pièce d'étanchéité J064 est montée. Le montant est monté sur la pièce de
+  compensation et vissé au travers de l'équerre. L'extrémité du seuil est obturée à l'aide d'un
+  bouchon G067. Le seuil est drainé à 100 mm des montants puis tous les 600 mm maximum par un
+  orifice de 5 × 25 mm environ.
+- *Cas d'une partie fixe* — un profilé de dormant ou de traverse est mis en place, en partie
+  basse, sur le seuil pour permettre la prise en feuillure du vitrage. La fixation de ce profilé
+  est réalisée de la même manière que pour un meneau.
+- *Cas des dormants capotés* — une étanchéité au mastic sur le seuil avant mise en place du
+  capotage aluminium doit être réalisée conformément aux figures du dossier technique [1 p. 8].
+
+**2.2.3.2 Cadre ouvrant.** Ce système de fenêtres ne présente pas de particularité par rapport aux
+fenêtres classiques. Les détails des drainages et de l'équilibrage de pression sont présentés dans
+les schémas du paragraphe 2.10 [1 p. 8].
+
+Les ouvrants surplombant le seuil sont systématiquement munis de rejets d'eau équipés de 2
+garnitures de joint brosse. Les pièces M175, M179 et M261 sont montées dans les fonds de feuillure
+pour compléter l'étanchéité du système [2 p. 5].
+
+**2.2.3.2.1 Battement des fenêtres à 2 vantaux.** Le **battement** est le profilé qui recouvre la
+jonction des deux vantaux. Le montant central semi-fixe est complété par un battement extérieur,
+monté par clippage et collage à la colle PVC. Un battement intérieur peut également être mis en
+place. Un élargisseur d'ouvrant peut être mis en place en montant à l'intérieur d'un cadre soudé,
+par vissage tous les 600 mm par vis 3.9 × 80. En extrémités d'élargisseur et sur une remontée de
+150 mm, une étanchéité par mastic est mise en place dans la rainure à parclose. La mousse réf.
+ISO53X30 peut être mise en place dans l'élargisseur [2 p. 5].
+
+**2.2.3.2.2 Traverse intermédiaire.** Le cadre ouvrant peut recevoir une traverse intermédiaire
+assemblée mécaniquement. Après contre profilage de la traverse intermédiaire, la pièce J050,
+J051, J052, J053 ou J054 est vissée en extrémité. La pièce J050, J052 ou J054 est vissée dans
+l'ouvrant à l'aide de 4 vis et la traverse intermédiaire est vissée au travers du profilé
+d'ouvrant. La traverse intermédiaire peut aussi être vissée au travers de l'ouvrant dans les
+pièces J051 et J053. Le profilé recevant la traverse intermédiaire est muni d'un renfort. Une
+traverse complémentaire réf. 76299 peut également être mise en place sur la traverse haute ou
+basse [2 p. 5].
+
+**2.2.3.2.3 Drainage et équilibrage de la feuillure à verre.** Une ligne par position sur
+l'ouvrant ; la première lumière est située entre 20 et 200 mm de chaque extrémité, les orifices de
+sous face sont en nombre identique et décalés d'environ 50 mm par rapport à ceux du fond de
+feuillure [2 p. 5].
+
+| Position sur l'ouvrant | Fond de feuillure vitrage | Sous face |
+| --- | --- | --- |
+| traverse basse et intermédiaire | 1 lumière de 5 × 25 mm ou un perçage Ø 8 mm, entre 20 et 200 mm de chaque extrémité ; une découpe de 10 mm, à chaque extrémité, de la garniture de joint en fond de feuillure | un nombre identique d'orifices de 5 × 25 (ou de perçage Ø 8 mm), décalés d'environ 50 mm |
+| traverse haute ou partie haute des montants | 1 lumière de 5 × 25 mm ou un perçage Ø 6 mm, entre 20 et 200 mm de chaque extrémité | un nombre identique d'orifices de 5 × 25 (ou de perçage Ø 6 mm), décalés d'environ 50 mm |
+
+(schéma: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 5)
+
+**2.2.3.3 Capotage aluminium.**
+
+- **2.2.3.3.1 Capotage des dormants.** Un capotage composé de profilés en aluminium peut être
+  clippé sur la face extérieure des cadres dormants. Les capotages sont débités en coupe droite
+  puis grugés en bout à l'aide d'un outillage de poinçonnage. Les capots de traverses sont
+  filants. Le capotage en traverse basse peut être constitué d'un **capot complet (réf. A033,
+  A313 ou A314)** clippé sur dormant ou d'un **demi-capot réf. A385** mis en place sur des clips
+  vissés tous les **400 mm maxi** sur la traverse basse à l'aide de vis inox. Une étanchéité
+  linéaire est mise en place sous le capotage avant clippage. Les assemblages d'angle sont
+  étanchés au joint à la pompe sur le dormant. En extrémités des capotages de traverses, l'espace
+  entre capotage et dormant est étanché au mastic. Dans le cas des entrées d'air, l'étanchéité
+  entre le profilé PVC et le capotage aluminium est réalisée par un cordon de mastic.
+- **2.2.3.3.2 Capotage des ouvrants.** Les ouvrants peuvent être recouverts d'un capotage ; les
+  capots des montants sont filants. Les capots ouvrants peuvent également être coupés d'onglet.
+  Les joints coextrudés des battements sont à retirer avant mise en place des capots.
+- **2.2.3.3.3 Capotage des meneaux et traverses.** Le montage et l'étanchéité des capotages sur
+  traverses et meneaux doivent être conformes aux figures du dossier technique.
+- **2.2.3.3.4 Drainage et équilibrage de pression.** Pour le drainage des dormants, conformément
+  aux figures du dossier technique :
+  - *cas du capot complet* — drainage avec manchon **G008** : drainage Ø 8 mm et réalisation de
+    l'étanchéité avec le manchon G008 introduit dans l'orifice préalablement enduit de mastic
+    entre capotage et dormant, puis mise en place de la busette **M450**. Le diamètre de perçage
+    est de **13,8 mm** ; il est réalisé simultanément sur le capot et le profil PVC, et
+    l'étanchéité est mise après perçage entre le capot et le dormant, puis est introduit le
+    manchon puis la busette. Le surplus de mastic doit être enlevé avant la mise en place de
+    G008, afin de ne pas obstruer l'orifice de drainage ;
+  - *cas du demi-capot* — drainage 5 × 25 ou Ø 8 mm minimum.
+
+  L'équilibrage de pressions est assuré en traverse haute ou intermédiaire par, au choix : un
+  perçage Ø 6 mm ou oblongs 5 × 25 mm à chaque extrémité ; la mise en place d'un joint plat
+  **9043** sur une longueur de 300 mm minimum ; la suppression de la lèvre du joint sur une
+  longueur de 300 mm minimum.
+- **2.2.3.3.5 Tapée aluminium et pièces d'appui.** Les dormants capotés peuvent recevoir des
+  tapées et des appuis aluminium vissés avec un entraxe maximum de **400 mm** maxi. L'étanchéité
+  avec le dormant est assurée par mastic écrasé. L'étanchéité entre la pièce d'appui et la tapée
+  est assurée par l'embout de tapée **M646** et sa plaquette en mousse repliée pour recevoir la
+  pièce d'appui. Les extrémités des appuis sont obturées par l'embout **M643**. La mousse **G251**
+  est mise en place dans les angles bas à la jonction appui / tapée et étanchée au mastic.
+  **L'appui A476 est assemblé avec les tapées A470, A471, A472 ou A473** [1 p. 8]. Les
+  paragraphes 2.2.3.3.1 à 2.2.3.3.5 sont les mêmes au DTD [2 p. 5-6].
+
+**2.2.3.4 Renforts.** Les profilés PVC peuvent être renforcés par l'insertion d'un profilé
+métallique. Leur utilisation est définie selon les spécifications de la société Profine [1 p. 8].
+Les renforts du système et leurs inerties sont sur
+[Renforts du système 76](/profiles/systeme-76-renforts.md).
+
+D'une façon générale, les profilés sont **renforcés systématiquement** dans les cas suivants
+[1 p. 9] :
+
+- traverses supérieures des dormants avec coffre de volets roulant, sauf si la rigidité du coffre
+  et/ou de son renfort est suffisante ;
+- au droit des assemblages mécaniques sans entretoise ;
+- les profilés PVC revêtus dont le film ou la laque présente une caractéristique colorimétrique
+  L\* inférieure à 82 ;
+- les profilés PVC revêtus d'un capotage aluminium présentant une caractéristique colorimétrique
+  L\* inférieure à 82.
+
+Ces profilés de renfort sont immobilisés par vis autotaraudeuses. Le renfort inox **VSF01** peut
+être vissé à l'extérieur du battement **76453**, tous les **250 mm**, à l'aide de vis inox A2 de
+4,1 × 40 mm [1 p. 9] [2 p. 6]. La référence 76453, que ne dessine aucune planche, est l'entrée
+**VER-29**.
+
+**2.2.3.5 Ferrage - Verrouillage.** Quincaillerie : **[FERCO](/quincaillerie/ferco.md)**. La répartition des fiches est
+spécifiée dans les cahiers techniques. D'autres quincailleries peuvent être utilisées sur
+justifications [1 p. 9]. PROFERM emploie la quincaillerie [ROTO](/fournisseurs/roto.md) : la
+justification correspondante est l'entrée **VER-20** du registre
+[Informations à vérifier](/anomalies/informations-a-verifier.md).
+
+**2.2.3.6 Vitrage.** Isolant double ou triple **jusqu'à 50 mm d'épaisseur**. La pose des vitrages
+est effectuée conformément à la norme NF P20-650-1 ou au NF DTU 39 [1 p. 9]. La borne de 48 mm
+donnée par le manuel de mise en œuvre profine est l'entrée **CTR-17**.
+
+### 2.2.3.7 Dimensions maximales
+
+Dimensions maximales de baie, hauteur H × largeur L en mètres, pour les fabrications non
+certifiées ; une ligne par type d'ouvrant. OF signifie ouvrant à la française, OB oscillo-battant ;
+le soufflet est ici manœuvré par loqueteaux. Le 1 vantail OB porte deux couples de valeurs dans la
+même case du DTA, 1,50 × 1,40 et 2,15 × 1,00 : ce sont deux lignes ci-dessous.
+
+| Configuration | H maxi (m) | L maxi (m) |
+| --- | --- | --- |
+| 1 vantail OF | 2,15 | 1,00 |
+| 1 vantail OB | 1,50 | 1,40 |
+| 1 vantail OB | 2,15 | 1,00 |
+| 2 vantaux OF | 2,15 | 1,60 |
+| 2 vantaux OF + fixe latéral | 2,15 | 2,40 |
+| Soufflet (loqueteaux) | 0,80 | 1,30 |
+
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 9 ; même tableau :
+raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 6)
+
+Pour les fabrications certifiées, des dimensions supérieures peuvent être envisagées ; elles sont
+alors précisées dans le Certificat de Qualification attribué au menuisier. Il est nécessaire de
+vérifier pour chaque conception de fenêtre la conformité aux performances prévues par le document
+FD DTU 36.5 P3. Les dispositions relatives au renforcement et aux quincailleries sont à prévoir
+selon les fiches techniques de Profine [1 p. 9]. Les limites d'ouvrant selon le renfort, la
+couleur et le vitrage sont sur les
+[Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md).
+
+## 2.3 Disposition de conception
+
+Les sections 2.3 à 2.8 ci-dessous sont les mêmes au DTD [2 p. 7-9], à trois compléments près :
+la référence du tableau 1 en 2.8.1, le tableau 1 lui-même et les codes des compositions de
+garnitures en 2.8.4. La section 2.9 est la même au DTD [2 p. 9-10].
+
+Les fenêtres sont conçues compte tenu des performances prévues par le document FD DTU 36.5 P3 en
+fonction de leur exposition. Les vitrages isolants utilisés doivent bénéficier d'un Certificat de
+Qualification **CEKAL** ou équivalent [1 p. 9].
+
+Dans le cas de vitrages d'épaisseur de verre supérieure à **12 mm** ou de masse de vantail
+supérieure à **60 kg**, le fabricant devra s'assurer, par voie expérimentale, que la conception
+globale de la fenêtre (ferrage, profilés) permet de satisfaire aux critères mécaniques spécifiques
+prévus par la norme NF P 20-302, dans la limite des charges maximum prévue par la quincaillerie
+[1 p. 9].
+
+Les profilés réf. 76101 et 76102 doivent être exclusivement utilisés pour la réalisation de cadres
+fixes. **Les ouvrants des fenêtres équipées d'un seuil doivent systématiquement posséder en
+traverse basse un rejet d'eau équipé de 2 garnitures de joint brosse.** **L'appui A476 ne peut pas
+être assemblé avec la tapée A469.** La mise en place du capot complet en traverse basse de dormant
+est limitée à une utilisation sur fenêtre mise en œuvre en rénovation sur dormant existant
+[1 p. 9].
+
+## 2.4 Disposition de mise en œuvre
+
+Les fenêtres doivent être mises en œuvre conformément au **NF DTU 36.5**. Les fenêtres revêtues
+d'un film décor / laquées doivent être mises en œuvre conformément au document « Conditions
+générales de mise en œuvre en travaux neufs et sur dormants existants », e-cahier du CSTB 3521 de
+juillet 2005 [1 p. 9].
+
+**Les habillages monoparois dont la caractéristique colorimétrique L\* est inférieure à 82 ou non
+définie ne peuvent pas être utilisés en traverse basse** (quelle que soit la technologie utilisée
+pour obtenir la couleur : plaxage, laquage, teinté masse, …) ; sur les autres côtés, des désordres
+esthétiques sous forme de déformations permanentes de ces habillages peuvent se produire [1 p. 9].
+
+Les orifices d'aération des chambres extérieures dormant ne devront pas être obstrués par la mise
+en œuvre. Lorsque l'usinage des extrémités d'une pièce d'appui, dans le plan du nez de la fourrure
+d'épaisseur, ne se fait pas au droit d'une cloison PVC, un bouchon d'obturation doit être mis en
+place en usine avant de réaliser l'usinage de la pièce d'appui. Lorsque les fenêtres sont vitrées
+sur chantier, la mise en œuvre des vitrages doit s'effectuer conformément au NF DTU 39 [1 p. 9].
+
+Certaines configurations de fenêtres oscillo-battantes ou à soufflet (dimensions, poids de
+vitrages, positionnement poignée…) peuvent conduire à un **effort d'amorçage de fermeture de la
+position soufflet du vantail supérieur à 100 N** [1 p. 9].
+
+**2.4.1 Cas de la rénovation.** **L'utilisation de l'appui aluminium A477 est réservée aux mises
+en œuvre en rénovation sur dormant existant.** La mise en place du capot complet en traverse basse
+de dormant est limitée à une utilisation sur fenêtre mise en œuvre en rénovation sur dormant
+existant [1 p. 10].
+
+**2.4.2 Cas des ossatures bois.** Le calfeutrement de la fenêtre doit être assuré avec le
+pare-pluie et le pare-vapeur (notamment dans les angles de la fenêtre). La compatibilité et la
+cohésion du pare-pluie, du pare-vapeur et du calfeutrement avec les parties du dormant de la
+fenêtre en contact doivent être avérées [1 p. 10].
+
+**2.4.3 Cas de l'ITE.** La mise en œuvre en tableau ou en applique extérieure avec isolation
+extérieure s'effectue selon les modalités du NF DTU 36.5 et du e-cahier CSTB 3709_V2. Les
+préconisations du guide « Protection contre l'incendie des façades béton ou maçonnerie revêtues
+de systèmes d'isolation thermique extérieure par enduit sur polystyrène expansé (ETICS-PSE) –
+septembre 2020 » doivent être respectées. Dans le cas d'une mise en œuvre en applique
+extérieure, il conviendra de conserver, en partie haute, un jeu suffisant pour le dégondage des
+ouvrants à la française [1 p. 10].
+
+**2.4.4 Cas des ossatures métalliques.** Selon la destination du produit, il peut exister un
+risque de condensation [1 p. 10].
+
+**2.4.5 Système d'étanchéité.** Les systèmes d'étanchéité (le calfeutrement entre dormant et
+gros œuvre) sont de type [1 p. 10] :
+
+- mousse imprégnée de classe 1, à l'exclusion des produits bitumeux (normes NF P 85-570 et
+  NF P 85-571) ;
+- ou de type mastic élastomère (25 E) ou plastique (12.5 P) sur fond de joint (selon la
+  classification de la NF EN ISO 11600).
+
+Dans les deux cas, le calfeutrement doit être disposé et dimensionné en fonction de la dimension
+du joint et de l'exposition de la fenêtre. Dans tous les cas, il conviendra de s'assurer de la
+compatibilité du produit employé avec la matière du dormant. Pour les mastics élastomères ou
+plastiques, il conviendra également de s'assurer de l'adhésivité / cohésion (avec ou sans
+primaire) sur les profilés PVC et les différents matériaux constituant l'ouvrage. Mastics
+élastiques selon les normes NF EN ISO 10590 et NF P 85-527 ; mastics plastiques selon les normes
+NF EN ISO 10591 et NF P 85-528 [1 p. 10].
+
+Les produits ayant fait l'objet d'essais satisfaisants de compatibilité et d'adhésivité -
+cohésion sur les profilés de ce système sont le **Perennator FA 101 de Tremco** et le **SILICONE
+8051 (DEN BRAVEN France)**. Sur les profilés revêtus, ce sont ceux cités dans les certificats de
+la marque de qualité « Profilés Revêtus – (QB 33) » des revêtements utilisés [1 p. 10].
+
+## 2.5 Maintien en service du produit ou procédé
+
+On peut utiliser dans les cas courants de l'eau avec un détergent suivi d'un rinçage. Pour des
+tâches plus importantes, on peut utiliser des produits spéciaux ne contenant pas de solvant pour
+PVC [1 p. 10].
+
+## 2.6 Traitement en fin de vie
+
+Les fenêtres déposées sur des chantiers de déconstruction ou de rénovation peuvent être
+collectées au travers du réseau du point de collecte mis en place par les éco-organismes
+accrédités par les pouvoirs publics, dans le cadre de la filière de responsabilité élargie du
+producteur pour les produits et matériaux de construction du bâtiment. Les produits collectés
+sont ensuite orientés vers les circuits de démantèlement et de valorisation des différents
+matériaux constitutifs de ces produits [1 p. 10].
+
+## 2.7 Assistance technique
+
+Les fenêtres sont assemblées par des entreprises assistées techniquement selon le DTD et les
+prescriptions de la société Profine. Le DTD, référencé au paragraphe 2.9.2, doit être remis par
+la société Profine aux entreprises souhaitant se prévaloir du DTA [1 p. 10].
+
+## 2.8 Principes de fabrication et de contrôle de cette fabrication
+
+La fabrication s'effectue en deux phases distinctes : l'extrusion des profilés PVC, puis
+l'assemblage des fenêtres [1 p. 10].
+
+**2.8.1 Fabrication des profilés PVC.** Les profilés bénéficient de la marque de qualité
+« QB-Profilés de fenêtres en PVC (QB 59) ». Des contrôles en matière première et de l'extrusion
+sont effectués selon les prescriptions des marques de qualité « QB-Composition vinylique et sa
+fabrication pour profilé de fenêtres en PVC (QB 34) » et « QB-Profilés de fenêtres en PVC
+(QB 59) ». L'autocontrôle de fabrication des profilés de coloris marron et caramel doit faire
+l'objet d'un suivi au CSTB [1 p. 10-11]. La référence de ces compositions vinyliques est indiquée
+dans le tableau 1 [2 p. 8].
+
+**Tableau 1 — Compositions vinyliques.** Une **composition vinylique** est la recette de PVC dont
+est extrudé le profilé, certifiée sous la marque QB 34. Le tableau 1 se lit par ligne : la
+référence matière du certificat QB 34, son code CSTB, son coloris, et si la composition peut (ou
+doit) être plaxée, c'est-à-dire revêtue d'un film décor. Deux tableaux : les compositions blanc,
+gris et beige, qui **peuvent** être plaxées, puis les compositions brun et caramel, qui **doivent**
+être plaxées [2 p. 11].
+
+| Référence matière (certificat QB 34) | Code CSTB | Coloris | Composition pouvant être plaxée |
+| --- | --- | --- | --- |
+| 4038-699 / 4038-099 | 4003 | Blanc ou Gris | Oui |
+| 4091/A-4092/A-4093/A-4094/A/147 | 300 (variante A) | Gris | Oui |
+| 4091/A-4092/A-4093/A-4094/A/147 | 300 (variante B) | Gris | Oui |
+| 4091/A-4092/A-4093/A-4094/A/607 | 301 (variante A) | Beige | Oui |
+| 4091/A-4092/A-4093/A-4094/A/607 | 301 (variante B) | Beige | Oui |
+| 4091/A-4092/A-4093/A-4094/A/654 | 251 (variante A) | Blanc | Oui |
+| 4091/A-4092/A-4093/A-4094/A/654 | 251 (variante B) | Blanc | Oui |
+| 4091A/4092A/4093A/4094A/654V3 (ancienne référence) | 343 | Blanc | Oui |
+| 4291/4292/4293/4294/654 (nouvelle référence) | 343 | Blanc | Oui |
+| 4292A/4293A-147 | 382 | Gris | Oui |
+| 4292A/4293A-607 | 381 | Beige | Oui |
+| 4292A/4293A-654 | 383 | Blanc | Oui |
+| 4392/4393-147 | 443 (variante A) | Gris | Oui |
+| 4392/4393-147 | 443 (variante B) | Gris | Oui |
+| 4392/4393-607 | 442 (variante A) | Beige | Oui |
+| 4392/4393-607 | 442 (variante B) | Beige | Oui |
+| 4392/4393-654 | 394 (variante A) | Blanc | Oui |
+| 4392/4393-654 | 394 (variante B) | Blanc | Oui |
+| 4395-654 | 441 | Blanc | Oui |
+| 1462-655 | 452 | Blanc | Oui |
+
+| Référence matière (certificat QB 34) | Code CSTB | Coloris | Composition devant être plaxée |
+| --- | --- | --- | --- |
+| 2558-914 | 57 px | Brun | Oui |
+| 2558-924 | 55 px | Brun | Oui |
+| 2588-926 | 56 px | Caramel | Oui |
+| 4184-925 | 9 px | Brun | Oui |
+| 4184-928 | 10 px | Caramel | Oui |
+| 4185-925 | 58 px | Brun | Oui |
+| 4185-928 | 59 px | Caramel | Oui |
+| 4185-932 | 60 px | Caramel | Oui |
+
+(schéma: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 11)
+
+La composition de code CSTB 343 porte deux références matière dans la même case, l'ancienne
+(4091A/4092A/4093A/4094A/654V3) et la nouvelle (4291/4292/4293/4294/654) : ce sont deux lignes
+ci-dessus.
+
+**2.8.2 Profilés PVC filmés.** Les profilés PVC filmés bénéficient de la marque de qualité
+« Profilés Revêtus (QB 33) » et sont marqués à la fabrication, selon les prescriptions de
+marquage précisées dans le référentiel de cette marque de qualité [1 p. 11].
+
+**2.8.3 Fabrication des profilés aluminium à rupture de pont thermique** [1 p. 11] :
+
+- **2.8.3.1 Rupture de pont thermique** : elle est assurée par une barrette en polyamide 6.6
+  renforcée à 25 % de fibre de verre. Les barrettes sont livrées avec un certificat de contrôle
+  des caractéristiques dimensionnelles, mécaniques et chimiques ;
+- **2.8.3.2 Traitement de surface** : les traitements de surface doivent être exécutés en prenant
+  les précautions définies dans le Dossier Technique, notamment pour les ouvrages situés en bord
+  de mer. Ils font l'objet du label QUALICOAT, QUALIMARINE ;
+- **2.8.3.3 Assemblage des coupures thermiques** : les profilés avec rupture thermique en
+  polyamide bénéficient de la marque de qualité « QB-Profilés aluminium à rupture de pont
+  thermique (QB 49) » ;
+- **2.8.3.4 Profilés aluminium** : caractéristiques de l'alliage, caractéristiques mécaniques des
+  profilés, dimensions.
+
+**2.8.4 Fabrication des profilés d'étanchéité.** Les compositions utilisées pour la fabrication
+des profilés d'étanchéité sont en EPDM ou bénéficient de la marque de qualité « Matières souples
+(QB 36) » [1 p. 11]. Les références codées des compositions certifiées sont : pour les
+garnitures rapportées, E400 (gris), E401 (noir), M400, G551 (caramel) ; pour les garnitures
+co-extrudées, D400, M101, D552 (gris), M103, C557 (noir), I552, N100 (caramel) [2 p. 8]. Le
+tableau des garnitures de joint avec leur matière est sur
+[Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md).
+
+**2.8.5 Fabrication des profilés aluminium.** Les traitements de surface doivent être exécutés en
+prenant les précautions définies dans le Dossier Technique, notamment pour les ouvrages situés en
+bord de mer. Ils font l'objet du label QUALICOAT selon définition du NF DTU 36.5 P1.2 pour le
+laquage et QUALANOD pour l'anodisation, en fonction des prescriptions de la norme NF P24-351
+[1 p. 11].
+
+**2.8.6.1 Fabrication des seuils mixtes aluminium – PVC.** Les seuils mixtes réf. **A075, A076,
+A077, A343** sont réalisés à partir de profilés PVC extrudés par la société Menke à WARSTEIN
+(D-59581) à partir de matières certifiées gris clair (code CSTB : 300A, 300B, 382, 443A, 443B), et
+de profilés aluminium 6060 T5 anodisés nature 15 µm fabriqués par la société RBB à WALLSCHEID
+(D-54531) et bénéficiant du label Qualanod [1 p. 11].
+
+**2.8.7 Fabrication des fenêtres.** Les fenêtres sont assemblées par des entreprises assistées
+techniquement selon le DTD et les prescriptions de la société Profine ; le DTD doit être remis par
+la société Profine aux entreprises souhaitant se prévaloir du DTA. Les fenêtres doivent être
+fabriquées conformément au DTD cité au paragraphe 2.9.2, et conformément au e-cahier CSTB 3625
+« Conditions Générales de fabrication des fenêtres en PVC faisant l'objet d'un Avis Technique ».
+Les contrôles sur les fenêtres bénéficiant du Certificat de Qualification NF « Fenêtres et
+blocs-baies PVC et aluminium RPT » associé à la marque CERTIFIÉ CSTB CERTIFIED (NF 220) doivent
+être exécutés selon les modalités et fréquences retenues dans le règlement. Pour les fabrications
+n'en bénéficiant pas, il convient de vérifier le respect des prescriptions techniques ci-dessus,
+et en particulier le classement A\*E\*V\* des fenêtres. La mise en œuvre des vitrages doit être
+réalisée conformément à la NF P 20-650-1 ou au NF DTU 39. La réalisation du drainage avec manchon
+G008 nécessite une attention particulière lors de la mise en place du mastic d'étanchéité entre
+capotage aluminium et dormant, afin qu'il n'obstrue pas l'orifice de drainage [1 p. 11].
+
+## 2.9 Mention des justificatifs
+
+### 2.9.1 Résultats expérimentaux
+
+Justificatifs sur lesquels repose l'avis, dans l'ordre du DTA ; une ligne par essai, avec le
+châssis essayé, ses dimensions largeur × hauteur et le numéro du rapport d'essai (RE).
+
+| Origine | Essai | Châssis et dimensions L × H | Rapport |
+| --- | --- | --- | --- |
+| a) fournisseur de la matière | caractéristiques mécaniques et identification | - | - |
+| a) fournisseur de la matière | justifications de la durabilité | - | - |
+| b) IFT de Rosenheim | résistance au vent et étanchéité à l'eau après sollicitations thermiques et mécaniques | châssis OF1 + OF1, 1200 × 1200 mm, montage avec JO52, JO55 et JO56 | RE 18-002835-PR04/PR05/PR08 |
+| c) CSTB | A\*E\*V\* | 2 vantaux à la française avec fixe latéral, 2,40 × 2,15 m | RE CSTB n° BV16-1029 |
+| c) CSTB | A\*E\*V\* et endurance au vent | 2 vantaux à la française avec fixe latéral avec capotage, 2,40 × 2,15 m | RE CSTB n° BV16-1030 |
+| c) CSTB | A\*E\*V\* | 2 vantaux à la française + fixe latéral, seuil PMR, 2,40 × 2,15 m | RE CSTB n° BV16-1031 |
+| c) CSTB | endurance à l'ouverture/fermeture, manœuvre et mécanique spécifique | 1 vantail oscillo-battant, vitrage 4/16/4/16/4, 1,23 × 1,45 m | RE CSTB n° BV16-1291 |
+| c) CSTB | endurance à l'ouverture/fermeture, manœuvre et mécanique spécifique | porte-fenêtre 1 vantail à la française avec seuil PMR, 0,80 × 2,15 m | RE CSTB n° BV17-0189 |
+| c) CSTB | perméabilité à l'air sous gradient thermique | fenêtre 2 vantaux, 1,60 × 2,25 m | RE CSTB n° BV16-1292 |
+| c) CSTB | étanchéité d'angle de seuil avec pièce M150 et M154 | - | RE CSTB n° 17-0195 |
+| c) CSTB | cycles sur seuil PMR | - | RE CSTB n° 17-0190 |
+| c) CSTB | ensoleillement et aquarium sur cadre dormant capotés | - | RE CSTB BV17-0194, BV19-0471, BV19-0558-A-1 et BV19-0558-B-1 |
+| c) CSTB | choc M50 à 900 J sur traverse d'ouvrant, battement et meneau capotés | porte-fenêtre 2 vantaux à la française et fixe latéral, 2,40 × 2,15 m | RE CSTB BV19-0600 |
+| d) sous la responsabilité du demandeur | A\*E\*V\* | 1 vantail à la française avec seuil PMR, 1,31 × 2,47 m | PROFINE 19-10-2016 |
+| d) sous la responsabilité du demandeur | A\*E\*V\* | 1 vantail OB avec traverse complémentaire, 1,40 × 1,50 m | PROFINE 29-11-2016 |
+| e) rapport d'étude thermique | rapport d'étude thermique attesté conforme au DTA | - | RE CSTB n° DBV-M-25-47449 |
+
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 12)
+
+**2.9.2 Document Technique Détaillé.** Les détails des éléments techniques sont présentés dans le
+document DBV-25-06/16-2334_V5, le [DTD](/sources/dtd-6-16-2334.md). **2.9.3 Références
+chantiers** : de nombreuses réalisations [1 p. 12].
+
+## 2.10 Annexe du Dossier Technique
+
+L'annexe (p. 13 à 56) dessine les composants et les dispositions de mise en œuvre. Ses
+nomenclatures de profilés vont sur les pages de famille du système 76 ; ses schémas de
+fabrication et de pose sont décrits ci-dessous.
+
+# Citations
+
+[1] [DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED](raw/dta-trocal-76-advanced-6-16-2334-v5.pdf)
+
+[2] [DTD n° DBV-25-6/16-2334_V5, système 76 Advanced](raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf)
+
+# Voir aussi
+
+- [Fiche source du DTA](/sources/dta-trocal-76-advanced.md)
+- [DTD n° DBV-25-6/16-2334_V5](/sources/dtd-6-16-2334.md)
+- [profine](/fournisseurs/profine.md)
+- [PERFORM](/gammes/perform.md)
+- [Labels et certifications](/certifications/labels-et-certifications.md)
+- [Renforts du système 76](/profiles/systeme-76-renforts.md)
+- [Pose de la PERFORM76](/procedures/pose-perform76.md)
+
+===== PAGE 2 : /certifications/dtd-6-16-2335.md =====
+Le **Dossier Technique Détaillé (DTD) n° DBV-24-6/16-2335_V5** concerne le système **TROCAL
+e.XCLUSIVE, KBE e.MOTION, KÖMMERLING e.VOLUTION** de PROFINE France, c'est-à-dire le système PVC
+de 70 mm de profondeur de profine (le « système 70 »). Il est émis par le CSTB (Centre
+Scientifique et Technique du Bâtiment), Direction Baies et Vitrages, Pôle Évaluation fenêtres et
+coffres. Ce document présente le Dossier Technique Détaillé issu des éléments fournis par le
+titulaire et des prescriptions du Groupe Spécialisé n° 6 acceptées par le titulaire, relatif au
+**DTA 6/16-2335_V5** [1 p. 1]. Le DTA lui-même (l'avis du Groupe Spécialisé) n'est pas dans le
+corpus : seules les prescriptions du DTD sont portées ici. Aucun document PROFERM ne rattache ce
+système à une gamme PROFERM (**VER-28**).
+
+Les clauses sont transcrites avec la numérotation du DTD, dans ses mots. Les termes du métier sont
+expliqués dans le [glossaire](/reference/glossaire.md) ; les références de profilés renvoient aux
+pages de famille du système 70 : [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md),
+[Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md),
+[Assemblages du système 70](/profiles/systeme-70-assemblages.md) et
+[Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md).
+
+# Versions et descripteur
+
+| Version | Description |
+| --- | --- |
+| V5 | présentée au GS6 du 19/12/2024 ; intègre les modifications suivantes : création du DTD ; modification d'ouvrants, de dormants et des pieds de joint des profilés ; suppression de parcloses, d'accessoires ; ajout de profilés complémentaires, d'accessoires |
+
+[1 p. 2]
+
+# Domaine d'emploi
+
+## 2.2.1 Principe
+
+Ce système permet de réaliser des fenêtres et portes-fenêtres à 1, 2 ou 3 vantaux, à la
+française, à soufflet, oscillo-battante ou oscillo-coulissante, dont les cadres tant dormants
+qu'ouvrants sont réalisés avec des profilés extrudés en PVC de coloris blanc, beige ou gris, ou
+bien en PVC de coloris blanc pouvant être revêtus sur la face extérieure et/ou intérieure d'un
+film coloré, ou bien en PVC de coloris brun ou caramel systématiquement revêtu sur la face
+extérieure et intérieure d'un film coloré [1 p. 3].
+
+Il s'agit d'un système de fenêtre pouvant être recouvert d'un capotage aluminium (un habillage en
+aluminium clippé sur la face extérieure des profilés PVC) [1 p. 3].
+
+Les dimensions maximales sont définies :
+
+- pour les fabrications non certifiées dans le paragraphe « 2.2.3.8 Dimensions maximales » (voir
+  *2.2.3.8 Dimensions maximales* ci-dessous) ;
+- pour les fabrications certifiées dans le Certificat de Qualification.
+
+Ce système est commercialisé sous la dénomination commerciale TROCAL e.XCLUSIVE, KBE e.MOTION,
+KÖMMERLING e.VOLUTION [1 p. 3].
+
+# Prescriptions
+
+## 2.1 Mode de commercialisation
+
+### 2.1.1 Coordonnées
+
+Le procédé est commercialisé par le titulaire. Titulaire : PROFINE France, ZI Rue Gutleutfeld,
+FR - 67440 Marmoutier, tél. 03 88 71 50 51 [1 p. 3].
+
+### 2.1.2 Mise sur le marché
+
+Les produits doivent faire l'objet d'une déclaration des performances (DdP) lors de leur mise sur
+le marché conformément au règlement (UE) n° 305/2011 article 4.1. Les produits conformes à cette
+DdP sont identifiés par le marquage CE [1 p. 3].
+
+### 2.1.3 Identification
+
+**2.1.3.1 Profilés.** Les profilés PVC sont marqués à la fabrication, selon les prescriptions de
+marquage précisées dans les règles de certification « QB-Profilés de fenêtres en PVC (QB 59) ».
+Les profilés en PVC brun et caramel, extrudés par Profine à Pirmasens (DE), Berlin (DE), Zivinice
+(Bosnie) et Marmoutier (FR) sont marqués à la fabrication d'un repère indiquant l'année, le jour
+de fabrication et le lieu d'extrusion ainsi que le sigle CSTB. Les profilés revêtus d'un film /
+d'une laque sont marqués à la fabrication, outre le marquage relatif aux profilés lui-même, selon
+les prescriptions de marquage précisées dans le référentiel de la marque de qualité « Profilés PVC
+Revêtus (QB33) » [1 p. 3].
+
+**2.1.3.2 Fenêtres.** Les fabrications certifiées sont identifiées par le marquage de
+certification, les autres n'ont pas d'identification prévue [1 p. 3].
+
+## 2.2 Description
+
+### 2.2.2 Caractéristiques des composants
+
+Les différents composants (profilés, accessoires, …) sont représentés au paragraphe 2.10 Annexe du
+Dossier Technique [1 p. 3].
+
+**2.2.2.1 Films de recouvrement / laques.** Les films de recouvrement / laques utilisés sont ceux
+cités dans les certificats de la marque de qualité « Profilés PVC Revêtus – Process de
+recouvrement (QB33) » et référencés pour ce système [1 p. 3].
+
+**2.2.2.2 Quincaillerie.** En aluminium ou acier protégé contre la corrosion (grade 3 selon
+EN 1670) [1 p. 3] :
+
+- quincaillerie : [FERCO](/quincaillerie/ferco.md), d'autres quincailleries sont possibles sur justifications ;
+- quincaillerie PSK200 Portal de [Siegenia](/quincaillerie/siegenia.md) pour l'oscillo-coulissant, d'autres quincailleries
+  sont possibles sur justifications ;
+- gâches en zamack.
+
+### 2.2.3 Éléments
+
+Les cadres dormants et ouvrants sont assemblés par thermosoudure après coupe d'onglet. Les meneaux
+ou traverses sont assemblés soit mécaniquement soit par thermosoudure [1 p. 3].
+
+Les chambres des profilés filmés / laqués dont la caractéristique colorimétrique L* (clarté de la
+teinte, de 0 pour le noir à 100 pour le blanc) est inférieure à 82 ou non définie sont en
+communication avec l'extérieur au moyen d'orifices Ø 5 mm minimum selon les schémas du dossier
+technique [1 p. 4]. Les schémas sont ceux des pages 45 et 46, reportés dans
+[Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md).
+
+#### 2.2.3.1 Cadre dormant
+
+Ce système de fenêtres ne présente pas de particularité par rapport aux fenêtres classiques.
+Lorsque la traverse basse du dormant n'est pas réalisée avec un dormant large, elle peut être
+complétée par une pièce d'appui vissée et clippée, une étanchéité de fil étant réalisée avec du
+mastic élastomère. Le cadre dormant est équipé d'un profilé d'étanchéité sur la frappe
+extérieure [1 p. 4].
+
+**2.2.3.1.1 Meneau.** Ce système de fenêtres ne présente pas de particularité par rapport aux
+fenêtres classiques. Le cadre dormant peut recevoir un meneau - traverse assemblé mécaniquement ou
+par soudure selon le *tableau 2* (voir [Assemblages du système 70](/profiles/systeme-70-assemblages.md)).
+Le meneau 6127 peut être soudé à plat sur le dormant, l'assemblage est complété par une équerre
+réf. 9714 de chaque côté du meneau, vissée dans le renfort du dormant et dans le meneau [1 p. 4].
+
+**2.2.3.1.2 Drainage et équilibrage de pression.** Les détails des drainages et de l'équilibrage
+de pression sont présentés dans les schémas au paragraphe 2.10 Annexe du Dossier Technique. La
+traverse basse ou intermédiaire est percée [1 p. 4] :
+
+- en fond de feuillure : 1 lumière de 5 × 25 mm ou un perçage Ø 8 mm à environ 100 mm de chaque
+  extrémité, puis des lumières ou perçages supplémentaires pour un entraxe maximum de 600 mm ;
+- sur la face extérieure : un nombre identique d'orifices de 5 × 25 décalés d'environ 50 mm par
+  rapport aux précédents ou par perçage de trous de Ø 8 en traverse basse.
+
+L'équilibrage des pressions est assuré en traverse haute ou en partie haute des montants par deux
+orifices (trous Ø 6 mm ou trous oblongs 5 × 25 mm) ou par la mise en place d'un joint plat 9043 ou
+par la suppression de la lèvre du joint en traverse haute sur une longueur de 100 mm au
+total [1 p. 4].
+
+**2.2.3.1.3 Fourrures d'épaisseurs et pièces d'appui.** Ce système de fenêtres ne présente pas de
+particularité par rapport aux fenêtres classiques. Le détail de l'assemblage est présenté dans les
+schémas au paragraphe 2.10 Annexe du Dossier Technique. Les dormants peuvent recevoir des
+fourrures d'épaisseur. L'étanchéité avec le montant du dormant est assurée par une lèvre
+coextrudée ou par mastic écrasé. L'étanchéité pièce d'appui / tapée est assurée par la pièce M298
+ou M613 écrasée lors du vissage de la pièce d'appui dans les alvéovis. Les chambres des pièces
+d'appui entaillées sont obturées par l'embout associé. Pour les configurations où il n'y a pas
+correspondance des chambres des pièces d'appui avec les nez des fourrures d'épaisseur,
+l'obturation des chambres de pièces d'appui est réalisée par des embouts ajustés en PVC
+expansé [1 p. 4].
+
+**2.2.3.1.4 Seuil PMR.** Ce système de fenêtres ne présente pas de particularité par rapport aux
+seuils PMR classiques. Excepté dans le cas d'un oscillo-coulissant, le cadre dormant peut être muni
+d'un seuil aluminium selon le *tableau 4* (voir [Assemblages du système 70](/profiles/systeme-70-assemblages.md)).
+Dans le cas d'une partie fixe avec le seuil 9F67 ou Z043 [1 p. 4] :
+
+- un profilé de dormant peut être monté sur ce seuil pour permettre la prise en feuillure du
+  vitrage. Les fonds de feuillure des montants sont alors étanchés à l'aide de mastic élastomère
+  mono-composant en partie basse, puis la traverse PVC est montée à l'aide d'équerres 9714 ;
+- ou bien, le profilé de parclose extérieure A271 est monté sur le support de cale A272.
+
+*Cas des assemblages 9F57, 9F58, 9F59, 9F60, 9F61, 9F62, 9F63, 9F64, 9F65, 9F66, J087, J088.* Un
+mastic polyuréthane est déposé à l'arrière de la pièce d'assemblage puis le seuil aluminium est
+vissé sur les patins d'étanchéité des pièces d'assemblage à l'aide de 2 vis Ø 4 × 50. Une
+troisième vis Ø 4 × 30 est ajoutée dans le cas du seuil 9F68. La pièce d'assemblage est ensuite
+pressée contre le montant à l'aide d'une vis Ø 4 × 30 et le maintien de l'assemblage est alors
+réalisé par le vissage au travers de la pièce d'assemblage, de deux vis autoforeuses Ø 4 × 20 dans
+le fond de feuillure du montant, préalablement étanché à l'aide d'un mastic élastomère
+mono-composant. Pour finir, le cache vis est monté [1 p. 4].
+
+*Cas des assemblages 9F71, 9F72, J077 + M002.* Les montants sont contre profilés avec le même
+contour que pour les traverses lorsqu'il s'agit du seuil 9F68, avec un contour spécial lorsqu'il
+s'agit du seuil 9F67 ou Z043. Les assemblages correspondants sont introduits dans les chambres de
+renfort des profilés et fixés à l'aide de goupilles. Une étanchéité complémentaire au mastic
+élastomère est déposée en feuillure et dans la rainure de parclose du seuil. Le seuil est percé à
+l'aide d'un gabarit à ses extrémités. Il est ensuite fixé avec deux vis [1 p. 4].
+
+*Cas des dormants capotés.* Une étanchéité au mastic entre le capot et le seuil est réalisée après
+mise en place du capotage aluminium conformément aux figures du dossier technique [1 p. 4].
+
+*Drainage de seuil PMR.* En fond de feuillure : 1 orifice de 5 × 25 mm ou Ø 8 mm à environ 100 mm
+de chaque angle intérieur, puis un orifice supplémentaire pour un entraxe maximum de
+600 mm [1 p. 5].
+
+#### 2.2.3.2 Cadre ouvrant
+
+Ce système de fenêtres ne présente pas de particularité par rapport aux fenêtres classiques. Les
+détails des drainages et de l'équilibrage de pression sont présentés dans les schémas au
+paragraphe 2.10 Annexe du Dossier Technique. Les cadres ouvrants sont munis d'un profilé
+complémentaire d'étanchéité post extrudé de vitrage et de frappe intérieure. La traverse basse
+peut recevoir par collage, clippage ou vissage un profilé de rejet d'eau [1 p. 5].
+
+**2.2.3.2.1 Battement des fenêtres à 2 vantaux.** Dans le cas de fenêtre 2 vantaux, le battement
+central (le profilé qui recouvre la jonction entre les deux vantaux) est réalisé de 2 façons :
+
+- soit avec le battement 0140 vissé et collé sur l'ouvrant secondaire. Ce profilé peut recevoir
+  un renfort ;
+- soit avec les profilés 1578, 6130, 6128, 6132, 6162, A176 pour les battements extérieurs et
+  1547, 6129, 6131, 76833 ou 6133 pour les battements intérieurs clippés et collés.
+
+Dans tous les cas, ces battements reçoivent des embouts collés [1 p. 5]. Le battement intérieur
+6154, dessiné à l'annexe p. 19 sous KBE e.MOTION, n'est pas dans cette liste (voir
+[Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)).
+
+**2.2.3.2.2 Traverse intermédiaire.** Le cadre ouvrant peut recevoir une traverse intermédiaire
+assemblée par soudage ou mécaniquement selon le *tableau 3* (voir
+[Assemblages du système 70](/profiles/systeme-70-assemblages.md)) [1 p. 5].
+
+**2.2.3.2.3 Drainage et équilibrage de la feuillure à verre.** En fond de feuillure, 2 orifices de
+5 × 25 mm ou un perçage Ø 8 mm de 20 à 200 mm des angles intérieurs. Orifices d'évacuation :
+orifices de 5 × 25 mm ou un perçage Ø 8 mm vers chambre dormant / ouvrant et décalés des
+précédents. Les orifices de la traverse intermédiaire visibles de l'extérieur peuvent être munis
+de coupe vent. Équilibrage de pression de la feuillure à verre : la traverse supérieure reçoit
+les mêmes orifices que la traverse basse, ou bien ces orifices sont réalisés en partie haute des
+montants latéraux. Ces orifices peuvent également être pratiqués sur la partie supérieure du
+montant côté paumelle, ou pivots [1 p. 5].
+
+#### 2.2.3.3 Assemblage mécanique pour meneau / traverse intermédiaire de dormant / ouvrant
+
+Ce système de fenêtres ne présente pas de particularité par rapport aux fenêtres classiques. Le
+détail de l'assemblage est présenté dans les schémas au paragraphe 2.10 Annexe du Dossier
+Technique. Le meneau ou la traverse est contreprofilé (usiné en bout au contour du profilé contre
+lequel il vient s'appuyer). Quatre types d'assemblage sont utilisés [1 p. 5].
+
+Le mastic utilisé pour l'étanchéité complémentaire des assemblages mécaniques ayant fait l'objet
+d'essais satisfaisants de compatibilité et d'adhésivité - cohésion NF P 85-804 ou NF P 85-507, sur
+les pièces d'assemblages en TPE de ce système est le Perennator FA101 blanc de chez ILLBRUCK. Le
+même produit est attribué à Tremco au § 2.4.4 (**INC-83**) [1 p. 5].
+
+*Assemblage par alvéovis dans traverse 6127-6157.* Le dormant ou l'ouvrant sont percés à l'aide
+d'un gabarit de deux trous étagés Ø 4.5 côté feuillure et Ø 10.5 côté opposé. Au travers de ces
+deux trous viennent se loger des vis Ø 4.3 de longueur variable en fonction du dormant ou ouvrant.
+Ces vis viendront se prendre dans les alvéovis (les canaux à vis du profilé). Elles serrent le
+patin d'étanchéité 9718 ou M299. Leur tête repose sur un renfort d'une longueur minimum de
+250 mm. Une étanchéité complémentaire est réalisée au mastic dans la rainure de parclose et en
+solin sur la joue de feuillure et devant la rainure de parclose [1 p. 5].
+
+*Assemblage par pièces d'ancrage et goupille.* La traverse à assembler est percée à l'aide d'un
+gabarit 9918 de trous de Ø 8.5 mm. La pièce d'ancrage est logée dans la chambre de renfort et
+maintenue par une goupille passant au travers des trous préalablement percés. Le dormant ou
+l'ouvrant sont percés de trous Ø 6.2 mm côté feuillure et Ø 10.5 du côté opposé. Une vis CHC M6
+passe au travers de l'ouvrant ou du dormant et vient se visser dans la pièce d'ancrage. Sa tête
+repose sur un renfort d'une longueur minimum de 250 mm. L'étanchéité entre la pièce d'ancrage et
+le cadre est assurée au droit de la vis par une bague en caoutchouc complétée par du mastic écrasé
+au montage en périphérie du contre fraisage ainsi que dans et devant la rainure à
+parclose [1 p. 5].
+
+*Assemblage par équerres.* La traverse à assembler est percée à l'aide d'un gabarit de trous de
+Ø 8.5 mm. Puis le dormant ou l'ouvrant est percé de trous Ø 3.2 mm. Un patin d'étanchéité est
+placé entre le dormant ou l'ouvrant et la traverse. Les équerres sont fixées sur la traverse à
+l'aide de 4 vis Ø 4.2 × 16 puis sur l'ouvrant ou le dormant, à l'aide de 4 vis auto perçantes
+venant se fixer dans un renfort d'une longueur minimum de 250 mm [1 p. 5].
+
+*Assemblage par pièces d'ancrage et goupille avec fixation en feuillure.* La traverse à assembler
+est percée à l'aide d'un gabarit 9918 de trous de Ø 8.5 mm. La pièce d'ancrage est logée dans la
+chambre de renfort et maintenue par une goupille passant au travers des trous préalablement
+percés. La pièce d'ancrage est munie d'un coussin d'étanchéité. La pièce est fixée en feuillure à
+l'aide de vis auto perçantes venant se fixer dans un renfort d'une longueur minimum de
+250 mm [1 p. 5].
+
+#### 2.2.3.4 Renforts
+
+Les profilés PVC sont rendus éventuellement plus rigides par l'insertion de renforts métalliques
+fixés par vissage. Les cas d'utilisation de renforts sont précisés dans les spécifications
+techniques établies par la société PROFINE et dans les certificats des fabrications certifiées.
+D'une façon générale les profilés sont renforcés systématiquement dans les cas suivants :
+
+- traverses supérieures des dormants avec coffre de volets roulant, sauf si la rigidité du coffre
+  et/ou de son renfort est suffisante ;
+- au droit des assemblages mécaniques sans entretoise ;
+- les profilés PVC revêtus dont le film ou la laque présente une caractéristique colorimétrique L*
+  inférieure à 82 ;
+- les traverses d'ouvrant au-delà de 750 mm de large ;
+- les profilés PVC avec capotage aluminium sont renforcés suivant les mêmes règles que les
+  profilés PVC blanc sans capotage.
+
+Ces profilés de renfort sont immobilisés par vis autotaraudeuses. Les renforts des ouvrants sont
+vissés tous les 300 mm pour les profilés blancs et tous les 250 mm pour les autres profilés. Les
+vis extrêmes doivent se situer à 65 mm maximum de l'angle de feuillure concerné [1 p. 5-6]. Les
+renforts cotés sont sur [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md).
+
+#### 2.2.3.5 Capotage aluminium
+
+Un capotage composé de profilés en aluminium peut être clippé sur la face extérieure des cadres
+dormants et ouvrants. Les capotages sont débités en coupe droite pour les dormants et droite ou
+d'onglet pour les ouvrants. Pour les coupes droites, les capots devront être grugés en bout à
+l'aide d'un outillage de poinçonnage. Sur dormant, les capots de traverses sont filants, sur
+ouvrants les capots de montants sont filants [1 p. 6].
+
+**2.2.3.5.1 Capotage des dormants.** Le capotage en traverse basse peut être constitué d'un capot
+complet clippé sur les dormants rénovation ou d'un demi-capot réf. A474 mis en place sur des clips
+vissés tous 400 mm maxi sur la traverse basse à l'aide de vis inox. Les assemblages d'angle sont
+étanchés au joint à la pompe sur le dormant. Les capots de dormant reçoivent une étanchéité
+linéaire sur la face supérieure de la feuillure. En extrémités des capotages de traverses,
+l'espace entre capotage et dormant est étanché au mastic. Dans le cas des entrées d'air,
+l'étanchéité entre le profilé PVC et le capotage aluminium est réalisée par un cordon de mastic.
+Les profilés de dormants capotés sont munis des garnitures de vitrage 101000 ou G161 [1 p. 6].
+
+*Dispositions de drainage et équilibrage de pression* [1 p. 6] :
+
+- avec un capot complet pour les dormants rénovation : drainage avec manchon G008 : drainage
+  Ø 8 mm et réalisation de l'étanchéité avec le manchon G008 introduit dans l'orifice
+  préalablement enduit de mastic entre capotage et dormant, puis mise en place de la busette M450.
+  Le diamètre de perçage est de 13,8 mm, il est réalisé simultanément sur le capot et le profil
+  PVC et l'étanchéité est mise après perçage entre le capot et le dormant, puis est introduit le
+  manchon puis la busette. Le surplus de mastic doit être enlevé avant la mise en place de G008,
+  afin de ne pas obstruer l'orifice de drainage ;
+- avec le demi-capot réf. A474 mis en place sur des clips réf. M569 : écoulement par le drainage
+  standard (5 × 25 mm ou diamètre 8 mm minimum).
+
+Pour assurer la décompression de la chambre ouvrant / dormant : soit le joint de frappe extérieur
+est coupé sur environ 300 mm en traverse haute, soit deux perçages de Ø 6 mm mini est réalisé sur
+le recouvrement du dormant de la traverse haute. Le renforcement est réalisé systématiquement en
+dormant et en ouvrant pour les capotages avec caractéristique colorimétrique L* inférieure à
+82 [1 p. 6].
+
+**2.2.3.5.2 Capotage des ouvrants.** Le battement A176 est vissé tous les 300 mm sur l'ouvrant
+principal. Les profilés d'ouvrants capotés sont munis des garnitures de vitrage 9E46 ou
+9047 [1 p. 6].
+
+**2.2.3.5.3 Capotage des meneaux et traverses capotées.** Le montage et l'étanchéité des capotages
+sur traverses et meneaux doivent être conformes aux figures du dossier technique [1 p. 6].
+
+**2.2.3.5.4 Fourrures d'épaisseurs.** Les dormants capotés peuvent recevoir des tapées et des
+appuis aluminium vissés avec un entraxe maximum de 300 mm maxi. L'étanchéité avec le dormant est
+assurée par mastic écrasé. L'étanchéité entre la pièce d'appui et la tapée est assurée par
+l'embout de tapée M646 et sa plaquette en mousse repliée pour recevoir la pièce d'appui. Les
+extrémités des appuis sont obturées par l'embout M643. La mousse G250 est mise en place dans les
+angles bas à la jonction appui / tapée et étanchée au mastic. L'appui A476 est assemblé avec les
+tapées A471, A472 ou A473 [1 p. 6].
+
+#### 2.2.3.6 Ferrage – Verrouillage
+
+- Quincaillerie utilisable : les fenêtres TROCAL e.XCLUSIVE, KBE e.MOTION, KÖMMERLING e.VOLUTION
+  sont équipées de crémones de chez FERCO. D'autres quincailleries sont possibles sur
+  justifications.
+- Quincaillerie pour oscillo-coulissant : PSK200 Portal de Siegenia jusqu'à 200 kg. D'autres
+  quincailleries sont possibles sur justifications.
+
+Les ouvrants seront systématiquement munis de verrouillages complémentaires haut et bas centrés à
+partir de 900 mm [1 p. 6].
+
+Fiches à broche sur dormant et ouvrant ou fiches à platine sur dormant et fiches à broches sur
+ouvrant (MOATTI - OTLAV - SFS), avec la répartition suivante ; une ligne par tranche de hauteur
+d'ouvrant [1 p. 6-7] :
+
+| Hauteur d'ouvrant (m) | Nombre de fiches par vantail |
+| --- | --- |
+| jusqu'à 0,90 | 2 |
+| jusqu'à 1,60 | 3 |
+| jusqu'à 2,10 | 4 |
+| au-delà de 2,10 | 5 |
+
+#### 2.2.3.7 Vitrage
+
+Isolant double ou triple jusqu'à 42 mm d'épaisseur. La hauteur de feuillure des profilés ouvrants
+et dormants est de 20 mm (non compris la hauteur des garnitures d'étanchéité). La pose des
+vitrages est effectuée en conformément à la norme NF P20-650-1 ou au NF DTU 39 [1 p. 7].
+
+#### 2.2.3.8 Dimensions maximales (Baie H × L) en m
+
+Une ligne par type de fenêtre ; H est la hauteur et L la largeur de la baie, en mètres. La ligne
+oscillo-battante 1 vantail porte deux couples de dimensions dans une même case, repris ici sur deux
+lignes [1 p. 7].
+
+| Type de fenêtre | H (m) | L (m) |
+| --- | --- | --- |
+| Française 1 vantail | 2,15 | 1,00 |
+| Oscillo battante 1 vantail | 1,50 | 1,40 |
+| Oscillo battante 1 vantail | 2,15 | 1,00 |
+| Oscillo battante 2 vantaux | 2,15 | 1,60 |
+| Française 2 vantaux + fixe | 2,15 | 2,40 |
+| Oscillo-coulissante 1 vantail + fixe | 2,15 | 3,20 |
+| Soufflet | 0,80 | 1,30 |
+
+La ligne « Oscillo battante 2 vantaux » est l'objet de l'entrée **VER-30**. Pour les fabrications
+certifiées, des dimensions supérieures peuvent être envisagées. Elles sont alors précisées dans le
+Certificat de Qualification attribué au menuisier. Il est nécessaire de vérifier pour chaque
+conception de fenêtre la conformité aux performances prévues par le document FD DTU 36.5 P3. Les
+dispositions relatives au renforcement et aux quincailleries sont à prévoir selon les fiches
+techniques de Profine [1 p. 7]. Les abaques de profine sont sur
+[Abaques dimensionnels du système 70](/profiles/systeme-70-abaques-dimensionnels.md).
+
+## 2.3 Disposition de conception
+
+Les fenêtres sont conçues compte tenu des performances prévues par le document FD DTU 36.5 P3 en
+fonction de leur exposition. Les vitrages isolants utilisés doivent bénéficier d'un Certificat de
+Qualification CEKAL ou équivalent [1 p. 7].
+
+Dans le cas de vitrages d'épaisseur de verre supérieure à 12 mm ou de masse de vantail supérieure
+à 62 kg, le fabricant devra s'assurer, par voie expérimentale, que la conception globale de la
+fenêtre (ferrage, profilés) permet de satisfaire aux critères mécaniques spécifiques prévus par la
+norme NF P 20-302, dans la limite des charges maximum prévue par la quincaillerie [1 p. 7].
+
+Les ouvrants des fenêtres équipées du seuil doivent systématiquement posséder en traverse basse un
+rejet d'eau. Les rejets d'eau A465, A466 sont équipés du joint brosse G256 et le rejet d'eau
+JA701-02 est équipé du joint brosse PB-48-1200-4P-BLK. La mise en place du capot complet en
+traverse basse de dormant est limitée à une utilisation sur fenêtre mise en œuvre en rénovation
+sur dormant existant [1 p. 7].
+
+## 2.4 Disposition de mise en œuvre
+
+Les fenêtres doivent être mises en œuvre conformément au NF DTU 36.5. Les fenêtres revêtues d'un
+film décor / laquées doivent être mises en œuvre conformément au document « Conditions générales
+de mise en œuvre en travaux neufs et sur dormants existants » e-cahier du CSTB 3521 de juillet
+2005 [1 p. 7].
+
+Les habillages monoparois dont la caractéristique colorimétrique L* est inférieure à 82 ou non
+définie ne peuvent pas être utilisés en traverse basse (quelle que soit la technologie utilisée
+pour obtenir la couleur : plaxage, laquage, teinté masse, …) ; sur les autres côtés des désordres
+esthétiques sous forme de déformations permanentes de ces habillages peuvent se produire. Les
+orifices d'aération des chambres extérieures dormant ne devront pas être obstrués par la mise en
+œuvre [1 p. 7].
+
+Lorsque l'usinage des extrémités d'une pièce d'appui, dans le plan du nez de la fourrure
+d'épaisseur, ne se fait pas au droit d'une cloison PVC, un bouchon d'obturation doit être mis en
+place en usine avant de réaliser l'usinage de la pièce d'appui. Lorsque les fenêtres sont vitrées
+sur chantier, la mise en œuvre des vitrages doit s'effectuer conformément au NF DTU 39. Certaines
+configurations de fenêtres oscillo-battantes ou à soufflet (dimensions, poids de vitrages,
+positionnement poignée…) peuvent conduire à un effort d'amorçage de fermeture de la position
+soufflet du vantail supérieur à 100 N. La mise en place du capot complet en traverse basse de
+dormant est limitée à une utilisation sur fenêtre mise en œuvre en rénovation sur dormant
+existant [1 p. 7].
+
+### 2.4.1 Cas des ossatures bois
+
+Le calfeutrement de la fenêtre doit être assuré avec le pare-pluie et le pare-vapeur (notamment
+dans les angles de la fenêtre). La compatibilité et la cohésion du pare-pluie, du pare-vapeur et
+du calfeutrement avec les parties du dormant de la fenêtre en contact doivent être
+avérées [1 p. 7].
+
+### 2.4.2 Cas de l'ITE
+
+La mise en œuvre en tableau ou en applique extérieure avec isolation extérieure (ITE, isolation
+thermique par l'extérieur) s'effectue selon les modalités du NF DTU 36.5 et du e-cahier CSTB
+3709_V2. Les préconisations du guide « Protection contre l'incendie des façades béton ou
+maçonnerie revêtues de systèmes d'isolation thermique extérieure par enduit sur polystyrène
+expansé (ETICS-PSE) – septembre 2020 » doivent être respectées [1 p. 7-8].
+
+### 2.4.3 Cas des ossatures métalliques
+
+Selon la destination du produit il peut exister un risque de condensation [1 p. 8].
+
+### 2.4.4 Système d'étanchéité
+
+Les systèmes d'étanchéité sont de type :
+
+- mousse imprégnée de classe 1 à l'exclusion des produits bitumeux (norme NF P 85-570 et
+  NF P 85-571) ;
+- ou de type mastic élastomère (25 E) ou plastique (12.5 P) sur fond de joint (selon la
+  classification de la NF EN ISO 11600).
+
+Dans les deux cas, le calfeutrement doit être disposé et dimensionné en fonction de la dimension
+du joint et de l'exposition de la fenêtre. Dans tous les cas, il conviendra de s'assurer de la
+compatibilité du produit employé avec la matière du dormant. Pour les mastics élastomères ou
+plastiques, il conviendra également de s'assurer de l'adhésivité / cohésion (avec ou sans
+primaire) sur les profilés PVC et les différents matériaux constituants l'ouvrage. Pour les
+mastics élastiques selon les normes NF EN ISO 10590 et NF P 85-527. Pour les mastics plastiques
+selon les normes NF EN ISO 10591 et NF P 85-528 [1 p. 8].
+
+Les produits ayant fait l'objet d'essais satisfaisants de compatibilité et d'adhésivité -
+cohésion, sur les profilés de ce système sont : Perennator FA 101 de Tremco (voir **INC-83**) ;
+SILICONE 8051 (DEN BRAVEN France). Les produits ayant fait l'objet d'essais satisfaisants de
+compatibilité et d'adhésivité - cohésion, sur les profilés revêtus de ce système sont ceux cités
+dans les certificats de la marque de qualité « Profilés PVC Revêtus – (QB33) » des revêtements
+utilisés [1 p. 8].
+
+## 2.5 Maintien en service du produit ou procédé
+
+On peut utiliser dans les cas courants de l'eau avec un détergent suivi d'un rinçage. Pour des
+tâches plus importantes, on peut utiliser des produits spéciaux ne contenant pas de solvant pour
+PVC [1 p. 8].
+
+## 2.6 Traitement en fin de vie
+
+Les fenêtres déposées sur des chantiers de déconstruction ou de rénovation, peuvent être
+collectées au travers du réseau du point de collecte mis en place par les éco-organismes accrédités
+par les pouvoirs publics, dans le cadre de la filière de responsabilité élargie du producteur pour
+les produits et matériaux de construction du bâtiment. Les produits collectés sont ensuite
+orientés vers les circuits de démantèlement et de valorisation des différents matériaux
+constitutifs de ces produits [1 p. 8].
+
+## 2.7 Assistance technique
+
+Les fenêtres sont assemblées par des entreprises assistées techniquement selon le DTD et les
+prescriptions de la société Profine. Le DTD, référencé au paragraphe 2.9.2 Document Technique
+Détaillé, doit être remis par la société Profine aux entreprises souhaitant se prévaloir du
+présent DTA [1 p. 8].
+
+## 2.8 Principes de fabrication et de contrôle de cette fabrication
+
+La fabrication s'effectue en deux phases distinctes : extrusion des profilés PVC ; assemblage des
+fenêtres [1 p. 8].
+
+### 2.8.1 Fabrication des profilés PVC
+
+Les profilés bénéficient de la marque de qualité « QB-Profilés de fenêtres en PVC (QB 59) ». Des
+contrôles en matière première et de l'extrusion sont effectués selon les prescriptions des marques
+de qualité « QB-Composition vinylique et sa fabrication pour profilé de fenêtres en PVC (QB 34) »
+et « QB-Profilés de fenêtres en PVC (QB 59) ». La référence de ces compositions vinyliques est
+indiquée dans le tableau 1. L'autocontrôle de fabrication des profilés de coloris caramel et brun
+doit faire l'objet d'un suivi au CSTB [1 p. 8].
+
+### 2.8.2 Profilés PVC filmés
+
+Les profilés PVC filmés bénéficient de la marque de qualité « Profilés PVC Revêtus (QB33) » et sont
+marqués à la fabrication, selon les prescriptions de marquage précisées dans le référentiel de
+cette marque de qualité [1 p. 8].
+
+### 2.8.3 Fabrication des profilés d'étanchéité
+
+Les compositions utilisées pour la fabrication des profilés d'étanchéité sont en EPDM ou
+bénéficient de la marque de qualité « Matières souples (QB36) » [1 p. 8].
+
+Les compositions utilisées pour la fabrication des profilés d'étanchéité font l'objet d'une
+certification au CSTB ; leurs références codées et le tableau des garnitures de joint par coloris
+(9B58P / 9B58T, 9C32P / 9C32T, 9C31 / 9C31T, 1A17P, 1A16P, joint sur parclose, G256, G342T) sont
+sur [Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md) [1 p. 9].
+
+### 2.8.4 Fabrication des seuils mixtes aluminium – PVC
+
+Les seuils mixtes réf. 9F67, 9F68 et Z043 sont réalisés à partir de profilés PVC extrudés par la
+société SLS et de profilés aluminium 6060 T5 anodisés fabriqués par la société Flandria ;
+l'assemblage des profilés se fait par clippage. La clause complète (lieux, codes CSTB des matières,
+anodisation, label) est sur [Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md),
+section *Fabrication des seuils mixtes* [1 p. 9].
+
+### 2.8.5 Fabrication des fenêtres
+
+Les fenêtres sont assemblées par des entreprises assistées techniquement selon le DTD et les
+prescriptions de la société Profine. Le DTD, référencé au paragraphe 2.9.2 Document Technique
+Détaillé, doit être remis par la société Profine aux entreprises souhaitant se prévaloir du
+présent DTA. Les fenêtres doivent être fabriquées conformément au DTD cité au paragraphe 2.9.2
+Document Technique Détaillé. Les fenêtres doivent être fabriquées conformément au e-cahier CSTB
+3625 « Conditions Générales de fabrication des fenêtres en PVC faisant l'objet d'un Avis
+Technique » [1 p. 9].
+
+Les soudures à plat doivent être réservées aux fabrications certifiées et validées pour chaque
+type de machine de façon que le cordon de soudure rende étanche les chambres de renfort des
+profilés assemblés. Elles concernent l'assemblage du meneau réf. 6127 [1 p. 9].
+
+Les contrôles sur les fenêtres bénéficiant du Certificat de Qualification NF « Fenêtres et
+blocs-baies PVC et aluminium RPT » associée à la marque CERTIFIÉ CSTB CERTIFIED (NF 220) doivent
+être exécutés selon les modalités et fréquences retenues dans le règlement. Pour les fabrications
+n'en bénéficiant pas, il convient de vérifier le respect des prescriptions techniques ci-dessus,
+et en particulier le classement A\*E\*V\* (perméabilité à l'air, étanchéité à l'eau, résistance au
+vent) des fenêtres. La mise en œuvre des vitrages doit être réalisée conformément à la NF P 20-650
+ou au NF DTU 39 [1 p. 9].
+
+## 2.9 Mention des justificatifs
+
+### 2.9.1 Résultats expérimentaux
+
+a) Résultats communiqués par le fournisseur de la matière : caractéristiques mécaniques et
+identification ; justifications de la durabilité [1 p. 9].
+
+b) Essais effectués par le CSTB ; une ligne par essai, dans l'ordre de la source, H × L en
+mètres, « RE » pour rapport d'essai [1 p. 9-10] :
+
+| Essai | Menuiserie essayée | Rapport |
+| --- | --- | --- |
+| détermination de la masse volumique, colorimétrie, résistance au choc, module d'élasticité, aptitude à la soudure, retrait à chaud | - | RE CSTB BV11-078 et CSTB BV11-079, BV15-1070A et CSTB BV15-1070B |
+| essais de retrait à chaud, choc à froid, résistance thermique, arrachement et pelage avant et après vieillissement | - | RE CSTB n° BV11-080, BV11-081, BV11-082, BV11-083, BV11-084, BV11-085, BV11-086 |
+| essais de colorimétrie, échelle des gris, choc, résistance thermique et pelage avant et après vieillissement | - | RE CSTB n° BV15-1049-A à BV15-1049-M |
+| caractéristiques A\*E\*V\* et endurance du meneau | menuiserie à 2 vantaux avec un fixe latéral (H × L) = 2,15 × 2,40 m - ouvrant 6112 | RE CSTB n° BV09-370 et BV09-837 |
+| essais mécaniques spécifiques et endurance ouverture/fermeture | menuiserie oscillo-battante 1 vantail (H × L) = 1,55 × 1,40 m – ouvrant 6112 | RE CSTB n° BV09-369 et BV09-836 |
+| essais sous écart de température | menuiserie à 2 vantaux (H × L) = 2,25 × 1,60 m - ouvrant 6112 | RE CSTB n° BV09-835 |
+| essais sur assemblages mécaniques | - | RE CSTB n° BV09-533 |
+| caractéristiques A\*E\*V\* et endurance du meneau | menuiserie à 2 vantaux avec un fixe latéral (H × L) = 2,15 × 2,40 m - ouvrant 6112, seuil 9F72 | RE CSTB n° 10-0372-1 |
+| essai à l'eau en méthode A | menuiserie à 2 vantaux avec un fixe latéral (H × L) = 2,15 × 2,40 m - ouvrant 6112 | RE CSTB n° 10-0371-1 |
+| essai à l'eau en méthode A | menuiserie à 2 vantaux avec un fixe latéral (H × L) = 2,15 × 2,40 m - ouvrant 6112, seuil 9F72 | RE CSTB n° 10-644 |
+| essai de perméabilité à l'air sous gradient thermique | menuiserie 2 vantaux (H × L) = 2,25 × 1,60 m plaxée acajou | RE CSTB n° BV11-931 |
+| caractéristiques A\*E\*V\* | fenêtre à 2 vantaux avec un fixe latéral (H × L) = 2,15 × 2,40 m - seuil Z043, partie fixe vitrée avec A271 et A272 | RE CSTB n° BV17-0188 |
+| caractéristiques A\*E\*V\*, essais mécaniques spécifiques et endurance ouverture/fermeture | menuiserie oscillo-coulissante 1 vantail + fixe (H × L) = 2,15 × 3,14 m | RE CSTB n° BV16-1303 |
+| caractéristiques A\*E\*V\* et endurance au vent | menuiserie avec capotage à 2 vantaux avec un fixe latéral (H × L) = 2,15 × 2,40 m | RE CSTB n° BV17-0187 |
+| caractéristiques A\*E\*V\* | menuiserie à 2 vantaux avec un fixe latéral (H × L) = 2,15 × 2,40 m avec seuil PMR Z043 et joint brosse G256 | RE CSTB n° BV20-1331 |
+| caractéristiques A\*E\*V\* et endurance au vent | menuiserie à 2 vantaux avec un fixe latéral (H × L) = 2,15 × 2,40 m, meneau 6127 soudé à plat avec équerres 9714 | RE CSTB n° DBV-21-06826 |
+| essais sous écart de température | menuiserie à 2 vantaux (H × L) = 2,25 × 1,60 m | RE CSTB n° BV17-0175 |
+| essais d'ensoleillement et d'étanchéité à l'eau | cadres capotés | RE CSTB n° BV20-1564 |
+| essais d'ensoleillement | cadre capotés (H × L) = 1,3 × 1,5 m | RE CSTB n° DBV-24-40287 |
+| essais d'ensoleillement | cadre capotés (H × L) = 1,8 × 1,5 m | RE CSTB n° DBV-24-40287 |
+| essais sous écart de température | menuiserie à 2 vantaux capoté (H × L) = 2,25 × 1,60 m | RE CSTB n° DBV-24-40285 |
+
+c) Essais effectués sous la responsabilité du demandeur : essai de tenue sous charge et
+d'étanchéité de l'appui [1 p. 10].
+
+d) Rapport d'étude thermique : rapport d'étude thermique attesté conforme au DTA (RE CSTB n
+DBV-24-43398) [1 p. 10].
+
+### 2.9.2 Document Technique Détaillé
+
+Les détails des éléments techniques sont présentés dans le document : DBV-24-6/16-2335_V5 [1 p. 10].
+
+### 2.9.3 Références chantiers
+
+De nombreuses réalisations [1 p. 10].
+
+## 2.10 Annexe du Dossier Technique
+
+### Tableau 1 – Compositions vinyliques
+
+Les compositions vinyliques sont les matières PVC certifiées QB34 dont sont extrudés les
+profilés. Une ligne par référence matière et par variante ; la dernière colonne dit si la
+composition peut être plaxée (revêtue d'un film). La ligne 343 porte deux références, l'ancienne
+et la nouvelle [1 p. 11].
+
+| Référence matière (certificat QB34) | Code CSTB | Coloris | Composition pouvant être plaxée |
+| --- | --- | --- | --- |
+| 4038-699 / 4038-099 | 4003 | Blanc ou Gris | Oui |
+| 4091/A-4092/A-4093/A-4094/A/147 | 300 (variante A) | Gris | Oui |
+| 4091/A-4092/A-4093/A-4094/A/147 | 300 (variante B) | Gris | Oui |
+| 4091/A-4092/A-4093/A-4094/A/607 | 301 (variante A) | Beige | Oui |
+| 4091/A-4092/A-4093/A-4094/A/607 | 301 (variante B) | Beige | Oui |
+| 4091/A-4092/A-4093/A-4094/A/654 | 251 (variante A) | Blanc | Oui |
+| 4091/A-4092/A-4093/A-4094/A/654 | 251 (variante B) | Blanc | Oui |
+| 4091A/4092A/4093A/4094A/654V3 (ancienne référence) | 343 | Blanc | Oui |
+| 4291/4292/4293/4294/654 (nouvelle référence) | 343 | Blanc | Oui |
+| 4292A/4293A-147 | 382 | Gris | Oui |
+| 4292A/4293A-607 | 381 | Beige | Oui |
+| 4292A/4293A-654 | 383 | Blanc | Oui |
+| 4392/4393-147 | 443 (variante A) | Gris | Oui |
+| 4392/4393-147 | 443 (variante B) | Gris | Oui |
+| 4392/4393-607 | 442 (variante A) | Beige | Oui |
+| 4392/4393-607 | 442 (variante B) | Beige | Oui |
+| 4392/4393-654 | 394 (variante A) | Blanc | Oui |
+| 4392/4393-654 | 394 (variante B) | Blanc | Oui |
+| 4395-654 | 441 | Blanc | Oui |
+| 1462-655 | 452 | Blanc | Oui |
+
+Le second tableau liste les compositions qui **doivent** être plaxées, brunes ou caramel [1 p. 11].
+
+| Référence matière (certificat QB34) | Code CSTB | Coloris | Composition devant être plaxée |
+| --- | --- | --- | --- |
+| 2558- 914 | 57 px | Brun | Oui |
+| 2558- 924 | 55 px | Brun | Oui |
+| 2588-926 | 56 px | Caramel | Oui |
+| 4184-925 | 9 px | Brun | Oui |
+| 4184-928 | 10 px | Caramel | Oui |
+| 4185-925 | 58 px | Brun | Oui |
+| 4185-928 | 59 px | Caramel | Oui |
+| 4185-932 | 60 px | Caramel | Oui |
+
+Soit 19 compositions pouvant être plaxées (20 lignes, la 343 portant deux références) et 8 devant
+l'être. Les tableaux 2 à 4 (assemblages) sont sur [Assemblages du système 70](/profiles/systeme-70-assemblages.md) ;
+les planches de profilés (p. 14 à 25) sur les pages de famille du système 70 ; les planches de
+méthode (p. 26 à 46) et les plans de mise en œuvre (p. 47 à 53) sur
+[Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md).
+
+# Citations
+
+[1] [DTD n° DBV-24-6/16-2335_V5, système TROCAL e.XCLUSIVE, KBE e.MOTION, KÖMMERLING e.VOLUTION](raw/dtd-6-16-2335-v5-e-volution.pdf)
+
+# Voir aussi
+
+- [Fiche source du DTD n° DBV-24-6/16-2335_V5](/sources/dtd-6-16-2335.md)
+- [DTA n° 6/16-2334_V5, système 76 Advanced](/certifications/dta-6-16-2334.md)
+- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
+- [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md)
+- [Assemblages du système 70](/profiles/systeme-70-assemblages.md)
+- [Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md)
+- [Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md)
+- [Labels et certifications](/certifications/labels-et-certifications.md)
+- [profine](/fournisseurs/profine.md)
+
+===== PAGE 3 : /procedures/montage-generaux-profine.md =====
+# Ce que fait cette procédure
+
+Elle porte le registre 1.3.7 « Directives de montage » des directives générales profine — la pose
+d'une menuiserie dans la baie et son **joint de raccordement** (le joint entre le dormant et la
+maçonnerie) — et le registre 1.3.8 « Principes d'intégration des entrées d'air autoréglables »,
+communs aux systèmes 70 et 76 [1 p. 100, 107].
+
+Les directives de mise en œuvre du classeur KÖMMERLING e.VOLUTION d'août 2008 (système 70) sont sur
+[Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) ; elles
+diffèrent de celles-ci sur le film de protection, la largeur du joint, la mousse de polyuréthane et
+la distance des fixations (**CTR-100** à **CTR-103**).
+
+# Conditions et interdictions
+
+- Pour le montage, il faut respecter les directives d'assurance qualité RAL ou le DTU 36.5. Les
+  situations de montage décrites par la suite (registre 2.7.2) sont des exemples schématiques
+  [1 p. 103].
+- **Il ne faut pas remplir les joints (mortier)**, car cela produirait un raccordement fixe entre la
+  fenêtre et le corps du bâtiment (voir *Exigences particulières*) [1 p. 101].
+- **Attention — pour les portes et fenêtres anti-effraction, insérer des cales qui résistent à la
+  pression entre le dormant et la maçonnerie à tous les points de verrouillage** [1 p. 104].
+- **Attention — ne pas utiliser des métaux tels que le plomb, le cuivre ou un alliage à base de
+  cuivre (par exemple le laiton) ensemble avec l'aluminium (même pas à l'état fluide).** Les pièces
+  d'acier galvanisé, les éléments de construction en acier inoxydable ou en zinc peuvent être
+  utilisés sans problème avec l'aluminium [1 p. 106].
+
+# Étapes
+
+## 1. Sollicitation des joints de raccordement
+
+Les joints de raccordement sont sollicités par [1 p. 100] :
+
+1. la pluie battante ;
+2. les charges de vent ;
+3. l'utilisation ;
+4. le bruit ;
+5. la dilatation d'éléments ;
+6. la fermeture incontrôlée (claquer par le vent).
+
+## 2. Types de joints et formation
+
+**2.1 Joints de reprise** : les joints ne doivent pas absorber de mouvements ; le mastic de joints
+doit seulement assurer l'étanchéité [1 p. 100].
+
+**2.2 Joints de mouvement** : ces joints sont soumis à toutes les sollicitations du point 1. C'est
+pourquoi ils doivent supporter des sollicitations plus élevées et nécessitent une exécution soignée
+ainsi que des matériaux particulièrement résistants ; seulement ainsi, des dégâts au bâtiment
+peuvent être évités. Pour l'étanchéité entre le dormant et la maçonnerie, les mastics d'étanchéité
+pour joints conviennent parfaitement, car ils peuvent compenser les irrégularités de la
+maçonnerie, ils sont faciles à utiliser et résistent durablement aux sollicitations dues au vent,
+à la pluie battante et aux mouvements. Les bandes de joint et les dormants de montage conviennent
+également, mais il n'est pas toujours possible de les utiliser [1 p. 100].
+
+**2.2.1 Sources d'erreur en planification des joints** [1 p. 100] :
+
+1. Largeur / profondeur du joint trop réduite.
+2. Erreur sur le sens supposé de mouvement.
+3. Exécution non suffisante des surfaces adhérentes (éviter l'adhérence 3 faces, les flancs des
+   joints doivent être solides et secs).
+
+**2.2.2 Sources d'erreur en exécution** [1 p. 100] :
+
+1. Adhérence 3 faces.
+2. Endroits d'adhérence humides.
+3. Surfaces adhérentes non solides.
+4. Limitation de profondeur manquante ou insuffisante.
+5. Corde ronde à cellules fermées.
+6. Matériau de joint inadapté.
+7. Non-respect des directives techniques du fabricant de mastic de joint.
+
+**2.2.3 Exigences particulières** : l'espace intermédiaire entre le joint extérieur et le joint
+intérieur, ou entre le côté extérieur du dormant et le raccordement à la maçonnerie, doit être
+soigneusement rempli avec de la fibre minérale (fibre de verre / laine de pierre), surtout s'il faut
+remplir des exigences d'isolation acoustique ; ainsi, le bruit est sensiblement atténué. Ne pas
+comprimer trop fort la fibre minérale de remplissage, pour éviter des couplages fixes entre le
+dormant en PVC et la maçonnerie. Il ne faut pas remplir les joints (mortier), car cela produirait
+un raccordement fixe entre la fenêtre et le corps du bâtiment : le mortier se détache par les
+mouvements de la fenêtre et tombe. Par fermeture incontrôlée (vent : claquer l'ouvrant, etc.), les
+joints sont particulièrement sollicités ; c'est pourquoi un raccordement avec crépi ne peut pas
+être durablement étanche : le crépi se détache, l'eau peut pénétrer et produit des dégâts au
+bâtiment. Les mastics de joint sont élastiques et restent étanches [1 p. 101].
+
+Les profilés de raccordement au crépi avec baguettes à angles revêtues de PVC offrent l'avantage que
+le mastic de joint reste **toujours en contact avec le PVC** aux flancs adhérents. Ceci permet la
+formation des joints même si le crépi adjacent est encore humide ; un flanc parfait et solide du
+joint est présent et on évite de nombreuses sources d'erreur. Prendre en compte les flexions des
+linteaux dans le dimensionnement des joints (contacter un spécialiste en étude statique !)
+[1 p. 101].
+
+**2.3 Film de protection** : pour les profilés pourvus de films de protection appliqués à l'usine,
+il faut enlever la feuille protectrice immédiatement après la fixation au corps du bâtiment et
+vérifier si la surface du profilé est endommagée. Les éventuels défauts constatés doivent faire
+l'objet d'une réclamation immédiate [1 p. 103].
+
+**2.4 Stockage et transport** : les supports, cales, etc. doivent être protégés de manière à ce
+qu'ils ne puissent ni glisser ni basculer (plaques de bois, palettes, châssis). Transporter tous
+les éléments de fenêtres et portes debout. Éviter les points de pression et les flexions. *Les
+emballages ne doivent pas provoquer de dommages. Éviter absolument une accumulation de chaleur et
+d'eau par l'emballage* [1 p. 103]. Le stockage en atelier des menuiseries finies est sur
+[Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md#stockage-et-transport-des-menuiseries-finies).
+
+## 3. Montage : conditions côté bâtiment
+
+**3.1.1 Tolérances dimensionnelles dans le bâtiment** : vérifier les ouvertures du bâtiment selon
+le tableau suivant, écarts dimensionnels admissibles par rapport aux cotes nominales, une ligne
+par état de la maçonnerie, une colonne par surface des éléments de construction [1 p. 103].
+
+| Maçonnerie | Surface jusqu'à 2,5 m | Surface à partir de 2,5 m jusqu'à 5 m | Surface à partir de 5 m |
+| --- | --- | --- | --- |
+| Maçonnerie « haute » (par exemple mur pas encore crépi) | ± 10 mm | ± 15 mm | ± 20 mm |
+| Maçonnerie finie (par exemple mur crépi, mur en briques de parement, béton apparent) | ± 5 mm | ± 10 mm | ± 15 mm |
+
+(schéma: raw/profine-directives-generales-2023-01.pdf, p. 103)
+
+Les surfaces sont imprimées « m » sans exposant, et la première ligne s'intitule « Maçonnerie
+haute » (**INC-94**).
+
+**3.1.2 Points de référence en hauteur** : le maître d'ouvrage doit fournir les cotes en hauteur
+correspondantes (niveau mètre). Les points de référence en hauteur doivent être présents au moins
+une fois pour chaque étage ; écarts des points de référence max. 10 m. Vérifier les points de
+hauteur avant le début du montage et communiquer immédiatement toute dérive ou erreur au maître
+d'ouvrage [1 p. 103].
+
+**3.1.3 Position dans le bâtiment** : poser tous les éléments perpendiculairement, horizontalement
+et alignés, si ce n'est pas précisé différemment. **L'horizontale peut varier au plus de 1,5 mm/m
+(précision du niveau à bulle), mais ne doit pas dépasser 3 mm en tout.** Cela ne doit pas porter
+atteinte au fonctionnement et à l'aspect visuel. Cet écart maximal de la verticale doit aussi être
+respecté pour ne pas influencer la valeur Uw (coefficient de transmission thermique de la fenêtre,
+en W/m²K). La position exacte des éléments de fenêtres et portes dans le bâtiment doit être
+convenue avec le maître d'ouvrage par écrit [1 p. 103].
+
+## 4. Raccordement au corps du bâtiment
+
+**4.1 Moyens de fixation** : chevilles, pattes de fixation, pré-cadres de montage, etc. Les
+éléments de fixation doivent être choisis de manière à ne pas empêcher les dilatations des éléments
+aux raccordements au bâtiment (on recommande des chevilles spéciales) [1 p. 104].
+
+**4.2 Fixation** : fixation de montage et réglage par cales. On recommande un calage diagonal (mais
+pas directement dans les angles). **Laisser au moins 10 mm de joint de construction** pour
+permettre ultérieurement une étanchéité parfaite. Choisir les points de fixation de la manière
+suivante : 100 - 150 mm de distance par rapport aux coins intérieurs ; écarts max. 700 mm.
+Respecter les directives de montage de la planche des points de fixation [1 p. 104].
+
+### Points de fixation à la maçonnerie
+
+La planche montre, vus de face, un châssis fixe, un ouvrant à la française, une porte (avec son
+seuil) et une fenêtre à deux vantaux ; chaque point noir est un point de fixation, A l'écartement
+entre deux points, E la distance au coin intérieur [1 p. 102].
+
+![Points de fixation à la maçonnerie : fixe, ouvrant, porte, fenêtre 2 vantaux](/assets/procedures/directives-profine/points-de-fixation-maconnerie.png)
+
+| Repère | Définition | Valeur (mm) |
+| --- | --- | --- |
+| A | écartement maxi. entre points de fixation | 700 |
+| E | distance du coin intérieur | env. 150 |
+| E | écartement pour meneaux et traverses, à partir de la face intérieure du profilé | env. 150 |
+| E | pour profilés non blancs | env. 250 |
+| 50 | cote portée sous la porte, de part et d'autre de A | 50 |
+
+(schéma: raw/profine-directives-generales-2023-01.pdf, p. 102)
+
+Le texte du § 4.2 donne 100 à 150 mm au coin intérieur sans distinguer les profilés non blancs ; la
+planche donne env. 150 mm et env. 250 mm pour les non blancs (**INC-94**).
+
+## 5. Joints entre dormants et maçonnerie
+
+**5.1 Largeur** : laisser des joints de même largeur latéralement et en partie haute. Respecter le
+tableau suivant si on utilise des mastics à base de silicone comme matériau d'étanchéité de joints.
+Une ligne par surface des profilés de fenêtres, une colonne par type de pose et dimension
+d'élément ; les cellules donnent la largeur minimale de joint b, en mm [1 p. 105].
+
+<table>
+<thead>
+<tr><th rowspan="2">Surface des profilés de fenêtres</th><th colspan="4">Pose entre mur, dimension d'élément jusqu'à</th><th colspan="3">Pose en applique, dimension d'élément jusqu'à</th></tr>
+<tr><th>1,5 m</th><th>2,5 m</th><th>3,5 m</th><th>4,5 m</th><th>2,5 m</th><th>3,5 m</th><th>4,5 m</th></tr>
+</thead>
+<tbody>
+<tr><td>blanc</td><td>10</td><td>15</td><td>20</td><td>25</td><td>10</td><td>10</td><td>15</td></tr>
+<tr><td>non blanc</td><td>15</td><td>20</td><td>25</td><td>30</td><td>10</td><td>15</td><td>20</td></tr>
+</tbody>
+</table>
+
+(schéma: raw/profine-directives-generales-2023-01.pdf, p. 105)
+
+![Largeur minimale b du joint, pose entre mur et pose en applique](/assets/procedures/directives-profine/joint-dormant-maconnerie-largeur-b.png)
+
+Sur les deux coupes, b est la largeur du joint hachuré entre le dormant et la maçonnerie. Pour une pose en
+applique, maintenir la distance minimale de 10 mm entre le niveau de la fenêtre et la maçonnerie
+[1 p. 105].
+
+**5.2 Étanchéité** [1 p. 105] :
+
+- Remplir le joint de raccordement à la maçonnerie selon les exigences avec des matériaux isolants
+  thermiques ou acoustiques, comme la laine minérale ou la laine de verre ou d'autres matériaux
+  isolants compressibles. Lors de la pose du matériau d'isolation, veiller à laisser libre la
+  largeur et la profondeur de joint nécessaires pour l'étanchéité.
+- *N'utiliser des mousses de remplissage que si celles-ci ne présentent pas de réactions
+  ultérieures et si elles sont compatibles avec le dormant en PVC et le matériau d'étanchéité.*
+- Des produits à base de bitume doivent être utilisés avec précaution en contact direct avec le
+  profilé, car ces produits provoquent d'importants changements de couleur qui ne peuvent plus être
+  enlevés.
+- En cas d'utilisation de silicone et d'autres matériaux d'étanchéité, si ce n'est pas précisé
+  différemment, il faut respecter la règle : **l'épaisseur du matériau d'étanchéité correspond à la
+  moitié de la largeur du joint.**
+- En cas d'étanchéité avec des bandes d'étanchéité et des lés d'étanchéité de bâtiment
+  précomprimés, respecter les indications de traitement des fabricants.
+
+## 6. Généralités, indications
+
+- En cas d'éléments particulièrement larges, s'accorder avec le maître d'ouvrage sur la taille de
+  la flexion possible du linteau, pour pouvoir former un joint de maçonnerie correspondant.
+- Les forces dues aux mouvements de la maçonnerie ne doivent pas être transmises à l'élément monté.
+- Après le montage des éléments, effectuer immédiatement une réception avec le maître d'ouvrage.
+- En cas de rebords de fenêtres existants en pierre naturelle ou artificielle, prévoir une
+  réhausse (entre le dormant inférieur et le parapet de la fenêtre) ; ainsi, on évite des ponts
+  thermiques entre le rebord de fenêtre extérieur et intérieur.
+
+[1 p. 106]
+
+**Aluminium** : les composants en aluminium ne doivent pas être exposés à des sollicitations
+d'éraflures et de chocs. En cas de travaux de maçonnerie et de crépissage après le montage, il faut
+protéger les éléments contre les matériaux de construction, si possible au moyen de films adaptés
+en matière plastique autoadhésifs, lisses et résistant aux UV. L'aluminium ayant un comportement de
+dilatation différent, il ne doit pas être inséré dans le crépi ou le corps de construction de
+manière fixe ; toujours prévoir la fixation entre l'aluminium et la maçonnerie de manière mobile.
+**Pour l'aluminium, la dilatation est d'environ 1,2 mm/m pour une différence de température de
+50 °C. Ne pas monter des longueurs supérieures à 3 m sans jonction bout à bout (joint de
+dilatation)** [1 p. 106].
+
+# Entrées d'air autoréglables
+
+Une **entrée d'air autoréglable** est une bouche posée sur la menuiserie qui laisse entrer un débit
+d'air neuf à peu près constant quelle que soit la pression. Registre 1.3.8 [1 p. 107].
+
+**Avant-propos** : la ventilation des bâtiments étant un sujet d'actualité, une évolution des
+produits, et notamment de ceux venant se mettre en œuvre sur les menuiseries, est à présumer. De
+nouvelles solutions pourront être proposées par les fabricants d'entrées d'air, sous la double
+réserve qu'elles n'affaiblissent pas structurellement la menuiserie et soient conformes aux
+exigences aérauliques [1 p. 107].
+
+**Domaine d'application** : intégration dans les profilés de menuiseries PVC de bouches d'entrée
+d'air autoréglables de modules 20 et 30 m³/heure, avec plage débit-pression conforme à la norme
+NF E 51-732. Ce registre ne traite pas des performances acoustiques du couple menuiserie / entrée
+d'air : seul l'aspect des performances aérauliques est traité [1 p. 107].
+
+**Remarque** : les modules de 45 m³/h n'étant pas admissibles avec les montages préconisés
+ci-dessous, l'équivalence de débit sera obtenue par la mise en place de deux modules de 22 m³/h. La
+phrase suivante, « Elles sont établies en fonction du type de ventilation et du type de
+chauffage : », n'est suivie d'aucune liste (**INC-95**) [1 p. 107].
+
+## Mortaise standard (réalisation en atelier)
+
+Usinage dans la menuiserie d'une ou de plusieurs mortaises, selon besoin. Cet usinage type sera
+réalisé conformément aux prescriptions du cahier 3376 V3 établi par le CSTB, et se composera de
+une, deux ou quatre lumières oblongues afin de minimiser l'affaiblissement structurel du profilé
+[1 p. 107].
+
+![Exemple d'usinage de mortaise d'entrée d'air](/assets/procedures/directives-profine/entree-air-mortaise-exemple-usinage.png)
+
+L'exemple d'usinage montre quatre lumières oblongues alignées, cotées en mm :
+
+| Cote de l'exemple d'usinage | Valeur (mm) |
+| --- | --- |
+| Longueur hors tout de la mortaise | 354 |
+| Longueur des deux premières lumières réunies | 160 |
+| Intervalle entre les deux premières lumières et la troisième | 10 |
+| Intervalle entre la troisième et la quatrième lumière | 2 |
+| Largeur des lumières | 12 |
+
+(schéma: raw/profine-directives-generales-2023-01.pdf, p. 107)
+
+## Montages
+
+Cinq montages, chacun dessiné en coupe sur deux combinaisons de profilés dormant / ouvrant
+[1 p. 108-110].
+
+| Montage | Cote portée (mm) | Page PDF |
+| --- | --- | --- |
+| Passage direct dormant / ouvrant | 12 mini ; si les entailles sont alignées, un passage de 12 mm (direct) est possible | 108 |
+| Passage décalé dormant / ouvrant | 15 mini | 108 |
+| Entrée vers le bas côté extérieur et en façade côté intérieur | 15 mini et 12 à gauche, 12 et 12 à droite | 109 |
+| Passage au travers du dormant | - | 109 |
+| Passage au travers d'une réhausse | - | 110 |
+
+(schéma: raw/profine-directives-generales-2023-01.pdf, p. 108 à 110)
+
+![Passage direct dormant / ouvrant](/assets/procedures/directives-profine/entree-air-passage-direct-dormant-ouvrant.png)
+
+![Passage décalé dormant / ouvrant](/assets/procedures/directives-profine/entree-air-passage-decale-dormant-ouvrant.png)
+
+![Entrée vers le bas côté extérieur et en façade côté intérieur](/assets/procedures/directives-profine/entree-air-bas-exterieur-facade-interieur.png)
+
+![Passage au travers du dormant](/assets/procedures/directives-profine/entree-air-passage-travers-dormant.png)
+
+![Passage au travers d'une réhausse](/assets/procedures/directives-profine/entree-air-passage-travers-rehausse.png)
+
+L'en-tête des pages 108 à 110 porte « entrées d'air autoréglables\* » sans note correspondante (**INC-95**).
+Le registre 5.9 du classeur e.VOLUTION de 2008, marqué « * source UFPVC », dessine les mêmes
+principes sur les profilés du système 70, avec un autre cahier de référence et un passage indirect
+coté 13 mm (**CTR-98**) : voir
+[Intégration des entrées d'air autoréglables du système 70, 2008](/procedures/entrees-d-air-systeme-70-evo2008.md).
+
+# Ce que le document ne dit pas
+
+- Les situations de montage du registre 2.7.2 et le « Manuel du montage » ne font pas partie des
+  directives générales.
+- Aucune largeur de joint pour un mastic autre que silicone ; pour les bandes précomprimées, le
+  registre renvoie au fabricant.
+
+# Citations
+
+[1] [Directives générales profine, version janvier 2023](raw/profine-directives-generales-2023-01.pdf),
+registre 1.3.7 « Directives de montage », p. 1 à 7 imprimées (PDF p. 100 à 106, version janvier
+2016) et registre 1.3.8 « Principes d'intégration des entrées d'air autoréglables », p. 1 à 4
+imprimées (PDF p. 107 à 110, version février 2023)
+
+# Voir aussi
+
+- [Couplages et contreventements d'éléments](/procedures/couplages-elements.md)
+- [Usage, nettoyage et entretien d'une menuiserie profine](/entretien/usage-nettoyage-entretien-menuiseries-profine.md)
+- [Pose de la PERFORM76](/procedures/pose-perform76.md)
+- [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md)
+- [Directives générales profine](/sources/profine-directives-generales.md)
+- [profine](/fournisseurs/profine.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /reference/choix-des-fenetres-exposition-au-vent-2008.md | Sans type | choix des fenetres exposition au vent 2008 |  | - | classeur e.VOLUTION d'août 2008 et repose sur les zones de vent des règles NV 65. La méthode actuelle, par région climatique et catégorie de terrain, |
+| /reference/resistance-au-vent-volets-soprofen.md | Référence | Résistance au vent des volets roulants SOPROFEN | reference, vent, resistance-au-vent, volet-roulant, soprofen, dtu-34-2 | Abaques de résistance au vent des lames PVC et aluminium SOPROFEN (classes V*2 à V*6 selon NF EN 13659) et matrice de prescription par zone géographique, catégorie de terrain et hauteur selon le DTU 34-2. | # Cadre normatif et méthodologie de dimensionnement La résistance au vent des tabliers de volets roulants relève de la norme européenne **NF EN 13659 |
+| /procedures/mise-en-oeuvre-systeme-70-evo2008.md | Procédure | Mise en œuvre du système 70, classeur e.VOLUTION de 2008 | profine, kommerling, e-volution, systeme-70, mise-en-oeuvre, pose | Le registre 7.1 « Mise en oeuvre » du classeur KÖMMERLING e.VOLUTION d'août 2008 (système 70, système F 91), pages imprimées 1 à 45 : contraintes et joints de raccordement, protection, stockage, tolérances du gros œuvre, fixation (100 mm des angles, 700 mm d'entraxe, 600 mm en coulissant), largeur et bourrage du joint, points de fixation, calcul des jeux de dilatation, référentiel UFPVC de pose en applique et en tunnel, symboles, instructions de pose, gros œuvre (appuis, rejingots, linteaux), types de pose, réservations maçonnerie, coupes de principe (feuillure, doublages de 100 à 160 mm, porte d'entrée, ouverture à l'anglaise) et exemples de pose en neuf avec volet roulant. | Se renseigner auprès du bureau d'études pour le dimensionnement du joint au niveau du linteau. - Des pressions résultant des dilatations du bâtiment |
+| /sources/profine-mise-en-oeuvre-76-advanced.md | Document source | Mise en œuvre Système 76 Advanced, profine | profine, systeme-76-advanced, joint-central, fabrication, cotes-de-debit, renfort | Manuel de fabrication de 424 pages du système PVC 76 Advanced à joint central de profine, qui porte les cotes de débit, les abaques dimensionnels et les renforts. | 07.Z, V308, V326.Z, V314.Z : limites par couleur, zones A à D, courbes de verre 12 à 28 mm échantillonnées tous les 10 cm / transcrit / [Abaques dimen |
+| /procedures/surfaces-collage-nettoyage-profine.md | Procédure | Surfaces des profilés profine, collage, étanchéité, nettoyage et aluminium laqué | profine, colle, collage, c008, c009, c004 | Les colles de référence profine (C008, C009, C004, C005, C120, polymère MS), le collage à froid à la colle PVC, la préparation des surfaces, les mastics admis, les nettoyants des profilés blancs et plaxés, et la commande, la manipulation, le montage, le nettoyage et la réparation des profilés aluminium laqués livrés par profine. | toyer plusieurs fois**. **Le nettoyage de grandes zones des profilés peut entraîner des changements de couleur sous l'influence des intempéries** : ne |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/contradictions-entre-sources.md :
+| CTR-98 | Entrées d'air autoréglables : cahier de référence de la mortaise, nombre de lumières et hauteur du passage indirect | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008, PDF p. 302 et 304 (registre 5.9, « * source UFPVC »), relues en image à 200 dpi le 29/09/2026 : mortaise « conformément aux prescriptions du cahier des charges établi par l'UNION FENETRE PVC », « de deux ou de quatre lumières oblongues » ; « 5.2 Passage indirect dormant/ouvrrant » coté **12 mm** et **13 mm** | Directives générales profine, janvier 2023, PDF p. 107-108 (registre 1.3.8), d'après [Montage au bâtiment, directives générales profine](/procedures/montage-generaux-profine.md) : « cahier 3376 V3 établi par le CSTB », « une, deux ou quatre lumières oblongues » ; « passage décalé » **15 mini** | Aucune : chaque prescription reste avec son document et sa date ; à confirmer par profine (et relire en image la p. 108 de 2023) | Une mortaise usinée d'après 2008 peut n'avoir qu'un passage indirect de 13 mm, sous le minimum de 15 mm de 2023 ; voir [Intégration des entrées d'air autoréglables du système 70, 2008](/procedures/entrees-d-air-systeme-70-evo2008.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-100 | Délai d'enlèvement du film de protection des profilés après la pose | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008, PDF p. 330 (registre 7.1, page imprimée 2), relue(s) en image à 200 dpi le 29/09/2026 : « celui-ci est à enlever **au plus tard trois mois** après la mise en oeuvre » | Directives générales profine, version janvier 2023, d'après [Montage au bâtiment, directives générales profine](/procedures/montage-generaux-profine.md), PDF p. 103 : « il faut enlever la feuille protectrice **immédiatement après la fixation** au corps du bâtiment » | Aucune : chaque consigne reste avec son document et sa date ; à confirmer par profine | Un film laissé jusqu'à trois mois contre un enlèvement immédiat ; voir [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-101 | Largeur du joint dormant / maçonnerie en mastic silicone | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008, PDF p. 331 (registre 7.1, page imprimée 3), relue(s) en image à 200 dpi le 29/09/2026 : colonnes « jusqu'à 1 m / de 1 à 2 m / de 2 à 3 m », profilés blancs 10 / 10 / 15 mm, profilés structure 10 / 15 / 20 mm | Directives générales profine, version janvier 2023, d'après [Montage au bâtiment, directives générales profine](/procedures/montage-generaux-profine.md), PDF p. 105 : pose entre mur jusqu'à 1,5 / 2,5 / 3,5 / 4,5 m, blanc 10 / 15 / 20 / 25 mm, non blanc 15 / 20 / 25 / 30 mm ; pose en applique jusqu'à 2,5 / 3,5 / 4,5 m, blanc 10 / 10 / 15, non blanc 10 / 15 / 20 | Aucune : chaque table reste avec son document ; à confirmer par profine | Pour un élément de 2 à 2,5 m blanc posé entre mur, 10 mm (2008) contre 15 mm (2023) ; voir [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-102 | Mousse de polyuréthane en bombe dans le joint dormant / gros œuvre | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008, PDF p. 331 (registre 7.1, page imprimée 3), relue(s) en image à 200 dpi le 29/09/2026 : « **Ne pas employer** des produits de scellement en bombe (mousse de polyuréthane) de car leur neutralité dimensionnelle après pose est trés aléatoire » | Directives générales profine, version janvier 2023, d'après [Montage au bâtiment, directives générales profine](/procedures/montage-generaux-profine.md), PDF p. 105 : « N'utiliser des mousses de remplissage **que si** celles-ci ne présentent pas de réactions ultérieures et si elles sont compatibles avec le dormant en PVC et le matériau d'étanchéité » | Aucune : interdiction en 2008, admission sous condition en 2023 ; à confirmer par profine | Un bourrage à la mousse est interdit ou admis selon le document suivi ; voir [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md) |

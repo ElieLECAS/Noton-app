@@ -1,0 +1,26 @@
+{
+ "id": "R07",
+ "reponse": "L'**effet bilame** est la déformation d'un élément dont deux faces ou deux matériaux se dilatent différemment (glossaire). Le wiki le traite dans trois contextes :\n\n1. **Menuiseries PVC renforcées (directives profine)** : le renfort acier et le profilé PVC ont des coefficients de dilatation très différents ; des fenêtres fabriquées à température ambiante puis entreposées dans une pièce froide subissent des contraintes qui peuvent les déformer. L'effet dépend du matériel et ne peut pas être évité ; plus l'écart de température est grand, plus la déformation est forte. **Il est réversible, la fenêtre n'est pas endommagée, et il n'apparaît plus après le montage.** Précaution : au moment de l'usinage, profilés PVC et renforts doivent être à la même température (respecter un délai de stockage) ; les essais montrent que la déformation n'a pas d'effet négatif sur le montage avec un renfort fermé.\n\n2. **Coulissant aluminium SOLEAL GY (galandage)** : sous fort ensoleillement la face extérieure de l'ouvrant se dilate plus vite que la face intérieure, le montant latéral se cintre et la manœuvre devient difficile. Deux solutions TECHNAL : le **montant spécifique TGY1220** (lame de dilatation décalée ; compense jusqu'à H = 2,18 m, limite jusqu'à H = 2,70 m), ou un **renfort plat acier galvanisé 50 × 5 mm** glissé dans le montant tubulaire TGY1301 / TGY1302, fixé par douilles taraudées M5 et vis FHC M5x20 tous les 250 mm, recouvert du capot TGY2516 (débit H − 77 mm). Menuiserie à risque de bilame : poser obligatoirement **2 centreurs TGY3832** répartis sur la hauteur.\n\n3. **Portes d'entrée aluminium** : l'âme de panneau **AEROLAME** (mousse 30 kg/m³ renforcée de composites alvéolaires) est un process développé pour éviter l'effet bilame ; l'ouvrant monobloc **THERMALUX** (PERFORM, HYBRIDE, LUMINE, TEXTURAL, sur cadre aluminium) contre significativement l'effet bilame.",
+ "dans_le_wiki": "oui",
+ "preuves": [
+  {"page": "/procedures/fabrication-profiles-pvc.md", "extrait": "Cet effet dépend du matériel et ne peut pas être évité ; plus la différence de température est élevée, plus la déformation est importante. **L'effet est réversible et la fenêtre n'est pas endommagée ; après le montage, cet effet n'apparaît plus** [1 p. 33]."},
+  {"page": "/profiles/soleal-gy-dormants-et-rails.md", "extrait": "1. **Montant spécifique TGY1220** : profilé intégrant une lame de dilatation thermique décalée. Compense la dilatation jusqu'à $H = 2,18\\text{ m}$ et la limite jusqu'à $H = 2,70\\text{ m}$."},
+  {"page": "/quincaillerie/soleal-gy-roulements-et-fermetures.md", "extrait": "*Règle bilame :* Dans le cas d'une menuiserie soumise aux risques de bilame, poser obligatoirement **2 centreurs TGY3832** répartis sur la hauteur."},
+  {"page": "/portes/panneaux-et-monoblocs.md", "extrait": "| Âme AEROLAME, spécifique au produit aluminium pour éviter l'effet bilame | mousse isolante haute densité 30 kg/m³ renforcée au choix par 1 ou 2 composites alvéolaires"},
+  {"page": "/reference/glossaire.md", "extrait": "| Effet bilame | déformation d'un panneau dont les deux faces se dilatent différemment |"}
+ ],
+ "ambiguite": "Question ouverte : le contexte (PVC renforcé en stockage, coulissant alu SOLEAL GY, panneau de porte alu) n'est pas précisé ; les trois sont à donner.",
+ "outils": 2,
+ "comment_trouve": "Grep « bilame » : 15 occurrences sur 7 pages. Lecture des passages dans fabrication-profiles-pvc.md, soleal-gy-dormants-et-rails.md, soleal-gy-roulements-et-fermetures.md, panneaux-et-monoblocs.md et du glossaire.",
+ "formulations": [
+  "Pourquoi mes fenêtres PVC stockées au froid se déforment-elles ?",
+  "effet bilame",
+  "Le montant de mon coulissant alu se cintre au soleil, que faire ?"
+ ],
+ "defauts_wiki": [
+  "Donnée répartie sur quatre pages (fabrication-profiles-pvc 51 Ko, soleal-gy-dormants-et-rails, soleal-gy-roulements-et-fermetures, panneaux-et-monoblocs) : les 3 premières pages BM25 ne couvrent pas les trois contextes, et la page PVC fait 51 Ko pour une section de 15 lignes.",
+  "Le terme est écrit « effet de bilame » (PVC) et « effet bilame » (alu, portes) : même racine, sans conséquence en BM25 mais la page PVC a « bilame » une seule fois dans un titre de section.",
+  "Sur SOLEAL GY, le registre de couverture (sources/technal-soleal-gy-conception.md) marque les p. 123-131 « Traitement de l'effet bilame » encore « à faire » : la donnée actuelle (TGY1220, plat 50x5) n'a pas été relue page à page.",
+  "Aucun tag « bilame » sur les pages concernées."
+ ]
+}

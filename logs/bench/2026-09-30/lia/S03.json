@@ -1,0 +1,27 @@
+{
+  "question": "quelle autre crémone est compatible avec cette rallonge ?",
+  "pages_lues": [
+    "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+    "/portes/ouvrants-de-porte.md",
+    "/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md"
+  ],
+  "anomalies": [
+    "CTR-119",
+    "INC-10",
+    "VER-123"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "TGY3704 rallonge 4ème point crémone compatible TGY3702 TGY3703"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/soleal-gy-roulements-et-fermetures.md",
+        "/portes/ouvrants-de-porte.md",
+        "/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md"
+      ],
+      "caracteres": 65537
+    }
+  ]
+}

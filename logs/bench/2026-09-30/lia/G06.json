@@ -1,0 +1,30 @@
+{
+  "question": "Patte NT1947 sur un dormant 76171, c'est pour quelle épaisseur d'isolant ?",
+  "pages_lues": [
+    "/profiles/perform76-tapees-et-isolation.md",
+    "/procedures/pose-perform76.md",
+    "/procedures/accouplement-elements-systeme-76.md"
+  ],
+  "anomalies": [
+    "INC-03",
+    "INC-28",
+    "INC-29",
+    "INC-64",
+    "INC-65",
+    "INC-66"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "NT1947 patte 76171 épaisseur isolant"
+      },
+      "pages_nouvelles": [
+        "/profiles/perform76-tapees-et-isolation.md",
+        "/procedures/pose-perform76.md",
+        "/procedures/accouplement-elements-systeme-76.md"
+      ],
+      "caracteres": 100741
+    }
+  ]
+}

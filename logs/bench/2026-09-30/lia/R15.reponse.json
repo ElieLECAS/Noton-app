@@ -1,0 +1,10 @@
+{
+  "id": "R15",
+  "reponse": "Le meneau d'ouvrant **76301** (PERFORM76, système 76 Advanced) fait **84 mm** de large : **21 / 42 / 21 mm**, soit aile, clair intérieur, aile (/profiles/perform76-meneaux.md).\n\n- **Il ne se monte que sur les ouvrants, jamais sur un dormant.**\n- Son jumeau côté dormant, au même clair de 42 mm, est le meneau de dormant **76372**, de **98 mm** (28 / 42 / 28). L'écart de 14 mm vient des ailes : 28 mm côté dormant, 21 mm côté ouvrant.\n\nÀ noter : la famille du 76301 n'est pas la même selon le document (**VER-47**). Le cahier PERFORM76 l'appelle meneau d'ouvrant. Les planches de fenêtre du manuel profine le titrent « Traverse d'ouvrant 84 mm ». Les planches de porte d'entrée en font un « Meneau 84 mm » avec set d'assemblage sur seuil. La largeur, elle, est de 84 mm partout.",
+  "pages_citees": [
+    "/profiles/perform76-meneaux.md"
+  ],
+  "appels": 1,
+  "trouve": "oui",
+  "navigation": "Une seule requête, « 76301 meneau ouvrant largeur », sans facette. La première page livrée, meneaux PERFORM76, donne directement la ligne 76301 (ouvrant, 84 mm, 21 / 42 / 21), la règle « jamais sur un dormant » et le jumeau de dormant 76372. Les deux autres pages livrées (assemblage des traverses, drainage du système 76) confirment le rôle de traverse d'ouvrant du 76301 sans autre largeur. L'entrée VER-47, injectée par le serveur, porte précisément sur la famille meneau ou traverse d'ouvrant du 76301 : je l'ai signalée. Rien n'a manqué."
+}

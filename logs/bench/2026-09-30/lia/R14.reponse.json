@@ -1,0 +1,12 @@
+{
+  "id": "R14",
+  "reponse": "La **76576** est une **parclose de dormant** PERFORM76 (système 76 Advanced) pour un vitrage de **42 mm**. La parclose elle-même fait **16 mm** d'épaisseur. Ces valeurs valent pour une feuillure de 62 mm, avec un joint post-extrudé ou d'épaisseur équivalente.\n\n![Parclose 76576](/assets/profiles/perform76/parcloses/parclose-76576.png)\n\n- **Se monte sur** les cinq dormants 76171, 76172, 76177, 76180 et 76185, jamais sur un ouvrant (/profiles/perform76-parcloses.md).\n- **Selon le joint** (manuel profine, dormant et meneau sans compensateur) : 42 mm de vitrage avec le joint A de 4 mm, 44 mm avec le joint B de 2 mm, tolérance +1,0 / −0,5 mm. Le support de cale est le M138 (/profiles/systeme-76-tableau-de-vitrage.md).\n\n![Parclose 76576](/assets/profiles/systeme76/tableau-vitrage/dormant-76576.png)\n\n- **Parclose jumelle côté ouvrant** : pour le même vitrage de 42 mm, c'est la **76506** (16 mm aussi). Les deux ne sont pas interchangeables.\n\nLe poster et le DTA donnent eux aussi 16 mm et 42 mm pour la 76576 (/profiles/systeme-76-profiles-complementaires.md).",
+  "pages_citees": [
+    "/profiles/perform76-parcloses.md",
+    "/profiles/systeme-76-tableau-de-vitrage.md",
+    "/profiles/systeme-76-profiles-complementaires.md"
+  ],
+  "appels": 1,
+  "trouve": "oui",
+  "navigation": "La référence seule, « 76576 », sans facette. Les trois pages livrées portaient toutes une ligne 76576 : parcloses PERFORM76 (famille dormant, 42 mm / 16 mm, coupe du cahier), tableau de vitrage du manuel (joint A / joint B, tolérance, coupe du manuel) et profilés complémentaires du système 76 (poster et DTA concordants). La ligne voisine de la série ouvrant, la 76506 à 42 mm, a donné la jumelle à signaler au titre de la règle 8. Aucune entrée d'anomalie injectée ne portait sur la 76576 : les CTR remontés concernaient les appuis et les réhausses. Un seul appel a suffi."
+}

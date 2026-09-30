@@ -1,0 +1,423 @@
+===== PAGE 1 : /quincaillerie/askey-coulissant-65-nv-quincaillerie.md =====
+# Quincaillerie et accessoires ASKEY Coulissant 65 NV
+
+La quincaillerie et les accessoires du **Coulissant 65 NV ASKEY** intègrent les organes de roulement, les verrouillages multipoints, les organes de manœuvre ainsi que les composants d'étanchéité à l'air et à l'eau [1 p. 81, 109].
+
+---
+
+# Caractéristiques
+
+### Chariots de roulement
+
+Les chariots sont certifiés en classe 6 (200 000 cycles d'ouverture) selon la norme européenne, montés sur roulements à aiguilles anticorrosion avec axes inox et chapes polyamide isolantes [1 p. 9, 110, 124] :
+
+| Référence | Désignation | Type de galet | Axe (mm) | Charge max / roulette | Charge max / vantail | Compatibilité rail |
+| --- | --- | --- | --- | --- | --- | --- |
+| **W6050150** | Roulette simple fixe | Polyamide | 6 | 40 kg | **80 kg** | Alu (W3041224) ou inox (W4000158) |
+| **W6050151** | Roulette simple réglable | Polyamide | 6 | 40 kg | **80 kg** | Alu (W3041224) ou inox (W4000158) |
+| **W6050152** | Roulette double fixe | Polyamide | 6 | 80 kg | **160 kg** | Alu (W3041224) ou inox (W4000158) |
+| **W6050153** | Roulette double réglable | Polyamide | 6 | 80 kg | **160 kg** | Alu (W3041224) ou inox (W4000158) |
+| **W6050155** | Roulette double réglable renforcée | Polyamide | 8 | 110 kg | **220 kg** | Inox W4000158 obligatoire |
+| **W6000025** | Roulette double charges lourdes | Acier trempé | - | 125 kg | **250 kg** | Inox W4000158 obligatoire (ouvrant 32) |
+| **W6050149** | Cale d'adaptation roulette 32 | Polyamide | - | - | - | Traverse W1041274 |
+
+(schéma: raw/askey1.pdf, p. 110, 111, 124)
+
+### Serrures et crémones de fermeture
+
+Têtière de 16 mm, axe à 43 mm, fouillot carré de 7 mm [1 p. 10, 111, 112] :
+
+| Référence | Désignation | Points de fermeture | Mode de pose | Fonction spécifique |
+| --- | --- | --- | --- | --- |
+| **W6050100** | Fermeture 1 point | 1 crochet réglable | À visser | Système anti-fausse manœuvre |
+| **W6050102** | Fermeture 2 points | 1 crochet réglable + 1 fixe | À clamer | Fournie avec clameaux |
+| **W6050103** | Fermeture 3 points | 1 réglable + 2 fixes | À clamer | Verrouillage par cylindre européen |
+| **W6050104** | Fermeture 3 points à clé | 1 réglable + 2 fixes | À clamer | Cylindre traversant ouvrant |
+| **W6050111** | Bloc verrou encastré | 1 pêne à bascule | À encastrer | Verrouillage supplémentaire de vantail |
+| **W6050085** | Gâche à clamer | - | À clamer | Fournie avec vis de serrage |
+| **W6050083** | Clameau pour fermeture | - | À glisser | Maintien de têtière dans la gorge |
+
+(schéma: raw/askey1.pdf, p. 111, 112)
+
+### Organes de manœuvre et poignées
+
+| Référence | Désignation | Type de fixation | Application vantail |
+| --- | --- | --- | --- |
+| **W6050120** | Grande poignée de manœuvre | Rivets taraudés W6060386 | Vantail principal 24 ou 32 mm |
+| **W6050125** | Poignée standard | Rivets taraudés W6060387 | Vantail principal ou secondaire |
+| **W6050130** | Petite commande compacte | Rivets taraudés W6060385 | Vantail semi-fixe ou secondaire |
+| **W6050126** | Gâchette allongée | Remplacement sur poignée | Manœuvre adoucie / PMR |
+| **W6050127** | Bouchon de manœuvre poignée | Obturation | Transforme la poignée en poignée fixe de tirage |
+| **W6050133** | Coquille à carré vantail 24 mm | Encastrée | Croisement total des vantaux de 24 mm |
+| **W6050134** | Coquille à carré vantail 32 mm | Encastrée | Croisement total des vantaux de 32 mm |
+| **W6050284** | Verrou à levier extra-plat | Encastré | Ouvrants de 24 et 32 mm |
+
+(schéma: raw/askey1.pdf, p. 113, 114, 117, 119)
+
+### Carrés de manœuvre (carré de 7 mm)
+
+Longueur nominale de la tige carrée en fonction de la section de profilé et du ferrage [1 p. 116, 121, 122] :
+
+| Référence | Longueur $L$ (mm) | Type d'ouvrant | Face de manœuvre |
+| --- | --- | --- | --- |
+| **W4070492** | 32 | Vantail 24 mm non renforcé | Face intérieure seule |
+| **W4070493** | 35 | Vantail 24 mm non renforcé | Poignées intérieure et extérieure |
+| **W4070494** | 41 | Vantail 32 mm non renforcé | Face intérieure ou deux faces |
+| **W4070496** | 53 | Vantail 24 mm renforcé carré | Poignées sur les deux faces |
+| **W4070495** | 56 | Vantail 24 mm renforcé W1041261 | Poignées sur une ou deux faces |
+| **W4070497** | 59 | Vantail 32 mm renforcé carré | Face intérieure seule |
+| **W4070498** | 62 | Vantail 32 mm renforcé carré | Poignées intérieure et extérieure |
+
+(schéma: raw/askey1.pdf, p. 116)
+
+---
+
+# Champs d'application
+
+### Hauteur de poignée et limites de châssis
+
+Dimensions minimales hors-tout d'ouvrant ($Ho$) et hauteur minimale de poignée ($hp$) en millimètres selon le type de fermeture [1 p. 125] :
+
+| Type de fermeture | Référence | $Ho$ mini (mm) | $hp$ mini (mm) | Plage hauteur traverse intermédiaire ($HTr$) |
+| --- | --- | --- | --- | --- |
+| 1 point | W6050100 | **500** | 250 | $HP - 162 < HTr < HP + 90$ |
+| 2 points | W6050102 | **965** | 425 | $HP - 162 < HTr < HP + 52$ |
+| 3 points | W6050103 | **1 297** | 755 | $HP - 162 < HTr < HP + 52$ |
+| 3 points avec cylindre | W6050104 | **1 297** | 755 | $HP - 252 < HTr < HP + 52$ |
+| 1 point à coulisse | W6050111 | - | - | $HP - 106 < HTr < HP + 106$ |
+
+(schéma: raw/askey1.pdf, p. 125)
+
+Relation hauteur hors-tout châssis et ouvrant :
+$$\text{Hors tout châssis} = Ho + 2 \times \text{hauteur dormant} - 16\text{ mm}$$
+
+---
+
+# Compatibilités
+
+* **Cale de roulette W6050149** : Obligatoire pour monter les chariots W6050150 à W6050155 dans la gorge de traverse d'ouvrant 32 mm W1041274 [1 p. 110].
+* **Crochet de bloc verrou** : Le bloc verrou W6050111 nécessite le crochet **W6050112** sur ouvrant 24 mm et le crochet **W6050117** sur ouvrant 32 mm [1 p. 112, 113].
+* **Sélection des poignées sur ouvrants renforcés** : Les poignées à coquille W6050133 et W6050134 sont conçues pour s'effacer lors du croisement complet des vantaux en baies de 3 et 4 vantaux [1 p. 114].
+
+---
+
+# Ce que la source ne donne pas
+
+* La source ne précise pas la référence de la clé de manœuvre d'urgence pour le bloc verrou W6050111 en l'absence de cylindre européen.
+
+---
+
+# Citations
+
+[1] [Coulissant 65 NV ASKEY - Conception](raw/askey1.pdf), p. 81, 109-127
+[2] [Coulissant 65 NV ASKEY - Fabrication](raw/askey5.pdf), p. 38-53, 98-114
+
+---
+
+# Voir aussi
+
+- [Gamme Coulissant 65 NV](/gammes/askey-coulissant-65-nv.md)
+- [Profilés dormants et ouvrants Coulissant 65 NV](/profiles/askey-coulissant-65-nv-dormants-et-ouvrants.md)
+- [Cotes de débit Coulissant 65 NV](/profiles/askey-coulissant-65-nv-cotes-de-debit.md)
+- [Fabrication Coulissant 65 NV](/procedures/fabrication-coulissant-askey-65-nv.md)
+
+===== PAGE 2 : /quincaillerie/roto-nx-legende-catalogue.md =====
+# Ce que porte cette légende
+
+Les tableaux de commande du catalogue Roto NX pour profils PVC (juin 2023) n'ont presque pas de
+texte en en-tête : chaque colonne est désignée par un **pictogramme**, un petit dessin normalisé
+(une poignée avec une flèche pour la hauteur de poignée, « N° » pour le numéro de commande…). Les
+tables ci-dessous donnent le sens de chacun, dans les termes du catalogue, avec le dessin découpé
+de la page. Une ligne se lit ainsi : la signification, une description du dessin en mots, puis le
+pictogramme lui-même. Toutes les dimensions du catalogue sont indiquées en millimètres ; les autres
+valeurs portent leur unité [1 p. 10].
+
+Le manuel de montage Roto NX KSR emploie ses propres pictogrammes, en partie différents : voir
+[Roto NX KSR — conventions et consignes](/procedures/roto-nx-ksr-consignes-generales.md). Les
+termes du métier (fouillot, galet, gâche, loqueteau, renvoi d'angle, feuillure) sont expliqués
+dans le [glossaire](/reference/glossaire.md).
+
+# Pictogrammes des caractéristiques de production
+
+Le catalogue les appelle « caractéristiques de production » (section 1.1.1). La table est
+imprimée sur trois pages ; elle est reprise ici page par page, dans l'ordre de la source.
+
+## Page 10
+
+| Signification | Dessin du pictogramme | Pictogramme |
+| --- | --- | ---: |
+| Zone de recoupe | scie au-dessus d'une barre, cote fléchée en bout | ![Zone de recoupe](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/zone-de-recoupe.png) |
+| Sortie de tringle | deux tringles verticales décalées, cote fléchée | ![Sortie de tringle](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/sortie-de-tringle.png) |
+| Axe de ferrure | deux profils emboîtés, trait d'axe mixte | ![Axe de ferrure](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/axe-de-ferrure.png) |
+| Désignation | bulle de dialogue | ![Désignation](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/designation.png) |
+| Sol | contour de pièce à deux trous vissés | ![Sol](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/sol.png) |
+| Ergot | plot carré sur une base hachurée | ![Ergot](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ergot.png) |
+| Perçage ergot | plot carré dans une base hachurée, diamètre coté | ![Perçage ergot](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/percage-ergot.png) |
+| DIN gauche/droite | deux vantaux, repères au milieu | ![DIN gauche/droite](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/din-gauche-droite.png) |
+| Fouillot | boîtier de crémone à deux trous, cote fléchée depuis le chant | ![Fouillot](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/fouillot.png) |
+| Renvoi d'angle intégré | équerre en L | ![Renvoi d'angle intégré](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/renvoi-d-angle-integre.png) |
+| Jeu | deux profils emboîtés, cote fléchée en bas | ![Jeu](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/jeu.png) |
+| Profondeur de feuillure | angle de feuillure, flèche oblique | ![Profondeur de feuillure](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/profondeur-de-feuillure.png) |
+| Couleur | pinceau | ![Couleur](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/couleur.png) |
+| Code couleur | palette de peintre | ![Code couleur](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/code-couleur.png) |
+| Largeur fond de feuillure d'ouvrant | double flèche horizontale entre deux butées | ![Largeur fond de feuillure d'ouvrant](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/largeur-fond-de-feuillure-d-ouvrant.png) |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 10)
+
+## Page 11
+
+| Signification | Dessin du pictogramme | Pictogramme |
+| --- | --- | ---: |
+| Hauteur fond de feuillure d'ouvrant | double flèche verticale entre deux butées | ![Hauteur fond de feuillure d'ouvrant](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/hauteur-fond-de-feuillure-d-ouvrant.png) |
+| Poids d'ouvrant | poids | ![Poids d'ouvrant](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/poids-d-ouvrant.png) |
+| Taille | carré plein agrandi en carré pointillé, flèche oblique | ![Taille](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/taille.png) |
+| Hauteur de la poignée constante | poignée, flèche vers le bas | ![Hauteur de la poignée constante](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/hauteur-de-poignee-constante.png) |
+| Hauteur de poignée milieu/variable | poignée, flèche vers le haut et vers le bas | ![Hauteur de poignée milieu/variable](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/hauteur-de-poignee-milieu-variable.png) |
+| Information | « i » encadré | ![Information](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/information.png) |
+| Hauteur de levier fixe | levier sur un montant, flèche vers le haut | ![Hauteur de levier fixe](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/hauteur-de-levier-fixe.png) |
+| Hauteur de levier milieu/variable | levier sur un montant, flèche vers le haut et vers le bas | ![Hauteur de levier milieu/variable](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/hauteur-de-levier-milieu-variable.png) |
+| Raccordable | deux barres crantées emboîtées | ![Raccordable](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/raccordable.png) |
+| Longueur | barre, cote fléchée sur toute la longueur | ![Longueur](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/longueur.png) |
+| Position du ventilateur | coupe de profil avec aérateur, cote fléchée depuis le bas | ![Position du ventilateur](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/position-du-ventilateur.png) |
+| N° de matériel | « N° » | ![N° de matériel](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/numero-de-materiel.png) |
+| Type de montage | vis et outil | ![Type de montage](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/type-de-montage.png) |
+| Anti-fausse manœuvre | levier articulé sur un montant | ![Anti-fausse manœuvre](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/anti-fausse-manoeuvre.png) |
+| Rainure | profil en U | ![Rainure](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/rainure.png) |
+| Traitement de surface | couches empilées sous une flèche | ![Traitement de surface](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/traitement-de-surface.png) |
+| Position | carré entouré de quatre flèches | ![Position](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/position.png) |
+| Système de profil | profil en perspective | ![Système de profil](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/systeme-de-profil.png) |
+| Nombre de gâches soudées | gâche, signe « # » | ![Nombre de gâches soudées](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/nombre-de-gaches-soudees.png) |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 11)
+
+## Page 12
+
+| Signification | Dessin du pictogramme | Pictogramme |
+| --- | --- | ---: |
+| Nombre de galets | galet, signe « # » | ![Nombre de galets](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/nombre-de-galets.png) |
+| Type de goujon de verrouillage | galet sans signe | ![Type de goujon de verrouillage](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/type-de-goujon-de-verrouillage.png) |
+| Loqueteau | vantail entrouvert et loqueteau | ![Loqueteau](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/loqueteau.png) |
+| Classe de sécurité | document avec cadenas | ![Classe de sécurité](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/classe-de-securite.png) |
+| Aération intégrée | cadre entouré de flèches d'air | ![Aération intégrée](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/aeration-integree.png) |
+| Blocage | montant avec pièce de blocage | ![Blocage](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/blocage.png) |
+| Système | quatre carrés pleins | ![Système](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/systeme.png) |
+| Réglage | étoile de six flèches | ![Réglage](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/reglage.png) |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 12)
+
+Quelques termes de la légende : la *zone de recoupe* est la longueur dont une pièce (crémone,
+tringle) peut être raccourcie à la scie ; le *fouillot* est le carré de la crémone qui reçoit la
+tige de la poignée ; le *goujon de verrouillage* (ou galet) est le téton porté par la crémone qui
+s'engage dans la gâche du dormant ; *raccordable* se dit d'une pièce qui s'accouple à une autre
+(prolongateur, verrouilleur). Voir le [glossaire](/reference/glossaire.md).
+
+# Pictogrammes des types d'ouverture
+
+Section 1.1.2 du catalogue : le pictogramme du type de fenêtre auquel un tableau s'applique. Les
+dessins sont reproduits ci-dessous tels qu'ils sont imprimés [1 p. 12, 13].
+
+| Type d'ouverture | Page | Pictogramme |
+| --- | --- | ---: |
+| Fenêtre ouvrant à la française | 12 | ![Fenêtre ouvrant à la française](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-francaise.png) |
+| Fenêtre basculante | 12 | ![Fenêtre basculante](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-basculante.png) |
+| Fenêtre oscillo-battante | 12 | ![Fenêtre oscillo-battante](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-oscillo-battante.png) |
+| Fenêtre plein cintre oscillo-battante | 12 | ![Fenêtre plein cintre oscillo-battante](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-plein-cintre-oscillo-battante.png) |
+| Fenêtre inclinée oscillo-battante | 12 | ![Fenêtre inclinée oscillo-battante](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-inclinee-oscillo-battante.png) |
+| Fenêtre triangulaire oscillo-battante | 12 | ![Fenêtre triangulaire oscillo-battante](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-triangulaire-oscillo-battante.png) |
+| Fenêtre ouvrant à la française à ouvrant semi-fixe | 12 | ![Fenêtre ouvrant à la française à ouvrant semi-fixe](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-francaise-semi-fixe.png) |
+| Fenêtre à la française / oscillo-battante à ouvrant semi-fixe | 12 | ![Fenêtre à la française / oscillo-battante à ouvrant semi-fixe](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-francaise-oscillo-battante-semi-fixe.png) |
+| Fenêtre à la française / oscillo-battante à ouvrant semi-fixe avec plein cintre | 12 | ![Fenêtre à la française / oscillo-battante à ouvrant semi-fixe avec plein cintre](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-francaise-oscillo-battante-semi-fixe-plein-cintre.png) |
+| Fenêtre à trois vantaux | 13 | ![Fenêtre à trois vantaux](/assets/quincaillerie/roto-nx-catalogue/pictogrammes/ouverture-trois-vantaux.png) |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 12-13)
+
+# Abréviations
+
+Section 1.1.4 du catalogue, dans l'ordre de la source [1 p. 13, 14].
+
+| Abréviation | Signification |
+| --- | --- |
+| AF | Axe de ferrure |
+| DIN G / D | DIN gauche / droite |
+| OB | Ferrure OB |
+| LFF | Largeur fond de feuillure d'ouvrant |
+| HFF | Hauteur fond de feuillure d'ouvrant |
+| PO | Poids d'ouvrant |
+| SDB | Sécurité de base |
+| O | Oui |
+| KSR | Basculement vertical |
+| Raccordable | Raccordable |
+| VM | Verrouilleur |
+| N | Non |
+| AFM | Anti-fausse manœuvre |
+| cf. ill. | sans illustration |
+| CDR | Classe de résistance |
+| SEC | Sécurité |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 13-14)
+
+**INC-279** : « cf. ill. » est expliqué par « sans illustration » [1 p. 14] ; « cf. » signifie
+« voir » (« se reporter à l'illustration »). La mention se lit donc de deux façons opposées tant
+qu'elle n'est pas confirmée par ROTO.
+
+VM est écrit « Verrouilleur » dans ce catalogue, « Verrouilleur médian » dans le manuel de montage
+KSR ; OB y est « Ferrure OB », « Oscillo-battant » dans le manuel.
+
+# Système PVC et droit de propriété intellectuelle
+
+La section 1.1.5 « Système – PVC » donne les six systèmes d'axe de ferrure (12/18-9 à 12/22-13),
+avec leur jeu de feuillure [A], leur largeur de recouvrement [B] et leur axe de ferrure [C] : la
+table et le dessin sont sur
+[Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md), section *Cotes de dimensionnement des profilés*,
+[1 p. 14].
+
+« Les contenus de ce document sont protégés par la loi relative à la propriété intellectuelle.
+Leur utilisation est autorisée dans le cadre de la mise en œuvre des ferrures. Toute utilisation
+complémentaire est interdite sans l'autorisation écrite du fabricant. » [1 p. 14]
+
+# Citations
+
+[1] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 —
+`raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 10 à 14 (numérotation du PDF, identique à la numérotation imprimée)
+
+# Voir aussi
+
+- [Catalogue Roto NX pour profils PVC](/sources/roto-nx-catalogue-pvc.md)
+- [Roto NX](/quincaillerie/roto-nx.md)
+- [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)
+- [Roto NX KSR — conventions et consignes](/procedures/roto-nx-ksr-consignes-generales.md)
+- [Glossaire](/reference/glossaire.md)
+
+===== PAGE 3 : /procedures/redressement-montant-porte-cintre-9708.md =====
+# Ce que fait cette procédure
+
+Le **profilé acier 9708 précontraint** est un plat d'acier livré cintré (courbé). Il sert au
+rattrapage de montants de portes cintrés : un montant (le côté vertical de l'ouvrant, la partie
+mobile de la porte) qui s'est courbé est redressé en logeant contre lui ce plat d'acier cintré en
+sens inverse, puis en le vissant. L'intervention se fait sur la porte en place [1 p. 1].
+
+# Conditions et interdictions
+
+**Cette mise en œuvre n'est pas compatible avec des traverses intermédiaires horizontales** [1 p. 1].
+Une traverse intermédiaire est un profilé horizontal qui recoupe l'ouvrant entre son haut et son bas.
+
+L'ensemble de l'intervention s'effectue sans dégonder l'ouvrant, c'est-à-dire sans le sortir de
+ses paumelles [1 p. 1].
+
+# Étapes
+
+Les six étapes sont numérotées comme sur la préconisation, dans ses mots [1 p. 1]. La
+[parclose](/reference/glossaire.md) est la baguette qui maintient le vitrage ; la
+[feuillure](/reference/glossaire.md) est le logement en creux du profilé.
+
+1. L'ensemble de l'intervention s'effectue sans dégonder l'ouvrant.
+2. Déposer le vitrage ou le panneau.
+3. Retirer les vis de renfort en feuillure du montant cintré **sauf une**, de préférence la
+   première en haut de l'ouvrant pour éviter le glissement du renfort.
+4. Couper le profilé acier 9708 à dimension, soit **10 à 15 mm plus court que la longueur pare
+   close**, et le positionner dans la feuillure intérieure du montant de porte. Le cintre du
+   montant de porte et celui du renfort plat doivent être **en opposition et non dans le même
+   sens**.
+5. Pour les deux sens de pose du profilé acier, porte cintrée vers l'extérieur ou vers
+   l'intérieur, effectuer un calage de plus ou moins 5 mm entre le profilé acier et l'intérieur de
+   la rainure à pare close :
+   - porte cintrée vers l'extérieur, **cas n° 1** : caler le renfort **en son centre** côté
+     rainure à pare closes ;
+   - porte cintrée vers l'intérieur, **cas n° 2** : caler le renfort **à ses extrémités** côté
+     rainure à pare closes.
+
+   Augmenter ou diminuer l'épaisseur de calage à souhait de façon à redresser le montant de porte
+   et apporter **1 mm de contrainte supplémentaire**, à contrôler avec une règle de 2 m. Visser le
+   profilé acier avec des **vis autoforantes 3,9 × 28**.
+6. Dans le cas d'un vitrage, coller des cales d'1 mm sur le profilé acier pour assurer la mise en
+   place de ce dernier.
+
+## Calage selon le sens du cintre
+
+Les deux schémas numérotés 1 et 2 montrent la coupe du montant de porte une fois le profilé 9708
+posé dans la feuillure intérieure et vissé, pour chacun des deux cas de l'étape 5 : cas n° 1,
+porte cintrée vers l'extérieur ; cas n° 2, porte cintrée vers l'intérieur [1 p. 1].
+
+![Cas n° 1 : porte cintrée vers l'extérieur](/assets/procedures/9708/calage-cas-1-cintre-vers-exterieur.png)
+
+![Cas n° 2 : porte cintrée vers l'intérieur](/assets/procedures/9708/calage-cas-2-cintre-vers-interieur.png)
+
+Lecture : le profilé PVC du montant est tracé en vert ; dans sa chambre basse est dessiné un
+rectangle à angles arrondis, en noir, et en haut à gauche un profil en bleu clair. Les éléments
+tracés en rouge -- un plat posé en travers de la feuillure, recoupé en plusieurs segments, et une
+vis à tête fraisée -- sont ceux de l'intervention ; la vis descend à travers le fond de feuillure
+jusque dans le rectangle noir. Un carré barré bleu est dessiné contre la rainure à parclose, à
+droite. Entre le cas 1 et le cas 2, la vis change de place le long du plat. Aucun des deux
+schémas n'est coté et aucune légende des couleurs n'est imprimée : ce que désignent le rectangle
+noir, le profil bleu clair et le carré barré n'est pas écrit sur la planche.
+
+(schéma: raw/profine-mise-en-oeuvre-9708-montants-cintres-2017-07.pdf, p. 1)
+
+# Cotes
+
+Le profilé 9708 est dessiné deux fois : en élévation, cintré, avec la flèche X qui désigne la
+coupe, et en coupe transversale X à l'échelle 1:1. Cotes en mm, relevées sur la planche rendue ;
+la planche ne dit pas ce que mesurent les cotes 40 et 25 de l'élévation, qui sont donc reprises
+avec leur emplacement sur le dessin (**VER-27**).
+
+| Référence | Vue | Cote | Valeur (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| Profilé acier 9708 | élévation | longueur, entre les deux extrémités | 2500 | ![Profilé acier 9708](/assets/procedures/9708/profile-acier-9708.png) |
+| Profilé acier 9708 | élévation | cote portée à mi-longueur, en travers du profilé cintré | 40 | |
+| Profilé acier 9708 | élévation | cote portée à l'extrémité basse, en travers du profilé | 25 | |
+| Profilé acier 9708 | coupe X 1:1 | épaisseur du plat | 6 | |
+| Profilé acier 9708 | coupe X 1:1 | cote portée depuis le bord gauche jusqu'à un trait vertical intérieur ; la largeur totale n'est pas cotée | 25 | |
+
+(schéma: raw/profine-mise-en-oeuvre-9708-montants-cintres-2017-07.pdf, p. 1)
+
+Les valeurs de mise en œuvre prescrites par les étapes sont les suivantes [1 p. 1].
+
+| Grandeur | Valeur |
+| --- | --- |
+| Longueur de coupe du profilé 9708 | longueur de parclose moins 10 à 15 mm |
+| Calage entre le profilé acier et l'intérieur de la rainure à parclose (mm) | plus ou moins 5 |
+| Contrainte supplémentaire à apporter (mm) | 1, contrôlée avec une règle de 2 m |
+| Vis de fixation du profilé acier | autoforantes 3,9 × 28 |
+| Cales collées sur le profilé acier, cas d'un vitrage (mm) | 1 |
+
+# Ce que le document ne dit pas
+
+La préconisation ne nomme aucun système ni aucune gamme de profilés, ne donne ni la matière exacte
+ni la largeur totale du plat 9708, et ne dit pas ce que mesurent les cotes 40 et 25 de
+l'élévation : entrée **VER-27** du registre [Informations à vérifier](/anomalies/informations-a-verifier.md).
+
+# Citations
+
+[1] [Préconisation de mise en œuvre du profilé acier 9708 précontraint pour le rattrapage de
+montants de portes cintrés, profine France](raw/profine-mise-en-oeuvre-9708-montants-cintres-2017-07.pdf), p. 1
+
+# Voir aussi
+
+- [profine](/fournisseurs/profine.md)
+- [Renforts du système 76](/profiles/systeme-76-renforts.md)
+- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
+- [Ouvrants de porte d'entrée](/portes/ouvrants-de-porte.md)
+- [Informations à vérifier](/anomalies/informations-a-verifier.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /quincaillerie/accessoires-portes-entree.md | Quincaillerie | Accessoires de porte d'entrée | porte-entree, baton-de-tirage, heurtoir, poignee, bequille, bouton | Bâtons de tirage, pavé et poignée de tirage, heurtoirs, poignées, boutons et boîtes aux lettres des portes d'entrée PROFERM, avec leurs dimensions, leurs finitions, leurs restrictions par ouvrant et par gamme, et la photo de chacun. | res/portes-2024/tirant-horizontal.png) / / Design carré / H. / 500 / - / ![Design carré](/assets/quincaillerie/accessoires/portes-2024/design-carre.pn |
+| /procedures/percage-montage-roto-nx.md | Procédure | Perçage et montage de la ferrure Roto NX | roto, roto-nx, ksr, percage, gabarit, montage | Les cotes d'usinage et le montage de la ferrure Roto NX KSR sur PVC — coupe du profilé de vantail, perçage et montage de la poignée, perçage du dormant et de l'ouvrant avec gabarits, découpe et montage de la ferrure, crémone de semi-fixe, bras de compas et anti-rabattement, vissage, accrochage et réglage des galets. | rant équipé d'une crémone à fouillot -6 montre le carré de poignée (en rouge) traversant le profilé jusqu'au boîtier de crémone, et à côté l'adaptateu |
+| /profiles/askey-coulissant-65-nv-cotes-de-debit.md | Profilé | Cotes de débit ASKEY Coulissant 65 NV | cotes-de-debit, aluminium, coulissant, askey, debit, atelier | Formules de calcul et abaques de débit des profilés aluminium, vitrages et accessoires pour les châssis Coulissant 65 NV ASKEY. | ntral 2 / **W3041251** / Montant central renforcé carré / 1 / $H - 93$ / 90°-90° / / Chicane PVC / **W4030243** / Chicane centrale 32 mm / 2 / $H - 93 |
+| /quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md | Quincaillerie | Renvois d'angle et verrouilleurs Roto NX | roto, roto-nx, renvoi-angle, verrouilleur, galet, quincaillerie | Les références de commande des renvois d'angle Roto NX pour menuiseries PVC (standard, spécial court, têtière, seuil, compas, cintré, fenêtre inclinée, aération, gâche et sortie de tringle) et des verrouilleurs (standard, sécurité, seuils, recoupable, crémone, têtière, opposé, crochet, plein cintre, confort), avec leurs galets, longueurs, positions et dessins. | [Roto NX](/quincaillerie/roto-nx.md)), position (carré entouré de quatre flèches : haut, bas), traitement de surface, N° de matériel, et selon le tab |
+| /quincaillerie/roto-nx-cremones.md | Quincaillerie | Crémones Roto NX | roto, roto-nx, cremone, quincaillerie, reference, pictogramme | Les références de commande des crémones Roto NX — crémones OB KSR à hauteur de poignée fixe et crémones OB à hauteur de poignée centrée / variable par fouillot (8, 15, 25 à 50 mm, têtières et boîtiers), crémone adaptée OB, crémone OB Confort, crémones verrou, raccords de crémone, crémones de semi-fixe standard, Plus et à levier séparé avec leurs tableaux de combinaisons, verrous d'arête, schémas de perçage et de fraisage — et les nomenclatures des instructions de montage KSR (fouillot -6, sortie de tringle, EasyMix, serrures H100). | syMix des nomenclatures de montage KSR (« boîtier carré », « boîtier cylindre ») ; les boîtiers à cylindre rond 788164 et 788275 à 788279 n'y sont pas |
+| /quincaillerie/roto-nx-ksr-ouvrant-francaise.md | Quincaillerie | Configurations Roto NX KSR — ouvrant à la française | roto, roto-nx, ksr, ouvrant-francaise, of, quincaillerie | Les champs d'application, la quincaillerie et le positionnement des gâches de l'ouvrant à la française Roto NX KSR, à un ou deux vantaux, avec ses compas, têtières, verrouilleurs médians et gabarits de montage. | e de tringle (p. 48)</td><td>2</td><td>Adaptateur carré de 7 mm : fouillot -6 mm</td><td>-</td><td>493348</td></tr> <tr><td>12</td><td>Gâche sur batte |
+| /quincaillerie/roto-nx-ksr-cintre-trapezoidal.md | Quincaillerie | Configurations Roto NX KSR — châssis cintré et trapézoïdal | roto, roto-nx, ksr, cintre, trapezoidal, plein-cintre | La quincaillerie oscillo-battante Roto NX KSR pour châssis cintré, plein cintre, arc surbaissé et trapézoïdal — nomenclature complète (carton de base, crémones, verrouilleurs, renvois d'angle, paliers), vue éclatée, positionnement des gâches, montage et gabarit de perçage du palier de compas. | e manœuvrée par la poignée ; le *fouillot* est le carré qui reçoit la tige de la poignée (8 mm ici). Elle se choisit par la hauteur en feuillure du va |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/informations-a-verifier.md :
+| VER-25 | Longueur de l'acier dit « long » dans le tableau des poids d'ouvrant admissibles | Mise en œuvre Système 76 Advanced, registre 2.3.3, p. 5 : « court (55 mm) » et « long (5 mm) » — la seconde valeur ne peut pas être une longueur en regard de la première (PDF p. 102, relu en image le 25/09/2026 : « long (5 mm) » confirmé ; les six rapports d'essais sont numérotés 12-002529-PR01 à PR06 PB-K20-09-de-01) | profine — c'est la ligne qui fait passer une ferrure de 80 à 100 kg admissibles |

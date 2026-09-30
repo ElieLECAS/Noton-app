@@ -1,0 +1,52 @@
+{
+  "question": "montre moi la coupe de l'appui A491",
+  "pages_lues": [
+    "/procedures/capotage-aluclip-systeme-70.md",
+    "/profiles/perform76-appuis-et-seuils.md",
+    "/procedures/capotage-aluclip-systeme-76.md",
+    "/profiles/systeme-70-profiles-complementaires.md"
+  ],
+  "anomalies": [
+    "CTR-32",
+    "CTR-40",
+    "CTR-63",
+    "CTR-64",
+    "CTR-68",
+    "INC-25",
+    "INC-45",
+    "VER-27",
+    "VER-40"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "A491 appui"
+      },
+      "pages_nouvelles": [
+        "/procedures/capotage-aluclip-systeme-70.md",
+        "/profiles/perform76-appuis-et-seuils.md",
+        "/procedures/capotage-aluclip-systeme-76.md"
+      ],
+      "caracteres": 110390
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/profiles/systeme-70-profiles-complementaires.md"
+      },
+      "pages_nouvelles": [
+        "/profiles/systeme-70-profiles-complementaires.md"
+      ],
+      "caracteres": 119637
+    },
+    {
+      "outil": "lire_anomalie",
+      "args": {
+        "identifiant": "VER-72"
+      },
+      "pages_nouvelles": [],
+      "caracteres": 585
+    }
+  ]
+}

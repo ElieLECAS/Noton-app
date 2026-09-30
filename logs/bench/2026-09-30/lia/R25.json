@@ -1,0 +1,60 @@
+{
+  "question": "donne moi les seuils compatibles pour le 6101",
+  "pages_lues": [
+    "/procedures/fabrication-systeme-70.md",
+    "/procedures/mise-en-oeuvre-seuil-systeme-70.md",
+    "/procedures/porte-fenetre-fixe-lateral-systeme-70.md",
+    "/profiles/systeme-70-assemblages.md",
+    "/procedures/systemes-speciaux-systeme-70-evo2008.md",
+    "/procedures/seuil-alu-9c42-systeme-70-evo2008.md"
+  ],
+  "anomalies": [
+    "CTR-37",
+    "CTR-78",
+    "CTR-99",
+    "INC-169",
+    "INC-177",
+    "INC-237",
+    "INC-264",
+    "INC-265",
+    "INC-85"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "6101 seuil dormant embout set d'assemblage",
+        "limite": 3
+      },
+      "pages_nouvelles": [
+        "/procedures/fabrication-systeme-70.md",
+        "/procedures/mise-en-oeuvre-seuil-systeme-70.md",
+        "/procedures/porte-fenetre-fixe-lateral-systeme-70.md"
+      ],
+      "caracteres": 85203
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/profiles/systeme-70-assemblages.md"
+      },
+      "pages_nouvelles": [
+        "/profiles/systeme-70-assemblages.md"
+      ],
+      "caracteres": 29119
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "seuil 9C42 dormant 6101 débit 2008",
+        "systeme": "70",
+        "limite": 2
+      },
+      "pages_nouvelles": [
+        "/procedures/systemes-speciaux-systeme-70-evo2008.md",
+        "/procedures/seuil-alu-9c42-systeme-70-evo2008.md"
+      ],
+      "caracteres": 65671
+    }
+  ]
+}

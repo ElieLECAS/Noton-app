@@ -1,0 +1,1427 @@
+===== PAGE 1 : /procedures/fabrication-systeme-70.md =====
+# Ce que fait cette procédure
+
+Elle rassemble les planches de méthode de l'annexe du DTD du **système 70** de
+[profine](/fournisseurs/profine.md) (TROCAL e.XCLUSIVE, KBE e.MOTION, KÖMMERLING e.VOLUTION) :
+comment s'assemblent en atelier les meneaux et traverses, la soudure à plat du meneau 6127, les
+élargisseurs et rehausseurs, les seuils, les capots aluminium, les tapées et appuis aluminium, et
+où se percent les drainages et décompressions ; puis les coupes de principe et les plans de mise
+en œuvre. Ce sont des vues éclatées et des coupes : elles portent surtout des références de pièces,
+des légendes et quelques cotes, reprises sous chaque schéma. Les termes du métier sont dans le
+[glossaire](/reference/glossaire.md).
+
+Les prescriptions écrites qui gouvernent ces schémas (quatre types d'assemblage mécanique,
+drainages, capotage, couleurs sombres) sont dans
+[DTD n° DBV-24-6/16-2335_V5](/certifications/dtd-6-16-2335.md) ; les tableaux d'assemblage par
+profilé et les pièces dans [Assemblages du système 70](/profiles/systeme-70-assemblages.md).
+
+# Conditions et interdictions
+
+- Les soudures à plat doivent être réservées aux fabrications certifiées et validées pour chaque
+  type de machine de façon que le cordon de soudure rende étanche les chambres de renfort des
+  profilés assemblés ; elles concernent l'assemblage du meneau réf. 6127 [1 p. 9].
+- La tête des vis des assemblages mécaniques repose sur un renfort d'une longueur minimum de
+  250 mm [1 p. 5].
+- **La mise en place du capot complet en traverse basse de dormant est limitée à une utilisation
+  sur fenêtre mise en œuvre en rénovation sur dormant existant** [1 p. 7].
+
+# Étapes
+
+## Assemblage meneau / traverse intermédiaire
+
+Planche de vues éclatées des assemblages mécaniques en T d'un meneau ou d'une traverse
+intermédiaire sur le profilé qui le reçoit ; les quatre types d'assemblage et leurs perçages sont
+écrits au § 2.2.3.3 du DTD [1 p. 5, 26].
+
+![Assemblage meneau / traverse intermédiaire, sets en T 9F76, 9F75 et 9F73](/assets/certifications/dtd-6-16-2335/assemblage-meneau-traverse-sets-en-t.png)
+
+![Assemblage meneau / traverse intermédiaire, set 9B51, pièce J216, patins 9B56, M299 et 9718](/assets/certifications/dtd-6-16-2335/assemblage-meneau-traverse-9b51-j216-patins.png)
+
+Lecture, de gauche à droite et de haut en bas : meneau **6127** avec le set **9F76** vissé par
+quatre vis dans le profilé qui le reçoit, avec goupille et bouchons ; traverse **6126** avec le set
+**9F75** ; meneau **2425** avec le set **9F73** ; traverse **6126** sur ouvrant **6112** avec la
+pièce **M384** et le patin **M299** ; meneau **6127** avec le set **9F76** vissé à travers deux
+profilés superposés ; profilé **2427** sur dormant **6104** avec le **Set 9B51** ; pièce **J216**
+vissée entre deux profilés ; traverse **6126** sur ouvrant **6112** avec le patin **9B56** ;
+meneau **6127** sur dormant **6104** avec le patin **M299** puis avec le patin **9718**, serrés par
+deux vis longues. L'astérisque renvoie à la note « Etanchéité dans la rainure à parclose au droit
+du meneau / traverse intermédiaire » [1 p. 26].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 26)
+
+## Soudure à plat du meneau 6127
+
+La planche « Soudure à plat » montre le meneau 6127 soudé à plat sur le profilé qui le reçoit,
+les zones à étancher et l'usinage de la traverse avant soudure [1 p. 27].
+
+![Soudure à plat du meneau 6127, zones à étancher, zone soudée et équerres 9714 L+R](/assets/certifications/dtd-6-16-2335/soudure-a-plat-6127.png)
+
+Lecture : en haut à gauche, la coupe du profilé récepteur avec, en noir, les « Zones a étancher » ;
+en haut à droite, la vue de face de l'assemblage. En bas à gauche, la coupe du 6127 avec la légende
+« Zone soudée inertie : X : 8,43 cm4 Y : 5,39 cm4 » et la cote « e = 20 mm » ; au centre la coupe
+de l'assemblage soudé ; à droite l'assemblage en perspective et les équerres **9714 L+R**, avec la
+note : « L'assemblage par soudure est complété par l'ajout des équerres ci dessus dont les plots de
+centrage ont été supprimés » [1 p. 27].
+
+![Usinage de la traverse avant soudure](/assets/certifications/dtd-6-16-2335/usinage-traverse-avant-soudure.png)
+
+Le schéma « Usinage traverse avant soudure » donne le contour à usiner en bout de la traverse
+6127 avant la soudure à plat, en mm ; à droite, la coupe de principe du « surplus de soudure 4 mm »,
+avec le Ø fraise et la longueur de débit [1 p. 27].
+
+| Cote portée | Valeur (mm) |
+| --- | --- |
+| largeur totale, entre parenthèses | 70 |
+| partie gauche | 16,5 |
+| partie droite | 53,5 |
+| hauteurs à gauche | 31,97 ; 27,55 ; 0,5 |
+| hauteurs au centre | 4 ; 4,5 |
+| cotes horizontales au pied | 6 ; 11,5 |
+| hauteurs à droite | 3,73 ; 7,26 ; 11,76 |
+| angle | 85° |
+| surplus de soudure | 4 |
+| cote sous le Ø fraise | 11,76 |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 27)
+
+Les deux cas de soudure à plat (parements intérieurs soudés ou non), l'aspect qualitatif, l'aspect
+matériel et la restriction à la traverse d'ouvrant (**CTR-89**) du classeur e.VOLUTION de 2008 sont sur
+[Directives générales de fabrication du système 70, 2008](/procedures/directives-generales-systeme-70-evo2008.md#soudure-à-plat-registre-510).
+
+## Assemblage dormant et élargisseurs
+
+Un élargisseur se visse sous le dormant pour l'agrandir ; un rehausseur est un élargisseur posé
+sous la traverse basse [1 p. 28].
+
+![Assemblage dormant et élargisseurs](/assets/certifications/dtd-6-16-2335/assemblage-dormant-elargisseurs.png)
+
+Lecture : dormant et deux élargisseurs en coupe. Légendes : « Etanché au mastic sur toute la
+longueur » (en noir, à gauche) ; « Garniture d'étanchéité coextrudée » ; « Vissage tous les 400 mm
+pour le blanc et 300 mm pour la couleur ». À droite : « Les rehausses peuvent être montées
+indiféremment joint côté intérieur ou extérieur » [1 p. 28].
+
+## Assemblage d'élargisseurs et rehausseur avec une pièce d'appui
+
+![Assemblage d'élargisseurs et rehausseur avec une pièce d'appui](/assets/certifications/dtd-6-16-2335/assemblage-elargisseurs-piece-appui.png)
+
+Lecture : pièce d'appui clippée sous un rehausseur, vue en coupe, la partie hachurée figurant les
+embouts. Légendes : « Etanchéité au mastic sur toute la longueur » ; « embout en extrémité
+d'élargisseur latéral (colle PVC) » ; « usinage en extrémité » ; « embout en extrémité de pièce
+d'appui et de réhausseur (colle PVC) » ; loupe « Délignage de la partie avant de la réhausse ». À
+droite, l'usinage en extrémité est coté **64,3** de large sur **10,4** de haut [1 p. 28].
+
+## Assemblage de rehausseur avec un seuil PMR
+
+![Assemblage de rehausseur avec un seuil PMR](/assets/certifications/dtd-6-16-2335/assemblage-rehausseur-seuil-pmr.png)
+
+Lecture : rehausseur vissé sous un seuil, en coupe. Légendes : « bouchon réf. M002 » ;
+« Etanchéité au mastic sur toute la longueur » ; loupe « Délignage de la partie avant de la
+réhausse » ; « embout en extrémité de pièce d'appui et de réhausseur (colle PVC) » [1 p. 28].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 28)
+
+## Assemblage de l'élargisseur 0303
+
+![Assemblage de l'élargisseur 0303, coupes verticale et horizontale](/assets/certifications/dtd-6-16-2335/assemblage-elargisseur-0303.png)
+
+Lecture : à gauche la coupe verticale, l'élargisseur 0303 posé sur l'ouvrant **6115**, légende
+« Assemblage équerre 9714 » ; à droite la coupe horizontale, légendes « Fixation de l'élément
+supérieur » et « Renfort sur 250 mm mini » [1 p. 29].
+
+## Mise en place des bouchons d'élargisseurs
+
+![Mise en place bouchon d'élargisseurs, cas 1 et cas 2 élargisseurs](/assets/certifications/dtd-6-16-2335/bouchons-elargisseurs.png)
+
+1. Usinage en bout de l'élargisseur : **64,3** mm de large sur **10,4** mm de haut.
+2. Cas 1 élargisseur : collage du bouchon à la colle PVC.
+3. Cas 2 élargisseurs, étape n° 1 : collage du bouchon à la colle PVC sur le premier élargisseur.
+4. Cas 2 élargisseurs, étape n° 2 : collage du bouchon à la colle PVC sur le second.
+
+[1 p. 29]
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 29)
+
+## Assemblages seuils
+
+Le seuil aluminium remplace la traverse basse du dormant d'une porte-fenêtre ; il s'assemble aux
+montants par une pièce d'assemblage. Le mode opératoire écrit est au § 2.2.3.1.4 du
+[DTD](/certifications/dtd-6-16-2335.md) ; les pièces par dormant au tableau 4, sur
+[Assemblages du système 70](/profiles/systeme-70-assemblages.md) [1 p. 4, 13, 30].
+
+![Assemblages seuils : seuil 9F67 avec dormant 6100 et embout 9F72, seuil 9F68 avec dormant 6101 et embout 9F71](/assets/certifications/dtd-6-16-2335/assemblage-seuils-9f67-9f68.png)
+
+Lecture : en haut, deux vues éclatées légendées « Seuil 9F67 - dormant 6100 - embout 9F72 » et
+« Seuil 9F68 - dormant 6101 - embout 9F71 », chacune avec la pièce introduite dans la chambre de
+renfort du montant, les pistolets à mastic et l'« Embout M002 » ; en bas, les mêmes seuils avec le
+« Set d'assemblage » vissé, légendes « Vis Ø4x50 », « Vis Ø4x30 », « Vis autoforeuses Ø4x20 »,
+« Patin d'étanchéité », « Seuil 9F67 », « Seuil 9F68 » [1 p. 30].
+
+![Assemblage seuil avec capot](/assets/certifications/dtd-6-16-2335/assemblage-seuil-avec-capot.png)
+
+« Avec capot » : même assemblage sur seuil 9F67 d'un dormant capoté, avec la légende « Etanchéité
+au mastic entre capot et seuil après clippage » [1 p. 30].
+
+![Assemblage seuil avec dormant large, pièces 9F08, 9F71 et M325](/assets/certifications/dtd-6-16-2335/assemblage-seuil-dormant-large.png)
+
+« Avec dormant large » : le dormant large sur le seuil avec la pièce **9F08** sous son aile, le set
+**9F71** et la pièce **M325** [1 p. 30].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 30)
+
+## Assemblage seuils partie fixe
+
+Sur une partie fixe équipée du seuil 9F67 ou Z043, le vitrage se prend soit dans une traverse PVC
+rapportée sur le seuil, soit dans une contre-feuillure reconstituée par la parclose extérieure
+A271 sur le support de cale A272 [1 p. 4, 31].
+
+![Assemblage seuil partie fixe avec traverse rapportée 6101, jonc 1248 et équerre 9714](/assets/certifications/dtd-6-16-2335/seuil-partie-fixe-traverse-rapportee.png)
+
+« Avec traverse rapportée » : le dormant **6101** monté sur le seuil, le profilé **1248** logé
+entre les deux, la traverse fixée par l'« Equerre de fixation 9714 » ; une flèche d'angle de 15°
+est portée entre la traverse et le montant ; à droite, « Etancheité avant montage équerre »
+(hachures) [1 p. 31].
+
+![Assemblage seuil partie fixe avec reconstitution de la contre-feuillure, A271 et A272](/assets/certifications/dtd-6-16-2335/seuil-partie-fixe-contre-feuillure.png)
+
+« Avec reconstitution de la contre feuillure » : le vitrage pris entre la parclose **A271** et le
+seuil, sur le support **A272 (entraxe maxi = 800 mm)**, avec la légende « Callage suivant NF DTU
+39 » [1 p. 31].
+
+## Assemblage fourrure et pièce d'appui
+
+![Assemblage fourrure et pièce d'appui, patin M298 ou M613](/assets/certifications/dtd-6-16-2335/assemblage-fourrure-piece-appui.png)
+
+La fourrure (tapée) et la pièce d'appui se vissent sous le dormant, le patin **M298 ou M613**
+écrasé entre elles, avec un embout en about de la pièce d'appui [1 p. 4, 31].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 31)
+
+## Capotage aluminium
+
+Le capotage est l'habillage aluminium clippé sur la face extérieure des profilés PVC ; les
+prescriptions écrites sont au § 2.2.3.5 du [DTD](/certifications/dtd-6-16-2335.md) [1 p. 6, 32].
+
+![Capotage : assemblage, joint à la pompe, meneau / traverse, montage rénovation capot complet](/assets/certifications/dtd-6-16-2335/capotage-assemblage-renovation-meneau.png)
+
+Lecture : « Assemblage » (capot clippé sur le dormant, coupe), « Joint à la pompe » (joint injecté
+à l'angle du capot sur le dormant) ; au milieu, un cadre à capots en coupe droite et un cadre à
+capots d'onglet ; à droite « Meneau/traverse » avec « Joint à la pompe », deux montages dessinés
+et reliés par « ou » ; en bas « Montage rénovation - capot complet », légendes « Etanchéité aux
+extrémités » et « Joint à la pompe sur montants et traverses » [1 p. 32].
+
+![Capotage : demi-capot en traverse basse, bouchons G250](/assets/certifications/dtd-6-16-2335/capotage-demi-capot-traverse-basse.png)
+
+« Demi-capot en traverse basse » : légendes « Etanchéité aux extrémités », « Etanchéité aux
+extrémités et bouchons G250 », « G250 », « Joint à la pompe » [1 p. 32].
+
+![Usinage des capots, angles de 105° et rayon R1](/assets/certifications/dtd-6-16-2335/usinage-capots.png)
+
+« Usinage capots » : grugeage en bout du capot, cotes **R1**, **105°** et **17,5** mm, sur deux
+profils de capot [1 p. 32].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 32)
+
+## Drainage avec capot complet sur dormant rénovation
+
+![Drainage du capot complet sur dormant rénovation, busette M450 et manchon G008](/assets/certifications/dtd-6-16-2335/drainage-capot-complet-renovation.png)
+
+1. Perçage du capot et du dormant, à 90°, Ø 13,8 mm, aux cotes X et Y (non chiffrées sur la
+   planche).
+2. Introduire mastic entre capot et dormant.
+3. Introduire tube puis busette.
+
+La busette **M450** est cotée Ø 15,5 et Ø 10 mm, longueurs 7,5 et 14 mm ; le manchon **G008**
+Ø 14 mm [1 p. 33]. La clause écrite (surplus de mastic à enlever avant la mise en place du G008)
+est au § 2.2.3.5.1 du [DTD](/certifications/dtd-6-16-2335.md) [1 p. 6].
+
+## Demi-capot A474 en traverse basse
+
+![Mise en place du demi-capot A474 avec clip M569, gabarit T127, entraxes 150 et max. 400 mm](/assets/certifications/dtd-6-16-2335/demi-capot-a474-clip-m569.png)
+
+« Mise en place du capot A474 avec clip M569 », au moyen du « Gabarit de perçage T127 » : les clips
+sont vissés sur la traverse basse à **150 mm** de chaque extrémité puis à **max. 400 mm** d'entraxe.
+Coupes : « Joint a la pompe sur traverse basse », « Vis inox » (clip vissé), et, avec une pièce
+d'appui, « Vis inox » et « G250 » [1 p. 33].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 33)
+
+## Assemblage tapées / fourrures avec capotage
+
+Sur un dormant capoté, les tapées aluminium A469 à A473 et les appuis aluminium se vissent sur le
+dormant ; la clause écrite (entraxe maximum de 300 mm, M646, M643, G250, A476 avec A471 à A473) est
+au § 2.2.3.5.4 du [DTD](/certifications/dtd-6-16-2335.md) [1 p. 6, 34].
+
+![Assemblage tapées / fourrures, capotage : A469 à A473, A491, A476, A477 en rénovation](/assets/certifications/dtd-6-16-2335/tapees-appuis-alu-capotage.png)
+
+Lecture, de haut en bas : les cinq tapées **A473, A472, A471, A470, A469** superposées avec
+l'embout **M646** et la légende « Etancheité » ; l'appui **A491** avec « vis inox », « G250 »,
+« Etancheite de fil » et l'orifice « 5X25 OU Ø8 » ; l'appui **A476** avec les mêmes légendes ;
+l'appui **A477** en « Montage rénovation » [1 p. 34].
+
+![Entrée d'air avec capotage](/assets/certifications/dtd-6-16-2335/entree-air-avec-capotage.png)
+
+« Entrée d'air avec capotage » : coupe d'une traverse capotée traversée par une entrée d'air, les
+cordons de mastic en noir ; le § 2.2.3.5.1 prescrit un cordon de mastic entre le profilé PVC et le
+capotage aluminium dans le cas des entrées d'air [1 p. 6, 34].
+
+![Montage appui A477 avec capot complet, pour montage rénovation](/assets/certifications/dtd-6-16-2335/appui-a477-capot-complet-renovation.png)
+
+« Montage appui A477 avec capot complet (pour montage rénovation) » : l'appui A477 sous un dormant à
+capot complet, en coupe [1 p. 34].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 34)
+
+## Montage tapées, appui alu, demi-capot en traverse basse
+
+Deux planches de vues éclatées montrent le montage des tapées aluminium et de l'appui aluminium
+sous un dormant capoté d'un demi-capot en traverse basse [1 p. 35-36].
+
+![Montage tapées, appui alu, demi-capot en traverse basse, planche 1](/assets/certifications/dtd-6-16-2335/montage-tapees-appui-alu-demi-capot-1.png)
+
+Planche 1 : vue d'ensemble de la fenêtre ; angle bas avec loupe « Etanchéité » cotée **31** mm ;
+mousse **G250** ; tapée cotée **30,5** mm ; embout **M646** vissé ; embouts d'appui et pièce d'appui
+vissée [1 p. 35].
+
+![Montage tapées, appui alu, demi-capot en traverse basse, planche 2](/assets/certifications/dtd-6-16-2335/montage-tapees-appui-alu-demi-capot-2.png)
+
+Planche 2 : coupe de l'appui sous le dormant ; « M643 recoupé et étanché avant montage » (cote X
+non chiffrée) ; vue en plan avec « 1vis tous les 300 mm », « Etanchéité de fil » (deux fois),
+« G250 sous tapée » et l'orifice oblong à **20-200** mm de l'extrémité [1 p. 36].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 35 et 36)
+
+## Tapée sur seuil PMR
+
+![Tapée sur seuil PMR, première variante, cordon de mastic](/assets/certifications/dtd-6-16-2335/tapee-sur-seuil-pmr-1.png)
+
+![Tapée sur seuil PMR, seconde variante, tapée A470, patin M298, dormant 6104, seuil Z043](/assets/certifications/dtd-6-16-2335/tapee-sur-seuil-pmr-2-a470-6104-z043.png)
+
+La planche « Tapée sur seuil PMR » montre deux montages, chacun en élévation, en coupe A et en
+perspective : le premier avec la légende « Cordon de mastic » et une pièce marquée « M646-R » ; le second avec la
+tapée **A470**, le patin **M298**, le dormant **6104** et le seuil **Z043** [1 p. 37].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 37)
+
+## Drainages et décompressions
+
+Le drainage évacue l'eau entrée en feuillure ; la décompression (équilibrage de pression) ouvre
+la chambre en partie haute. Les prescriptions écrites sont aux § 2.2.3.1.2 et 2.2.3.2.3 du
+[DTD](/certifications/dtd-6-16-2335.md) [1 p. 4-5, 38].
+
+![Drainages du châssis sans capotage, quatre variantes de décompression](/assets/certifications/dtd-6-16-2335/drainages-chassis-nu.png)
+
+Lecture : à gauche, coupe verticale d'une fenêtre avec « DECOMPRESSION VARIANTE 1 » à « VARIANTE
+4 », « DRAINAGE DE FACE » et « DRAINAGE PAR LE BAS » ; au centre, l'élargisseur **0303** sur
+l'ouvrant **6112C** ; à droite, une fenêtre à meneau **6127**, ouvrants **6121**, traverse **2425**
+et dormant **6104**. Notes : « Décompression réalisée soit par un perçage diamètre 6 mm soit par la
+suppression du joint en traverse haute sur une largeur de 100 mm » ; « Les drainages sont réalisés
+soit par un perçage diamètre 8 mm soit par un trou oblong de 5 X 25 mm » [1 p. 38].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 38)
+
+![Drainages avec capotage, variante rénovation capot complet](/assets/certifications/dtd-6-16-2335/drainages-avec-capotage.png)
+
+« DRAINAGES avec Capotage » : « Décompression réalisée soit par un perçage diamètre 6 mm soit par
+la suppression du joint en traverse haute sur une largeur de 300 mm » ; « Les drainages sont
+réalisés soit par un perçage diamètre 8 mm soit par un trou oblong de 5 X 25 mm » ; « Variante
+rénovation capot complet » : « orifice diamètre 8 mm (passage busette) ». La largeur de suppression
+du joint est de 100 mm sans capotage et de 300 mm avec capotage, comme au § 2.2.3.5.1. Un
+caractère « & » isolé est imprimé en bas à gauche de la planche [1 p. 6, 39].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 39)
+
+## Masses centrales
+
+La masse centrale est la largeur vue au centre d'une fenêtre à deux vantaux : les deux ouvrants
+et le battement ou le meneau qui les sépare. Une ligne par combinaison dessinée ; cotes en mm,
+portées au-dessus de chaque coupe [1 p. 40].
+
+| Combinaison dessinée | Masse centrale (mm) | Cote partielle de gauche (mm) | Cote du profilé central (mm) |
+| --- | --- | --- | --- |
+| 6122 + battement 6132 + 6121, battement intérieur 6131 | 118 | 39 | 40 |
+| 6124 + battement 6132 + 6123, battement intérieur 6131 | 166 | 63 | 40 |
+| 6115 + battement 0140 + 6115 | 200 | 69 | 62 |
+| 6121 + meneau 2425 + 6121 | 180 | 45 | 90 |
+| 6112C + meneau 6127 + 6112C | 170 | 45 | 80 |
+| 6121 + meneau 2427 + 6121 | 205 | 45 | 115 |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 40)
+
+![Masses centrales à battement et à meneau 2425](/assets/certifications/dtd-6-16-2335/masses-centrales-1.png)
+
+![Masses centrales à meneau 6127 et 2427](/assets/certifications/dtd-6-16-2335/masses-centrales-2.png)
+
+## Coupes horizontales et verticales
+
+![Coupe des dormants larges 6108 à 6158 avec l'ouvrant 6112C](/assets/certifications/dtd-6-16-2335/coupes-dormants-larges-6158-6112c.png)
+
+Dormants larges superposés sur une même coupe, cotes verticales de l'aile au pied : **6158** 200,
+**6111** 155, **6110** 135, **6109** 115, **6108** 95 mm ; au pied, **56** (dormant), **53**
+(ouvrant **6112C**) et **20** mm [1 p. 41]. Ces cotes sont celles du tableau des dormants larges
+du DTD (**CTR-20**).
+
+![Coupe de l'ouvrant 6112C sur le dormant de rénovation 6106](/assets/certifications/dtd-6-16-2335/coupe-6106-6112c.png)
+
+Dormant **6106** et ouvrant **6112C** : cotes **100** et **55** en haut, **40** (aile), **67**, **53**
+(indice du 6112C) et **20** mm au pied [1 p. 41].
+
+![Coupes du dormant 6101 avec l'ouvrant 6112C et la parclose 76515](/assets/certifications/dtd-6-16-2335/coupes-6101-6112c-76515.png)
+
+À gauche, dormant **6101**, ouvrant **6112C** et parclose **76515** avec un vitrage de **42** mm ; à
+droite, la coupe cotée du 6101 et du 6112C [1 p. 41] :
+
+| Cote portée sur la coupe 6101 / 6112C | Valeur (mm) |
+| --- | --- |
+| hauteur totale | 109 |
+| hauteur du dormant | 64 |
+| décomposition droite, de haut en bas | 20 ; 53 ; 36 |
+| cotes intermédiaires à droite | 12 ; 8 |
+| cotes horizontales | 3,5 (en haut) ; 13 ; 3,5 ; 19,5 |
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 41)
+
+## Coupes avec capotage
+
+![Coupes avec capotage : battement A176, dormants 6101 et 6155, seuil avec appui A475](/assets/certifications/dtd-6-16-2335/coupes-avec-capotage.png)
+
+Quatre coupes de profilés capotés, capots légendés [1 p. 42] :
+
+| Coupe | Profilés PVC | Capots et pièces aluminium légendés |
+| --- | --- | --- |
+| battement de fenêtre 2 vantaux | ouvrants 6113 et 6112C, battement intérieur 6129 | A170 (deux), battement A176 |
+| dormant standard | dormant 6101, ouvrant 6112C | A107 (dormant), A170 (ouvrant) |
+| dormant de rénovation | dormant 6155, ouvrant 6112C | A109 (dormant), A170 (ouvrant) |
+| traverse basse sur appui | ouvrant, appui A475 | A170, demi-capot A474, G250 |
+
+Le capot légendé sur le dormant **6101** de cette coupe est l'**A107**, alors que la planche des
+dormants du DTD (p. 14) dessine l'A108 à côté du même 6101 (**CTR-37**, **INC-85**) [1 p. 14, 42].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 42)
+
+## Oscillo-coulissant
+
+![Oscillo-coulissant : dormant 2502, ouvrants 6115, meneau 2425, profilé 2428, cornière alu 20 × 20 × 2](/assets/certifications/dtd-6-16-2335/oscillo-coulissant.png)
+
+Coupe verticale et coupe horizontale d'un oscillo-coulissant : dormant **2502**, ouvrants
+**6115**, meneau **2425**, profilé **2428** en pied, et la « Cornière alu 20 X 20 X 2 » vissée en
+traverse basse du dormant. La quincaillerie PSK200 Portal de Siegenia est celle du § 2.2.3.6 ; le
+seuil aluminium est exclu sur l'oscillo-coulissant (§ 2.2.3.1.4) [1 p. 4, 6, 43].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 43)
+
+## Coupes avec seuil
+
+![Coupes avec seuil 9F68 et 9F67, rejets d'eau 93051 et A465](/assets/certifications/dtd-6-16-2335/coupes-avec-seuil-9f68-9f67.png)
+
+Trois coupes cotées, en mm : « Seuil 9F68 » (largeur 70, hauteur 36, cote 8) ; « Seuil 9F67 » avec
+l'ouvrant **6115** et le « Rejet d'eau 93051 » (70, 20, 8) ; « Seuil 9F67 » avec l'ouvrant
+**6123** et le « Rejet d'eau A465 » (70, 20, 8). Note : « Trous de drainage à 50 mm de chaque
+extrémité (5X25) », sur le rejet d'eau [1 p. 44].
+
+![Coupes avec seuil, rejets d'eau A465, A466 et JA701-02, joint brosse G256](/assets/certifications/dtd-6-16-2335/coupes-avec-seuil-rejets-deau.png)
+
+Coupes des rejets d'eau sur seuil : « Rejet d'eau A465 » avec **G256** (deux coupes), « Rejet
+d'eau A466 » avec **G256**, « Rejet d'eau JA701-02 » avec son joint brosse [1 p. 44]. Le § 2.3
+rend le rejet d'eau obligatoire en traverse basse des ouvrants des fenêtres équipées du seuil [1 p. 7].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 44)
+
+## Décompression, drainage et ventilation des couleurs sombres
+
+Pour les profilés filmés ou laqués dont la clarté L* est inférieure à 82 ou non définie, les
+chambres sont mises en communication avec l'extérieur par des orifices de Ø 5 mm minimum selon ces
+schémas (§ 2.2.3) [1 p. 4, 45-46].
+
+La légende est la même sur les deux planches : trait noir « DECOMPRESSION : TROU OBLONG 5 X 25 OU
+TROU DIAM 6 » ; trait noir « DRAINAGE : TROU OBLONG 5 X 25 OU TROU DIAM 8 » ; trait gris
+« VENTILATION COULEUR SOMBRE Ø 5 MINI ». Une ligne par groupe de profilés, dans l'ordre des
+planches [1 p. 45-46].
+
+| Profilés concernés | Emplacements dessinés |
+| --- | --- |
+| dormants 6100, 6101, 6104, 2502 | traverse haute : décompression ; « si décompression par retrait de joint » : ventilation ; traverse basse : drainage et ventilation |
+| dormants 6102, 6105, 6106, 6107, 6159 | traverse haute : décompression ; « si décompression par retrait de joint » : ventilation ; traverse basse : drainage |
+| dormants larges 6108, 6109, 6110, 6111, 6158 | traverse haute : décompression et deux perçages dans l'aile ; « si décompression par retrait de joint » : ventilation (trois perçages dans l'aile et un en feuillure) ; traverse basse : drainage et deux ventilations dans l'aile |
+| ouvrants 2416, 6112C, 6115, 6121, 6123, 6117, 6119, 6150, 6152 | traverse haute : décompression ; traverse basse : drainage |
+| montants 6127, 2425, 2427, 6157 | « Autre possibilité d'aération du montant par perçage des contre feuillures des traverses hautes et basses » (trois trous) ; traverse basse : deux drainages |
+| appuis | une ventilation et une ventilation oblique |
+| traverse basse 0303 | décompression et drainage |
+| traverse 6127, 6126, 6157, 2425, 2427 | drainage (deux) et décompression |
+
+« Ventilation couleur sombre : Au minimum un trou oblong par cadre. Ce trou oblong devra ouvrir les
+chambres exposées » [1 p. 45].
+
+![Couleurs sombres, dormants](/assets/certifications/dtd-6-16-2335/couleur-sombre-dormants.png)
+
+![Couleurs sombres, ouvrants, montants, appuis, traverses](/assets/certifications/dtd-6-16-2335/couleur-sombre-ouvrants-meneaux-appuis.png)
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 45 et 46)
+
+# Plans de mise en œuvre
+
+Sept plans de pose clôturent l'annexe du DTD. Ce sont des coupes (verticale, et horizontale ou
+coupe A-A) de la fenêtre dans le mur, sans cote sauf mention ; le béton est dessiné pointillé
+avec des triangles, l'isolant en alvéoles hexagonales, les briques à alvéoles en blocs creux. Les
+fenêtres doivent être mises en œuvre conformément au NF DTU 36.5 (§ 2.4 du
+[DTD](/certifications/dtd-6-16-2335.md)) [1 p. 7, 47-53].
+
+## Mise en œuvre en applique intérieure sur monomur
+
+![Mise en œuvre en applique intérieure sur monomur, dormants larges 6109 et 6111](/assets/certifications/dtd-6-16-2335/pose-applique-interieure-monomur.png)
+
+Le dormant large **6109** (en haut) et le dormant large **6111** (en bas, sur l'appui béton) posés
+contre la face intérieure d'un mur monomur, avec l'isolant côté intérieur [1 p. 47].
+
+## Pose seuil PMR
+
+![Pose seuil PMR, ouvrant 6115, caillebotis, embout M325, patte de fixation, sol fini](/assets/certifications/dtd-6-16-2335/pose-seuil-pmr.png)
+
+Porte-fenêtre à ouvrants **6115** sur seuil, légendes « Etancheite », « Caillebotis », « Embout
+M325 », « Patte de fixation », « Sol fini » [1 p. 48].
+
+## Pose côté extérieur, calfeutrement en tunnel et fixation en tableau
+
+![Pose côté extérieur, calfeutrement en tunnel et fixation en tableau, planche 1](/assets/certifications/dtd-6-16-2335/pose-cote-exterieur-tunnel-tableau-1.png)
+
+Coupe verticale et « Coupe A-A » d'une fenêtre posée côté extérieur d'un mur en briques à
+alvéoles avec isolant extérieur [1 p. 49].
+
+![Pose côté extérieur, calfeutrement en tunnel et fixation en tableau, planche 2](/assets/certifications/dtd-6-16-2335/pose-cote-exterieur-tunnel-tableau-2.png)
+
+Même titre, second plan : coupe verticale et « Coupe A-A » d'une fenêtre posée côté extérieur
+d'un mur béton avec isolant extérieur [1 p. 53].
+
+## Pose en applique extérieure sur monomur
+
+![Pose en applique extérieure sur monomur](/assets/certifications/dtd-6-16-2335/pose-applique-exterieure-monomur.png)
+
+Coupe verticale, coupe horizontale et « Coupe A-A » d'une fenêtre en applique extérieure sur un
+mur monomur. Le titre est imprimé « P0SE » avec un zéro [1 p. 50].
+
+## Mise en œuvre en applique intérieure avec doublage de 180 mm, rejingot déporté avec capotage
+
+![Mise en œuvre en applique intérieure avec doublage de 180 mm, rejingot déporté avec capotage](/assets/certifications/dtd-6-16-2335/pose-applique-interieure-doublage-180.png)
+
+Fenêtre capotée en applique intérieure sur un doublage coté **180 mm** [1 p. 51].
+
+## Mise en œuvre en tableau sans ébrasement ni feuillure dans le mur
+
+![Mise en œuvre située en tableau sans ébrasement ni feuillure dans le mur, calfeutrée en tunnel et fixée en tableau](/assets/certifications/dtd-6-16-2335/pose-tableau-sans-ebrasement.png)
+
+« Mise en oeuvre située en tableau sans ébrasement ni feuillure dans le mur, calfeutrée en tunnel
+et fixée en tableau » : coupe verticale et « Coupe A-A », le dormant vissé dans le béton en
+tableau, haut et bas [1 p. 52].
+
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 47 à 53)
+
+# Citations
+
+[1] [DTD n° DBV-24-6/16-2335_V5, système TROCAL e.XCLUSIVE, KBE e.MOTION, KÖMMERLING e.VOLUTION](raw/dtd-6-16-2335-v5-e-volution.pdf)
+
+# Voir aussi
+
+- [DTD n° DBV-24-6/16-2335_V5](/certifications/dtd-6-16-2335.md)
+- [Assemblages du système 70](/profiles/systeme-70-assemblages.md)
+- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
+- [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md)
+- [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md)
+- [Fiche source du DTD](/sources/dtd-6-16-2335.md)
+
+===== PAGE 2 : /procedures/mise-en-oeuvre-seuil-systeme-70.md =====
+# Ce que fait cette procédure
+
+Le seuil est le profilé aluminium qui remplace la traverse basse du dormant d'une
+porte-fenêtre ; il est dit à rupture de pont thermique parce que ses faces intérieure et
+extérieure sont séparées par une barrette isolante. Le dormant est le cadre fixe scellé dans
+la maçonnerie ; ses deux montants verticaux viennent se poser sur le seuil. Le registre 2.4.5 du
+système 70 Plateforme de [profine](/fournisseurs/profine.md) (KÖMMERLING e.VOLUTION, KBE
+e.MOTION, TROCAL e.XCLUSIVE) décrit quatre seuils — 9F67, 9F68, 9F69 et Z043 — et deux façons
+de les monter [1 p. 254-269] :
+
+- variante 1, coupe droite à 90° sur dormant : le seuil est coupé droit et reçoit à chaque
+  bout un embout (pièce plastique qui ferme l'extrémité du seuil et reçoit le vissage du
+  montant) ; seuils 9F67 et 9F68 ;
+- variante 2, coupe à 90° sur dormant grugé : le pied du montant est grugé (fraisé au
+  contour du seuil, pour venir le chevaucher) et assemblé par un set d'assemblage mécanique
+  (9F71, 9F72 ou J077) introduit dans sa chambre de renfort ; seuils 9F67, 9F68, 9F69 et Z043.
+
+Le registre traite aussi le drainage des seuils, le rejet d'eau A465 (profilé aluminium clippé
+en bas de l'ouvrant qui renvoie l'eau vers l'extérieur) et les élargisseurs posés sous le seuil.
+Les termes du métier sont dans le [glossaire](/reference/glossaire.md).
+
+Les coupes cotées des quatre seuils sont sur
+[Assemblages du système 70](/profiles/systeme-70-assemblages.md#seuils-aluminium), avec la table
+du DTD des pièces admises par dormant et les schémas d'assemblage du DTD sur
+[Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md#assemblages-seuils) ;
+les cotes des accessoires A465, A466, A271 sur
+[Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md). La porte-fenêtre
+avec fixe latéral sur seuil filant est dans
+[Porte-fenêtre avec fixe latéral du système 70](/procedures/porte-fenetre-fixe-lateral-systeme-70.md).
+
+# Conditions et interdictions
+
+- Les drainages permettent d'assurer une évacuation correcte de la feuillure. **Ne jamais les
+  obturer avec des cales de vitrage (fixe).** [1 p. 257]
+- **En ouverture extérieure, aucun drainage ne doit être réalisé sur les seuils.** [1 p. 257]
+- Si le dormant n'est pas renforcé, prévoir un renfort L = 100 mm en pied de dormant, fixé par
+  deux vis autoforeuses (3,9 × 13) [1 p. 258-259].
+- Pour le battement 0140, il faut usiner le rejet d'eau pour permettre le passage de l'embout
+  [1 p. 268].
+
+# Profilés et accessoires nécessaires
+
+Liste du registre 2.4.5, une ligne par pièce ; la colonne « Pour » dit à quels seuils ou dormants
+la pièce est destinée [1 p. 254].
+
+| Famille | Référence | Désignation | Pour |
+| --- | --- | --- | --- |
+| seuil | 9F67 | seuil | - |
+| seuil | 9F68 | seuil | - |
+| seuil | 9F69 | seuil | - |
+| seuil | Z043 | seuil | - |
+| set d'assemblage mécanique pour seuil filant 9F67, 9F68, 9F69, Z043 | 9F71 | set d'assemblage | dormants 6101, 6104, 6108, 6109, 6110, 6111, 6158 |
+| set d'assemblage mécanique pour seuil filant 9F67, 9F68, 9F69, Z043 | 9F72 | set d'assemblage | dormants 6100, 6102, 6105, 6106, 6107, 6155, 6156 |
+| set d'assemblage mécanique pour seuil filant 9F67, 9F68, 9F69, Z043 | J077 | set d'assemblage | dormant 2502 |
+| embout pour seuil 9F67, montage entre dormants | 9F57 | embout | dormants 6100, 6102 |
+| embout pour seuil 9F67, montage entre dormants | 9F58 | embout | dormants 6105, 6155 |
+| embout pour seuil 9F67, montage entre dormants | 9F59 | embout | dormant 6106 |
+| embout pour seuil 9F67, montage entre dormants | 9F60 | embout | dormant 6107 |
+| embout pour seuil 9F67, montage entre dormants | J087 | embout | dormant 6156 |
+| embout pour seuil 9F67, montage entre dormants | 9F65 | embout | dormants 6101, 6104, 6108, 6109, 6110, 6111 |
+| embout pour seuil 9F68, montage entre dormants | 9F61 | embout | dormants 6100, 6102 |
+| embout pour seuil 9F68, montage entre dormants | 9F62 | embout | dormants 6105, 6155 |
+| embout pour seuil 9F68, montage entre dormants | 9F63 | embout | dormant 6106 |
+| embout pour seuil 9F68, montage entre dormants | 9F64 | embout | dormant 6107 |
+| embout pour seuil 9F68, montage entre dormants | J088 | embout | dormant 6156 |
+| embout pour seuil 9F68, montage entre dormants | 9F66 | embout | dormants 6101, 6104, 6108, 6109, 6110, 6111 |
+| accessoire | 9F78 | insert | 6105, 6107 |
+| accessoire | M002 | embout d'étanchéité | 9F67, 9F69, Z043 |
+| accessoire | A465 | rejet d'eau aluminium | - |
+| accessoire | M626, M628, M629 | embouts | A465 |
+| accessoire | G256 | joint | A465 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 254)
+
+La planche des seuils dessine les quatre seuils cotés et douze accessoires, chacun avec sa
+désignation ; la ligne « Valeurs » de ses tableaux est vide [1 p. 255]. Les cotes des seuils sont
+celles de [Assemblages du système 70](/profiles/systeme-70-assemblages.md#seuils-aluminium) (9F67 :
+70 × 20 mm, 9F68 : 70 × 36 mm, 9F69 : 125,5 mm de large, Z043 : 125 mm de large, partie arrière de
+16 mm pour les quatre), et les coupes des rejets d'eau A465 (30,5 × 11,3 mm), A466 (36,1 × 11,3 mm)
+et de la réhausse A271 (14,5 × 19,5 mm) sont sur
+[Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md).
+
+| Accessoire | Désignation |
+| --- | --- |
+| A465 | Rejet d'eau |
+| A466 | Rejet d'eau AluClip |
+| A271 | Réhausse de feuillure |
+| A272 | Verrou de réhausseur |
+| M626 | Set embout de rejet d'eau |
+| M628 | Set embout de rejet d'eau médiant ouvrant de service à gauche |
+| M629 | Set embout de rejet d'eau médiant ouvrant de service à droite |
+| M002 | Obturateurs latéraux pour seuil |
+| 9C32 | Joint pour 9F68 |
+| G256 | Joint pour A465, A466 |
+| 93051 | Rejet d'eau pvc |
+| M329 | Embout G/D 93051 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 255)
+
+Ouvrant de service : le vantail qui s'ouvre en premier sur une fenêtre à deux vantaux ; le
+rejet d'eau médiant est celui posé au milieu, au droit du battement.
+
+# Variante 1 : montage coupe 90° sur dormant, débit des seuils 9F67 et 9F68
+
+Le seuil 9F67 ou 9F68 est coupé droit et fermé à chaque bout par l'embout du dormant. La table
+donne, pour chaque dormant, l'embout à employer sur chacun des deux seuils, la **largeur de débit
+du seuil et la hauteur de débit du montant du dormant**, toutes deux exprimées à partir de la
+DHT (dimension hors tout de la menuiserie, en mm) [1 p. 256].
+
+| Dormant | Embout pour 9F67 | Embout pour 9F68 | Débit seuil, largeur (mm) | Débit montant dormant, hauteur (mm) | Embout 9F67 | Embout 9F68 |
+| --- | --- | --- | --- | --- | ---: | ---: |
+| 6101 | 9F65 | 9F66 | DHT − 148 | DHT − 6,5 | ![Embout 9F65](/assets/procedures/moe-systeme-70/seuil/set-9f65.png) | ![Embout 9F66](/assets/procedures/moe-systeme-70/seuil/set-9f66.png) |
+| 2502 | 9F65 | 9F66 | DHT − 190 | DHT − 6,5 | ![Embout 9F65](/assets/procedures/moe-systeme-70/seuil/set-9f65.png) | ![Embout 9F66](/assets/procedures/moe-systeme-70/seuil/set-9f66.png) |
+| 6104 | 9F65 | 9F66 | DHT − 148 | DHT + 13,5 | ![Embout 9F65](/assets/procedures/moe-systeme-70/seuil/set-9f65.png) | ![Embout 9F66](/assets/procedures/moe-systeme-70/seuil/set-9f66.png) |
+| 6108 | 9F65 | 9F66 | DHT − 148 | DHT + 13,5 | ![Embout 9F65](/assets/procedures/moe-systeme-70/seuil/set-9f65.png) | ![Embout 9F66](/assets/procedures/moe-systeme-70/seuil/set-9f66.png) |
+| 6109 | 9F65 | 9F66 | DHT − 148 | DHT + 13,5 | ![Embout 9F65](/assets/procedures/moe-systeme-70/seuil/set-9f65.png) | ![Embout 9F66](/assets/procedures/moe-systeme-70/seuil/set-9f66.png) |
+| 6110 | 9F65 | 9F66 | DHT − 148 | DHT + 13,5 | ![Embout 9F65](/assets/procedures/moe-systeme-70/seuil/set-9f65.png) | ![Embout 9F66](/assets/procedures/moe-systeme-70/seuil/set-9f66.png) |
+| 6111 | 9F65 | 9F66 | DHT − 148 | DHT + 13,5 | ![Embout 9F65](/assets/procedures/moe-systeme-70/seuil/set-9f65.png) | ![Embout 9F66](/assets/procedures/moe-systeme-70/seuil/set-9f66.png) |
+| 6158 | 9F65 | 9F66 | DHT − 148 | DHT + 13,5 | ![Embout 9F65](/assets/procedures/moe-systeme-70/seuil/set-9f65.png) | ![Embout 9F66](/assets/procedures/moe-systeme-70/seuil/set-9f66.png) |
+| 6100 | 9F57 | 9F61 | DHT − 114 | DHT − 6,5 | ![Embout 9F57](/assets/procedures/moe-systeme-70/seuil/set-9f57.png) | ![Embout 9F61](/assets/procedures/moe-systeme-70/seuil/set-9f61.png) |
+| 6102 | 9F57 | 9F61 | DHT − 114 | DHT + 23,5 | ![Embout 9F57](/assets/procedures/moe-systeme-70/seuil/set-9f57.png) | ![Embout 9F61](/assets/procedures/moe-systeme-70/seuil/set-9f61.png) |
+| 6105 | 9F58 | 9F62 | DHT − 114 | DHT + 33,5 | ![Embout 9F58](/assets/procedures/moe-systeme-70/seuil/set-9f58.png) | ![Embout 9F62](/assets/procedures/moe-systeme-70/seuil/set-9f62.png) |
+| 6155 | 9F58 | 9F62 | DHT − 114 | DHT + 33,5 | ![Embout 9F58](/assets/procedures/moe-systeme-70/seuil/set-9f58.png) | ![Embout 9F62](/assets/procedures/moe-systeme-70/seuil/set-9f62.png) |
+| 6106 | 9F59 | 9F63 | DHT − 130 | DHT + 33,5 | ![Embout 9F59](/assets/procedures/moe-systeme-70/seuil/set-9f59.png) | ![Embout 9F63](/assets/procedures/moe-systeme-70/seuil/set-9f63.png) |
+| 6107 | 9F60 | 9F64 | DHT − 114 | DHT + 53,5 | ![Embout 9F60](/assets/procedures/moe-systeme-70/seuil/set-9f60.png) | ![Embout 9F64](/assets/procedures/moe-systeme-70/seuil/set-9f64.png) |
+| 6156 | J087 | J088 | DHT − 114 | DHT + 63,5 | ![Embout J087](/assets/procedures/moe-systeme-70/seuil/set-j087.png) | ![Embout J088](/assets/procedures/moe-systeme-70/seuil/set-j088.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 256)
+
+Les colonnes d'embout de la table portent l'en-tête « Set d'assemblage pour 9F67 / 9F68 » ; la liste
+de la p. 254 nomme ces mêmes références « embouts ». Chaque dessin montre l'embout en perspective,
+avec le cache-vis oblong à gauche.
+
+## Drainage des seuils alu 9F67, 9F68, 9F69, Z043
+
+Trou oblong de 5 × 25 mm ou trou Ø 8 mm à environ 100 mm de l'angle inférieur, puis un oblong ou
+trou supplémentaire pour un entraxe maxi de 600 mm. Répartition selon présence battement central
+et meneau. Règle identique pour le seuil 9F68. Un drainage supplémentaire sur la paroi
+extérieure, décalé de 50 mm par rapport au drainage intérieur. En ouverture extérieure, aucun
+drainage ne doit être réalisé sur les seuils [1 p. 257].
+
+![Seuil aluminium vu en perspective avec ses trous oblongs de drainage](/assets/procedures/moe-systeme-70/seuil/drainage-seuil-trous-oblongs.png)
+
+Le seuil est vu en perspective, face supérieure : trois trous oblongs répartis sur la longueur. Le
+titre de la page écrit « 9F67, 9F68, 9F68, Z043 » (entrée **INC-165**).
+
+À noter : les trous oblongs peuvent être réalisés par poinçonnage. Cet outillage est proposé par
+la société Mécan'Outil [1 p. 257].
+
+![Poinçonneuse de trous oblongs pour seuils, image de synthèse](/assets/procedures/moe-systeme-70/seuil/outil-poinconnage-mecan-outil.png)
+
+L'image de synthèse montre la poinçonneuse sur son socle, un seuil engagé dans la matrice.
+
+## Directives de mise en œuvre du seuil 9F67 coupe droite 90°, variante 1
+
+Les étapes suivantes sont à observer [1 p. 258] :
+
+1. Débiter le seuil 1.
+2. Perçage / poinçonnage des drainages. Si dormant non renforcé, prévoir renfort L = 100 mm en pied
+   de dormant, fixé par deux vis autoforeuses (3,9 × 13).
+3. Fixer les embouts 3 avec deux vis 4 (4 × 50). Au préalable, faire une étanchéité au
+   mastic entre ces 2 pièces.
+4. Déposer un cordon de mastic dans la feuillure du dormant. Puis glisser l'embout dans la
+   feuillure du dormant et le fixer avec deux vis autoforeuses 5 (3,9 × 16) et une vis 6
+   (4,2 × 30).
+5. Pour finir, monter le cache-vis 7.
+
+![Vue éclatée du montage du seuil 9F67 en coupe droite sur embout, variante 1](/assets/procedures/moe-systeme-70/seuil/montage-9f67-coupe-droite-variante-1.png)
+
+En haut, le montant du dormant (2) vu de l'intérieur, avec le cordon de mastic (8) en trait noir
+épais au pied de la feuillure ; en bas, l'embout (3) vissé en bout du seuil (1) par les deux vis
+inox (4), les deux vis autoforeuses (5) et le cache-vis (7) à droite, la vis PVC (6) par le
+dessous, et le mastic (8) sur l'embout.
+
+| Pos. | Qté | Désignation |
+| --- | --- | --- |
+| 1 | - | Seuil |
+| 2 | - | Dormant |
+| 3 | 2 | Embout |
+| 4 | 2 | Vis inox Ø 4 × 50 mm |
+| 5 | 2 | Vis autoforeuse tête fraisée Ø 3,9 × 16 mm |
+| 6 | 1 | Vis PVC Ø 4 × 30 mm |
+| 7 | 2 | cache vis |
+| 8 | - | Mastic silicone |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 258)
+
+Le texte donne la vis 6 en 4,2 × 30, la nomenclature en Ø 4 × 30 mm (entrée **INC-166**).
+
+## Directives de mise en œuvre du seuil 9F68 coupe droite 90°, variante 1
+
+Les étapes suivantes sont à observer [1 p. 259] :
+
+1. Débiter le seuil 1.
+2. Perçage / poinçonnage des drainages. Si dormant non renforcé, prévoir renfort L = 100 mm en pied
+   de dormant, fixé par deux vis autoforeuses (3,9 × 13).
+3. Fixer les embouts 3 avec deux vis 4 (4 × 50). Au préalable, faire une étanchéité au
+   mastic entre ces 2 pièces.
+4. Déposer un cordon de mastic dans la feuillure du dormant. Puis glisser l'embout dans la
+   feuillure du dormant et le fixer avec deux vis autoforeuses 5 (3,9 × 16) et deux vis 6
+   (4,2 × 30).
+5. Pour finir, monter le cache-vis 7.
+
+![Vue éclatée du montage du seuil 9F68 en coupe droite sur embout, variante 1](/assets/procedures/moe-systeme-70/seuil/montage-9f68-coupe-droite-variante-1.png)
+
+Même lecture que pour le 9F67, sur le seuil 9F68, plus haut ; deux vis (6) sont dessinées, l'une
+horizontale en haut de l'embout, l'autre verticale par le dessous. Sur ce dessin, le repère 5 est
+porté sur les deux vis longues et le repère 4 sur les deux vis courtes, à l'inverse du texte.
+
+| Pos. | Qté | Désignation |
+| --- | --- | --- |
+| 1 | - | Seuil |
+| 2 | - | Dormant |
+| 3 | 2 | Embout |
+| 4 | 2 | Vis inox Ø 4 × 50 mm |
+| 5 | 2 | Vis autoforeuse tête fraisée Ø 3,9 × 16 mm |
+| 6 | 1 | Vis PVC Ø 4 × 30 mm |
+| 7 | 2 | cache vis |
+| 8 | - | Mastic silicone |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 259)
+
+Le texte demande deux vis 6, la nomenclature en compte une ; les repères 4 et 5 du dessin sont
+inversés par rapport au texte (entrée **INC-166**).
+
+# Variante 2 : montage coupe 90° sur dormant grugé
+
+## Débit des seuils 9F67, 9F68, 9F69, Z043
+
+Sur dormant grugé, le montant chevauche le seuil et s'y fixe par un set d'assemblage logé dans sa
+chambre de renfort. La table donne le set de chaque dormant, la largeur de débit du seuil et la
+hauteur de débit du montant, à partir de la DHT ; l'aile de recouvrement est l'aile du dormant
+de rénovation qui recouvre l'ancien dormant ou la maçonnerie [1 p. 260].
+
+| Dormant | Set d'assemblage | Débit seuil, largeur (mm) | Débit montant dormant, hauteur (mm) | Set |
+| --- | --- | --- | --- | ---: |
+| 6101 | 9F71 | DHT | DHT − 14 | ![Set 9F71](/assets/procedures/moe-systeme-70/seuil/set-9f71.png) |
+| 6104 | 9F71 | DHT + 2 × aile de recouvrement | DHT − 14 | ![Set 9F71](/assets/procedures/moe-systeme-70/seuil/set-9f71.png) |
+| 6108 | 9F71 | DHT + 2 × aile de recouvrement | DHT − 14 | ![Set 9F71](/assets/procedures/moe-systeme-70/seuil/set-9f71.png) |
+| 6109 | 9F71 | DHT + 2 × aile de recouvrement | DHT − 14 | ![Set 9F71](/assets/procedures/moe-systeme-70/seuil/set-9f71.png) |
+| 6110 | 9F71 | DHT + 2 × aile de recouvrement | DHT − 14 | ![Set 9F71](/assets/procedures/moe-systeme-70/seuil/set-9f71.png) |
+| 6111 | 9F71 | DHT + 2 × aile de recouvrement | DHT − 14 | ![Set 9F71](/assets/procedures/moe-systeme-70/seuil/set-9f71.png) |
+| 6158 | 9F71 | DHT + 2 × aile de recouvrement | DHT − 14 | ![Set 9F71](/assets/procedures/moe-systeme-70/seuil/set-9f71.png) |
+| 2502 | dessiné dans la colonne 9F71, sans référence | DHT | DHT − 14 | ![Set du dormant 2502, colonne 9F71](/assets/procedures/moe-systeme-70/seuil/set-dormant-2502-colonne-9f71.png) |
+| 6100 | 9F72 | DHT | DHT − 14 | ![Set 9F72](/assets/procedures/moe-systeme-70/seuil/set-9f72.png) |
+| 6102 | 9F72 | DHT + 2 × aile de recouvrement | DHT + 16 | ![Set 9F72](/assets/procedures/moe-systeme-70/seuil/set-9f72.png) |
+| 6105 | 9F72 | DHT + 2 × aile de recouvrement | DHT + 26 | ![Set 9F72](/assets/procedures/moe-systeme-70/seuil/set-9f72.png) |
+| 6106 | 9F72 | DHT + 2 × aile de recouvrement | DHT + 26 | ![Set 9F72](/assets/procedures/moe-systeme-70/seuil/set-9f72.png) |
+| 6155 | 9F72 | DHT + 2 × aile de recouvrement | DHT + 26 | ![Set 9F72](/assets/procedures/moe-systeme-70/seuil/set-9f72.png) |
+| 6107 | 9F72 | DHT + 2 × aile de recouvrement | DHT + 56 | ![Set 9F72](/assets/procedures/moe-systeme-70/seuil/set-9f72.png) |
+| 6156 | 9F72 | DHT + 2 × aile de recouvrement | DHT + 66 | ![Set 9F72](/assets/procedures/moe-systeme-70/seuil/set-9f72.png) |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 260)
+
+La cellule de débit du seuil de la première ligne de la source groupe les dormants 6101, 6104,
+6108, 6109, 6110, 6111 et 6158 et porte « 6101 = DHT » puis « DHT + 2\* aile de recouvrement » ;
+la table ci-dessus attribue DHT au 6101 et la seconde formule aux autres. Le dormant 2502 est
+dessiné dans la colonne du set 9F71 avec une pièce de forme différente, sans référence, alors que la
+liste des pièces lui attribue le set J077 (entrée **INC-167**).
+
+## Préparation du seuil et schéma de perçage
+
+Débiter le seuil et le prépercer à l'aide du gabarit 9918 [1 p. 261].
+
+![Bouts des seuils Z043, 9F69, 9F67 et 9F68 en coupe, avec le montant posé](/assets/procedures/moe-systeme-70/seuil/seuils-z043-9f69-9f67-9f68-bout.png)
+
+Les quatre seuils, de gauche à droite Z043, 9F69, 9F67 et 9F68, sont dessinés en coupe hachurée,
+chacun avec le pied du montant du dormant posé dessus.
+
+![Schémas de perçage du seuil pour dormant neuf et pour dormant avec aile de recouvrement](/assets/procedures/moe-systeme-70/seuil/schema-percage-seuil-variante-2.png)
+
+Le bout du seuil est vu de dessus, le trou de perçage marqué d'une croix. En haut, **schéma de
+perçage pour dormant neuf** : X est la distance du bout du seuil à l'axe du trou, Y la distance de
+l'axe au bord arrière du seuil. En bas, **schéma de perçage pour dormant avec aile de
+recouvrement** : le seuil dépasse de la largeur de l'aile de recouvrement, X se mesure depuis le
+bout de la partie grugée, et un retrait de 10 mm est coté au pied.
+
+| Dormant | Cote X (mm) | Cote Y (mm) |
+| --- | --- | --- |
+| 6100 | 17,7 | 32,4 |
+| 6101 | 22,7 | 32,4 |
+| 6102 | 39,7 | 32,4 |
+| 6104 | 42,2 | 32,4 |
+| 6105 | 49,7 | 32,4 |
+| 6106 | 57,7 | 32,4 |
+| 6107 | 69,7 | 32,4 |
+| 6155 | 49,7 | 32,4 |
+| 6156 | 79,7 | 32,4 |
+| 6108 | 42,2 | 32,4 |
+| 6109 | 42,2 | 32,4 |
+| 6110 | 42,2 | 32,4 |
+| 6111 | 42,2 | 32,4 |
+| 2502 | 33,0 | 32,4 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 261)
+
+La source écrit la ligne des dormants larges « 6108/09/10/11 ».
+
+![Gabarit de perçage 9918](/assets/procedures/moe-systeme-70/seuil/gabarit-percage-9918.png)
+
+Le gabarit de perçage 9918 est une réglette percée de plusieurs rangées de trous de guidage,
+avec une butée à chaque bout.
+
+## Contour de fraisage dormant / meneau avec seuil 9F69, Z043
+
+Le pied du montant (dormant ou meneau) est fraisé au profil du seuil. Le contour est vu en bout,
+côté extérieur à gauche, et la cote de débit du montant est la ligne de référence à droite ;
+cotes en mm [1 p. 262].
+
+![Contour de fraisage du dormant ou du meneau sur seuil Z043](/assets/procedures/moe-systeme-70/seuil/contour-fraisage-seuil-z043.png)
+
+![Contour de fraisage du dormant ou du meneau sur seuil 9F69](/assets/procedures/moe-systeme-70/seuil/contour-fraisage-seuil-9f69.png)
+
+| Cote portée sur le contour | Seuil Z043 | Seuil 9F69 |
+| --- | --- | --- |
+| longueur totale du contour (mm) | 126 | 126 |
+| palier du nez, largeur (mm) | 18 | 18 |
+| palier central, largeur (mm) | 50 (tolérance 0 / −0,3) | 50 (tolérance 0 / −0,3) |
+| rainure de droite, largeur (mm) | 4 (tolérance +0,2 / −0) | 4 (tolérance +0,2 / −0) |
+| retour à droite, largeur (mm) | 4 | 4 |
+| saillie du palier central, hauteur (mm) | 4 | 4 |
+| saillie du palier central, largeur (mm) | 4,5 | 4,5 |
+| marche à droite (mm) | 2 | 2 |
+| hauteur jusqu'à la cote de débit (mm) | 16 | 16 |
+| hauteur du nez (mm) | 6,5 (±0,1) | 6,5 (±0,1) |
+| chanfrein du nez | 1 × 45° | 1 × 45° |
+| pente du nez | 15,5° | 15,5° |
+| rayon du nez | R0,5 | R0,5 |
+| hauteur sous le nez (mm) | 10,6 | 10,8 |
+| hauteur de la pente avant (mm) | 6,6 | 6,4 |
+| pente avant | 2,0° | 5,0° |
+| rayon au départ de la pente | R3 | R1 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 262)
+
+## Contour de fraisage dormant / meneau avec seuil 9F67, 9F68
+
+Même lecture ; le seuil 9F68 porte en plus deux détails à l'échelle 2:1 (M 2:1) [1 p. 263].
+
+![Contour de fraisage du dormant ou du meneau sur seuil 9F68, avec deux détails à l'échelle 2:1](/assets/procedures/moe-systeme-70/seuil/contour-fraisage-seuil-9f68.png)
+
+![Contour de fraisage du dormant ou du meneau sur seuil 9F67](/assets/procedures/moe-systeme-70/seuil/contour-fraisage-seuil-9f67.png)
+
+| Cote portée sur le contour | Seuil 9F67 | Seuil 9F68 |
+| --- | --- | --- |
+| palier du nez, largeur (mm) | 16 | 16 |
+| palier central, largeur (mm) | 50 (tolérance 0 / −0,3) | 50 (tolérance 0 / −0,3) |
+| rainure de droite, largeur (mm) | 4 (tolérance +0,2 / −0) | 4 (tolérance +0,2 / −0) |
+| retour à droite, largeur (mm) | 4 | 4 |
+| saillie du palier central, hauteur (mm) | 4 | 4 |
+| saillie du palier central, largeur (mm) | 4,5 | 4,5 |
+| marche à droite (mm) | 2 | 2 |
+| hauteur du nez (mm) | 6,5 (±0,1) | 20,2 (±0,1) |
+| pente du nez | 15,5° | 15,5° (tolérance +0,5° / −0,0°) |
+| rayon du nez | R0,5 | - |
+| détail 2:1, rayon | - | R0,5 |
+| détail 2:1, hauteur (mm) | - | 20,2 (±0,1) |
+| détail 2:1, angle | - | 45° |
+| détail 2:1, retrait (mm) | - | 0,5 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 263)
+
+Sur le 9F68, les deux cercles repèrent les zones agrandies dans les détails 2:1 ; la cote de
+débit est légendée « Cotes de débit » au pluriel.
+
+## Directives de mise en œuvre du seuil 9F67 grugé, variante 2
+
+Les étapes suivantes sont à observer [1 p. 264] :
+
+1. Débiter le seuil.
+2. Prépercer le seuil 1 avec le gabarit 9918 Ø 6,2 mm.
+3. Usiner le dormant 2 conformément au contour de fraisage.
+4. Prépercer le dormant 2 avec le gabarit 9918 Ø 8,5 mm pour le passage de la goupille.
+5. Couper la languette d'étanchéité (fig. 1) puis insérer le noyau 3 dans le dormant 2 et le
+   fixer avec la goupille 4. Mettre les capuchons 5 sur la goupille.
+6. Une étanchéité au mastic est réalisée en feuillure et dans la rainure de parclose.
+7. Fixer le dormant 2 dans la feuillure du seuil 1 avec une vis 6 (M6 × 30 CHC).
+8. Obturer les extrémités du seuil 1 avec les bouchons 7 (M002).
+
+CHC : vis à tête cylindrique à six pans creux. Le noyau est la pièce d'ancrage du set
+d'assemblage, introduite dans la chambre de renfort du montant ; la goupille est la cheville
+qui la traverse et la bloque dans le montant.
+
+![Vue éclatée du montage du seuil 9F67 sur dormant grugé, variante 2](/assets/procedures/moe-systeme-70/seuil/montage-9f67-gruge-variante-2.png)
+
+De haut en bas : le montant du dormant (2) percé pour la goupille ; le noyau (3) marqué « 9F72L »,
+la goupille (4) et ses capuchons (5) ; le seuil (1) avec le mastic (8) en feuillure et dans la
+rainure de parclose ; la vis CHC (6) par le dessous ; le bouchon (7) M002 à droite.
+
+![Fig. 1 : languette à couper sur le noyau avec seuil 9F67](/assets/procedures/moe-systeme-70/seuil/fig1-languette-a-couper-9f67.png)
+
+Fig. 1 : la flèche montre la languette du noyau, « languette à couper avec seuil 9F67 ».
+
+| Pos. | Qté | Désignation | Set |
+| --- | --- | --- | --- |
+| 1 | - | Seuil | - |
+| 2 | - | Dormant | - |
+| 3 | 2 | noyau | oui |
+| 4 | 2 | Goupille | oui |
+| 5 | 2 | Capuchon | oui |
+| 6 | 1 | Vis CHC M6 × 30 mm | oui |
+| 7 | 2 | embout M002 | oui |
+| 8 | - | Mastic silicone | - |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 264)
+
+La colonne « Set » dit si la pièce est livrée dans le set d'assemblage.
+
+## Directives de mise en œuvre du seuil 9F68 grugé, variante 2
+
+Les étapes suivantes sont à observer [1 p. 265] :
+
+1. Débiter le seuil.
+2. Prépercer le seuil 1 avec le gabarit 9918 Ø 6,2 mm.
+3. Usiner le dormant 2 conformément au contour de fraisage.
+4. Prépercer le dormant 2 avec le gabarit 9918 Ø 8,5 mm pour le passage de la goupille.
+5. Insérer le noyau 3 dans le dormant 2 et le fixer avec la goupille 4. Mettre les
+   capuchons 5 sur la goupille.
+6. Une étanchéité au mastic est réalisée en feuillure et dans la rainure de parclose.
+7. Fixer le dormant 2 dans la feuillure du seuil 1 avec une vis 6 (M6 × 30 CHC).
+8. Obturer les extrémités du seuil 1 avec les bouchons 7 (M002).
+
+![Vue éclatée du montage du seuil 9F68 sur dormant grugé, variante 2](/assets/procedures/moe-systeme-70/seuil/montage-9f68-gruge-variante-2.png)
+
+Même lecture que pour le 9F67, sur le seuil 9F68 ; le noyau (3) est marqué « 9F71L » et la languette
+n'est pas coupée. La nomenclature est identique à celle du 9F67 (noyau, goupille, capuchon 2 de
+chaque, vis CHC M6 × 30 mm 1, embout M002 2, tous « oui » au set ; seuil, dormant et mastic
+silicone hors set) [1 p. 265].
+
+La liste des pièces réserve l'embout M002 aux seuils 9F67, 9F69 et Z043, alors que cette page
+l'emploie sur le 9F68 (entrée **INC-168**).
+
+## Directives de mise en œuvre du seuil 9F67 grugé sur dormant 2502
+
+Mêmes étapes que la variante 2 du 9F67, sans languette à couper [1 p. 266] :
+
+1. Débiter le seuil.
+2. Prépercer le seuil 1 avec le gabarit 9918 Ø 6,2 mm.
+3. Usiner le dormant 2 conformément au contour de fraisage.
+4. Prépercer le dormant 2 avec le gabarit 9918 Ø 8,5 mm pour le passage de la goupille.
+5. Insérer le noyau 3 dans le dormant 2 et le fixer avec la goupille 4. Mettre les
+   capuchons 5 sur la goupille.
+6. Une étanchéité au mastic est réalisée en feuillure et dans la rainure de parclose.
+7. Fixer le dormant 2 dans la feuillure du seuil 1 avec une vis 6 (M6 × 30 CHC).
+8. Obturer les extrémités du seuil 1 avec les bouchons 7 (M002).
+
+![Vue éclatée du montage du seuil 9F67 grugé sur le dormant 2502](/assets/procedures/moe-systeme-70/seuil/montage-9f67-gruge-dormant-2502.png)
+
+Le noyau (3) du 2502 est une pièce à deux chambres, sans marquage lisible, posée sur une semelle ;
+le reste se lit comme la variante 2. Nomenclature identique : noyau 2, goupille 2, capuchon 2, vis
+CHC M6 × 30 mm 1, embout M002 2 (dans le set), seuil, dormant et mastic silicone hors set
+[1 p. 266].
+
+## Directives de mise en œuvre du seuil Z043, étanchéité sur dormant grugé
+
+Les étapes suivantes sont à observer [1 p. 267] :
+
+1. Débiter le seuil.
+2. Prépercer le seuil avec le gabarit 9918 Ø 6,2 mm.
+3. Usiner le dormant conformément au contour de fraisage.
+4. Prépercer le dormant avec le gabarit 9918 Ø 8,5 mm pour le passage de la goupille.
+5. Insérer le noyau dans le dormant et le fixer avec la goupille. Mettre les capuchons sur la
+   goupille (fig. 1).
+6. Positionner le patin d'étanchéité M325, en respectant le sens droite - gauche (fig. 2).
+7. Appliquer la mousse du patin sur les parois du dormant, puis fixer l'ensemble au dos du dormant
+   avec une vis PVC (4,2 × 16 mm) (fig. 3).
+8. Fixer le dormant dans la feuillure du seuil avec une vis (M6 × 30 CHC). Puis fixer le seuil avec
+   2 vis autoforeuses (3,9 × 32 mm) dans l'insert pour assurer la compression du patin d'étanchéité
+   (fig. 4).
+9. Obturer les extrémités du seuil avec les bouchons (M002) et compléter par une étanchéité au
+   silicone dans les angles (fig. 5).
+
+Le patin d'étanchéité est la plaque de mousse posée entre le dormant et le seuil, qui ferme le
+passage de l'eau sous le montant.
+
+![Fig. 1 : noyau inséré dans le pied du montant et goupille en place](/assets/procedures/moe-systeme-70/seuil/z043-fig1-noyau-goupille.png)
+
+![Fig. 2 : patin d'étanchéité M325 positionné contre le dormant](/assets/procedures/moe-systeme-70/seuil/z043-fig2-patin-m325.png)
+
+![Fig. 3 : fixation du patin au dos du dormant par une vis PVC](/assets/procedures/moe-systeme-70/seuil/z043-fig3-vis-patin.png)
+
+![Fig. 4 : seuil fixé par deux vis autoforeuses dans l'insert, patin comprimé](/assets/procedures/moe-systeme-70/seuil/z043-fig4-vis-insert.png)
+
+![Fig. 5 : extrémité du seuil obturée et étanchéité au silicone dans l'angle](/assets/procedures/moe-systeme-70/seuil/z043-fig5-bouchon-silicone.png)
+
+Ce sont cinq photographies d'atelier, dans l'ordre des étapes 5 à 9.
+
+## Rejet d'eau pour seuils 9F67, 9F69, Z043
+
+Le rejet d'eau A465 se pose au bas de l'ouvrant, au-dessus du seuil ; le joint G256 (joint
+brosse) s'insère dans sa rainure [1 p. 268].
+
+1. Débiter le rejet d'eau, coupe à 90° (voir tableau ci-dessous).
+2. Percer les trous de drainage (fig. 1).
+3. Insérer le joint G256 dans le rejet d'eau (débit voir tableau ci-dessous), visser les embouts,
+   vis 3,9 × 19 mm et 3,9 × 60 mm.
+4. Positionner le rejet d'eau à 11 mm du fond de feuillure ouvrant, le fixer avec des vis têtes
+   fraisées inoxydables 4,2 × 16 mm (fig. 2).
+
+À noter : pour le battement 0140, il faut usiner le rejet d'eau pour permettre le passage de
+l'embout (fig. 3).
+
+La table donne la longueur de débit du rejet d'eau A465 et de son joint G256 selon la composition,
+pour l'ouvrant principal et l'ouvrant secondaire ; FFO est la cote fond de feuillure
+d'ouvrant, en mm. Le battement est le profilé qui recouvre la jonction des deux vantaux.
+
+| Composition | Ouvrant | Débit A465 (mm) | Débit G256 (mm) |
+| --- | --- | --- | --- |
+| 1 vantail | principal | FFO − 40 | A465 + 9 |
+| 2 vantaux avec battements 6132, 6162 | principal | FFO − 44 | A465 + 9 |
+| 2 vantaux avec battements 6132, 6162 | secondaire | FFO − 36 | A465 + 41,5 |
+| 2 vantaux avec battements 6130, 1578, 6128 | principal | FFO − 47 | A465 + 9 |
+| 2 vantaux avec battements 6130, 1578, 6128 | secondaire | FFO − 34 | A465 + 41,5 |
+| avec battement 0140 | principal | FFO − 43 | A465 + 9 |
+| avec battement 0140 | secondaire | FFO − 4 | A465 + 9 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 268)
+
+La ligne « avec battement 0140 », ouvrant secondaire, porte FFO − 4 mm et A465 + 9 mm, là où les
+autres ouvrants secondaires portent FFO − 34 à − 36 mm et A465 + 41,5 mm (entrée **VER-100**).
+
+![Coupe verticale du bas d'ouvrant avec rejet d'eau A465 sur seuil](/assets/procedures/moe-systeme-70/seuil/rejet-a465-coupe-sur-seuil.png)
+
+Coupe verticale : l'ouvrant vitré en haut, le rejet d'eau A465 et son joint brosse à gauche, clippé
+au pied de l'ouvrant, le seuil hachuré en bas.
+
+![Fig. 1 : trou oblong de drainage du rejet d'eau, 25 × 5 mm](/assets/procedures/moe-systeme-70/seuil/rejet-a465-fig1-trou-oblong.png)
+
+Fig. 1 : trou oblong de 25 mm de long sur 5 mm de haut.
+
+![Fig. 2 : rejet d'eau positionné à 11 mm du fond de feuillure de l'ouvrant](/assets/procedures/moe-systeme-70/seuil/rejet-a465-fig2-position-11mm.png)
+
+Fig. 2 : l'angle bas de l'ouvrant en perspective, le rejet d'eau et son embout ; la cote 11 mm
+se prend du fond de feuillure de l'ouvrant au rejet d'eau.
+
+![Fig. 3 : usinage du rejet d'eau et de l'embout pour le battement 0140](/assets/procedures/moe-systeme-70/seuil/rejet-a465-fig3-usinage-battement-0140.png)
+
+Fig. 3 : la loupe montre l'embout au droit du battement ; en dessous, le rejet d'eau vu de face et en
+perspective, usiné en bout sur 23,5 mm de long et 1 mm de profondeur, et l'embout, arasé de
+1 mm, vu de face et en perspective.
+
+## Mise en œuvre des élargisseurs 0204B, 0210, 0207, 0301 sous seuil
+
+Un élargisseur est un profilé PVC rapporté sous le dormant (ici sous le seuil) pour augmenter
+sa hauteur ; ses pieds de clippage sont les ailettes qui l'accrochent au profilé du dessus
+[1 p. 269].
+
+1. Délignier partiellement les pieds de clippage (délignage : découpe en long d'une partie du
+   profilé).
+2. Retirer le joint.
+3. Au montage, faire un bourrelet de silicone sur toute la largeur du profilé.
+4. Fixer les profilés avec des vis :
+   - PVC 4,2 × 16 et autoforeuse 3,9 × 16 pour 0204 ;
+   - PVC 4,2 × 22 et autoforeuse 3,9 × 19 pour 0210 ;
+   - entraxe de vissage 300 mm.
+
+![Seuil posé sur un élargisseur, bourrelet de silicone](/assets/procedures/moe-systeme-70/seuil/elargisseur-sous-seuil-silicone.png)
+
+Coupe : le seuil en haut, l'élargisseur dessous, la flèche « silicone » sur le joint entre les deux.
+
+![Élargisseur 0204 et ses deux vis de fixation](/assets/procedures/moe-systeme-70/seuil/elargisseur-0204-sous-seuil-vis.png)
+
+![Élargisseur 0210 et ses deux vis de fixation](/assets/procedures/moe-systeme-70/seuil/elargisseur-0210-sous-seuil-vis.png)
+
+Chaque élargisseur est dessiné en coupe, pieds de clippage délignés en trait fin, avec ses deux vis
+par le dessous ; la hauteur cotée à droite est de 16,5 mm pour le 0204 et de 26,5 mm pour
+le 0210.
+
+| Élargisseur | Hauteur cotée sur le dessin (mm) | Vis PVC | Vis autoforeuse | Entraxe de vissage (mm) |
+| --- | --- | --- | --- | --- |
+| 0204 | 16,5 | 4,2 × 16 | 3,9 × 16 | 300 |
+| 0210 | 26,5 | 4,2 × 22 | 3,9 × 19 | 300 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 269)
+
+Les vis des élargisseurs 0204B, 0207 et 0301 nommés dans le titre ne sont pas données. Les cotes
+des élargisseurs sont sur
+[Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md).
+
+# Ce que le document ne dit pas
+
+Le registre 2.4.5 ne donne pas les vis de fixation des élargisseurs 0204B, 0207 et 0301, ni la
+largeur de l'aile de recouvrement de chaque dormant de rénovation employée dans la formule de
+débit de la variante 2.
+
+# Citations
+
+[1] [Mise en œuvre Système 70 Plateforme, profine, version septembre 2023](raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf),
+registre 2.4.5, PDF p. 254 à 269
+
+# Voir aussi
+
+- [Assemblages du système 70](/profiles/systeme-70-assemblages.md)
+- [Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md)
+- [Porte-fenêtre avec fixe latéral du système 70](/procedures/porte-fenetre-fixe-lateral-systeme-70.md)
+- [Porte d'entrée du système 70](/procedures/porte-d-entree-systeme-70.md)
+- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
+- [Mise en œuvre du seuil du système 76 Advanced](/procedures/mise-en-oeuvre-seuil-systeme-76.md)
+- [Seuil aluminium de porte 9C42 du système 70, classeur e.VOLUTION de 2008](/procedures/seuil-alu-9c42-systeme-70-evo2008.md)
+- [Mise en œuvre Système 70 Plateforme](/sources/profine-mise-en-oeuvre-systeme-70.md)
+
+===== PAGE 3 : /procedures/porte-fenetre-fixe-lateral-systeme-70.md =====
+# Ce que fait cette procédure
+
+La porte-fenêtre avec fixe latéral associe, sur un même seuil filant (un seuil aluminium
+d'un seul tenant sous toute la largeur), un ouvrant de porte-fenêtre et un vitrage fixe placé à
+côté, séparés par un meneau (le montant intermédiaire). Sous le fixe, le seuil ne porte pas de
+feuillure (le logement où se pose le vitrage) : il faut la reconstituer. Le registre 2.4.6
+du système 70 Plateforme de [profine](/fournisseurs/profine.md) donne trois façons de le faire
+[1 p. 270-274, 280] :
+
+- avec la réhausse de feuillure A271 clippée sur le seuil et verrouillée par les pièces
+  A272 ;
+- avec le dormant 6101 posé en traverse sur le seuil, positionné par le profilé 1248 et
+  fixé par les équerres 9714 ;
+- avec l'élargisseur 0303, pour seuil de 20 mm et de 36 mm.
+
+Les points suivants sont à respecter lors de la fabrication : **1. Dimensions et renforcement,
+quincaillerie ; 2. Traitement des joints ; 3. Montage seuil et rejet d'eau** [1 p. 270].
+
+Le montage du seuil lui-même (débit, sets d'assemblage, contours de fraisage, drainage, rejet
+d'eau) est dans [Mise en œuvre du seuil aluminium du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md) ;
+les schémas du DTD de la partie fixe sur seuil (traverse rapportée 6101 avec 1248 et 9714,
+contre-feuillure A271 / A272) dans
+[Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md#assemblage-seuils-partie-fixe).
+Les termes du métier sont dans le [glossaire](/reference/glossaire.md).
+
+# Conditions et interdictions
+
+- Le profilé A271 et la sous-cale A272 se clippent sur tous les seuils de la gamme profine. Le
+  système est conçu pour permettre l'évacuation sans intervenir sur le profilé A271 : **les
+  drainages sont donc réalisés sur le seuil de façon habituelle** [1 p. 272].
+- Avec l'élargisseur 0303, drainage par le bas pour seuil de 20 mm, drainage en façade pour le
+  seuil de 36 mm [1 p. 280].
+
+# Profilés et accessoires nécessaires
+
+La liste reprend celle du registre des seuils (voir
+[Mise en œuvre du seuil aluminium du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md#profilés-et-accessoires-nécessaires)) :
+seuils 9F67, 9F68, 9F69, Z043 ; sets d'assemblage mécanique 9F71 (dormants 6101, 6104, 6108, 6109,
+6110, 6111, 6158), 9F72 (dormants 6100, 6102, 6105, 6106, 6107, 6155, 6156) et J077 (dormant 2502) ;
+embouts 9F57 à 9F66, J087 et J088 ; accessoires 9F78, M002, A465, M626, M628, M629 et G256. Elle y
+ajoute cinq accessoires propres au fixe latéral [1 p. 270] :
+
+| Référence | Désignation |
+| --- | --- |
+| A271 | réhausseur de feuillure pour 9F67 |
+| A272 | sous-cale de vitrage |
+| 9714 | équerre de fixation |
+| 9B32T | joint de vitrage |
+| 1248 | profilé de liaison |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 270)
+
+La planche des seuils nomme l'A272 « Verrou de réhausseur » ; le texte de la reconstitution de
+feuillure dit qu'il « sert de verrou et de sous-cale de vitrage » [1 p. 255, 272]. Le joint de
+vitrage est écrit 9B32T dans cette liste et 9C32T dans les étapes de fabrication (entrée
+**INC-170**).
+
+# Cotes de débit : reconstitution de feuillure avec A272
+
+La porte-fenêtre est vue de l'intérieur, l'ouvrant à gauche et le fixe à droite ; Axe est la
+cote de l'extérieur du dormant droit à l'axe du meneau, X le retrait du dormant, Y la
+largeur du meneau [1 p. 271].
+
+| Élément | Référence |
+| --- | --- |
+| Seuil | 9F67, 9F69, Z043 |
+| Rejet d'eau | A465 |
+| Ouvrant | 6112 |
+| Dormant | 6101 |
+| Set d'assemblage seuil | 9F71 |
+| Meneau | 2425 |
+| Set d'assemblage sur seuil | 9F73 |
+
+| Meneau | Cote Y (mm) |
+| --- | --- |
+| 2425 | 50 |
+| 6127 | 40 |
+| 6157 | 40 |
+
+- Seuil filant (Des. 1), cotes de débit A472 = Axe − (X + Y/2).
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 271)
+
+Le 9F67 est écrit en gras dans la ligne des seuils, les 9F69 et Z043 en maigre. La page porte le
+titre « Porte d'entrée avec fixe latéral — Reconstitution de feuillure avec A272 » dans le
+registre de la porte-fenêtre, et sa cote de débit nomme une pièce A472 qui ne figure dans
+aucune liste du registre (entrée **INC-169**).
+
+![Des. 1 : porte-fenêtre avec fixe latéral vue de face, cote d'axe, retraits X et Y, plans de coupe A-A et B-B](/assets/procedures/moe-systeme-70/porte-fenetre/a272-des1-seuil-filant-cotes.png)
+
+Des. 1, coupe seuil filant : l'ouvrant à gauche (triangle de l'ouverture), le fixe à droite ; A-A
+coupe l'ouvrant, B-B le fixe ; la cote « Axe » part de l'axe du meneau.
+
+![Coupes A-A et B-B, parties hautes : dormant et ouvrant, dormant du fixe](/assets/procedures/moe-systeme-70/porte-fenetre/a272-coupes-hautes-a-a-b-b.png)
+
+![Coupes A-A et B-B, parties basses : ouvrant sur seuil avec rejet d'eau, fixe sur seuil avec réhausse A271](/assets/procedures/moe-systeme-70/porte-fenetre/a272-coupes-basses-a-a-b-b.png)
+
+En haut, la traverse haute : A-A le dormant et l'ouvrant, B-B le dormant du fixe et son vitrage.
+En bas : A-A l'ouvrant sur le seuil, avec le rejet d'eau et son joint brosse à gauche ; B-B le
+vitrage fixe pris dans la feuillure reconstituée sur le seuil.
+
+| Coupe | Hauteur totale (mm) | Décomposition portée sur la coupe (mm) |
+| --- | --- | --- |
+| A-A, haut, dormant et ouvrant | 109 | 64 + 45 ; 36 ; 12 |
+| B-B, haut, dormant du fixe | 64 | - |
+| A-A, bas, ouvrant sur seuil avec rejet d'eau | 81 | 20 à gauche ; 53 + 8 à droite ; 12 |
+| B-B, bas, fixe sur seuil | 36 | 16 à droite |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 271)
+
+La cote X n'est chiffrée nulle part sur la page.
+
+# Étapes : reconstitution de feuillure avec réhausse de feuillure A271
+
+Reconstitution de feuillure sur seuils 9F67, 9F68, 9F69, Z043 avec réhausse de feuillure A271. Le
+profilé A271 sert de réhausse et porte-joint, la pièce A272 sert de verrou et de sous-cale de
+vitrage [1 p. 272].
+
+![Fixe latéral sur seuil filant avec réhausse A271, vue en perspective](/assets/procedures/moe-systeme-70/porte-fenetre/a271-fixe-sur-seuil-perspective.png)
+
+Étapes de fabrication [1 p. 272-273] :
+
+1. Débiter le profilé A271 1. Débit = cote pareclose − 32,5.
+
+   ![Étape 1 : profilé A271 en coupe et débit coupé à 15° aux deux bouts, largeur parclose − 32,5 mm](/assets/procedures/moe-systeme-70/porte-fenetre/a271-etape-1-debit.png)
+
+   Le profilé A271 (1) en coupe à gauche ; à droite, la barre débitée, chaque bout coupé à
+   15°, légende « DEBIT = Largeur parclose − 32,5 mm ».
+
+2. Appliquer sur toute la largeur un cordon de silicone sur le nez de la réhausse. Latéralement,
+   en pied de dormant et de meneau, sur une hauteur de 15 mm 2.
+
+   ![Étape 2 : cordon de silicone sur le nez de la réhausse et deux remontées de 15 mm](/assets/procedures/moe-systeme-70/porte-fenetre/a271-etape-2-silicone.png)
+
+   À gauche, le cordon (point noir) sur le nez du seuil en coupe ; à droite, le pistolet à
+   silicone entre les deux montants, légende « Deux remontées de 15 mm de silicone ».
+
+3. Poser le joint de vitrage 9C32T 3. Puis clipper le profilé sur le seuil entre les montants
+   4.
+
+   ![Étape 3 : joint de vitrage inséré dans l'A271, clippage sur le seuil](/assets/procedures/moe-systeme-70/porte-fenetre/a271-etape-3-joint-clippage.png)
+
+   ![Étape 4 : réhausse A271 clippée sur le seuil entre les montants](/assets/procedures/moe-systeme-70/porte-fenetre/a271-etape-4-monte.png)
+
+4. Verrouiller le profilé A271 avec le verrou A272 5 à 30 mm de chaque extrémité, entraxe maxi
+   de 700 mm.
+
+   ![Étape 5 : verrou A272 glissé sous l'A271, à 30 mm de chaque extrémité](/assets/procedures/moe-systeme-70/porte-fenetre/a271-etape-5-verrou-a272.png)
+
+   La flèche courbe montre la rotation qui engage le verrou sous la réhausse ; les deux cotes
+   30 partent des montants.
+
+5. Mettre les cales de vitrages sur les verrous, à figer avec un plot de silicone 6.
+
+   ![Étape 6 : cales de vitrage posées sur les verrous](/assets/procedures/moe-systeme-70/porte-fenetre/a271-etape-6-cales.png)
+
+6. Poser le remplissage 7.
+
+   ![Étape 7 : pose du vitrage sur les cales](/assets/procedures/moe-systeme-70/porte-fenetre/a271-etape-7-remplissage.png)
+
+7. Parecloser 8.
+
+   ![Étape 8 : pose de la parclose intérieure](/assets/procedures/moe-systeme-70/porte-fenetre/a271-etape-8-parclose.png)
+
+   ![Fixe latéral terminé : vitrage parclosé sur la réhausse A271](/assets/procedures/moe-systeme-70/porte-fenetre/a271-fixe-termine.png)
+
+Chaque étape est dessinée deux fois : à gauche en coupe, le seuil, la réhausse et la pièce posée
+(flèche noire) ; à droite en perspective, le seuil entre les deux montants. La parclose est la
+baguette qui maintient le vitrage dans sa feuillure.
+
+L'entraxe maxi de 700 mm des verrous A272 diffère de l'entraxe maxi de 800 mm porté sur le schéma
+du DTD (entrée **CTR-62**).
+
+# Étapes : reconstitution de feuillure avec dormant 6101
+
+Reconstitution de feuillure sur seuils 9F67, 9F68, 9F69, Z043 avec dormant 6101 : le profilé 6101
+est posé en traverse basse du fixe, sur le seuil. Étapes de fabrication [1 p. 274] :
+
+1. Débiter le profilé. Débit = cote pareclose + 4 mm.
+2. Gruger le profilé, faire le drainage.
+3. Renforcement avec renfort V601. Cote renfort = débit traverse − 10 mm.
+4. Perçage Ø 8,5 2 à chaque extrémité avec le gabarit 9918 pour la mise en place des équerres
+   9714.
+5. Faire le délignage 1 de 15° sur toute la longueur.
+6. Réusiner l'extrémité côté dormant de 4 mm 2 et recouper 3 l'embout de 20 mm afin de
+   permettre le passage de l'équerre 9714.
+7. Faire une étanchéité au silicone sur toute la largeur du seuil 4, positionner le profilé à
+   l'aide du profilé 1248. Étancher les angles 5, puis le fixer avec les équerres de fond de
+   feuillure 9714 et des vis par l'arrière du seuil.
+
+Délignage : découpe en long d'une partie du profilé ; ici l'aile du 6101 est délignée à 15°.
+
+![Fig. 1 : délignage à 15° du bord du profilé 6101](/assets/procedures/moe-systeme-70/porte-fenetre/6101-fig1-delignage-15.png)
+
+Fig. 1 : le profilé 6101 en coupe, le trait de délignage à 15° au « Bord du profil ».
+
+![Fig. 2 et 3 : réusinage de 4 mm, perçage Ø 8,5 mm, embout recoupé de 20 mm](/assets/procedures/moe-systeme-70/porte-fenetre/6101-fig2-fig3-reusinage-embout.png)
+
+Fig. 2 : le bout du profilé vu de face, la partie « à déligner » hachurée sur 4 mm, le trou
+Ø 8,5 mm. Fig. 3 : l'embout de seuil en perspective, la partie « à déligner » hachurée sur
+20 mm de haut.
+
+![Fig. 4 : étanchéité avant montage de l'équerre de fixation 9714](/assets/procedures/moe-systeme-70/porte-fenetre/6101-fig4-etancheite-equerre-9714.png)
+
+Fig. 4 : le montant en coupe et la traverse 6101 en bout (4), le mastic hachuré en fond de
+feuillure et dans l'angle, légende « Etanchéité avant montage équerre » ; à droite l'« Equerre de
+fixation 9714 ».
+
+![Contour de fraisage de la traverse 6101 sur seuil](/assets/procedures/moe-systeme-70/porte-fenetre/6101-contour-fraisage.png)
+
+Le contour de fraisage de la page reprend celui du dormant sur seuil 9F68 (16, 50 tolérance
+0 / −0,3, 4, 4,5, 4 tolérance +0,2 / −0, 2, 20,2 ± 0,1, 15,5° tolérance +0,5° / −0,0°, détails 2:1
+R0,5, 45°, 0,5), transcrit sur
+[Mise en œuvre du seuil aluminium du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md#contour-de-fraisage-dormant--meneau-avec-seuil-9f67-9f68).
+
+![Fig. 5 : fixe monté, traverse 6101 sur le seuil avec profilé 1248, étanchéité et équerre 9714](/assets/procedures/moe-systeme-70/porte-fenetre/6101-fig5-fixe-monte-1248.png)
+
+Fig. 5 : coupe du fixe monté ; la traverse 6101 et son renfort sur le seuil, le profilé
+1248 à droite, l'étanchéité (hachures noires) à gauche, l'équerre de fixation 9714 dans la
+feuillure, la vis par l'arrière du seuil.
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 274)
+
+# Étapes : reconstitution de feuillure avec élargisseur 0303, seuil de 20 mm et de 36 mm
+
+L'élargisseur 0303 est posé en traverse sur le seuil sous le fixe. Étape de travail
+[1 p. 280] :
+
+1. Débiter le profilé. Débit = cote pareclose + 4 mm.
+2. Contre-profilage à chaque extrémité. Drainage : par le bas pour seuil de 20 mm, drainage en
+   façade pour le seuil de 36 mm.
+3. Renforcement avec renfort V045. Cote renfort = débit élargisseur − 10 mm.
+4. Perçage Ø 8,5 à chaque extrémité avec le gabarit 9918 pour la mise en place des équerres 9714.
+5. Pose compribande 1 sur seuil + joint silicone 2 sur la largeur de la traverse.
+6. Montage de l'élargisseur, étancher les angles avant montage de l'équerre 9714.
+7. Fixation de l'élargisseur par des vis 5 × 75 mm 3, entraxe de vissage 300 mm.
+
+Le contre-profilage est l'usinage du bout du profilé au contour de celui qu'il rencontre ; la
+compribande est une bande de mousse imprégnée précomprimée qui gonfle pour faire l'étanchéité.
+
+![Coupe du fixe sur élargisseur 0303 : drainage par le bas, compribande 1, silicone 2, vis 3](/assets/procedures/moe-systeme-70/porte-fenetre/0303-coupe-drainage-par-le-bas.png)
+
+![Coupe du fixe sur élargisseur 0303 : drainage en façade, compribande 1, silicone 2, vis 3](/assets/procedures/moe-systeme-70/porte-fenetre/0303-coupe-drainage-en-facade.png)
+
+Coupes verticales : le vitrage en haut, l'élargisseur 0303 et son renfort, la vis 5 × 75 mm (3) à
+travers le seuil, le joint silicone (2) côté extérieur et la compribande (1) côté intérieur ; les
+flèches noires suivent le chemin de l'eau, descendant jusqu'au seuil sur la première coupe,
+sortant en façade de l'élargisseur sur la seconde.
+
+![Étanchéité avant montage de l'équerre 9714 et équerre en place sur l'élargisseur 0303](/assets/procedures/moe-systeme-70/porte-fenetre/0303-etancheite-equerre-9714.png)
+
+En haut, le montant en coupe, le mastic dans l'angle et l'équerre 9714 amenée par la flèche,
+légende « Etancheité avant montage équerre » ; en bas, l'équerre en place.
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 280)
+
+# Ce que le document ne dit pas
+
+Le registre ne chiffre pas la cote X de la formule de débit, ni la référence des vis de fixation
+par l'arrière du seuil du dormant 6101. Sa sixième page est reliée après le registre 2.4.7 de la
+porte d'entrée (PDF p. 280).
+
+# Citations
+
+[1] [Mise en œuvre Système 70 Plateforme, profine, version septembre 2023](raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf),
+registre 2.4.6, PDF p. 270 à 274 et 280 ; registre 2.4.5, PDF p. 255
+
+# Voir aussi
+
+- [Mise en œuvre du seuil aluminium du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md)
+- [Porte d'entrée du système 70](/procedures/porte-d-entree-systeme-70.md)
+- [Fabrication et assemblage du système 70](/procedures/fabrication-systeme-70.md)
+- [Assemblages du système 70](/profiles/systeme-70-assemblages.md)
+- [Porte-fenêtre avec fixe latéral du système 76 Advanced](/procedures/porte-fenetre-fixe-lateral-systeme-76.md)
+- [Mise en œuvre Système 70 Plateforme](/sources/profine-mise-en-oeuvre-systeme-70.md)
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/incoherences-internes.md :
+| INC-237 | Système e.VOLUTION, plan des profilés, système F 91, édition août 2008 | PDF p. 228 à 232 (registre 5.3, pages imprimées 1 à 5), relues en image à 200 dpi (contour à 300 dpi) le 29/09/2026 | Le patin d'étanchéité du 6127 est « F91-75- 9718.3 » (p. 228), « 9718.3 » dans le titre et l'étape 3 de la p. 229 mais « Patin d'étanchéité F90-75- 9F27 » dans sa légende ; le titre de la p. 230 écrit « patin d'étanchéité 9813.3 » et sa légende « F90-75- 9718.3 » ; la p. 232, sous le titre « patin d'étanchéité 9718.3 », légende « Patin d'étanchéité F90-75- 9727 » ; la p. 240 (meneaux 2425 ou 2427 sur dormant 6101) légende aussi « Patin d'étanchéité F90-75- 9727 » alors que la p. 228 donne le 9719 au 2425 et le 9B89 au 2427 | 9718.3 (liste p. 228, titres, étapes) ; 9F27, 9813.3 et 9727 à confirmer ou corriger ; même écart 9727 / 9718.3 dans le manuel de 2023 (INC-154) | Le patin commandé pour un 6127 dépend de la ligne lue ; voir [Assemblages mécaniques des meneaux et traverses du système 70, 2008](/procedures/assemblage-mecanique-meneau-traverse-systeme-70-evo2008.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-37 | Capot aluminium des dormants 6100 et 6101 du système 70 | Poster Kömmerling Gamme 70, profilés principaux, mars 2025 (réf. PROFINE/73/POSTERPLANA0/PRINC/COMP/2024), p. 1, relu en image à 500-600 dpi le 28/09/2026 : le capot **A107** (21 × 67,7 mm, avec la pièce 9B18) est dessiné à gauche du dormant 6100 et à gauche du dormant 6101 ; le demi-capot A474 sur clip M569 est dessiné à gauche du A107 du 6101 ; l'**A108** (21 × 61,7 mm) est dessiné à côté des 6104 et 6161 | DTD n° DBV-24-6/16-2335_V5, p. 14 et 15, relues en image à 300 dpi le 28/09/2026 : le demi-capot **A474 (alu)** sur clip M569 et le capot **A108** sont dessinés à gauche du dormant **6101** ; A474 (alu) et **A108 (alu)** à gauche du **6104** ; le dormant **6100** (p. 15) est dessiné **sans aucun capot** ; l'A107 ne figure pas au DTD. La valeur DTD portée auparavant (« 6100 et 6104 → A108 ») était fausse pour le 6100 : la contradiction demeure pour le **6101** (A107 au poster, A108 sur la planche des dormants du DTD) ; la coupe « Coupes avec capotage » du même DTD, p. 42, légende pourtant **A107** le capot du 6101 (**INC-85**) ; pour le 6100 il n'y a plus de contradiction, le DTD ne dessinant pas de capot | aucune arbitrée : les deux attributions sont portées sur la page, chacune avec sa source | capot commandé à 61,7 mm au lieu de 67,7 mm (ou l'inverse) sur les deux dormants standard — Complément du 28/09/2026 : le manuel de mise en œuvre Système 70 Plateforme porte l'A107 et l'A474 sur les dormants 6100 et 6101 (PDF p. 8-9), comme le poster. |
+/anomalies/contradictions-entre-sources.md :
+| CTR-78 | Cote à déduire « Vitrage (fixe) » des dormants, meneaux et ouvrants du système 70 | Système e.VOLUTION, plan des profilés, système F 91, août 2008, PDF p. 110-111 (registre 3 « Côtes de débit », pages imprimées 2 et 3), relues en image à 200 dpi le 29/09/2026 : ③ Vitrage (fixe) **37,5** (6100, 6106), **46,5** (6101, 6104, 6108 à 6111), **67,5** (2502), **29,5** (6102, 6105, 6107), 52,5 (2403) ; toutes les autres lignes (DEO, DFO, renforts, meneau / traverse) égales au manuel de 2023. Complément du 29/09/2026, même classeur, PDF p. 112 (meneaux) et p. 113 (ouvrants), relues en image : ③ Vitrage (fixe) **22,5** (6127), **27,5** (2425), **40** (2427) ; **55,5** (6112, 6121), **79,5** (6115, 6123), **78,5** (2418), **100,5** (2416, 2415) ; toutes les autres lignes égales au manuel de 2023 | Mise en œuvre Système 70 Plateforme, septembre 2023, PDF p. 105-106 (registre 2.3.1) : ③ Vitrage (fixe) **38**, **47**, **68**, **30** pour les mêmes dormants ; p. 107 (meneaux) : 23, 28, 40,5 ; p. 108 (ouvrants) : 56, 80, 79, 101 | Pas de valeur retenue seule : 2008 pour les menuiseries de cette période, 2023 pour la fabrication actuelle. À vérifier auprès de profine : la cote de vitrage fixe a-t-elle changé de 0,5 mm ou l'une des deux éditions arrondit-elle ? | Un vitrage de châssis fixe commandé d'après l'une ou l'autre édition diffère de 1 mm (0,5 mm de chaque côté) |
+/anomalies/incoherences-internes.md :
+| INC-85 | DTD n° DBV-24-6/16-2335_V5 (système 70) | p. 14 et p. 42, relues en image à 300 et 600 dpi le 28/09/2026 | La planche « Dormants » (p. 14) dessine à gauche du dormant **6101** le demi-capot A474 (alu) sur clip M569 et le capot **A108** ; la planche « Coupes avec capotage » (p. 42) légende **A107** le capot clippé sur le même dormant 6101 (coupe 6101 / 6112C / A170). L'A107 n'apparaît nulle part ailleurs dans le DTD | Une des deux légendes est à corriger ; le poster Gamme 70 dessine l'A107 à côté du 6101 (voir **CTR-37**) | capot du 6101 commandé en A108 (61,7 mm au poster) au lieu d'A107 (67,7 mm), ou l'inverse |
+/anomalies/incoherences-internes.md :
+| INC-169 | Mise en œuvre Système 70 Plateforme, profine, version septembre 2023 | PDF p. 271 (registre 2.4.6), relue en image le 28/09/2026 | Titre « Porte **d'entrée** avec fixe latéral » dans le registre de la porte-fenêtre ; « cotes de débit **A472** = Axe − (X + Y/2) » ; X non chiffré | A472 = réhausse A271 ; titre « Porte-fenêtre » ; X : table du 2.4.7 (2502 = 65, 6100 = 35, 6101 = 44) | Référence introuvable au débit, cote X à chercher ailleurs |
+/anomalies/incoherences-internes.md :
+| INC-177 | Mise en œuvre Système 70 Plateforme, profine, version septembre 2023 | PDF p. 309 (registre 2.5.2), relue en image le 28/09/2026 | 6356 / 656 : « 3,2 + 3,5 + 3,2 = IWtotal **9,4** » (la somme vaut 9,9) ; 2502 « **13,8** » (la somme vaut 14,1) ; « (2x) » absent pour 6100 et 6101 | Totaux à recalculer par profine | Inertie de couplage sous-estimée ou fausse |

@@ -21,7 +21,7 @@ source_pages:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     pages: 9, 21-34, 36-37
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
-    pages: 14, 34-52
+    pages: 14, 34-52, 278
 generated:
   by: process:claude-code
   at: 2026-09-18T14:15:00Z
@@ -973,6 +973,11 @@ rose saumon, paumelles à droite : la cote horizontale portée au droit de la pa
 21 mm en 130 kg et 26,5 mm en 150 kg, celle portée au droit de la paumelle basse 19 mm dans les
 deux cas, et une cote verticale de 8 mm est portée sous le vantail [1 p. 36].
 
+Le catalogue Roto NX PVC de juin 2023 donne la même tolérance avec, pour 150 kg, un angle
+d'ouverture d'environ 150° au lieu de 180°, et appelle [C] l'espace extérieur de 100 mm (entrée
+**CTR-118**) ; ses tableaux et vues sont sur
+[Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md) [2 p. 278].
+
 # Fixation d'une fenêtre de sécurité
 
 La *fenêtre de sécurité* est une fenêtre classée retard d'effraction (classes CDR). Le manuel
@@ -1013,7 +1018,7 @@ IMO_180_NX_FR_v2, novembre 2022 —
 `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 9, 21 à 37 (numérotation du PDF)
 
 [2] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 —
-`raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 14 et 34 à 52
+`raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 14, 34 à 52 et 278
 
 # Voir aussi
 

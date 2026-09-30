@@ -1,0 +1,39 @@
+{
+  "question": "chez Roto NX une crémone",
+  "pages_lues": [
+    "/quincaillerie/roto-nx-cremones.md",
+    "/quincaillerie/roto-nx-ksr-soufflet.md",
+    "/quincaillerie/roto-nx-ksr-oscillo-battant.md"
+  ],
+  "anomalies": [
+    "CTR-109",
+    "CTR-113",
+    "CTR-117",
+    "INC-290",
+    "INC-291",
+    "INC-292"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "763392 crémone",
+        "systeme": "Roto NX"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/roto-nx-cremones.md",
+        "/quincaillerie/roto-nx-ksr-soufflet.md",
+        "/quincaillerie/roto-nx-ksr-oscillo-battant.md"
+      ],
+      "caracteres": 212212
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "763392"
+      },
+      "pages_nouvelles": [],
+      "caracteres": 98
+    }
+  ]
+}

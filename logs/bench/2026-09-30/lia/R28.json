@@ -1,0 +1,42 @@
+{
+  "question": "quels sont les embouts compatibles avec les dormants standard de la gamme 70 de profine",
+  "pages_lues": [
+    "/profiles/systeme-70-assemblages.md",
+    "/procedures/seuil-alu-9c42-systeme-70-evo2008.md",
+    "/procedures/traitement-du-battement-systeme-70-evo2008.md",
+    "/profiles/systeme-70-accessoires-par-profile.md"
+  ],
+  "anomalies": [
+    "CTR-96",
+    "CTR-97",
+    "INC-246",
+    "INC-247",
+    "INC-258",
+    "INC-259"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "embout embouts dormant standard compatibles",
+        "systeme": "70"
+      },
+      "pages_nouvelles": [
+        "/profiles/systeme-70-assemblages.md",
+        "/procedures/seuil-alu-9c42-systeme-70-evo2008.md",
+        "/procedures/traitement-du-battement-systeme-70-evo2008.md"
+      ],
+      "caracteres": 90434
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/profiles/systeme-70-accessoires-par-profile.md"
+      },
+      "pages_nouvelles": [
+        "/profiles/systeme-70-accessoires-par-profile.md"
+      ],
+      "caracteres": 79299
+    }
+  ]
+}

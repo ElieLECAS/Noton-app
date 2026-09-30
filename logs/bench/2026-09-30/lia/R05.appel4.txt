@@ -1,0 +1,1143 @@
+===== PAGE 1 : /procedures/chassis-cintres-trapezoidaux-systeme-70.md =====
+# Ce que fait cette procédure
+
+Un châssis spécial du système 70 Plateforme de [profine](/fournisseurs/profine.md)
+(e.VOLUTION, e.MOTION, e.XCLUSIVE) est une menuiserie qui n'est pas rectangulaire : soit
+cintrée (le profilé PVC est courbé à chaud en arc, comme la traverse haute d'une fenêtre en
+plein cintre), soit oblique (trapèze ou triangle, dont deux côtés se rejoignent sous un angle
+aigu appelé angle de pointe). Cette procédure donne le diamètre minimum auquel chaque profilé
+du système 70 peut être cintré, les conditions d'un bon cintrage, et les usinages à prévoir sur
+l'ouvrant et le dormant d'une menuiserie oblique selon son angle de pointe [1 p. 312-313].
+
+Le redressement d'un montant de porte cintré est traité à part, pour la gamme 76 :
+[Redressement d'un montant de porte cintré](/procedures/redressement-montant-porte-cintre-9708.md).
+
+# Conditions et interdictions
+
+Les diamètres minimum de cintrage ont été déterminés en coopération avec les fabricants de
+machines de cintrage : ce sont les diamètres minimum jugés qualitativement acceptables. **Les
+conditions préalables sont que les inserts prévus par le constructeur de la machine soient utilisés
+et que leurs recommandations soient suivies.** Le diamètre de cintrage minimum est égal à la
+largeur du profilé × 10 [1 p. 312].
+
+**Attention — conditions pour un bon cintrage** [1 p. 312] :
+
+- **les profilés ne doivent pas être cintrés avec leurs joints** ;
+- les joints d'étanchéité doivent être enfilés manuellement sur le profilé cintré.
+
+# Étapes
+
+## Cintrage de profilés en matière PVC
+
+Le diamètre de cintrage est le diamètre du cercle suivi par le profilé courbé (deux fois le rayon
+R dessiné sur la fenêtre plein cintre ci-dessous). Le tableau donne, pour chaque profilé du
+système 70, le diamètre minimum de cintrage, en mètres, tel qu'il est écrit dans la liste de la
+planche [1 p. 312].
+
+| Profilé | Diamètre minimum de cintrage (m) |
+| --- | --- |
+| 6100 | 0,50 |
+| 6101 | 0,70 |
+| 2502 | 0,70 |
+| 6102 | 0,85 |
+| 6104 | 0,70 |
+| 6105 | 0,85 |
+| 6155 | 0,85 |
+| 6106 | 0,85 |
+| 6107 | 0,90 |
+| 6108 | 0,85 |
+| 6109 | 0,85 |
+| 6110 | 0,90 |
+| 6111 | 0,90 |
+| 6112 | 0,70 |
+| 6115 | 0,80 |
+| 6121 | 0,70 |
+| 6123 | 0,80 |
+| 2415 | 1,00 |
+| 2416 | 1,00 |
+| 2418 | 0,90 |
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 312, registre 2.6.1, p. 1, version septembre 2023, dessin non à l'échelle)
+
+Les dormants (6100 à 6111, 2502) et les ouvrants (6112, 6115, 6121, 6123, 2415, 2416, 2418) sont
+décrits, avec leurs largeurs, dans
+[Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md). Les
+profilés absents de la liste (6113, 6116, 6117 à 6120, 6122, 6124, meneaux, battements, parcloses)
+n'ont pas de diamètre minimum de cintrage écrit sur la planche.
+
+![Fenêtre plein cintre, rayon R de la traverse cintrée](/assets/procedures/moe-systeme-70/cintrage/chassis-plein-cintre-rayon.png)
+
+Pictogramme d'une fenêtre oscillo-battante en plein cintre, vue de l'intérieur : la flèche R est
+le rayon de l'arc ; le cercle en tireté-point repère la zone cintrée du haut du châssis.
+
+![Profilé dormant et ouvrant cintrés en arc](/assets/procedures/moe-systeme-70/cintrage/cintrage-profile-arc.png)
+
+La coupe d'un dormant et de son ouvrant est dessinée sur l'arc cintré : les trois arcs sont les
+faces du profilé courbé, les traits en tireté-point les rayons qui limitent le tronçon dessiné.
+
+## Menuiserie oblique : trapèze, triangle
+
+Le plus petit angle de pointe réalisable **sans usinage supplémentaire de l'ouvrant ou du
+dormant est de 68°, en tenant compte d'un axe de rotation de 10.5/20** (position de l'axe de
+rotation de la ferrure, en mm, notée ainsi sur la planche). En dessous, des usinages sont à prévoir,
+voir tableau et dessin ci-dessous [1 p. 313].
+
+![Menuiserie oblique, angle de pointe α](/assets/procedures/moe-systeme-70/cintrage/menuiserie-oblique-angle-de-pointe.png)
+
+Pictogramme d'un châssis trapézoïdal : l'angle α est l'angle de pointe, entre le montant vertical
+et la traverse oblique ; le cercle en tireté-point repère la pointe, dont la coupe cotée est donnée
+plus bas.
+
+Le tableau dit quelles mesures d'usinage (repérées 1 à 5 sur la coupe) sont à réaliser pour
+chaque angle de pointe. Une croix signifie que la mesure est à réaliser ; l'en-tête de la planche
+est « Mesure 1-5 pour angle α ≤ 61° » [1 p. 313].
+
+| Angle de pointe α | Mesure 1 | Mesure 2 | Mesure 3 | Mesure 4 | Mesure 5 |
+| --- | --- | --- | --- | --- | --- |
+| 68° | - | - | - | - | - |
+| 61° | X | - | - | - | - |
+| 53° | X | X | - | - | - |
+| 51° | X | X | X | X | - |
+| 48° | X | X | X | X | X |
+| 44° (*) | X | X | X | X | X |
+
+(*) En fonction de la quincaillerie (axe de rotation 10.5/24) [1 p. 313].
+
+Les colonnes 1 à 5 de la planche ne portent pas de titre : la correspondance colonne → repère
+1 à 5 de la coupe suit leur ordre de gauche à droite.
+
+![Coupe dormant / ouvrant, usinages 1 à 5 de la menuiserie oblique](/assets/procedures/moe-systeme-70/cintrage/menuiserie-oblique-usinages-1-5.png)
+
+La coupe montre un dormant renforcé et son ouvrant vitré, avec trois petites zones hachurées : deux
+sur la paroi du dormant côté ouvrant, une sous le joint du haut du dormant. La planche ne dit pas
+en toutes lettres ce que chaque repère enlève ; le tableau donne l'emplacement de chaque repère
+cerclé sur la coupe et sa cote [1 p. 313].
+
+| Repère | Emplacement sur la coupe | Cote portée (mm ou °) |
+| --- | --- | --- |
+| 1 | paroi du dormant côté ouvrant, au droit des zones hachurées basses | 4 |
+| 2 | entre la paroi du dormant et la face biaise de l'ouvrant, en haut | 4.5 |
+| 3 | pied de l'ouvrant, largeur horizontale | 12 |
+| 4 | sous les cotes de pied 20,2 et 12, sans cote propre | - |
+| 5 | haut du dormant, biais mesuré depuis la verticale | 25° |
+
+Les cotes repérées d'un astérisque, 10,5 (verticale) et 20,2 (horizontale), positionnent
+l'axe de rotation (croix cerclée) par rapport au dormant. Le texte écrit un axe de rotation
+« 10.5/20 », la coupe cote 20,2 — entrée **INC-180** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md).
+
+(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 313, registre 2.6.1, p. 2, version septembre 2023, dessin non à l'échelle)
+
+# Ce que le document ne dit pas
+
+Les outils et la méthode d'usinage des repères 1 à 5, la longueur des usinages le long du
+profilé et le profilé dessiné dans la coupe (dormant et ouvrant non légendés) ne sont pas donnés.
+Le repère 4 n'a pas de cote propre.
+
+# Citations
+
+[1] [Système 70 Plateforme, manuel de mise en œuvre, profine](raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf), p. 312-313
+
+# Voir aussi
+
+- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
+- [Abaques dimensionnels du système 70](/profiles/systeme-70-abaques-dimensionnels.md)
+
+===== PAGE 2 : /quincaillerie/roto-nx-ksr-cintre-trapezoidal.md =====
+# Oscillo-battant trapézoïdal et cintré, sécurité de base
+
+Un *châssis cintré* est une fenêtre dont la partie haute est arrondie (plein cintre : un
+demi-cercle ; arc surbaissé : un arc moins haut qu'un demi-cercle) ; un *châssis trapézoïdal* a
+une traverse haute oblique (voir le [glossaire](/reference/glossaire.md)). L'*oscillo-battant*
+(OB) s'ouvre à la française et bascule en soufflet par le haut. La Roto NX KSR en donne une
+configuration propre à ces formes, en sécurité de base, avec sa liste de pièces et sa vue éclatée
+[1 p. 64-65].
+
+**Champs d'application** de l'oscillo-battant trapézoïdal et cintré Roto NX KSR [1 p. 64] :
+
+| Grandeur | Plage |
+| --- | --- |
+| Largeur en feuillure du vantail (LFF) | 400 à 1300 mm |
+| Hauteur en feuillure du vantail (HFF) | 511 à 1900 mm |
+| Poids du vantail | 80 kg maximum |
+
+Autres valeurs de HFF minimale de la fenêtre cintrée : 500 mm [2 p. 41], 510 mm [2 p. 71] — entrée **CTR-112**, voir [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md).
+
+Dans les listes qui suivent, le nombre de galets de verrouillage d'une pièce est donné par sa
+lettre : **E** (galet excentrique réglable en pression d'appui), **V** (galet excentrique de
+sécurité réglable aussi en hauteur) — voir le [glossaire](/reference/glossaire.md). Le chiffre
+entouré en tête de chaque liste est le repère de la pièce sur la vue éclatée. « Voir fichier
+gamme » renvoie au fichier gamme Roto, hors de ce corpus.
+
+## Carton de base (repère 1)
+
+| Repère | Pièce | Système | Galets | Contenu | N° d'article |
+| --- | --- | --- | --- | --- | --- |
+| 1 | Carton de base pour châssis cintré et trapézoïdal | 12/20-13 | 1 V | 1 compas cintré K, 1 étrier pour compas cintré, 1 butée de réhausse cintré | 896118 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 64)
+
+## Crémones OB, hauteur de poignée fixe, fouillot 8 mm (repères 2a et 2b)
+
+La *crémone* est la tringle de verrouillage manœuvrée par la poignée ; le *fouillot* est le carré
+qui reçoit la tige de la poignée (8 mm ici). Elle se choisit par la hauteur en feuillure du
+vantail ; chaque ligne donne la longueur de la crémone, la hauteur de poignée (distance du bas du
+vantail en feuillure à l'axe de la poignée), le nombre de galets et le numéro d'article [1 p. 64].
+
+**Crémone OB, hauteur poignée fixe fouillot 8 mm (2a)** ⁴⁾ :
+
+| Hauteur en feuillure (mm) | Longueur crémone (mm) | Hauteur poignée (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 300 – 600 ²⁾ ³⁾ | 490 | 120 | - | 734530 |
+| 601 – 900 ¹⁾ | 790 | 220 | 1 E | 2009309 |
+
+**Crémone OB KSR, hauteur poignée fixe fouillot 8 mm (2b)** :
+
+| Hauteur en feuillure (mm) | Longueur crémone (mm) | Hauteur poignée (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 801 – 1000 | 780 | 413 | 1 E | 771920 |
+| 1001 – 1200 | 980 | 513 | 1 E | 771921 |
+| 1201 – 1400 | 1180 | 563 | 1 E | 771922 |
+| 1401 – 1600 | 1380 | 563 | 2 E | 771923 |
+| 1601 – 1800 | 1580 | 563 | 2 E | 771924 |
+| 1601 – 1800 | 1380 | 763 | 2 E | 771923 |
+| (ligne sans plage imprimée) | 200 | - | - | 767639 |
+| 1601 – 1800 | 1580 | 1000 | 2 E | 795269 |
+| 1801 – 1900 | 1780 | 1000 | 2 E | 795271 |
+
+**Crémone OB KSR HP fixe – F8 mm avec 2ème compas (2b)**, quand le deuxième compas pour châssis
+cintré (repère 5) est posé :
+
+| Hauteur en feuillure (mm) | Longueur crémone (mm) | Hauteur poignée (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 985 – 1184 | 780 | 413 | 1 E | 771920 |
+| 1185 – 1384 | 980 | 513 | 1 E | 771921 |
+| 1385 – 1584 | 1180 | 563 | 1 E | 771922 |
+| 1585 – 1784 | 1380 | 563 | 2 E | 771923 |
+| 1785 – 1900 | 1580 | 563 | 2 E | 771924 |
+| 1785 – 1900 | 1380 | 763 | 2 E | 771923 |
+| (ligne sans plage imprimée) | 200 | - | - | 767639 |
+| 1785 – 1900 | 1580 | 1000 | 2 E | 795269 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 64)
+
+Dans les deux listes 2b, la ligne « 200 — 767639 » est imprimée sans plage ni désignation, sous la
+ligne 1 380 / 763. Les deux listes portent le même repère 2b (entrée **INC-203**).
+
+Notes de la page [1 p. 64] :
+
+- ¹⁾ HFF 601-700 avec Mini renvoi d'angle.
+- ²⁾ pas de releveur / anti-fausse manœuvre.
+- ³⁾ appelée sur la plage 300 – 600, sans texte imprimé (entrée **INC-203**).
+- ⁴⁾ Avec renvoi d'angle OB intégré.
+
+## Raccord, renvoi d'angle, deuxième compas et allonge (repères 3 à 6)
+
+| Repère | Pièce | Largeur en feuillure (mm) | Hauteur en feuillure (mm) | Longueur (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- | --- | --- |
+| 3 | Raccord de crémone pour châssis arc surbaissé | 400 – 600 | 500 – 1900 | - | 1 E | 245688 |
+| 4 | Renvoi d'angle pour châssis trapézoïdal | - | - | - | 1 V | 260278 |
+| 5 | Deuxième compas pour châssis cintré | 900 – 1300 | 985 – 1900 | - | - | 245764 |
+| 6 | Allonge médian pour châssis cintré | 601 – 1300 | - | 750 | 1 E / 1 V | 245735 |
+| 6 | Allonge médian pour châssis cintré | 601 – 1300 | - | 590 KU | 1 E / 1 V | 245733 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 64)
+
+KU signifie accouplable (abréviation du manuel, voir le [glossaire](/reference/glossaire.md)).
+
+## Verrouilleurs (repères 7 à 9)
+
+Un *verrouilleur* est une pièce de ferrure qui ajoute des points de fermeture (galets) le long
+d'un côté du vantail. Chaque liste se lit par la plage de dimension en feuillure du côté concerné
+[1 p. 64].
+
+**Verrouilleur pour châssis trapézoïdal (7)**, par longueur de la traverse (oblique) en
+feuillure :
+
+| Longueur traverse en feuillure (mm) | Longueur (mm) | Galets | N° d'article |
+| --- | --- | --- | --- |
+| 800 – 1200 | 400 | 1 E | 255280 |
+| 1201 – 1400 | 600 | 1 E | 255281 |
+| 1401 – 1600 | 600 KU | 1 E | 255282 |
+| 1401 – 1600 | 400 | 1 E | 255280 |
+
+Sur la plage 1 401 – 1 600, les deux lignes 600 KU (255282) et 400 (255280) sont imprimées l'une
+sous l'autre, la seconde sans plage répétée.
+
+**Verrouilleur vertical pour châssis cintré (plein cintre) (8)** :
+
+| Hauteur en feuillure (mm) | Longueur (mm) | Galets | N° d'article |
+| --- | --- | --- | --- |
+| 500 – 700 | 420 | - | 245715 ⁴⁾ |
+| 701 – 900 | 620 | 1 V, 1 E | 245716 |
+| 901 – 1100 | 820 | 1 V, 1 E | 245718 |
+| 1101 – 1300 | 1020 | 1 V, 1 E | 245720 |
+| 1301 – 1500 | 1220 | 1 V, 1 E | 245722 |
+| 1501 – 1700 | 1420 | 1 V, 2 E | 245724 |
+| 1701 – 1900 | 1620 | 1 V, 2 E | 245726 |
+
+**Verrouilleur vertical pour châssis trapézoïdal ou arc surbaissé (8a)** :
+
+| Hauteur en feuillure (mm) | Longueur (mm) | Galets | N° d'article |
+| --- | --- | --- | --- |
+| 645 – 845 | 420 | - | 245715 ⁴⁾ |
+| 846 – 1045 | 620 | 1 V, 1 E | 245716 |
+| 1046 – 1245 | 820 | 1 V, 1 E | 245718 |
+| 1246 – 1445 | 1020 | 1 V, 1 E | 245720 |
+| 1446 – 1645 | 1220 | 1 V, 1 E | 245722 |
+| 1646 – 1845 | 1420 | 1 V, 2 E | 245724 |
+| 1846 – 2045 | 1620 | 1 V, 2 E | 245726 |
+
+⁴⁾ Avec renvoi d'angle OB intégré [1 p. 64]. La plage 8a monte jusqu'à 2 045 mm, au-delà de la HFF
+maximale de 1 900 mm du champ d'application, telle qu'imprimée.
+
+**Verrouilleur horizontal pour châssis cintré et trapézoïdal (9)**, par largeur en feuillure :
+
+| Largeur en feuillure (mm) | Longueur (mm) | Galets | N° d'article |
+| --- | --- | --- | --- |
+| 400 – 500 | 380, sans galet de levage | - | 812595 |
+| 501 – 700 | 480 | - | 245729 |
+| 701 – 900 | 680 | 1 E | 245730 |
+| 901 – 1100 | 880 | 1 E | 245731 |
+| 1101 – 1300 | 1080 | 1 E | 245732 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 64)
+
+## Renvois d'angle, paliers, pivots, releveur et gâches (repères 10a à 20)
+
+Le *renvoi d'angle* transmet le verrouillage de la crémone dans l'angle du vantail ; le *pivot
+d'angle* est la ferrure de l'angle bas de l'ouvrant côté paumelles, le *palier d'angle* celle de
+l'angle bas du dormant sur laquelle se pose le vantail ; l'*anti-fausse manœuvre* (AFM) empêche
+de basculer le vantail en soufflet quand il est ouvert à la française (voir le
+[glossaire](/reference/glossaire.md)) [1 p. 64].
+
+| Repère | Pièce | Version | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 10a | Renvoi d'angle | - | 1 V | 260272 |
+| 11 | Renvoi d'angle | - | - | 255273 |
+| 12 | Palier de compas réglable +/-3 | P 3/100 | - | 840384 |
+| 12 | Palier de compas réglable +/-3 | P 6/100 | - | 840403 |
+| 13 | Tige d'axe | - | - | 834705 |
+| 13 | Pivot d'angle | P 6/150 | - | 263858 |
+| 13a | Pivot d'angle réglable en compression | P 6/150 | - | 445171 |
+| 15 | Palier d'angle | P 3/130 (non illustré) | - | 787207 |
+| 15 | Palier d'angle | P 6/130 | - | 787208 |
+| 15 | Palier d'angle | P 6/150 (non illustré) | - | 787209 |
+| 17 | Releveur / anti-fausse manœuvre partie ouvrant | - | - | 795927 |
+| 18 | Gache releveur | - | - | voir fichier gamme |
+| 19 | Gâche de basculement | - | - | voir fichier gamme |
+| 20 | Gâche | - | - | voir fichier gamme |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 64)
+
+Le réglage « +/-3 » du palier de compas est imprimé sans unité. Le repère 13 est imprimé deux fois,
+pour la tige d'axe et pour le pivot d'angle (entrée **INC-203**).
+
+## Vue éclatée
+
+La vue éclatée montre un vantail (gris clair) dans son dormant (rose saumon), dessiné à gauche en
+plein cintre et en haut en trapèze : les deux formes sont superposées sur un même dessin, comme le
+disent les deux pictogrammes de la page (fenêtre trapézoïdale et fenêtre cintrée, toutes deux
+oscillo-battantes) [1 p. 65].
+
+![Vue éclatée de la ferrure Roto NX KSR, oscillo-battant cintré et trapézoïdal](/assets/quincaillerie/roto-nx-ksr/cintre-trapezoidal/vue-eclatee-ob-cintre-trapezoidal.png)
+
+Comment lire la vue, côté par côté :
+
+- **Côté cintré (à gauche en haut)** : l'allonge médian pour châssis cintré (6, dessinée sur
+  l'arc) et une gâche (20) sur le dormant ; en dessous, le deuxième compas (5), le raccord de crémone (3) et
+  une gâche (20).
+- **Côté trapézoïdal (traverse oblique)** : le verrouilleur pour châssis trapézoïdal (7), le
+  renvoi d'angle pour châssis trapézoïdal (4) dans l'angle, une gâche (20).
+- **Montant côté poignée (à gauche)** : les crémones 2a et 2b, la poignée (poignées : voir
+  CTL_1), le releveur / anti-fausse manœuvre (17) et, sur le dormant, une pièce repérée 16.
+- **Montant côté paumelles (à droite)** : les pièces du carton de base (1) — compas cintré,
+  étrier, butée —, la tige d'axe (13) et le palier de compas (12) ; plus bas le verrouilleur
+  vertical (8 / 8a) et ses gâches (20, 21), la pièce 14a, et dans l'angle bas la pièce 14 et le
+  palier d'angle (15).
+- **Traverse basse** : le renvoi d'angle (10a) à gauche, le verrouilleur horizontal (9), le
+  renvoi d'angle (11) à droite ; sur le dormant, la gâche de basculement (19), une pièce (1) et
+  une gâche (20).
+
+Deux indications sont écrites sur le dessin [1 p. 65] :
+
+- **Encoche** : « Coupez la partie dormant du deuxième compas à hauteur de l'encoche. »
+- **Attention** : « Réglez le jeu en feuillure de telle sorte que le compas pour châssis cintré ne
+  frotte pas quand appuie sur le vantail pour passer de l'ouverture à soufflet vers la position de
+  verrouillage. » (texte imprimé tel quel).
+
+La vue repère **14**, **14a**, **16** et **21**, que la liste de la page précédente ne connaît
+pas, et ne repère ni 13a ni 18 (entrée **INC-203**).
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 65)
+
+# Positionnement des gâches, châssis cintré ou trapézoïdal
+
+La page « Dormant — Montage de la ferrure, Chassis cintré ou trapézoïdal » donne les cotes de pose
+des gâches, en mm, pour une « Crémone OB fouillot 15 mm hauteur de poignée fixe », et les cotes de
+perçage du palier de compas sur le dormant [1 p. 102].
+
+![Positionnement des gâches, châssis cintré ou trapézoïdal Roto NX KSR](/assets/quincaillerie/roto-nx-ksr/cintre-trapezoidal/gaches-cintre-trapezoidal.png)
+
+Comment lire le plan : le dormant (saumon) est dessiné à la fois en plein cintre et en trapèze.
+Sur le montant gauche (côté crémone), **G1**, **G2**, **NSP** (releveur / anti-fausse manœuvre) et
+**S** (loqueteau) se cotent depuis le bas ; **GH** est la hauteur de l'axe de la poignée. Sur le
+montant droit, **MV1** et **MV2** depuis le bas, **45** et **190** près du haut, avec la hauteur
+« F-F ouvrant » ; sur l'arc et sur l'oblique, les gâches sont repérées **x** et la cote **3** ; en
+bas, **24**, **86,5**, **MH1** et **12**. « **Conseil :** à hauteur du compas, le cadre dormant doit
+être fixé au mur avec plusieurs vis. »
+
+**Crémone OB** :
+
+| Hauteur HVFF (mm) | HP | G1 | G2 | AFM | L |
+| --- | --- | --- | --- | --- | --- |
+| 351 – 480 | 120 | - | - | - | - |
+| 481 – 600 | 170 | - | - | 223 | - |
+| 601 – 800 | 263 | 383 | - | 138 | - |
+| 801 – 1000 | 413 | 550 | - | 288 | - |
+| 1001 – 1200 | 513 | 700 | - | 388 | - |
+| 1201 – 1400 | 563 | 700 | - | 388 | - |
+| 1401 – 1600 | 563 | 700 | 1170 | 388 | - |
+| 1601 – 1800 | 563 | 700 | 1370 | 388 | - |
+| 1601 – 1800 | 1000 | 700 | 1370 | 1121 | 1244 |
+| 1801 – 1900 | 1000 | 700 | 1370 | 1121 | 1244 |
+
+AFM = releveur / anti fausse manœuvre ; L = loqueteau [1 p. 102].
+
+**Verrouilleur médian vertical châssis cintré** et **châssis trapézoïdal** :
+
+| Hauteur HVFF, cintré (mm) | Hauteur HVFF, trapézoïdal (mm) | MV1 | MV2 | MV3 |
+| --- | --- | --- | --- | --- |
+| 500 – 700 | 645 – 745 | - | - | - |
+| 701 – 900 | 746 – 945 | 175 | 280 | - |
+| 901 – 1100 | 946 – 1145 | 175 | 480 | - |
+| 1101 – 1300 | 1146 – 1345 | 175 | 680 | - |
+| 1301 – 1500 | 1346 – 1545 | - | 280 | 880 |
+| 1501 – 1700 | 1546 – 1745 | 175 | 680 | 1080 |
+| 1701 – 1900 | 1746 – 1900 | 175 | 680 | 1280 |
+
+Les deux tables sont imprimées séparément, avec les mêmes cotes MV1 à MV3 ligne pour ligne.
+
+**Verrouilleur médian horizontal** :
+
+| Largeur LVFF (mm) | MH1 |
+| --- | --- |
+| 400 – 500 | - |
+| 501 – 700 | - |
+| 701 – 900 | 350 |
+| 901 – 1100 | 480 |
+| 1101 – 1300 | 680 |
+
+**Verrouilleur médian cintre / oblique** : « **X** Suivant l'angle de basculement il convient de
+tracer l'emplacement de la gâche de fermeture » [1 p. 102].
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 102)
+
+## Cotes de perçage du dormant, palier de compas
+
+![Cotes de perçage du dormant, palier de compas réglable P3/100 et P6/100](/assets/quincaillerie/roto-nx-ksr/cintre-trapezoidal/percage-dormant-palier-de-compas-p100.png)
+
+Le dessin de gauche montre le dormant (saumon) le long de l'ouvrant (gris), avec les trous du palier
+de compas : **45** entre le début du cintre et le milieu du palier, **16**, **48** et **80** entre les
+trous, **12** en bas ; celui de droite, le palier réglable (flèche **-3.0** / **+2.0**) [1 p. 102].
+
+| Repère | Description | Système |
+| --- | --- | --- |
+| [A] | Palier de compas P3/100, perçage Ø 3 mm, 4 mm profondeur ; Palier de compas P6/100, perçage Ø 6 mm, 9 mm profondeur | - |
+| [B] | 24 mm | 12/20-13 |
+| [C] | Milieu du palier de compas | - |
+| [D] | Début du cintre | - |
+
+« Pour le réglage, utiliser une clé six-pans de 4 mm. Faire un réglage identique au niveau du
+repère [A]. » **Gabarits** : Gabarit P3 **2002405**, Gabarit P6 **2002406** [1 p. 102].
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 102)
+
+# Montage de la ferrure d'ouvrant, dans l'ordre
+
+La page « Ouvrant — Montage de la ferrure, Chassis cintré ou trapézoïdal » donne treize étapes
+[1 p. 103] :
+
+1. Positionnez le compas cintré de telle façon que l'encoche se trouve à la hauteur du début du
+   cintre et fixer le avec 2 vis.
+2. Posez la Renvoi d'angle cintré.
+3. Posez la Renvoi d'angle OB.
+4. Posez l'élément cintré vertical.
+5. Posez l'élément cintré horizontal.
+6. Jusque LFF 600 mm, posez le raccord de crémone cintré de telle façon que l'encoche se trouve à
+   la hauteur du début du cintre. A partir de LFF 601 mm posez, à sa place, le verrouilleur médian
+   cintré. **Attention ! En principe il faut d'abord adapter le verrouilleur médian cintré à la
+   courbe avec les vis de fixation en procédant du bas vers le haut.**
+7. Si nécessaire posez la partie vantail du deuxième compas.
+8. Posez la crémone OB.
+9. Posez la poignée. Débloquez la position médiane des éléments de ferrure en tournant fermement la
+   poignée vers le bas.
+10. Posez le pivot d'angle en feuillure.
+11. Mettez la poignée en position d'ouverture à soufflet.
+12. Enlevez la vis de d'arrêt du compas cintré, dépliez le bras de compas et redressez l'étrier,
+    puis vissez les vis restantes.
+13. En dernier lieu, fixez l'étrier avec 3 vis de longueur maximale.
+
+## Compas 12/20-13 pour châssis cintré
+
+![Compas 12/20-13 pour châssis cintré, repères de montage](/assets/quincaillerie/roto-nx-ksr/cintre-trapezoidal/compas-cintre-12-20-13.png)
+
+Indications écrites sur le dessin [1 p. 103] :
+
+- « Fixez au préalable le compas cintré avec ces 2 vis » ;
+- « **Courbez la têtière du compas selon l'arc du châssis avant le montage du compas** » ;
+- « Début vantail trapézoïdal » (trait en haut) ; « Début de l'arc — Repère pour le montage du
+  palier de compas » ; « Encoche » ; cote **45** entre l'encoche et le palier ;
+- « **Attention ! N'oubliez pas de fixer l'étrier à la fin du montage** (utilisez 3 vis de longueur
+  maximale) » ;
+- « Enlevez la vis d'arrêt » ; la loupe montre le repère **L** / **R** du palier.
+
+## Gabarit de perçage du palier de compas
+
+![Gabarit de perçage du palier de compas sur dormant cintré](/assets/quincaillerie/roto-nx-ksr/cintre-trapezoidal/gabarit-palier-de-compas-cintre.png)
+
+« Placer le gabarit de perçage [1] sur le dormant à 45 mm du début du cintre [3]. [2] = support de
+serrage ; [4] = milieu du palier de compas. » Le dessin porte aussi la cote **24** [1 p. 103].
+
+| Gabarit | N° d'article |
+| --- | --- |
+| Gabarit palier réglable plot de 3mm | 2002405 |
+| Gabarit palier réglable plot de 6mm | 2002406 |
+
+**INFO** : « Pour plus d'informations de montage, se reporter au document SUG_42 » (hors de ce
+corpus) [1 p. 103].
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 103)
+
+# Ce que la source ne donne pas
+
+Les gâches (releveur, basculement, standard) se lisent au fichier gamme, hors de ce corpus.
+
+# Citations
+
+[1] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf.
+IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 64, 65, 102 et 103 (numérotation du PDF)
+
+[2] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 — `raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 41, 71 (numérotation du PDF)
+
+# Voir aussi
+
+- [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md)
+- [Roto NX](/quincaillerie/roto-nx.md)
+- [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)
+- [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md)
+- [PERFORM](/gammes/perform.md)
+- [Instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md)
+- [ROTO](/fournisseurs/roto.md)
+
+===== PAGE 3 : /quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md =====
+# Renvois d'angle Roto NX
+
+Le **renvoi d'angle** est la pièce d'angle de la ferrure : dessinée en équerre, elle transmet le
+verrouillage d'un côté de l'ouvrant à l'autre (voir le [glossaire](/reference/glossaire.md)). Le
+chapitre 5 « Renvois d'angle » du catalogue Roto NX PVC les range en standard (5.1), court (5.2),
+têtière (5.3 : standard et seuil), seuil (5.4), compas (5.5) et solutions particulières (5.6 :
+cintré, fenêtre inclinée, aération, gâche et sortie de tringle) [1 p. 265].
+
+Chaque tableau a des pictogrammes en en-tête de colonne, définis dans la légende du catalogue
+(voir [Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md)) :
+désignation (bulle), longueur, nombre de galets, type de goujon de verrouillage (galets E, P, V,
+voir [Roto NX](/quincaillerie/roto-nx.md)), position (carré entouré de quatre flèches : haut,
+bas), traitement de surface, N° de matériel, et selon le tableau information (« i »), jeu, axe de
+ferrure, profondeur de feuillure, DIN gauche / droite, sortie de tringle, nombre de gâches
+soudées [1 p. 10-11, 266-272]. Conventions de transcription :
+
+- la **longueur** est imprimée en paire « a / b » (110 / 110, 110 / 10, 180 / 0, 110 / 0) ; le sens
+  des deux nombres n'est pas défini, la paire est reportée telle quelle ;
+- une désignation ou une longueur imprimée une seule fois pour plusieurs lignes (cellule
+  fusionnée) est répétée sur chaque ligne ;
+- une position imprimée « Haut / Bas » sur deux lignes d'une même cellule est reportée
+  « Haut, Bas » ;
+- au-dessus de chaque tableau, le catalogue dessine le ou les renvois d'angle sans relier chaque
+  dessin à un N° de matériel : les dessins sont donc montrés ensemble, au-dessus de leur tableau ;
+- les types d'ouverture sont nommés d'après les pictogrammes de la légende [1 p. 12].
+
+Pour les références de renvois d'angle appelées par les nomenclatures de montage KSR, voir
+[Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md).
+
+## Renvoi d'angle standard
+
+![Renvois d'angle standard](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-standard.png)
+
+Section 5.1 « Standard » : quatre dessins ; types d'ouverture : fenêtre oscillo-battante, fenêtre
+ouvrant à la française, fenêtre basculante, fenêtre à la française / oscillo-battante à ouvrant
+semi-fixe [1 p. 266].
+
+| N° de matériel | Désignation | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Position | Traitement de surface |
+| --- | --- | --- | :---: | :---: | --- | --- |
+| 339785 | Renvoi d'angle standard | 110 / 110 | – | – | Haut | Roto Sil |
+| 260275 | Renvoi d'angle standard | 110 / 110 | 1 | E | Haut | Roto Sil |
+| 260277 | Renvoi d'angle standard | 110 / 110 | 1 | P | Haut, Bas | Roto Sil |
+| 260272 | Renvoi d'angle standard | 110 / 110 | 1 | V | Haut, Bas | Roto Sil |
+| 260274 | Renvoi d'angle standard | 110 / 110 | 2 | V | Haut, Bas | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 266)
+
+## Renvoi d'angle spécial court
+
+![Renvois d'angle spéciaux courts](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-special-court.png)
+
+Section 5.2 « Court » : deux dessins ; types d'ouverture : fenêtre oscillo-battante, fenêtre
+ouvrant à la française, fenêtre à la française / oscillo-battante à ouvrant semi-fixe. C'est le
+« renvoi d'angle spécial court → à partir de la page 267 » des tableaux de combinaisons des
+crémones de semi-fixe, voir [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) [1 p. 249, 267].
+
+| N° de matériel | Désignation | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Position | Traitement de surface |
+| --- | --- | --- | :---: | :---: | --- | --- |
+| 260280 | Renvoi d'angle spécial court | 110 / 10 | 1 | E | Haut | Roto Sil |
+| 260282 | Renvoi d'angle spécial court | 110 / 10 | 1 | P | Haut, Bas | Roto Sil |
+| 281288 | Renvoi d'angle spécial court | 110 / 10 | 1 | V | Haut, Bas | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 267)
+
+## Renvoi d'angle de têtière, standard
+
+![Renvoi d'angle de têtière, standard](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-tetiere-standard.png)
+
+Section 5.3.1 « Standard » du renvoi d'angle de têtière, pour l'ouvrant secondaire ; type
+d'ouverture : fenêtre à la française / oscillo-battante à ouvrant semi-fixe. La colonne
+« information » précise l'usage [1 p. 268].
+
+| N° de matériel | Désignation | Longueur (mm) | Information | Nombre de gâches soudées | Nombre de galets | Type de goujon de verrouillage | Position | Traitement de surface |
+| --- | --- | --- | --- | :---: | :---: | :---: | --- | --- |
+| 313538 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire | 1 | 1 | V | Haut | Roto Sil |
+| 367227 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire | 1 | 1 | V | Bas | Roto Sil |
+| 839223 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire / protection contre les déplacements | 1 | 1 | V | Haut | Roto Sil |
+| 839224 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire / protection contre les déplacements | 1 | 1 | V | Bas | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 268)
+
+## Renvoi d'angle de têtière, seuil
+
+![Renvoi d'angle de têtière, seuil](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-tetiere-seuil.png)
+
+Section 5.3.2 « Seuil » du renvoi d'angle de têtière, dessiné en angle bas ; type d'ouverture :
+fenêtre à la française / oscillo-battante à ouvrant semi-fixe ; la colonne « jeu » (deux profils
+emboîtés, cote fléchée en bas) porte 7 ou 10 mm [1 p. 11, 268].
+
+| N° de matériel | Désignation | Longueur (mm) | Information | Jeu (mm) | Nombre de gâches soudées | Nombre de galets | Type de goujon de verrouillage | Position | Traitement de surface |
+| --- | --- | --- | --- | ---: | :---: | :---: | :---: | --- | --- |
+| 823316 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire / gâche soudée | 7 | 1 | 1 | V | Bas | Roto Sil |
+| 794779 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire / gâche soudée | 10 | 1 | 1 | V | Bas | Roto Sil |
+| 858513 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire / système anti-coulissant intégré | 7 | 1 | 1 | V | Bas | Roto Sil |
+| 858515 | Renvoi d'angle têtière | 110 / 110 | Ouvrant secondaire / gâche soudée | 10 | 1 | 1 | V | Bas | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 268)
+
+## Renvoi d'angle de seuil
+
+![Renvois d'angle de seuil](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-seuil.png)
+
+Section 5.4 « Seuil » : deux dessins en angle bas ; types d'ouverture : fenêtre oscillo-battante,
+fenêtre ouvrant à la française, fenêtre à la française / oscillo-battante à ouvrant semi-fixe,
+fenêtre plein cintre oscillo-battante, fenêtre inclinée oscillo-battante ; pas de colonne
+position [1 p. 269].
+
+| N° de matériel | Désignation | Longueur (mm) | Information | Jeu (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | --- | --- | ---: | :---: | :---: | --- |
+| 642264 | Renvoi d'angle seuil | 110 / 110 | Renvoi d'angle standard, galet rallongé | 7 | 1 | V | Roto Sil |
+| 823317 | Renvoi d'angle seuil | 110 / 110 | Renvoi d'angle standard, galet rallongé | 7 | 2 | V | Roto Sil |
+| 614456 | Renvoi d'angle seuil | 110 / 110 | Renvoi d'angle standard, galet rallongé | 10 | 1 | V | Roto Sil |
+| 794778 | Renvoi d'angle seuil | 110 / 110 | Renvoi d'angle standard, galet rallongé | 10 | 2 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 269)
+
+INFO, « Raccordement des seuils » : une description détaillée du raccordement des seuils au
+système de ferrures Roto NX se trouve dans le document **IMO_347**, auquel renvoie un QR code
+imprimé [1 p. 269]. Ce document n'est pas dans le corpus.
+
+## Compas de renvoi d'angle
+
+![Compas de renvoi d'angle](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-compas.png)
+
+Section 5.5 « Compas » : deux dessins, la pièce montée verticalement avec un retour court en
+haut ; types d'ouverture : fenêtre oscillo-battante, fenêtre à la française / oscillo-battante à
+ouvrant semi-fixe [1 p. 270].
+
+| N° de matériel | Désignation | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | --- | :---: | :---: | --- |
+| 293521 | Compas de renvoi d'angle | 180 / 0 | – | – | Roto Sil |
+| 260286 | Compas de renvoi d'angle | 180 / 0 | 1 | P | Roto Sil |
+| 260284 | Compas de renvoi d'angle | 180 / 0 | 1 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 270)
+
+## Renvoi d'angle cintré
+
+![Renvoi d'angle cintré](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-cintre.png)
+
+Section 5.6.1 « Cintré » (solutions particulières) ; types d'ouverture : fenêtre plein cintre
+oscillo-battante, fenêtre inclinée oscillo-battante [1 p. 271].
+
+| N° de matériel | Désignation | Longueur (mm) | Information | Traitement de surface |
+| --- | --- | --- | --- | --- |
+| 255273 | Renvoi d'angle cintré | 110 / 0 | Standard | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 271)
+
+## Renvoi d'angle de fenêtre inclinée
+
+![Renvois d'angle de fenêtre inclinée](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-fenetre-inclinee.png)
+
+Section 5.6.2 « Fenêtre inclinée » : deux dessins, la branche horizontale montante ; types
+d'ouverture : fenêtre inclinée oscillo-battante, fenêtre triangulaire oscillo-battante
+[1 p. 271].
+
+| N° de matériel | Désignation | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | --- | :---: | :---: | --- |
+| 260279 | Renvoi d'angle fenêtre inclinée | 110 / 110 | 1 | E | Roto Sil |
+| 260278 | Renvoi d'angle fenêtre inclinée | 110 / 110 | 1 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 271)
+
+## Renvoi d'angle aération
+
+![Renvoi d'angle aération](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-aeration.png)
+
+Section 5.6.3 « Aération » ; type d'ouverture : fenêtre oscillo-battante. Colonnes « axe de
+ferrure » (deux profils emboîtés, trait d'axe mixte), « profondeur de feuillure » (angle de
+feuillure, flèche oblique) et « DIN gauche/droite » (deux vantaux) [1 p. 11, 272].
+
+| N° de matériel | Désignation | Longueur (mm) | Axe de ferrure (mm) | Profondeur de feuillure (mm) | Nombre de galets | Type de goujon de verrouillage | DIN gauche / droite | Traitement de surface |
+| --- | --- | --- | ---: | ---: | :---: | :---: | --- | --- |
+| 389819 | Renvoi d'angle aération | 110 / 110 | 9 | 20 | 1 | P | Gauche | Roto Sil |
+| 389818 | Renvoi d'angle aération | 110 / 110 | 9 | 20 | 1 | P | Droite | Roto Sil |
+| 389817 | Renvoi d'angle aération | 110 / 110 | 13 | 30 | 1 | P | Gauche | Roto Sil |
+| 389816 | Renvoi d'angle aération | 110 / 110 | 13 | 30 | 1 | P | Droite | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 272)
+
+INFO : **éléments non utilisables en combinaison avec le côté paumelles P et le côté paumelles
+T** [1 p. 272]. Le « côté paumelles T » n'est défini nulle part dans le catalogue (entrée
+**VER-123**).
+
+## Renvoi d'angle gâche et sortie de tringle
+
+![Renvoi d'angle gâche et sortie de tringle](/assets/quincaillerie/roto-nx-catalogue/renvois-angle/renvoi-angle-gache-et-sortie-de-tringle.png)
+
+Section 5.6.4 « Gâche et sortie de tringle » ; type d'ouverture : fenêtre à la française /
+oscillo-battante à ouvrant semi-fixe ; colonnes « sortie de tringle » (deux tringles décalées,
+cote fléchée) et « nombre de gâches soudées » [1 p. 11, 272].
+
+| N° de matériel | Désignation | Longueur (mm) | Sortie de tringle (mm) | Nombre de gâches soudées | Traitement de surface |
+| --- | --- | --- | --- | :---: | --- |
+| 484686 | Renvoi d'angle gâche et sortie de tringle | 110 / 10 | – | 1 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 272)
+
+# Verrouilleurs Roto NX
+
+Le **verrouilleur** (VM dans les abréviations du catalogue) est une ferrure dessinée en tringle
+plate, qui porte selon la référence aucun, un ou deux galets de verrouillage, une gâche soudée ou un
+crochet (voir le [glossaire](/reference/glossaire.md)) [1 p. 13, 318-328]. Le chapitre 7
+« Verrouilleurs » du catalogue Roto NX PVC les range
+en plusieurs pièces (7.1 : standard, sécurité, seuils, recoupable, crémone), têtière (7.2), opposé
+(7.3), crochet (7.4), plein cintre (7.5 : standard, élément cintré horizontal, élément cintré
+vertical) et confort (7.6) [1 p. 317].
+
+Les tableaux suivent la même légende de pictogrammes que ceux des renvois d'angle (voir
+[Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md)) :
+**raccordable** (deux barres crantées emboîtées : la pièce s'accouple à une autre, « J » pour oui,
+« N » pour non, **INC-288**), longueur, nombre de galets, type de goujon de verrouillage (galets E,
+P, V, voir [Roto NX](/quincaillerie/roto-nx.md)), information (« i »), traitement de surface, N° de
+matériel ; selon le tableau, jeu, zone de recoupe, position, nombre de gâches soudées, renvoi
+d'angle intégré, largeur (LFF) ou hauteur (HFF) fond de feuillure d'ouvrant [1 p. 10-12, 318-328].
+Conventions de transcription :
+
+- une valeur imprimée une seule fois pour plusieurs lignes (cellule fusionnée) est répétée sur chaque ligne ;
+- les paires « a / b » des verrouilleurs plein cintre (« 2 / – », « E / – », « 1 / 1 », « V / E ») sont
+  reportées telles quelles : le catalogue ne dit pas à quoi correspond chaque membre de la paire ;
+- chaque section dessine le verrouilleur au-dessus de son tableau sans relier le dessin à un N° de
+  matériel : un dessin par section, au-dessus du tableau ;
+- les types d'ouverture sont nommés d'après les pictogrammes de la légende [1 p. 12].
+
+Les mêmes pièces portent d'autres noms dans les nomenclatures du manuel de montage KSR (« allonge »,
+« allonge de semi-fixe », « allonge médian pour châssis cintré », « verrouilleur médian pour châssis
+cintré ») : voir [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md) et
+[Configurations Roto NX KSR — châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md).
+
+## Verrouilleur en plusieurs pièces, standard
+
+Section 7.1.1 « Standard », deux tableaux : raccordable sur un côté et raccordable des deux côtés ;
+types d'ouverture : fenêtre oscillo-battante, fenêtre ouvrant à la française, fenêtre basculante, fenêtre à la française / oscillo-battante à ouvrant semi-fixe, fenêtre inclinée oscillo-battante [1 p. 318].
+
+### Raccordable sur un côté, standard
+
+![Verrouilleur standard raccordable sur un côté](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-standard-raccordable-un-cote.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- | --- |
+| 255280 | N | 400 | 1 | E | – | Roto Sil |
+| 593607 | N | 400 | 1 | E | Position de broche -4 mm | Roto Sil |
+| 255281 | N | 600 | 1 | E | – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 318)
+
+### Raccordable des deux côtés, standard
+
+![Verrouilleur standard raccordable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-standard-raccordable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- | --- |
+| 308267 | J | 200 | – | – | – | Roto Sil |
+| 767639 | J | 200 | – | – | Réception AFM | Roto Sil |
+| 450821 | J | 200 | 1 | E | – | Roto Sil |
+| 297858 | J | 400 | – | – | – | Roto Sil |
+| 280346 | J | 400 | 1 | E | – | Roto Sil |
+| 255282 | J | 600 | 1 | E | – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 318)
+
+AFM : anti-fausse manœuvre, voir le [glossaire](/reference/glossaire.md) [1 p. 13].
+
+## Verrouilleur en plusieurs pièces, sécurité
+
+Section 7.1.2 « Sécurité », deux tableaux ; types d'ouverture : fenêtre oscillo-battante, fenêtre ouvrant à la française, fenêtre basculante, fenêtre à la française / oscillo-battante à ouvrant semi-fixe [1 p. 319].
+
+### Raccordable sur un côté, sécurité
+
+![Verrouilleur sécurité raccordable sur un côté](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-securite-raccordable-un-cote.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- | --- |
+| 255284 | N | 200 | 1 | P | – | Roto Sil |
+| 296853 | N | 200 | 1 | V | – | Roto Sil |
+| 255285 | N | 400 | 1 | P | – | Roto Sil |
+| 593611 | N | 400 | 1 | P | Position de broche -4 mm | Roto Sil |
+| 296854 | N | 400 | 1 | V | – | Roto Sil |
+| 593612 | N | 400 | 1 | V | Position de broche -4 mm | Roto Sil |
+| 255286 | N | 600 | 1 | P | – | Roto Sil |
+| 296855 | N | 600 | 1 | V | – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 319)
+
+### Raccordable des deux côtés, sécurité
+
+![Verrouilleur sécurité raccordable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-securite-raccordable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- | --- |
+| 567456 | J | 130 | 1 | V | – | Roto Sil |
+| 622880 | J | 200 | 1 | P | – | Roto Sil |
+| 337708 | J | 200 | 1 | V | Emballage spécial | Roto Sil |
+| 622881 | J | 400 | 1 | P | – | Roto Sil |
+| 337710 | J | 400 | 1 | V | Emballage spécial | Roto Sil |
+| 622882 | J | 600 | 1 | P | – | Roto Sil |
+| 296852 | J | 600 | 1 | V | – | Roto Sil |
+| 337711 | J | 600 | 1 | V | Emballage spécial | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 319)
+
+## Verrouilleur en plusieurs pièces, seuils
+
+Section 7.1.3 « Seuils », deux tableaux ; types d'ouverture : fenêtre oscillo-battante, fenêtre ouvrant à la française, fenêtre à la française / oscillo-battante à ouvrant semi-fixe. La colonne « jeu »
+(deux profils emboîtés, cote fléchée en bas) porte 7, 10 ou 12 mm ; toutes les pièces ont un galet
+V et l'information « Galet rallongé » [1 p. 10, 320].
+
+### Raccordable sur un côté, seuils
+
+![Verrouilleur de seuil raccordable sur un côté](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-seuil-raccordable-un-cote.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Jeu (mm) | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | ---: | --- | --- |
+| 625214 | N | 200 | 1 | V | 7 | Galet rallongé | Roto Sil |
+| 625225 | N | 400 | 1 | V | 7 | Galet rallongé | Roto Sil |
+| 566651 | N | 400 | 1 | V | 10 | Galet rallongé | Roto Sil |
+| 625226 | N | 600 | 1 | V | 7 | Galet rallongé | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 320)
+
+### Raccordable des deux côtés, seuils
+
+![Verrouilleur de seuil raccordable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-seuil-raccordable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Jeu (mm) | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | ---: | --- | --- |
+| 618552 | J | 200 | 1 | V | 10 | Galet rallongé | Roto Sil |
+| 618554 | J | 400 | 1 | V | 10 | Galet rallongé | Roto Sil |
+| 741408 | J | 400 | 1 | V | 12 | Galet rallongé | Roto Sil |
+| 625227 | J | 600 | 1 | V | 7 | Galet rallongé | Roto Sil |
+| 618553 | J | 600 | 1 | V | 10 | Galet rallongé | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 320)
+
+INFO, « Raccordement des seuils », imprimé sous chacun des deux tableaux : « Vous trouverez dans le
+document suivant une description détaillée du raccordement des seuils au système de ferrures Roto
+NX. » Le document est l'**IMO_347**, auquel renvoie un QR code [1 p. 320].
+
+## Verrouilleur en plusieurs pièces, recoupable
+
+Section 7.1.4 « Recoupable » : la colonne « zone de recoupe » (scie au-dessus d'une barre) donne la
+longueur dont la pièce peut être raccourcie (voir le [glossaire](/reference/glossaire.md)). Deux
+tableaux, recoupable sur un côté et recoupable des deux côtés ; types d'ouverture : fenêtre oscillo-battante, fenêtre ouvrant à la française, fenêtre basculante,
+fenêtre à la française / oscillo-battante à ouvrant semi-fixe [1 p. 10, 321].
+
+### Recoupable sur un côté
+
+![Verrouilleur recoupable sur un côté](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-recoupable-un-cote.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Zone de recoupe (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | ---: | :---: | :---: | --- |
+| 489993 | J | 330 | 200 | – | – | Roto Sil |
+| 861349 | J | 330 | 200 | 1 | V | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 321)
+
+### Recoupable des deux côtés
+
+![Verrouilleur recoupable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-recoupable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Zone de recoupe (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | ---: | :---: | :---: | --- |
+| 610174 | J | 980 | 200 / 200 | 1 | P | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 321)
+
+La zone de recoupe du 610174 est imprimée « 200 / 200 », sans dire à quel bout correspond chaque valeur [1 p. 321].
+
+## Verrouilleur en plusieurs pièces, crémone
+
+Section 7.1.5 « Crémone », deux tableaux : raccordable des deux côtés (types d'ouverture : fenêtre oscillo-battante, fenêtre ouvrant à la française,
+fenêtre à la française / oscillo-battante à ouvrant semi-fixe) et ouvrant secondaire (fenêtre à la française / oscillo-battante à ouvrant semi-fixe) ; ce second tableau a une colonne « nombre de gâches soudées »
+(gâche, signe « # ») au lieu des colonnes de galets [1 p. 11, 321].
+
+### Raccordable des deux côtés, crémone
+
+![Verrouilleur de crémone raccordable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-cremone-raccordable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Information | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- | --- |
+| 260193 | J | 400 | 1 | E | – | Roto Sil |
+| 257598 | J | 400 | 1 | V | – | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 321)
+
+### Ouvrant secondaire, crémone
+
+![Verrouilleur de crémone d'ouvrant secondaire](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-cremone-ouvrant-secondaire.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de gâches soudées | Information | Traitement de surface |
+| --- | --- | ---: | :---: | --- | --- |
+| 260195 | J | 400 | 1 | Ouvrant secondaire | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 321)
+
+## Verrouilleur de têtière
+
+Section 7.2 « Têtière » : un tableau, par longueur et par position (carré entouré de quatre flèches :
+haut, bas), toutes les pièces raccordables (« J ») avec une gâche soudée ; type d'ouverture : fenêtre à la française / oscillo-battante à ouvrant semi-fixe
+[1 p. 11, 322]. Les mêmes numéros sont les « allonges de semi-fixe en partie haute / basse, sur
+crémone de semi-fixe » du manuel KSR, voir [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md).
+
+![Verrouilleur de têtière](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-tetiere.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Position | Nombre de gâches soudées | Traitement de surface |
+| --- | --- | ---: | --- | :---: | --- |
+| 280342 | J | 200 | Bas | 1 | Roto Sil |
+| 450822 | J | 200 | Haut | 1 | Roto Sil |
+| 280343 | J | 400 | Bas | 1 | Roto Sil |
+| 280345 | J | 400 | Haut | 1 | Roto Sil |
+| 609059 | J | 600 | Bas | 1 | Roto Sil |
+| 280331 | J | 600 | Haut | 1 | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 322)
+
+## Verrouilleur opposé
+
+Section 7.3 « Opposé », deux tableaux, chaque pièce à deux galets P ; type d'ouverture : fenêtre oscillo-battante. La
+colonne « information » dit où se pose la cale [1 p. 323].
+
+### Raccordable sur un côté, opposé
+
+![Verrouilleur opposé raccordable sur un côté](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-oppose-raccordable-un-cote.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Information | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | --- | :---: | :---: | --- |
+| 330079 | N | 400 | Cale : horizontal en bas | 2 | P | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 323)
+
+### Raccordable des deux côtés, opposé
+
+![Verrouilleur opposé raccordable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-oppose-raccordable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Information | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | --- | :---: | :---: | --- |
+| 373968 | J | 400 | Cale : horizontal en bas, au-dessus de la hauteur de poignée | 2 | P | Roto Sil |
+| 377263 | J | 400 | Cale : horizontal en haut, sous la hauteur de poignée, côté paumelles | 2 | P | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 323)
+
+## Verrouilleur à crochet
+
+Section 7.4 « Crochet » : verrouilleur dessiné avec un boîtier d'où sort un crochet, en deux
+hauteurs de crochet, 17 mm et 21 mm ; type d'ouverture : fenêtre oscillo-battante ; deux dessins par hauteur, sans
+lien avec les N° de matériel. La colonne « information » dit où se pose la pièce [1 p. 324-325].
+
+### Hauteur du crochet 17 mm
+
+![Verrouilleurs à crochet, hauteur du crochet 17 mm](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-crochet-17-mm.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Information | Traitement de surface |
+| --- | --- | ---: | --- | --- |
+| 821929 | J | 200 | Hauteur de crochet 17 mm ; en bas horizontalement | Roto Sil |
+| 821995 | J | 400 | Hauteur de crochet 17 mm ; en bas horizontalement | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 324)
+
+### Hauteur du crochet 21 mm
+
+![Verrouilleurs à crochet, hauteur du crochet 21 mm](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-crochet-21-mm.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Information | Traitement de surface |
+| --- | --- | ---: | --- | --- |
+| 365299 | J | 200 | Hauteur du crochet 21 mm ; côté crémone en haut verticalement, en bas horizontalement | Roto Sil |
+| 365300 | J | 400 | Hauteur du crochet 21 mm ; côté crémone en bas verticalement, côté paumelles verticalement | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 325)
+
+Sous chacun des deux tableaux du crochet est imprimé le même encadré INFO « Raccordement des
+seuils » que sous les verrouilleurs de seuil (document **IMO_347**, QR code) [1 p. 324-325].
+
+## Verrouilleur plein cintre, standard
+
+Section 7.5.1 « Standard » du verrouilleur plein cintre : pièce cintrée, deux tableaux ; type
+d'ouverture : fenêtre plein cintre oscillo-battante. Nombre de galets et type de goujon sont imprimés en paires « a / b »
+[1 p. 326]. Les numéros 245735 et 245733 sont l'« allonge médian pour châssis cintré » du manuel
+KSR, voir [châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md).
+
+### Raccordable sur un côté, plein cintre
+
+![Verrouilleur plein cintre raccordable sur un côté](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-plein-cintre-raccordable-un-cote.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- |
+| 245736 | N | 750 | 2 / – | E / – | Roto Sil |
+| 245735 | N | 750 | 1 / 1 | V / E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 326)
+
+### Raccordable des deux côtés, plein cintre
+
+![Verrouilleur plein cintre raccordable des deux côtés](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-plein-cintre-raccordable-deux-cotes.png)
+
+| N° de matériel | Raccordable | Longueur (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | :---: | :---: | --- |
+| 245734 | J | 590 | 2 / – | E / – | Roto Sil |
+| 245733 | J | 590 | 1 / 1 | V / E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 326)
+
+## Élément cintré horizontal
+
+Section 7.5.2 « Élément cintré -horizontal » : pièce droite, choisie par la largeur fond de
+feuillure d'ouvrant (LFF, double flèche horizontale) ; zone de recoupe 200 mm pour toutes ; types
+d'ouverture : fenêtre plein cintre oscillo-battante, fenêtre inclinée oscillo-battante [1 p. 327]. Le 812595 figure aussi, avec la même longueur, dans le
+tableau du verrouilleur confort (section *Verrouilleur confort* ci-dessous) [1 p. 328].
+
+![Élément cintré horizontal](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-element-cintre-horizontal.png)
+
+| N° de matériel | LFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | ---: | :---: | :---: | --- |
+| 812595 | 400 – 500 | 380 | 200 | – | – | Roto Sil |
+| 245729 | 501 – 700 | 480 | 200 | – | – | Roto Sil |
+| 245730 | 701 – 900 | 680 | 200 | 1 | E | Roto Sil |
+| 245731 | 901 – 1100 | 880 | 200 | 1 | E | Roto Sil |
+| 245732 | 1101 – 1300 | 1080 | 200 | 1 | E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 327)
+
+## Élément cintré vertical
+
+Section 7.5.3 « Élément cintré - vertical » : pièce droite, choisie par la hauteur fond de feuillure
+d'ouvrant (HFF, double flèche verticale) ; zone de recoupe 200 mm ; colonne « renvoi d'angle intégré »
+(équerre en L), « J » pour la seule 245715 ; nombre de galets et type de goujon en paires « a / b » ;
+types d'ouverture : fenêtre plein cintre oscillo-battante, fenêtre inclinée oscillo-battante [1 p. 10, 327]. Chaque plage de HFF à partir de 701 mm porte deux
+pièces, l'une imprimée « E / – », l'autre « V / E ».
+
+![Élément cintré vertical](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-element-cintre-vertical.png)
+
+| N° de matériel | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Renvoi d'angle intégré | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | ---: | --- | :---: | :---: | --- |
+| 245715 | 500 – 700 | 420 | 200 | J | – / – | – / – | Roto Sil |
+| 245717 | 701 – 900 | 620 | 200 | N | 1 / – | E / – | Roto Sil |
+| 245716 | 701 – 900 | 620 | 200 | N | 1 / 1 | V / E | Roto Sil |
+| 245719 | 901 – 1100 | 820 | 200 | N | 1 / – | E / – | Roto Sil |
+| 245718 | 901 – 1100 | 820 | 200 | N | 1 / 1 | V / E | Roto Sil |
+| 245721 | 1101 – 1300 | 1020 | 200 | N | 1 / – | E / – | Roto Sil |
+| 245720 | 1101 – 1300 | 1020 | 200 | N | 1 / 1 | V / E | Roto Sil |
+| 245723 | 1301 – 1500 | 1220 | 200 | N | 2 / – | E / – | Roto Sil |
+| 245722 | 1301 – 1500 | 1220 | 200 | N | 1 / 1 | V / E | Roto Sil |
+| 245725 | 1501 – 1700 | 1420 | 200 | N | 2 / – | E / – | Roto Sil |
+| 245724 | 1501 – 1700 | 1420 | 200 | N | 1 / 2 | V / E | Roto Sil |
+| 245727 | 1701 – 1900 | 1620 | 200 | N | 2 / – | E / – | Roto Sil |
+| 245726 | 1701 – 1900 | 1620 | 200 | N | 1 / 2 | V / E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 327)
+
+## Verrouilleur confort
+
+Section 7.6 « Confort » : pièce droite, choisie par la hauteur fond de feuillure d'ouvrant (HFF) ;
+zone de recoupe 200 mm ; type d'ouverture : fenêtre à la française / oscillo-battante à ouvrant semi-fixe [1 p. 328]. Pour l'oscillo-battant Confort, le
+manuel KSR prescrit d'autres numéros (245715 à 245726, « verrouilleur médian pour châssis cintré »),
+**CTR-119**.
+
+![Verrouilleur confort](/assets/quincaillerie/roto-nx-catalogue/verrouilleurs/verrouilleur-confort.png)
+
+| N° de matériel | HFF (mm) | Longueur (mm) | Zone de recoupe (mm) | Nombre de galets | Type de goujon de verrouillage | Traitement de surface |
+| --- | --- | ---: | ---: | :---: | :---: | --- |
+| 812595 | 530 – 600 | 380 | 200 | – | – | Roto Sil |
+| 774165 | 601 – 800 | 690 | 200 | – | – | Roto Sil |
+| 774174 | 801 – 1000 | 890 | 200 | 1 | E | Roto Sil |
+| 774175 | 1001 – 1200 | 1090 | 200 | 1 | E | Roto Sil |
+| 774176 | 1201 – 1400 | 1290 | 200 | 1 | E | Roto Sil |
+| 774177 | 1401 – 1600 | 1490 | 200 | 2 | E | Roto Sil |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 328)
+
+# Citations
+
+[1] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 — `raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 10 à 13, 249, 265 à 272 et 317 à 328
+
+# Voir aussi
+
+- [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)
+- [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md)
+- [Légende des tableaux du catalogue Roto NX](/quincaillerie/roto-nx-legende-catalogue.md)
+- [Compas et paliers Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md)
+- [Pièces de fermeture et gâches Roto NX](/quincaillerie/roto-nx-pieces-fermeture-gaches.md)
+- [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md)
+- [Roto NX](/quincaillerie/roto-nx.md)
+- [Catalogue Roto NX pour profils PVC](/sources/roto-nx-catalogue-pvc.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /procedures/drainage-et-vitrage-generaux.md | Procédure | Drainage, décompression et vitrage, directives générales profine | profine, drainage, decompression, ventilation, vitrage, vitrage-a-sec | Les cotes de drainage, de décompression et de ventilation communes à tous les systèmes profine, et les règles de calage d'un vitrage isolant par type d'ouverture, avec la conversion poids de vitre / épaisseur, et le montage et le démontage des parcloses. | spéciales : fenêtre à pan coupé, fenêtre en plein cintre, demi-lune fixe, et trois triangles fixes. Les cales marquées d'un astérisque (*) sont en mat |
+| /quincaillerie/roto-nx-champs-application.md | Quincaillerie | Champs d'application Roto NX | roto, roto-nx, abaque, champ-application, poids-vantail, cdr | Les largeurs, hauteurs et poids de vantail admissibles de la ferrure Roto NX selon le type d'ouverture et la classe de sécurité — tableaux, diagrammes d'application relevés courbe par courbe (rectangulaire, inclinée, cintrée, soufflet, paumelles à soufflet pour recouvrement d'ouvrant, confort, Designo), positions des compas d'arrêt de la ferrure soufflet, forces de traction TBDK — avec la règle qui convertit l'épaisseur de vitrage en poids. | fenêtre cintrée a un sommet en arc de cercle, de rayon R. **Le rayon (R) de la fenêtre cintrée doit correspondre à la moitié de la LFF** [1 p. 25]. |
+| /gammes/perform.md | Gamme | PERFORM | pvc, fenetre, perform, kommerling | Gamme de fenêtres et portes PVC de PROFERM, déclinée en profilés de 70 et 76 mm sur profilés KÖMMERLING GREENLINE. | que des menuiseries de différentes formes : plein cintre ou cintre surbaissé, œil de bœuf, anse de panier ou chapeau de gendarme (à partir d'un gabari |
+| /sources/profine-mise-en-oeuvre-systeme-70.md | Document source | Mise en œuvre Système 70 Plateforme, profine | profine, systeme-70, e-volution, fabrication, cotes-de-debit, renfort | Manuel technique d'atelier de 371 pages du système PVC 70 Plateforme de profine (e.VOLUTION, e.MOTION et e.XCLUSIVE) couvrant profilés, débit, statique et mise en œuvre. | rofilé (20 références), conditions, fenêtre plein cintre, profilé en arc / transcrit / [Châssis cintrés et trapézoïdaux du système 70](/procedures/cha |
+| /procedures/redressement-montant-porte-cintre-9708.md | Procédure | Redressement d'un montant de porte cintré par le profilé 9708 | profine, 9708, porte, montant-cintre, renfort, profilé-acier | Préconisation profine pour redresser un montant de porte déformé au moyen du profilé acier précontraint 9708, sans dégonder l'ouvrant. | ier 9708 précontraint** est un plat d'acier livré cintré (courbé). Il sert au rattrapage de montants de portes cintrés : un montant (le côté vertical |
+| /procedures/directives-generales-systeme-70-evo2008.md | Procédure | Directives générales de fabrication du système 70, classeur e.VOLUTION de 2008 | profine, kommerling, e-volution, systeme-70, fabrication, matiere | Les registres 5.1 « Directives générales », 5.10 « Soudure à plat » et 5.2 « Drainage/Décompression » du classeur KÖMMERLING e.VOLUTION d'août 2008 (système 70, système F 91) — matière Kömalit Z, livraison, stockage, débit, fraisage, renforcement, soudure, ébavurage, joints, quincailleries, soudure à plat, drainage, décompression et ventilation des profilés filmés — pour les menuiseries fabriquées à cette époque. | e la teinte (RAL RG 716/1, 1re partie) / après un rayonnement énergétique de 0,8 GJ/m², supérieure au facteur 4 de l'échelle des gris / / Résistance a |
+| /profiles/systeme-76-cotes-de-debit.md | Profilé | Cotes de débit du système 76 | systeme-76-advanced, cote-de-debit, cintrage, trapeze, dormant, ouvrant | Les cotes à déduire de la dimension hors tout pour débiter dormants, meneaux, ouvrants, battements et seuils du système 76 Advanced à joint central, celles des capots aluminium AluClip, et les limites des châssis cintrés et trapézoïdaux. | eu de **0,5** mm ; la variante 1 porte en plus un rayon **R1,5** et **4,4** mm entre le capot et le seuil, et, sur le seuil A076, une hauteur de **12, |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/contradictions-entre-sources.md :
+| CTR-112 | Hauteur fond de feuillure minimale de la fenêtre cintrée Roto NX, côté paumelles P | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 25 (diagramme, 500 mm) et p. 64 (page de configuration, « 511 à 1900 mm », transcrite sur [Configurations Roto NX KSR — châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md)) | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 41 (diagramme en allemand, « FFH 500 – 1 900 mm ») et p. 71 (chapitre 3, relue en image à 110 dpi le 29/09/2026 : « 510 – 1 900 mm ») | Aucune : les valeurs sont citées | Vantail cintré de 500 à 510 mm de HFF admis ou refusé selon la page lue, dans les deux documents ; voir [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-119 | Verrouilleur de l'oscillo-battant Confort Roto NX | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 66 (imprimée 64, « Oscillo-battant Confort, sécurité de base »), relue en image à 110 dpi le 29/09/2026 : repère 6 « Verrouilleur médian pour châssis cintré », par hauteur HVFF côté fermeture / côté paumelle, 530 – 600 (côté paumelle) → 420, **245715** ²⁾ (« avec renvoi d'angle intégré ») ; 601 – 800 → 620 1 V + 1 E, **245716** ; puis 820, 1020, 1220, 1420, 1620 mm, 245718, 245720, 245722, 245724, 245726 | Catalogue Roto NX pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 328 (7.6 « Confort »), relu en image à 110-200 dpi le 29/09/2026 : par HFF, pictogramme « fenêtre à la française / oscillo-battante à ouvrant semi-fixe », 530 – 600 → 380, **812595** ; 601 – 800 → 690, **774165** ; 801 – 1000 → 890, 1 E, 774174 ; 1001 – 1200 → 1090, 774175 ; 1201 – 1400 → 1290, 774176 ; 1401 – 1600 → 1490, 2 E, 774177 ; zone de recoupe 200. Les numéros 245715 à 245726 du manuel sont, au catalogue, l'« Élément cintré - vertical » (7.5.3, p. 327 : 500 – 700 → 420, 245715, renvoi d'angle intégré « J » ; 701 – 900 → 620, 245716, « 1 / 1 », « V / E » …) | Non arbitré : chaque valeur reste dans sa source ; que la section 7.6 « Confort » du catalogue vise l'oscillo-battant Confort du manuel reste à confirmer (pictogramme à deux vantaux au catalogue) | Verrouilleur d'un vantail Confort commandé sous l'un ou l'autre jeu de références, de longueurs différentes (380 / 690 / 890 … contre 420 / 620 / 820 …) ; voir [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md) et [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md) |
+/anomalies/informations-a-verifier.md :
+| VER-123 | Sens de « côté paumelles T » dans l'encadré INFO du renvoi d'angle aération (389816 à 389819) : « Éléments non utilisables en combinaison avec le côté paumelles P et le côté paumelles T » | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 272 (5.6.3), relu en image à 250 dpi le 29/09/2026 : le catalogue ne traite que le côté paumelles P et le côté paumelles Designo (BA 13) (sommaires p. 53 et 277) ; « côté paumelles T » n'apparaît dans aucune liste d'abréviations ni aucun chapitre lu ; complément du 29/09/2026 (tranche 6) : PDF p. 299 (6.5.1), l'équerre de compas OF 331488 est désignée « Équerre de compas OF côté paumelles P / T / A16 » — deuxième emploi de « T » comme côté paumelles, toujours sans définition ; complément du 29/09/2026 (tranche 8) : PDF p. 380 (10.6 compas d'aération), même encadré « Éléments non utilisables en combinaison avec le côté paumelles P et le côté paumelles T. » ; PDF p. 374 (10.3 limiteur d'ouverture à blocage indexé), tableaux « Côté paumelles P / K / A / A16 » et « Côté paumelles Designo (BA 13), côté paumelles A16 Designo » — côtés K, A, A16 et A16 Designo, eux aussi sans définition (le manuel KSR p. 78 écrit « Côté paumelle K, E5, A », **CTR-120**) ; complément du 29/09/2026 (tranche 9) : PDF p. 397 (11.2.2 aération à plusieurs niveaux), même encadré « Éléments non utilisables en combinaison avec le côté paumelles P et le côté paumelles T. » | ROTO : quel côté paumelles est désigné par « T », et avec quel côté paumelles ces renvois d'angle aération s'emploient ; voir [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md) |

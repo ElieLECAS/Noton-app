@@ -1,0 +1,1152 @@
+===== PAGE 1 : /procedures/transformation-of-en-ob-roto-nx.md =====
+# Ce que fait cette procédure
+
+La procédure PROFERM **PRO-PVC-OFOB-01, révision A**, rédigée le 19/03/2026 et classée **PVC**,
+transforme un ouvrant à la française en ouvrant oscillo-battant sur ferrure
+[ROTO NX](/quincaillerie/roto-nx.md) [1 p. 1].
+
+- Un **ouvrant à la française (OF)** est un vantail qui s'ouvre en tournant autour de ses
+  paumelles (les charnières), sur un axe vertical, comme une porte.
+- Un **ouvrant oscillo-battant (OB)** s'ouvre de la même façon, et peut en plus **basculer en
+  soufflet** : le haut du vantail s'écarte vers l'intérieur, le bas restant tenu sur le dormant.
+- Le **dormant** est le cadre fixe scellé dans le mur ; l'**ouvrant** (ou vantail) est la partie
+  mobile. Ces termes, et ceux de la quincaillerie employés plus bas (compas, têtière, coulisseau,
+  plot, platine, obturateur de manœuvre, gâche), sont expliqués dans le
+  [glossaire](/reference/glossaire.md).
+
+La transformation tient en cinq opérations : on retire le compas OF et son équerre, on pose une
+têtière puis un compas OB, on retire l'obturateur de manœuvre de la ferrure d'origine, et on
+visse une gâche OB sur la traverse basse du dormant [1 p. 1-2].
+
+# Conditions et interdictions
+
+- La procédure porte la mention **PVC** dans son cartouche et dans sa référence
+  (PRO-**PVC**-OFOB-01) [1 p. 1].
+- La **têtière** est « fournie à dimension » et le **compas OB** est « adéquat » et « fourni » :
+  ni leur référence de commande, ni la dimension à retenir, ni la règle de choix du compas ne sont
+  données (**VER-31**) [1 p. 1].
+- La **gâche OB** existe en deux versions, **droite** et **gauche** ; la règle qui fait choisir
+  l'une ou l'autre n'est pas donnée (**VER-110**) [1 p. 2].
+- L'obturateur de manœuvre est retiré « afin de libérer la manœuvre OB » [1 p. 2].
+- La procédure ne rappelle aucune limite de dimension ni de poids pour l'ouvrant transformé
+  (**VER-31**). Les champs d'application de la ferrure oscillo-battante Roto NX sont sur
+  [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md).
+
+# Étapes
+
+Les cinq étapes sont numérotées comme dans la procédure. Chaque étape est suivie de son schéma,
+en pleine largeur. Sur les schémas en couleur, le code est celui que légende le schéma de
+l'étape 5 : **gris = ouvrant**, **rose saumon = dormant**. Les ellipses rouges entourent la pièce
+dont parle l'étape ; les flèches noires montrent où elle se pose.
+
+## Étape 1 — Démonter l'équerre de compas et le compas OF d'origine
+
+Première opération : **démonter l'équerre de compas et le compas OF d'origine** [1 p. 1]. Le
+compas OF est la ferrure de l'angle haut propre à l'ouvrant à la française ; l'équerre de compas
+est la pièce coudée en L dessinée dans le même angle.
+
+![Étape 1 — compas OF et équerre de compas OF à démonter](/assets/procedures/transformation-of-en-ob-roto-nx/etape-1-depose-compas-et-equerre-of.png)
+
+Le schéma montre l'angle haut de la menuiserie, vu de face. La bande rose saumon du haut et la
+bande de droite sont le dormant, la zone grise est l'ouvrant (le rectangle blanc, en bas à
+gauche, n'est pas légendé). Deux pièces sont désignées par une flèche et une étiquette :
+
+| Étiquette du schéma | Ce que montre le dessin |
+| --- | --- |
+| Compas OF | ferrure dessinée en haut à droite : un bras horizontal, avec une vis à tête moletée à gauche, posé sur la bande du dormant, et un corps vertical le long du bord droit |
+| Equerre de Compas OF | pièce coudée en L dessinée sur l'ouvrant : une branche horizontale le long du haut, une branche verticale qui descend dans l'angle droit |
+
+(schéma: raw/roto-nx-transformation-of-en-ob-2026-03.pdf, p. 1)
+
+## Étape 2 — Installer et visser la têtière fournie à dimension
+
+Deuxième opération : **installer et visser la têtière fournie à dimension** [1 p. 1]. La têtière
+est ici la longue ferrure plate qui court le long du haut de l'ouvrant et sur laquelle le compas
+OB viendra se monter.
+
+![Étape 2 — pose de la têtière sur le haut de l'ouvrant](/assets/procedures/transformation-of-en-ob-roto-nx/etape-2-pose-tetiere.png)
+
+La têtière est entourée de rouge, au-dessus de l'ouvrant (en gris) ; la flèche noire verticale
+indique qu'elle se pose sur le haut de l'ouvrant. Dans les deux angles, on voit les autres parties
+de la ferrure de l'ouvrant. Aucune cote de pose ni
+de perçage n'est portée sur le schéma.
+
+(schéma: raw/roto-nx-transformation-of-en-ob-2026-03.pdf, p. 1)
+
+## Étape 3 — Installer le compas OB adéquat fourni sur la têtière
+
+Troisième opération : **installer le compas OB adéquat fourni sur la têtière** [1 p. 1]. Le compas
+OB est le bras articulé de l'angle haut qui retient le vantail quand il bascule en soufflet.
+
+![Étape 3 — pose du compas OB sur la têtière](/assets/procedures/transformation-of-en-ob-roto-nx/etape-3-pose-compas-ob.png)
+
+Le compas OB, entouré de rouge, est dessiné en position levée, son extrémité droite au-dessus de l'angle haut droit ; la flèche noire le fait descendre dans cet angle. La
+têtière posée à l'étape 2 est visible le long du haut de l'ouvrant.
+
+(schéma: raw/roto-nx-transformation-of-en-ob-2026-03.pdf, p. 1)
+
+Le détail ci-dessous montre, en deux temps reliés par une flèche bleue, comment le compas OB
+s'accroche sur la têtière.
+
+![Étape 3 — accrochage du coulisseau et du plot, ouverture à soufflet de 140 mm](/assets/procedures/transformation-of-en-ob-roto-nx/etape-3-coulisseau-plot-anti-rabattement.png)
+
+Comment lire le détail :
+
+- **À gauche, avant montage.** Le **coulisseau** (pièce rose au bout du bras de compas) est
+  au-dessus de la têtière ; un pointillé rouge le relie au téton de la têtière sur lequel il se
+  pose, et la flèche rouge indique qu'il descend. À droite, le **plot** est le téton qui dépasse
+  au bout d'un petit bras à lumière (bras percé d'une fente).
+- **À droite, après montage.** Le dessin porte l'inscription **« Ouverture à soufflet 140 mm »**.
+  Le coulisseau est engagé sur la têtière (flèche rouge horizontale) ; le petit bras à lumière est
+  relié au bras de compas à l'endroit que désigne la flèche rouge verticale. Une troisième flèche
+  rouge et un pointillé désignent le bout de la platine, avec l'inscription **« Position finale la
+  platine = anti-rabattement \* »**.
+- L'astérisque de cette inscription ne renvoie à aucune note sur les deux pages de la procédure
+  (**VER-109**).
+
+| Donnée portée sur le détail | Valeur |
+| --- | --- |
+| Ouverture à soufflet (mm) | 140 |
+
+(schéma: raw/roto-nx-transformation-of-en-ob-2026-03.pdf, p. 1)
+
+Le montage du bras de compas, les deux réglages d'ouverture à soufflet de la ferrure Roto NX et
+la position anti-rabattement de la platine sont décrits dans
+[Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md).
+
+## Étape 4 — Retirer l'obturateur de manœuvre
+
+Quatrième opération : **retirer l'obturateur de manœuvre sur la quincaillerie d'origine afin de
+libérer la manœuvre OB** [1 p. 2]. L'obturateur de manœuvre est une petite pièce en plastique
+logée dans une lumière (une fente oblongue) de la ferrure d'origine.
+
+![Étape 4 — obturateur de manœuvre en place, puis retiré](/assets/procedures/transformation-of-en-ob-roto-nx/etape-4-retrait-obturateur-de-manoeuvre.png)
+
+Deux photos reliées par une flèche bleue montrent la même ferrure posée à plat sur un établi :
+
+- **à gauche**, l'obturateur de manœuvre, pièce grise en plastique, est en place dans la lumière
+  de la ferrure, à droite d'une vis à tête ronde ; il est **entouré de rouge** ;
+- **à droite**, l'obturateur est retiré : la lumière est vide, **entourée de vert**, et une
+  flèche verte horizontale, dirigée vers la droite, court le long de la lumière dégagée.
+
+(schéma: raw/roto-nx-transformation-of-en-ob-2026-03.pdf, p. 2)
+
+## Étape 5 — Installer et visser la gâche OB, droite ou gauche, en traverse basse du dormant
+
+Cinquième opération : **installer et visser la gâche OB (droite ou gauche) en traverse basse du
+dormant** [1 p. 2]. Une gâche est une pièce fixée sur le dormant, dans laquelle vient s'engager une
+pièce de la ferrure de l'ouvrant ; la traverse basse est le profilé horizontal du bas du dormant.
+
+![Étape 5 — gâche OB en traverse basse du dormant, sous l'angle bas de l'ouvrant](/assets/procedures/transformation-of-en-ob-roto-nx/etape-5-pose-gache-ob-traverse-basse.png)
+
+Le schéma montre l'angle bas de la menuiserie. La zone grise étiquetée **OUVRANT** porte la
+ferrure d'angle bas de l'ouvrant, dessinée en L (une branche verticale, une branche horizontale),
+et, plus à droite, une autre partie de la ferrure. La bande rose saumon étiquetée **DORMANT** porte
+la gâche OB. La flèche verte part du téton situé sous la branche horizontale de la ferrure
+d'ouvrant et descend jusqu'à la gâche : elle relie ce téton à la gâche.
+Aucune cote de position ni de perçage n'est portée.
+
+(schéma: raw/roto-nx-transformation-of-en-ob-2026-03.pdf, p. 2)
+
+Les deux versions de la gâche sont dessinées côte à côte :
+
+![Gâche OB gauche et gâche OB droite](/assets/procedures/transformation-of-en-ob-roto-nx/etape-5-gaches-ob-gauche-et-droite.png)
+
+À gauche la **Gâche OB Gauche**, à droite la **Gâche OB Droite**. Les deux pièces sont dessinées
+en symétrie l'une de l'autre ; chacune porte deux trous de vis, un à chaque extrémité. Leur
+référence de commande n'est pas donnée (**VER-31**), ni la règle de choix entre droite et gauche
+(**VER-110**).
+
+(schéma: raw/roto-nx-transformation-of-en-ob-2026-03.pdf, p. 2)
+
+# Cotes
+
+| Donnée | Valeur | Où elle est portée |
+| --- | --- | --- |
+| Ouverture à soufflet (mm) | 140 | détail de l'étape 3 |
+
+(schéma: raw/roto-nx-transformation-of-en-ob-2026-03.pdf, p. 1)
+
+C'est la seule cote de la procédure. Les cotes de pose et de perçage de la têtière, du compas OB
+et de la gâche OB ne sont pas données.
+
+# Ce que le document ne dit pas
+
+- La référence de commande de la têtière, du compas OB et des gâches OB droite et gauche, la
+  dimension de la têtière et la règle de choix du compas « adéquat » (**VER-31**).
+- La règle de choix entre la gâche OB droite et la gâche OB gauche (**VER-110**).
+- Le renvoi de l'astérisque de « Position finale la platine = anti-rabattement \* » (**VER-109**).
+- Les limites de dimension et de poids de l'ouvrant transformé (**VER-31**).
+
+Ces points sont suivis au registre [Informations à vérifier](/anomalies/informations-a-verifier.md).
+
+# Citations
+
+[1] [Transformation OF en OB gamme ROTO NX, PROFERM, réf. PRO-PVC-OFOB-01, révision A, 19/03/2026](raw/roto-nx-transformation-of-en-ob-2026-03.pdf), p. 1-2
+
+# Voir aussi
+
+- [Roto NX](/quincaillerie/roto-nx.md)
+- [ROTO](/fournisseurs/roto.md)
+- [Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md)
+- [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md)
+- [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md)
+- [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md)
+- [Glossaire](/reference/glossaire.md)
+- [Informations à vérifier](/anomalies/informations-a-verifier.md)
+
+===== PAGE 2 : /quincaillerie/roto-nx.md =====
+# Ce qu'est la Roto NX
+
+Roto NX est la gamme de quincaillerie [ROTO](/fournisseurs/roto.md) (ferrures, crémones, galets et
+gâches qui font ouvrir, fermer et verrouiller l'ouvrant) dont PROFERM équipe les fenêtres
+[PERFORM+](/gammes/perform-plus.md) et [HYBRIDE+](/gammes/hybride-plus.md) : « Nous équipons nos
+menuiseries des quincailleries Roto NX pour vous assurer sécurité & sérénité et pouvant répondre
+à la classe de résistance 2 avec OB position ouverte (RC2) » [1 p. 2].
+
+# Composants
+
+Les composants Roto NX des gammes PERFORM+ et HYBRIDE+, photographiés et légendés ; une ligne par
+composant, légende dans les termes de la source. La gâche et le galet de sécurité sont regroupés
+sous « + d'étanchéité, + de résistance » ; la crémone de semi-fixe, le système TiltSafe et le
+système anti-fausse manœuvre sous « maniabilité & sécurité maximale, même en oscillo-battant »
+[1 p. 2]. La gâche est la pièce fixée sur le dormant dans laquelle vient s'engager le galet porté
+par l'ouvrant ; l'oscillo-battant (OB) s'ouvre à la française ou en soufflet par la même poignée
+(voir le [glossaire](/reference/glossaire.md)).
+
+| Composant | Légende de la source | Regroupement | Image |
+| --- | --- | --- | ---: |
+| Traitement de surface Roto Sil Level 6 | Il surpasse les exigences de la classe anticorrosion 5, la classe maximale pour un traitement d'une dureté exceptionnelle et d'une protection durable contre la corrosion | - | ![Traitement de surface Roto Sil Level 6](/assets/quincaillerie/roto-nx/roto-sil-level-6.png) |
+| Pivot symétrique | Pivot symétrique systématique. Paumelles invisibles en option | - | ![Pivot symétrique systématique](/assets/quincaillerie/roto-nx/pivot-symetrique.png) |
+| Ouverture oscillo-battante | 2 largeurs d'ouverture oscillo-battante (OB) en 80 mm ou 140 mm avec dispositif anti-claquement intégré | - | ![2 largeurs d'ouverture oscillo-battante](/assets/quincaillerie/roto-nx/largeurs-ouverture-ob.png) |
+| Gâche de sécurité | Gâche de sécurité | + d'étanchéité, + de résistance | ![Gâche de sécurité](/assets/quincaillerie/roto-nx/gache-de-securite.png) |
+| Galet de sécurité | Galet de sécurité | + d'étanchéité, + de résistance | ![Galet de sécurité](/assets/quincaillerie/roto-nx/galet-de-securite.png) |
+| Crémone de semi-fixe | Crémone de semi-fixe | maniabilité & sécurité maximale, même en oscillo-battant | ![Crémone de semi-fixe](/assets/quincaillerie/roto-nx/cremone-semi-fixe.png) |
+| Système TiltSafe | Système TiltSafe (pour une position OB sécurisée) | maniabilité & sécurité maximale, même en oscillo-battant | ![Système TiltSafe](/assets/quincaillerie/roto-nx/tiltsafe.png) |
+| Système anti-fausse manœuvre | Système anti-fausse manœuvre + réhausseur réglable monté sur la crémone | maniabilité & sécurité maximale, même en oscillo-battant | ![Système anti-fausse manœuvre](/assets/quincaillerie/roto-nx/anti-fausse-manoeuvre.png) |
+
+(schéma: raw/brochure-perform-plus-hybride-plus-2023-05.pdf, p. 2)
+
+Le pivot symétrique est systématique, les paumelles invisibles sont **en option** [1 p. 2].
+
+# Cotes
+
+Largeurs d'ouverture oscillo-battante de la Roto NX sur PERFORM+ et HYBRIDE+, en mm [1 p. 2]. La
+largeur d'ouverture est l'écartement de l'ouvrant basculé en soufflet.
+
+| Caractéristique | Valeur (mm) |
+| --- | --- |
+| Largeur d'ouverture OB, première largeur | 80 |
+| Largeur d'ouverture OB, seconde largeur | 140 |
+
+(schéma: raw/brochure-perform-plus-hybride-plus-2023-05.pdf, p. 2)
+
+Les deux largeurs portent le dispositif anti-claquement intégré. Le choix entre elles, à la
+commande ou sur la menuiserie posée, n'est pas documenté.
+
+# Traitement de surface Roto Sil Level 6
+
+Le traitement de surface **Roto Sil Level 6** « surpasse les exigences de la classe anticorrosion
+5, la classe maximale, pour un traitement d'une dureté exceptionnelle et d'une protection
+durable contre la corrosion » [1 p. 2]. La norme de la classe n'est pas nommée à cet endroit ; le
+manuel de montage écrit « Finition Roto Sil de haute qualité (argent mat) pour résistance à la
+corrosion maximale (DIN EN 13126 / 8 et exempte de composés de chrome VI) » [3 p. 21].
+
+# Accès au RC2
+
+La Roto NX peut « répondre à la classe de résistance 2 avec OB position ouverte (RC2) » [1 p. 2] ;
+RC2 est la classe 2 de résistance à l'effraction de la série NF EN 1627 à 1630. Le système
+TiltSafe est donné « pour une position OB sécurisée » [1 p. 2]. Les classes d'effraction des
+produits PROFERM, dont le RC2 de la PERFORM76 obtenu par un autre équipement, sont sur
+[Labels et certifications](/certifications/labels-et-certifications.md). L'accès aux
+certifications RC1 et RC2 relève aussi du Label ROTO Performance [2 p. 34].
+
+# Garantie
+
+La ferrure Roto est garantie 10 ans sur le fonctionnement : voir
+[Garanties par composant](/garanties/garanties-par-composant.md) [1 p. 3, 2 p. 35].
+
+# Caractéristiques générales des ferrures Roto NX KSR
+
+Caractéristiques générales des ferrures Roto NX KSR, dans les termes des
+[instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md) de novembre 2022 [3 p. 21] :
+
+- charges élevées jusqu'à 150 kg : P reposant côté paumelles pour fenêtres et portes PVC ;
+- confort d'aération étendu sans opération de montage importante supplémentaire grâce à
+  l'aération intégrée en série dans le compas (bras de compas et têtière de compas) ;
+- possibilités de réglage simple pour les réglages en hauteur et latéraux ; réglage additionnel de
+  la compression par :
+  - galet de verrouillage **E** : galet excentrique réglable en pression d'appui ;
+  - galet de verrouillage **P** : galet excentrique de sécurité réglable en pression d'appui ;
+  - galet de verrouillage **V** : galet excentrique de sécurité réglable en pression d'appui et en
+    hauteur ;
+- assemblage « Clip&Fit » mécanique et sans perte de course ;
+- assemblage facile et sans vis de têtière et boîtier de crémone / boîtier de serrure au moyen du
+  système Easy Mix System pour dimensions de fouillot ≥ 25 mm ;
+- possibilités d'adaptation individuelle du système de ferrures Roto NX aux différentes exigences
+  de sécurité : de la sécurité de base jusqu'aux fenêtres de sécurité testées de la classification
+  CDR selon la DIN EN 1627-1630 ;
+- position de basculement avec retard d'effraction Tilt Safe selon la classification CDR 2 / CDR 2 N ;
+- finition Roto Sil de haute qualité (argent mat) pour résistance à la corrosion maximale
+  (DIN EN 13126 / 8 et exempte de composés de chrome VI) ;
+- côté paumelles P attrayant grâce aux versions de surface blanc et titane (thermolaquage) ;
+- certifié selon QM 328 ;
+- 10 ans de garantie sur la fonctionnalité des ferrures.
+
+Le *galet de verrouillage* est le galet monté sur la crémone de l'ouvrant qui s'engage dans la
+gâche du dormant ; *excentrique* signifie que sa position se règle en le tournant. Le *fouillot*
+est le carré de la crémone qui reçoit la tige de la poignée (voir le
+[glossaire](/reference/glossaire.md)). Les champs d'application, les classes CDR et les forces de
+traction TBDK sont sur [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) ;
+les consignes générales de montage sur
+[Roto NX KSR — conventions et consignes de sécurité](/procedures/roto-nx-ksr-consignes-generales.md).
+
+Le « galet de sécurité » des PERFORM+ et HYBRIDE+ n'est rattaché par la brochure à aucun des trois
+galets E, P et V [1 p. 2, 3 p. 21].
+
+# Concept de fermeture : galets E, P et V
+
+« Toutes les gâches du système de ferrures Roto NX présentent des axes de vissage identiques. Ce
+concept permet le prééquipement de l'ouvrant avec des galets de sécurité et un rééquipement
+ultérieur du dormant avec des gâches de sécurité (zinc ou acier). Toutes les versions de
+verrouillage sont combinables avec toutes les gâches. » [4 p. 18]
+
+La *gâche* est la pièce vissée sur le dormant dans laquelle s'engage le galet de verrouillage porté
+par la crémone de l'ouvrant. La ferrure Roto NX propose trois versions de galet de verrouillage,
+« qui se distinguent par leur application et les possibilités de réglage » [4 p. 18] :
+
+| Galet de verrouillage | Description |
+| --- | --- |
+| E | Galet réglable par compression |
+| P | Galet champignon de sécurité réglable par compression |
+| V | Galet champignon de sécurité réglable en hauteur et par compression |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 18)
+
+![Galets de verrouillage Roto NX E, P et V montés sur la crémone](/assets/quincaillerie/roto-nx-catalogue/informations/galets-de-verrouillage-e-p-v.png)
+
+La photo montre, de gauche à droite, trois galets montés dans la têtière d'une crémone ; elle
+n'associe pas de lettre à chaque galet.
+
+# Concept de sécurité anti-effraction
+
+« Dans sa version de base, la ferrure Roto NX est déjà équipée d'une sécurité de base au bord
+inférieur de l'ouvrant. Les assemblages prototypes pour fenêtres de sécurité selon la DIN V ENV
+1627–1630 atteignent un effet maximal pour le retard d'effraction. Cette norme comprend un essai
+complet de tous les éléments constitutifs d'une fenêtre. » [4 p. 17]
+
+# Niveaux de sécurité des compositions de ferrure
+
+Le chapitre « Aperçu des ferrures » du catalogue Roto NX pour profils PVC (compositions de
+ferrure par type d'ouverture, côtés paumelles P et Designo) s'ouvre sur deux avertissements
+[4 p. 54] :
+
+- **Toutes les illustrations de ferrures présentées dans ce chapitre servent uniquement
+  d'exemple.** Les données et consignes de montage concrètes figurent respectivement dans les
+  manuels de montage valides ;
+- **niveaux de sécurité** :
+  - les niveaux de sécurité RC 1 N, RC 2 et RC 2 N se réfèrent au système en entier ;
+  - les compositions de ferrures indiquées dans les aperçus des ferrures constituent des
+    recommandations ;
+  - la ferrure atteint les niveaux de sécurité correspondants lors des contrôles nécessaires des
+    systèmes ;
+  - toutefois, les niveaux de sécurité ne sont atteints que si tous les autres éléments du
+    système (par exemple le système de profilés, l'armature, le vitrage, etc.) sont également
+    dimensionnés en fonction du niveau respectif ;
+  - **sur les systèmes avec axe de ferrure de 9 mm, il convient d'utiliser systématiquement des
+    éléments de fermeture de sécurité en acier.**
+
+L'*axe de ferrure* est la cote qui situe la ferrure dans la feuillure de l'ouvrant (systèmes
+12/18-9 et 12/20-9 pour l'axe de 9 mm), voir
+[Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md). Ces niveaux sont
+écrits « RC » ici, « CDR » sur les tableaux français des diagrammes d'application (entrée
+**INC-13**).
+
+# Structure du traitement de surface Roto Sil
+
+Roto Sil est le traitement de surface de la ferrure modulaire Roto NX : « aspect mat argenté pour
+une finition raffinée ; extrêmement robuste et résistant aux rayures ; l'ensemble du revêtement est
+exempt de chrome (VI) ; inoffensif sur le plan toxique pour l'environnement » [4 p. 18].
+
+« Roto Sil Level 6 est basé sur une technologie de revêtement innovante et présente une structure
+micro-cristalline. En combinaison avec Roto Sil, Roto Sil Level 6 est une norme complémentaire pour
+les composants d'assemblage tels que les rivets, les goujons et les éléments coulissants. Cela
+signifie que l'ensemble du système de ferrures OB va bien au-delà des exigences de la classe de
+protection anticorrosion 5 la plus élevée. » Pour la première fois, « des pièces sensibles telles
+que des rivets ou des glissières sont durablement protégées de la corrosion et de l'usure »
+[4 p. 18].
+
+Le médaillon agrandi d'un élément de raccordement montre sa structure de surface ; la légende
+nomme quatre couches [4 p. 18] :
+
+| Ordre dans la légende | Couche (couleur de la légende) |
+| --- | --- |
+| 1 | Vitrification optique (gris foncé) |
+| 2 | Passivation sans chrome VI (gris clair) |
+| 3 | Revêtement en zinc (cadre rouge) |
+| 4 | Matériau de base en acier (hachures) |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 18)
+
+![Structure de surface d'un élément de raccordement Roto Sil](/assets/quincaillerie/roto-nx-catalogue/informations/roto-sil-structure-de-surface.png)
+
+Le certificat QM 328
+de la Roto NX (classe 5 de résistance à la corrosion selon EN 1670) est sur
+[Certificats Roto NX](/certifications/roto-nx-certificats.md). Les arguments commerciaux du
+catalogue (rentabilité, confort, design) sont sur [Roto NX, ce que ROTO annonce](/commercial/roto-nx.md).
+
+# Ce qui reste à documenter
+
+Les gammes PERFORM+ et HYBRIDE+ que la Roto NX équipe sont de statut commercial incertain,
+entrée **VER-02** du registre
+[Informations à vérifier](/anomalies/informations-a-verifier.md).
+
+Les numéros de commande par composant — crémones, compas, verrouilleurs, pivots — sont sur les
+pages de famille Roto NX ; leurs tableaux se lisent avec la
+[légende des tableaux du catalogue](/quincaillerie/roto-nx-legende-catalogue.md). Manque encore
+**le côté paumelles que PROFERM emploie réellement** — P ou Designo II, dont les champs
+d'application diffèrent nettement. Entrée **VER-34**.
+
+# Citations
+
+[1] [Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023](raw/brochure-perform-plus-hybride-plus-2023-05.pdf), p. 2 et 3
+[2] [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md),
+p. 34 et 35
+[3] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf.
+IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 21
+
+[4] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 —
+`raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 17, 18 et 54
+
+# Trois interventions documentées sur ROTO NX
+
+| Intervention | Page |
+| --- | --- |
+| Transformer un ouvrant à la française en oscillo-battant, sur PVC | [Transformation OF en OB](/procedures/transformation-of-en-ob-roto-nx.md) |
+| Monter et régler le bras de report de charge NT Designo II | [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md) |
+| Entretenir et contrôler une ferrure en service | [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md) |
+
+# Voir aussi
+
+- [ROTO](/fournisseurs/roto.md)
+- [PERFORM+](/gammes/perform-plus.md)
+- [HYBRIDE+](/gammes/hybride-plus.md)
+- [Labels et certifications](/certifications/labels-et-certifications.md)
+- [Brochure Nouveautés PERFORM+ et HYBRIDE+](/sources/brochure-perform-plus-hybride-plus.md)
+- [Instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md)
+- [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md)
+- [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)
+- [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md)
+
+===== PAGE 3 : /quincaillerie/roto-nx-ksr-confort-designo.md =====
+# Oscillo-battant Confort, sécurité de base
+
+L'*oscillo-battant* (OB) s'ouvre à la française et bascule en soufflet par le haut (voir le
+[glossaire](/reference/glossaire.md)). La configuration **Confort** de la Roto NX KSR emploie une
+crémone à fouillot de 15 mm (le *fouillot* est le carré qui reçoit la tige de la poignée) et un
+compas P à manœuvre assistée. Le manuel en donne la liste des pièces et la vue éclatée
+[1 p. 66-67].
+
+**Champs d'application** de l'oscillo-battant Confort Roto NX KSR [1 p. 66] :
+
+| Grandeur | Plage |
+| --- | --- |
+| Largeur en feuillure du vantail (LFF) | 520 à 1400 mm |
+| Hauteur en feuillure du vantail (HFF) | 530 à 1730 mm |
+| Poids du vantail | 50 kg maximum |
+| Force de fermeture | 1650 N |
+
+Autre valeur de HFF maximale : 1 600 mm [2 p. 48, 67] — entrée **CTR-111**, voir [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md).
+
+Dans les listes, le chiffre entouré est le repère de la pièce sur la vue éclatée ; la lettre
+après un nombre de galets donne leur type : **E** (galet excentrique réglable en pression
+d'appui), **V** (galet excentrique de sécurité réglable aussi en hauteur), **P** (galet excentrique
+de sécurité) — voir le [glossaire](/reference/glossaire.md). « Voir fichier gamme » renvoie au
+fichier gamme Roto, hors de ce corpus.
+
+## Crémone OB Confort, fouillot 15 mm (repère 1)
+
+La crémone de l'OB Confort se choisit par la largeur en feuillure [1 p. 66].
+
+| Largeur en feuillure (mm) | Longueur crémone (mm) | Galets | N° d'article |
+| --- | --- | --- | --- |
+| 520 – 700 | 490 | - | 307029 |
+| 701 – 900 | 690 | 1 E | 307030 |
+| 901 – 1400 ¹⁾ | 690 | 1 E | 307030 |
+
+¹⁾ avec rallonge (11) en bas et rallonge (12) en haut [1 p. 66].
+
+## Compas P avec manœuvre assistée 12/20-13 (repère 4a)
+
+Le *compas* est le bras de la traverse haute qui retient le vantail en position soufflet ; G et D
+désignent la version gauche et la version droite [1 p. 66].
+
+| Largeur en feuillure (mm) | Compas / longueur (mm) | Galets | N° d'article, gauche (G) | N° d'article, droite (D) |
+| --- | --- | --- | --- | --- |
+| 520 – 600 | 250 / 490 | - | 795032 | 795033 |
+| 601 – 800 | 350 / 690 | - | 795036 | 795037 |
+| 801 – 1000 | 500 / 890 | 1 E | 795040 | 795041 |
+| 1001 – 1400 ¹⁾ | 500 / 890 | 1 E | 795040 | 795041 |
+
+¹⁾ avec rallonge (11) en bas et rallonge (12) en haut [1 p. 66].
+
+## Allonges de crémone horizontales (repères 11 et 12)
+
+Une *allonge* (rallonge) prolonge la crémone ou le compas sur les grandes largeurs ; chaque ligne
+donne la plage de largeur en feuillure et la pièce à ajouter [1 p. 66].
+
+| Repère | Pièce | Largeur en feuillure (mm) | Longueur (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- | --- |
+| 11 | Allonge de crémone horizontale bas | 901 – 1100 | 200 | - | 767639 |
+| 11 | Allonge de crémone horizontale bas | 1101 – 1300 | 400 | 1 E | 280346 |
+| 11 | Allonge de crémone horizontale bas | 1301 – 1400 | 200 | - | 767639 |
+| 11 | Allonge de crémone horizontale bas | 1301 – 1400 | 400 | 1 E | 280346 |
+| 12 | Allonge de crémone horizontale haut | 1001 – 1200 | 200 | - | 767639 |
+| 12 | Allonge de crémone horizontale haut | 1201 – 1400 | 400 | 1 E | 280346 |
+
+De 1 301 à 1 400 mm, l'allonge basse se compose des deux pièces, 200 (767639) et 400 1 E (280346),
+imprimées l'une sous l'autre.
+
+## Verrouilleur médian pour châssis cintré (repère 6)
+
+Le *verrouilleur médian* ajoute des points de fermeture le long d'un montant. Sur l'OB Confort,
+il se choisit par la hauteur du vantail en feuillure (HVFF), dans deux colonnes : côté fermeture
+(montant de la poignée) et côté paumelle [1 p. 66].
+
+| Hauteur HVFF côté fermeture (mm) | Hauteur HVFF côté paumelle (mm) | Longueur (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| - | 530 – 600 | 420 | - | 245715 ²⁾ |
+| 530 – 730 | 601 – 800 | 620 | 1 V + 1 E | 245716 |
+| 731 – 930 | 801 – 1000 | 820 | 1 V + 1 E | 245718 |
+| 931 – 1130 | 1001 – 1200 | 1020 | 1 V + 1 E | 245720 |
+| 1131 – 1330 | 1201 – 1400 | 1220 | 1 V + 1 E | 245722 |
+| 1331 – 1530 | 1401 – 1600 | 1420 | 1 V + 2 E | 245724 |
+| 1531 – 1730 | 1601 – 1730 | 1620 | 1 V + 2 E | 245726 |
+
+²⁾ avec renvoi d'angle intégré [1 p. 66]. Les mêmes numéros d'article (245715 à 245726) sont ceux
+du verrouilleur vertical des [châssis cintrés et trapézoïdaux](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md),
+sur d'autres plages de hauteur.
+
+## Autres pièces de l'OB Confort
+
+| Repère | Pièce | Version | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 2 | Renvoi d'angle OB | - | V | 260288 |
+| 3 | Renvoi d'angle | - | V | 260272 |
+| 5 | Renvoi d'angle coté compas | - | V | 260284 |
+| 7 | Renvoi d'angle pour châssis cintré | - | V | 255273 |
+| 8 | Palier de compas | P 3/130 (non illustré) | - | 859171 |
+| 8 | Palier de compas | P 6/130 | - | 859172 |
+| 8 | Palier de compas | P 6/150 (non illustré) | - | 859173 |
+| 8a | Tige d'axe 88 mm | - | - | 834705 |
+| 9 | Pivot d'angle | P 6/150 | - | 263858 |
+| 9 | Pivot d'angle réglable en compression | P 6/150 | - | 445171 |
+| 10 | Palier d'angle | P 3/130 (non illustré) | - | 787207 |
+| 10 | Palier d'angle | P 6/130 | - | 787208 |
+| 10 | Palier d'angle | P 6/150 (non illustré) | - | 787209 |
+| 16 | Anti-fausse manœuvre | - | - | 307050 |
+| 14 | Gâche de basculement | - | - | voir fichier gamme |
+| 15 | Gâche | - | - | voir fichier gamme |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 66)
+
+Le nombre de galets V des renvois d'angle n'est pas imprimé (pictogramme V seul). Le *palier de
+compas* et le *palier d'angle* sont côté dormant, le *pivot d'angle* côté ouvrant (voir le
+[glossaire](/reference/glossaire.md)).
+
+## Vue éclatée de l'OB Confort
+
+La vue éclatée montre où chaque pièce se pose : le vantail (gris clair) dans son dormant (rose
+saumon) [1 p. 67].
+
+![Vue éclatée de la ferrure Roto NX KSR, oscillo-battant Confort](/assets/quincaillerie/roto-nx-ksr/confort-designo/vue-eclatee-ob-confort.png)
+
+La crémone (1) et la poignée (13 ; poignées : voir CTL_1) sont dessinées sur la **traverse
+basse** du vantail, entre le renvoi d'angle OB (2) à gauche et le renvoi d'angle pour châssis
+cintré (7) à droite, avec l'allonge basse (11) sous elles et, sur le dormant, la gâche de
+basculement (14), l'anti-fausse manœuvre (16) et une gâche (15). En haut : le renvoi d'angle (3)
+à gauche, le compas (4) le long de la traverse haute, l'allonge haute (12), le renvoi d'angle côté
+compas (5) à droite, et dans l'angle haut droit la tige d'axe (8a) et le palier de compas (8). Sur
+chaque montant : un verrouilleur médian (6) et des gâches (15). Dans l'angle bas droit : le pivot
+d'angle (9) et le palier d'angle (10).
+
+La vue repère **4** le compas que la liste repère 4a, et **13** la poignée, qui n'a pas de ligne
+dans la liste (entrée **INC-204**).
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 67)
+
+# Positionnement des gâches, OB Confort, crémone OB fouillot 15 mm, position de poignée variable
+
+Cotes de pose des gâches, en mm, sur le dormant de l'oscillo-battant Confort, « Crémone OB
+fouillot 15 mm position de poignée variable » [1 p. 101].
+
+![Positionnement des gâches, oscillo-battant Confort](/assets/quincaillerie/roto-nx-ksr/confort-designo/gaches-ob-confort.png)
+
+Comment lire le plan : le dormant est en saumon, les gâches en petits rectangles ; la poignée est
+dessinée sur la traverse basse. En haut, **B** se cote depuis l'angle gauche (avec **76** pour la
+première gâche) et **A** depuis l'angle droit, côté paumelles ; sur le montant droit, **149** puis
+**MV1** à **MV3** depuis le bas ; sur le montant gauche, **MV4** à **MV6** depuis le bas ; en bas,
+**24**, **86,5**, **MH1** depuis l'angle gauche et **MH2** depuis l'angle droit ; **12** à côté de
+la poignée. La dernière colonne des tables donne la crémone ou le compas (longueur / hauteur de
+poignée) et les allonges à ajouter.
+
+**Crémone OB Confort** :
+
+| Largeur LVFF (mm) | HP (mm) | MH1 (mm) | MH2 (mm) | Crémone et allonges |
+| --- | --- | --- | --- | --- |
+| 521 – 700 | 220 | - | - | 490/220 |
+| 701 – 900 | 220 | 452 | - | 690/220 1E |
+| 901 – 1100 | 220 | 452 | - | 690/220 1E + 200 KU |
+| 1101 – 1300 | 220 | 452 | 276 | 690/220 1E + 400 1E KU |
+| 1301 – 1400 | 220 | 452 | 476 | 690/220 1E + 400 1E KU + 200 KU |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 101)
+
+**Compas K Confort** :
+
+| Largeur LVFF (mm) | A (mm) | B (mm) | Compas et allonges |
+| --- | --- | --- | --- |
+| 521 – 600 | - | - | 490 |
+| 601 – 800 | - | - | 690 |
+| 801 – 1000 | 600 | - | 890 1E |
+| 1001 – 1200 | 600 | 276 | 890 1E + 200 1E KU |
+| 1201 – 1400 | 600 | 476 | 690 1E + 400 1E KU |
+
+**Coté suspension** (montant droit, côté paumelles) :
+
+| HVFF (mm) | MV1 (mm) | MV2 (mm) | MV3 (mm) | Élément cintré |
+| --- | --- | --- | --- | --- |
+| 530 – 600 | - | - | - | 245715 |
+| 601 – 800 | 175 | 280 | - | 245716 |
+| 801 – 1000 | 175 | 480 | - | 245718 |
+| 1001 – 1200 | 175 | 680 | - | 245720 |
+| 1201 – 1400 | 175 | 880 | - | 245722 |
+| 1401 – 1600 | 175 | 680 | 1080 | 245724 |
+| 1601 – 1730 | 175 | 680 | 1280 | 245726 |
+
+**Verrouilleur vertical** (montant gauche) :
+
+| HVFF (mm) | MV4 (mm) | MV5 (mm) | MV6 (mm) | Élément cintré |
+| --- | --- | --- | --- | --- |
+| 530 – 730 | 196 | 298 | - | 245716 |
+| 731 – 930 | 196 | 498 | - | 245718 |
+| 931 – 1130 | 196 | 698 | - | 245720 |
+| 1131 – 1330 | 196 | 898 | - | 245722 |
+| 1331 – 1530 | 196 | 698 | 1098 | 245724 |
+| 1531 – 1730 | 196 | 698 | 1298 | 245726 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 101)
+
+# Oscillo-battant NT Designo II avec composants Roto NX, sécurité de base
+
+*NT Designo II* est l'un des deux côtés paumelles couverts par le manuel de ferrage Roto NX KSR,
+avec le côté P (voir les diagrammes Designo II de
+[Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md)). Le manuel donne la
+liste des pièces de l'oscillo-battant NT Designo II avec composants Roto NX et sa vue éclatée
+[1 p. 68-69].
+
+**Champs d'application** de l'oscillo-battant NT Designo II [1 p. 68] :
+
+| Grandeur | Plage |
+| --- | --- |
+| Largeur en feuillure du vantail (LFF) | 330 à 1400 mm ¹⁾ |
+| Hauteur en feuillure du vantail (HFF) | 300 à 2400 mm |
+| Poids du vantail standard | 80 kg maximum |
+| Poids du vantail avec report de charge | 150 kg maximum |
+
+Autres valeurs, sécurité de base, sans report de charge : HFF 280 à 2 600 mm, 100 kg maximum ; avec report de charge : LFF 800 à 1 400 mm, HFF 1 000 à 2 600 mm, 150 kg maximum [2 p. 137] — entrée **CTR-114**, voir [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md).
+
+Le *report de charge* est l'ensemble d'une pièce vissée sur l'ouvrant, d'une pièce dormant vissée
+sur le palier d'angle et d'une tringle de soutien du vantail (voir le
+[glossaire](/reference/glossaire.md) et [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md)).
+
+## Crémones OB, hauteur de poignée fixe, fouillot 8 mm (repères 1a et 1)
+
+Trois listes, par hauteur en feuillure ; chaque ligne donne la longueur de la crémone, la hauteur
+de poignée, les galets et le numéro d'article [1 p. 68].
+
+**Crémone OB, hauteur poignée fixe fouillot 8 mm (1a)** ⁴⁾ :
+
+| Hauteur en feuillure (mm) | Longueur crémone (mm) | Hauteur poignée (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 300 – 600 ²⁾ ³⁾ | 490 | 120 | - | 734530 |
+| 601 – 900 ¹⁾ | 790 | 220 | 1 E | 2009309 |
+
+**Crémone OB KSR, hauteur poignée fixe fouillot 8 mm (1)** :
+
+| Hauteur en feuillure (mm) | Longueur crémone (mm) | Hauteur poignée (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 801 – 1000 | 780 | 413 | 1 E | 771920 |
+| 1001 – 1200 | 980 | 513 | 1 E | 771921 |
+| 1201 – 1400 | 1180 | 563 | 1 E | 771922 |
+| 1401 – 1600 | 1380 | 563 | 2 E | 771923 |
+| 1601 – 1800 | 1580 | 563 | 2 E | 771924 |
+| 1601 – 1800 | 1380 | 763 | 2 E | 771923 |
+| (ligne sans plage imprimée) | 200 | - | - | 767639 |
+| 1601 – 1800 | 1580 | 1000 | 2 E | 795269 |
+| 1801 – 2000 | 1780 | 1000 | 2 E | 795271 |
+| 2001 – 2200 | 1980 | 1000 | 2 E | 795273 |
+| 2201 – 2400 | 2180 | 1000 | 3 E | 795275 |
+
+**Crémone OB KSR, version courte HP fixe fouillot 8 mm (1)** — HP : hauteur de poignée :
+
+| Hauteur en feuillure (mm) | Longueur crémone (mm) | Hauteur poignée (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 801 – 1000 | 780 | 413 | 1 E | 771920 |
+| 1001 – 1200 | 980 | 513 | 1 E | 771921 |
+| 1201 – 1400 | 1180 | 563 | 1 E | 771922 |
+| 1401 – 1600 | 1380 | 563 | 1 E | 771923 |
+| 1601 – 1800 | 1380 | 563 | 2 E | 771923 |
+| (ligne sans plage imprimée) | 200 | - | - | 767639 |
+| 1601 – 1800 | 1380 | 763 | 2 E | 771923 |
+| (ligne sans plage imprimée) | 200 | - | - | 767639 |
+| 1801 – 2000 | 1780 | 1000 | 2 E | 795271 |
+| 2001 – 2200 | 1780 | 1000 | 2 E | 795271 |
+| (ligne sans plage imprimée) | 200 | - | - | 767639 |
+| 2201 – 2400 | 1780 | 1000 | 2 E | 795271 |
+| (ligne sans plage imprimée) | 400 | - | 1 E | 280346 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 68)
+
+Les lignes sans plage sont imprimées sans désignation, sous la crémone qu'elles complètent ; leurs
+numéros 767639 (200) et 280346 (400, 1 E) sont ceux des allonges de crémone horizontales de l'OB
+Confort ci-dessus. La crémone 771923 est imprimée avec 1 E sur la plage 1 401 – 1 600 de la version
+courte et avec 2 E sur la même plage de la liste standard ; les deux listes portent le même repère 1
+(entrée **INC-204**).
+
+## Renvois d'angle et têtière de compas (repères 4 à 11)
+
+La *têtière de compas* (repère 7) est la longue ferrure plate vissée le long du haut de l'ouvrant,
+sur laquelle se monte le compas ; elle se choisit par la largeur en feuillure [1 p. 68].
+
+| Repère | Pièce | Galets | N° d'article |
+| --- | --- | --- | --- |
+| 4 | Renvoi d'angle | V | 260272 ⁵⁾ |
+| 6 | Mini renvoi d'angle | P | 260282 |
+| 8 | Deuxième compas (à partir de LFF 1200 mm) | - | 255237 |
+| 9 | Compas Designo | - | voir fichier gamme |
+| 11 | Renvoi d'angle coté compas (toujours) | 1 V | 260284 |
+
+**Têtière de compas (7)** :
+
+| Largeur en feuillure (mm) | Compas / longueur (mm) | Galets | N° d'article |
+| --- | --- | --- | --- |
+| 330 – 430 | 250 / 490, avec mini renvoi d'angle | - | 385393 ⁶⁾ |
+| 431 – 600 | 250 / 490 | - | 385393 |
+| 601 – 800 | 350 / 690 | - | 385394 |
+| 801 – 1000 | 500 / 890 | 1 | 385415 |
+| 1001 – 1200 | 500 / 1090 | 1 | 385416 |
+| 1201 – 1400 | 500 / 1090 | 1 | 385416 ⁷⁾ |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 68)
+
+Le type du galet de la têtière (« 1 ») n'est pas imprimé. Le deuxième compas est annoncé « à partir
+de LFF 1200 mm » dans sa ligne et « à partir de 1201 mm » dans la note ⁷⁾.
+
+## Verrouilleur médian, horizontal et vertical (repère 12)
+
+Le verrouilleur médian de l'OB NT Designo II se choisit par la largeur en feuillure (verrouilleur
+horizontal) et par la hauteur en feuillure (verrouilleur vertical) ; une plage peut demander
+plusieurs pièces, imprimées l'une sous l'autre [1 p. 68].
+
+| Largeur en feuillure (mm) | Hauteur en feuillure (mm) | Longueur (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 801 – 1200 | 801 – 1200 | 400 | 1 E | 255280 |
+| 1201 – 1400 | 1201 – 1400 | 600 | 1 E | 255281 |
+| 1401 – 1600 | 1401 – 1800 | 600 KU | 1 E | 255282 |
+| 1401 – 1600 | 1401 – 1800 | 400 | 1 E | 255280 |
+| - | 1801 – 2000 | 600 KU | 1 E | 255282 |
+| - | 1801 – 2000 | 600 | 1 E | 255281 |
+| - | 2001 – 2400 | 600 KU | 1 E | 255282 |
+| - | 2001 – 2400 | 600 KU | 1 E | 255282 |
+| - | 2001 – 2400 | 400 | 1 E | 255280 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 68)
+
+La plage de largeur 1 401 – 1 600 dépasse la LFF maximale de 1 400 mm du champ d'application,
+telle qu'imprimée. KU signifie accouplable ([glossaire](/reference/glossaire.md)).
+
+## Pivot, palier, releveur, limiteur, kits 150 kg et gâches (repères 13 à 23)
+
+| Repère | Pièce | N° d'article |
+| --- | --- | --- |
+| 13 | Pivot d'angle Designo | 634705 |
+| 14 | Palier d'angle Designo | voir fichier gamme |
+| 15 | Releveur / anti-fausse manœuvre partie ouvrant | 795927 |
+| 19 | Compas limiteur d'ouverture (LFF > 1000) | 485591 |
+| 20 | Kit 150 kg partie dormant | 565254 |
+| 21 | Kit 150 kg partie ouvrant | 567972 |
+| 17 | Gâche de basculement de sécurité | voir fichier gamme |
+| 18 | Gâche | voir fichier gamme |
+| 22 | Gâche compas limiteur d'ouverture | voir fichier gamme |
+| 23 | Cale accessoire | voir fichier gamme |
+| 16 | Releveur / anti-fausse manœuvre | voir fichier gamme |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 68)
+
+Le compas limiteur d'ouverture (485591) est « possible à partir de LFF 525 », « obligatoire à
+partir de LFF 1000 et si le report de charge est monté » [1 p. 68].
+
+## Notes de l'OB NT Designo II
+
+Les sept notes de la page, telles qu'imprimées [1 p. 68] :
+
+- ¹⁾ HFF 601-700 avec Mini renvoi d'angle avec largeur > 430.
+- ²⁾ Pas de releveur / anti-fausse manœuvre.
+- ³⁾ HFF 300-400 avec mini renvoi d'angle avec largeur > 430.
+- ⁴⁾ Avec renvoi d'angle OB intégré.
+- ⁵⁾ Couper l'accroche crocodile si LFF < 331 mm.
+- ⁶⁾ LFF 330-430 avec Mini renvoi d'angle et avec hauteur > 380 ou 700.
+- ⁷⁾ Deuxième compas à partir de 1201 mm.
+
+La note ⁵⁾ fixe une coupe de l'accroche crocodile sous une LFF de 331 mm, alors que la LFF minimale
+du champ d'application est 330 mm.
+
+## Vue éclatée de l'OB NT Designo II
+
+La vue éclatée montre le vantail (gris clair) dans son dormant (rose saumon) [1 p. 69].
+
+![Vue éclatée de la ferrure Roto NX KSR, oscillo-battant NT Designo II](/assets/quincaillerie/roto-nx-ksr/confort-designo/vue-eclatee-ob-designo-ii.png)
+
+Sur le montant côté poignée (à gauche) : les deux crémones dessinées côte à côte (1 et 1a), la
+poignée (poignées : voir CTL_1), le releveur / anti-fausse manœuvre (15) et sa pièce de dormant
+(16), une gâche (18), un renvoi d'angle (4) à chaque angle, et le mini renvoi d'angle (6) dessiné à
+l'intérieur. En haut : la têtière de compas (7) le long de la traverse, le deuxième compas (8) et la
+cale accessoire (23) au-dessus, le compas Designo (9) qui descend dans l'angle haut droit, une gâche
+(18). Sur le montant côté paumelles (à droite) : le renvoi d'angle côté compas (11), le verrouilleur
+médian (12), des gâches (18), le kit 150 kg partie ouvrant (21) et partie dormant (20). En bas : le
+compas limiteur d'ouverture (19) et sa gâche (22), le verrouilleur médian horizontal (12), la gâche
+de basculement de sécurité (17), une gâche (18), et dans l'angle bas droit le pivot d'angle
+Designo (13) et le palier d'angle Designo (14).
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 69)
+
+# Ouvrant à la française NT Designo II avec composants Roto NX
+
+L'*ouvrant à la française* (OF) s'ouvre seulement en rotation sur ses paumelles, sans position
+soufflet (voir le [glossaire](/reference/glossaire.md)). Le manuel donne la liste des pièces de
+l'OF NT Designo II avec composants Roto NX et sa vue éclatée [1 p. 70-71].
+
+**Champs d'application** de l'ouvrant à la française NT Designo II [1 p. 70] :
+
+| Grandeur | Plage |
+| --- | --- |
+| Largeur en feuillure du vantail (LFF) | 370 à 1400 mm ¹⁾ |
+| Hauteur en feuillure du vantail (HFF) | 300 à 2400 mm |
+| Poids du vantail standard | 80 kg maximum |
+| Poids du vantail avec report de charge | 150 kg maximum |
+
+Autres valeurs, sécurité de base, sans report de charge : HFF 280 à 2 600 mm, 100 kg maximum ; avec report de charge : LFF 800 à 1 400 mm, HFF 1 000 à 2 600 mm, 150 kg maximum [2 p. 147] — entrée **CTR-114**, voir [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md).
+
+## Crémones (repères 1a et 1)
+
+Les trois listes de crémones de l'OF NT Designo II — « Crémone OB, hauteur poignée fixe fouillot
+8 mm ⁴⁾ » (1a), « Crémone OB KSR, hauteur poignée fixe fouillot 8 mm » (1) et « Crémone OB KSR,
+version courte HP fixe fouillot 8 mm » (1) — sont imprimées ligne pour ligne avec les mêmes plages,
+longueurs, hauteurs de poignée, galets et numéros d'article que celles de
+l'oscillo-battant NT Designo II (section *Crémones OB, hauteur de poignée fixe, fouillot 8 mm*
+ci-dessus), y compris la ligne 1 401 – 1 600 à 1 E de la version courte et les lignes sans plage
+767639 / 280346 [1 p. 70]. Les listes de l'ouvrant à la française sont intitulées « Crémone OB »,
+telles qu'imprimées.
+
+## Autres pièces de l'OF NT Designo II
+
+| Repère | Pièce | Galets | N° d'article |
+| --- | --- | --- | --- |
+| 4 | Renvoi d'angle | V | 260272 ⁵⁾ |
+| 6 | Mini renvoi d'angle | P | 260282 |
+| 8 | Equerre de compas OF Designo | - | 477255 |
+| 9 | Compas OF | - | voir fichier gamme |
+| 10 | Pivot d'angle Designo | - | 634705 |
+| 11 | Palier d'angle Designo | - | voir fichier gamme |
+| 12 | Releveur / anti-fausse manœuvre ouvrant | - | 795927 |
+| 13 | Limitateur de course à 90° | - | 264603 |
+| 14 | Kit 150 kg partie dormant | - | 565254 |
+| 15 | Kit 150 kg partie ouvrant | - | 567972 |
+| 16 | Verrouilleur médian invisible, partie ouvrant | - | 450984 |
+| 20 | Gâche limiteur d'ouverture | - | voir fichier gamme |
+| 17 | Gâche releveur / anti-fausse manœuvre | - | voir fichier gamme |
+| 18 | Verrouilleur médian invisible, dormant | - | voir fichier gamme |
+| 19 | Gâche | - | voir fichier gamme |
+
+**Verrouilleur médian horizontal (7)**, par largeur en feuillure :
+
+| Largeur en feuillure (mm) | Longueur (mm) | Galets | N° d'article |
+| --- | --- | --- | --- |
+| 801 – 1200 | 400 | 1 E | 255280 |
+| 1201 – 1400 | 600 | 1 E | 255281 |
+| 1401 – 1600 | 600 KU | 1 E | 255282 |
+| 1401 – 1600 | 400 | 1 E | 255280 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 70)
+
+Notes de la page, telles qu'imprimées [1 p. 70] :
+
+- ¹⁾ HFF 601-700 avec Mini renvoi d'angle.
+- ²⁾ Pas de releveur / anti-fausse manœuvre.
+- ³⁾ HFF 300-400 avec mini renvoi d'angle.
+- ⁴⁾ Avec renvoi d'angle OB intégré.
+- ⁵⁾ Couper l'accroche crocodile si LFF < 411 mm.
+
+La note ¹⁾ est appelée à la fois sur la LFF du champ d'application et sur la plage de HFF 601 – 900
+de la crémone 1a ; la note ⁵⁾ fixe ici une LFF de 411 mm, contre 331 mm sur la page de l'OB
+NT Designo II (entrée **INC-204**).
+
+## Vue éclatée de l'OF NT Designo II
+
+![Vue éclatée de la ferrure Roto NX KSR, ouvrant à la française NT Designo II](/assets/quincaillerie/roto-nx-ksr/confort-designo/vue-eclatee-of-designo-ii.png)
+
+Le vantail (gris clair) est dessiné dans son dormant (rose saumon) [1 p. 71]. Sur le montant côté
+poignée (à gauche) : les crémones 1 et 1a, la poignée (poignées : voir CTL_1), le releveur /
+anti-fausse manœuvre (12) et sa gâche (17), une gâche (19), un renvoi d'angle (4) à chaque angle et
+le mini renvoi d'angle (6) dessiné à l'intérieur. En haut et en bas : le verrouilleur médian
+horizontal (7) et des gâches (19) ; en haut à droite, l'équerre de compas OF Designo (8) et le
+compas OF (9). Sur le montant côté paumelles (à droite) : les verrouilleurs médians invisibles,
+partie ouvrant (16) et partie dormant (18), le kit 150 kg partie ouvrant (15) et partie dormant
+(14). En bas : le limitateur de course (13), la gâche limiteur d'ouverture (20), une pièce repérée
+21, et dans l'angle bas droit le pivot d'angle Designo (10) et le palier d'angle Designo (11).
+
+Le repère **21** n'a pas de ligne dans la liste (entrée **INC-204**).
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 71)
+
+# Oscillo-battant à deux vantaux NT Designo II avec composants Roto NX, sécurité de base
+
+La fenêtre à deux vantaux *sans meneau fixe* (sans montant fixe entre les vantaux) a un vantail
+principal oscillo-battant, qui porte la poignée, et un vantail *semi-fixe*, qui ne s'ouvre qu'après
+l'ouvrant principal et se verrouille par une crémone de semi-fixe manœuvrée par un levier (voir le
+[glossaire](/reference/glossaire.md)). Le manuel en donne la liste des pièces et la vue éclatée
+[1 p. 72-73].
+
+**Champs d'application** de l'oscillo-battant à deux vantaux NT Designo II [1 p. 72] :
+
+| Grandeur | Plage |
+| --- | --- |
+| Largeur en feuillure du vantail (LFF) | 370 à 1400 mm ⁵⁾ |
+| Hauteur en feuillure du vantail (HFF) | 300 à 2400 mm |
+| Poids du vantail standard | 80 kg maximum |
+| Poids du vantail avec report de charge | 150 kg maximum |
+
+Autres valeurs (ferrure de battement standard, sécurité de base) : sans report de charge, HFF 430 à 2 600 mm, 100 kg maximum ; avec report de charge, LFF 800 à 1 400 mm, HFF 1 000 à 2 600 mm, 150 kg maximum [2 p. 149] — entrée **CTR-114**, voir [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md).
+
+## Crémones et verrouilleur médian du vantail principal (repères 1, 2 et 12)
+
+Les listes « Crémone OB, hauteur poignée fixe fouillot 8 mm ⁴⁾ » (repère **1**, 300-600 et
+601-900), « Crémone OB KSR, hauteur poignée fixe fouillot 8 mm » et « Crémone OB KSR, version
+courte HP fixe fouillot 8 mm » (repère **2**), ainsi que le « Verrouilleur médian, horizontal et
+vertical » (12), sont imprimés ligne pour ligne avec les mêmes valeurs que ceux de
+l'oscillo-battant NT Designo II à un vantail
+(sections ci-dessus) ; seuls les repères changent (1 et 2 au lieu de 1a et 1) [1 p. 72].
+
+## Têtière de compas (repère 7)
+
+| Largeur en feuillure (mm) | Compas / longueur (mm) | Galets | N° d'article |
+| --- | --- | --- | --- |
+| 370 – 430 | 250 / 490, avec mini renvoi d'angle | - | 385393 |
+| 431 – 600 | 250 / 490 | - | 385393 |
+| 601 – 800 | 350 / 690 | - | 385394 |
+| 801 – 1000 | 500 / 890 | 1 | 385415 |
+| 1001 – 1200 | 500 / 1090 | 1 | 385416 |
+| 1201 – 1400 | 500 / 1090 | 1 | 385416 ⁵⁾ |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 72)
+
+## Autres pièces du vantail principal (repères 4 à 17)
+
+| Repère | Pièce | Galets | N° d'article |
+| --- | --- | --- | --- |
+| 4 | Renvoi d'angle | V | 260272 |
+| 6 | Mini renvoi d'angle | P | 260282 |
+| 8 | Deuxième compas (à partir de LFF 1200 mm) | - | 255237 |
+| 9 | Compas Designo | - | voir fichier gamme |
+| 10 | Releveur / anti-fausse manœuvre partie ouvrant | - | 795927 |
+| 11 | Renvoi d'angle coté compas (toujours) | V | 260284 |
+| 13 | Pivot d'angle Designo | - | 634705 |
+| 14 | Palier d'angle Designo | - | voir fichier gamme |
+| 15 | Renvoi d'angle avec gâche | - | 313538 |
+| 16 | Equerre de compas OF Designo | - | 477255 |
+| 17 | Compas OF | - | voir fichier gamme |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 72)
+
+## Crémones de semi-fixe (repères 18a et 18)
+
+La *crémone de semi-fixe* verrouille le vantail secondaire ; elle se manœuvre par un levier, dont
+la hauteur est donnée à la place de la hauteur de poignée. Le galet **G** n'est pas défini par le
+manuel ([glossaire](/reference/glossaire.md)) [1 p. 72-73].
+
+**Crémone de semi-fixe hauteur poignée fixe (18a)** ⁴⁾ :
+
+| Hauteur en feuillure (mm) | Longueur (mm) | Hauteur levier (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 431 – 710 ⁶⁾ | 600 | 233 | - | 810974 |
+| 601 – 900 ¹⁾ | 790 | 156 | 1 G | 2009311 |
+
+**Crémone de semi-fixe KSR hauteur poignée fixe (18)** :
+
+| Hauteur en feuillure (mm) | Longueur (mm) | Hauteur levier (mm) | Galets | N° d'article |
+| --- | --- | --- | --- | --- |
+| 801 – 1000 | 780 | 335 | 1 G | 835109 |
+| 1001 – 1200 | 980 | 335 | 1 G | 763118 |
+| 1201 – 1400 | 1180 | 335 | 1 G | 763119 |
+| 1401 – 1600 | 1380 | 335 | 2 G | 763120 |
+| 1601 – 1800 | 1580 | 335 | 2 G | 795474 |
+| 1801 – 2000 | 1780 | 640 | 2 G | 795476 |
+| 2001 – 2200 | 1980 | 640 | 2 G | 795478 |
+| 2201 – 2400 | 2180 | 640 | 3 G | 795480 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 72-73)
+
+Les plages 431 – 710 et 601 – 900 de la crémone 18a se chevauchent, telles qu'imprimées.
+
+## Dimensions minimales du semi-fixe
+
+Le tableau donne, selon l'équipement du vantail semi-fixe, sa largeur et sa hauteur minimales et
+la position du mini renvoi d'angle [1 p. 72].
+
+| Semi fixe | Largeur mini (mm) | Hauteur min (mm) | Position du mini-renvoi d'angle |
+| --- | --- | --- | --- |
+| Avec verrou | 430 | 300 | Horizontal |
+| Avec crémone de semi-fixe | 370 | 430 | Vertical D:120 |
+| Avec crémone de semi-fixe | 370 | 700 | Vertical D:220 et + |
+| Avec crémone de semi-fixe | 430 | 380 | horizontal |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 72)
+
+« D:120 » et « D:220 et + » sont imprimés sans explication.
+
+## Pièces du vantail semi-fixe et du battement (repères 19 à 37)
+
+Le *battement* est le profil vertical où se rejoignent les deux ouvrants (voir le
+[glossaire](/reference/glossaire.md)) [1 p. 73].
+
+| Repère | Pièce | Version | N° d'article |
+| --- | --- | --- | --- |
+| 19 | Loqueteau sur crémone semi-fixe | - | 788363 |
+| 20 | Gâche loqueteau sur crémone semi-fixe | - | 788378 |
+| 21 | Butée AFM sur battement | - | 623126 |
+| 22 | Verrou pour semi-fixe | 100 | 305638 |
+| 22 | Verrou pour semi-fixe | 200 (non illustré) | 633419 |
+| 22 | Verrou pour semi-fixe | 390 (non illustré) | 618666 |
+| 23 | Gâche sur battement | - | 623125 |
+| 24 | Cale jeu de 12 mm | - | 350402 |
+| 25 | Verrouilleur médian invisible, partie ouvrant | - | 450984 |
+| 33 | Kit 150 kg partie dormant | - | 565254 |
+| 34 | Kit 150 kg partie ouvrant | - | 567972 |
+| 35 | Compas limiteur d'ouverture (LFF > 1000) | - | 485591 |
+| 26 | Gâche de basculement de sécurité | - | voir fichier gamme |
+| 27 | Gâche | - | voir fichier gamme |
+| 28 | Gâche de sécurité | - | voir fichier gamme |
+| 29 | Verrouilleur médian invisible dormant | - | voir fichier gamme |
+| 30 | Cale accessoire | - | voir fichier gamme |
+| 31 | Gâche sortie de tringle | - | voir fichier gamme |
+| 36 | Gâche compas limiteur d'ouverture | - | voir fichier gamme |
+| 37 | Renvoi de fouillot (option pour poignée centrée) | - | voir fichier gamme |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 73)
+
+Le compas limiteur d'ouverture (485591) est « possible à partir de LFF 525 », « obligatoire à
+partir de LFF 1000 et si le report de charge est monté » [1 p. 73]. Le renvoi de fouillot (37) est
+présenté dans un cadre bleu « Option pour poignée centrée ».
+
+## Notes de l'OB à deux vantaux NT Designo II
+
+Telles qu'imprimées [1 p. 72] :
+
+- ¹⁾ HFF 601-700 avec Mini renvoi d'angle.
+- ²⁾ pas de releveur / anti-fausse manœuvre.
+- ³⁾ LFF 370-430 avec Mini renvoi d'angle et crémone de semi-fixe obligatoire et renvoi d'angle
+  equerre 313538.
+- ⁴⁾ Avec renvoi d'angle OB intégré.
+- ⁵⁾ à partir de LFF 1200 mm un deuxième compas est nécessaire.
+- ⁶⁾ HFF 431-510 avec Mini renvoi d'angle.
+- \*\* Avec renvoi d'angle 280350.
+
+La note ³⁾, qui porte sur une LFF, est appelée sur la plage de hauteur 300 – 600 de la crémone 1 ;
+la note \*\* n'est appelée par aucune ligne des deux pages (entrée **INC-204**).
+
+## Vue éclatée de l'OB à deux vantaux NT Designo II
+
+La vue montre les deux vantaux dans le dormant, sans meneau fixe (pictogramme de la page) : le
+vantail semi-fixe à gauche, le vantail principal oscillo-battant à droite [1 p. 73].
+
+![Vue éclatée de la ferrure Roto NX KSR, oscillo-battant à deux vantaux NT Designo II](/assets/quincaillerie/roto-nx-ksr/confort-designo/vue-eclatee-ob-deux-vantaux-designo-ii.png)
+
+Sur le **vantail semi-fixe** (à gauche) : le compas OF (17) et l'équerre de compas OF Designo (16)
+en haut à gauche, le renvoi d'angle avec gâche (15), un renvoi d'angle (4) aux angles côté
+battement, la crémone de semi-fixe (18 et 18a) le long du battement avec le loqueteau (19) et sa
+gâche (20), le verrouilleur médian (12) en traverses, le verrouilleur médian invisible partie
+ouvrant (25) et partie dormant (29), le kit 150 kg (34 ouvrant, 33 dormant), le compas limiteur
+(35) et sa gâche (36), le pivot (13) et le palier d'angle (14). Un cadre pointillé regroupe les
+pièces posées sur le battement : les gâches de sortie de tringle (31), les verrous (22), la gâche
+sur battement (23) et la butée AFM (21). Sur le **vantail principal** (à droite) : les crémones (1
+et 2), la poignée (poignées : voir CTL_1) et, en option dans un cadre bleu, le renvoi de fouillot
+(37), le releveur (10), le mini renvoi d'angle (6), la têtière de compas (7), le deuxième compas
+(8), la cale accessoire (30), le compas Designo (9), le renvoi d'angle côté compas (11), le
+verrouilleur médian (12), le kit 150 kg (34, 33), le compas limiteur (35), le pivot (13) et le
+palier d'angle (14). Sur le dormant : des gâches (27), la gâche de basculement de sécurité (26) et
+la cale jeu de 12 mm (24).
+
+La gâche de sécurité (28) de la liste n'est pas repérée sur la vue.
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 73)
+
+# Ce que la source ne donne pas
+
+Les compas Designo et OF, le palier d'angle Designo, les gâches, les verrouilleurs médians
+invisibles côté dormant, les cales accessoires et le renvoi de fouillot se lisent au fichier gamme,
+hors de ce corpus.
+
+# Citations
+
+[1] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf.
+IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 66 à 73 et
+101 (numérotation du PDF)
+
+[2] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 — `raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 48, 67, 137, 147, 149 (numérotation du PDF)
+
+# Voir aussi
+
+- [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md)
+- [Roto NX](/quincaillerie/roto-nx.md)
+- [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)
+- [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md)
+- [Compas, paliers et pivots Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md)
+- [Configurations Roto NX KSR — châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md)
+- [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md)
+- [Instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md)
+- [ROTO](/fournisseurs/roto.md)
+- [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md)
+
+===== AUTRES RÉSULTATS =====
+Métadonnées seules. Appelle lire_page(chemin) si l'une d'elles est nécessaire.
+
+| Chemin | Type | Titre | Tags | Description | Extrait |
+| --- | --- | --- | --- | --- | --- |
+| /sources/roto-nx-transformation-of-en-ob.md | Document source | Transformation OF en OB, gamme ROTO NX | roto-nx, of, ob, transformation | Procédure PROFERM de 2 pages, réf. PRO-PVC-OFOB-01 révision A du 19/03/2026, pour transformer un ouvrant PVC à la française en oscillo-battant sur ferrure ROTO NX. | 03/2026, réf. PRO-PVC-OFOB-01, révision A, PVC, « Transformation OF en OB GAMME ROTO NX », logo PROFERM) n'est imprimé qu'en tête de la p. 1. / Pages |
+| /sources/roto-nx-ksr-montage.md | Document source | Instructions de montage Roto NX KSR, PVC, novembre 2022 | roto, roto-nx, ksr, ferrure, montage, abaque | Manuel de ferrage de 124 pages de la quincaillerie Roto NX KSR sur menuiseries PVC — consignes et conventions, champs et diagrammes d'application, nomenclatures de ferrage par configuration, positionnement des gâches, montage, réglage et maintenance — avec son registre de couverture page par page. | dant de commande est le [catalogue Roto NX pour profils PVC](/sources/roto-nx-catalogue-pvc.md) de juin 2023. **La pagination imprimée est inférieure |
+| /quincaillerie/roto-nx-ksr-oscillo-battant.md | Quincaillerie | Configurations Roto NX KSR — oscillo-battant | roto, roto-nx, ksr, oscillo-battant, ob, quincaillerie | Les champs d'application, la quincaillerie et le positionnement des gâches de l'oscillo-battant Roto NX KSR, sécurité de base et RC1, à un vantail et à deux vantaux — têtière de compas, compas P, verrouilleur médian, crémone de semi-fixe et gabarits de montage. | émone de semi-fixe (18, 18a), l'équerre de compas OF (16) et le compas OF (17). Le cadre pointillé, au droit du battement, regroupe les verrous pour s |
+| /quincaillerie/roto-nx-apercu-ferrures-cote-p.md | Quincaillerie | Aperçu des ferrures Roto NX, côté paumelles P | roto, roto-nx, catalogue, apercu-ferrures, oscillo-battant, ouvrant-francaise | Les compositions de ferrure Roto NX côté paumelles P du catalogue PVC de juin 2023, configuration par configuration (OB, TiltSafe, confort, fenêtres inclinée et cintrée, TiltFirst, OF, battement, sécurité de base à CDR 3) — vue d'ensemble, liste des positions avec les pages du catalogue et champ d'application. | Aperçu des ferrures » du catalogue Roto NX pour profils PVC montre, pour chaque configuration — type d'ouverture et niveau de sécurité —, la ferrure c |
+| /quincaillerie/roto-nx-champs-application.md | Quincaillerie | Champs d'application Roto NX | roto, roto-nx, abaque, champ-application, poids-vantail, cdr | Les largeurs, hauteurs et poids de vantail admissibles de la ferrure Roto NX selon le type d'ouverture et la classe de sécurité — tableaux, diagrammes d'application relevés courbe par courbe (rectangulaire, inclinée, cintrée, soufflet, paumelles à soufflet pour recouvrement d'ouvrant, confort, Designo), positions des compas d'arrêt de la ferrure soufflet, forces de traction TBDK — avec la règle qui convertit l'épaisseur de vitrage en poids. | antail / La *feuillure* est le décrochement du profilé d'ouvrant dans lequel se loge la ferrure (voir le [glossaire](/reference/glossaire.md)) : LFF |
+| /procedures/report-de-charge-roto-nx.md | Procédure | Report de charge ROTO NX | roto-nx, nt-designo, report-de-charge, quincaillerie, palier-d-angle, pivot-d-angle | Montage en cinq étapes et réglage de la tension du ressort du report de charge NT Designo II sur ferrure ROTO NX, vantail ouvert à 90°, clé de 4 mm, jusqu'à ce que les arcs rouge et argent forment un cercle plein. | /quincaillerie/roto-nx-ksr-confort-designo.md) - [Transformation d'un ouvrant à la française en oscillo-battant](/procedures/transformation-of-en-ob-r |
+| /quincaillerie/roto-nx-apercu-ferrures-designo.md | Quincaillerie | Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13) | roto, roto-nx, catalogue, apercu-ferrures, designo, oscillo-battant | Les compositions de ferrure Roto NX côté paumelles Designo (BA 13) du catalogue PVC de juin 2023, configuration par configuration (OB, TiltSafe, TiltFirst, OF, battement, sécurité de base à CDR 2 / CDR 2 N) — vue d'ensemble, liste des positions avec les pages du catalogue et champ d'application sans et avec report de charge. | Aperçu des ferrures » du catalogue Roto NX pour profils PVC montre, pour chaque configuration — type d'ouverture et niveau de sécurité —, la ferrure c |
+
+[message système]
+===== ENTRÉES D'ANOMALIE À PRENDRE EN COMPTE =====
+
+Ces entrées ont été rapprochées de la question et des pages que tu as chargées. Signale celles qui concernent réellement la valeur que tu donnes, avec leur identifiant. Passe les autres sous silence, sans les énumérer.
+
+Elles ne dispensent pas de lire les pages : une entrée d'anomalie signale un problème, elle n'est pas la source de la valeur. Charge la page concernée avec lire_page avant de répondre, et cite son chemin.
+
+/anomalies/contradictions-entre-sources.md :
+| CTR-114 | Champ d'application de l'oscillo-battant, de l'ouvrant à la française et de l'oscillo-battant à deux vantaux, Roto NX côté paumelles Designo (NT Designo II), sécurité de base | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 68 (OB), 70 (OF), 72 (OB deux vantaux), valeurs de la page [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md) : largeur en feuillure 330 (OB) ou 370 (OF, deux vantaux) à 1 400 mm, hauteur **300 à 2 400 mm**, poids du vantail standard **80 kg maximum**, avec report de charge 150 kg maximum | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 137 (OB), 147 (OF), 149 (battement standard), relues en image à 110 dpi le 29/09/2026 : sans report de charge LFF 330 – 1 400 / 370 – 1 400 mm, HFF **280 – 2 600 mm** (OB, OF) ou **430 – 2 600 mm** (battement), **max. 100 kg** ; avec report de charge LFF 800 – 1 400 mm, HFF 1 000 – 2 600 mm, max. 150 kg | Aucune : les valeurs sont citées ; que la ferrure de battement du catalogue et l'oscillo-battant à deux vantaux du manuel soient la même configuration reste à confirmer | HFF de 280 à 299 mm et de 2 401 à 2 600 mm, et poids de 81 à 100 kg sans report de charge, admis par le seul catalogue ; le catalogue borne aussi le vantail avec report de charge à 800 mm de LFF et 1 000 mm de HFF, bornes absentes du manuel ; voir [Aperçu des ferrures Roto NX, côté paumelles Designo (BA 13)](/quincaillerie/roto-nx-apercu-ferrures-designo.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-119 | Verrouilleur de l'oscillo-battant Confort Roto NX | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 66 (imprimée 64, « Oscillo-battant Confort, sécurité de base »), relue en image à 110 dpi le 29/09/2026 : repère 6 « Verrouilleur médian pour châssis cintré », par hauteur HVFF côté fermeture / côté paumelle, 530 – 600 (côté paumelle) → 420, **245715** ²⁾ (« avec renvoi d'angle intégré ») ; 601 – 800 → 620 1 V + 1 E, **245716** ; puis 820, 1020, 1220, 1420, 1620 mm, 245718, 245720, 245722, 245724, 245726 | Catalogue Roto NX pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 328 (7.6 « Confort »), relu en image à 110-200 dpi le 29/09/2026 : par HFF, pictogramme « fenêtre à la française / oscillo-battante à ouvrant semi-fixe », 530 – 600 → 380, **812595** ; 601 – 800 → 690, **774165** ; 801 – 1000 → 890, 1 E, 774174 ; 1001 – 1200 → 1090, 774175 ; 1201 – 1400 → 1290, 774176 ; 1401 – 1600 → 1490, 2 E, 774177 ; zone de recoupe 200. Les numéros 245715 à 245726 du manuel sont, au catalogue, l'« Élément cintré - vertical » (7.5.3, p. 327 : 500 – 700 → 420, 245715, renvoi d'angle intégré « J » ; 701 – 900 → 620, 245716, « 1 / 1 », « V / E » …) | Non arbitré : chaque valeur reste dans sa source ; que la section 7.6 « Confort » du catalogue vise l'oscillo-battant Confort du manuel reste à confirmer (pictogramme à deux vantaux au catalogue) | Verrouilleur d'un vantail Confort commandé sous l'un ou l'autre jeu de références, de longueurs différentes (380 / 690 / 890 … contre 420 / 620 / 820 …) ; voir [Renvois d'angle et verrouilleurs Roto NX](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md) et [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-111 | Hauteur fond de feuillure maximale de l'oscillo-battant Confort Roto NX, côté paumelles P | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 66 (imprimée 64), relue en image à 70 dpi le 29/09/2026 : « Hauteur en feuillure du vantail 530 – 1730 mm », force de fermeture 1650 N ; le diagramme de la fenêtre confort du même manuel (p. 29) borne la HFF à 1 600 mm | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 48 et 67, relues en image le 29/09/2026 : « 530 – 1 600 mm » (p. 67, confort un vantail) ; battement confort « 800 – 1 600 mm » (p. 91, 101) | Aucune : les valeurs sont citées | Vantail Confort de 1 601 à 1 730 mm de HFF admis par la seule page de configuration du manuel ; voir [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md) et [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-108 | Hauteur fond de feuillure minimale, côté paumelles Designo, fenêtre OF et OB sans report de charge, 100 kg | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 31 (imprimée 29), relue en image le 29/09/2026 : « Hauteur de vantail HFF …… 280 – 2600 mm » ; le bord gauche du diagramme de la même page commence vers 400 mm de HFF | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 50 (section 2.3.1.2 « 100 kg »), relue en image le 29/09/2026 : « Hauteur fond de feuillure d'ouvrant 400 – 2 600 mm » en sécurité de base et en CDR 1 N, « 490 – 2 400 mm » en CDR 2 / CDR 2 N ; même diagramme | **400 mm**, la plus restrictive des deux, qui est aussi celle que trace le diagramme des deux documents | Un vantail Designo 100 kg de 280 à 400 mm de HFF est admis par le tableau du manuel, lu par le vérificateur de faisabilité, et refusé par le catalogue ; voir [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-109 | Compas de la zone droite haute du diagramme soufflet, côté paumelles Designo | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 33 (imprimée 31), relue en image le 29/09/2026 : légende « = 2 compas latéraux **et** en partie haute » | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 52 (section 2.3.2), relue en image à 450 dpi le 29/09/2026 : légende « = 2 compas soufflet sur le côté **ou** en haut » ; les autres teintes concordent (« 2 compas soufflet sur le côté », « 1 compas soufflet en haut », « 2 compas soufflet en haut ») | Aucune : les deux formulations sont citées | Deux compas (au choix latéraux ou en haut) ou quatre (latéraux et en haut) sur un vantail soufflet Designo de 1 200 à 1 400 mm de LFF au-dessus de 550 mm de HFF ; voir [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md) |
+/anomalies/contradictions-entre-sources.md :
+| CTR-110 | Hauteur fond de feuillure minimale et poids, Roto NX côté paumelles P, oscillo-battant et ouvrant à la française, hauteur de poignée fixe, sécurité de base | Instructions de montage Roto NX KSR, IMO_180_NX_FR_v2, novembre 2022, PDF p. 38 (OF un vantail), 42 (OB un vantail), 44 (OB deux vantaux), relue en image à 150 dpi le 29/09/2026 (p. 42) : « Hauteur en feuillure du vantail 300 – 2800 mm », « Poids du vantail max. 130 ou 150 kg » ; le diagramme du même manuel (p. 23-24) donne 290 mm (**CTR-18**) | Roto NX, catalogue pour profils PVC, CTL_105_FR_v5, juin 2023, PDF p. 57, 73, 75, 81 (chapitre 3), relues en image à 110 dpi le 29/09/2026 : « Hauteur fond de feuillure d'ouvrant (HFF) 280 – 2 800 mm », « Poids d'ouvrant (PO) max. 150 kg » ; le chapitre 2 (p. 35-36) donne aussi 280 mm | Aucune : les valeurs sont citées | Vantail de 280 à 299 mm de HFF admis ou refusé selon le document ; voir [Aperçu des ferrures Roto NX, côté paumelles P](/quincaillerie/roto-nx-apercu-ferrures-cote-p.md) et [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |

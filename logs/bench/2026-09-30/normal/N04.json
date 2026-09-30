@@ -1,0 +1,23 @@
+{
+ "id": "N04",
+ "reponse": "Le wiki ne donne pas le temps de polymérisation du mastic Illbruck SP350. Il dit seulement quand et comment l'employer, sur le coulissant Technal LUMEAL GA : si la hauteur d'ouvrant dépasse 2,20 m, le vitrage doit faire l'objet d'un collage structurel au mastic Illbruck SP350, sur 200 mm de long à mi-hauteur des montants centraux et latéraux ; le joint EPDM est délardé sur 200 mm à mi-hauteur et un cordon de colle mastic structurel SP350 est injecté le long de la rainure intérieure. Aucun délai avant manipulation du vantail n'est écrit. À prendre sur la fiche technique Illbruck ou auprès de Technal. Attention : la page Fabrication du Coulissant 65 NV ASKEY avance « typiquement 24 h à 20°C » pour un autre mastic (mastic colle SNJF), sans source : ce n'est pas une valeur pour le SP350.",
+ "dans_le_wiki": "non",
+ "preuves": [
+  {"page": "/procedures/fabrication-et-pose-lumeal-ga.md", "extrait": "- **Collage structurel obligatoire** : si la hauteur d'ouvrant dépasse **$2,20\\text{ m}$**, le vitrage doit impérativement faire l'objet d'un collage structurel au mastic **Illbruck SP350** sur une longueur de 200 mm à mi-hauteur des montants centraux et latéraux [1 p. 159, 202]."},
+  {"page": "/procedures/fabrication-et-pose-lumeal-ga.md", "extrait": "7. Si $H_{\\text{vantail}} > 2,20\\text{ m}$, délarder le joint EPDM sur 200 mm à mi-hauteur et injecter un cordon de colle mastic structurel **Illbruck SP350** le long de la rainure intérieure [1 p. 159]."},
+  {"page": "/procedures/fabrication-coulissant-askey-65-nv.md", "extrait": "* Le temps de polymérisation complet du mastic colle SNJF avant manipulation du cadre n'est pas spécifié (se conformer à la fiche technique du fabricant de mastic, typiquement 24 h à 20°C)."}
+ ],
+ "ambiguite": "",
+ "outils": 5,
+ "comment_trouve": "Grep « illbruck|SP ?350|SP ?525|tremco » : le SP350 n'apparaît que sur les pages LUMEAL GA (fabrication et pose, roulements et fermetures) et la fiche source (registre p. 150-163 « à faire ») ; les autres Illbruck/Tremco sont le Perennator FA101 et le FS125 (DTA, DTD, AT coffres). Grep « polyméris|séchage|durcissement|réticul|temps de prise|mastic » puis « avant manipulation|avant de manipuler|temps de séchage » : seul temps de polymérisation cité = page ASKEY, pour un mastic SNJF, et donné « non spécifié » avec une valeur typique non sourcée ; temps de durcissement des colles profine (surfaces de collage) sans rapport. Lecture des sections Conditions et Étapes de la page LUMEAL GA : aucun délai.",
+ "formulations": [
+  "Temps de séchage du mastic de collage structurel SP350 avant de bouger l'ouvrant LUMEAL ?",
+  "SP350 temps de polymérisation ?",
+  "Combien de temps attendre après le collage structurel du vitrage avant de manipuler le vantail d'un coulissant LUMEAL GA ?"
+ ],
+ "defauts_wiki": [
+  "Absence de donnée ; les pages sources correspondantes (fabrication LUMEAL GA, p. 150-163) sont encore à l'état « à faire » au registre de la fiche technal-lumeal-ga-fabrication.",
+  "Piège pour une recherche lexicale : la page Fabrication Coulissant 65 NV ASKEY contient « temps de polymérisation » + « avant manipulation » + « 24 h à 20°C », valeur inventée (non sourcée, contraire au protocole « rien n'est inféré ») pour un autre mastic ; BM25 la classera très haut sur cette question.",
+  "La consigne SP350 est portée par deux pages (fabrication-et-pose-lumeal-ga.md et lumeal-ga-roulements-et-fermetures.md), avec des citations de pages différentes (p. 159, 202 contre p. 202, 204)."
+ ]
+}

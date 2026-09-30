@@ -1,0 +1,8 @@
+{
+  "id": "G01",
+  "reponse": "La **TGY3701** est la crémone encastrée **1 point à clé** (condamnation par cylindre) du coulissant SOLEAL GY 55. Sa **hauteur minimale de châssis est de 525 mm**, avec une **hauteur minimale de poignée Hp de 346 mm** ; elle se fixe par 4 vis TGY3723.\n\nPour comparaison, dans le même tableau : TGY3700 (1 point simple) 395 mm / Hp 219 mm ; TGY3702 et TGY3703 (3 points) 1 292 mm / Hp 721 mm.\n\nLe tableau ne précise pas si cette hauteur s'entend hors tout dormant ou hors tout ouvrant : il parle seulement de « hauteur min. châssis ».\n\nSource : (/quincaillerie/soleal-gy-roulements-et-fermetures.md)",
+  "pages_citees": ["/quincaillerie/soleal-gy-roulements-et-fermetures.md"],
+  "appels": 1,
+  "trouve": "oui",
+  "navigation": "Une seule requête, la référence avec les mots de la question (« TGY3701 hauteur minimale châssis »), puisque le prompt dit qu'une référence se cherche en texte intégral. La page SOLEAL GY roulements et fermetures est arrivée en tête, en contenu entier, avec le tableau des crémones encastrées où la ligne TGY3701 porte la colonne « Hauteur min. châssis » (525 mm) et « Hauteur min. poignée Hp » (346 mm). Les deux autres pages livrées (LUMEAL GA, ASKEY) portent des tableaux voisins de hauteurs mini de châssis pour d'autres références, sans risque de confusion puisque la référence est explicite. Les entrées d'anomalie injectées portaient toutes sur Roto NX ou les entrées d'air, rien sur la TGY3701 : passées sous silence. Seule ambiguïté non levée par le wiki : le sens exact de « châssis » (dormant ou ouvrant)."
+}

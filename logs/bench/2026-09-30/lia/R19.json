@@ -1,0 +1,55 @@
+{
+  "question": "J'ai une grosse porte d'entrée Soleal PY sur paumelles à pivot (le modèle pour les vantaux lourds jusqu'à 130 kg). Le vantail frotte un peu en bas côté serrure. On m'a dit qu'on pouvait régler ça sur site sans rien dégonder. Comment tu t'y prends avec tes clés ?",
+  "pages_lues": [
+    "/quincaillerie/soleal-py-serrures-et-paumelles.md",
+    "/portes/soleal-py-dormants-et-ouvrants.md",
+    "/portes/soleal-py-cotes-de-debit.md",
+    "/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md",
+    "/quincaillerie/roto-nx-accessoires-et-gabarits.md"
+  ],
+  "anomalies": [
+    "CTR-110",
+    "CTR-113",
+    "CTR-118",
+    "CTR-82",
+    "INC-280",
+    "INC-281",
+    "VER-114"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "porte SOLEAL PY paumelle pivot 130 kg réglage vantail frotte hauteur clé sans dégonder",
+        "systeme": "SOLEAL PY"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/soleal-py-serrures-et-paumelles.md",
+        "/portes/soleal-py-dormants-et-ouvrants.md",
+        "/portes/soleal-py-cotes-de-debit.md"
+      ],
+      "caracteres": 37915
+    },
+    {
+      "outil": "lire_page",
+      "args": {
+        "chemin": "/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md"
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md"
+      ],
+      "caracteres": 12243
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "réglage paumelle sur pivot T940023 clé Allen hauteur latéral compression porte frotte seuil",
+        "limite": 8
+      },
+      "pages_nouvelles": [
+        "/quincaillerie/roto-nx-accessoires-et-gabarits.md"
+      ],
+      "caracteres": 127091
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "question": "Quelle retombée de membrane prévoir en applique extérieure sur monomur ?",
+  "pages_lues": [
+    "/procedures/fabrication-systeme-76-advanced.md",
+    "/equipements/screen-exterieur-screenamax.md",
+    "/procedures/fabrication-systeme-70.md",
+    "/procedures/mise-en-oeuvre-systeme-70-evo2008.md",
+    "/profiles/lumeal-ga-dormants-et-ouvrants.md",
+    "/quincaillerie/soleal-py-serrures-et-paumelles.md",
+    "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+  ],
+  "anomalies": [
+    "CTR-100",
+    "CTR-101",
+    "CTR-102",
+    "CTR-103",
+    "INC-22",
+    "INC-273",
+    "INC-274"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "retombée membrane applique extérieure monomur pose"
+      },
+      "pages_nouvelles": [
+        "/procedures/fabrication-systeme-76-advanced.md",
+        "/equipements/screen-exterieur-screenamax.md",
+        "/procedures/fabrication-systeme-70.md"
+      ],
+      "caracteres": 91190
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "membrane d'étanchéité retombée ITE applique extérieure",
+        "type": "Procédure"
+      },
+      "pages_nouvelles": [
+        "/procedures/mise-en-oeuvre-systeme-70-evo2008.md"
+      ],
+      "caracteres": 163248
+    },
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "membrane monomur applique extérieure technal aluminium",
+        "tags": [
+          "technal"
+        ]
+      },
+      "pages_nouvelles": [
+        "/profiles/lumeal-ga-dormants-et-ouvrants.md",
+        "/quincaillerie/soleal-py-serrures-et-paumelles.md",
+        "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+      ],
+      "caracteres": 29585
+    }
+  ]
+}

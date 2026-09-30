@@ -1,0 +1,39 @@
+{
+  "question": "Comment transformer un ouvrant OF en OB avec Roto NX ?",
+  "pages_lues": [
+    "/procedures/transformation-of-en-ob-roto-nx.md",
+    "/quincaillerie/roto-nx.md",
+    "/quincaillerie/roto-nx-ksr-confort-designo.md"
+  ],
+  "anomalies": [
+    "CTR-108",
+    "CTR-109",
+    "CTR-110",
+    "CTR-111",
+    "CTR-114",
+    "CTR-119"
+  ],
+  "appels": [
+    {
+      "outil": "chercher",
+      "args": {
+        "mots_cles": "transformation ouvrant à la française OF en oscillo-battant OB ferrure",
+        "systeme": "Roto NX"
+      },
+      "pages_nouvelles": [
+        "/procedures/transformation-of-en-ob-roto-nx.md",
+        "/quincaillerie/roto-nx.md",
+        "/quincaillerie/roto-nx-ksr-confort-designo.md"
+      ],
+      "caracteres": 72018
+    },
+    {
+      "outil": "lire_anomalie",
+      "args": {
+        "identifiant": "VER-31"
+      },
+      "pages_nouvelles": [],
+      "caracteres": 929
+    }
+  ]
+}

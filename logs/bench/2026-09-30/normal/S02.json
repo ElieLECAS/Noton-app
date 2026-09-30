@@ -1,0 +1,22 @@
+{
+ "id": "S02",
+ "reponse": "Le wiki ne connaît pas de référence TGY3710 : elle n'apparaît sur aucune page. La seule rallonge de crémone SOLEAL GY documentée est la TGY3704 « Rallonge 4ème point », raccordée à la TGY3702 ou à la TGY3703, fixée par 2 vis TGY3723. Je ne peux donc pas dire si une TGY3710 se monte comme la TGY3704 — il faut vérifier la référence (peut-être une confusion avec la TGY3704) ou consulter TECHNAL. À noter : le wiki ne contient pas non plus la procédure de montage pas à pas de la TGY3704 citée dans l'historique (gabarit de réglage du crochet haut, support de guidage…) : les pages 108-122 du guide de fabrication SOLEAL GY (montage des organes de fermeture, crémones 1 à 4 points) sont encore « à faire » dans le registre de la fiche source. Sources : /quincaillerie/soleal-gy-roulements-et-fermetures.md, /sources/technal-soleal-gy-fabrication.md.",
+ "dans_le_wiki": "non",
+ "preuves": [
+  {"page": "/quincaillerie/soleal-gy-roulements-et-fermetures.md", "extrait": "| **TGY3704** | Rallonge 4ème point | Raccordée à TGY3702/03 | Pour très grandes hauteurs | — | 2 vis TGY3723 |"},
+  {"page": "/sources/technal-soleal-gy-fabrication.md", "extrait": "| 108-122 | Montage des organes de fermeture : crémones 1 à 4 points, cuvettes, cales TGY3831, poignées intérieures, réversibilité TGY3606, béquille à carré, gâches et centreurs | à faire |"}
+ ],
+ "ambiguite": "TGY3710 inconnue du wiki : faute de frappe possible (TGY3704 ?) ou référence d'un document non transcrit. Il faudrait demander d'où vient la référence.",
+ "outils": 1,
+ "comment_trouve": "Grep « 3710 » sur tout le wiki : seulement des références ASKEY (Y3710012, W3710014…), aucune TGY3710. Grep « support de guidage / crochet haut / gabarit de réglage » : rien sur la procédure de la TGY3704 (seul le gabarit T621000 du LUMEAL GA). Le registre de la fiche source (vu lors de R33) montre les pages de montage « à faire ».",
+ "formulations": [
+  "la rallonge de crémone TGY3710 se raccorde-t-elle comme la TGY3704 sur la TGY3702 ?",
+  "montage rallonge TGY3710",
+  "comment monter la seconde rallonge de crémone sur un coulissant SOLEAL GY ?"
+ ],
+ "defauts_wiki": [
+  "Référence absente du wiki (TGY3710) : aucune page ne peut répondre.",
+  "La procédure de montage des crémones et rallonges SOLEAL GY (guide de fabrication p. 108-122) n'est pas transcrite (registre « à faire ») : même pour la TGY3704, le « comment monter » n'est pas dans le wiki, alors que l'historique en cite les étapes.",
+  "Une recherche lexicale sur « rallonge TGY3710 » ne ramènera que la page SOLEAL GY par « rallonge » et « TGY37… » : risque qu'un modèle attribue à la TGY3710 les données de la TGY3704."
+ ]
+}
