@@ -1,9 +1,11 @@
 """Le tour de chat : une question, quelques pages, une réponse streamée, ses citations vérifiées.
 
-Navigation outillée et non CAG : le wiki (198 pages) ne tient dans aucune fenêtre de contexte.
+Navigation outillée et non CAG : le wiki (~2 M tokens) ne tient dans aucune fenêtre de contexte.
 Le prompt permanent ne porte que les consignes et un vocabulaire ; les pages arrivent par
-trois outils — ``chercher`` (qui livre directement le contenu entier des
-premières pages trouvées), ``lire_page`` et ``lire_anomalie``.
+trois outils — ``chercher`` (qui livre les pages trouvées : entières si elles sont petites,
+sinon leur fiche, leur sommaire et les sections qui répondent), ``lire_page`` (la page
+complète, ou une section de son sommaire) et ``lire_anomalie``. Rien n'est livré deux fois
+dans un tour (``Livraison``).
 
 Deux garde-fous ne dépendent pas de la discipline du modèle :
 
@@ -38,13 +40,14 @@ from app.models.message import Message
 from app.services import wiki_service
 from app.services.mistral_service import chat_stream
 from app.services.wiki_index import (
+    BUDGET_RECHERCHE,
     REFERENCE_RE,
+    Livraison,
     WikiIndex,
     cotes_de,
-    formate_resultats,
+    formate_liste,
     references_de,
     tokenise,
-    trier_resultats,
 )
 from app.services.wiki_service import WikiSnapshot
 
@@ -61,11 +64,12 @@ ANOMALY_PAGES = {
 }
 
 # Un tour = plusieurs appels. Au-delà, la question est trop large pour être traitée en lisant :
-# on le dit plutôt que de laisser filer le coût.
-MAX_TOOL_ROUNDS = int(os.environ.get("CHAT_MAX_TOOL_ROUNDS", "6"))
-# Nombre de pages que ``chercher`` livre en entier. Trois couvrent la très grande majorité des
-# questions pour un contexte encore modeste ; monter à cinq gagne peu et coûte la moitié en plus.
-PAGES_COMPLETES = int(os.environ.get("CHAT_PAGES_COMPLETES", "3"))
+# on le dit plutôt que de laisser filer le coût. Huit et non plus six : lire une section du
+# sommaire est un appel de plus, et il remplace la lecture d'une page entière.
+MAX_TOOL_ROUNDS = int(os.environ.get("CHAT_MAX_TOOL_ROUNDS", "8"))
+# Ce qu'un tour peut lire en tout (~60 k tokens). Au-delà, chercher ne livre plus que des
+# métadonnées et une page complète renvoie à son sommaire.
+BUDGET_TOUR = 200_000
 
 TOOLS: List[Dict[str, Any]] = [
     {
@@ -73,13 +77,14 @@ TOOLS: List[Dict[str, Any]] = [
         "function": {
             "name": "chercher",
             "description": (
-                "Trouve les pages du wiki et renvoie le contenu ENTIER des premières, suivi des "
-                "autres résultats en métadonnées seules. La recherche porte sur le texte intégral "
-                "autant que sur les métadonnées : une référence (76526, NT1947, A076) se cherche "
-                "directement. Premier outil à appeler pour toute question, et souvent le seul "
-                "nécessaire. Commence par les mots-clés seuls : les facettes sont faites pour "
-                "départager deux familles voisines une fois que tu as vu les résultats, pas pour "
-                "un premier essai — une facette mal choisie écarte la bonne page."
+                "Trouve les pages du wiki qui répondent, par leurs sections. Une page courte est "
+                "livrée ENTIÈRE ; une page longue arrive avec sa fiche, son SOMMAIRE et les "
+                "sections qui répondent. Suivent les autres résultats en métadonnées. La "
+                "recherche porte sur le texte intégral : une référence (76526, NT1947, A076) se "
+                "cherche directement. Premier outil à appeler pour toute question. Commence par "
+                "les mots-clés seuls : les facettes départagent deux familles voisines une fois "
+                "les résultats vus, une facette mal choisie fait passer la bonne page après. "
+                "Relancée, la recherche ne renvoie pas ce qui a déjà été livré."
             ),
             "parameters": {
                 "type": "object",
@@ -110,7 +115,7 @@ TOOLS: List[Dict[str, Any]] = [
                     },
                     "limite": {
                         "type": "integer",
-                        "description": "Nombre de résultats, 10 par défaut, 15 au maximum.",
+                        "description": "Nombre de pages considérées (livrées puis listées), 10 par défaut, 15 au maximum.",
                     },
                 },
                 "required": ["mots_cles"],
@@ -122,9 +127,11 @@ TOOLS: List[Dict[str, Any]] = [
         "function": {
             "name": "lire_page",
             "description": (
-                "Charge le contenu complet d'une page du wiki à partir d'un chemin rendu par "
-                "chercher (par ex. /profiles/perform76-parcloses.md). À appeler pour chaque page "
-                "pertinente avant d'affirmer un détail technique."
+                "Lit une page du wiki à partir d'un chemin rendu par chercher (par ex. "
+                "/profiles/perform76-parcloses.md) : la page complète, ou seulement une section "
+                "de son sommaire. Quand chercher n'a livré que des sections et que la réponse "
+                "dépend d'une autre partie de la page, lis la section du sommaire qui la porte ; "
+                "si toute la page est nécessaire, lis-la sans section."
             ),
             "parameters": {
                 "type": "object",
@@ -132,7 +139,15 @@ TOOLS: List[Dict[str, Any]] = [
                     "chemin": {
                         "type": "string",
                         "description": "Chemin de la page, commençant par /, copié d'un résultat de chercher.",
-                    }
+                    },
+                    "section": {
+                        "type": "string",
+                        "description": (
+                            "Optionnel : la section à lire, telle que le sommaire la donne "
+                            "(« §13 »), ou un mot de son titre (« courbes »), ou « sommaire ». "
+                            "Sans section : la page complète."
+                        ),
+                    },
                 },
                 "required": ["chemin"],
             },
@@ -415,7 +430,8 @@ def _detail(nom: str, args: Dict[str, Any]) -> str:
         return f"{mots} ({facettes})" if facettes else mots
     if nom == "lire_anomalie":
         return str(args.get("identifiant") or "")
-    return str(args.get("chemin") or "")
+    section = str(args.get("section") or "").strip()
+    return str(args.get("chemin") or "") + (f" ({section})" if section else "")
 
 
 StreamFn = Callable[..., AsyncIterator[str]]
@@ -446,6 +462,8 @@ class WikiAnswer:
     anomalies: List[Dict[str, str]] = field(default_factory=list)
     steps: List[Dict[str, Any]] = field(default_factory=list)
     trace: Dict[str, Any] = field(default_factory=dict)
+    # Ce que le tour a déjà livré : rien n'est envoyé deux fois, et le budget du tour est tenu.
+    livraison: Livraison = field(default_factory=Livraison)
 
     def __post_init__(self) -> None:
         if not self.model:
@@ -471,56 +489,89 @@ class WikiAnswer:
 
     # ---- outils --------------------------------------------------------
 
-    def _executer(self, nom: str, args: Dict[str, Any], pages_lues: List[Dict[str, Any]]) -> str:
-        if nom == "chercher":
-            mots = str(args.get("mots_cles") or "")
-            # La référence de la question est le signal le plus sûr, et le modèle l'oublie dans
-            # sa requête (TGY3702 : gardée 3 fois sur 8 le 30/09) : le serveur la remet. L'étape
-            # affichée montre la recherche réellement faite.
-            presents = set(tokenise(mots))
-            oubliees = [r for r in self._references if r not in presents]
-            if oubliees:
-                mots = " ".join([mots, *oubliees]).strip()
-                args["mots_cles"] = mots
-            try:
-                limite = min(int(args.get("limite") or 10), 15)
-            except (TypeError, ValueError):
-                limite = 10
-            pages = self.index.search(
-                mots_cles=mots,
-                type=args.get("type"),
-                tags=args.get("tags"),
-                gamme=args.get("gamme"),
-                systeme=args.get("systeme"),
-                limite=limite,
-                cotes=self._cotes,
-            )
-            # Les pages livrées entières comptent comme lues : elles alimentent le rapprochement
-            # avec les registres d'anomalies, et le modèle a le droit de les citer sans repasser
-            # par lire_page.
-            livrees, _ = trier_resultats(pages, PAGES_COMPLETES)
-            for page in livrees:
-                if page not in pages_lues:
-                    pages_lues.append(page)
-            resultat = formate_resultats(self.index, pages, mots, completes=PAGES_COMPLETES)
-            # Une référence qu'aucune page ne porte : le dire d'emblée évite six recherches pour
-            # une absence (parclose 3702 : 369 000 tokens) et la tentation de la compléter.
-            absentes = [r.upper() for r in self._references if not self.index.df.get(r)]
-            if absentes:
-                resultat = (
-                    f"Absent de tout le wiki : {', '.join(absentes)}. Aucune page ne porte "
-                    "cette référence.\n\n" + resultat
-                )
-            return resultat
-        if nom == "lire_page":
-            chemin = args.get("chemin", "")
-            entree = next((e for e in self.index.entries if e["chemin"] == chemin), None)
+    def _marquer_lues(self, livrees: Sequence[Dict[str, Any]], pages_lues: List[Dict[str, Any]]) -> None:
+        """Une page livrée, entière ou en partie, compte comme lue : elle alimente le rapprochement
+        avec les registres d'anomalies et le contrôle des coupes, et le modèle peut la citer."""
+        for livree in livrees:
+            entree = self.index.par_chemin.get(livree["chemin"])
             if entree is not None and entree not in pages_lues:
                 pages_lues.append(entree)
-            return read_wiki_page(chemin, self.snapshot)
+        self._livrees_etape.extend(livrees)
+
+    def _executer(self, nom: str, args: Dict[str, Any], pages_lues: List[Dict[str, Any]]) -> str:
+        if not hasattr(self, "_livrees_etape"):
+            self._livrees_etape: List[Dict[str, Any]] = []
+        if nom == "chercher":
+            return self._chercher(args, pages_lues)
+        if nom == "lire_page":
+            chemin = args.get("chemin", "")
+            erreur = read_wiki_page(chemin, self.snapshot)
+            if erreur.startswith(("Chemin invalide", "Page introuvable")):
+                return erreur
+            texte, livree = self.index.lire(
+                self.snapshot.pages[chemin], args.get("section"), self.livraison,
+                BUDGET_TOUR - self.livraison.caracteres,
+            )
+            self._marquer_lues([livree], pages_lues)
+            return texte
         if nom == "lire_anomalie":
             return self.index.anomalie(args.get("identifiant", ""))
         return f"Outil inconnu : {nom}"
+
+    def _chercher(self, args: Dict[str, Any], pages_lues: List[Dict[str, Any]]) -> str:
+        mots = str(args.get("mots_cles") or "")
+        try:
+            limite = min(int(args.get("limite") or 10), 15)
+        except (TypeError, ValueError):
+            limite = 10
+        if not [t for t in tokenise(mots) if t]:
+            # Sans mot-clé il n'y a rien à classer : la facette liste une catégorie.
+            pages = self.index.search(mots_cles="", type=args.get("type"), tags=args.get("tags"),
+                                      gamme=args.get("gamme"), systeme=args.get("systeme"), limite=limite)
+            return formate_liste(pages)
+
+        reste = BUDGET_TOUR - self.livraison.caracteres
+        classement = self.index.classer(mots, gamme=args.get("gamme"), systeme=args.get("systeme"),
+                                        tags=args.get("tags"), cotes=self._cotes)
+        if not classement:
+            resultat = "Aucune page ne correspond. Élargis la requête : retire une facette, ou cherche la référence seule."
+        elif reste <= 0:
+            texte, _ = self.index.livrer(classement[:limite], self.livraison, budget=0, pages_max=0)
+            resultat = ("Budget de lecture du tour atteint : plus rien n'est livré. Réponds avec ce que "
+                        "tu as lu, ou dis ce qui reste à vérifier.\n\n" + texte)
+        else:
+            texte, livrees = self.index.livrer(classement[:max(limite, 1)], self.livraison,
+                                               budget=min(reste, BUDGET_RECHERCHE))
+            self._marquer_lues(livrees, pages_lues)
+            resultat = texte if livrees else (
+                "Aucune nouvelle page ni section : ce qui correspond à cette recherche a déjà été "
+                "livré plus haut. Relis-le, reformule autrement, ou lis une section précise avec "
+                "lire_page(chemin, section).\n\n" + texte
+            )
+
+        # La référence de la question est le signal le plus sûr, et le modèle l'oublie dans sa
+        # requête (TGY3702 : gardée 3 fois sur 8 le 30/09). Elle est cherchée À PART : remise
+        # dans la requête, elle l'écrasait (section du DTA du rang 2 au rang 29 le 01/10).
+        presents = set(tokenise(mots))
+        oubliees = [r for r in self._references if r not in presents and self.index.df.get(r)]
+        if oubliees and reste > 0:
+            classes = self.index.classer(" ".join(oubliees), cotes=self._cotes)
+            texte, livrees = self.index.livrer(classes, self.livraison, budget=15_000, pages_max=2,
+                                               sections_par_page=1, autres_max=0, entete="RÉFÉRENCE")
+            if livrees:
+                self._marquer_lues(livrees, pages_lues)
+                resultat += (f"\n\n===== RÉFÉRENCES DE LA QUESTION, cherchées à part : "
+                             f"{', '.join(r.upper() for r in oubliees)} =====\n\n" + texte)
+
+        # Une référence qu'aucune page ne porte : le dire d'emblée évite six recherches pour
+        # une absence (parclose 3702 : 369 000 tokens) et la tentation de la compléter.
+        absentes = [r.upper() for r in self._references if not self.index.df.get(r)]
+        if absentes:
+            resultat = (
+                f"Absent de tout le wiki : {', '.join(absentes)}. Aucune page ne porte "
+                "cette référence.\n\n" + resultat
+            )
+        return resultat
 
     def _injecter_anomalies(
         self, working: List[Dict[str, Any]], pages_lues: List[Dict[str, Any]], deja: set
@@ -624,12 +675,15 @@ class WikiAnswer:
                 for call in tool_calls:
                     nom, args = _tool_args(call)
                     deja_lues = len(pages_lues)
+                    self._livrees_etape = []
                     contenu = self._executer(nom, args, pages_lues)
                     etape = {
                         "outil": nom,
                         "libelle": LIBELLES.get(nom, nom),
                         "detail": _detail(nom, args),
                         "pages": [p["chemin"] for p in pages_lues[deja_lues:]],
+                        # Page par page : livrée entière, ou les sections livrées.
+                        "livraisons": list(self._livrees_etape),
                     }
                     self.steps.append(etape)
                     yield sse({"etape": etape})
@@ -652,9 +706,9 @@ class WikiAnswer:
                     {
                         "role": "system",
                         "content": (
-                            "Tu n'as chargé aucune page. Appelle chercher : il te renvoie "
-                            "directement le contenu entier des premières pages, sur lequel tu "
-                            "pourras t'appuyer.\n"
+                            "Tu n'as chargé aucune page. Appelle chercher : il te livre "
+                            "directement les pages qui répondent (entières, ou leurs sections "
+                            "avec leur sommaire), sur lesquelles tu pourras t'appuyer.\n"
                             "Tu ne peux pas déclarer que le wiki ne couvre pas un sujet sans "
                             "avoir cherché au moins une fois. Le wiki ne contient pas que des "
                             "cotes de profilés : il porte aussi des tables réglementaires et de "
@@ -727,6 +781,7 @@ class WikiAnswer:
             "history_messages": len(self.history),
             "steps": self.steps,
             "pages_lues": [p["chemin"] for p in pages_lues],
+            "caracteres_livres": self.livraison.caracteres,
             "cited_pages": [s["path"] for s in self.sources if s["exists"]],
             "unknown_citations": [s["path"] for s in self.sources if not s["exists"]],
             "anomalies": [a["id"] for a in self.anomalies],

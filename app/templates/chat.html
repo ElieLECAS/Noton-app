@@ -927,18 +927,26 @@ async function submitChat(message) {
         if (data.stage) {
           if (!full && !thinkingStarted) renderStage(data.stage.label);
         } else if (data.etape) {
-          // Le tour de lecture s'affiche pendant qu'il a lieu : un outil, son argument, et les
-          // pages que « chercher » a livrées entières. C'est la traçabilité de la réponse.
+          // Le tour de lecture s'affiche pendant qu'il a lieu : un outil, son argument, et ce
+          // qu'il a livré — une page entière, ou des sections de la page. C'est la traçabilité
+          // de la réponse.
           stepsEl.classList.remove("hidden");
           if (!full) contentEl.innerHTML = "";
           const ligne = document.createElement("div");
           ligne.className = "lia-step";
           ligne.innerHTML = `<i class="ti ti-search"></i><span>${escapeHtml(data.etape.libelle)} : ${escapeHtml(data.etape.detail)}</span>`;
           stepsEl.appendChild(ligne);
-          for (const chemin of data.etape.pages || []) {
+          const livraisons = data.etape.livraisons && data.etape.livraisons.length
+            ? data.etape.livraisons
+            : (data.etape.pages || []).map(chemin => ({ chemin, mode: "page", sections: [] }));
+          for (const livree of livraisons) {
+            if (livree.mode === "sommaire") continue;
             const page = document.createElement("div");
             page.className = "lia-step lia-step-page";
-            page.innerHTML = `<i class="ti ti-file-text"></i><span>page chargée : ${escapeHtml(chemin)}</span>`;
+            const quoi = livree.mode === "sections"
+              ? `sections : ${escapeHtml(livree.chemin)} — ${escapeHtml((livree.sections || []).join(" · "))}`
+              : `page chargée : ${escapeHtml(livree.chemin)}`;
+            page.innerHTML = `<i class="ti ti-file-text"></i><span>${quoi}</span>`;
             stepsEl.appendChild(page);
           }
           host.scrollTop = host.scrollHeight;

@@ -1,16 +1,16 @@
-"""L'index de navigation : recherche lexicale, facettes, tri des résultats, anomalies."""
+"""L'index de navigation : recherche lexicale, facettes, classement par sections, anomalies."""
 from __future__ import annotations
 
 import pytest
 
 from app.services.wiki_index import (
+    Livraison,
     WikiIndex,
     cotes_de,
-    formate_resultats,
+    formate_liste,
     normalise,
     references_de,
     tokenise,
-    trier_resultats,
 )
 from app.services.wiki_service import load_snapshot, wiki_root
 
@@ -33,16 +33,20 @@ def test_index_exclut_les_pages_reservees(index):
     assert "/profiles/perform76-parcloses.md" in chemins
 
 
+def _premieres(classement, n=3):
+    return [c["entree"]["chemin"] for c in classement[:n]]
+
+
 def test_recherche_par_reference(index):
     """Une référence ne figure dans aucun tag : elle se trouve par le texte intégral.
 
-    76507 est citée par cinq pages ; ce qui compte est que sa page de famille arrive parmi les
-    pages livrées entières, pas qu'elle devance le tableau de vitrage qui la cite six fois.
+    76507 est citée par cinq pages, et en tête de ligne dans neuf sections ; ce qui compte est
+    que sa page de famille soit livrée, pas qu'elle devance le tableau de vitrage qui la cite
+    six fois.
     """
-    resultats = index.search(mots_cles="76507", limite=5)
-    assert resultats, "aucune page pour la référence 76507"
-    livrees, _ = trier_resultats(resultats, 3)
-    assert "/profiles/perform76-parcloses.md" in [p["chemin"] for p in livrees]
+    assert index.search(mots_cles="76507", limite=5), "aucune page pour la référence 76507"
+    _, livrees = index.livrer(index.classer("76507"), Livraison())
+    assert "/profiles/perform76-parcloses.md" in [l["chemin"] for l in livrees]
 
 
 def test_le_type_ne_change_pas_le_classement(index):
@@ -64,9 +68,8 @@ def test_seule_une_reference_de_piece_pese_triple(index):
 def test_la_gamme_ne_masque_pas_la_piece(index):
     """LUMINE55 compté triple faisait passer la gamme, le nuancier et l'argumentaire devant."""
     q = "Sur un châssis alu LUMINE55 en ouvrant apparent, j'ai un vitrage de 24 mm : quelle parclose ?"
-    resultats = index.search(mots_cles="LUMINE55 parclose joint vitrage 24", limite=10, cotes=cotes_de(q))
-    livrees, _ = trier_resultats(resultats, 3)
-    assert "/profiles/soleal-fy-parcloses-et-vitrage.md" in [p["chemin"] for p in livrees]
+    classement = index.classer("LUMINE55 parclose joint vitrage 24", cotes=cotes_de(q))
+    assert "/profiles/soleal-fy-parcloses-et-vitrage.md" in _premieres(classement)
 
 
 def test_une_graphie_pour_deux_ecritures():
@@ -75,6 +78,8 @@ def test_une_graphie_pour_deux_ecritures():
     assert "lumine65" in tokenise("LUMINE 65") and "lumine65" in tokenise("LUMINE65")
     assert tokenise("parcloses") == tokenise("parclose")
     assert tokenise("2,15 1,00") == ["2", "15", "1", "00"]  # des décimales ne se recollent pas
+    # PERFORM+ est une gamme à part, pas la PERFORM.
+    assert tokenise("PERFORM+") == ["performplus"] and tokenise("PERFORM") == ["perform"]
 
 
 def test_une_cote_de_la_question_n_est_pas_une_reference():
@@ -102,35 +107,24 @@ def test_facette_seule_sert_de_filtre(index):
     assert resultats and all(p["type"] == "Gamme" for p in resultats)
 
 
-def test_trier_resultats_ecarte_les_anomalies_et_repousse_les_sources(index):
-    pages = [
-        {"chemin": "/anomalies/contradictions-entre-sources.md"},
-        {"chemin": "/sources/technal-dta-soleal-fy.md"},
-        {"chemin": "/profiles/soleal-fy-cotes-de-debit.md"},
-    ]
-    entieres, reste = trier_resultats(pages, completes=3)
-    chemins = [p["chemin"] for p in entieres]
-    assert "/anomalies/contradictions-entre-sources.md" not in chemins
-    # La page concept passe devant la source, quel que soit l'ordre du classement.
-    assert chemins == [
-        "/profiles/soleal-fy-cotes-de-debit.md",
-        "/sources/technal-dta-soleal-fy.md",
-    ]
-    assert reste == []
+def test_les_registres_d_anomalies_ne_sont_jamais_classes(index):
+    """Ils se lisent entrée par entrée ; les entrées utiles sont injectées par le serveur."""
+    classement = index.classer("contradiction garantie ferrure Technal CTR-09")
+    assert classement
+    assert not any(c["entree"]["chemin"].startswith("/anomalies/") for c in classement)
 
 
-def test_formate_resultats_livre_les_premieres_pages_entieres(index):
-    pages = index.search(mots_cles="parclose vitrage perform76", limite=8)
-    texte = formate_resultats(index, pages, "parclose vitrage perform76", completes=2)
-    assert texte.count("===== PAGE ") == 2
-    assert "===== AUTRES RÉSULTATS =====" in texte
-    # Les pages entières portent leur corps, pas un extrait.
-    assert len(texte) > 2000
+def test_une_source_pese_moins_qu_une_page_concept(index):
+    """Une page sources/ résume un document ; la page concept porte la valeur."""
+    classement = index.classer("SOLEAL FY parclose joint intérieur")
+    concepts = [c for c in classement if not c["entree"]["chemin"].startswith("/sources/")]
+    assert concepts and _premieres(classement, 1)[0] == concepts[0]["entree"]["chemin"]
 
 
-def test_formate_resultats_sans_resultat(index):
-    texte = formate_resultats(index, [], "zzzz")
-    assert "Aucune page ne correspond" in texte
+def test_formate_liste_sans_mot_cle(index):
+    texte = formate_liste(index.search(mots_cles="", type="Gamme", limite=50))
+    assert texte.startswith("===== PAGES =====") and "/gammes/perform.md" in texte
+    assert "Aucune page ne correspond" in formate_liste([])
 
 
 def test_index_des_anomalies_et_lecture_d_une_entree(index):

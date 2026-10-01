@@ -1,5 +1,7 @@
 # Plan — indexation par sections, livraison page ou section (01/10/2026)
 
+**STATUT 01/10/2026 : lots 0 à 5 LIVRÉS dans l'application (non commités), lot 6 (test réel Mistral Small) non lancé.** Valeurs retenues par la mesure du lot 2 : seuil de page entière 15 000 car. (et non 20 000), 6 pages, 3 sections par page, 60 000 car. par recherche, 200 000 par tour, 8 allers-retours. Mesure : `python -m app.scripts.mesurer_recuperation`.
+
 **PROPOSITION, à valider lot par lot.** Aucune page du wiki n'est modifiée par ce plan : le découpage se
 fait à l'indexation, en mémoire, avec l'instantané. Les problèmes de génération (calculs, comparaisons,
 lecture de « donne accès à ») sont **hors périmètre** : ils seront traités ensuite, avec ou sans

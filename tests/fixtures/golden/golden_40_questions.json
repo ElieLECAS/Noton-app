@@ -1,0 +1,1698 @@
+{
+ "version": 1,
+ "kind": "golden_wiki",
+ "created": "2026-10-01",
+ "description": "Golden 40 questions (docs/golden_lia_20_questions_2026-10-01.md et docs/golden_lia_20_questions_pvc_roto_2026-10-01.md) : question, historique des suivis, pages utiles, preuves stockées par extrait de texte (pas par numéro de ligne, qui bouge).",
+ "entries": [
+  {
+   "id": "Q1",
+   "serie": 1,
+   "titre": "Poignées du coulissant LUMÉAL GA",
+   "question": "Quelles poignées je peux mettre sur un coulissant LUMÉAL GA ?",
+   "historique": [],
+   "pages": [
+    "/quincaillerie/lumeal-ga-roulements-et-fermetures.md",
+    "/quincaillerie/poignees-et-croisillons.md"
+   ],
+   "preuves": []
+  },
+  {
+   "id": "Q2",
+   "serie": 1,
+   "titre": "Uw et vitrage SOLÉAL55 contre LUMÉAL55",
+   "question": "C'est quoi le Uw et le vitrage standard du SOLÉAL55 et du LUMÉAL55 ?",
+   "historique": [],
+   "pages": [
+    "/gammes/coulissants-aluminium.md"
+   ],
+   "preuves": []
+  },
+  {
+   "id": "Q3",
+   "serie": 1,
+   "titre": "Quincaillerie invisible en LUMINE65",
+   "question": "La quincaillerie invisible, on peut la faire en LUMINE65 ?",
+   "historique": [],
+   "pages": [
+    "/gammes/lumine.md",
+    "/commercial/lumine.md",
+    "/quincaillerie/poignees-et-croisillons.md"
+   ],
+   "preuves": []
+  },
+  {
+   "id": "Q4",
+   "serie": 1,
+   "titre": "*Suivi de Q3*",
+   "question": "Et en LUMINE55 ?",
+   "historique": [
+    {
+     "role": "user",
+     "content": "La quincaillerie invisible, on peut la faire en LUMINE65 ?"
+    },
+    {
+     "role": "assistant",
+     "content": "Non : la quincaillerie invisible n'est pas disponible sur la LUMINE65 fenêtre (réservée au module 55). (/gammes/lumine.md)"
+    }
+   ],
+   "pages": [
+    "/gammes/lumine.md",
+    "/commercial/lumine.md",
+    "/quincaillerie/poignees-et-croisillons.md"
+   ],
+   "preuves": []
+  },
+  {
+   "id": "Q5",
+   "serie": 1,
+   "titre": "Ouvrants SOLEAL FY",
+   "question": "Y a quoi comme ouvrants en FY et ils font quelle profondeur ?",
+   "historique": [],
+   "pages": [
+    "/profiles/soleal-fy-dormants-et-ouvrants.md"
+   ],
+   "preuves": []
+  },
+  {
+   "id": "Q6",
+   "serie": 1,
+   "titre": "Drainage complémentaire de feuillure",
+   "question": "À partir de quelle épaisseur de vitrage il faut un drainage en plus dans la feuillure ?",
+   "historique": [],
+   "pages": [
+    "/procedures/fabrication-soleal-fy.md"
+   ],
+   "preuves": []
+  },
+  {
+   "id": "Q7",
+   "serie": 1,
+   "titre": "Volets roulants et Technal",
+   "question": "Technal nous fournit nos volets roulants ?",
+   "historique": [],
+   "pages": [
+    "/equipements/volets-roulants.md",
+    "/fournisseurs/soprofen.md"
+   ],
+   "preuves": []
+  },
+  {
+   "id": "Q8",
+   "serie": 1,
+   "titre": "LUMÉAL GA : module, rupture thermique, gain de clair",
+   "question": "Pour le LUMÉAL GA : le module, la rupture de pont thermique et ce qu'on gagne en clair de vitrage ?",
+   "historique": [],
+   "pages": [
+    "/gammes/coulissants-aluminium.md",
+    "/profiles/lumeal-ga-dormants-et-ouvrants.md"
+   ],
+   "preuves": []
+  },
+  {
+   "id": "Q9",
+   "serie": 1,
+   "titre": "LUMÉAL GA : charge maximale",
+   "question": "Combien de kilos par vantail on peut mettre sur un LUMÉAL GA, et à quelle condition ?",
+   "historique": [],
+   "pages": [
+    "/quincaillerie/lumeal-ga-roulements-et-fermetures.md",
+    "/procedures/fabrication-et-pose-lumeal-ga.md"
+   ],
+   "preuves": []
+  },
+  {
+   "id": "Q10",
+   "serie": 1,
+   "titre": "Galandage en LUMÉAL GA",
+   "question": "On peut faire du galandage avec le LUMÉAL GA ?",
+   "historique": [],
+   "pages": [],
+   "preuves": []
+  },
+  {
+   "id": "Q11",
+   "serie": 1,
+   "titre": "Crémone SOLÉAL pour 1 300 mm à clé",
+   "question": "Quelle crémone pour un coulissant SOLÉAL de 1 300 de large, que le client veut pouvoir fermer à clé ?",
+   "historique": [],
+   "pages": [
+    "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+   ],
+   "preuves": []
+  },
+  {
+   "id": "Q12",
+   "serie": 1,
+   "titre": "*Suivi de Q11*",
+   "question": "Et pourquoi pas la TGY3701 ?",
+   "historique": [
+    {
+     "role": "user",
+     "content": "Quelle crémone pour un coulissant SOLÉAL de 1 300 de large, que le client veut pouvoir fermer à clé ?"
+    },
+    {
+     "role": "assistant",
+     "content": "Pour un coulissant SOLÉAL GY 55 de 1 300 mm avec fermeture à clé, la crémone adaptée est la TGY3703 (3 points à clé), hauteur minimale 1 292 mm. (/quincaillerie/soleal-gy-roulements-et-fermetures.md)"
+    }
+   ],
+   "pages": [
+    "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+   ],
+   "preuves": []
+  },
+  {
+   "id": "Q13",
+   "serie": 1,
+   "titre": "Ce que ROTO fournit",
+   "question": "Roto, ils nous fournissent quoi exactement, et qu'est-ce qu'on doit aller chercher ailleurs ?",
+   "historique": [],
+   "pages": [
+    "/fournisseurs/roto.md"
+   ],
+   "preuves": []
+  },
+  {
+   "id": "Q14",
+   "serie": 1,
+   "titre": "Designo II : 500 mm, 90 kg",
+   "question": "Un vantail Designo II de 500 de large pour 90 kg, ça passe ?",
+   "historique": [],
+   "pages": [
+    "/quincaillerie/roto-nx-apercu-ferrures-designo.md",
+    "/procedures/report-de-charge-roto-nx.md"
+   ],
+   "preuves": []
+  },
+  {
+   "id": "Q15",
+   "serie": 1,
+   "titre": "PERFORM70 contre PERFORM76",
+   "question": "Qu'est-ce qui change entre une PERFORM70 et une PERFORM76 au catalogue ?",
+   "historique": [],
+   "pages": [
+    "/gammes/perform.md",
+    "/commercial/perform.md"
+   ],
+   "preuves": []
+  },
+  {
+   "id": "Q16",
+   "serie": 1,
+   "titre": "Styles TEXTURAL",
+   "question": "C'est quoi les trois styles TEXTURAL, et combien de textures exclusives ?",
+   "historique": [],
+   "pages": [],
+   "preuves": []
+  },
+  {
+   "id": "Q17",
+   "serie": 1,
+   "titre": "INNOSLIDE",
+   "question": "Comment marche l'INNOSLIDE, et pour quelles configurations ?",
+   "historique": [],
+   "pages": [
+    "/gammes/innoslide.md",
+    "/quincaillerie/roto-patio-inowa.md"
+   ],
+   "preuves": []
+  },
+  {
+   "id": "Q18",
+   "serie": 1,
+   "titre": "Les quatre coulissants aluminium",
+   "question": "Les quatre coulissants alu, ils font combien de large maxi ?",
+   "historique": [],
+   "pages": [
+    "/gammes/coulissants-aluminium.md"
+   ],
+   "preuves": []
+  },
+  {
+   "id": "Q19",
+   "serie": 1,
+   "titre": "Classement AEV de la PERFORM70",
+   "question": "Quel classement A*E*V pour la fenêtre PERFORM70 ?",
+   "historique": [],
+   "pages": [
+    "/commercial/perform.md"
+   ],
+   "preuves": []
+  },
+  {
+   "id": "Q20",
+   "serie": 1,
+   "titre": "*Contrôle de stabilité*",
+   "question": "Combien de kilos par vantail on peut mettre sur un LUMÉAL GA, et à quelle condition ?",
+   "historique": [],
+   "pages": [
+    "/quincaillerie/lumeal-ga-roulements-et-fermetures.md",
+    "/procedures/fabrication-et-pose-lumeal-ga.md"
+   ],
+   "preuves": []
+  },
+  {
+   "id": "Q21",
+   "serie": 2,
+   "titre": "Soufflet de 2 200 × 1 000 : dans la plage ou pas ?",
+   "question": "Un vantail soufflet de 2 200 de large sur 1 000 de haut avec de la Roto NX, vitrage 4/16/4, ça passe ?",
+   "historique": [],
+   "pages": [
+    "/quincaillerie/roto-nx-champs-application.md",
+    "/quincaillerie/roto-nx-ksr-soufflet.md",
+    "/quincaillerie/roto-nx-apercu-ferrures-cote-p.md"
+   ],
+   "preuves": [
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| Soufflet, fenêtre rectangulaire | Sécurité de base | 310 | 2400 | 290 | 1200 | 80 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "<tr><td>au-dessus de la limite oblique</td><td>1200 à 2400</td><td>de la limite oblique à 1200</td><td>champ d'application non autorisé</td><td>-</td></tr>"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "La limite oblique est un segment droit qui part du coin haut (LFF 1 200, HFF 1 200) et descend"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "jusqu'à environ 800 mm de HFF au bord droit (LFF 2 400), relevé à ±25 mm [1 p. 26]."
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "<tr><td>1000</td><td>compas latéraux</td><td>latéraux + triangle en haut</td><td>latéraux + triangle en haut</td><td>latéraux + deux cercles en haut, LFF 1200 à 1800</td></tr>"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "<tr><td>900</td><td>compas latéraux</td><td>latéraux + triangle en haut</td><td>latéraux + triangle en haut</td><td>latéraux + deux cercles en haut, LFF 1200 à 2100</td></tr>"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "<tr><td>600 à 800</td><td>compas latéraux</td><td>latéraux + triangle en haut</td><td>latéraux + triangle en haut</td><td>latéraux + deux cercles en haut, LFF 1200 à 2400</td></tr>"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "Champ d'application de l'ouvrant à soufflet côté paumelles Designo : LFF 450 à 1 400 mm, HFF 370 à"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "1 200 mm, poids de vantail 80 kg maximum ; son diagramme et ses zones de compas sont sur"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "[Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md)"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-ksr-soufflet.md",
+     "extrait": "| Largeur de vantail (LFF) | 450 à 1400 mm |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-ksr-soufflet.md",
+     "extrait": "| Hauteur de vantail (HFF) | 370 à 1200 mm |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-ksr-soufflet.md",
+     "extrait": "| Poids de vantail (PV) | 80 kg maximum |"
+    }
+   ]
+  },
+  {
+   "id": "Q22",
+   "serie": 2,
+   "titre": "Oscillo-battant de 1 500 de large en RC1 N",
+   "question": "Une fenêtre oscillo-battante Roto NX de 1 500 de large sur 1 400 de haut, en classe RC1 N : on est dans le champ d'application ?",
+   "historique": [],
+   "pages": [
+    "/quincaillerie/roto-nx-champs-application.md",
+    "/quincaillerie/roto-nx-apercu-ferrures-cote-p.md"
+   ],
+   "preuves": [
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| Oscillo-battant, fenêtre rectangulaire, version 130 kg | CDR 1 N | 320 | 1400 | 290 | 2600 | 130 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 130 kg | CDR 1 N | 320 | 1600 | 280 | 2800 | 130 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 150 kg | CDR 1 N | 320 | 1600 | 280 | 2800 | 150 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "**Les deux documents ROTO ne donnent pas les mêmes bornes** sur quatre valeurs — hauteur de"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "feuillure minimale, largeur maximale en CDR 1 N, hauteur maximale en CDR 1 N et en CDR 2. Entrée"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "**CTR-18** du registre [Contradictions entre sources](/anomalies/contradictions-entre-sources.md) ;"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "en attendant l'arbitrage, la valeur retenue pour un chiffrage est la borne la plus basse des deux"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-apercu-ferrures-cote-p.md",
+     "extrait": "Champ d'application de la configuration « Ferrure OB, CDR 1 N », colonne « CDR 1 N » [1 p. 59] :"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-apercu-ferrures-cote-p.md",
+     "extrait": "| Grandeur | Valeur |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-apercu-ferrures-cote-p.md",
+     "extrait": "| --- | --- |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-apercu-ferrures-cote-p.md",
+     "extrait": "| Largeur fond de feuillure d'ouvrant (LFF) | 320 – 1 600 mm |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-apercu-ferrures-cote-p.md",
+     "extrait": "| Hauteur fond de feuillure d'ouvrant (HFF) | 280 – 2 800 mm |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-apercu-ferrures-cote-p.md",
+     "extrait": "| Poids d'ouvrant (PO) | max. 150 kg |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-apercu-ferrures-cote-p.md",
+     "extrait": "Mêmes bornes que le tableau CDR 1 N du chapitre 2 [1 p. 35-36] ; CDR 1 N : 320 – 1 600 mm et 280 – 2 800 mm [1 p. 35, 59], 320 – 1 400 mm et 290 – 2 600 mm [2 p. 23] — entrée **CTR-18** ([Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md))."
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 1400 | hors champ | 1890 | 2320 | 930 | 2ᵉ compas nécessaire |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 1500 | hors champ | hors champ | 2180 | 995 | 2ᵉ compas nécessaire |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 1600 | hors champ | hors champ | 2030 | 1065 | 2ᵉ compas nécessaire |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 1400 | hors champ | hors champ | 2180 | 2360 | 935 | 2ᵉ compas nécessaire |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 1500 | hors champ | hors champ | hors champ | 2210 | 1000 | 2ᵉ compas nécessaire |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 1600 | hors champ | hors champ | hors champ | 2060 | 1070 | 2ᵉ compas nécessaire |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| Oscillo-battant, fenêtre rectangulaire, version 130 kg | Sécurité de base | 290 | 1600 | 290 | 2800 | 130 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 130 kg | Sécurité de base | 290 | 1600 | 280 | 2800 | 130 |"
+    }
+   ]
+  },
+  {
+   "id": "Q23",
+   "serie": 2,
+   "titre": "Couple de serrage des vis du palier de compas",
+   "question": "Quel couple de serrage je dois appliquer sur les vis du palier de compas d'une ferrure Roto NX ?",
+   "historique": [],
+   "pages": [
+    "/procedures/percage-montage-roto-nx.md",
+    "/procedures/maintenance-ferrure-roto-nx.md",
+    "/quincaillerie/roto-nx-champs-application.md"
+   ],
+   "preuves": [
+    {
+     "page": "/procedures/percage-montage-roto-nx.md",
+     "extrait": "- Ne pas trop serrer les vis. Respecter les couples de serrage. Sélectionner le couple de manière à"
+    },
+    {
+     "page": "/procedures/percage-montage-roto-nx.md",
+     "extrait": "ne pas déformer la ferrure et le profil. Déterminer le couple spécifique au profil par essais de"
+    },
+    {
+     "page": "/procedures/percage-montage-roto-nx.md",
+     "extrait": "## 8.2 Vissage"
+    },
+    {
+     "page": "/procedures/percage-montage-roto-nx.md",
+     "extrait": "Pour la fixation des pièces de ferrure, il faut utiliser des vis de montage de fenêtre en acier"
+    },
+    {
+     "page": "/procedures/percage-montage-roto-nx.md",
+     "extrait": "galvanisées et passivées (Ø 3,9 – 4,2 x …), et pour des contraintes climatiques plus élevées, des"
+    },
+    {
+     "page": "/procedures/maintenance-ferrure-roto-nx.md",
+     "extrait": "5. **Couple de verrouillage et de déverrouillage : max. 10 Nm.** Le contrôle peut être fait avec"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| Poids du vantail (kg) | Force de traction (N) |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| --- | --- |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 60 | 1 650 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 70 | 1 900 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 80 | 2 200 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 90 | 2 450 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 100 | 2 700 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 110 | 3 000 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 120 | 3 250 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 130 | 3 500 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 140 | 3 900 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 150 | 4 200 |"
+    },
+    {
+     "page": "/procedures/roto-nx-ksr-consignes-generales.md",
+     "extrait": "| Nm | Couple en newton.mètres |"
+    }
+   ]
+  },
+  {
+   "id": "Q24",
+   "serie": 2,
+   "titre": "Le certificat à 300 kg",
+   "question": "Le certificat ift de la Roto NX parle de 300 kg de poids d'ouvrant. Je peux donc faire un oscillo-battant de 200 kg avec ?",
+   "historique": [],
+   "pages": [
+    "/certifications/roto-nx-certificats.md",
+    "/quincaillerie/roto-nx-champs-application.md",
+    "/quincaillerie/roto-nx.md",
+    "/procedures/percage-montage-roto-nx.md"
+   ],
+   "preuves": [
+    {
+     "page": "/certifications/roto-nx-certificats.md",
+     "extrait": "| max. Flügelgewicht / max. casement weight | 300 kg | poids d'ouvrant maximal |"
+    },
+    {
+     "page": "/certifications/roto-nx-certificats.md",
+     "extrait": "| Einsatzbereich / field of application | Systeme mit entsprechender Beschlagaufnahmenut / Systems with suitable hardware groove | systèmes avec rainure de ferrure adaptée |"
+    },
+    {
+     "page": "/certifications/roto-nx-certificats.md",
+     "extrait": "Le poids d'ouvrant maximal de 300 kg est celui du certificat ; les poids admissibles de chaque"
+    },
+    {
+     "page": "/certifications/roto-nx-certificats.md",
+     "extrait": "configuration sont sur [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md)."
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| Oscillo-battant, fenêtre rectangulaire, version 130 kg | Sécurité de base | 290 | 1600 | 290 | 2800 | 130 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| Oscillo-battant, fenêtre rectangulaire, version 130 kg | CDR 1 N | 320 | 1400 | 290 | 2600 | 130 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| Oscillo-battant, fenêtre rectangulaire, version 130 kg | CDR 2 et CDR 2 N | 320 | 1400 | 510 | 2400 | 130 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| Oscillo-battant, fenêtre rectangulaire, version 150 kg | Sécurité de base | 290 | 1600 | 290 | 2800 | 150 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| Oscillo-battant, fenêtre rectangulaire, version 150 kg | CDR 1 N | 320 | 1400 | 290 | 2600 | 150 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| Oscillo-battant, fenêtre rectangulaire, version 150 kg | CDR 2 et CDR 2 N | 320 | 1400 | 510 | 2400 | 150 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| Oscillo-battante avec report de charge, 80 à 150 kg | 800 | 1400 | 1000 | 2600 | 150 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| Fenêtre à la française et oscillo-battante, sans report de charge, 80 kg | 330 | 1400 | 280 | 2600 | 80 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| Fenêtre à la française et oscillo-battante, sans report de charge, 100 kg | 600 | 1400 | 280 | 2600 | 100 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 150 | 4 200 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx.md",
+     "extrait": "- charges élevées jusqu'à 150 kg : P reposant côté paumelles pour fenêtres et portes PVC ;"
+    },
+    {
+     "page": "/procedures/percage-montage-roto-nx.md",
+     "extrait": "les tailles et poids maxi admissibles des ouvrants. **L'élément ayant la capacité de charge la plus"
+    },
+    {
+     "page": "/procedures/percage-montage-roto-nx.md",
+     "extrait": "faible admissible détermine ce faisant le poids maximal admissible de l'ouvrant** [1 p. 110]."
+    },
+    {
+     "page": "/procedures/percage-montage-roto-nx.md",
+     "extrait": "- Ne jamais dépasser les tailles et poids d'ouvrant maximum admissibles. En cas de doute, contacter"
+    }
+   ]
+  },
+  {
+   "id": "Q25",
+   "serie": 2,
+   "titre": "Roto NX 130 kg sur un ouvrant système 76 sans acier",
+   "question": "Sur un ouvrant du système 76, je veux poser un oscillo-battant Roto NX version 130 kg avec un vantail de 115 kg, sans renfort acier dans le dormant. C'est bon ?",
+   "historique": [],
+   "pages": [
+    "/profiles/systeme-76-abaques-dimensionnels.md",
+    "/quincaillerie/roto-nx-champs-application.md",
+    "/procedures/percage-montage-roto-nx.md",
+    "/fournisseurs/roto.md"
+   ],
+   "preuves": [
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "| 130 kg | sans | - | 6 | 100 | 12-002529-PR04 PB-K20-09-de-01 |"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "| 130 kg | court (55 mm) | 2 | 4 | 110 | 12-002529-PR05 PB-K20-09-de-01 |"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "| 130 kg | long (5 mm) | 5 | 1 | 130 | 12-002529-PR06 PB-K20-09-de-01 |"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "« Les poids d'ouvrants admissibles indiqués dans le tableau suivant ont été déterminés à l'ift"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "Rosenheim selon la directive TBDK. Ces valeurs sont valables uniquement pour les composants"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "indiqués dans les rapports d'essais (compas, vis, acier) et le traitement décrit et elles peuvent"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "être considérées comme des valeurs indicatives. » Une ligne par configuration ; l'acier est celui"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "ferrure, acier, vis. **Les poids d'ouvrants maximaux doivent être contrôlés et garantis par le"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "fabricant de fenêtres !** Faites déterminer les poids d'ouvrants admissibles pour les composants"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "que vous utilisez selon la directive TBDK en vigueur. Assurez dans votre production que les"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "éléments répondent aux caractéristiques de performance contrôlées (WPK). » [1 p. 102] Voir"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "[Roto NX](/quincaillerie/roto-nx.md)."
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| Oscillo-battant, fenêtre rectangulaire, version 130 kg | Sécurité de base | 290 | 1600 | 290 | 2800 | 130 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| Oscillo-battant, fenêtre rectangulaire, version 130 kg | CDR 1 N | 320 | 1400 | 290 | 2600 | 130 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| Oscillo-battant, fenêtre rectangulaire, version 130 kg | CDR 2 et CDR 2 N | 320 | 1400 | 510 | 2400 | 130 |"
+    },
+    {
+     "page": "/procedures/percage-montage-roto-nx.md",
+     "extrait": "les tailles et poids maxi admissibles des ouvrants. **L'élément ayant la capacité de charge la plus"
+    },
+    {
+     "page": "/procedures/percage-montage-roto-nx.md",
+     "extrait": "faible admissible détermine ce faisant le poids maximal admissible de l'ouvrant** [1 p. 110]."
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 110 | 3 000 |"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| 120 | 3 250 |"
+    }
+   ]
+  },
+  {
+   "id": "Q26",
+   "serie": 2,
+   "titre": "Triple vitrage sur un oscillo-battant : la courbe d'épaisseur de verre décide",
+   "question": "Fenêtre PERFORM76 oscillo-battante un vantail, blanche, 1 300 de large sur 1 450 de haut, dormant 76171 et ouvrant 76281, avec un triple vitrage 4/12/4/12/4 : on peut la faire ?",
+   "historique": [],
+   "pages": [
+    "/certifications/dta-6-16-2334.md",
+    "/profiles/systeme-76-cotes-de-debit.md",
+    "/profiles/systeme-76-abaques-dimensionnels.md",
+    "/quincaillerie/roto-nx-champs-application.md"
+   ],
+   "preuves": [
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "| 1 vantail OB | 1,50 | 1,40 |"
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "| 1 vantail OB | 2,15 | 1,00 |"
+    },
+    {
+     "page": "/profiles/systeme-76-cotes-de-debit.md",
+     "extrait": "| 76171 | 38 | 58 | 59 | 45 | 40 | 71 | 46 |"
+    },
+    {
+     "page": "/profiles/systeme-76-cotes-de-debit.md",
+     "extrait": "**Les valeurs de chaque tableau valent pour une seule coupe.** Un dormant a deux montants : une"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "différentes couches de verre, sans les intercalaires : ex. un vitrage 4-12-4-12-4 donne une"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "épaisseur totale de 4+4+4 = 12 mm. » [1 p. 103]"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "| 120 | 132 | 101 | 83 | 71 | 62 |"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "| 130 | 112 | 86 | 71 | 61 | 54 |"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "| blanc | 235 | 95 | 130 | 130 | 130 | 104 |"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "total. La largeur ouvrant ne peut dépasser la hauteur ouvrant de plus 25 %. » Exemples portés sur"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "## Équerre de feuillure J079"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "« L'utilisation de l'equerre de feuillure J079 dans les 4 coins de l'ouvrant augmente"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "considérablement sa stabilité pour la reprise des poids de vitrage. Si l'equerre de feuillure J079"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "est montée, les limitations de vitrage peuvent être décalées de 2 courbes caractéristiques"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "(niveaux). Pour ex. dans le cas de mise en place d'un vitrage de 16mm d'épaisseur (de verre) et des"
+    },
+    {
+     "page": "/profiles/systeme-76-abaques-dimensionnels.md",
+     "extrait": "equerres de feuillure, les dimensions maximales à respecter sont celles d'un vitrage de 8 mm (2"
+    },
+    {
+     "page": "/quincaillerie/roto-nx-champs-application.md",
+     "extrait": "| Oscillo-battant, fenêtre rectangulaire, version 130 kg | Sécurité de base | 290 | 1600 | 290 | 2800 | 130 |"
+    }
+   ]
+  },
+  {
+   "id": "Q27",
+   "serie": 2,
+   "titre": "Porte-fenêtre à 2 vantaux, 1 600 × 2 250 : l'essai à 2,25 m n'est pas une limite",
+   "question": "Porte-fenêtre PERFORM76 à deux vantaux à la française, 1 600 de large sur 2 250 de haut : c'est dans le DTA ?",
+   "historique": [],
+   "pages": [
+    "/certifications/dta-6-16-2334.md",
+    "/gammes/perform.md"
+   ],
+   "preuves": [
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "| 2 vantaux OF | 2,15 | 1,60 |"
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "| 2 vantaux OF + fixe latéral | 2,15 | 2,40 |"
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "Dimensions maximales de baie, hauteur H × largeur L en mètres, pour les fabrications non"
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "certifiées ; une ligne par type d'ouvrant. OF signifie ouvrant à la française, OB oscillo-battant ;"
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "le soufflet est ici manœuvré par loqueteaux. Le 1 vantail OB porte deux couples de valeurs dans la"
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "même case du DTA, 1,50 × 1,40 et 2,15 × 1,00 : ce sont deux lignes ci-dessous."
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "Pour les fabrications certifiées, des dimensions supérieures peuvent être envisagées ; elles sont"
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "alors précisées dans le Certificat de Qualification attribué au menuisier. Il est nécessaire de"
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "| c) CSTB | perméabilité à l'air sous gradient thermique | fenêtre 2 vantaux, 1,60 × 2,25 m | RE CSTB n° BV16-1292 |"
+    },
+    {
+     "page": "/gammes/perform.md",
+     "extrait": "| 2 vantaux ouvrants à la française | 2,15 | 1,60 |"
+    },
+    {
+     "page": "/gammes/perform.md",
+     "extrait": "| 2 vantaux ouvrants à la française avec fixe latéral | 2,15 | 2,40 |"
+    }
+   ]
+  },
+  {
+   "id": "Q28",
+   "serie": 2,
+   "titre": "Tapée 6141 et patte NT1947 : 140 mm sur un 76180, 155 mm sur un 76171",
+   "question": "Je pose une PERFORM76 sur un dormant 76171 avec 140 mm de doublage : je prends la tapée 6141 avec la patte NT1947 ?",
+   "historique": [],
+   "pages": [
+    "/profiles/perform76-tapees-et-isolation.md"
+   ],
+   "preuves": [
+    {
+     "page": "/profiles/perform76-tapees-et-isolation.md",
+     "extrait": "| 6141 | 75 | 140 | 140 | 155 | ![Tapée 6141](/assets/profiles/perform76/tapees/tapee-6141.png) |"
+    },
+    {
+     "page": "/profiles/perform76-tapees-et-isolation.md",
+     "extrait": "Montée sur un dormant **76171**, une tapée PERFORM76 donne **15 mm d'isolant de plus** que le même"
+    },
+    {
+     "page": "/profiles/perform76-tapees-et-isolation.md",
+     "extrait": "profil monté sur un 76177, un 76185 ou un 76180. L'épaisseur d'isolation se lit donc dans la"
+    },
+    {
+     "page": "/profiles/perform76-tapees-et-isolation.md",
+     "extrait": "colonne du dormant réellement employé."
+    },
+    {
+     "page": "/profiles/perform76-tapees-et-isolation.md",
+     "extrait": "**Sur un dormant 76171, les seules épaisseurs d'isolation qui existent sont 80, 95, 115, 135, 155,"
+    },
+    {
+     "page": "/profiles/perform76-tapees-et-isolation.md",
+     "extrait": "175, 195 et 215 mm.** Une demande à 140 mm sur ce dormant se traite en 135 ou en 155 mm : le"
+    },
+    {
+     "page": "/profiles/perform76-tapees-et-isolation.md",
+     "extrait": "140 mm appartient au 76180 et aux dormants rénovation."
+    },
+    {
+     "page": "/profiles/perform76-tapees-et-isolation.md",
+     "extrait": "| 135 | 6140 | NT1945 | 76758 | CTHNT0030 |"
+    },
+    {
+     "page": "/profiles/perform76-tapees-et-isolation.md",
+     "extrait": "| 155 | 6141 | NT1947 | 76758 | CTHNT0030 |"
+    },
+    {
+     "page": "/profiles/perform76-tapees-et-isolation.md",
+     "extrait": "| 140 | 6141 | NT1947 | 6137 |"
+    },
+    {
+     "page": "/profiles/perform76-tapees-et-isolation.md",
+     "extrait": "| NT1947 | 76180 | 140 |"
+    },
+    {
+     "page": "/profiles/perform76-tapees-et-isolation.md",
+     "extrait": "| NT1947 | 76171 | 155 |"
+    },
+    {
+     "page": "/profiles/perform76-tapees-et-isolation.md",
+     "extrait": "**Aucune épaisseur intermédiaire n'existe** : les valeurs de ce tableau sont les seules"
+    }
+   ]
+  },
+  {
+   "id": "Q29",
+   "serie": 2,
+   "titre": "Trois vantaux ouvrants : aucune dimension maximale dans le DTA",
+   "question": "Une fenêtre PERFORM76 avec trois vantaux ouvrants à la française côte à côte, 2 100 de large sur 1 200 de haut : on est dans les dimensions maxi du DTA ?",
+   "historique": [],
+   "pages": [
+    "/certifications/dta-6-16-2334.md",
+    "/gammes/perform.md"
+   ],
+   "preuves": [
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "**Descripteur.** Ce système permet de réaliser des fenêtres et portes-fenêtres à 1, 2 ou 3"
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "vantaux, soit à la française ou à soufflet, soit oscillo-battante, dont les cadres tant dormants"
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "vantaux à la française, à soufflet, ou oscillo-battante, dont les cadres tant dormants qu'ouvrants"
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "sont réalisés avec des profilés extrudés en PVC rigide de coloris blanc, beige ou gris ou bien de"
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "| Configuration | H maxi (m) | L maxi (m) |"
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "| --- | --- | --- |"
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "| 1 vantail OF | 2,15 | 1,00 |"
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "| 1 vantail OB | 1,50 | 1,40 |"
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "| 1 vantail OB | 2,15 | 1,00 |"
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "| 2 vantaux OF | 2,15 | 1,60 |"
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "| 2 vantaux OF + fixe latéral | 2,15 | 2,40 |"
+    },
+    {
+     "page": "/certifications/dta-6-16-2334.md",
+     "extrait": "| Soufflet (loqueteaux) | 0,80 | 1,30 |"
+    },
+    {
+     "page": "/gammes/perform.md",
+     "extrait": "| 2 vantaux ouvrants à la française | 2,15 | 1,60 |"
+    },
+    {
+     "page": "/gammes/perform.md",
+     "extrait": "| 2 vantaux ouvrants à la française avec fixe latéral | 2,15 | 2,40 |"
+    },
+    {
+     "page": "/gammes/perform.md",
+     "extrait": "| Soufflet à loqueteaux | 0,80 | 1,30 |"
+    },
+    {
+     "page": "/profiles/perform76-meneaux.md",
+     "extrait": "Le schéma se lit en deux parties. À gauche, l'élévation de l'ensemble à trois vantaux, vu de"
+    },
+    {
+     "page": "/profiles/systeme-76-aluclip-plans-de-combinaison.md",
+     "extrait": "l'ouvrant capotés. Chaque dormant est dessiné avec les trois ouvrants **76281** (capot A042),"
+    },
+    {
+     "page": "/profiles/systeme-76-renforts.md",
+     "extrait": "Sur les trois ouvrants de 110 mm, les V314.Z, V337 R/L, V339 R/L et V353 sont désignés « soudé »,"
+    },
+    {
+     "page": "/certifications/dtd-6-16-2335.md",
+     "extrait": "Ce système permet de réaliser des fenêtres et portes-fenêtres à 1, 2 ou 3 vantaux, à la"
+    },
+    {
+     "page": "/profiles/systeme-70-statique-et-inerties.md",
+     "extrait": "## Exemple n° 1 : porte-croisée à 3 vantaux"
+    }
+   ]
+  },
+  {
+   "id": "Q30",
+   "serie": 2,
+   "titre": "Pivot bas : 130 kg au catalogue, 100 kg au cahier technique (CTR-01)",
+   "question": "Le catalogue dit que le pivot de la PERFORM supporte 130 kg. Donc je peux mettre un vantail de 120 kg dessus ?",
+   "historique": [],
+   "pages": [
+    "/quincaillerie/perform76-poignee-et-pivot.md",
+    "/gammes/perform.md"
+   ],
+   "preuves": [
+    {
+     "page": "/quincaillerie/perform76-poignee-et-pivot.md",
+     "extrait": "La charge admissible sur le pivot bas d'une PERFORM76 est de **100 kg par ouvrant** [1 p. 6]."
+    },
+    {
+     "page": "/quincaillerie/perform76-poignee-et-pivot.md",
+     "extrait": "Le catalogue général annonce 130 kg pour « le poids d'une fenêtre ». Les deux énoncés ne portent"
+    },
+    {
+     "page": "/quincaillerie/perform76-poignee-et-pivot.md",
+     "extrait": "peut-être pas sur le même objet, et l'écart est de 30 % : **retenir 100 kg pour un"
+    },
+    {
+     "page": "/quincaillerie/perform76-poignee-et-pivot.md",
+     "extrait": "dimensionnement d'atelier** — entrée **CTR-01** du registre"
+    },
+    {
+     "page": "/quincaillerie/perform76-poignee-et-pivot.md",
+     "extrait": "Le pivot bas se règle à la **clé 6 pans de 4 mm**, avec une course de **± 2 mm**. La charge"
+    },
+    {
+     "page": "/quincaillerie/perform76-poignee-et-pivot.md",
+     "extrait": "admissible est de **100 kg par ouvrant** [1 p. 6]."
+    },
+    {
+     "page": "/gammes/perform.md",
+     "extrait": "| 4 | Pivot pouvant supporter le poids d'une fenêtre jusqu'à 130 kg |"
+    },
+    {
+     "page": "/gammes/perform.md",
+     "extrait": "Le pivot du repère 4 est donné pour 130 kg ; le cahier technique PERFORM76 limite l'ouvrant à"
+    },
+    {
+     "page": "/gammes/perform.md",
+     "extrait": "100 kg : voir [Poignée et pivot PERFORM76](/quincaillerie/perform76-poignee-et-pivot.md) [2 p. 6]."
+    }
+   ]
+  },
+  {
+   "id": "Q31",
+   "serie": 2,
+   "titre": "Meneau 2425 : le renfort 9132 suffit-il en V*A2 ?",
+   "question": "J'ai un meneau 2425 avec son renfort 9132, 2,50 m de haut, entre deux fixes de 1 m de large chacun, en classement V*A2. Ça tient ?",
+   "historique": [],
+   "pages": [
+    "/profiles/systeme-70-inerties-va2.md",
+    "/profiles/systeme-70-statique-et-inerties.md",
+    "/profiles/systeme-70-meneaux-et-traverses.md"
+   ],
+   "preuves": [
+    {
+     "page": "/profiles/systeme-70-inerties-va2.md",
+     "extrait": "<tr><th>250</th><td>2,3</td><td>3,4</td><td>4,5</td><td>5,4</td><td>6,3</td><td>7,1</td><td>7,8</td><td>8,4</td><td>8,8</td><td>9,1</td><td>9,3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>1,67</td></tr>"
+    },
+    {
+     "page": "/profiles/systeme-70-inerties-va1.md",
+     "extrait": "<tr><th>250</th><td>1,2</td><td>1,7</td><td>2,2</td><td>2,7</td><td>3,2</td><td>3,6</td><td>3,9</td><td>4,2</td><td>4,4</td><td>4,6</td><td>4,6</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>1,67</td></tr>"
+    },
+    {
+     "page": "/profiles/systeme-70-inerties-va2.md",
+     "extrait": "chargé des deux côtés, on lit une valeur pour a et une pour b et on les additionne — méthode,"
+    },
+    {
+     "page": "/profiles/systeme-70-statique-et-inerties.md",
+     "extrait": "| 2425 | 9132 | 9,1 | meneau 70 × 90, chambre 50 ; renfort 48 × 25, épaisseur 2,5 | ![Meneau 2425 et renfort 9132](/assets/procedures/moe-systeme-70/statique/meneau-2425-9132.png) |"
+    },
+    {
+     "page": "/profiles/systeme-70-meneaux-et-traverses.md",
+     "extrait": "| 2425 | 9132 | Renfort 2 mm | 2 | 3,6 | 9,1 | - |"
+    },
+    {
+     "page": "/profiles/systeme-70-statique-et-inerties.md",
+     "extrait": "| Iw (a) (cm⁴) | 3,39 | 0,71 |"
+    },
+    {
+     "page": "/profiles/systeme-70-statique-et-inerties.md",
+     "extrait": "| Iw (b) (cm⁴) | 2,69 | 0,89 |"
+    },
+    {
+     "page": "/profiles/systeme-70-statique-et-inerties.md",
+     "extrait": "| Iw (a + b) (cm⁴) | 6,08 | 1,60 |"
+    },
+    {
+     "page": "/profiles/systeme-70-statique-et-inerties.md",
+     "extrait": "(schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, p. 161)"
+    },
+    {
+     "page": "/profiles/systeme-70-statique-et-inerties.md",
+     "extrait": "Possibilité de construction système 70 : dormant 6101, ouvrant 6112 ; axe 1 : meneau 2425,"
+    },
+    {
+     "page": "/profiles/systeme-70-statique-et-inerties.md",
+     "extrait": "renfort 9132, Iw disponible 9,1 cm⁴ pour un Iw besoin de 6,08 cm⁴ ; axe B : traverse 6127, renfort"
+    },
+    {
+     "page": "/profiles/systeme-70-statique-et-inerties.md",
+     "extrait": "V603, Iw disponible 3,0 cm⁴ pour un Iw besoin de 1,6 cm⁴. « Compte tenu du fait que les valeurs"
+    },
+    {
+     "page": "/profiles/systeme-70-statique-et-inerties.md",
+     "extrait": "## Cas 4 : meneau avec traverse intermédiaire (composé)"
+    },
+    {
+     "page": "/profiles/systeme-70-statique-et-inerties.md",
+     "extrait": "![Plans de charge, cas 4 : meneau avec traverse intermédiaire](/assets/procedures/moe-systeme-70/statique/plan-de-charge-cas-4-meneau-compose.png)"
+    },
+    {
+     "page": "/profiles/systeme-70-statique-et-inerties.md",
+     "extrait": "Le meneau reprend un rectangle de largeur L¹/2 + L²/2 sur toute la hauteur H (S 1)."
+    },
+    {
+     "page": "/profiles/systeme-70-statique-et-inerties.md",
+     "extrait": "Le classeur e.VOLUTION de 2008 imprime les mêmes quinze tables au registre 4.2 (PDF p. 171 à 185) : relues case par case contre celles de 2023, elles sont identiques, et chacune le dit sur sa page [2 p. 171-185]."
+    }
+   ]
+  },
+  {
+   "id": "Q32",
+   "serie": 2,
+   "titre": "Drainage du dormant 6100 : angle de perçage et alternative au trou oblong",
+   "question": "Sur un dormant 6100 je perce le trou de drainage en biais, à quel angle ? Et si c'est profond je peux remplacer le trou oblong par 3 trous de 6 ?",
+   "historique": [],
+   "pages": [
+    "/procedures/drainage-decompression-ventilation-systeme-70.md",
+    "/procedures/drainage-decompression-ventilation-systeme-76.md"
+   ],
+   "preuves": [
+    {
+     "page": "/procedures/drainage-decompression-ventilation-systeme-70.md",
+     "extrait": "- Alternative drainage : « le trou oblong de 5 x 25mm peut-être remplacé par un trou Ø 8 »."
+    },
+    {
+     "page": "/procedures/drainage-decompression-ventilation-systeme-70.md",
+     "extrait": "La traverse basse du dormant se draine par un premier trou oblong de 5 × 25 mm percé en biais à"
+    },
+    {
+     "page": "/procedures/drainage-decompression-ventilation-systeme-70.md",
+     "extrait": "50° depuis la feuillure, qui débouche soit par l'avant (trou oblong horizontal de 5 × 25 mm"
+    },
+    {
+     "page": "/procedures/drainage-decompression-ventilation-systeme-70.md",
+     "extrait": "| 6100 | 50°, 5 × 25 mm | 36 | 5 × 25 mm | 6 | 18 | 5 × 25 mm | 1 | 192 |"
+    },
+    {
+     "page": "/procedures/drainage-decompression-ventilation-systeme-76.md",
+     "extrait": "- **Alternative au trou oblong** : « Pour des profondeurs de perçages supérieures à 50 mm les trous"
+    },
+    {
+     "page": "/procedures/drainage-decompression-ventilation-systeme-76.md",
+     "extrait": "oblongs peuvent être remplacés par 3 trous de Ø 6 », trois trous alignés sur 25 mm de long et"
+    },
+    {
+     "page": "/procedures/drainage-decompression-ventilation-systeme-76.md",
+     "extrait": "| 76171 | 40°, 5 × 25 mm | 44 | 5 × 25 mm | 6 | 29 | 5 × 25 mm | 1 | 128 |"
+    },
+    {
+     "page": "/procedures/drainage-decompression-ventilation-systeme-76.md",
+     "extrait": "| 76172 | 40°, 5 × 25 mm | 44 | 5 × 25 mm | 6 | 46 | 5 × 25 mm ou 3 × Ø 6 | 2 | 128 |"
+    },
+    {
+     "page": "/procedures/drainage-decompression-ventilation-systeme-76.md",
+     "extrait": "| 76173 | 40°, 5 × 25 mm | 44 | 5 × 25 mm | 6 | 58 | 5 × 25 mm ou 3 × Ø 6 | 3 | 129 |"
+    },
+    {
+     "page": "/certifications/dtd-6-16-2335.md",
+     "extrait": "- en fond de feuillure : 1 lumière de 5 × 25 mm ou un perçage Ø 8 mm à environ 100 mm de chaque"
+    }
+   ]
+  },
+  {
+   "id": "Q33",
+   "serie": 2,
+   "titre": "Réglage de soudeuse : 240 °C et 45 s de fusion sur du système 70",
+   "question": "Ma soudeuse est réglée à 240 °C avec 45 secondes de fusion, c'est bon pour souder des profilés système 70 ?",
+   "historique": [],
+   "pages": [
+    "/procedures/directives-generales-systeme-70-evo2008.md",
+    "/procedures/fabrication-profiles-pvc.md"
+   ],
+   "preuves": [
+    {
+     "page": "/procedures/directives-generales-systeme-70-evo2008.md",
+     "extrait": "| Soudure | température du miroir | 235 à 245 °C, contrôlée avec un appareil de mesure muni d'un palpeur |"
+    },
+    {
+     "page": "/procedures/directives-generales-systeme-70-evo2008.md",
+     "extrait": "| Temps de soudure | temps de fusion | 40 à 50 s |"
+    },
+    {
+     "page": "/procedures/directives-generales-systeme-70-evo2008.md",
+     "extrait": "| Pressions standards | pression de serrage | environ 6 bars |"
+    },
+    {
+     "page": "/procedures/directives-generales-systeme-70-evo2008.md",
+     "extrait": "| Pressions standards | pression d'accostage | 2,5 à 3,0 bars |"
+    },
+    {
+     "page": "/procedures/directives-generales-systeme-70-evo2008.md",
+     "extrait": "| Pressions standards | pression de soudage | 5 à 6 bars |"
+    },
+    {
+     "page": "/procedures/directives-generales-systeme-70-evo2008.md",
+     "extrait": "| Soudage avec insert de soudure | température du miroir chauffant | 235 °C |"
+    },
+    {
+     "page": "/procedures/directives-generales-systeme-70-evo2008.md",
+     "extrait": "| Soudage avec insert de soudure | temps de fusion | 60 s |"
+    },
+    {
+     "page": "/procedures/directives-generales-systeme-70-evo2008.md",
+     "extrait": "| Ébavurage | profondeur de la rainure | maxi 0,3 mm |"
+    },
+    {
+     "page": "/procedures/fabrication-profiles-pvc.md",
+     "extrait": "<tr><td>Température du miroir chauffant (°C)</td><td>245 à 250</td><td>245 à 250</td></tr>"
+    },
+    {
+     "page": "/procedures/fabrication-profiles-pvc.md",
+     "extrait": "<tr><td>Temps de fusion (s)</td><td>30 à 40</td><td>40 à 45</td></tr>"
+    },
+    {
+     "page": "/procedures/fabrication-profiles-pvc.md",
+     "extrait": "| Pression de serrage | 4,5 à 6 |"
+    },
+    {
+     "page": "/procedures/fabrication-profiles-pvc.md",
+     "extrait": "| Pression de soudage | 4 à 5 |"
+    },
+    {
+     "page": "/procedures/fabrication-profiles-pvc.md",
+     "extrait": "rainure **max. 0,5 mm** ; couteau arrondi pour les angles intérieurs ; limiter les perçages des"
+    }
+   ]
+  },
+  {
+   "id": "Q34",
+   "serie": 2,
+   "titre": "Combien de cassettes de profilés PVC peut-on empiler au stockage",
+   "question": "On reçoit nos profilés PVC en cassettes. Au stockage, je peux en empiler combien les unes sur les autres ?",
+   "historique": [],
+   "pages": [
+    "/procedures/livraison-et-stockage-semi-produits-profine.md",
+    "/procedures/directives-generales-systeme-70-evo2008.md"
+   ],
+   "preuves": [
+    {
+     "page": "/procedures/livraison-et-stockage-semi-produits-profine.md",
+     "extrait": "capacité de charge d'au moins **2,5 t**, par exemple un chariot élévateur frontal ou latéral, ou"
+    },
+    {
+     "page": "/procedures/livraison-et-stockage-semi-produits-profine.md",
+     "extrait": "- Les profilés doivent être posés à plat sur une surface plane pour éviter des déformations ;"
+    },
+    {
+     "page": "/procedures/livraison-et-stockage-semi-produits-profine.md",
+     "extrait": "- La température ambiante doit se situer entre **18 et 35 °C**, avec une humidité d'air"
+    },
+    {
+     "page": "/procedures/livraison-et-stockage-semi-produits-profine.md",
+     "extrait": "- les profilés doivent être usinés dans les **6 mois** ;"
+    },
+    {
+     "page": "/procedures/livraison-et-stockage-semi-produits-profine.md",
+     "extrait": "paquets ou par cassettes ; les quantités contenues dans une cassette sont indiquées dans la liste"
+    },
+    {
+     "page": "/procedures/directives-generales-systeme-70-evo2008.md",
+     "extrait": "élévateur frontal ou latéral ou pont roulant (2,5 t mini). Éviter tout moyen de déchargement"
+    },
+    {
+     "page": "/procedures/directives-generales-systeme-70-evo2008.md",
+     "extrait": "1. Stocker les profilés à plat afin d'éviter toute déformation."
+    },
+    {
+     "page": "/procedures/livraison-et-stockage-semi-produits-profine.md",
+     "extrait": "pas la surface (matière plastique, bois, etc.). L'empilage doit être limité, de manière à ce que"
+    }
+   ]
+  },
+  {
+   "id": "Q35",
+   "serie": 2,
+   "titre": "Collage à la colle PVC par 8 °C à l'atelier",
+   "question": "À l'atelier il fait 8 °C. Je colle un profilé complémentaire à la colle PVC, je le maintiens combien de temps ? Et la colle qui déborde, je l'essuie tout de suite ?",
+   "historique": [],
+   "pages": [
+    "/procedures/surfaces-collage-nettoyage-profine.md",
+    "/procedures/directives-generales-systeme-70-evo2008.md",
+    "/procedures/livraison-et-stockage-semi-produits-profine.md"
+   ],
+   "preuves": [
+    {
+     "page": "/procedures/surfaces-collage-nettoyage-profine.md",
+     "extrait": "| C004 \\* (transparent), C005 \\* (blanc) | colle PVC à base de solvants | collage de pièces en PVC ; en fabrication de fenêtres, collage des profilés complémentaires |"
+    },
+    {
+     "page": "/procedures/surfaces-collage-nettoyage-profine.md",
+     "extrait": "2. Assembler les pièces immédiatement après l'application de la colle, **au plus tard après"
+    },
+    {
+     "page": "/procedures/surfaces-collage-nettoyage-profine.md",
+     "extrait": "30 secondes** [1 p. 45]."
+    },
+    {
+     "page": "/procedures/surfaces-collage-nettoyage-profine.md",
+     "extrait": "3. Fixer les pièces pendant environ **2 à 4 minutes** [1 p. 45]."
+    },
+    {
+     "page": "/procedures/surfaces-collage-nettoyage-profine.md",
+     "extrait": "4. Enlever la colle sortie des bords des pièces avec un racloir, **après le durcissement** de la"
+    },
+    {
+     "page": "/procedures/surfaces-collage-nettoyage-profine.md",
+     "extrait": "intempéries.** Ne pas essuyer de colle encore liquide ; attendre que la colle ait pris, puis"
+    },
+    {
+     "page": "/procedures/surfaces-collage-nettoyage-profine.md",
+     "extrait": "| 4 heures | sollicitations légères |"
+    },
+    {
+     "page": "/procedures/surfaces-collage-nettoyage-profine.md",
+     "extrait": "| 8 heures | sollicitations moyennes |"
+    },
+    {
+     "page": "/procedures/surfaces-collage-nettoyage-profine.md",
+     "extrait": "| 24 heures | sollicitations totales prévues |"
+    },
+    {
+     "page": "/procedures/surfaces-collage-nettoyage-profine.md",
+     "extrait": "Pour des températures inférieures à 10 °C, doubler ou tripler le temps de durcissement [1 p. 45]."
+    },
+    {
+     "page": "/procedures/directives-generales-systeme-70-evo2008.md",
+     "extrait": "2. Trente secondes au plus tard après la mise en place de la colle, assembler les deux surfaces en"
+    },
+    {
+     "page": "/procedures/directives-generales-systeme-70-evo2008.md",
+     "extrait": "5. Pour un collage par des températures inférieures à 10 °C, le temps de pression ou d'application"
+    },
+    {
+     "page": "/procedures/directives-generales-systeme-70-evo2008.md",
+     "extrait": "| Temps de pression ou d'application en dessous de 10 °C | environ 6 à 12 min |"
+    },
+    {
+     "page": "/procedures/directives-generales-systeme-70-evo2008.md",
+     "extrait": "| Efficacité maximale de la liaison | après 24 h |"
+    },
+    {
+     "page": "/procedures/directives-generales-systeme-70-evo2008.md",
+     "extrait": "- enlever le surplus de colle avec une spatule, après prise ;"
+    },
+    {
+     "page": "/procedures/directives-generales-systeme-70-evo2008.md",
+     "extrait": "- ne pas utiliser de chiffon ;"
+    },
+    {
+     "page": "/procedures/livraison-et-stockage-semi-produits-profine.md",
+     "extrait": "- **Il ne faut jamais coller deux surfaces filmées** : le vieillissement accéléré de la colle"
+    }
+   ]
+  },
+  {
+   "id": "Q36",
+   "serie": 2,
+   "titre": "Délai de fabrication d'une PERFORM70 cintrée",
+   "question": "Le client veut une PERFORM70 plein cintre, c'est quoi le délai de fabrication ? Je lui annonce combien de semaines ?",
+   "historique": [],
+   "pages": [
+    "/commercial/proferm.md",
+    "/gammes/perform.md",
+    "/commercial/perform.md",
+    "/procedures/directives-generales-systeme-70-evo2008.md"
+   ],
+   "preuves": [
+    {
+     "page": "/commercial/proferm.md",
+     "extrait": "| Proximité | PROFERM met tout en œuvre pour garantir l'écoute, l'accompagnement et la satisfaction de sa clientèle, et veille à toujours fournir un produit et un service de qualité dans les meilleurs délais, pour chacun de ses clients. |"
+    },
+    {
+     "page": "/commercial/proferm.md",
+     "extrait": "fiabilité », « les meilleurs délais » ne sont rattachés à aucune mesure, aucun essai ni aucun"
+    },
+    {
+     "page": "/commercial/proferm.md",
+     "extrait": "disponibles sur : ELCIA PRODEVIS », au-dessus d'une page de notes [3 p. 159]. La quatrième de"
+    },
+    {
+     "page": "/commercial/proferm.md",
+     "extrait": "| Usine, à Douvrin dans le Pas-de-Calais | 1 | usine |"
+    },
+    {
+     "page": "/commercial/proferm.md",
+     "extrait": "| Collaborateurs | 220 | personnes |"
+    },
+    {
+     "page": "/commercial/proferm.md",
+     "extrait": "| Surface de production | 14 000 | m² |"
+    },
+    {
+     "page": "/commercial/proferm.md",
+     "extrait": "| Châssis fabriqués par an | 56 000 | châssis |"
+    },
+    {
+     "page": "/gammes/perform.md",
+     "extrait": "ou chapeau de gendarme (à partir d'un gabarit), triangle ou trapèze. **Le cintrage (hors triangle"
+    },
+    {
+     "page": "/gammes/perform.md",
+     "extrait": "- **Pas de cintrage en PERFORM76** : le cintrage (hors triangle et trapèze) n'est possible que"
+    },
+    {
+     "page": "/commercial/perform.md",
+     "extrait": "Le cintrage (hors triangle et trapèze) n'est possible que pour la PERFORM70, et le laquage n'est"
+    },
+    {
+     "page": "/procedures/directives-generales-systeme-70-evo2008.md",
+     "extrait": "**Conseil** [1 p. 212] :"
+    },
+    {
+     "page": "/procedures/directives-generales-systeme-70-evo2008.md",
+     "extrait": "- les profilés destinés à être cintrés devront faire l'objet d'un stockage **au minimum pendant 4"
+    },
+    {
+     "page": "/procedures/directives-generales-systeme-70-evo2008.md",
+     "extrait": "semaines** à l'intérieur du hall de fabrication, en prenant soin de les entreposer sur des"
+    }
+   ]
+  },
+  {
+   "id": "Q37",
+   "serie": 2,
+   "titre": "Facteur solaire Sw d'une PERFORM76",
+   "question": "C'est quoi le facteur solaire Sw d'une PERFORM76 en double vitrage standard ? J'en ai besoin pour une étude thermique.",
+   "historique": [],
+   "pages": [
+    "/vitrages/performances-vitrages.md",
+    "/gammes/perform.md",
+    "/gammes/coulissants-aluminium.md"
+   ],
+   "preuves": [
+    {
+     "page": "/vitrages/performances-vitrages.md",
+     "extrait": "| Double vitrage standard, en standard | 6 / 18 / 4 | gaz argon | warm edge faible émissivité | 1,1 (gammes PVC) | - | ![Double vitrage standard](/assets/vitrages/performances/double-vitrage-standard.png) |"
+    },
+    {
+     "page": "/vitrages/performances-vitrages.md",
+     "extrait": "Le Ug de 1,1 W/m²K est donné pour le vitrage « de nos gammes PVC ». Le SGC ULTRA ONE est présenté"
+    },
+    {
+     "page": "/vitrages/performances-vitrages.md",
+     "extrait": "comme « le double vitrage le plus performant du marché » [1 p. 27]. Sur la PERFORM76, le double"
+    },
+    {
+     "page": "/vitrages/performances-vitrages.md",
+     "extrait": "vitrage de série est monté avec un intercalaire TGI noir [2 p. 4]."
+    },
+    {
+     "page": "/gammes/perform.md",
+     "extrait": "- **Isolation thermique** : Uw jusque 1,3 W/m²K en PERFORM70 et jusque 0,8 W/m²K en PERFORM76"
+    },
+    {
+     "page": "/gammes/coulissants-aluminium.md",
+     "extrait": "| Sw (facteur solaire) | 0,46 | - | - | [4 p. 2] |"
+    },
+    {
+     "page": "/gammes/coulissants-aluminium.md",
+     "extrait": "| TLw (transmission lumineuse) | 0,65 | - | - | [4 p. 2] |"
+    },
+    {
+     "page": "/gammes/coulissants-aluminium.md",
+     "extrait": "* **Déperditions thermiques globales** : Uw jusqu'à 1,4 W/m²K en coulissant standard avec vitrage 6/14/4, Sw = 0,51 et TLw = 0,57 [1 p. 17]. Sur le LUMÉAL55, le coefficient Uw descend à 1,2 W/m²K [1 p. 16]."
+    },
+    {
+     "page": "/equipements/stores-integres.md",
+     "extrait": "« Le facteur solaire Gtot(i) est la part d'énergie solaire qui entre dans la pièce en traversant"
+    }
+   ]
+  },
+  {
+   "id": "Q38",
+   "serie": 2,
+   "titre": "PERFORM+ anthracite avec poignée centrée",
+   "question": "Mon client veut une PERFORM+ à ouvrant caché en anthracite 7016 avec une poignée centrée. On lui confirme ?",
+   "historique": [],
+   "pages": [
+    "/gammes/perform-plus.md",
+    "/coloris/coloris-perform-plus.md",
+    "/coloris/coloris-hybride-plus.md",
+    "/gammes/hybride-plus.md"
+   ],
+   "preuves": [
+    {
+     "page": "/coloris/coloris-perform-plus.md",
+     "extrait": "| 9016 | Blanc 9016 | teinté dans la masse | intérieur et extérieur PVC | - | - | ![Blanc 9016](/assets/coloris/perform-plus/blanc-9016.png) |"
+    },
+    {
+     "page": "/coloris/coloris-perform-plus.md",
+     "extrait": "Aucun autre coloris, plaxage ou laquage n'est proposé pour la PERFORM+ [1 p. 3]."
+    },
+    {
+     "page": "/gammes/perform-plus.md",
+     "extrait": "« Il n'est pas possible d'ajouter de traverses, de poignée centrée, de serrures sur les"
+    },
+    {
+     "page": "/gammes/perform-plus.md",
+     "extrait": "- **Pas de poignée centrée** : la poignée TOULON est « uniquement en poignée décalée » [1 p. 3]."
+    },
+    {
+     "page": "/gammes/perform-plus.md",
+     "extrait": "| Poignée | TOULON, uniquement en poignée décalée — finitions sur [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) |"
+    },
+    {
+     "page": "/gammes/perform-plus.md",
+     "extrait": "La PERFORM+ n'apparaît pas au catalogue général de janvier 2026 ; son statut commercial est à"
+    },
+    {
+     "page": "/coloris/coloris-hybride-plus.md",
+     "extrait": "| 7016 | Anthracite 7016 satiné | laqué | 1 ou 2 faces identiques | satiné | - | ![Anthracite 7016 satiné](/assets/coloris/hybride-plus/anthracite-7016-satine.png) |"
+    },
+    {
+     "page": "/commercial/perform-plus-et-hybride-plus.md",
+     "extrait": "Les cinq impossibilités (traverses, poignée centrée, serrures sur portes-fenêtres, fiches,"
+    },
+    {
+     "page": "/commercial/perform-plus-et-hybride-plus.md",
+     "extrait": "cintrage) sont sur [PERFORM+](/gammes/perform-plus.md) et [HYBRIDE+](/gammes/hybride-plus.md)"
+    }
+   ]
+  },
+  {
+   "id": "Q39",
+   "serie": 2,
+   "titre": "RC2 sur HYBRIDE : Label ROTO Performance et garantie ferrure",
+   "question": "Un client veut du RC2 sur sa fenêtre HYBRIDE avec la ferrure Roto. Le Label Roto Performance, ça suffit ? Et la ferrure est garantie combien d'années ?",
+   "historique": [],
+   "pages": [
+    "/garanties/garanties-par-composant.md",
+    "/certifications/labels-et-certifications.md",
+    "/fournisseurs/roto.md",
+    "/quincaillerie/roto-nx.md"
+   ],
+   "preuves": [
+    {
+     "page": "/garanties/garanties-par-composant.md",
+     "extrait": "| Ferrure ROTO | 10 | sur le fonctionnement |"
+    },
+    {
+     "page": "/garanties/garanties-par-composant.md",
+     "extrait": "| Autre ferrure | 2 | - (**CTR-09**) |"
+    },
+    {
+     "page": "/garanties/garanties-par-composant.md",
+     "extrait": "| Ferrure Roto | 10 | sur le fonctionnement |"
+    },
+    {
+     "page": "/certifications/labels-et-certifications.md",
+     "extrait": "| Label ROTO Performance | ROTO | produits équipés de la quincaillerie ROTO | label créé en 2023 ; PROFERM premier fabricant à le recevoir |"
+    },
+    {
+     "page": "/certifications/labels-et-certifications.md",
+     "extrait": "[1 p. 34]. Le Label ROTO Performance offre, pour les produits équipés de la quincaillerie ROTO, un"
+    },
+    {
+     "page": "/certifications/labels-et-certifications.md",
+     "extrait": "équipement premium sur la menuiserie, la garantie de 10 ans sur les équipements ROTO, l'accès à la"
+    },
+    {
+     "page": "/certifications/labels-et-certifications.md",
+     "extrait": "certification RC1 / RC2 sur les fenêtres et d'autres services et assistances [1 p. 34]."
+    },
+    {
+     "page": "/certifications/labels-et-certifications.md",
+     "extrait": "* **Label ROTO Performance** : il offre l'accès à la certification RC1 / RC2 sur les fenêtres [1 p. 34]."
+    },
+    {
+     "page": "/certifications/labels-et-certifications.md",
+     "extrait": "* **Classe RC2 CERIBOIS** : la fenêtre PERFORM76, équipée d'un vitrage securit 44/6 collé et d'une quincaillerie spécifique — ferrage périmétrique et poignée verrouillable Sécustik —, a été testée et labellisée par CERIBOIS [1 p. 34]."
+    },
+    {
+     "page": "/certifications/labels-et-certifications.md",
+     "extrait": "* **Classe de résistance 2 avec oscillo-battant en position ouverte (RC2)** : les quincailleries Roto NX des gammes [PERFORM+](/gammes/perform-plus.md) et [HYBRIDE+](/gammes/hybride-plus.md) peuvent y répondre ; le système TiltSafe est donné « pour une position OB sécurisée » [5 p. 2]. Voir [Roto NX"
+    },
+    {
+     "page": "/fournisseurs/roto.md",
+     "extrait": "PROFERM est le **premier fabricant à avoir reçu le Label ROTO Performance**, créé en 2023"
+    },
+    {
+     "page": "/fournisseurs/roto.md",
+     "extrait": "[1 p. 34]. Il apporte aux produits équipés de quincaillerie ROTO un équipement premium, la"
+    },
+    {
+     "page": "/fournisseurs/roto.md",
+     "extrait": "garantie de 10 ans, l'accès à la certification **RC1 et RC2**, et des services associés."
+    },
+    {
+     "page": "/fournisseurs/roto.md",
+     "extrait": "[LUMINE](/gammes/lumine.md), qui relève de TECHNAL et non de ROTO. Les conditions d'obtention du"
+    },
+    {
+     "page": "/fournisseurs/roto.md",
+     "extrait": "Label ROTO Performance ne sont pas documentées."
+    },
+    {
+     "page": "/quincaillerie/roto-nx.md",
+     "extrait": "La Roto NX peut « répondre à la classe de résistance 2 avec OB position ouverte (RC2) » [1 p. 2] ;"
+    },
+    {
+     "page": "/quincaillerie/roto-nx.md",
+     "extrait": "RC2 est la classe 2 de résistance à l'effraction de la série NF EN 1627 à 1630. Le système"
+    },
+    {
+     "page": "/quincaillerie/roto-nx.md",
+     "extrait": "TiltSafe est donné « pour une position OB sécurisée » [1 p. 2]. Les classes d'effraction des"
+    },
+    {
+     "page": "/quincaillerie/roto-nx.md",
+     "extrait": "produits PROFERM, dont le RC2 de la PERFORM76 obtenu par un autre équipement, sont sur"
+    },
+    {
+     "page": "/quincaillerie/roto-nx.md",
+     "extrait": "[Labels et certifications](/certifications/labels-et-certifications.md). L'accès aux"
+    },
+    {
+     "page": "/quincaillerie/roto-nx.md",
+     "extrait": "certifications RC1 et RC2 relève aussi du Label ROTO Performance [2 p. 34]."
+    },
+    {
+     "page": "/quincaillerie/roto-nx.md",
+     "extrait": "La ferrure Roto est garantie 10 ans sur le fonctionnement : voir"
+    },
+    {
+     "page": "/profiles/systeme-76-profiles-principaux.md",
+     "extrait": "| Anti-effraction | jusqu'à RC 2 |"
+    }
+   ]
+  },
+  {
+   "id": "Q40",
+   "serie": 2,
+   "titre": "Garantie du panneau de porte plaxée",
+   "question": "Mon client a le catalogue portes de 2024 sous les yeux. Il me demande combien d'années de garantie sur le panneau de sa porte d'entrée plaxée. Je lui réponds quoi ?",
+   "historique": [],
+   "pages": [
+    "/garanties/garanties-par-composant.md",
+    "/sources/catalogue-portes-entree.md"
+   ],
+   "preuves": [
+    {
+     "page": "/garanties/garanties-par-composant.md",
+     "extrait": "| Panneau de porte | 10 | - |"
+    },
+    {
+     "page": "/garanties/garanties-par-composant.md",
+     "extrait": "| Panneau de porte | 7 | sur les modèles plaxés (**CTR-16**) |"
+    },
+    {
+     "page": "/garanties/garanties-par-composant.md",
+     "extrait": "| Panneau de porte | 7 | - (**CTR-16**) |"
+    },
+    {
+     "page": "/garanties/garanties-par-composant.md",
+     "extrait": "| Panneau de porte | 5 | sur les modèles plaxés (**CTR-16**) |"
+    },
+    {
+     "page": "/garanties/garanties-par-composant.md",
+     "extrait": "| Motorisation | 7 | - |"
+    },
+    {
+     "page": "/garanties/garanties-par-composant.md",
+     "extrait": "| Volet roulant | 7 | - (**CTR-04**) |"
+    },
+    {
+     "page": "/garanties/garanties-par-composant.md",
+     "extrait": "| Laquage | 7 | - (**CTR-05**) |"
+    },
+    {
+     "page": "/garanties/garanties-par-composant.md",
+     "extrait": "| Panneau de porte modèle plaxé | 5 | - (**CTR-16**) |"
+    },
+    {
+     "page": "/garanties/garanties-par-composant.md",
+     "extrait": "| Panneau de porte | 7 ans, 5 ans sur les modèles plaxés | 10 ans, 7 ans sur les modèles plaxés (**CTR-16**) |"
+    },
+    {
+     "page": "/garanties/garanties-par-composant.md",
+     "extrait": "2023, contre 10 ans et 7 ans en janvier 2026 (**CTR-16**). Elle cite la serrure, à 2 ans, que les"
+    },
+    {
+     "page": "/sources/catalogue-portes-entree.md",
+     "extrait": "| **CTR-16** | Garantie panneau de porte affichée à 7 ans (5 ans plaxé, p. 158), portée à 10 ans (7 ans plaxé) au catalogue 2026. |"
+    },
+    {
+     "page": "/portes/collection-authentique.md",
+     "extrait": "Les durées de garantie des panneaux de porte, des soubassements, des serrures et des ferrures"
+    },
+    {
+     "page": "/portes/panneaux-et-monoblocs.md",
+     "extrait": "| 10 | garantie décennale selon législation applicable aux vitrages isolants et sous condition expresse du placement du panneau dans la porte selon descriptif technique par produit |"
+    }
+   ]
+  }
+ ]
+}

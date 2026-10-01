@@ -132,7 +132,7 @@ def test_le_modele_cherche_puis_repond(snapshot, monkeypatch):
     etape = events[0]["etape"]
     assert etape["outil"] == "chercher" and etape["libelle"] == "Recherche"
     assert etape["detail"] == "parclose 76507"
-    # chercher livre les premières pages entières : elles comptent comme lues.
+    # Les pages livrées, entières ou en sections, comptent comme lues.
     assert "/profiles/perform76-parcloses.md" in etape["pages"]
 
     # Le premier contexte : prompt permanent, historique, question.
@@ -195,20 +195,56 @@ def test_le_serveur_injecte_les_anomalies(snapshot):
     assert answer.anomalies == [{"id": "CTR-09", "path": "/anomalies/contradictions-entre-sources.md"}]
 
 
-def test_le_serveur_remet_la_reference_de_la_question(snapshot):
-    """TGY3702 : le modèle cherchait « crémone 4 points » et tombait sur une autre gamme."""
+def test_la_reference_de_la_question_est_cherchee_a_part(snapshot):
+    """TGY3702 : le modèle cherchait « crémone 4 points » et tombait sur une autre gamme.
+
+    La référence oubliée est cherchée à part : remise dans la requête du modèle, elle
+    l'écrasait (section du DTA du rang 2 au rang 29 pour « … dimensions maximales 76171 76281 »).
+    """
     answer = WikiAnswer(question="J'ai une crémone 3 points TGY3702, il me faut la 4 points",
                         history=[], snapshot=snapshot)
-    args = {"mots_cles": "crémone 4 points coulissant"}
-    resultat = answer._executer("chercher", args, [])
-    # L'étape affichée (et enregistrée) montre la recherche réellement faite.
-    assert args["mots_cles"] == "crémone 4 points coulissant tgy3702"
+    args = {"mots_cles": "crémone dormant ouvrant"}
+    pages_lues = []
+    resultat = answer._executer("chercher", args, pages_lues)
+    assert args["mots_cles"] == "crémone dormant ouvrant"  # la requête du modèle n'est pas touchée
     assert "/quincaillerie/soleal-gy-roulements-et-fermetures.md" in resultat
-    # Une cote de la question n'est pas une référence : elle n'est pas ajoutée.
-    cote = WikiAnswer(question="SoftOpen sur un INNOSLIDE de 1 800 mm ?", history=[], snapshot=snapshot)
-    args = {"mots_cles": "INNOSLIDE SoftOpen"}
-    cote._executer("chercher", args, [])
-    assert args["mots_cles"] == "INNOSLIDE SoftOpen"
+    assert "/quincaillerie/soleal-gy-roulements-et-fermetures.md" in [p["chemin"] for p in pages_lues]
+
+    dta = WikiAnswer(question="PERFORM76 oscillo-battante, dormant 76171 et ouvrant 76281 : dimensions maxi ?",
+                     history=[], snapshot=snapshot)
+    resultat = dta._executer("chercher", {"mots_cles": "PERFORM76 oscillo-battant dimensions maximales"}, [])
+    principal = resultat.split("===== RÉFÉRENCES DE LA QUESTION")[0]
+    assert "/certifications/dta-6-16-2334.md" in principal
+    assert "1 vantail OB" in principal
+
+
+def test_rien_n_est_livre_deux_fois(snapshot):
+    """Relancée à l'identique, la recherche donne la suite, jamais ce qui a déjà été livré."""
+    answer = WikiAnswer(question="q", history=[], snapshot=snapshot)
+    pages_lues = []
+    premier = answer._executer("chercher", {"mots_cles": "parclose vitrage 44 perform76"}, pages_lues)
+    second = answer._executer("chercher", {"mots_cles": "parclose vitrage 44 perform76"}, pages_lues)
+    entetes = lambda t: set(re.findall(r"===== PAGE \d+ : (\S+) — page entière", t))  # noqa: E731
+    assert entetes(premier) and not (entetes(premier) & entetes(second))
+    # Une page déjà livrée entière n'est pas renvoyée par lire_page.
+    deja = next(iter(entetes(premier)))
+    assert "déjà été livrée entière" in answer._executer("lire_page", {"chemin": deja}, pages_lues)
+
+
+def test_lire_page_une_section_puis_la_page(snapshot):
+    """Une grosse page se lit section par section ; la page complète renvoie à ce qui a été lu."""
+    answer = WikiAnswer(question="q", history=[], snapshot=snapshot)
+    chemin = "/certifications/dta-6-16-2334.md"
+    section = answer._executer("lire_page", {"chemin": chemin, "section": "dimensions maximales"}, [])
+    assert "section(s) demandée(s)" in section and "1 vantail OB" in section
+    complete = answer._executer("lire_page", {"chemin": chemin}, [])
+    assert "déjà fourni plus haut" in complete
+    assert "1 vantail OB" not in complete.split("déjà fourni plus haut")[0][-200:]
+    sommaire = answer._executer("lire_page", {"chemin": chemin, "section": "sommaire"}, [])
+    assert "§1" in sommaire and "(déjà livrée)" in sommaire
+    inconnue = answer._executer("lire_page", {"chemin": chemin, "section": "zzzz"}, [])
+    assert inconnue.startswith("Aucune section « zzzz »")
+    assert "Page introuvable" in answer._executer("lire_page", {"chemin": "/x/inexistante.md"}, [])
 
 
 def test_la_page_d_une_coupe_servie_rejoint_les_sources(snapshot):

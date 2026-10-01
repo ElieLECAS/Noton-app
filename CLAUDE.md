@@ -8,21 +8,33 @@ le recevoir en entier. Mistral Small, trois outils, rien d'autre.
 les consignes et un **vocabulaire** (types, tags, gammes, systèmes) : ~3 200 tokens au lieu de
 185 000. **Aucune anomalie dans le prompt** (30/09) : on pose une question, il cherche dans le
 wiki. L'index des 479 entrées (35 000 car.) lui faisait perdre la référence demandée — audit
-`docs/audit_recherche_2026-09-30.md`. Les pages arrivent par `chercher`, qui
-livre directement le contenu **entier** des trois premières trouvées. On ne raccourcit jamais le
-wiki pour le faire rentrer quelque part. **La lecture des PDF est multimodale native** : chaque
-page est visualisée directement, sans script d'extraction ni PyMuPDF, pour garantir zéro perte
-d'information technique. Le protocole d'écriture fait foi : `wiki_llm/CLAUDE.md`.
+`docs/audit_recherche_2026-09-30.md`. **01/10/2026 — la recherche se fait par SECTIONS et se
+livre par page ou par sections** (`docs/plan_indexation_sections_2026-10-01.md`) : le wiki fait
+maintenant ~2 M tokens et 23 pages de plus de 50 000 car., alors que « trois pages entières »
+avait été réglé le 22/09 sur 193 pages sans page > 50 k. `chercher` classe des sections (découpe
+faite à l'indexation, jamais dans le wiki), livre la page **entière si elle fait moins de 15 000
+car.**, sinon sa **fiche**, son **sommaire** (§n, lignes) et les **sections qui répondent** ; 6 pages
+et 60 000 car. au plus par recherche, rien n'est livré deux fois dans un tour. **`lire_page(chemin,
+section)`** lit une section du sommaire (« §13 », un mot du titre, « sommaire »), sans `section` la
+page complète. On ne raccourcit jamais le wiki pour le faire rentrer quelque part ; le budget d'un
+tour est de 200 000 car. **La lecture des PDF est multimodale native** : chaque page est visualisée
+directement, sans script d'extraction ni PyMuPDF, pour garantir zéro perte d'information
+technique. Le protocole d'écriture fait foi : `wiki_llm/CLAUDE.md`.
 
 ## Où sont les choses
 
-- `app/services/wiki_index.py` — l'index de navigation : recherche lexicale BM25 sur le texte
-  intégral + facettes, vocabulaire, registres d'anomalies, mise en forme des résultats.
+- `app/services/wiki_index.py` — l'index de navigation : BM25 sur le texte intégral (pages) et
+  par **sections** (`decouper_sections`, `classer`, `livrer`, `lire`), facettes, vocabulaire,
+  registres d'anomalies.
 - `app/services/wiki_service.py` — charge le wiki, construit l'index, le prompt permanent et sa
   clé de cache, le graphe et le lint ; rechargé dès qu'un fichier change.
-- `app/services/wiki_chat_service.py` — le tour de chat : boucle d'outils, injection serveur des
-  anomalies, filtre des coupes, flux SSE, citations vérifiées par le code (`/dossier/page.md` →
-  existe ou pas), identifiants d'anomalie.
+- `app/services/wiki_chat_service.py` — le tour de chat : boucle d'outils, livraison page/sections
+  et budget du tour (`Livraison`), injection serveur des anomalies, filtre des coupes, flux SSE,
+  citations vérifiées par le code (`/dossier/page.md` → existe ou pas), identifiants d'anomalie.
+- `app/scripts/mesurer_recuperation.py` — la mesure hors ligne, sans modèle : rejoue la première
+  recherche sur le golden (`tests/fixtures/golden/golden_40_questions.json`) et sur le banc du
+  30/09 et dit si la preuve arrive au modèle, à quel volume. À relancer après toute modification de
+  l'index (`--grille` balaie seuil, nombre de pages, budget).
 - `app/prompts/wiki_consignes.md` — les consignes du modèle (modifier = nouvelle clé de cache).
 - `app/prompts/vocal_consignes.md` — la forme parlée, placée DEVANT les consignes générales pour
   le tour vocal : prose, pas de liste ni de tableau, les citations restent, pas d'image. Les
@@ -68,8 +80,8 @@ d'information technique. Le protocole d'écriture fait foi : `wiki_llm/CLAUDE.md
 
 ## Le tour de chat en trois outils
 
-`chercher(mots_cles, type, tags, gamme, systeme, limite)` — `lire_page(chemin)` —
-`lire_anomalie(identifiant)`. Six allers-retours au maximum, puis le tour s'arrête sur un message
+`chercher(mots_cles, type, tags, gamme, systeme, limite)` — `lire_page(chemin, section)` —
+`lire_anomalie(identifiant)`. Huit allers-retours au maximum, puis le tour s'arrête sur un message
 clair.
 
 Deux garde-fous ne dépendent pas de la discipline du modèle :
@@ -87,9 +99,9 @@ fois**, et ce qu'il avait commencé à écrire est effacé de l'écran.
 La recherche aussi est tenue par le serveur (30/09/2026, mesuré sur les recherches réelles de
 Mistral) :
 
-- **les références de la question sont remises dans chaque recherche** du tour (TGY3702 : le
-  modèle ne la gardait que 3 fois sur 8), et l'étape affichée montre la recherche réellement
-  faite ;
+- **les références de la question sont cherchées À PART** (TGY3702 : le modèle ne les gardait
+  que 3 fois sur 8) et ajoutées après les résultats : remises dans sa requête, elles
+  l'écrasaient (section du DTA du rang 2 au rang 29, 01/10) ;
 - **une cote de la question n'est pas une référence** (« 1 800 mm », « 1 200 de large ») : elle
   ne reçoit pas le poids ×3 qui ramenait les grands tableaux de ferrures ;
 - **le filtre `type` ne classe plus** : Mistral le devine mal (« Profilé » pour une limite que
@@ -98,6 +110,13 @@ Mistral) :
   six recherches pour une absence ;
 - les graphies se rejoignent : œ, « 487 206 », « LUMINE 65 », pluriel en -s/-x (pas plus) ;
 - la page d'une **coupe servie rejoint les sources**, que le modèle la cite ou non.
+
+Mesuré le 01/10 (`mesurer_recuperation`, sans modèle) : la preuve arrive au modèle dans 95 % des
+questions du golden et 91 % du banc pour ~52 000 car., contre 95 % et 82 % pour ~69 000 avec trois
+pages entières. Réglages fins (taille de section, poids des titres) : ±3 points, sans effet. Un
+routeur à règles « intention → pages » n'a pas fait mieux que le classement lexical à volume égal.
+Ne livre pas d'une page lue en partie une conclusion d'absence : le sommaire dit ce qui n'a pas
+été reçu (consigne 0).
 
 La règle 14 des consignes interdit un « oui » de faisabilité sans avoir lu la limite (3 → 8 sur 9
 justes sur les trois questions de faisabilité du golden).

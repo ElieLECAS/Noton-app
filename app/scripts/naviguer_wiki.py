@@ -1,9 +1,10 @@
 """Naviguer le wiki avec les outils de LIA, et rien d'autre — pour un banc où Claude joue LIA.
 
-Chaque commande exécute le code du chat lui-même (``WikiAnswer._executer``) : même index, mêmes
-trois pages livrées entières, même rapprochement des anomalies après chaque outil. Ce qui sort
-ici est ce que LIA reçoit, au caractère près. Une session par question garde l'état du tour
-(pages lues, anomalies déjà poussées, appels) dans un fichier JSON et journalise chaque appel ;
+Chaque commande exécute le code du chat lui-même (``WikiAnswer._executer``) : même index, même
+livraison (pages entières ou sections avec sommaire), même rapprochement des anomalies après
+chaque outil. Ce qui sort ici est ce que LIA reçoit, au caractère près. Une session par question
+garde l'état du tour (pages lues, ce qui a déjà été livré, anomalies déjà poussées, appels) dans
+un fichier JSON et journalise chaque appel ;
 le résultat de chaque appel est écrit à côté (``<session>.appelN.txt``), en entier.
 
 Usage (dans le conteneur) ::
@@ -12,6 +13,7 @@ Usage (dans le conteneur) ::
     python -m app.scripts.naviguer_wiki --session logs/bench/x/q01.json --question "…" \\
         chercher '{"mots_cles": "crémone TGY3702"}'
     python -m app.scripts.naviguer_wiki --session logs/bench/x/q01.json lire_page '{"chemin": "/…"}'
+    python -m app.scripts.naviguer_wiki --session logs/bench/x/q01.json lire_page '{"chemin": "/…", "section": "§13"}'
 
 Budget : cinq appels d'outil par question (LIA : six appels du modèle, le dernier répond).
 """
@@ -23,6 +25,7 @@ import sys
 from pathlib import Path
 
 from app.services.wiki_chat_service import WikiAnswer
+from app.services.wiki_index import Livraison
 from app.services.wiki_service import load_snapshot, wiki_root
 
 BUDGET = 5
@@ -57,7 +60,8 @@ def main() -> int:
     # « - » : les arguments arrivent sur l'entrée standard (une apostrophe dans les mots-clés
     # casse la ligne de commande).
     args = json.loads(sys.stdin.read() if ns.args == "-" else ns.args)
-    answer = WikiAnswer(question=etat["question"], history=[], snapshot=snapshot)
+    answer = WikiAnswer(question=etat["question"], history=[], snapshot=snapshot,
+                        livraison=Livraison.depuis_dict(etat.get("livraison")))
     par_chemin = {e["chemin"]: e for e in answer.index.entries}
     pages_lues = [par_chemin[c] for c in etat["pages_lues"] if c in par_chemin]
     deja = set(etat["anomalies"])
@@ -81,6 +85,7 @@ def main() -> int:
 
     etat["pages_lues"] = [p["chemin"] for p in pages_lues]
     etat["anomalies"] = sorted(deja)
+    etat["livraison"] = answer.livraison.vers_dict()
     etat["appels"].append({
         "outil": ns.outil,
         "args": args,
