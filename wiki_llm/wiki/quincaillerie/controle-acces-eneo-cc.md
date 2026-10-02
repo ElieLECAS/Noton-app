@@ -543,3 +543,4 @@ PROFERM / Roto, version 2, 2022 — `raw/proferm-roto-eneo-cc-notice-simplifiee-
 - [ROTO](/fournisseurs/roto.md)
 - [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md)
 - [Glossaire](/reference/glossaire.md)
+- [Roto Safe E Eneo CC, notice simplifiée PROFERM](/sources/proferm-roto-eneo-cc-notice-simplifiee.md)

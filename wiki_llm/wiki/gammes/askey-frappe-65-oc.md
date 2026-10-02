@@ -126,3 +126,5 @@ Les limites dimensionnelles dépendent du type de ferrage Ferco Unijet [1 p. 134
 - [Quincaillerie et équerres Frappe ASKEY](/quincaillerie/askey-frappe-quincaillerie-et-equerres.md)
 - [Fabrication Frappe 65 ASKEY](/procedures/fabrication-frappe-askey-65.md)
 - [Fournisseur ASKEY](/fournisseurs/askey.md)
+- [Frappe 65 Ouvrant Caché ASKEY - Conception](/sources/askey-frappe-65-oc-conception.md)
+- [Frappe 65 Ouvrant Caché ASKEY - Fabrication](/sources/askey-frappe-65-oc-fabrication.md)

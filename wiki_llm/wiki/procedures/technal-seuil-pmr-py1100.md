@@ -120,3 +120,4 @@ Le **seuil PMR PY1100** est un procédé d'étanchéité basse à rupture de pon
 - [Cotes de débit des portes SOLEAL PY 55](/portes/soleal-py-cotes-de-debit.md)
 - [Serrures et paumelles SOLEAL PY 55](/quincaillerie/soleal-py-serrures-et-paumelles.md)
 - [Fournisseur Technal](/fournisseurs/technal.md)
+- [F.I.T N° 15 — Évolution Porte PY et Seuil PMR PY1100 Technal](/sources/technal-seuil-py1100.md)

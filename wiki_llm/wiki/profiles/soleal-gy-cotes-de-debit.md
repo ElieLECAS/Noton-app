@@ -200,3 +200,4 @@ $$\mathbf{L_1 = L_{1d} + 62,5\text{ mm}} \quad \text{et} \quad \mathbf{L_2 = L_{
 - [Roulements et fermetures SOLEAL GY 55](/quincaillerie/soleal-gy-roulements-et-fermetures.md)
 - [Pose et galandage SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md)
 - [Fournisseur Technal](/fournisseurs/technal.md)
+- [Catalogue de fabrication Technal SOLEAL GY 55](/sources/technal-soleal-gy-fabrication.md)

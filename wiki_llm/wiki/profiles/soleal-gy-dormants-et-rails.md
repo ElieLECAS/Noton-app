@@ -176,3 +176,4 @@ Calculée selon la norme européenne **NF EN 14024** (variation de la rupture th
 - [Roulements et fermetures SOLEAL GY 55](/quincaillerie/soleal-gy-roulements-et-fermetures.md)
 - [Pose et galandage SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md)
 - [Fournisseur Technal](/fournisseurs/technal.md)
+- [Catalogue de conception Technal SOLEAL GY 55](/sources/technal-soleal-gy-conception.md)

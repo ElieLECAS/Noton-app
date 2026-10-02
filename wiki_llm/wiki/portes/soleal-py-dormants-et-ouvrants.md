@@ -131,3 +131,4 @@ Assemblées en coupe droite à 90° entre montants avec embouts **T760003** à *
 - [Mise en œuvre du seuil PMR PY1100](/procedures/technal-seuil-pmr-py1100.md)
 - [Ouvrants de porte](/portes/ouvrants-de-porte.md)
 - [Fournisseur Technal](/fournisseurs/technal.md)
+- [Catalogue de conception Technal SOLEAL PY 55](/sources/technal-soleal-py-conception.md)

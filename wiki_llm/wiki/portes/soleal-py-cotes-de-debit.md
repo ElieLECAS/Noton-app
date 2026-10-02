@@ -159,3 +159,4 @@ Les tringles plates en aluminium **T525058** actionnent les pênes hauts et bas 
 - [Serrures et paumelles SOLEAL PY 55](/quincaillerie/soleal-py-serrures-et-paumelles.md)
 - [Mise en œuvre du seuil PMR PY1100](/procedures/technal-seuil-pmr-py1100.md)
 - [Fournisseur Technal](/fournisseurs/technal.md)
+- [Catalogue de fabrication Technal SOLEAL PY 55](/sources/technal-soleal-py-fabrication.md)

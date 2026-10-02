@@ -83,3 +83,4 @@ Pour les ensembles combinant vantaux battants et parties fixes sur seuil PMR (pr
 - [Quincaillerie et équerres Frappe ASKEY](/quincaillerie/askey-frappe-quincaillerie-et-equerres.md)
 - [Fabrication Frappe 65 ASKEY](/procedures/fabrication-frappe-askey-65.md)
 - [Fournisseur ASKEY](/fournisseurs/askey.md)
+- [Frappe 65 Ouvrant Visible ASKEY - Fabrication](/sources/askey-frappe-65-ov-fabrication.md)
