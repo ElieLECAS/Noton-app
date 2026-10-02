@@ -221,3 +221,51 @@ Critères proposés, à valider : médiane de **3 appels ou moins**, **60 000 to
 4. **Pas de reprise sur réponse vide** avant la mesure réelle (décision 7).
 5. **Tarifs en configuration** pour le coût affiché dans la fenêtre de trace.
 6. **Schéma de `lire`** en tableau d'objets, avec repli à un seul objet si GLM s'y perd.
+
+## 10. Réalisé le 02/10 (lots 2, 3 et 4) — et ce qui a changé en route
+
+Fait, non commité, **204 tests verts** : le tour (3 outils, carte, lecture en lot, raisonnement renvoyé, dernier appel
+sans outils, `finish_reason`, `citees_non_lues`, fil d'un tour à l'autre par la fiche), le prompt (consignes,
+`index.md`, vocabulaire), l'interface (étapes « Carte » et « Lecture », budget, fenêtre de trace, coût estimé,
+libellés du vocal), les deux routeurs, les scripts de banc.
+
+Écarts au plan, par mesure ou par prudence :
+
+- **Pas de formulation « références rares » à part.** Mesuré hors ligne (étape 2a) : question + références + GLM,
+  question + GLM + références et question + GLM donnent le même résultat. Les formulations sont la question brute,
+  puis celles de GLM.
+- **La fiche ne dit que ce qui change la recherche** : références rares, absentes, citées seulement dans un registre,
+  tour précédent. Les cotes et les produits nommés restent calculés, mais ne sont pas écrits dans le message.
+- **Consignes : le cadre est réécrit, les règles de vérité sont gardées** avec leur numérotation (le vocal renvoie
+  aux règles 11 et 13) et seulement ajustées aux nouveaux outils. Les condenser aurait gagné ~1 500 tokens sur un
+  prompt de ~44 000 : à décider après le golden, pas avant.
+- **Probes API avant de coder** (~1 000 tokens) : un message système en milieu de conversation est accepté et suivi,
+  un dernier appel sans `tools` avec un historique d'appels d'outils est accepté.
+- **Configuration** : le défaut `CHAT_MAX_TOKENS` de `docker-compose.yaml` (4 096) l'emportait sur celui de
+  `config.py` ; il est à 16 384. Tarifs `MODEL_PRIX_*` dans `.env` (local, ignoré par git) et en défaut à 0 dans le
+  compose. **Un changement de `docker-compose.yaml` ne s'applique qu'à la recréation du conteneur.**
+
+### Premier essai réel, et son échec
+
+Question de faisabilité PERFORM76 (oscillo-battante 1 300 × 1 450, 76171 / 76281, triple vitrage) : le tour s'est
+terminé sur « Réponse coupée » **sans une ligne de réponse**. Cause : le conteneur tournait encore avec
+`max_tokens` = 4 096 (le journal le dit) ; le raisonnement de GLM a consommé la limite du dernier appel avant le
+premier mot. Corrigé en recréant le service web. Le message d'échec dit maintenant que la réflexion a épuisé la
+limite quand rien n'a été écrit.
+
+Rejeu réel, une seule fois, après correction (6 appels, 27 s) : réponse **correcte et sourcée** (limites du DTA, abaque
+d'ouvrant et règle des 25 %, parclose 76503 pour 36 mm, poids du vantail, anomalie CTR-01, nuance « fabrications
+certifiées »). La sortie la plus longue d'un appel est de 1 948 tokens, donc 16 384 laisse de la marge.
+
+| Mesure | Résultat | Cible du plan |
+|---|---|---|
+| Appels | **6** (une carte, quatre lectures, la réponse) | médiane ≤ 3 |
+| Tokens d'entrée cumulés | 359 639, dont 260 928 en cache (73 %) | ≤ 60 000 |
+| Coût estimé | **0,195 $** à froid | ≤ 0,03 $ |
+| Question suivante (« montre moi sa coupe », 2 min plus tard) | 3 appels, 141 375 tokens, 92 % en cache, ~0,04 $ | |
+
+Lecture de ces chiffres : (1) le premier appel d'une conversation ne trouve pas le prompt en cache après quelques
+minutes d'inactivité : ~44 000 tokens au prix plein, soit ~0,06 $ ; une question suivante le trouve (92 %).
+(2) Une faisabilité à cinq sources fait lire GLM en quatre fois au lieu d'une, malgré la consigne : chaque tour de
+lecture ajoute ~10 000 tokens relus ensuite. (3) Les cibles de coût et d'appels ne valent que pour la **médiane du
+golden**, pas pour la question la plus dure ; elles restent à mesurer (§ 7).

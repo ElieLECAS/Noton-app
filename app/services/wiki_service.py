@@ -8,11 +8,12 @@ Le wiki est un bundle OKF (``wiki_llm/wiki/*.md`` : frontmatter YAML + markdown,
     pas encore écrites — valides en OKF), les degrés, les pages périmées ;
   * l'**index de navigation** (``wiki_index.WikiIndex``) : recherche lexicale sur le texte
     intégral et registres d'anomalies, ce que l'outil ``chercher`` du chat interroge ;
-  * le **prompt système** du chat : consignes + vocabulaire — quelques milliers de tokens, PAS
-    le wiki, qui ne tient dans aucune fenêtre, ni les anomalies, qui arrivent avec les pages
-    lues — et sa clé de cache Mistral (sha256 du prompt entier, donc toute modification des
-    consignes ou du vocabulaire invalide proprement le cache) ;
-  * le **prompt du tour vocal** : le même vocabulaire, précédé des consignes parlées
+  * le **prompt système** du chat : consignes + **index du wiki** (``index.md`` tel qu'il est
+    écrit : une ligne par page, ~36 000 tokens) + vocabulaire — PAS le wiki, qui ne tient dans
+    aucune fenêtre, ni les anomalies, qui arrivent avec les pages lues — et sa clé de cache
+    (sha256 du prompt entier, donc toute modification des consignes, de l'index ou du
+    vocabulaire invalide proprement le cache) ;
+  * le **prompt du tour vocal** : le même index et le même vocabulaire, précédés des consignes parlées
     (``app/prompts/vocal_consignes.md``) puis des consignes générales, avec sa propre clé de
     cache (``lia-vocal-``) — les règles de vérité sont écrites une fois, la forme parlée
     s'ajoute devant ;
@@ -54,11 +55,12 @@ LINK_RE = re.compile(r"\[([^\]]*)\]\((/[^)\s]+\.md)\)")
 FRONTMATTER_RE = re.compile(r"\A---\r?\n(.*?)\r?\n---\r?\n?(.*)\Z", re.DOTALL)
 # Ratio caractères / token mesuré le 18/09 sur le prompt réel (Small, tokenizer tekken).
 CHARS_PER_TOKEN = 2.924
-# Le prompt permanent ne porte que les consignes et le vocabulaire : il doit rester petit,
-# puisqu'il est payé à chaque appel d'un tour d'outils. Au-delà de ce seuil ESTIMÉ on avertit
-# dans le JOURNAL — c'est en général le vocabulaire qui enfle.
+# Le prompt permanent porte les consignes, l'index du wiki et le vocabulaire : il est payé à chaque
+# appel d'un tour d'outils (au dixième du prix, en cache). L'index en fait l'essentiel (~36 000
+# tokens pour 321 pages) : au-delà de ce seuil ESTIMÉ on avertit dans le JOURNAL — c'est la
+# longueur des descriptions de l'index qui le fait enfler.
 # L'administration ne montre pas cette mesure : elle n'a rien à dire à qui rédige le wiki.
-TOKEN_WARNING_THRESHOLD = 20_000
+TOKEN_WARNING_THRESHOLD = 60_000
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 CONSIGNES_PATH = PROJECT_ROOT / "app" / "prompts" / "wiki_consignes.md"
 CONSIGNES_VOCALES_PATH = PROJECT_ROOT / "app" / "prompts" / "vocal_consignes.md"
@@ -174,7 +176,7 @@ class WikiSnapshot:
 
     @property
     def wiki_chars(self) -> int:
-        """Le poids du wiki LISIBLE : la somme de ce que ``lire_page`` peut servir, frontmatter
+        """Le poids du wiki LISIBLE : la somme de ce que ``lire`` peut servir, frontmatter
         comprise (``read_wiki_page`` rend ``raw_text``, et refuse les pages réservées).
 
         C'est la mesure qui dit pourquoi le CAG a été abandonné : ce total est hors du prompt
@@ -425,24 +427,32 @@ def _signature(root: Path) -> Tuple:
 # ---------------------------------------------------------------------------
 
 
-def build_system_prompt(index: WikiIndex, consignes: str, cle: str = "lia-wiki-") -> Tuple[str, str]:
-    """Consignes et vocabulaire. **Ni le wiki, ni les anomalies.**
+def build_system_prompt(
+    index: WikiIndex, consignes: str, index_md: str, cle: str = "lia-wiki-"
+) -> Tuple[str, str]:
+    """Consignes, index du wiki, vocabulaire. **Ni le corps des pages, ni les anomalies.**
 
-    Le modèle n'a en permanence que de quoi *formuler une recherche* — les types de pages, les
-    tags, les gammes, les systèmes. On pose une question, il cherche dans le wiki : les pages
-    arrivent par ``chercher``, et les entrées d'anomalie rapprochées des pages lues arrivent avec
-    elles (règle 2). L'index des 479 entrées listé ici tirait le modèle hors de la question :
-    il y perdait la référence demandée (mesuré le 30/09, 0 requête sur 8 la gardait).
+    Le modèle a en permanence de quoi *savoir où chercher* — ``index.md``, une ligne par page,
+    dont la description dit à quelles questions la page répond — et de quoi *formuler une
+    recherche* — les gammes, les systèmes, les tags. Les pages arrivent par ``chercher`` (une
+    carte) et ``lire``, et les entrées d'anomalie rapprochées des pages lues arrivent avec elles
+    (règle 2). Le 30/09, un index de 479 entrées listé ici tirait Mistral Small hors de la
+    question : il y perdait la référence demandée (0 requête sur 8 la gardait). Avec GLM 5.3 rien
+    ne le dit : c'est ce que mesure le test avec et sans l'index.
 
-    Retourne ``(prompt, clé de cache)``. La clé couvre le prompt ENTIER, consignes comprises :
-    modifier une consigne invalide donc le cache au lieu de servir un préfixe périmé. ``cle`` est
-    le préfixe de la clé : le chat et le tour vocal ont deux prompts, donc deux caches.
+    Retourne ``(prompt, clé de cache)``. La clé couvre le prompt ENTIER, consignes et index
+    compris : modifier une consigne ou une description invalide donc le cache au lieu de servir
+    un préfixe périmé. ``cle`` est le préfixe de la clé : le chat et le tour vocal ont deux
+    prompts, donc deux caches.
     """
-    prompt = "\n\n".join([
-        consignes.rstrip(),
+    parties = [consignes.rstrip()]
+    if index_md.strip():
+        parties += ["===== INDEX DU WIKI : une ligne par page =====", index_md.strip()]
+    parties += [
         f"===== VOCABULAIRE DU WIKI ({len(index.entries)} pages indexées) =====",
         index.vocabulaire(),
-    ])
+    ]
+    prompt = "\n\n".join(parties)
     key = cle + hashlib.sha256(prompt.encode("utf-8")).hexdigest()[:32]
     return prompt, key
 
@@ -531,10 +541,12 @@ def load_snapshot(root: Optional[Path] = None, signature: Optional[Tuple] = None
         pages[link["target"]].in_degree += 1
 
     index = WikiIndex(pages.values())
-    prompt, cache_key = build_system_prompt(index, consignes)
+    index_page = pages.get("/index.md")
+    index_md = index_page.raw_text if index_page is not None and not index_page.missing else ""
+    prompt, cache_key = build_system_prompt(index, consignes, index_md)
     # Le tour vocal : la forme parlée d'abord, les mêmes règles de vérité ensuite.
     vocal_prompt, vocal_cache_key = build_system_prompt(
-        index, consignes_vocales.rstrip() + "\n\n" + consignes, cle="lia-vocal-"
+        index, consignes_vocales.rstrip() + "\n\n" + consignes, index_md, cle="lia-vocal-"
     )
     raw_dir = root / "raw"
     raw_files = sorted(p.name for p in raw_dir.glob("*.pdf")) if raw_dir.is_dir() else []

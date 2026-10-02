@@ -19,10 +19,14 @@ x-app-env: &app-env
   VOCAL_MODELE_TRANSCRIPTION: ${VOCAL_MODELE_TRANSCRIPTION:-voxtral-mini-latest}
   VOCAL_MODELE_SYNTHESE: ${VOCAL_MODELE_SYNTHESE:-voxtral-mini-tts-latest}
   VOCAL_VOIX: ${VOCAL_VOIX:-fr_marie_excited}
-  # Le chat CAG : le wiki entier dans le prompt, raisonnement, température basse.
+  # Le chat : un modèle qui navigue dans le wiki (carte, lecture), raisonnement, température basse.
   GENERATION_REASONING_EFFORT: ${GENERATION_REASONING_EFFORT:-high}
   CHAT_TEMPERATURE: ${CHAT_TEMPERATURE:-0.2}
-  CHAT_MAX_TOKENS: ${CHAT_MAX_TOKENS:-4096}
+  CHAT_MAX_TOKENS: ${CHAT_MAX_TOKENS:-16384}
+  # Tarifs du modèle du chat, en dollars par million de tokens (0 : le coût n'est pas affiché).
+  MODEL_PRIX_ENTREE: ${MODEL_PRIX_ENTREE:-0}
+  MODEL_PRIX_CACHE: ${MODEL_PRIX_CACHE:-0}
+  MODEL_PRIX_SORTIE: ${MODEL_PRIX_SORTIE:-0}
   CHAT_HISTORY_MAX_MESSAGES: ${CHAT_HISTORY_MAX_MESSAGES:-10}
   CHAT_HISTORY_MAX_CHARS: ${CHAT_HISTORY_MAX_CHARS:-24000}
   # Le wiki : wiki/ (les pages) et raw/ (les PDF, hors git, copiés sur le serveur).

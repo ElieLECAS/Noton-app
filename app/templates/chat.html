@@ -934,8 +934,18 @@ async function submitChat(message) {
           if (!full) contentEl.innerHTML = "";
           const ligne = document.createElement("div");
           ligne.className = "lia-step";
-          ligne.innerHTML = `<i class="ti ti-search"></i><span>${escapeHtml(data.etape.libelle)} : ${escapeHtml(data.etape.detail)}</span>`;
+          const b = data.etape.budget;
+          const budget = b ? ` <span class="text-gray-400">· appel ${b.appel}/${b.max} · lu ${Math.round(b.lu / 1000)} k car.</span>` : "";
+          ligne.innerHTML = `<i class="ti ti-search"></i><span>${escapeHtml(data.etape.libelle)} : ${escapeHtml(data.etape.detail)}${budget}</span>`;
           stepsEl.appendChild(ligne);
+          // La carte : les pages que la recherche a listées (elles ne sont pas lues pour autant).
+          if (data.etape.carte && data.etape.carte.length) {
+            const premiers = data.etape.carte.slice(0, 3).map((c) => escapeHtml((wikiIndex.get(c) || {}).title || c)).join(" · ");
+            const carte = document.createElement("div");
+            carte.className = "lia-step lia-step-page";
+            carte.innerHTML = `<i class="ti ti-list-search"></i><span>carte : ${data.etape.carte.length} pages — ${premiers}…</span>`;
+            stepsEl.appendChild(carte);
+          }
           const livraisons = data.etape.livraisons && data.etape.livraisons.length
             ? data.etape.livraisons
             : (data.etape.pages || []).map(chemin => ({ chemin, mode: "page", sections: [] }));
@@ -1095,11 +1105,14 @@ function openTraceModal(messageId) {
     const pages = (t.cited_pages || []).map((p) => `<a href="#" class="wiki-cite" data-wiki="${escapeHtml(p)}">${escapeHtml((wikiIndex.get(p) || {}).title || p)}</a>`).join(" ") || "<span class='text-gray-400'>aucune</span>";
     const unknown = (t.unknown_citations || []).map((p) => `<span class="wiki-cite missing">${escapeHtml(p)}</span>`).join(" ");
     body.innerHTML = `
-      <p class="text-xs text-gray-500">Tout le wiki (${fmt(t.wiki_pages)} pages) était dans le contexte ; aucune recherche, aucun extrait. Le modèle a répondu et cité ses pages ; l'application a vérifié que chaque page citée existe.</p>
+      <p class="text-xs text-gray-500">Le modèle a navigué dans le wiki (${fmt(t.wiki_pages)} pages) : une carte, puis la lecture des sections qu'il a choisies. Chaque appel relit tout ce qui précède : les tokens d'entrée sont <b>cumulés</b> sur les ${fmt(t.appels)} appels, et la part en cache coûte un dixième. L'application a vérifié que chaque page citée existe.</p>
       <div class="text-xs">
         ${row("Modèle", escapeHtml(t.model || "—"))}
-        ${row("Tokens en entrée", fmt(t.prompt_tokens) + (cached != null ? ` <span class="text-emerald-600">(${cached} % en cache)</span>` : ""))}
+        ${row("Appels au modèle", fmt(t.appels))}
+        ${row("Pages lues", fmt((t.pages_lues || []).length) + " · " + fmt(t.caracteres_livres) + " car.")}
+        ${row("Tokens en entrée (cumulés)", fmt(t.prompt_tokens) + (cached != null ? ` <span class="text-emerald-600">(${cached} % en cache)</span>` : ""))}
         ${row("Tokens en sortie", fmt(t.completion_tokens))}
+        ${t.cout_estime_usd != null ? row("Coût estimé", "~" + Number(t.cout_estime_usd).toFixed(3).replace(".", ",") + " $") : ""}
         ${row("Premier mot", t.first_token_ms != null ? (t.first_token_ms / 1000).toFixed(1) + " s" : "—")}
         ${row("Durée totale", t.duration_ms != null ? (t.duration_ms / 1000).toFixed(1) + " s" : "—")}
         ${row("Messages d'historique", fmt(t.history_messages))}
@@ -1107,6 +1120,8 @@ function openTraceModal(messageId) {
       </div>
       <div><p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">Pages citées</p><div class="flex flex-wrap gap-1">${pages}</div></div>
       ${unknown ? `<div><p class="text-[10px] font-bold uppercase tracking-wider text-rose-500 mb-1">Citations vers des pages inexistantes</p><div class="flex flex-wrap gap-1">${unknown}</div></div>` : ""}
+      ${(t.citees_non_lues || []).length ? `<div><p class="text-[10px] font-bold uppercase tracking-wider text-amber-600 mb-1">Citées sans avoir été lues</p><div class="flex flex-wrap gap-1">${t.citees_non_lues.map((p) => `<span class="wiki-cite missing">${escapeHtml((wikiIndex.get(p) || {}).title || p)}</span>`).join(" ")}</div></div>` : ""}
+      ${t.finish_reason === "length" ? `<p class="text-xs text-rose-500">Réponse coupée : la limite de longueur est atteinte.</p>` : ""}
       ${(t.anomalies || []).length ? `<div><p class="text-[10px] font-bold uppercase tracking-wider text-amber-600 mb-1">Anomalies signalées</p><div class="flex flex-wrap gap-1">${t.anomalies.map((a) => `<a href="#" class="anomaly-cite" data-anomaly="${a}" data-wiki="${ANOMALY_PAGES[a.slice(0, 3)]}">${a}</a>`).join(" ")}</div></div>` : ""}`;
   }
   document.getElementById("trace-modal").classList.remove("hidden");

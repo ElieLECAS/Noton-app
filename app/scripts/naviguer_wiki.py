@@ -1,19 +1,20 @@
 """Naviguer le wiki avec les outils de LIA, et rien d'autre — pour un banc où Claude joue LIA.
 
 Chaque commande exécute le code du chat lui-même (``WikiAnswer._executer``) : même index, même
-livraison (pages entières ou sections avec sommaire), même rapprochement des anomalies après
-chaque outil. Ce qui sort ici est ce que LIA reçoit, au caractère près. Une session par question
-garde l'état du tour (pages lues, ce qui a déjà été livré, anomalies déjà poussées, appels) dans
-un fichier JSON et journalise chaque appel ;
+carte, même lecture (sections avec sommaire), même rapprochement des anomalies après une lecture.
+Ce qui sort ici est ce que LIA reçoit, au caractère près, y compris le message de l'utilisateur et
+sa fiche au premier appel. Une session par question garde l'état du tour (pages lues, ce qui a
+déjà été livré, anomalies déjà poussées, appels) dans un fichier JSON et journalise chaque appel ;
 le résultat de chaque appel est écrit à côté (``<session>.appelN.txt``), en entier.
 
 Usage (dans le conteneur) ::
 
     python -m app.scripts.naviguer_wiki prompt
     python -m app.scripts.naviguer_wiki --session logs/bench/x/q01.json --question "…" \\
-        chercher '{"mots_cles": "crémone TGY3702"}'
-    python -m app.scripts.naviguer_wiki --session logs/bench/x/q01.json lire_page '{"chemin": "/…"}'
-    python -m app.scripts.naviguer_wiki --session logs/bench/x/q01.json lire_page '{"chemin": "/…", "section": "§13"}'
+        chercher '{"requetes": ["crémone TGY3702"]}'
+    python -m app.scripts.naviguer_wiki --session logs/bench/x/q01.json lire '{"lectures": [{"chemin": "/…"}]}'
+    python -m app.scripts.naviguer_wiki --session logs/bench/x/q01.json lire \\
+        '{"lectures": [{"chemin": "/…", "sections": ["§13"]}]}'
 
 Budget : cinq appels d'outil par question (LIA : six appels du modèle, le dernier répond).
 """
@@ -29,7 +30,7 @@ from app.services.wiki_index import Livraison
 from app.services.wiki_service import load_snapshot, wiki_root
 
 BUDGET = 5
-OUTILS = ("chercher", "lire_page", "lire_anomalie")
+OUTILS = ("chercher", "lire", "lire_anomalie")
 
 
 def main() -> int:
@@ -68,10 +69,15 @@ def main() -> int:
     avant = len(pages_lues)
 
     resultat = answer._executer(ns.outil, args, pages_lues)
+    resultat += answer._pied(len(etat["appels"]) + 1)
     injecte: list = []
-    answer._injecter_anomalies(injecte, pages_lues, deja)
+    # Les anomalies suivent une lecture, jamais une simple carte.
+    if pages_lues:
+        answer._injecter_anomalies(injecte, pages_lues, deja)
 
     sortie = resultat
+    if not etat["appels"]:
+        sortie = "[message de l'utilisateur]\n" + answer.message_utilisateur() + "\n\n[résultat de l'outil]\n" + sortie
     if injecte:
         sortie += "\n\n[message système]\n" + injecte[0]["content"]
     # Une recherche livre souvent plus de 60 000 caractères : un terminal les tronquerait, alors

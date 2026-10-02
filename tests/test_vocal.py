@@ -177,8 +177,12 @@ def test_le_tour_vocal_dit_la_reponse_phrase_par_phrase(snapshot, monkeypatch):
         if len(appels) == 1:
             assert kwargs["prompt_cache_key"] == snapshot.vocal_cache_key
             assert context[0]["content"] == snapshot.vocal_prompt
-            yield json.dumps({"tool_calls": [_outil("chercher", {"mots_cles": "parclose 76507"})]})
+            yield json.dumps({"tool_calls": [_outil("chercher", {"requetes": ["parclose 76507"]})]})
             yield json.dumps({"usage": {"prompt_tokens": 5000, "completion_tokens": 30}})
+            return
+        if len(appels) == 2:
+            yield json.dumps({"tool_calls": [_outil("lire", {"lectures": [{"chemin": "/profiles/perform76-parcloses.md", "sections": ["§2"]}]}, "call_2")]})
+            yield json.dumps({"usage": {"prompt_tokens": 7000, "completion_tokens": 20}})
             return
         yield json.dumps({"message": {"content": "La parclose 76507 tient 44 millimètres en ouvrant "}})
         yield json.dumps({"message": {"content": "(/profiles/perform76-parcloses.md). Elle ne se monte pas en dormant, "}})
@@ -229,7 +233,12 @@ def test_le_tour_vocal_ne_dit_ni_le_preambule_ni_la_reponse_hative(snapshot, mon
         if len(appels) == 2:
             # Un préambule, puis un appel d'outil : le préambule est effacé (reset).
             yield json.dumps({"message": {"content": "Je vais chercher dans le wiki tout de suite. "}})
-            yield json.dumps({"tool_calls": [_outil("chercher", {"mots_cles": "parclose 44"})]})
+            yield json.dumps({"tool_calls": [_outil("chercher", {"requetes": ["parclose 44"]})]})
+            yield json.dumps({"usage": {"prompt_tokens": 1, "completion_tokens": 1}})
+            return
+        if len(appels) == 3:
+            # La page citée plus loin est lue : sans lecture, le serveur renverrait lire (garde des citations).
+            yield json.dumps({"tool_calls": [_outil("lire", {"lectures": [{"chemin": "/profiles/perform76-parcloses.md", "sections": ["§2"]}]}, "call_2")]})
             yield json.dumps({"usage": {"prompt_tokens": 1, "completion_tokens": 1}})
             return
         yield json.dumps({"message": {"content": "La parclose 76507 convient pour 44 millimètres (/profiles/perform76-parcloses.md)."}})
@@ -249,16 +258,20 @@ def test_le_tour_vocal_ne_dit_ni_le_preambule_ni_la_reponse_hative(snapshot, mon
 
 def test_le_tour_vocal_survit_a_une_synthese_en_panne(snapshot, monkeypatch):
     async def fake_stream(message, *, model, context, max_tokens, temperature, **kwargs):
-        yield json.dumps({"tool_calls": [_outil("chercher", {"mots_cles": "parclose 76507"})]})
+        yield json.dumps({"tool_calls": [_outil("chercher", {"requetes": ["parclose 76507"]})]})
         yield json.dumps({"usage": {"prompt_tokens": 1, "completion_tokens": 1}})
         return
         yield  # pragma: no cover
+
+    async def fake_lire(message, *, model, context, max_tokens, temperature, **kwargs):
+        yield json.dumps({"tool_calls": [_outil("lire", {"lectures": [{"chemin": "/profiles/perform76-parcloses.md", "sections": ["§2"]}]}, "call_2")]})
+        yield json.dumps({"usage": {"prompt_tokens": 1, "completion_tokens": 1}})
 
     async def fake_stream_2(message, *, model, context, max_tokens, temperature, **kwargs):
         yield json.dumps({"message": {"content": "La parclose 76507 tient 44 millimètres (/profiles/perform76-parcloses.md)."}})
         yield json.dumps({"usage": {"prompt_tokens": 1, "completion_tokens": 1}})
 
-    flux = [fake_stream, fake_stream_2]
+    flux = [fake_stream, fake_lire, fake_stream_2]
 
     async def stream(message, **kwargs):
         async for chunk in flux.pop(0)(message, **kwargs):
@@ -305,7 +318,11 @@ def _flux_reponse(texte):
     async def fake_stream(message, *, model, context, max_tokens, temperature, **kwargs):
         appels.append(context)
         if len(appels) == 1:
-            yield json.dumps({"tool_calls": [_outil("chercher", {"mots_cles": "parclose"})]})
+            yield json.dumps({"tool_calls": [_outil("chercher", {"requetes": ["parclose"]})]})
+            yield json.dumps({"usage": {"prompt_tokens": 1, "completion_tokens": 1}})
+            return
+        if len(appels) == 2:
+            yield json.dumps({"tool_calls": [_outil("lire", {"lectures": [{"chemin": "/profiles/perform76-parcloses.md", "sections": ["§2"]}]}, "call_2")]})
             yield json.dumps({"usage": {"prompt_tokens": 1, "completion_tokens": 1}})
             return
         yield json.dumps({"message": {"content": texte}})

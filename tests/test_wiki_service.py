@@ -38,11 +38,17 @@ def test_real_wiki_loads(real_snapshot):
 
 
 def test_le_prompt_permanent_ne_contient_pas_le_wiki(real_snapshot):
-    """Consignes et vocabulaire — ni le corps des pages, ni les anomalies."""
+    """Consignes, index du wiki et vocabulaire — ni le corps des pages, ni les anomalies."""
     prompt = real_snapshot.system_prompt
     consignes = wiki_service.CONSIGNES_PATH.read_text(encoding="utf-8").rstrip()
     assert prompt.startswith(consignes)
-    assert "===== VOCABULAIRE DU WIKI" in prompt
+    assert "===== INDEX DU WIKI" in prompt and "===== VOCABULAIRE DU WIKI" in prompt
+    assert prompt.index("===== INDEX DU WIKI") < prompt.index("===== VOCABULAIRE DU WIKI")
+    # L'index est celui du wiki, en entier : une ligne par page, telle qu'elle y est écrite.
+    index_md = real_snapshot.pages["/index.md"].raw_text.strip()
+    assert index_md in prompt
+    for page in real_snapshot.concept_pages:
+        assert f"]({page.id})" in prompt, f"{page.id} n'est pas dans l'index du prompt"
     # Les anomalies arrivent avec les pages lues, jamais dans le prompt permanent.
     assert "INDEX DES ANOMALIES" not in prompt
     assert "CTR-09" not in prompt
@@ -51,17 +57,20 @@ def test_le_prompt_permanent_ne_contient_pas_le_wiki(real_snapshot):
     for page in real_snapshot.concept_pages[:20]:
         if len(page.body) > 400:
             assert page.body[:400] not in prompt
-    # Il reste petit : il est payé à chaque appel d'un tour d'outils.
+    # Il reste borné : il est payé à chaque appel d'un tour d'outils (au dixième du prix, en cache).
     assert real_snapshot.estimated_tokens < wiki_service.TOKEN_WARNING_THRESHOLD
 
 
 def test_cache_key_covers_whole_prompt(real_snapshot):
     index = real_snapshot.index
-    _, k1 = build_system_prompt(index, "consignes A")
-    _, k1_again = build_system_prompt(index, "consignes A")
-    _, k2 = build_system_prompt(index, "consignes B")
+    ligne = "# Gammes\n\n* [A](/a.md) - une gamme."
+    _, k1 = build_system_prompt(index, "consignes A", ligne)
+    _, k1_again = build_system_prompt(index, "consignes A", ligne)
+    _, k2 = build_system_prompt(index, "consignes B", ligne)
+    _, k3 = build_system_prompt(index, "consignes A", ligne.replace("une gamme", "une autre description"))
     assert k1 == k1_again
     assert k1 != k2
+    assert k1 != k3, "modifier une description de l'index change la clé de cache"
     assert k1.startswith("lia-wiki-") and len(k1) == len("lia-wiki-") + 32
 
 

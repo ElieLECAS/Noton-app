@@ -14,8 +14,13 @@ from app.services.wiki_service import load_snapshot, wiki_root
 
 
 @pytest.fixture(scope="module")
-def index() -> WikiIndex:
-    return load_snapshot(wiki_root()).index
+def snapshot():
+    return load_snapshot(wiki_root())
+
+
+@pytest.fixture(scope="module")
+def index(snapshot) -> WikiIndex:
+    return snapshot.index
 
 
 PAGE = """---
@@ -97,31 +102,53 @@ def test_la_section_du_dta_remonte_sur_une_question_de_limites(index):
     assert "Dimensions maximales" in titre_section(meilleure)
 
 
-def test_page_courte_entiere_page_longue_en_sections(index):
+def test_la_page_dominante_est_livree_entiere_une_fois(snapshot):
+    index = snapshot.index
     livraison = Livraison()
-    texte, livrees = index.livrer(index.classer("PERFORM76 oscillo-battant dimensions maximales"), livraison)
-    modes = {l["chemin"]: l["mode"] for l in livrees}
-    for chemin, mode in modes.items():
-        taille = len(index.par_chemin[chemin]["corps"].strip())
-        assert mode == ("page" if taille <= PAGE_ENTIERE_MAX else "sections")
-    assert "sections" in modes.values()
-    # Une page en sections arrive avec sa fiche et son sommaire.
-    assert "Fiche : " in texte and "Sommaire — lire_page(chemin, section)" in texte and "← livrée" in texte
-    assert len(livrees) <= 6
-    assert livraison.caracteres <= 60_000 + 10_000  # budget des sections, plus les fiches et sommaires
+    chemin = "/quincaillerie/soleal-gy-roulements-et-fermetures.md"
+    assert len(index.par_chemin[chemin]["corps"].strip()) <= PAGE_ENTIERE_MAX
+    texte, livree = index.page_entiere(chemin, livraison, entete="PAGE DOMINANTE")
+    assert texte.startswith(f"===== PAGE DOMINANTE : {chemin} — page entière =====")
+    assert livree == {"chemin": chemin, "mode": "page", "sections": []}
+    assert chemin in livraison.pages and livraison.caracteres == len(index.par_chemin[chemin]["corps"].strip())
+    # Une page livrée entière n'est pas renvoyée par lire, et n'est plus dominante.
+    assert "déjà été livrée entière" in index.lire(snapshot.pages[chemin], None, livraison, 10**6)[0]
+    assert index.page_dominante(index.classer_multi(["TGY3731 clé pompier"]), livraison) is None
 
 
-def test_le_budget_et_le_dedoublonnage(index):
+def test_une_lecture_partielle_montre_ce_qui_n_a_pas_ete_lu(snapshot):
+    """Q26 (02/10) : GLM lisait les tableaux de déductions sans « Ce que donnent ces tableaux ».
+
+    Toute lecture partielle rend le sommaire de la page : les sections lues y sont marquées, les
+    autres — dont la légende du tableau — apparaissent sans marque.
+    """
+    index = snapshot.index
+    chemin = "/profiles/systeme-76-cotes-de-debit.md"
+    texte, livree = index.lire(snapshot.pages[chemin], "§3", Livraison(), 10**6)
+    assert livree["mode"] == "sections" and livree["sections"][0].startswith("§3")
+    sommaire = texte.split("Sommaire de la page")[1].split("--- §3")[0]
+    lignes = {l.strip().split(" ")[0]: l for l in sommaire.splitlines() if l.strip().startswith("§")}
+    assert "← livrée" in lignes["§3"], "la section lue est marquée"
+    assert "Ce que donnent ces tableaux" in lignes["§1"] and "livrée" not in lignes["§1"], "la légende n'est pas lue : elle se voit"
+    assert "L'exemple du manuel" in lignes["§2"]
+    # Lue ensuite, elle change de marque.
     livraison = Livraison()
-    classement = index.classer("crémone oscillo-battant Roto NX")
-    _, premieres = index.livrer(classement, livraison, budget=15_000)
-    _, suivantes = index.livrer(classement, livraison, budget=15_000)
-    vues = {(l["chemin"], s) for l in premieres for s in l["sections"]} | {l["chemin"] for l in premieres if l["mode"] == "page"}
-    for l in suivantes:
-        if l["mode"] == "page":
-            assert l["chemin"] not in vues
-        else:
-            assert not any((l["chemin"], s) in vues for s in l["sections"])
+    index.lire(snapshot.pages[chemin], "§3", livraison, 10**6)
+    suite, _ = index.lire(snapshot.pages[chemin], "§1", livraison, 10**6)
+    marques = {l.strip().split(" ")[0]: l for l in suite.split("Sommaire de la page")[1].splitlines() if l.strip().startswith("§")}
+    assert "← livrée" in marques["§1"] and "déjà livrée" in marques["§3"]
+
+
+def test_une_section_lue_n_est_jamais_redonnee(snapshot):
+    """Rien n'est livré deux fois dans un tour, et le budget se compte en caractères livrés."""
+    index = snapshot.index
+    livraison = Livraison()
+    page = snapshot.pages["/certifications/dta-6-16-2334.md"]
+    _, livree = index.lire(page, "dimensions maximales", livraison, 10**6)
+    assert livree["mode"] == "sections" and livraison.caracteres > 0
+    lu = livraison.caracteres
+    seconde, _ = index.lire(page, "dimensions maximales", livraison, 10**6)
+    assert "déjà fourni plus haut" in seconde and livraison.caracteres == lu
 
 
 def test_livraison_serialisable():

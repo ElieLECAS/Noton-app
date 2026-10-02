@@ -23,7 +23,7 @@ from app.models.message import Message
 from app.models.user import UserRead
 from app.routers.auth import get_current_user
 from app.services.mistral_service import MistralRateLimitError
-from app.services.wiki_chat_service import WikiAnswer, load_history, sse
+from app.services.wiki_chat_service import WikiAnswer, load_history, load_precedent, sse
 from app.services.wiki_service import WikiUnavailable, get_snapshot
 
 logger = logging.getLogger(__name__)
@@ -82,6 +82,7 @@ async def stream_chat(
         raise HTTPException(status_code=503, detail=str(exc))
 
     history = load_history(session, conversation.id)
+    precedent = load_precedent(session, conversation.id)
     session.add(Message(conversation_id=conversation.id, role="user", content=message))
     conversation.updated_at = datetime.utcnow()
     session.add(conversation)
@@ -95,7 +96,9 @@ async def stream_chat(
         len(history),
         snapshot.cache_key,
     )
-    answer = WikiAnswer(question=message, history=history, snapshot=snapshot, model=settings.MODEL_FAST)
+    answer = WikiAnswer(
+        question=message, history=history, snapshot=snapshot, model=settings.MODEL_FAST, precedent=precedent
+    )
     conversation_id = conversation.id
 
     async def generate():

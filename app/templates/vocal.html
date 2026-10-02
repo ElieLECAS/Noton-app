@@ -607,7 +607,7 @@ async function envoyerTour(corps, type) {
           tour.questionEl.textContent = tour.question || "(rien d'audible)";
           if (tour.question) { setStatut("Je cherche dans le wiki…"); etatTour(tour, "Je cherche dans le wiki…"); }
         } else if (data.etape) {
-          const libelle = data.etape.outil === "chercher" ? "Je cherche : " : data.etape.outil === "lire_page" ? "Je lis : " : "Je vérifie : ";
+          const libelle = data.etape.outil === "chercher" ? "Je cherche : " : data.etape.outil === "lire" ? "Je lis : " : "Je vérifie : ";
           if (!tour.full) etatTour(tour, libelle + (data.etape.detail || ""));
           if (!tour.reponseAnnoncee) setStatut(libelle + (data.etape.detail || ""));
         } else if (data.thinking) {

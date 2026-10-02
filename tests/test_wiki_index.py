@@ -4,10 +4,8 @@ from __future__ import annotations
 import pytest
 
 from app.services.wiki_index import (
-    Livraison,
     WikiIndex,
     cotes_de,
-    formate_liste,
     normalise,
     references_de,
     tokenise,
@@ -41,21 +39,17 @@ def test_recherche_par_reference(index):
     """Une référence ne figure dans aucun tag : elle se trouve par le texte intégral.
 
     76507 est citée par cinq pages, et en tête de ligne dans neuf sections ; ce qui compte est
-    que sa page de famille soit livrée, pas qu'elle devance le tableau de vitrage qui la cite
-    six fois.
+    que sa page de famille soit classée parmi les premières, pas qu'elle devance le tableau de
+    vitrage qui la cite six fois.
     """
-    assert index.search(mots_cles="76507", limite=5), "aucune page pour la référence 76507"
-    _, livrees = index.livrer(index.classer("76507"), Livraison())
-    assert "/profiles/perform76-parcloses.md" in [l["chemin"] for l in livrees]
+    assert index.classer("76507"), "aucune page pour la référence 76507"
+    assert "/profiles/perform76-parcloses.md" in _premieres(index.classer("76507"), 6)
 
 
-def test_le_type_ne_change_pas_le_classement(index):
-    """Le modèle devine le type : « Profilé » pour une limite que fixe une page de gamme."""
-    requete = "PERFORM76 1 vantail à la française dimension maximale"
-    sans = [p["chemin"] for p in index.search(mots_cles=requete, limite=10)]
-    avec = [p["chemin"] for p in index.search(mots_cles=requete, type="Profilé", limite=10)]
-    assert sans == avec
-    assert "/gammes/perform.md" in sans[:3]
+def test_une_page_de_gamme_remonte_sur_une_limite_dimensionnelle(index):
+    """Le modèle ne choisit plus de type : la page qui fixe la limite se trouve par ses mots."""
+    classement = index.classer("PERFORM76 1 vantail à la française dimension maximale")
+    assert "/gammes/perform.md" in _premieres(classement)
 
 
 def test_seule_une_reference_de_piece_pese_triple(index):
@@ -94,17 +88,19 @@ def test_une_cote_de_la_question_n_est_pas_une_reference():
 
 def test_une_facette_remonte_mais_n_exclut_pas(index):
     """Une facette mal choisie ne doit pas cacher la bonne page."""
-    sans = index.search(mots_cles="garantie structure LUMINE65", limite=10)
-    avec = index.search(mots_cles="garantie structure LUMINE65", tags="coulissant", limite=10)
     garanties = "/garanties/garanties-par-composant.md"
-    assert any(p["chemin"] == garanties for p in sans)
-    assert any(p["chemin"] == garanties for p in avec)
+    sans = index.classer("garantie structure LUMINE65")
+    avec = index.classer("garantie structure LUMINE65", gamme="PERFORM", systeme="76")
+    assert garanties in [c["entree"]["chemin"] for c in sans]
+    assert garanties in [c["entree"]["chemin"] for c in avec], "la facette a caché la page"
 
 
-def test_facette_seule_sert_de_filtre(index):
-    """Sans mots-clés il n'y a rien à classer : la facette redevient un filtre."""
-    resultats = index.search(mots_cles="", type="Gamme", limite=50)
-    assert resultats and all(p["type"] == "Gamme" for p in resultats)
+def test_une_facette_bien_choisie_fait_remonter_la_page_du_produit(index):
+    requete = "dimensions maximales vantail oscillo-battant"
+    sans = [c["entree"]["chemin"] for c in index.classer(requete)]
+    avec = [c["entree"]["chemin"] for c in index.classer(requete, gamme="PERFORM")]
+    perform = [i for i, p in enumerate(avec) if index.par_chemin[p]["gamme"] == ["PERFORM"]]
+    assert perform and perform[0] <= next((i for i, p in enumerate(sans) if index.par_chemin[p]["gamme"] == ["PERFORM"]), 99)
 
 
 def test_les_registres_d_anomalies_ne_sont_jamais_classes(index):
@@ -119,12 +115,6 @@ def test_une_source_pese_moins_qu_une_page_concept(index):
     classement = index.classer("SOLEAL FY parclose joint intérieur")
     concepts = [c for c in classement if not c["entree"]["chemin"].startswith("/sources/")]
     assert concepts and _premieres(classement, 1)[0] == concepts[0]["entree"]["chemin"]
-
-
-def test_formate_liste_sans_mot_cle(index):
-    texte = formate_liste(index.search(mots_cles="", type="Gamme", limite=50))
-    assert texte.startswith("===== PAGES =====") and "/gammes/perform.md" in texte
-    assert "Aucune page ne correspond" in formate_liste([])
 
 
 def test_index_des_anomalies_et_lecture_d_une_entree(index):
@@ -142,8 +132,10 @@ def test_match_anomalies_rapproche_par_page_lue(index):
     assert any(e["id"] == "CTR-09" for e in trouvees)
 
 
-def test_vocabulaire_porte_types_gammes_et_systemes(index):
+def test_vocabulaire_porte_gammes_systemes_et_tous_les_tags(index):
     vocabulaire = index.vocabulaire()
-    assert "TYPES" in vocabulaire and "TAGS" in vocabulaire
-    assert "GAMMES" in vocabulaire and "SYSTÈMES" in vocabulaire
+    assert "GAMMES" in vocabulaire and "SYSTÈMES" in vocabulaire and "TAGS" in vocabulaire
+    assert "TYPES" not in vocabulaire, "le type ne se demande plus : la facette a disparu"
     assert "LUMINE" in vocabulaire
+    tags = {t for e in index.entries for t in e["tags"]}
+    assert tags and all(t in vocabulaire for t in tags), "tous les tags, pas les soixante premiers"

@@ -1,21 +1,21 @@
-"""L'index de navigation du wiki : recherche lexicale et registres d'anomalies.
+"""L'index de navigation du wiki : recherche lexicale, carte, fiche de la question, anomalies.
 
-Le wiki ne tient plus dans une fenêtre de contexte (297 pages). Le prompt permanent ne
-porte donc qu'un **vocabulaire** (types, tags, gammes, systèmes) ; les pages se trouvent par
-l'outil ``chercher``, qui interroge cet index, et les entrées d'anomalie rapprochées des pages
-lues sont poussées par le serveur.
+Le wiki ne tient pas dans une fenêtre de contexte (plus de 300 pages, ~2 M tokens). Le prompt
+permanent porte ``index.md`` (une ligne par page) et un vocabulaire ; GLM navigue : il formule
+une recherche, lit une **carte**, puis lit les sections qu'il choisit. Les entrées d'anomalie
+rapprochées des pages lues sont poussées par le serveur.
 
-La recherche est **lexicale** (BM25 sur texte intégral + facettes de métadonnées), pas
+La recherche est **lexicale** (BM25 sur texte intégral, par section et par page), pas
 vectorielle : deux pages qui se contredisent doivent toutes les deux remonter, alors qu'un
-top-k sémantique les met en concurrence. Trois choix méritent d'être rappelés :
+top-k sémantique les met en concurrence. Quelques choix méritent d'être rappelés :
 
 * les **facettes remontent une page, elles ne l'excluent pas**. Une facette mal choisie
   cachait la bonne page : « garantie structure LUMINE65 » filtré par ``tags=coulissant``
-  écartait la page des garanties. Le ``type`` ne compte même plus dans le classement : le
-  modèle le devine (« Profilé » pour une limite que fixe un DTA ou une page de gamme) et,
-  compté double, il reléguait la page qui répond — 68 % des recherches réelles de Mistral
-  trouvaient la bonne page dans les trois premières, 85 % sans lui (30/09/2026). Il ne sert
-  plus qu'à lister une catégorie sans mot-clé ;
+  écartait la page des garanties. Il ne reste que ``gamme`` et ``systeme``. Le ``type`` ne
+  compte plus dans le classement : le modèle le devine (« Profilé » pour une limite que fixe un
+  DTA ou une page de gamme) et, compté double, il reléguait la page qui répond — 68 % des
+  recherches réelles de Mistral trouvaient la bonne page dans les trois premières, 85 % sans lui
+  (30/09/2026) ;
 * une **référence** (76526, NT1947, A076) vaut trois mots ordinaires : c'est le signal le
   plus sûr de la question d'un menuisier, et elle ne figure dans aucun tag. Une **cote** de
   la question (« 1 800 mm », « 1 200 de large ») a la forme d'une référence mais n'en est
@@ -27,13 +27,16 @@ top-k sémantique les met en concurrence. Trois choix méritent d'être rappelé
   nombre également collé (« LUMINE 65 » = « LUMINE65 »), pluriel en -s ou -x des mots de plus
   de quatre lettres retiré (« parcloses » = « parclose »). Ce n'est pas une lemmatisation :
   « vantaux » ne trouve pas « vantail » ;
-* la recherche se fait **par section** et se livre **par page** (01/10/2026). Le wiki compte
-  23 pages de plus de 50 000 caractères : trois pages entières en coûtaient jusqu'à 300 000.
-  Les pages sont découpées à l'indexation (``decouper_sections``), jamais dans le wiki ; une page
-  est classée par ses meilleures sections, livrée **entière** si elle est petite, sinon par sa
-  fiche, son sommaire et les sections trouvées. Mesuré hors ligne sur le banc : la preuve
-  arrive dans 98 % des questions pour 60 000 caractères, contre 91 % pour 69 000 avec trois
-  pages entières ;
+* la recherche se fait **par section** et rend une **carte** (02/10/2026). Les pages sont
+  découpées à l'indexation (``decouper_sections``), jamais dans le wiki ; une page est classée
+  par ses meilleures sections ; plusieurs formulations se fusionnent par rang réciproque
+  (``classer_multi``). La carte donne douze résultats d'environ un millier de caractères — la
+  page, ses sections et les lignes qui répondent avec l'en-tête de leur tableau — et ne livre
+  que la page qui domine nettement le classement. Mesuré hors ligne : la section de la preuve
+  est désignée dans 100 % du golden et 93 % du banc pour ~17 000 caractères, là où six pages
+  livrées en coûtaient 52 000 ;
+* la **fiche de la question** (``fiche_question``) est calculée avant tout appel au modèle :
+  les références rares avec leurs emplacements exacts, celles qu'aucune page ne porte, les cotes ;
 * les registres d'``anomalies/`` ne sont pas livrés — ils se lisent entrée par entrée, et les
   entrées utiles sont injectées par le serveur — et les pages ``sources/`` pèsent moitié moins
   que les pages concept : une source résume un document, une page concept porte la valeur.
@@ -204,12 +207,6 @@ SECTION_MAX = 5_000
 # 30 k mesurés le 01/10 : 15 k fait aussi bien ou mieux sur le golden et le banc, avec moins de
 # volume (preuve livrée 95 % et 91 %, 52 k caractères par recherche).
 PAGE_ENTIERE_MAX = 15_000
-# Ce que livre une recherche : peu de pages, mais complètes. 60 000 caractères de sections
-# suffisent (98 % des preuves livrées sur le banc), et 24 pages d'une ou deux sections chacune
-# faisaient conclure au modèle qu'une page ne donnait pas ce qu'elle donnait (Q18, 01/10).
-PAGES_PAR_RECHERCHE = 6
-SECTIONS_PAR_PAGE = 3
-BUDGET_RECHERCHE = 60_000
 # Classement d'une page par ses sections : la meilleure, une part de la deuxième, et le score
 # de la page entière (l'index historique) pour départager.
 W_TITRES = 4
@@ -261,7 +258,7 @@ def decouper_sections(chemin: str, texte: str, limite: int = SECTION_MAX) -> Lis
       toutes les lignes ``<th>`` avant la première ``<td>`` en HTML (les en-têtes à plusieurs
       niveaux, comme la matrice des parcloses SOLEAL FY, restent lisibles) ;
     * ``debut`` et ``fin`` sont les lignes du fichier, frontmatter comprise : ce sont celles que
-      citent les preuves et que ``lire_page`` reconstitue.
+      citent les preuves et que ``lire`` reconstitue.
     """
     lignes = texte.splitlines()
     premier = _lignes_frontmatter(lignes)
@@ -527,12 +524,9 @@ class WikiIndex:
         voulus = [deaccent(v.lower()) for v in normalise(demande)]
         if not voulus:
             return True
-        if champ == "type":
-            disponibles = [deaccent(str(entry["type"]).lower())]
-        else:
-            disponibles = [deaccent(v.lower()) for v in entry[champ]]
-        # Comparaison souple dans les deux sens : des centaines de tags, et des gammes
-        # saisies tantôt « LUMINE », tantôt « LUMINE65 ».
+        disponibles = [deaccent(v.lower()) for v in entry[champ]]
+        # Comparaison souple dans les deux sens : des gammes saisies tantôt « LUMINE », tantôt
+        # « LUMINE65 ».
         return any(v in d or d in v for v in voulus for d in disponibles)
 
     def _score_bm25(
@@ -568,48 +562,6 @@ class WikiIndex:
     def _compte_facettes(self, entry: Dict[str, Any], facettes: Dict[str, Any]) -> int:
         return sum(1 for champ, demande in facettes.items() if self._facette_ok(entry, champ, demande))
 
-    def search(
-        self,
-        mots_cles: str = "",
-        type: Optional[str] = None,
-        tags: Optional[str] = None,
-        gamme: Optional[str] = None,
-        systeme: Optional[str] = None,
-        statut: Optional[str] = None,
-        limite: int = 10,
-        cotes: Set[str] = frozenset(),
-    ) -> List[Dict[str, Any]]:
-        """``cotes`` : les nombres que la question donne comme dimensions (``cotes_de``)."""
-        requete = [t for t in tokenise(mots_cles) if t not in VIDES]
-        demandees = {
-            k: v
-            for k, v in (("type", type), ("tags", tags), ("gamme", gamme), ("systeme", systeme))
-            if v
-        }
-
-        entries = self.entries
-        if statut:
-            voulu = deaccent(str(statut).lower())
-            entries = [e for e in entries if voulu in deaccent(str(e["statut"]).lower())]
-
-        # Sans mots-clés il n'y a rien à classer : la facette redevient un filtre.
-        if not requete:
-            return [
-                e for e in entries if self._compte_facettes(e, demandees) == len(demandees)
-            ][:limite]
-
-        # Les facettes remontent une page, elles ne l'excluent pas : les familles jumelles
-        # se départagent en les voyant toutes les deux, pas en en masquant une. Le type, lui,
-        # ne classe pas (voir l'en-tête du module).
-        classantes = {k: v for k, v in demandees.items() if k != "type"}
-        classees: List[Tuple[float, Dict[str, Any]]] = []
-        for entry in entries:
-            score = self._score_bm25(requete, entry, cotes)
-            if score > 0:
-                classees.append((score * 2.0 ** self._compte_facettes(entry, classantes), entry))
-        classees.sort(key=lambda c: c[0], reverse=True)
-        return [entry for _, entry in classees[:limite]]
-
     # ---- recherche par sections -----------------------------------------
 
     def _s_idf(self, token: str) -> float:
@@ -633,15 +585,14 @@ class WikiIndex:
         mots_cles: str,
         gamme: Optional[str] = None,
         systeme: Optional[str] = None,
-        tags: Optional[str] = None,
         cotes: Set[str] = frozenset(),
     ) -> List[Dict[str, Any]]:
         """Les pages classées par leurs sections : ``[{"entree", "score", "sections": [(id, score)…]}]``.
 
         Score d'une section : BM25 de la section (normalisé par la meilleure) + ``W_PAGE`` × BM25
         de sa page entière (normalisé). Score d'une page : sa meilleure section + ``W_SECONDE``
-        × la deuxième. Les facettes doublent le score sans rien exclure, le ``type`` ne compte
-        pas, une page ``sources/`` pèse ``POIDS_SOURCE``.
+        × la deuxième. Les facettes (gamme, système) doublent le score sans rien exclure, une
+        page ``sources/`` pèse ``POIDS_SOURCE``.
         """
         requete = [t for t in tokenise(mots_cles) if t not in VIDES]
         scores = self._scores_sections(requete, cotes)
@@ -654,7 +605,7 @@ class WikiIndex:
             if s > 0:
                 par_page_bm25[entry["chemin"]] = s
         plafond = max(par_page_bm25.values(), default=1.0) or 1.0
-        facettes = {k: v for k, v in (("gamme", gamme), ("systeme", systeme), ("tags", tags)) if v}
+        facettes = {k: v for k, v in (("gamme", gamme), ("systeme", systeme)) if v}
         notes: Dict[str, List[Tuple[int, float]]] = defaultdict(list)
         for sid, s in scores.items():
             chemin = self.sections[sid]["chemin"]
@@ -733,7 +684,7 @@ class WikiIndex:
         if len(retenus) < len(groupes):
             lignes.append(
                 f"  … {len(groupes) - len(retenus)} autres sections : "
-                "lire_page(chemin, section=\"sommaire\") pour le sommaire complet."
+                f"lire(lectures=[{{\"chemin\": \"{chemin}\", \"sections\": [\"sommaire\"]}}]) pour le sommaire complet."
             )
         return "\n".join(lignes)
 
@@ -744,107 +695,19 @@ class WikiIndex:
     def _description(self, sids: Iterable[int]) -> List[str]:
         return [f"§{self.sections[sid]['numero']} {titre_section(self.sections[sid], 2)}" for sid in sids]
 
-    def livrer(
-        self,
-        classement: Sequence[Dict[str, Any]],
-        livraison: Livraison,
-        budget: int = BUDGET_RECHERCHE,
-        pages_max: int = PAGES_PAR_RECHERCHE,
-        sections_par_page: int = SECTIONS_PAR_PAGE,
-        seuil_page: int = PAGE_ENTIERE_MAX,
-        autres_max: int = 8,
-        entete: str = "PAGE",
-    ) -> Tuple[str, List[Dict[str, Any]]]:
-        """Le résultat de ``chercher`` : page entière si elle est petite, sinon fiche, sommaire et
-        sections trouvées ; rien de ce que ``livraison`` a déjà vu. Rend le texte et, page par
-        page, ce qui a été livré (``{"chemin", "mode": "page" | "sections", "sections"}``).
+    def page_entiere(self, chemin: str, livraison: Livraison, entete: str = "PAGE") -> Tuple[str, Dict[str, Any]]:
+        """Une page livrée entière (la page dominante) : ``(texte, {"chemin", "mode", "sections"})``.
+
+        Le serveur ne la livre que si elle tient (``page_dominante``) et ne l'a pas déjà livrée.
         """
-        blocs: List[str] = []
-        livrees: List[Dict[str, Any]] = []
-        prises: Set[str] = set()
-        total = 0
-        for item in classement:
-            if len(livrees) >= pages_max:
-                break
-            entree = item["entree"]
-            chemin = entree["chemin"]
-            if chemin in livraison.pages:
-                continue
-            corps = entree["corps"].strip()
-            deja_en_partie = any(self._cle(sid) in livraison.sections for sid in self.sections_par_page.get(chemin, []))
-            numero = len(livrees) + 1
-            # Une page courte qui ne tient plus entière dans le budget est livrée par ses
-            # sections : la sauter faisait passer une page moins bien classée devant elle.
-            tient = total + len(corps) <= budget or not livrees
-            if len(corps) <= seuil_page and not deja_en_partie and tient:
-                blocs.append(f"===== {entete} {numero} : {chemin} — page entière =====\n{corps}")
-                livraison.pages.add(chemin)
-                prises.add(chemin)
-                total += len(corps)
-                livrees.append({"chemin": chemin, "mode": "page", "sections": []})
-                continue
-            choix: List[int] = []
-            for sid, _ in item["sections"]:
-                if self._cle(sid) not in livraison.sections:
-                    choix.append(sid)
-                if len(choix) >= sections_par_page:
-                    break
-            # Un tableau coupé : sa suite immédiate vient avec, une fois.
-            for sid in list(choix):
-                voisin = sid + 1
-                if (self.sections[sid]["coupe_tableau"] and voisin < len(self.sections)
-                        and self.sections[voisin]["chemin"] == chemin and voisin not in choix
-                        and self._cle(voisin) not in livraison.sections):
-                    choix.append(voisin)
-                    break
-            garde: List[int] = []
-            taille = 0
-            for sid in choix:
-                t = len(self.sections[sid]["texte"])
-                if total + taille + t > budget and (livrees or garde):
-                    continue
-                garde.append(sid)
-                taille += t
-            if not garde:
-                continue
-            garde.sort(key=lambda sid: self.sections[sid]["numero"])
-            tete = (
-                f"===== {entete} {numero} : {chemin} — {len(garde)} section(s) sur "
-                f"{len(self.sections_par_page[chemin])} (page de {_milliers(len(corps))} car.) =====\n"
-                f"{self.fiche(chemin)}\n"
-                "Sommaire — lire_page(chemin, section) pour une autre section, lire_page(chemin) pour la page complète :\n"
-                f"{self.sommaire(chemin, livrees=garde, deja=livraison.sections)}"
-            )
-            blocs.append(tete + "\n\n" + "\n\n".join(self._rendu_section(sid) for sid in garde))
-            livraison.sections.update(self._cle(sid) for sid in garde)
-            prises.add(chemin)
-            total += taille + len(tete)
-            livrees.append({"chemin": chemin, "mode": "sections", "sections": self._description(garde)})
-        autres = [
-            item for item in classement
-            if item["entree"]["chemin"] not in prises and item["entree"]["chemin"] not in livraison.pages
-        ][:autres_max]
-        if autres:
-            cellule = lambda s: str(s).replace("|", "/").replace("\n", " ")  # noqa: E731
-            lignes = [
-                "===== AUTRES RÉSULTATS =====",
-                "Non livrés : lire_page(chemin) pour la page, lire_page(chemin, section) pour une section.",
-                "",
-                "| Chemin | Titre | Section la plus proche |",
-                "| --- | --- | --- |",
-            ]
-            for item in autres:
-                s = self.sections[item["sections"][0][0]]
-                lignes.append(
-                    f"| {item['entree']['chemin']} | {cellule(item['entree']['titre'])} "
-                    f"| §{s['numero']} {cellule(titre_section(s, 2))} |"
-                )
-            blocs.append("\n".join(lignes))
-        livraison.caracteres += total
-        return "\n\n".join(blocs), livrees
+        corps = self.par_chemin[chemin]["corps"].strip()
+        livraison.pages.add(chemin)
+        livraison.caracteres += len(corps)
+        entete_page = f"===== {entete} : {chemin} — page entière ====="
+        return f"{entete_page}\n{corps}", {"chemin": chemin, "mode": "page", "sections": []}
 
     def lire(self, page: Any, section: Any, livraison: Livraison, reste: int) -> Tuple[str, Dict[str, Any]]:
-        """``lire_page`` : la page complète (``section`` vide), son sommaire, ou une section.
+        """``lire`` : la page complète (``section`` vide), son sommaire, ou une section.
 
         ``section`` : « §13 », « 13 », un morceau de titre, ou « sommaire ». Dans la page complète,
         ce qui a déjà été livré est remplacé par un renvoi ; ``reste`` est ce que le tour peut
@@ -867,7 +730,7 @@ class WikiIndex:
                 return (
                     f"La page {chemin} fait {_milliers(len(texte))} caractères, plus que ce qui reste à lire "
                     f"dans ce tour ({_milliers(max(reste, 0))}). Lis la section utile avec "
-                    f"lire_page(chemin, section).\n\n{self.fiche(chemin)}\nSommaire :\n{sommaire_complet()}",
+                    f"lire avec une ou plusieurs sections du sommaire.\n\n{self.fiche(chemin)}\nSommaire :\n{sommaire_complet()}",
                     {"chemin": chemin, "mode": "sommaire", "sections": []},
                 )
             livraison.pages.add(chemin)
@@ -902,7 +765,16 @@ class WikiIndex:
             taille += len(s["texte"])
         livraison.sections.update(self._cle(sid) for sid in nouvelles)
         livraison.caracteres += taille
-        texte = f"===== {chemin} — section(s) demandée(s) =====\n{self.fiche(chemin)}\n\n" + "\n\n".join(rendus)
+        # Le sommaire accompagne toute lecture partielle : il montre au modèle ce qu'il n'a pas reçu
+        # — la légende d'un tableau, la règle qui dit comment l'employer — et l'empêche de conclure
+        # d'une page lue en partie (consigne 0). Sa suppression avec l'ancienne livraison a fait lire
+        # à GLM les tableaux de déductions sans leur mode d'emploi (02/10, Q26 : « Oui » au lieu de « Non »).
+        texte = (
+            f"===== {chemin} — section(s) demandée(s) =====\n{self.fiche(chemin)}\n"
+            "Sommaire de la page (« ← livrée » : lue dans ce résultat ; sans marque : pas encore lue) :\n"
+            f"{self.sommaire(chemin, livrees=nouvelles, deja=livraison.sections)}\n\n"
+            + "\n\n".join(rendus)
+        )
         return texte, {"chemin": chemin, "mode": "sections", "sections": self._description(nouvelles)}
 
     # ---- la carte : ce que lit un modèle qui navigue ---------------------
@@ -921,7 +793,6 @@ class WikiIndex:
         requetes: Sequence[str],
         gamme: Optional[str] = None,
         systeme: Optional[str] = None,
-        tags: Optional[str] = None,
         cotes: Set[str] = frozenset(),
     ) -> List[Dict[str, Any]]:
         """Plusieurs formulations, un seul classement : ``[{"entree", "score", "relatif", "sections"}]``.
@@ -936,7 +807,7 @@ class WikiIndex:
         """
         pages: Dict[str, Dict[str, Any]] = {}
         for requete in requetes:
-            classement = self.classer(requete, gamme=gamme, systeme=systeme, tags=tags, cotes=cotes)
+            classement = self.classer(requete, gamme=gamme, systeme=systeme, cotes=cotes)
             if not classement:
                 continue
             haut = classement[0]["score"] or 1.0
@@ -1065,11 +936,11 @@ class WikiIndex:
           leurs emplacements exacts (page, section, ligne et en-tête) ;
         * les références **absentes** de tout le wiki, ou citées seulement dans un registre
           d'anomalies : le modèle n'a pas à chercher six fois ce qui n'existe pas ;
-        * les **cotes** de la question, qui ne sont pas des références ;
-        * les **produits nommés** (PERFORM76, LUMINE) : la lettre des mots, aucune équivalence
-          de système n'est déduite (VER-28).
-
-        ``texte`` est ce qu'on ajoute à la question ; il est vide quand il n'y a rien à dire.
+        ``texte`` est ce qu'on ajoute à la question ; il est vide quand il n'y a rien à dire. Il ne
+        porte que ce qui change la recherche : les cotes de la question (ce ne sont pas des
+        références) et les produits nommés (PERFORM76, LUMINE : la lettre des mots, aucune
+        équivalence de système n'est déduite, VER-28) sont calculés et rendus à part, mais ne
+        sont pas écrits dans le message du modèle.
         """
         cotes = cotes_de(question)
         rares: List[str] = []
@@ -1110,10 +981,6 @@ class WikiIndex:
             lignes.append(
                 f"- Cité seulement dans les registres d'anomalies : {', '.join(r.upper() for r in registres)}."
             )
-        if cotes:
-            lignes.append(f"- Dimensions lues dans la question (ce ne sont pas des références) : {', '.join(sorted(cotes))}.")
-        if produits:
-            lignes.append(f"- Produits nommés, tels qu'écrits : {', '.join(produits)}.")
         texte = ""
         if lignes:
             texte = "===== FICHE DE LA QUESTION (calculée par le serveur, avant ta première recherche) =====\n" + "\n".join(lignes)
@@ -1129,18 +996,18 @@ class WikiIndex:
 
     # ---- prompt permanent ----------------------------------------------
 
-    def vocabulaire(self, nb_tags: int = 60) -> str:
-        types = Counter(e["type"] for e in self.entries)
+    def vocabulaire(self) -> str:
+        """Les mots que le wiki emploie pour nommer les choses : les valeurs des facettes de
+        ``chercher`` (gamme, système) et tous les tags, du plus fréquent au moins fréquent. Le tag
+        est l'endroit où le mot du métier se range quand une source en emploie un autre."""
         tags = Counter(t for e in self.entries for t in e["tags"])
         gammes = sorted({g for e in self.entries for g in e["gamme"]})
-        systemes = sorted({s for e in self.entries for s in e["systeme"]})
+        systemes = sorted({str(s) for e in self.entries for s in e["systeme"]})
         return (
-            "TYPES (valeur exacte du champ type) : "
-            + ", ".join(f"{t} ({n})" for t, n in types.most_common())
-            + f"\n\nTAGS les plus fréquents ({len(tags)} tags distincts au total) : "
-            + ", ".join(t for t, _ in tags.most_common(nb_tags))
-            + "\n\nGAMMES : " + ", ".join(gammes)
-            + "\n\nSYSTÈMES : " + ", ".join(systemes)
+            "GAMMES (valeurs du paramètre gamme) : " + ", ".join(gammes)
+            + "\n\nSYSTÈMES (valeurs du paramètre systeme) : " + ", ".join(systemes)
+            + f"\n\nTAGS ({len(tags)} tags distincts, du plus fréquent au moins fréquent) : "
+            + ", ".join(t for t, _ in tags.most_common())
         )
 
     def anomalie(self, identifiant: str) -> str:
@@ -1185,28 +1052,3 @@ class WikiIndex:
 
         classees.sort(key=lambda c: c[0], reverse=True)
         return [entree for _, entree in classees[:limite]]
-
-
-# ---------------------------------------------------------------------------
-# Liste par facettes (recherche sans mot-clé)
-# ---------------------------------------------------------------------------
-
-
-def formate_liste(pages: Sequence[Dict[str, Any]]) -> str:
-    """Sans mot-clé il n'y a rien à classer : la facette liste une catégorie, en métadonnées."""
-    pages = [p for p in pages if not p["chemin"].startswith("/anomalies/")]
-    if not pages:
-        return "Aucune page ne correspond. Élargis la requête : retire une facette, ou cherche la référence seule."
-    cellule = lambda s: str(s).replace("|", "/").replace("\n", " ")  # noqa: E731
-    lignes = [
-        "===== PAGES =====",
-        "Métadonnées seules : lire_page(chemin) pour lire une page.",
-        "",
-        "| Chemin | Type | Titre | Description |",
-        "| --- | --- | --- | --- |",
-    ]
-    for page in pages:
-        lignes.append(
-            f"| {page['chemin']} | {cellule(page['type'])} | {cellule(page['titre'])} | {cellule(page['description'])} |"
-        )
-    return "\n".join(lignes)

@@ -50,11 +50,18 @@ class Settings(BaseSettings):
     # Défaut de max_tokens des appels non streamés (titres de conversation).
     MAX_COMPLETION_TOKENS: int = 1024
 
-    # Le chat CAG — réglages repris du prototype wiki_llm/chat/server.py.
-    # Effort de raisonnement demandé à Small ("" = aucun raisonnement).
+    # Le chat : un modèle qui navigue dans le wiki par trois outils.
+    # Effort de raisonnement demandé au modèle ("" = aucun ; GLM 5.3 : low, high ou max).
     GENERATION_REASONING_EFFORT: str = "high"
     CHAT_TEMPERATURE: float = 0.2
-    CHAT_MAX_TOKENS: int = 4096
+    # Le raisonnement compte dans la sortie : 4 096 pouvait couper une réponse sans rien signaler
+    # (``finish_reason`` « length » est maintenant relevé dans la trace).
+    CHAT_MAX_TOKENS: int = 16384
+    # Tarifs du modèle du chat, en dollars par million de tokens : entrée, entrée en cache, sortie.
+    # 0 = inconnus, le coût n'est pas affiché dans la fenêtre de trace. GLM 5.3 : 1,40 / 0,14 / 4,40.
+    MODEL_PRIX_ENTREE: float = 0.0
+    MODEL_PRIX_CACHE: float = 0.0
+    MODEL_PRIX_SORTIE: float = 0.0
     # Historique renvoyé au modèle : les N derniers messages, bornés en caractères. Il vient
     # APRÈS le prompt système, donc n'entame jamais le préfixe mis en cache.
     CHAT_HISTORY_MAX_MESSAGES: int = 10

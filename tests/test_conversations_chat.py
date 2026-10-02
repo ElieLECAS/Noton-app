@@ -83,10 +83,10 @@ def _appel_outil(nom, arguments, identifiant="c1"):
 
 
 def _fabrique_stream(reponse, contextes=None):
-    """Un faux flux qui cherche d'abord, puis répond — le chemin normal d'un tour.
+    """Un faux flux qui cherche, lit, puis répond — le chemin normal d'un tour.
 
-    Sans le premier appel d'outil, le serveur renverrait le modèle lire (aucune page chargée),
-    ce qui ajouterait un aller-retour à chaque test.
+    Sans lecture, le serveur renverrait le modèle lire (aucune page lue), ce qui ajouterait un
+    aller-retour à chaque test.
     """
     appels = {"n": 0}
 
@@ -94,8 +94,11 @@ def _fabrique_stream(reponse, contextes=None):
         appels["n"] += 1
         if contextes is not None:
             contextes.append([dict(m) for m in kwargs["context"]])
-        if appels["n"] % 2 == 1:
-            yield json.dumps({"tool_calls": [_appel_outil("chercher", {"mots_cles": "parclose 76507"})]})
+        if appels["n"] % 3 == 1:
+            yield json.dumps({"tool_calls": [_appel_outil("chercher", {"requetes": ["parclose 76507"]})]})
+            return
+        if appels["n"] % 3 == 2:
+            yield json.dumps({"tool_calls": [_appel_outil("lire", {"lectures": [{"chemin": "/profiles/perform76-parcloses.md", "sections": ["§2"]}]})]})
             return
         for evenement in reponse:
             yield json.dumps(evenement)
@@ -121,7 +124,7 @@ def test_chat_stream_persists_question_and_answer(client, responsable_headers, c
     assert r.status_code == 200
     events = extract_sse_events(r.text)
     kinds = [next(iter(e)) for e in events]
-    assert kinds == ["etape", "thinking", "message", "message", "sources", "done"]
+    assert kinds == ["etape", "etape", "thinking", "message", "message", "sources", "done"]
     assert extract_sse_message_text(r.text) == "La parclose 76507 (/profiles/perform76-parcloses.md)."
     done = events[-1]
     assert done["message_id"] and done["trace"]["cited_pages"] == ["/profiles/perform76-parcloses.md"]
@@ -145,13 +148,18 @@ def test_chat_stream_sends_history_after_system_prompt(client, responsable_heade
     with mock.patch("app.services.wiki_chat_service.chat_stream", spy):
         client.post("/api/chat/stream", headers=responsable_headers, json={"message": "Première", "conversation_id": conversation})
         client.post("/api/chat/stream", headers=responsable_headers, json={"message": "Seconde", "conversation_id": conversation})
-    # Deux appels par tour (recherche puis réponse) : le premier contexte du second tour porte
+    # Trois appels par tour (carte, lecture, réponse) : le premier contexte du second tour porte
     # l'historique, et seulement lui — les messages d'outils n'y sont pas persistés.
-    ctx = contextes[2]
+    ctx = contextes[3]
     assert ctx[0]["role"] == "system"
-    assert [(m["role"], m["content"]) for m in ctx[1:]] == [
-        ("user", "Première"), ("assistant", "ok"), ("user", "Seconde"),
-    ]
+    assert [(m["role"], m["content"]) for m in ctx[1:-1]] == [("user", "Première"), ("assistant", "ok")]
+    # La question de suite porte le fil du tour précédent, tiré de la trace enregistrée.
+    dernier = ctx[-1]
+    assert dernier["role"] == "user" and dernier["content"].startswith("Seconde")
+    assert "Tour précédent — requêtes : parclose 76507." in dernier["content"]
+    assert "/profiles/perform76-parcloses.md §2" in dernier["content"]
+    # Le premier tour n'avait pas de tour précédent.
+    assert contextes[0][-1]["content"] == "Première"
 
 
 def test_chat_stream_error_persists_nothing_but_the_question(client, responsable_headers, conversation):

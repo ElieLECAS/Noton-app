@@ -1,26 +1,20 @@
 """Mesure hors ligne de la récupération — sans modèle, en quelques dizaines de secondes.
 
-Rejoue la première recherche de LIA (``WikiIndex.classer`` puis ``WikiIndex.livrer``, le code du
-chat lui-même) avec le texte de la question comme requête, et vérifie ce qui arrive au modèle :
-
-  * **preuve livrée**     : au moins un extrait de preuve figure dans ce qui est livré ;
-  * **toutes les preuves** : chaque page de preuve a au moins un de ses extraits livré ;
-  * **pages utiles**      : les pages attendues sont livrées, entières ou en sections ;
-  * **volume**            : caractères livrés, nombre de pages.
-
-Deux jeux : le golden 40 questions (``tests/fixtures/golden/golden_40_questions.json``) et le banc
-du 30/09 (``logs/bench/2026-09-30`` : questions, pages attendues, extraits de preuve, trois
-reformulations par question). Comparé à la livraison historique (« 3 pages entières »,
-reconstituée ici) et sur une grille de réglages.
-
-Depuis le 02/10 il mesure aussi **la carte** (``WikiIndex.carte``), ce que lit un modèle qui
-navigue : la question seule, puis la question et ses reformulations fusionnées (``classer_multi``).
-Trois mesures y répondent à une autre question que « la preuve est-elle livrée ? » :
+Rejoue la carte de LIA (``WikiIndex.classer_multi`` puis ``WikiIndex.carte``, le code du chat
+lui-même) sur deux jeux : le golden de 40 questions (``tests/fixtures/golden/golden_40_questions.json``)
+et le banc du 30/09 (``logs/bench/2026-09-30`` : questions, pages attendues, extraits de preuve,
+trois reformulations par question). Une carte est ce que lit un modèle qui navigue : douze
+résultats, leurs sections et les lignes qui répondent. La mesure se fait sur la question seule,
+puis sur la question et ses reformulations fusionnées. Trois mesures :
 
   * **section désignée** : la section qui porte la preuve figure-t-elle parmi celles que la carte
     liste pour ses pages ? (le modèle n'a plus qu'à la lire) ;
   * **dans les lignes**  : l'extrait de preuve est-il déjà sous les yeux, dans les lignes de la carte ?
   * **fiche**            : pour une référence rare, la fiche de la question désigne-t-elle la section ?
+
+La livraison de six pages par recherche, qu'elle remplace, a été mesurée avec ce même outil le
+02/10 : preuve livrée 95 % (golden) et 91,1 % (banc) pour ~52 000 caractères ; trois pages
+entières, 95 % et 82,1 % pour ~69 000 (``docs/plan_glm_first_2026-10-02.md``).
 
 Usage ::
 
@@ -36,10 +30,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Sequence, Set, Tuple
 
 from app.services.wiki_index import (
-    BUDGET_RECHERCHE,
     CARTE_SECTIONS,
-    PAGE_ENTIERE_MAX,
-    PAGES_PAR_RECHERCHE,
     Livraison,
     WikiIndex,
     cotes_de,
@@ -79,52 +70,6 @@ def jeux() -> Dict[str, List[Dict[str, Any]]]:
     return {"golden": golden, "banc": banc}
 
 
-def livraison_historique(index: WikiIndex, question: str) -> Tuple[str, List[str]]:
-    """Ce que LIA recevait avant le 01/10 : les trois premières pages entières, concepts d'abord."""
-    pages = index.search(mots_cles=question, limite=15, cotes=cotes_de(question))
-    retenues = [p for p in pages if not p["chemin"].startswith("/anomalies/")]
-    entieres = ([p for p in retenues if not p["chemin"].startswith("/sources/")]
-                + [p for p in retenues if p["chemin"].startswith("/sources/")])[:3]
-    return "\n\n".join(p["corps"] for p in entieres), [p["chemin"] for p in entieres]
-
-
-def livraison_actuelle(index: WikiIndex, question: str, **reglages: Any) -> Tuple[str, List[str]]:
-    texte, livrees = index.livrer(index.classer(question, cotes=cotes_de(question)), Livraison(), **reglages)
-    principal = texte.split("===== AUTRES RÉSULTATS =====")[0]
-    return principal, [l["chemin"] for l in livrees]
-
-
-def evaluer(items: Sequence[Dict[str, Any]], livrer, reformulations: bool = False) -> Dict[str, float]:
-    n = preuve = toutes = pages = volume = nb_pages = avec_preuves = avec_pages = 0
-    for item in items:
-        questions = [item["question"]] + (list(item.get("reformulations") or []) if reformulations else [])
-        for question in questions:
-            if not question:
-                continue
-            texte, livrees = livrer(question)
-            plat_texte = plat(texte)
-            n += 1
-            volume += len(texte)
-            nb_pages += len(livrees)
-            if item["pages"]:
-                avec_pages += 1
-                pages += all(p in livrees for p in item["pages"])
-            if item["preuves"]:
-                avec_preuves += 1
-                trouves = {p["page"] for p in item["preuves"] if plat(p["extrait"])[:60] in plat_texte}
-                preuve += bool(trouves)
-                toutes += trouves >= {p["page"] for p in item["preuves"]}
-    pct = lambda a, b: 100 * a / b if b else 0.0  # noqa: E731
-    return {
-        "questions": n,
-        "preuve": pct(preuve, avec_preuves),
-        "toutes": pct(toutes, avec_preuves),
-        "pages": pct(pages, avec_pages),
-        "volume": volume / n if n else 0,
-        "nb_pages": nb_pages / n if n else 0,
-    }
-
-
 def sections_de_preuve(index: WikiIndex, preuves: Sequence[Dict[str, Any]]) -> Dict[str, Set[int]]:
     """Page de preuve → sections qui portent l'un de ses extraits."""
     par_page: Dict[str, Set[int]] = {}
@@ -144,7 +89,7 @@ def carte_actuelle(index: WikiIndex, question: str, formulations: Sequence[str] 
     texte, chemins = index.carte(classement, index.jetons_requete(requetes), livraison, **reglages)
     dominante = index.page_dominante(classement, livraison)
     if dominante is not None:
-        livre, _ = index.livrer([dominante], livraison, pages_max=1, autres_max=0)
+        livre, _ = index.page_entiere(dominante["entree"]["chemin"], livraison)
         texte += "\n\n" + livre
     designees = {sid for c in classement if c["entree"]["chemin"] in chemins for sid, _ in c["sections"][:CARTE_SECTIONS]}
     return texte, chemins, designees
@@ -188,36 +133,21 @@ def ligne_carte(nom: str, r: Dict[str, float]) -> str:
             f"| fiche {r['fiche']:5.1f} % ({r['fiche_n']} q.)")
 
 
-def ligne(nom: str, r: Dict[str, float]) -> str:
-    return (f"  {nom:38} preuve {r['preuve']:5.1f} % | toutes {r['toutes']:5.1f} % | pages utiles "
-            f"{r['pages']:5.1f} % | {r['volume'] / 1000:5.1f} k car. | {r['nb_pages']:.1f} pages")
-
-
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--grille", action="store_true", help="Balayer seuil de page entière et nombre de pages.")
+    parser.add_argument("--grille", action="store_true", help="Balayer le nombre de pages de la carte.")
     ns = parser.parse_args()
     index = load_snapshot(wiki_root()).index
     for nom, items in jeux().items():
         if not items:
             continue
         print(f"\n=== {nom} ({len(items)} questions)")
-        print(ligne("historique : 3 pages entières", evaluer(items, lambda q: livraison_historique(index, q))))
-        print(ligne(f"actuel ({PAGE_ENTIERE_MAX // 1000} k, {PAGES_PAR_RECHERCHE} pages, {BUDGET_RECHERCHE // 1000} k)",
-                    evaluer(items, lambda q: livraison_actuelle(index, q))))
-        if nom == "banc":
-            print(ligne("actuel, avec les 3 reformulations", evaluer(items, lambda q: livraison_actuelle(index, q), True)))
         print(ligne_carte("carte, question seule", evaluer_carte(index, items)))
         if nom == "banc":
             print(ligne_carte("carte, 4 formulations fusionnées", evaluer_carte(index, items, formulations=True)))
         if ns.grille:
             for pages in (8, 12, 15):
                 print(ligne_carte(f"carte {pages} pages", evaluer_carte(index, items, pages=pages)))
-            for seuil in (15_000, 20_000, 30_000):
-                for pages in (4, 6, 8):
-                    for budget in (40_000, 60_000, 100_000):
-                        r = evaluer(items, lambda q: livraison_actuelle(index, q, seuil_page=seuil, pages_max=pages, budget=budget))
-                        print(ligne(f"seuil {seuil // 1000} k, {pages} pages, budget {budget // 1000} k", r))
     return 0
 
 

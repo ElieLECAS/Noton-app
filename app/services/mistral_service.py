@@ -194,7 +194,8 @@ async def chat_stream(
     top_p: Optional[float] = None,
     **kwargs: Any,
 ):
-    """Appel streamé. Rend des chaînes JSON : ``thinking``, ``message``, ``tool_calls``, ``usage``.
+    """Appel streamé. Rend des chaînes JSON : ``thinking``, ``message``, ``tool_calls``,
+    ``finish_reason``, ``usage``.
 
     ``kwargs`` part tel quel dans la charge utile (``prompt_cache_key``, ``reasoning_effort``,
     ``tools``, ``tool_choice``). Quand le modèle appelle un outil plutôt que de répondre, le
@@ -256,6 +257,9 @@ async def chat_stream(
                         response.raise_for_status()
 
                     usage: Optional[Dict[str, Any]] = None
+                    # Pourquoi le modèle s'est arrêté : « stop », « tool_calls », ou « length » —
+                    # une réponse coupée par max_tokens, que rien d'autre ne signale.
+                    finish_reason: Optional[str] = None
                     # Les appels d'outils arrivent en fragments : l'identifiant et le nom sur
                     # le premier delta, les arguments JSON en morceaux sur les suivants. On
                     # les recolle par index et on ne les rend qu'une fois complets.
@@ -280,6 +284,8 @@ async def chat_stream(
                         if not choices:
                             continue
                         delta = (choices[0] or {}).get("delta") or {}
+                        if (choices[0] or {}).get("finish_reason"):
+                            finish_reason = choices[0]["finish_reason"]
                         for fragment in delta.get("tool_calls") or []:
                             last_token_ts = time.monotonic()
                             slot = tool_calls.setdefault(
@@ -330,6 +336,8 @@ async def chat_stream(
                         yield json.dumps(
                             {"tool_calls": [tool_calls[i] for i in sorted(tool_calls)]}
                         )
+                    if finish_reason:
+                        yield json.dumps({"finish_reason": finish_reason})
                     if usage:
                         yield json.dumps({"usage": usage})
                 break

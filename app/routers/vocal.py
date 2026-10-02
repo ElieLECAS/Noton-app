@@ -31,7 +31,7 @@ from app.routers.auth import get_current_user
 from app.services import vocal_service
 from app.services.mistral_service import MistralRateLimitError
 from app.services.vocal_service import AUDIO_MAX_OCTETS, TourVocal, TranscriptionImpossible
-from app.services.wiki_chat_service import WikiAnswer, load_history, sse
+from app.services.wiki_chat_service import WikiAnswer, load_history, load_precedent, sse
 from app.services.wiki_service import WikiUnavailable, get_snapshot
 
 logger = logging.getLogger(__name__)
@@ -100,6 +100,7 @@ async def tour_vocal(
         )
 
     history = load_history(session, conversation.id)
+    precedent = load_precedent(session, conversation.id)
     biais = vocal_service.biais_vocabulaire(snapshot.index)
     conv_id, user_id = conversation.id, current_user.id
 
@@ -138,6 +139,7 @@ async def tour_vocal(
                 system_prompt=snapshot.vocal_prompt,
                 cache_key=snapshot.vocal_cache_key,
                 images=False,
+                precedent=precedent,
             )
             tour = TourVocal(answer=answer)
             async for event in tour.run():
