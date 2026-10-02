@@ -218,6 +218,25 @@ W_SECONDE = 0.5
 W_PAGE = 0.3
 POIDS_SOURCE = 0.5
 SOMMAIRE_MAX = 40
+# La carte (02/10/2026) : ce que lit un modèle qui navigue au lieu de recevoir des pages. Douze
+# résultats d'environ un millier de caractères chacun (la page, ses sections qui répondent et les
+# lignes qui contiennent les mots cherchés, avec l'en-tête de leur tableau) contre six pages
+# livrées entières : mesuré hors ligne le 02/10, la section de la preuve y est désignée pour 100 %
+# du golden et 93 % du banc, pour ~17 000 caractères au lieu de 52 000.
+CARTE_PAGES = 12
+CARTE_SECTIONS = 5
+CARTE_SECTIONS_AVEC_LIGNES = 3
+CARTE_LIGNES = 4
+CARTE_BUDGET = 24_000
+# Plusieurs formulations d'une même question sont fusionnées par rang réciproque (RRF), sur les
+# trente premières pages de chacune : une relance coûte un appel, la fusion n'en coûte aucun.
+RRF_K = 10
+RRF_PROFONDEUR = 30
+# Une référence n'a de sens pour une recherche exacte que si peu de sections la portent : au-delà
+# (PERFORM76, 2024, un RAL dans un nuancier), c'est un terme du wiki, pas une pièce.
+REFERENCE_RARE_MAX = 10
+# Une page dont la suivante ne vaut pas la moitié du classement est LA page : elle arrive entière.
+DOMINANCE = 0.5
 
 TITRE_RE = re.compile(r"^(#{1,4})\s+(.*?)\s*#*\s*$")
 
@@ -323,6 +342,31 @@ def decouper_sections(chemin: str, texte: str, limite: int = SECTION_MAX) -> Lis
                 taille = sum(len(l) + 1 for l in courant)
     emettre(len(lignes), False)
     return sections
+
+
+def _entete_tableau(lignes: Sequence[str], i: int) -> List[str]:
+    """Les lignes d'en-tête du tableau qui porte la ligne ``i`` (markdown ou HTML), ou rien si la
+    ligne n'est pas dans un tableau ou est elle-même l'en-tête. Une section recoupée dans un
+    tableau commence par son en-tête (``decouper_sections``) : il est toujours là."""
+    ligne = lignes[i].strip()
+    if ligne.startswith("|"):
+        debut = i
+        while debut > 0 and lignes[debut - 1].strip().startswith("|"):
+            debut -= 1
+        return [l.strip() for l in lignes[debut:debut + 2]] if debut < i else []
+    if "<td" in ligne.lower():
+        debut = i
+        while debut > 0 and "<table" not in lignes[debut].lower():
+            debut -= 1
+        if "<table" not in lignes[debut].lower():
+            return []
+        entete: List[str] = []
+        for l in lignes[debut:i]:
+            if "<td" in l.lower():
+                break
+            entete.append(l.strip())
+        return entete
+    return []
 
 
 def titre_section(section: Dict[str, Any], profondeur: int = 3) -> str:
@@ -860,6 +904,228 @@ class WikiIndex:
         livraison.caracteres += taille
         texte = f"===== {chemin} — section(s) demandée(s) =====\n{self.fiche(chemin)}\n\n" + "\n\n".join(rendus)
         return texte, {"chemin": chemin, "mode": "sections", "sections": self._description(nouvelles)}
+
+    # ---- la carte : ce que lit un modèle qui navigue ---------------------
+
+    def jetons_requete(self, requetes: Iterable[str]) -> List[str]:
+        """Les mots d'une ou de plusieurs formulations, sans doublon ni mot vide."""
+        vus: List[str] = []
+        for requete in requetes:
+            for jeton in tokenise(requete):
+                if jeton not in VIDES and jeton not in vus:
+                    vus.append(jeton)
+        return vus
+
+    def classer_multi(
+        self,
+        requetes: Sequence[str],
+        gamme: Optional[str] = None,
+        systeme: Optional[str] = None,
+        tags: Optional[str] = None,
+        cotes: Set[str] = frozenset(),
+    ) -> List[Dict[str, Any]]:
+        """Plusieurs formulations, un seul classement : ``[{"entree", "score", "relatif", "sections"}]``.
+
+        Chaque formulation est classée par ``classer`` ; les pages sont fusionnées par rang
+        réciproque (``RRF_K``, ``RRF_PROFONDEUR``), leurs sections réunies ; **l'ordre des
+        formulations est une priorité** : la question de l'utilisateur en premier, les
+        reformulations ensuite. ``relatif`` est le
+        meilleur score de la page rapporté à la première de la formulation qui la place le mieux :
+        c'est lui qui dit si une page domine (``page_dominante``). Avec une seule formulation,
+        l'ordre est celui de ``classer``.
+        """
+        pages: Dict[str, Dict[str, Any]] = {}
+        for requete in requetes:
+            classement = self.classer(requete, gamme=gamme, systeme=systeme, tags=tags, cotes=cotes)
+            if not classement:
+                continue
+            haut = classement[0]["score"] or 1.0
+            for rang, item in enumerate(classement[:RRF_PROFONDEUR]):
+                chemin = item["entree"]["chemin"]
+                page = pages.setdefault(
+                    chemin, {"entree": item["entree"], "score": 0.0, "relatif": 0.0, "sections": {}}
+                )
+                page["score"] += 1.0 / (RRF_K + rang)
+                page["relatif"] = max(page["relatif"], item["score"] / haut)
+                # Le score d'une section est celui de la première formulation qui la classe : l'ordre
+                # des formulations est une priorité (les mots de l'utilisateur d'abord). Mesuré le
+                # 02/10 sur le banc, le maximum perdait 4 questions de plus sur 56 (« toutes les
+                # pages de preuve » 62,5 % contre 69,6 %) : une reformulation en mots-clés fait
+                # monter des sections qui ressemblent à la question sans la porter.
+                for sid, note in item["sections"]:
+                    page["sections"].setdefault(sid, note)
+        fusion = []
+        for page in pages.values():
+            page["sections"] = sorted(page["sections"].items(), key=lambda s: (-s[1], s[0]))
+            fusion.append(page)
+        fusion.sort(key=lambda p: (-p["score"], p["entree"]["chemin"]))
+        return fusion
+
+    def page_dominante(self, classement: Sequence[Dict[str, Any]], livraison: Livraison) -> Optional[Dict[str, Any]]:
+        """La première page du classement, si la suivante ne vaut pas la moitié, qu'elle tient
+        entière (``PAGE_ENTIERE_MAX``) et qu'elle n'a pas déjà été livrée. Sinon rien : la carte
+        suffit, et le modèle choisit."""
+        if not classement:
+            return None
+        premiere = classement[0]
+        if len(classement) > 1 and classement[1]["relatif"] >= DOMINANCE:
+            return None
+        chemin = premiere["entree"]["chemin"]
+        if chemin in livraison.pages or len(premiere["entree"]["corps"].strip()) > PAGE_ENTIERE_MAX:
+            return None
+        return premiere
+
+    def lignes_qui_repondent(self, sid: int, requete: Sequence[str], n: int = CARTE_LIGNES) -> List[str]:
+        """Les lignes d'une section qui portent les mots cherchés, avec l'en-tête de leur tableau.
+
+        Une ligne de tableau ne se lit qu'avec son en-tête (``| Référence | Cote |``) : sans lui,
+        « 76507 | 44 | 14 » ne dit rien. Sont gardées les ``n`` meilleures lignes, pourvu qu'elles
+        valent 60 % de la meilleure ; l'en-tête est donné une fois par tableau.
+        """
+        lignes = self.sections[sid]["texte"].splitlines()
+        cherches = set(requete)
+        notees: List[Tuple[float, int]] = []
+        for i, ligne in enumerate(lignes):
+            brut = ligne.strip()
+            if not brut or TITRE_RE.match(ligne) or set(brut) <= set("|-: "):
+                continue
+            jetons = set(tokenise(brut))
+            note = sum(self._s_idf(t) for t in cherches if t in jetons)
+            if note > 0:
+                notees.append((note, i))
+        if not notees:
+            return []
+        meilleure = max(note for note, _ in notees)
+        gardees = sorted((x for x in notees if x[0] >= 0.6 * meilleure), key=lambda x: (-x[0], x[1]))[:n]
+        rendues: List[str] = []
+        vues: Set[str] = set()
+        for _, i in sorted(gardees, key=lambda x: x[1]):
+            for ligne in _entete_tableau(lignes, i) + [lignes[i].strip()]:
+                if ligne not in vues:
+                    rendues.append(ligne[:700])
+                    vues.add(ligne)
+        return rendues
+
+    def carte(
+        self,
+        classement: Sequence[Dict[str, Any]],
+        requete: Sequence[str],
+        livraison: Livraison,
+        pages: int = CARTE_PAGES,
+        budget: int = CARTE_BUDGET,
+    ) -> Tuple[str, List[str]]:
+        """La carte d'une recherche : ``(texte, chemins listés)``.
+
+        Une entrée par page — chemin, titre, taille, produit, pertinence relative —, puis ses
+        sections qui répondent, et pour les trois meilleures les lignes qui contiennent les mots
+        cherchés. Ce qui a déjà été livré est marqué « lue » et n'est pas redonné. Une ligne de
+        carte situe une réponse, elle ne la prouve pas : c'est la lecture qui la prouve.
+        """
+        blocs: List[str] = []
+        listees: List[str] = []
+        total = 0
+        for rang, item in enumerate(classement[:pages], 1):
+            entree = item["entree"]
+            chemin = entree["chemin"]
+            corps = entree["corps"].strip()
+            produit = ", ".join(
+                [str(g) for g in entree["gamme"]]
+                + [f"système {s}" if str(s).isdigit() else str(s) for s in entree["systeme"]]
+            )
+            entiere = chemin in livraison.pages
+            taille = f"{max(1, round(len(corps) / 1000))} k car., {len(self.sections_par_page[chemin])} sections"
+            bloc = [
+                f"{rang}. {chemin} — {entree['titre']} ({taille}{', ' + produit if produit else ''})"
+                f" · pertinence {item.get('relatif', 1.0):.2f}" + (" · page déjà lue entière" if entiere else "")
+            ]
+            for j, (sid, _) in enumerate(item["sections"][:CARTE_SECTIONS]):
+                section = self.sections[sid]
+                lue = entiere or self._cle(sid) in livraison.sections
+                bloc.append(f"   §{section['numero']} {titre_section(section)}" + (" (lue)" if lue else ""))
+                if j < CARTE_SECTIONS_AVEC_LIGNES and not lue:
+                    bloc += ["      " + ligne for ligne in self.lignes_qui_repondent(sid, requete)]
+            texte = "\n".join(bloc)
+            if len(blocs) >= 3 and total + len(texte) > budget:
+                break
+            blocs.append(texte)
+            listees.append(chemin)
+            total += len(texte)
+        if not blocs:
+            return "Aucune page ne correspond. Reformule avec les mots du wiki, ou cherche la référence seule.", []
+        entete = f"===== CARTE — {len(blocs)} pages sur {len(classement)} trouvées ====="
+        pied = ""
+        if len(blocs) < len(classement):
+            pied = f"\n… {len(classement) - len(blocs)} autres pages classées plus bas, non affichées."
+        return entete + "\n" + "\n".join(blocs) + pied, listees
+
+    def fiche_question(self, question: str) -> Dict[str, Any]:
+        """Ce que le serveur sait de la question avant tout appel au modèle, sans modèle.
+
+        * les **références rares** — au plus ``REFERENCE_RARE_MAX`` sections les portent — avec
+          leurs emplacements exacts (page, section, ligne et en-tête) ;
+        * les références **absentes** de tout le wiki, ou citées seulement dans un registre
+          d'anomalies : le modèle n'a pas à chercher six fois ce qui n'existe pas ;
+        * les **cotes** de la question, qui ne sont pas des références ;
+        * les **produits nommés** (PERFORM76, LUMINE) : la lettre des mots, aucune équivalence
+          de système n'est déduite (VER-28).
+
+        ``texte`` est ce qu'on ajoute à la question ; il est vide quand il n'y a rien à dire.
+        """
+        cotes = cotes_de(question)
+        rares: List[str] = []
+        absentes: List[str] = []
+        registres: List[str] = []
+        for ref in references_de(question):
+            en_sections = self._s_df.get(ref, 0)
+            if not en_sections and not self.df.get(ref):
+                absentes.append(ref)
+            elif not en_sections:
+                registres.append(ref)
+            elif en_sections <= REFERENCE_RARE_MAX and self._reference(ref, cotes):
+                rares.append(ref)
+        produits = []
+        for jeton in mots(question):
+            nom = re.fullmatch(r"([a-z]+)\d*", jeton)
+            if nom and nom.group(1) in self.noms_gamme and jeton.upper() not in produits:
+                produits.append(jeton.upper())
+
+        lignes: List[str] = []
+        emplacements: Dict[str, List[Dict[str, Any]]] = {}
+        for ref in rares:
+            sids = sorted(self._inverse.get(ref, ()), key=lambda x: (-x[1], x[0]))
+            emplacements[ref] = []
+            lignes.append(f"- {ref.upper()} — {len(sids)} section(s) :")
+            for sid, _ in sids:
+                section = self.sections[sid]
+                extraits = self.lignes_qui_repondent(sid, [ref], 2)
+                emplacements[ref].append({"chemin": section["chemin"], "section": section["numero"]})
+                lignes.append(f"    {section['chemin']} §{section['numero']} {titre_section(section)}")
+                lignes += ["        " + e for e in extraits]
+        if absentes:
+            lignes.append(
+                f"- Absent de tout le wiki : {', '.join(r.upper() for r in absentes)}. "
+                "Aucune page ne porte cette référence."
+            )
+        if registres:
+            lignes.append(
+                f"- Cité seulement dans les registres d'anomalies : {', '.join(r.upper() for r in registres)}."
+            )
+        if cotes:
+            lignes.append(f"- Dimensions lues dans la question (ce ne sont pas des références) : {', '.join(sorted(cotes))}.")
+        if produits:
+            lignes.append(f"- Produits nommés, tels qu'écrits : {', '.join(produits)}.")
+        texte = ""
+        if lignes:
+            texte = "===== FICHE DE LA QUESTION (calculée par le serveur, avant ta première recherche) =====\n" + "\n".join(lignes)
+        return {
+            "texte": texte,
+            "rares": rares,
+            "absentes": absentes,
+            "registres": registres,
+            "cotes": sorted(cotes),
+            "produits": produits,
+            "emplacements": emplacements,
+        }
 
     # ---- prompt permanent ----------------------------------------------
 

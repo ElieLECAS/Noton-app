@@ -13,6 +13,15 @@ du 30/09 (``logs/bench/2026-09-30`` : questions, pages attendues, extraits de pr
 reformulations par question). Comparé à la livraison historique (« 3 pages entières »,
 reconstituée ici) et sur une grille de réglages.
 
+Depuis le 02/10 il mesure aussi **la carte** (``WikiIndex.carte``), ce que lit un modèle qui
+navigue : la question seule, puis la question et ses reformulations fusionnées (``classer_multi``).
+Trois mesures y répondent à une autre question que « la preuve est-elle livrée ? » :
+
+  * **section désignée** : la section qui porte la preuve figure-t-elle parmi celles que la carte
+    liste pour ses pages ? (le modèle n'a plus qu'à la lire) ;
+  * **dans les lignes**  : l'extrait de preuve est-il déjà sous les yeux, dans les lignes de la carte ?
+  * **fiche**            : pour une référence rare, la fiche de la question désigne-t-elle la section ?
+
 Usage ::
 
     python -m app.scripts.mesurer_recuperation
@@ -24,10 +33,11 @@ import argparse
 import json
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Sequence, Tuple
+from typing import Any, Dict, List, Sequence, Set, Tuple
 
 from app.services.wiki_index import (
     BUDGET_RECHERCHE,
+    CARTE_SECTIONS,
     PAGE_ENTIERE_MAX,
     PAGES_PAR_RECHERCHE,
     Livraison,
@@ -115,6 +125,69 @@ def evaluer(items: Sequence[Dict[str, Any]], livrer, reformulations: bool = Fals
     }
 
 
+def sections_de_preuve(index: WikiIndex, preuves: Sequence[Dict[str, Any]]) -> Dict[str, Set[int]]:
+    """Page de preuve → sections qui portent l'un de ses extraits."""
+    par_page: Dict[str, Set[int]] = {}
+    for p in preuves:
+        cible = plat(p["extrait"])[:60]
+        trouvees = {sid for sid in index.sections_par_page.get(p["page"], []) if cible in plat(index.sections[sid]["texte"])}
+        par_page.setdefault(p["page"], set()).update(trouvees)
+    return par_page
+
+
+def carte_actuelle(index: WikiIndex, question: str, formulations: Sequence[str] = (), **reglages: Any) -> Tuple[str, List[str], Set[int]]:
+    """La carte de la question (et de ses formulations, fusionnées), plus la page dominante si
+    elle tient entière : ``(texte lu par le modèle, pages listées, sections désignées)``."""
+    requetes = [question] + [f for f in formulations if f]
+    classement = index.classer_multi(requetes, cotes=cotes_de(question))
+    livraison = Livraison()
+    texte, chemins = index.carte(classement, index.jetons_requete(requetes), livraison, **reglages)
+    dominante = index.page_dominante(classement, livraison)
+    if dominante is not None:
+        livre, _ = index.livrer([dominante], livraison, pages_max=1, autres_max=0)
+        texte += "\n\n" + livre
+    designees = {sid for c in classement if c["entree"]["chemin"] in chemins for sid, _ in c["sections"][:CARTE_SECTIONS]}
+    return texte, chemins, designees
+
+
+def evaluer_carte(index: WikiIndex, items: Sequence[Dict[str, Any]], formulations: bool = False, **reglages: Any) -> Dict[str, float]:
+    n = une = toutes = lignes = pages = volume = dominantes = fiche_n = fiche_ok = 0
+    for item in items:
+        if not item["preuves"]:
+            continue
+        n += 1
+        texte, chemins, designees = carte_actuelle(
+            index, item["question"], (item.get("reformulations") or [])[:3] if formulations else (), **reglages
+        )
+        volume += len(texte)
+        dominantes += "page entière" in texte
+        par_page = sections_de_preuve(index, item["preuves"])
+        atteintes = {page: bool(sids & designees) for page, sids in par_page.items()}
+        une += any(atteintes.values())
+        toutes += all(atteintes.values())
+        lignes += any(plat(p["extrait"])[:60] in plat(texte) for p in item["preuves"])
+        attendues = [p for p in item["pages"] if not p.startswith("/anomalies/")]
+        pages += all(p in chemins for p in attendues) if attendues else 0
+        fiche = index.fiche_question(item["question"])
+        if fiche["rares"]:
+            fiche_n += 1
+            touchees = {(e["chemin"], e["section"]) for liste in fiche["emplacements"].values() for e in liste}
+            visees = {(index.sections[sid]["chemin"], index.sections[sid]["numero"]) for sids in par_page.values() for sid in sids}
+            fiche_ok += bool(touchees & visees)
+    pct = lambda a, b: 100 * a / b if b else 0.0  # noqa: E731
+    return {
+        "questions": n, "une": pct(une, n), "toutes": pct(toutes, n), "lignes": pct(lignes, n),
+        "pages": pct(pages, n), "volume": volume / n if n else 0, "dominantes": pct(dominantes, n),
+        "fiche": pct(fiche_ok, fiche_n), "fiche_n": fiche_n,
+    }
+
+
+def ligne_carte(nom: str, r: Dict[str, float]) -> str:
+    return (f"  {nom:38} section désignée {r['une']:5.1f} % | toutes {r['toutes']:5.1f} % | dans les lignes "
+            f"{r['lignes']:5.1f} % | {r['volume'] / 1000:5.1f} k car. | page dominante {r['dominantes']:4.1f} % "
+            f"| fiche {r['fiche']:5.1f} % ({r['fiche_n']} q.)")
+
+
 def ligne(nom: str, r: Dict[str, float]) -> str:
     return (f"  {nom:38} preuve {r['preuve']:5.1f} % | toutes {r['toutes']:5.1f} % | pages utiles "
             f"{r['pages']:5.1f} % | {r['volume'] / 1000:5.1f} k car. | {r['nb_pages']:.1f} pages")
@@ -134,7 +207,12 @@ def main() -> int:
                     evaluer(items, lambda q: livraison_actuelle(index, q))))
         if nom == "banc":
             print(ligne("actuel, avec les 3 reformulations", evaluer(items, lambda q: livraison_actuelle(index, q), True)))
+        print(ligne_carte("carte, question seule", evaluer_carte(index, items)))
+        if nom == "banc":
+            print(ligne_carte("carte, 4 formulations fusionnées", evaluer_carte(index, items, formulations=True)))
         if ns.grille:
+            for pages in (8, 12, 15):
+                print(ligne_carte(f"carte {pages} pages", evaluer_carte(index, items, pages=pages)))
             for seuil in (15_000, 20_000, 30_000):
                 for pages in (4, 6, 8):
                     for budget in (40_000, 60_000, 100_000):
