@@ -20,7 +20,7 @@ source_pages:
     pages: 1-36
 generated:
   by: process:claude-code
-  at: 2026-10-09T07:23:53Z
+  at: 2026-10-09T07:31:19Z
 ---
 
 # Identité
@@ -49,8 +49,8 @@ Numérotation du PDF : la page imprimée « Page n sur 36 » est la page n du PD
 | 3 | table des matières (chapitres 1 à 2.10 avec leur page), ouverte et lue : elle ne porte que les titres des paragraphes | sans contenu propre | - |
 | 4-6 | avis du Groupe Spécialisé : domaine d'emploi accepté, appréciation (stabilité, sécurité, feu, thermique, perméabilité A*2 à A*4, accessibilité, entrée d'air), durabilité, marquage NF / CSTB / ACOTHERM, impacts environnementaux, remarques complémentaires | transcrit | [Avis du Groupe Spécialisé et domaine d'emploi du DTA 6/14-2166_V2, coulissant LUMEAL GA](/certifications/dta-6-14-2166-lumeal-ga.md) |
 | 7-10 | dossier technique, texte : commercialisation, description, tableau des dimensions maximales (baie H x L), conception, mise en œuvre, entretien, fabrication, justificatifs et essais | transcrit | [Dossier technique et dimensions maximales du DTA 6/14-2166_V2, coulissant LUMEAL GA](/certifications/dta-6-14-2166-lumeal-ga-dossier-technique.md) |
-| 11-12 | annexe, planches « Dormants » : montants latéraux, traverses hautes et basses, appuis tubulaires, rails rapportés, rejets d'eau, couvre-joints, tapées, capot, cornières, profilés ITE | à faire | - |
-| 13-14 | annexe, planches « Ouvrants » : montants, traverses, profilés PVC, garnitures d'étanchéité TPE et EPDM, joints à bourrer | à faire | - |
+| 11-12 | annexe, planches « Dormants » : montants latéraux, traverses hautes et basses, traverses basses de hauteur réduite, appuis tubulaires, rail, rejets d'eau, couvre-joints, tapées, capot, cornières, profilés ITE ; 34 dessins cotés, tous découpés | transcrit | [Profilés dormants et ouvrants de l'annexe du DTA 6/14-2166_V2, coulissant LUMEAL GA](/certifications/dta-6-14-2166-lumeal-ga-profiles.md) |
+| 13-14 | annexe, planches « Ouvrants » : montants centraux avec inerties Ixx, montants latéraux, reconstitutions de feuillure PA66, traverses basses et hautes, profilés PVC, garnitures d'étanchéité TPE et EPDM ; 33 dessins, tous découpés | transcrit | [Profilés dormants et ouvrants de l'annexe du DTA 6/14-2166_V2, coulissant LUMEAL GA](/certifications/dta-6-14-2166-lumeal-ga-profiles.md) |
 | 15-19 | coupes de principe : fenêtre 2 vantaux, porte-fenêtre 2 vantaux, avec seuil PMR, 1 vantail + fixe, avec seuil PMR | à faire | - |
 | 20 | prises de volume : vitrage sur ouvrants et sur fixes | à faire | - |
 | 21-29 | drainage du dormant : 2 vantaux, 1 vantail + fixe, appui tubulaire 401028 (PMR) | à faire | - |
