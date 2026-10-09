@@ -56,14 +56,28 @@ generated:
 
 ## 2. Réf. 5850.002 — LUMEAL GA Notice de pose (18 pages)
 
-| Tranche de pages | Contenu technique | État | Page du wiki |
+Notice de pose chantier du coulissant LUMEAL GA, éditeur Technal (Hydro Building Systems), référence 5850.002, juillet 2018, 18 pages ; nature : atelier et chantier (document de pose, non réglementaire). Numérotation du PDF ; la page imprimée porte un décalage de -2 (la page imprimée 1 est le PDF 3 ; les pages 1, 2, 17 et 18 du PDF n'ont pas de numéro imprimé).
+
+| Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| 1-3 | Page de garde, mentions légales et sommaire de la notice de pose chantier | à faire | [Catalogue fabrication LUMEAL GA](/sources/technal-lumeal-ga-fabrication.md) |
-| 4-6 | Rappels généraux et contrôles préalables selon NF DTU 36.5-1 : charge 100 daN sur traverse basse, tolérances verticalité ($\le 2\text{ mm/m}$), horizontalité ($\le 2\text{ mm}$ si $L \le 1,5\text{ m}$, $3\text{ mm}$ au-delà), calage continu sous roulettes fermées et butées, pattes tous les 600 mm max (250 mm des angles, 1 patte par point de verrouillage), blocage rail bas obligatoire si $L > 900\text{ mm}$, interdiction formelle de percer le rail bas, bande préformée avec remontée 100 mm | à faire | [Fabrication et pose LUMEAL GA](/procedures/fabrication-et-pose-lumeal-ga.md) |
-| 7-8 | Fixation du dormant, réglage par trous oblongs des pattes, vérification des diagonales ($\Delta \le 2\text{ mm}$), protocole de montage de la partie fixe monorail | à faire | [Fabrication et pose LUMEAL GA](/procedures/fabrication-et-pose-lumeal-ga.md) |
-| 9-11 | Pose et gondage des vantaux ouvrants : ordre de pose (semi-fixe extérieur puis service intérieur), obligation de soulager le vantail avec ventouses lors du réglage des roulettes, réglage et verrouillage gâche avec gabarit T621000, mise en place des talons hauts T401000 et pièces anti-dégondage | à faire | [Fabrication et pose LUMEAL GA](/procedures/fabrication-et-pose-lumeal-ga.md), [Roulements et fermetures LUMEAL GA](/quincaillerie/lumeal-ga-roulements-et-fermetures.md) |
-| 12-14 | Conseils d'atelier et dépannage SAV : effort de manœuvre important (réglage hauteur des roulettes, cales TGA3817 obligatoires sur vitrage 29-32 mm ou si $L > 1,5\text{ m}$ ou poids $> 120\text{ kg}$), fermeture difficile (interruption impérative du joint T411003 au niveau du passage de poignée) | à faire | [Fabrication et pose LUMEAL GA](/procedures/fabrication-et-pose-lumeal-ga.md) |
-| 15-18 | Pages de garde arrière et mentions de copyright Technal | à faire | [Catalogue fabrication LUMEAL GA](/sources/technal-lumeal-ga-fabrication.md) |
+| 1 | couverture : titre « LUMEAL GA », « NOTICE DE POSE », référence 5850.002, vue du profilé assemblé et deux éclatés, logo TECHNAL | sans contenu propre | - |
+| 2 | page entièrement blanche (ouverte et rendue : aucun trait, aucun texte) | sans contenu propre | - |
+| 3 | sommaire daté « Juillet 2018 » (numérotation imprimée 1) | sans contenu propre | - |
+| 4 | Rappels généraux : nota, conseils de mise en œuvre des coulissants en pose de doublage intérieur, défauts de verticalité et d'horizontalité (imprimée 2) | transcrit | [Pose du dormant, de la partie fixe et des ouvrants du coulissant LUMÉAL55 (LUMEAL GA)](/procedures/pose-lumeal-ga-notice-installation.md) |
+| 5 | Pose du dormant, équipement du châssis : schéma d'implantation des pattes et du calage, détails en coupe (imprimée 3) | transcrit | [Pose du dormant, de la partie fixe et des ouvrants du coulissant LUMÉAL55 (LUMEAL GA)](/procedures/pose-lumeal-ga-notice-installation.md) |
+| 6 | Pose et calage : support d'étanchéité, rail bas, bande préformée avec limiteur d'écrasement, coupes (imprimée 4) | transcrit | [Pose du dormant, de la partie fixe et des ouvrants du coulissant LUMÉAL55 (LUMEAL GA)](/procedures/pose-lumeal-ga-notice-installation.md) |
+| 7 | Fixation du dormant : fixation, vérification des diagonales, niveaux et aplombs, quatre schémas (imprimée 5) | transcrit | [Pose du dormant, de la partie fixe et des ouvrants du coulissant LUMÉAL55 (LUMEAL GA)](/procedures/pose-lumeal-ga-notice-installation.md) |
+| 8 | Assemblage de la partie fixe : montage du vitrage et assemblage du montant central fixe, éclaté repéré (imprimée 6) | transcrit | [Pose du dormant, de la partie fixe et des ouvrants du coulissant LUMÉAL55 (LUMEAL GA)](/procedures/pose-lumeal-ga-notice-installation.md) |
+| 9 | Protocole de montage de la partie fixe, dix étapes, avertissement de gondage, schémas (imprimée 7) | transcrit | [Pose du dormant, de la partie fixe et des ouvrants du coulissant LUMÉAL55 (LUMEAL GA)](/procedures/pose-lumeal-ga-notice-installation.md) |
+| 10 | Protocole de montage de la partie fixe (suite) : rail haut, rail bas, clips TGA3612, éclatés (imprimée 8) | transcrit | [Pose du dormant, de la partie fixe et des ouvrants du coulissant LUMÉAL55 (LUMEAL GA)](/procedures/pose-lumeal-ga-notice-installation.md) |
+| 11 | Pose des ouvrants : gondage et réglage des roulettes (imprimée 9) | à faire | - |
+| 12 | Positionnement des gâches et réglage des pênes, gabarit T621000, cinq repères (imprimée 10) | à faire | - |
+| 13 | Montage des pièces de finition : talons hauts, butées d'ouvrant, pièces d'antidégondage (imprimée 11) | à faire | - |
+| 14 | Conseils et astuces, effort de manœuvre important : roulettes, cales TGA3817, rails réduits (imprimée 12) | à faire | - |
+| 15 | Conseils et astuces, fermeture difficile : joint T411003 au passage de la poignée (imprimée 13) | à faire | - |
+| 16 | mentions de copyright Technal, juillet 2018 | à faire | - |
+| 17 | page entièrement blanche (ouverte et rendue) | à faire | - |
+| 18 | quatrième de couverture : aplat bleu, logo TECHNAL et signature « IMAGINE WHAT'S NEXT » | à faire | - |
 
 **Le registre de couverture est intégral : 232/232 pages couvertes, zéro `à faire`.**
 

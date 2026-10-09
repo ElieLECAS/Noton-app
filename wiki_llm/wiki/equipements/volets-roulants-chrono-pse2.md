@@ -1,131 +1,82 @@
 ---
 type: Équipement
-title: Volet roulant et BSO bloc-baie CHRONO PSE²
-description: Système bloc-baie haute performance thermique SOPROFEN sous coffre PSE moulé (Uc jusqu'à 0,3 W/m²K) — bi-fonction volet roulant ou Brise-Soleil Orientable (BSO), caissons 300 et 360 mm, accès intérieur ou extérieur, compatible ITE, ITI et MOB.
-tags: [equipement, volet-roulant, bso, chrono-pse2, soprofen, pse, thermique, brise-soleil, mob, ite]
+title: "Chrono PSE² SOPROFEN : bloc-baie à coffre polystyrène, codes de coffre et tabliers"
+description: "Présentation du bloc-baie Chrono PSE² à coffre en polystyrène expansé, volet roulant ou BSO, codes de coffre AI30, AE30, AI36, AE36, AIP30, AEP30, AIP36, AEP36 avec hauteur h et profondeur P, limites de largeur, de hauteur et de poids des lames L50, LA37 et LA50."
+tags: [volet-roulant, chrono-pse2, bloc-baie, bso, coffre, polystyrene, tablier, lame, soprofen, somfy]
 systeme: Chrono PSE²
 fournisseur: SOPROFEN
 usage: chiffrage
-status: stable
+famille: chrono-pse2
+status: draft
 sources:
-  - resource: raw/moustiquaires/export_doc_132.zip
+  - resource: raw/moustiquaires/exports/132.pdf
     id: soprofen-guide-technique-blocs-baies-2022
-    title: Guide technique Blocs-baies SOPROFEN 2022, réf. DOC86505
+    title: Guide technique Blocs-baies 2022, SOPROFEN, réf. DOC86505 (09/2022)
     last_modified: 2022-09-01
 source_pages:
-  - resource: raw/moustiquaires/export_doc_132.zip
-    pages: 4, 86-123
+  - resource: raw/moustiquaires/exports/132.pdf
+    pages: 4, 86, 90
 generated:
-  by: process:gemini-coder
-  at: 2026-09-21T14:20:00Z
+  by: process:claude-code
+  at: 2026-10-09T02:30:00Z
 ---
 
-# Présentation du système CHRONO PSE²
+Le Chrono PSE² est le bloc-baie de [SOPROFEN](/fournisseurs/soprofen.md) dont le coffre est en polystyrène expansé (PSE, voir le [glossaire](/reference/glossaire.md)), conçu pour une pose en atelier sur une menuiserie comme un bloc-baie ordinaire. Un bloc-baie est une fenêtre et son volet roulant assemblés en un seul ensemble. Le coffre du Chrono PSE² reçoit au choix un tablier de volet roulant ou un brise-soleil orientable (BSO) ; ce que la marque annonce du produit est sur [Services, assistance et atouts produits de SOPROFEN](/commercial/soprofen-services-et-atouts-produits.md) [1 p. 4, 86, 115].
 
-Le **CHRONO PSE²** de [SOPROFEN](/fournisseurs/soprofen.md) est un système hybride combinant la rapidité de pose en atelier d'un bloc-baie monté sur menuiserie et les qualités thermiques d'un coffre tunnel de maçonnerie [1 p. 4, 86].
-* **Corps isolant en PSE haute densité** : caisson moulé en polystyrène expansé graphité garantissant une isolation thermique continue [1 p. 4, 86].
-* **Performances thermiques certifiées** : coefficient de transmission surfacique $U_c$ descendant jusqu'à **$0,3\text{ W/(m}^2\text{.K)}$** (selon modélisations logiciel Bisco), surpassant les exigences standard des bâtiments passifs et de la RE2020 [1 p. 4].
-* **Affaiblissement acoustique** : isolation phonique renforcée atteignant $D_{n,e,\text{tr}} = 47\text{ dB}$ grâce à l'adjonction de l'isolant phonique lourd PSX58 [1 p. 4, 101].
-* **Polyvalence fonctionnelle** : le caisson accueille au choix un tablier de **volet roulant** traditionnel ou un tablier de **Brise-Soleil Orientable (BSO)** à lames aluminium réglables [1 p. 4, 86, 115].
+Le guide technique traite le Chrono PSE² en deux séries de rubriques : le volet roulant (pages 86 à 114) et le BSO (pages 115 à 123). Les pages du wiki sont :
 
----
+- [Chrono PSE² : lames, coloris, cotes de commande et coulisses](/equipements/chrono-pse2-lames-coloris-et-cotes.md) ;
+- [Chrono PSE² : manœuvres et motorisations](/equipements/chrono-pse2-manoeuvres-et-motorisations.md) ;
+- [Chrono PSE² : options, nomenclature et pièces détachées](/equipements/chrono-pse2-options-et-nomenclature.md) ;
+- [Chrono PSE² : coupes d'intégration du volet roulant](/equipements/chrono-pse2-coupes-d-integration.md) ;
+- [Chrono PSE² : brise-soleil orientable (BSO)](/equipements/chrono-pse2-bso.md).
 
-# Dimensions de coffre et modes de visite
+# Coffres du Chrono PSE²
 
-Le coffre CHRONO PSE² est décliné en deux profondeurs de maçonnerie (300 et 360 mm) et deux sens de trappe d'accès [1 p. 90, 117] :
+Le coffre existe en profondeur 300 mm et 360 mm, avec ou sans plaque. Deux accès à la trappe de visite : accès intérieur (codes AI) et accès extérieur (codes AE) ; les codes AIP et AEP sont ceux du coffre « avec plaque » (plaque fibrociment d'après le bon de commande de la page 140). La hauteur de commande h du coffre est de 312 mm pour les huit coffres, la profondeur P est celle du tableau. Tableau des codes de coffre, en millimètres [1 p. 90].
 
-| Code coffre | Sens de visite | Profondeur maçonnerie $P$ (mm) | Hauteur $h$ caisson + adaptateur (mm) | Largeur max $L_{\max}$ (mm) | Hauteur max $H_{\max}$ (mm) | Revêtement de finition |
-| --- | --- | --- | --- | --- | --- | --- |
-| AI30 | Accès Intérieur | 300 | 312 | 3 000 | 3 500 | Polystyrène brut pour enduit intérieur |
-| AE30 | Accès Extérieur | 300 | 312 | 3 000 | 3 500 | Polystyrène brut pour enduit extérieur |
-| AI36 | Accès Intérieur | 360 | 312 | 3 000 | 3 500 | Polystyrène brut pour enduit intérieur |
-| AE36 | Accès Extérieur | 360 | 312 | 3 000 | 3 500 | Polystyrène brut pour enduit extérieur |
-| AIP30 | Accès Intérieur | 283 | 312 | 3 000 | 3 500 | Plaque fibrociment pour ossature bois |
-| AEP30 | Accès Extérieur | 283 | 312 | 3 000 | 3 500 | Plaque fibrociment pour ossature bois |
-| AIP36 | Accès Intérieur | 343 | 312 | 3 000 | 3 500 | Plaque fibrociment pour ossature bois |
-| AEP36 | Accès Extérieur | 343 | 312 | 3 000 | 3 500 | Plaque fibrociment pour ossature bois |
+| Taille de coffre | Code, accès intérieur | Code, accès extérieur | h (mm) | P (mm) |
+| --- | --- | --- | --- | --- |
+| coffre de 300, polystyrène | AI30 | AE30 | 312 | 300 |
+| coffre de 360, polystyrène | AI36 | AE36 | 312 | 360 |
+| coffre de 300, avec plaque | AIP30 | AEP30 | 312 | 283 |
+| coffre de 360, avec plaque | AIP36 | AEP36 | 312 | 343 |
 
-(schéma: raw/moustiquaires/export_doc_132.zip, p. 90 et 117)
+La hauteur de commande H du volet est la hauteur en millimètres, caisson compris [1 p. 90].
 
-*Règle de largeur* : la largeur de commande $L$ correspond à la largeur hors-tout du coffre, liée à la largeur entre tapées $L_t$ par la relation : $L = L_t + DG + DD$ (avec débord standard gauche/droite $DG = DD = 30\text{ mm}$, maxi 60 mm) [1 p. 89].
+![Coupes des quatre coffres : polystyrène de 300 et de 360, avec plaque de 300 et de 360](/assets/equipements/volets-roulants/blocs-baies-2022/chrono-pse2/quatre-coupes-de-coffre-polystyrene-et-avec-plaque.png)
 
----
+(schéma: raw/moustiquaires/exports/132.pdf, p. 90)
 
-# Déclinaison Volet Roulant
+# Limites des tabliers de volet roulant
 
-En version volet roulant, le CHRONO PSE² intègre des tabliers PVC ou aluminium à haute résistance [1 p. 86, 90] :
+Largeur et hauteur maximales du tablier selon la lame, pour un tablier, en millimètres ; le poids est en kg/m² de tablier. À ajouter pour la lame finale : 1,1 kg par mètre linéaire [1 p. 86, 90].
 
-| Type de lame | Matériau | Pas (mm) | Largeur max (mm) | Hauteur max coffre 300 (mm) | Hauteur max coffre 360 (mm) | Poids tablier (kg/m²) |
-| --- | --- | --- | --- | --- | --- | --- |
-| LA 37 | Aluminium | 37 | 2 500 | 3 500 | 3 500 | 2,70 |
-| LA 50 | Aluminium | 50 | 3 000 | 2 700 | 2 700 | 2,85 |
-| L 50 | PVC | 50 | 2 000 | 2 700 | 2 700 | 3,50 |
+| Lame | Largeur maxi (mm) | H maxi, coffre de 300 (mm) | H maxi, coffre de 360 (mm) | Poids (kg/m²) |
+| --- | --- | --- | --- | --- |
+| L50 (PVC de 50 mm) | 2 000 | 2 700 | 2 700 | 3,5 |
+| LA37 (aluminium de 37 mm) | 2 500 | 3 500 | 3 500 | 2,7 |
+| LA50 (aluminium de 50 mm) | 3 000 | 2 700 | 2 700 | 2,85 |
 
-(schéma: raw/moustiquaires/export_doc_132.zip, p. 86 et 90)
+Les quatre codes de coffre portent les mêmes limites de tablier à la page 90 : lames aluminium de 37 mm, 2 500 de largeur maxi et 3 500 de hauteur maxi ; lames aluminium de 50 mm, 3 000 et 2 700 ; lames PVC de 50 mm, 2 000 et 2 700 [1 p. 90].
 
-*Majoration lame finale* : ajouter **1,1 kg/ml** pour la lame finale en aluminium extrudé [1 p. 86].
+# Coulisses
 
-### Coulisses aluminium avec tapée intégrée
-
-* **AT1** : coulisse aluminium pour caisson à **accès intérieur** (déport de tapée 49 mm, cote totale 86 mm) [1 p. 91].
-* **AT2** : coulisse aluminium pour caisson à **accès extérieur** (déport de tapée 99 mm, cote totale 136 mm) [1 p. 91].
-
----
-
-# Déclinaison Brise-Soleil Orientable (BSO)
-
-Le coffre CHRONO PSE² en version BSO permet une régulation précise des apports solaires d'été tout en maximisant la lumière naturelle d'hiver [1 p. 115] :
-
-| Profil de lame BSO | Largeur de lame (mm) | Épaisseur (mm) | Spécificité technique | Largeur max $L_{\max}$ (mm) | Hauteur max $H_{\max}$ (mm) |
-| --- | --- | --- | --- | --- | --- |
-| Lames Ourlées | 80 | 0,45 | Bords ourlés double face, œillets polyamide noir | 4 000 | 2 800 |
-| Lames Plates | 80 | 0,45 | Faible hauteur de paquet, grande souplesse | 4 000 | 4 000 |
-| Lames en Z | 73 | 0,45 | Joint d'étanchéité PVC souple, obscurcissement et insonorisation renforcés | 4 000 | 2 500 |
-
-(schéma: raw/moustiquaires/export_doc_132.zip, p. 115, 117)
-
-> [!WARNING]
-> **Guidage anti-vent pour BSO** : pour garantir la tenue mécanique face aux rafales de vent, un câble de guidage supplémentaire intermédiaire est obligatoire pour les largeurs supérieures à **2,40 m** en lames plates, et supérieures à **3,00 m** en lames ourlées [1 p. 118].
-
----
-
-# Motorisations et commandes
-
-Le CHRONO PSE² bénéficie des technologies filaires et radio [SOMFY](/fournisseurs/somfy.md) et SOPROFEN [1 p. 95-100, 117-118] :
-
-* **Version Volet Roulant** :
-  * Radio RTS Somfy : Oximo RTS, Oximo court S RTS, Oximo 40 WF solaire autonome avec panneau déporté A35 [1 p. 95-96].
-  * Radio IO Somfy : Oximo IO, S&SO RS100 IO (classe 2), Oximo 40 WF IO solaire autonome A45 [1 p. 95-96].
-  * Radio M-Soft² Soprofen : M-Soft² MVM court (code R11) et MVM standard [1 p. 95-96].
-  * Filaire : Somfy WT Ilmo (12 et 17 tours), M-Soft² filaire (MVEC, MVE) [1 p. 95, 97].
-  * Manuelle : treuil sortie basse TB, sortie façade TF, ou tirage direct TGD avec ressort compensateur CR50G [1 p. 93-94].
-* **Version BSO** :
-  * Moteurs spécifiques BSO à couple et vitesse régulés avec commande de variation d'orientation des lames par molette : Somfy RTS Variation, Somfy Situo 1 IO Variation, et Soprofen Monotel M-Soft 2 [1 p. 117-118].
-
----
-
-# Compatibilité de pose selon les types de parois
-
-Le CHRONO PSE² dispose de plans de calepinage d'atelier détaillés pour tous les modes constructifs modernes [1 p. 105-114, 119-123] :
-1. **Isolation Thermique par l'Extérieur (ITE)** : caisson 300 mm en accès intérieur (p. 105) ou accès extérieur (p. 106).
-2. **Isolation Thermique par l'Intérieur (ITI)** : caisson 300 mm en doublage intérieur (p. 107-108).
-3. **Ossature Bois (MOB)** : caisson 300 mm avec plaque fibrociment rapportée en face supérieure (p. 109-110).
-4. **Double mur (brique de parement extérieure)** : caisson avec plaque fibrociment (p. 111-112).
-5. **Monomur (brique terre cuite ou béton cellulaire isolant)** : caisson grande profondeur de 360 mm assurant l'alignement parfait des faces brutes à enduire (p. 113-114).
-
----
+Les coulisses du Chrono PSE² sont en aluminium avec tapée : AT1 pour l'accès intérieur et AT2 pour l'accès extérieur ; leur choix et leurs cotes sont sur [Chrono PSE² : lames, coloris, cotes de commande et coulisses](/equipements/chrono-pse2-lames-coloris-et-cotes.md) [1 p. 91].
 
 # Citations
 
-[1] [Guide technique Blocs-baies SOPROFEN 2022, réf. DOC86505](raw/moustiquaires/export_doc_132.zip), p. 4, 86 à 123
-
----
+[1] Guide technique Blocs-baies 2022, SOPROFEN, réf. DOC86505 (09/2022) — `raw/moustiquaires/exports/132.pdf`, p. 4, 86, 90 et 115
+(le numéro de page imprimé est celui du PDF)
 
 # Voir aussi
 
+- [Chrono PSE² : lames, coloris, cotes de commande et coulisses](/equipements/chrono-pse2-lames-coloris-et-cotes.md)
+- [Chrono PSE² : manœuvres et motorisations](/equipements/chrono-pse2-manoeuvres-et-motorisations.md)
+- [Chrono PSE² : options, nomenclature et pièces détachées](/equipements/chrono-pse2-options-et-nomenclature.md)
+- [Chrono PSE² : coupes d'intégration du volet roulant](/equipements/chrono-pse2-coupes-d-integration.md)
+- [Chrono PSE² : brise-soleil orientable (BSO)](/equipements/chrono-pse2-bso.md)
+- [Volets roulants](/equipements/volets-roulants.md)
 - [SOPROFEN](/fournisseurs/soprofen.md)
 - [SOMFY](/fournisseurs/somfy.md)
-- [Volets roulants](/equipements/volets-roulants.md)
-- [Volet roulant inversé MONO VI](/equipements/volets-roulants-mono-vi.md)
-- [Volet roulant coffre demi-linteau BLOC LX](/equipements/volet-roulant-bloc-lx-demi-linteau.md)
-- [Guide technique Blocs-baies SOPROFEN 2022](/sources/soprofen-guide-technique-blocs-baies-2022.md)
+- [Guide technique Blocs-baies 2022, SOPROFEN (148 pages)](/sources/soprofen-guide-technique-blocs-baies-2022.md)

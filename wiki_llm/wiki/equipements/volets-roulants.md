@@ -12,9 +12,15 @@ sources:
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
     last_modified: 2026-01-31
+  - resource: raw/moustiquaires/exports/132.pdf
+    id: soprofen-guide-technique-blocs-baies-2022
+    title: Guide technique Blocs-baies 2022, SOPROFEN, réf. DOC86505 (09/2022)
+    last_modified: 2022-09-01
 source_pages:
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 28, 35
+  - resource: raw/moustiquaires/exports/132.pdf
+    pages: 4, 39, 124
 generated:
   by: process:gemini-coder
   at: 2026-09-19T17:20:00Z
@@ -24,7 +30,7 @@ generated:
 
 Le volet roulant intégré est assemblé à la menuiserie ; il s'adapte sur toutes les menuiseries PROFERM ([PERFORM](/gammes/perform.md), [HYBRIDE](/gammes/hybride.md), [LUMINE](/gammes/lumine.md), [TEXTURAL](/gammes/textural.md)) [1 p. 28]. Ce qui en est annoncé (« LA solution idéale en terme d'isolation thermique et de rapidité de pose ») est sur [Arguments de la marque PROFERM](/commercial/proferm.md).
 
-L'assemblage en usine sur le dormant repose sur le système bloc-baie **Chrono One** conçu par [SOPROFEN](/fournisseurs/soprofen.md), intégrant un adaptateur haut clippé/vissé avec joint de finition adhésif, un emboîtement par basculement verrouillé par vis FPZ-3.9-28-ST, et des coulisses encollées (2 cordons PVC/silicone) clippées sur vis plots VC4/10T (voir [Montage en atelier du volet roulant bloc-baie Chrono One SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md)).
+L'assemblage en usine sur le dormant repose sur le système bloc-baie Chrono One conçu par [SOPROFEN](/fournisseurs/soprofen.md), intégrant un adaptateur haut clippé/vissé avec joint de finition adhésif, un emboîtement par basculement verrouillé par vis FPZ-3.9-28-ST, et des coulisses encollées (2 cordons PVC/silicone) clippées sur vis plots VC4/10T (voir [Montage en atelier du volet roulant bloc-baie Chrono One SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md)).
 
 # Caractéristiques techniques du coffre
 
@@ -41,24 +47,25 @@ Le coffre est la boîte qui loge le tablier enroulé au-dessus de la menuiserie.
 
 ## Technologie brevetée GoodNight
 
-L'occultation est obtenue par la technologie brevetée **GoodNight** : intégration dans la coulisse (le rail vertical où glisse le tablier) d'un profilé d'insertion de coloris noir, d'un joint co-extrudé et d'un joint brosse [1 p. 28].
+L'occultation est obtenue par la technologie brevetée GoodNight : intégration dans la coulisse (le rail vertical où glisse le tablier) d'un profilé d'insertion de coloris noir, d'un joint co-extrudé et d'un joint brosse [1 p. 28].
 
 ## Coffres demi-linteau Bloc LX
 
-En construction neuve avec réservation demi-linteau en maçonnerie, la fermeture est réalisée au moyen du système **Bloc LX** de [SOPROFEN](/fournisseurs/soprofen.md), intégrant une fixation solidaire sur dormant, des profilés de renfort d'inertie (DL-R10 ou DL-R12) et un calfeutrement étanche à l'air (voir [Volet roulant coffre demi-linteau BLOC LX](/equipements/volet-roulant-bloc-lx-demi-linteau.md) et la procédure d'[Assemblage et pose du coffre demi-linteau Bloc LX SOPROFEN](/procedures/pose-bloc-lx-demi-linteau-soprofen.md)).
+En construction neuve avec réservation demi-linteau en maçonnerie, la fermeture est réalisée au moyen du système Bloc LX de [SOPROFEN](/fournisseurs/soprofen.md), intégrant une fixation solidaire sur dormant, des profilés de renfort d'inertie (DL-R10 ou DL-R12) et un calfeutrement étanche à l'air (voir [Volet roulant coffre demi-linteau BLOC LX](/equipements/volet-roulant-bloc-lx-demi-linteau.md) et la procédure d'[Assemblage et pose du coffre demi-linteau Bloc LX SOPROFEN](/procedures/pose-bloc-lx-demi-linteau-soprofen.md)).
 
 ## Blocs-baies Chrono One
 
-Évalué et certifié par le CSTB sous l'[Avis Technique n° 6/16-2339_V2](/certifications/at-cstb-6-16-2339-coffres-chrono.md), le coffre bloc-baie **Chrono One** de [SOPROFEN](/fournisseurs/soprofen.md) est disponible en hauteurs 200 mm ($\varnothing_{\text{enroulement}} = 165\text{ mm}$) et 230 mm ($\varnothing_{\text{enroulement}} = 185\text{ mm}$), avec une étanchéité à l'air de classe C3 ou C4 sous 4 Pa ($0,08\text{ m}^3/\text{h.m}$) et une rigidité flexionnelle $EI$ au vent atteignant $62\,160\text{ N.m}^2$ avec renfort MX20-2. Sa sous-face réversible MX01R permet d'augmenter l'épaisseur de doublage intérieur de 40 mm (de 120 à 160 mm) sans changer d'adaptateur. Il se décline selon deux méthodes de montage en atelier :
-* **Sur dormant standard** : montage avec pose préalable de l'adaptateur PVC et du joint adhésif de traverse haute, clippage du coffre par basculement et verrouillage latéral FPZ-3.9-28-ST, puis clippage frontal des coulisses sur pions VC4/10T avec double cordon de mastic PVC/silicone (voir [Montage en atelier du volet roulant bloc-baie Chrono One SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md)).
-* **Sur dormant monobloc** : vissage préalable des coulisses sur les montants de châssis (écartement max 400 mm, vis plots obligatoires pour coulisse centrale), emboîtement vertical du coffre dans la zone d'indexage sommitale des coulisses, relevage de la lame finale et vissage frontal traversant de l'adaptateur sur au moins 2 cloisons du profil dormant (voir [Montage en atelier du bloc-baie Chrono One sur dormant monobloc SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen.md)).
-* **Reprise de charge d'angle** : dans les deux configurations, des pattes métalliques déformables **VX26** (vis 15/3-9/9-5) assurent la liaison rigide et inclinable entre les joues du coffre et le dormant.
+Évalué et certifié par le CSTB sous l'[Avis Technique n° 6/16-2339_V2](/certifications/at-cstb-6-16-2339-coffres-chrono.md), le coffre bloc-baie Chrono One de [SOPROFEN](/fournisseurs/soprofen.md) est disponible en hauteurs 200 mm ($\varnothing_{\text{enroulement}} = 165\text{ mm}$) et 230 mm ($\varnothing_{\text{enroulement}} = 185\text{ mm}$), avec une étanchéité à l'air de classe C3 ou C4 sous 4 Pa ($0,08\text{ m}^3/\text{h.m}$) et une rigidité flexionnelle $EI$ au vent atteignant $62\,160\text{ N.m}^2$ avec renfort MX20-2. Sa sous-face réversible MX01R permet d'augmenter l'épaisseur de doublage intérieur de 40 mm (de 120 à 160 mm) sans changer d'adaptateur. Il se décline selon deux méthodes de montage en atelier :
+* Sur dormant standard : montage avec pose préalable de l'adaptateur PVC et du joint adhésif de traverse haute, clippage du coffre par basculement et verrouillage latéral FPZ-3.9-28-ST, puis clippage frontal des coulisses sur pions VC4/10T avec double cordon de mastic PVC/silicone (voir [Montage en atelier du volet roulant bloc-baie Chrono One SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md)).
+* Sur dormant monobloc : vissage préalable des coulisses sur les montants de châssis (écartement max 400 mm, vis plots obligatoires pour coulisse centrale), emboîtement vertical du coffre dans la zone d'indexage sommitale des coulisses, relevage de la lame finale et vissage frontal traversant de l'adaptateur sur au moins 2 cloisons du profil dormant (voir [Montage en atelier du bloc-baie Chrono One sur dormant monobloc SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen.md)).
+* Reprise de charge d'angle : dans les deux configurations, des pattes métalliques déformables VX26 (vis 15/3-9/9-5) assurent la liaison rigide et inclinable entre les joues du coffre et le dormant.
 
-## Blocs-baies haute performance CHRONO PSE² et inversé MONO VI
+## Autres blocs-baies SOPROFEN
 
-La gamme de blocs-baies SOPROFEN s'étend à des architectures spécifiques :
-* **[Volet roulant et BSO bloc-baie CHRONO PSE²](/equipements/volets-roulants-chrono-pse2.md)** : corps isolant en polystyrène expansé haute densité ($U_c$ jusqu'à $0,3\text{ W/m}^2\text{K}$), caissons de 300 et 360 mm, accès intérieur ou extérieur, et compatibilité avec tabliers volets roulants ou Brise-Soleil Orientables (BSO).
-* **[Volet roulant inversé bloc-baie MONO VI](/equipements/volets-roulants-mono-vi.md)** : volet bloc-baie à enroulement extérieur et trappe d'accès affleurante intérieure, coffre ultra-compact de 140 mm maximisant le clair de jour sous linteau, idéal en rénovation et ITE ($U_c = 0,9 + 0,11/L_c$).
+La gamme de blocs-baies de [SOPROFEN](/fournisseurs/soprofen.md) compte aussi :
+* [Chrono PSE² SOPROFEN : bloc-baie à coffre polystyrène, codes de coffre et tabliers](/equipements/volets-roulants-chrono-pse2.md) : coffre en polystyrène expansé, de 300 ou de 360 mm, accès intérieur ou extérieur, volet roulant ou brise-soleil orientable ; Uc annoncé jusqu'à 0,3 W/m²K selon le logiciel Bisco [2 p. 4].
+* [Mono VI SOPROFEN : bloc-baie inversé à enroulement extérieur, lames, cotes et adaptateurs](/equipements/volets-roulants-mono-vi.md) : volet à enroulement extérieur et trappe d'accès intérieure, coffre de 140 mm, utilisable en rénovation et en ITE ; Uc annoncé 0,9 + 0,11/Lc [2 p. 4, 124].
+* Chrono CX14, CRX14 et CRX18 : coffres de neuf et de rénovation, voir [Chrono CX14, CRX14 et CRX18 SOPROFEN : cotes de commande, coloris du coffre et tabliers](/equipements/chrono-cx14-crx14-crx18-cotes-tabliers-et-coloris.md) [2 p. 39].
 
 ## Résistance au vent des tabliers (NF EN 13659 et DTU 34-2)
 
@@ -93,7 +100,7 @@ Trois organes de manœuvre manuelle non motorisée sont disponibles [1 p. 28] :
 | Mécanisme manuel | Restriction d'emploi |
 | --- | --- |
 | Tirage direct | - |
-| Sangle | **non disponible en rénovation** |
+| Sangle | non disponible en rénovation |
 | Tringle oscillante | - |
 
 ![Mécanismes manuels sans domotique : tirage direct, sangle, tringle oscillante](/assets/equipements/volets-roulants/mecanismes-manuels.png)
@@ -105,15 +112,16 @@ Sur les volets à tirage direct équipés d'une lame finale à serrure, la réal
 # Garanties
 
 Durées de garantie applicables aux volets roulants et motorisations [1 p. 35] :
-* **Composants du volet roulant** : garantie 5 ans.
-* **Motorisation (Somfy filaire, RS100 io, moteur solaire)** : garantie 7 ans.
-* **Garantie « bord de mer » contre la corrosion des parties laquées (en option)** :
+* Composants du volet roulant : garantie 5 ans.
+* Motorisation (Somfy filaire, RS100 io, moteur solaire) : garantie 7 ans.
+* Garantie « bord de mer » contre la corrosion des parties laquées (en option) :
   * Distance de 0 à 10 km du littoral : garantie 5 ans.
   * Distance supérieure à 10 km du littoral : garantie 7 ans.
 
 # Citations
 
 [1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 28 et 35
+[2] [Guide technique Blocs-baies 2022, SOPROFEN, réf. DOC86505](raw/moustiquaires/exports/132.pdf), p. 4, 39 et 124
 
 # Voir aussi
 
@@ -123,8 +131,8 @@ Durées de garantie applicables aux volets roulants et motorisations [1 p. 35] :
 - [Volet roulant traditionnel TRADI NON PRÉMONTÉ](/equipements/volets-roulants-tradi-non-premonte.md)
 - [Volet roulant traditionnel TRADI pour COFFRE TUNNEL et TRADI VTR](/equipements/volets-roulants-tradi-tunnel-vtr.md)
 - [Volet roulant coffre demi-linteau BLOC LX](/equipements/volet-roulant-bloc-lx-demi-linteau.md)
-- [Volet roulant et BSO bloc-baie CHRONO PSE²](/equipements/volets-roulants-chrono-pse2.md)
-- [Volet roulant inversé bloc-baie MONO VI](/equipements/volets-roulants-mono-vi.md)
+- [Chrono PSE² SOPROFEN : bloc-baie à coffre polystyrène, codes de coffre et tabliers](/equipements/volets-roulants-chrono-pse2.md)
+- [Mono VI SOPROFEN : bloc-baie inversé à enroulement extérieur, lames, cotes et adaptateurs](/equipements/volets-roulants-mono-vi.md)
 - [Résistance au vent des volets roulants SOPROFEN](/reference/resistance-au-vent-volets-soprofen.md)
 - [Montage en atelier du volet roulant bloc-baie Chrono One SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md)
 - [Montage en atelier du bloc-baie Chrono One sur dormant monobloc SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen.md)
@@ -134,5 +142,9 @@ Durées de garantie applicables aux volets roulants et motorisations [1 p. 35] :
 - [Screen extérieur SCREENAMAX](/equipements/screen-exterieur-screenamax.md)
 - [Moustiquaires enroulables verticales](/equipements/moustiquaires-enroulables-verticales.md)
 - [Garanties par composant](/garanties/garanties-par-composant.md)
-- [Guide technique Blocs-baies SOPROFEN 2022](/sources/soprofen-guide-technique-blocs-baies-2022.md)
+- [Volet roulant Chrono ONE SOPROFEN : cotes, lames, tabliers et coloris du coffre](/equipements/chrono-one-cotes-tabliers-et-coloris.md)
+- [Chrono ONE SOPROFEN : treuils, cardans, sangle, tirage direct, moteurs radio et filaires](/equipements/chrono-one-manoeuvres-et-motorisations.md)
+- [Bons de commande des blocs-baies SOPROFEN (09/2022) : colonnes et codes](/equipements/blocs-baies-bons-de-commande-soprofen.md)
+- [Conditions générales de vente professionnels de SOPROFEN (09/2022)](/garanties/conditions-generales-de-vente-soprofen.md)
+- [Guide technique Blocs-baies SOPROFEN 2022 (148 pages)](/sources/soprofen-guide-technique-blocs-baies-2022.md)
 - [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md)

@@ -1,13 +1,14 @@
 ---
 type: Équipement
-title: Volet roulant traditionnel TRADI PRÉMONTÉ
-description: Volet roulant traditionnel SOPROFEN prémonté sur consoles et axe AXIS 50, coulisses Goodnight, lames 37 et 50 mm alu/PVC et solution thermique Isoflex.
+title: Volet roulant TRADI PRÉMONTÉ SOPROFEN, ossature bois et vérandas, lames LA 37, LA 50, PVC
+description: "Avantages, dimensions limites par lame (aluminium LA 37, LA 50, PVC), baies jusqu'à 3,5 m ou 4500 mm, options et mise en œuvre en ossature bois du volet roulant traditionnel TRADI PRÉMONTÉ de SOPROFEN."
 resource: https://www.soprofen.com
-tags: [volet-roulant, tradi, tradi-premonte, soprofen, goodnight, somfy, isoflex, ossature-bois, veranda]
+tags: [volet-roulant, tradi, lame, goodnight, ossature-bois, veranda, soprofen]
 systeme: TRADI
 fournisseur: SOPROFEN
 usage: chiffrage
-status: stable
+famille: volets-roulants-tradi
+status: draft
 sources:
   - resource: raw/moustiquaires/Fiche produit volet traditionnel TRADI PREMONTE 2025 SOPROFEN.pdf
     id: soprofen-volet-tradi-premonte-2025
@@ -17,99 +18,104 @@ source_pages:
   - resource: raw/moustiquaires/Fiche produit volet traditionnel TRADI PREMONTE 2025 SOPROFEN.pdf
     pages: 1-2
 generated:
-  by: process:gemini-coder
-  at: 2026-09-21T12:45:00Z
+  by: process:claude-code
+  at: 2026-10-09T02:30:00Z
 ---
 
-# Définition et principe d'intégration
+Le volet roulant traditionnel TRADI PRÉMONTÉ de [SOPROFEN](/fournisseurs/soprofen.md) est un
+volet roulant « prémonté » : ses consoles et son tablier (l'ensemble des lames) sont prémontés,
+solidaires de l'axe, pour une pose rapide [1 p. 1]. Il se pose en neuf ou en rénovation. Il est
+adapté aux constructions à ossature bois (dont la structure porteuse est en bois) et aux murs de
+faible épaisseur, particulièrement aux vérandas [1 p. 1]. Le volet
+roulant [TRADI non prémonté](/equipements/volets-roulants-tradi-non-premonte.md) a sa propre page.
+Les technologies (axe AXIS 50, Goodnight, Isoflex, lames), les manœuvres, les garanties et les
+teintes sont communes aux versions : voir
+[Technologies des volets roulants TRADI](/equipements/volets-roulants-tradi-technologies.md),
+[Manœuvres, motorisations, garanties et réparabilité](/equipements/volets-roulants-tradi-manoeuvres-et-garanties.md)
+et [Coloris du tablier et de l'encadrement](/coloris/coloris-volets-roulants-tradi.md).
 
-Le volet roulant traditionnel **TRADI PRÉMONTÉ** de [SOPROFEN](/fournisseurs/soprofen.md) est un système sans coffre extérieur visible destiné aux poses en coffre menuisé existant, en réservation linteau, dans les constructions à ossature bois (MOB) et sur chéneaux de vérandas [1 p. 1]. Les consoles de fixation et le tablier sont livrés **intégralement prémontés et solidaires de l'axe**, constituant un ensemble autoportant sans déport en version motorisée pour une installation rapide et directe sur chantier [1 p. 1].
+![Maison à ossature bois équipée de volets roulants TRADI prémontés](/assets/equipements/volets-roulants/tradi/tradi-premonte-maison-ossature-bois.png)
 
-# Cotes et limites dimensionnelles
+![Véranda équipée de volets roulants TRADI prémontés](/assets/equipements/volets-roulants/tradi/tradi-premonte-veranda.png)
 
-Limites dimensionnelles maximales d'exécution selon la nature et le profil de la lame, cotes en millimètres, relevées sur la fiche produit DOC83117 [1 p. 2] :
+# Ce qui est annoncé
 
-| Profil de lame | Matière du tablier | Largeur maximale (mm) | Hauteur maximale (mm) | Spécificités d'emploi |
-| --- | --- | --- | --- | --- |
-| Lame 37 (LA 37) | Aluminium double paroi | 2500 | 3550 | Enroulement compact, baies étroites et moyennes |
-| Lame 50 (LA 50) | Aluminium double paroi | 3500 | 3000 | Grandes baies vitrées de plain-pied |
-| Lame 50 (L 50) | PVC standard | 2000 | 2950 | Solution économique standard |
-| Lame 37 (L 37) | PVC | - | - | Cotes non chiffrées au tableau de synthèse |
+Huit avantages sont listés [1 p. 1] :
+
+- en neuf ou en rénovation ;
+- design arrondi des coulisses ;
+- volet prémonté ;
+- adaptation parfaite aux constructions à ossature bois et aux murs de faible épaisseur,
+  particulièrement aux vérandas ;
+- jusqu'à 4500 mm de largeur pour équiper les grandes baies (**INC-313**) ;
+- solution occultante supérieure au marché pour un meilleur sommeil, grâce à sa coulisse Goodnight
+  (renvoi *) ;
+- fixation robuste ;
+- montage rapide sans déport.
+
+Le renvoi * est imprimé « jusqu'à 3000 mm de large en LA37 et LA50 » [1 p. 1].
+
+![Tablier du TRADI prémonté, avec son axe et sa console](/assets/equipements/volets-roulants/tradi/tradi-premonte-tablier-et-axe.png)
+
+# Cotes
+
+Limites de largeur et de hauteur du tablier, en millimètres, relevées sur le tableau « Dimensions »
+de la fiche produit. Une ligne par lame ; le tableau est à deux niveaux (la matière de la lame, puis
+la largeur et la hauteur maximales), il est donc écrit en HTML. Un tiret signifie que la fiche ne
+donne pas de valeur pour cette lame dans cette matière [1 p. 2].
+
+<table>
+<thead>
+<tr><th rowspan="2">Lame</th><th colspan="2">PVC</th><th colspan="2">ALU</th></tr>
+<tr><th>Largeur maximale (mm)</th><th>Hauteur maximale (mm)</th><th>Largeur maximale (mm)</th><th>Hauteur maximale (mm)</th></tr>
+</thead>
+<tbody>
+<tr><td>Lame 37</td><td>-</td><td>-</td><td>2500</td><td>3550</td></tr>
+<tr><td>Lame 50</td><td>2000</td><td>2950</td><td>3500</td><td>3000</td></tr>
+</tbody>
+</table>
 
 (schéma: raw/moustiquaires/Fiche produit volet traditionnel TRADI PREMONTE 2025 SOPROFEN.pdf, p. 2)
 
-Pour équiper les très grandes baies jusqu'à **4 500 mm de largeur**, le système intègre un profilé de séparation central exclusif et discret utilisable jusqu'à 3,50 m de large par travée [1 p. 1].
+Le « système de séparation exclusif et discret » permet d'équiper des baies **jusqu'à 3,5 m de
+large** [1 p. 1]. La largeur maximale du tableau « Dimensions » est de 3500 mm, en aluminium (lame 50),
+et de 2000 mm en PVC [1 p. 2].
 
-# Technologie d'occultation brevetée Goodnight
+# Mise en œuvre
 
-Le volet TRADI PRÉMONTÉ intègre la technologie brevetée **Goodnight** pour éliminer les fuites lumineuses et atteindre un niveau d'obscurité complet [1 p. 1] :
-* **Dans la coulisse de guidage** : profilé d'insertion de coloris noir combinant un joint co-extrudé étanche à l'air et un joint brosse latéral [1 p. 1].
-* **En partie haute** : joint d'occultation spécifique appliqué sur la première lame du tablier pour obturer la fente du coffre [1 p. 1].
-* **En partie basse** : joint spécifique sur la lame finale, avec possibilité d'ajouter un joint brosse souple pour épouser les irrégularités de la pièce d'appui maçonnerie [1 p. 1].
-* **Plage dimensionnelle Goodnight** : applicable jusqu'à **3 000 mm de largeur** en lames aluminium LA 37 et LA 50 [1 p. 1].
+Le dessin donne un exemple en ossature bois : la coupe d'un mur d'ossature bois, avec son isolant et
+sa menuiserie, et le volet prémonté dans son coffre [1 p. 2].
 
-# Performances thermiques et isolation phonique
-
-* **Lames aluminium thermiques (LATH 37 et LATH 50)** : face intérieure traitée avec un revêtement spécifique piégeant le rayonnement infrarouge. Le réchauffement de la lame d'air stabilisée entre le volet et le vitrage apporte une résistance thermique additionnelle certifiée **$\Delta R = 0,24\text{ m}^2\text{K/W}$** [1 p. 1].
-* **Isolation de coffre menuisé Isoflex** : kit d'isolation breveté pour coffre bois ou maçonné intérieur réduisant jusqu'à **66 % des déperditions thermiques** et atténuant les bruits extérieurs de **6 dB** [1 p. 1].
-
-# Sécurité et tenue mécanique
-
-* **Axe d'enroulement AXIS 50** : compacité d'enroulement optimisant le diamètre total et prolongeant la durée de vie des tabliers [1 p. 1].
-* **Verrous automatiques anti-soulèvement** : montés de série sur l'axe, résistant à un effort de relevage forcé vertical de **25 kg** en versions motorisée et treuil [1 p. 1].
-* **Lame finale sécurisée** : butées d'arrêt invisibles dissimulées dans les embouts de la lame finale [1 p. 1].
-
-# Motorisations et organes de commande
-
-L'équipement motorisé fait appel aux technologies [SOMFY](/fournisseurs/somfy.md) et aux automatismes propres SOPROFEN [1 p. 2] :
-
-| Motorisation | Technologie / Type | Indice de réparabilité Actibaie |
-| --- | --- | --- |
-| Radio [SOMFY](/fournisseurs/somfy.md) IO S&SO RS100 IO | Réseau 230 V, bi-vitesse, accostage doux, protection gel | 7,5 / 10 |
-| Radio [SOMFY](/fournisseurs/somfy.md) Oximo IO | Réseau 230 V, protocole io-homecontrol | 7,5 / 10 |
-| Radio [SOMFY](/fournisseurs/somfy.md) RTS | Réseau 230 V, protocole radio RTS | 7,5 / 10 |
-| Filaire [SOMFY](/fournisseurs/somfy.md) | Réseau 230 V filaire standard | 7,8 / 10 |
-| Radio solaire [SOMFY](/fournisseurs/somfy.md) | Panneau photovoltaïque + batterie déportée | 7,8 / 10 |
-| Radio SOPROFEN M-Soft² | Réseau 230 V, protocole propre Soprofen | 7,5 / 10 |
-| Filaire SOPROFEN M-Soft² | Réseau 230 V filaire propre Soprofen | 7,8 / 10 |
-| Radio solaire SOPROFEN M-Soft² | Panneau solaire + batterie déportée Soprofen | 7,8 / 10 |
+![Mise en œuvre : exemple en ossature bois](/assets/equipements/volets-roulants/tradi/mise-en-oeuvre-ossature-bois.png)
 
 (schéma: raw/moustiquaires/Fiche produit volet traditionnel TRADI PREMONTE 2025 SOPROFEN.pdf, p. 2)
 
-Organes de manœuvre manuelle disponibles : treuil avec manivelle oscillante, sangle avec enrouleur en applique, et chaînette [1 p. 2].
+# Options
 
-# Nuancier tablier et encadrement
+Sept options sont listées [1 p. 2] :
 
-* **Tablier aluminium LA 37/50** : 24 teintes standards lisses, métallisées et sablées (Blanc, Beige, Beige 1015, Brun, Gris 7012, Gris 7016, Gris 7022, Gris 7035, Gris 7038, Gris 7039, Gris 9007, Noir 9005, Noir 9011, Blanc 9001, Bleu canon, Bleu 5024, Rouge 3004, Vert 6005, Vert 6021, Mars 2525, Chêne doré, Chêne irlandais, Gris sablé 2900, Noir sablé 2100) [1 p. 2].
-* **Lames thermiques LATH** : bicoloration avec intérieur gris réfléchissant (Gris 7016 ext. / Gris int., Chêne doré ext. / Gris int., Blanc ext. / Gris int.) [1 p. 2].
-* **Tablier PVC L 37/50** : Blanc, Gris, Beige [1 p. 2].
-* **Encadrement (coulisses et lame finale)** :
-  * Standards aspect lisse-satiné : Blanc, Beige, Beige 1015, Brun, Gris métal, Gris 7016 [1 p. 2].
-  * Aspect structuré mat : Gris 7016, Gris 9007, Noir 9005, Gris sablé 2900, Noir sablé 2100 [1 p. 2].
-  * Ton Bois : Chêne doré [1 p. 2].
-  * Niveau 1 (14 teintes RAL en lisse-satiné ou structuré-mat) et Niveau 2 (toutes teintes RAL avec laquage Haute Résistance Bord de mer) [1 p. 2].
-
-# Options complémentaires
-
-* Système de projection à l'italienne du tablier [1 p. 2].
-* Lame finale rehaussée et butées rondes apparentes [1 p. 2].
-* Kit de fixation universel et déport de manœuvre supplémentaire [1 p. 2].
-* Traitement Haute Résistance Bord de mer (zones 0 à 10 km et au-delà de 10 km) avec thermolaquage anti-corrosion du coffre, des coulisses et de la lame finale [1 p. 2].
-
-# Normes et certifications
-
-* Fabrication française avec marquage CE [1 p. 2].
-* Conformité aux normes **NF EN 13241** et **NF EN 13659** [1 p. 2].
-* Garanties tabliers, moteurs et automatismes appliquées selon le Carnet d'Assistance et Garanties SOPROFEN [1 p. 2].
+- projection ;
+- lame finale rehaussée ;
+- butée de lame finale ronde ;
+- tablier thermique ;
+- kit de fixation universel ;
+- déport de manœuvre supplémentaire ;
+- haute résistance bord de mer (voir
+  [Manœuvres, motorisations, garanties et réparabilité](/equipements/volets-roulants-tradi-manoeuvres-et-garanties.md)).
 
 # Citations
 
-[1] [Fiche produit volet traditionnel TRADI PRÉMONTÉ SOPROFEN, réf. DOC83117 - Version 07/2025](raw/moustiquaires/Fiche%20produit%20volet%20traditionnel%20TRADI%20PREMONTE%202025%20SOPROFEN.pdf), p. 1 et 2
+[1] Fiche produit volet traditionnel TRADI PRÉMONTÉ SOPROFEN, réf. DOC83117 - Version 07/2025 —
+`raw/moustiquaires/Fiche produit volet traditionnel TRADI PREMONTE 2025 SOPROFEN.pdf`, p. 1 et 2
 
 # Voir aussi
 
 - [SOPROFEN](/fournisseurs/soprofen.md)
+- [Technologies des volets roulants TRADI SOPROFEN](/equipements/volets-roulants-tradi-technologies.md)
+- [Manœuvres, motorisations, garanties et réparabilité des volets roulants TRADI SOPROFEN](/equipements/volets-roulants-tradi-manoeuvres-et-garanties.md)
+- [Coloris du tablier et de l'encadrement des volets roulants TRADI](/coloris/coloris-volets-roulants-tradi.md)
+- [Volet roulant TRADI non prémonté](/equipements/volets-roulants-tradi-non-premonte.md)
+- [Volet roulant TRADI pour coffre tunnel et TRADI VTR](/equipements/volets-roulants-tradi-tunnel-vtr.md)
 - [Volets roulants](/equipements/volets-roulants.md)
-- [SOMFY](/fournisseurs/somfy.md)
-- [Garanties par composant](/garanties/garanties-par-composant.md)
 - [Fiche produit volet traditionnel TRADI PRÉMONTÉ SOPROFEN 2025](/sources/soprofen-volet-tradi-premonte-2025.md)
+- [Incohérences internes](/anomalies/incoherences-internes.md)

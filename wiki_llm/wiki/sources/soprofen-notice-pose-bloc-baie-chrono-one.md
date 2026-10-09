@@ -1,54 +1,66 @@
 ---
-type: Source
-title: Notice de pose coffre bloc-baie Chrono One SOPROFEN en atelier (2024)
-description: Notice technique d'atelier officielle Soprofen (réf. NO-BB-T-CD-00-FR-202406) pour le montage et l'assemblage direct sur dormant de menuiserie extérieure du coffre bloc-baie Chrono One (manœuvre motorisée).
-resource: raw/moustiquaires/export_doc_137.zip
-origin: SOPROFEN SAS (Mertzwiller)
-last_modified: 2024-06-25
-tags: [source, soprofen, bloc-baie, chrono-one, volet-roulant, atelier, assemblage, adaptateur, coulisse]
+type: Document source
+title: "Notice de pose en atelier du bloc-baie Chrono One SOPROFEN, NO-BB-T-CO-00-FR-202406"
+description: "Notice de 4 pages de SOPROFEN (25/06/2024) : pose en atelier du coffre bloc-baie Chrono One sur le dormant d'une menuiserie extérieure, en cinq étapes."
+resource: raw/moustiquaires/exports/137.pdf
+tags: [source, bloc-baie, chrono-one, volet-roulant, atelier, assemblage, adaptateur, coulisse, soprofen]
 systeme: Chrono One
 fournisseur: SOPROFEN
 status: stable
+sources:
+  - resource: raw/moustiquaires/exports/137.pdf
+    id: soprofen-notice-pose-bloc-baie-chrono-one
+    title: Notice de pose coffre bloc-baie en atelier sur dormant d'une menuiserie extérieure, réf. NO-BB-T-CO-00-FR-202406
+    last_modified: 2024-06-25
 source_pages:
-  - resource: raw/moustiquaires/export_doc_137.zip
+  - resource: raw/moustiquaires/exports/137.pdf
     pages: 1-4
 generated:
-  by: process:gemini-coder
-  at: 2026-09-21T13:52:00Z
+  by: process:claude-code
+  at: 2026-10-09T02:30:00Z
 ---
 
-# Nature et identification du document
+# Identité
 
-Le document est le guide de montage en atelier officiel édité par [SOPROFEN](/fournisseurs/soprofen.md) pour l'intégration de son bloc-baie **Chrono One**.
-* **Titre** : « Notice de pose Coffre Bloc baie – En atelier sur dormant d'une menuiserie extérieure (Moteur) »
-* **Référence / Code-barres** : `NO-BB-T-CD-00-FR-202406`
-* **Date de révision** : 25 juin 2024 (`25/06/2024`)
-* **Dossier d'infographie source** : `G:\TECHNIC\DOCUMENT\80 Infographie\Notices\Chrono One\2024\montage en atelier_chronoOne.afpub`
-* **Format d'origine** : Archive `export_doc_137.zip` contenant le fichier `137.pdf` (4 pages).
-* **Objet** : Prescriptions d'assemblage en usine du coffre bloc-baie Chrono One directement sur le dormant de fenêtre (PVC ou aluminium), incluant la pose du joint adhésif, le vissage de l'adaptateur, le clippage du coffre, le calage des coulisses par vis plots et la mise en œuvre des pattes VX26.
+| Élément | Valeur |
+| --- | --- |
+| Titre | « Notice de pose Coffre Bloc baie — En atelier sur dormant d'une menuiserie extérieure » |
+| Éditeur | SOPROFEN |
+| Référence | NO-BB-T-CO-00-FR-202406 (code-barres du pied de page 1) |
+| Édition | 25/06/2024 (« 25/06/2024 JGi NO-229 » en marge) |
+| Pages | 4 au PDF |
+| Nature | **atelier** : notice « de principe » de pose du coffre sur le dormant |
+| Fichier | `raw/moustiquaires/exports/137.pdf`, dépliée de l'archive `export_doc_137.zip` |
 
-# Registre d'analyse page par page
+# Registre de couverture
 
 **Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
 
-| Page PDF | Section / Étape | Contenu technique relevé | État |
+Registre reconstruit le 09/10/2026 sur le rendu des quatre pages à 200 dpi, la référence, la marge et les coupes de l'étape 3 relues à 450-600 dpi, lecture en image seulement.
+
+Numérotation du PDF ; chaque page porte « n / 4 » en pied de page, identique au PDF.
+
+| Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| Page 1 | Recommandations générales<br>Étape 1 : Adaptateur et joint | **Destinations** : coffre à l'horizontale, coulisses à la verticale. Exigences de visserie : résistance à la corrosion **NF EN 1670** (24h intérieur, 96h extérieur) et prévention stricte de la corrosion électrolytique entre métaux dissemblables. Stockage vertical du bloc-baie interdit.<br>**1.1 Joint de finition** : retrait du film de protection adhésif et collage sur la traverse haute du dormant.<br>**1.2 Adaptateur** : centrage de l'adaptateur sur le dormant, vissage traversant pré-percé d'usine (vis à **50 mm min** de chaque rive, entraxe max de **400 mm** entre vis), cordon d'étanchéité silicone entre le coffre et la menuiserie. | à faire |
-| Page 2 | Étape 2 : Pose du coffre<br>Étape 3 : Vis plots coulisses | **2.1 Mise en place coffre** : retrait du film autocollant en sous-face de coffre, accrochage sur l'adaptateur (doigt d'indexage dans rainure de sous-face) et basculement du coffre.<br>**2.2 Vissage coffre** : vissage latéral dans le fût de vissage de l'adaptateur avec vis **FPZ-3.9-28-ST fournies**.<br>**3. Vis plots coulisses** : traçage de l'axe des vis clips **VC4/10T** (axe à 21 mm selon type de coulisse), pose des vis plots à **50 mm min** des extrémités et **400 mm max** d'écartement. Possibilité de vissage direct en biais sur châssis aluminium. Obligation de vis plots sur coulisse centrale pour tablier double. | à faire |
-| Page 3 | Étape 4 : Mise en place des coulisses | **4.1 Perçage tablette** : plaquette d'étanchéité servant de gabarit de perçage.<br>**4.2 Étanchéité coulisses** : application de **2 filets continus de colle PVC ou silicone** le long des coulisses.<br>**4.3 Insertion haute** : emboîtement des coulisses dans la pièce d'indexage de console (grugeage usine côté adaptateur).<br>**4.4 Clippage** : clippage par pression sur les vis plots le long du dormant.<br>**4.5 Fixation basse** : vissage dans la tablette par trous pré-percés (vis PVC $\varnothing 4\text{ mm}$ ou vis alu autoforeuse $\varnothing 3,9\text{ mm}$), collage de la plaquette d'étanchéité. | à faire |
-| Page 4 | Étape 5 : Option pattes VX26 | **5.1 Silicone** : dépose de silicone sur la surface de contact de la patte.<br>**5.2 Pattes VX26** : pattes métalliques articulées/pliables montées sur chaque côté du coffre.<br>**5.3 Fixation** : fixation première sur le coffre par vis **15/3-9/9-5 fournies**, pliage de la patte suivant l'alignement du dormant et fixation sur dormant avec vis adaptées. | à faire |
+| 1 | cartouche « GUIDE DE POSE » / « Moteur » ; titre « Notice de pose Coffre Bloc baie — En atelier sur dormant d'une menuiserie extérieure » ; encadré Info (destination finale, respect des plans, vérification des dimensions) ; « (*) Choix des vis / chevilles non fournies avec le produit » (NF EN 1670, 24 h et 96 h, corrosion électrolytique) ; vue d'ensemble cotée (mini 50, maxi 400) ; étape 1 (1.1 joint de finition, 1.2 adaptateur) ; encadré de consignes aux installateurs ; pictogramme « Ce mode de stockage est interdit » ; code-barres NO-BB-T-CO-00-FR-202406 ; marge « 25/06/2024 JGi NO-229 … » et mention de non-contractualité ; cinq images découpées dans `assets/procedures/montage-atelier-bloc-baie-chrono-one-soprofen/` | transcrit | [Montage en atelier du coffre bloc-baie Chrono One](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md) |
+| 2 | étape 2 (2.1 mise en place du coffre, 2.2 vissage du coffre, vis FPZ-3.9-28-ST) ; étape 3 (3.1, 3.2, châssis alu, coulisse centrale, trois coupes avec la cote 21 mm, L1 commande, L2) ; quatre images découpées | transcrit | [Montage en atelier du coffre bloc-baie Chrono One](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md) |
+| 3 | étape 4 (4.1 à 4.5 : plaquette d'étanchéité, filets de colle, pièce d'indexage et grugeage, clippage, vis PVC ∅ 4 et autoforeuse ∅ 3,9) ; quatre images découpées | transcrit | [Montage en atelier du coffre bloc-baie Chrono One](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md) |
+| 4 | étape 5 option (5.1 surface à siliconer, 5.2 patte VX26 inclinable, 5.3 fixation, exemple d'inclinaison, vis 15/3-9/9-5 fournies) ; mention « Exclusivement à la disposition des professionnels de la fermeture du bâtiment » ; trois images découpées | transcrit | [Montage en atelier du coffre bloc-baie Chrono One](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md) |
 
-# Données techniques de référence extraites
+# Anomalies portées par ce document
 
-### 1. Visserie et quincaillerie d'assemblage
-* Vissage du coffre dans l'adaptateur : vis **FPZ-3.9-28-ST fournies**.
-* Vis plots de clippage des coulisses : vis clips **VC4/10T**.
-* Fixation basse des coulisses sur tablette :
-  * Coulisse PVC : vis à filetage PVC **$\varnothing 4\text{ mm}$**.
-  * Coulisse Aluminium : vis autoforeuse **$\varnothing 3,9\text{ mm}$**.
-* Fixation des pattes latérales de reprise **VX26** : vis **15/3-9/9-5 fournies** sur coffre.
+| Entrée | Page | Objet |
+| --- | --- | --- |
+| **VER-134** | 1 | mention « Moteur » du cartouche sans objet |
+| **VER-135** | 1 | pictogramme de stockage interdit sans texte |
 
-### 2. Pas et cotes d'implantation
-* Vissage de l'adaptateur sur dormant : distance minimale de rive de **50 mm**, entraxe maximal de **400 mm**.
-* Axe de guidage des vis clips coulisses : positionné à **21 mm** du nu de référence.
-* Vis plots sur montants : distance minimale de rive de **50 mm**, entraxe maximal de **400 mm**.
+# Citations
+
+[1] Notice de pose Coffre Bloc baie, en atelier sur dormant d'une menuiserie extérieure, SOPROFEN, réf. NO-BB-T-CO-00-FR-202406 (25/06/2024) — `raw/moustiquaires/exports/137.pdf`, p. 1 à 4
+
+# Voir aussi
+
+- [SOPROFEN](/fournisseurs/soprofen.md)
+- [Montage en atelier du coffre bloc-baie Chrono One SOPROFEN sur dormant de menuiserie](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md)
+- [Montage en atelier du bloc-baie Chrono One sur dormant monobloc SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen.md)
+- [Informations à vérifier](/anomalies/informations-a-verifier.md)

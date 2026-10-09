@@ -41,11 +41,17 @@ sources:
     id: profine-plans-e-volution-2008
     title: Système e.VOLUTION, plan des profilés et manuel technique, système F 91, édition août 2008
     last_modified: 2008-08-31
+  - resource: raw/moustiquaires/exports/132.pdf
+    id: soprofen-guide-technique-blocs-baies-2022
+    title: Guide technique Blocs-baies 2022, SOPROFEN, réf. DOC86505 (09/2022)
+    last_modified: 2022-09-01
 source_pages:
   - resource: raw/profine-directives-generales-2023-01.pdf
     pages: 4, 8-16, 47
   - resource: raw/profine-plans-profiles-e-volution-2008-08.pdf
     pages: 120-121, 138-166, 215-216, 227-228, 243-245, 253, 257, 259-260, 307, 309, 311, 317, 321
+  - resource: raw/moustiquaires/exports/132.pdf
+    pages: 17, 18, 33, 73, 86
 generated:
   by: process:claude-code
   at: 2026-09-18T22:00:00Z
@@ -58,10 +64,10 @@ un objet différent. Plus la valeur est basse, plus l'objet est isolant.
 
 | Sigle | Porte sur | Unité |
 | --- | --- | --- |
-| Ug | le **vitrage** seul | W/m²K |
-| Uf | le **profilé** seul | W/m²K |
-| Uw | la **fenêtre complète**, vitrage et menuiserie | W/m²K |
-| Up | le **panneau** de porte | W/m²K |
+| Ug | le vitrage seul | W/m²K |
+| Uf | le profilé seul | W/m²K |
+| Uw | la fenêtre complète, vitrage et menuiserie | W/m²K |
+| Up | le panneau de porte | W/m²K |
 
 Deux coefficients accompagnent le Uw sur les fiches produit :
 
@@ -237,10 +243,10 @@ DEO et DFO sont les cotes des tableaux de cotes de débit des manuels de systèm
 | CCV | Cote clair de vitrage |
 
 Les quatre premières se déduisent en cascade, chaque tableau de cotes de débit donnant la valeur
-à retrancher pour **une seule coupe**. Voir
+à retrancher pour une seule coupe. Voir
 [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md).
 
-**Les cotes maximales des registres profine sont des cotes extérieures d'ouvrant** : la cote
+Les cotes maximales des registres profine sont des cotes extérieures d'ouvrant : la cote
 d'élément (cote finale de fenêtre) s'obtient en ajoutant les cotes des profilés adjacents à tous
 les côtés [1 p. 9] — exemple chiffré sur
 [Terminologie et légendes profine](/reference/terminologie-et-legendes-profine.md).
@@ -333,7 +339,7 @@ Vocabulaire des catalogues et manuels [ROTO](/fournisseurs/roto.md).
 | Bloc d'écartement | cale posée entre la maçonnerie et le dormant d'une fenêtre de sécurité, au droit des vissages de gâche de sécurité |
 | Condamnation au cylindre | verrouillage d'une porte-fenêtre par une serrure à cylindre à clé (serrure H100 Roto NX) |
 
-**Les cotes LFF et HFF sont des cotes de feuillure de vantail**, ni des cotes de baie ni des
+Les cotes LFF et HFF sont des cotes de feuillure de vantail, ni des cotes de baie ni des
 cotes extérieures d'ouvrant : les trois séries de limites s'appliquent en même temps et chacune
 peut être la contraignante. Voir
 [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md).
@@ -345,7 +351,7 @@ peut être la contraignante. Voir
 | OF | ouvrant à la française |
 | OB | ouvrant oscillo-battant |
 
-**OF ne signifie pas « ouvrant fixe ».** Tout le corpus, DTA compris, emploie OF pour l'ouvrant à
+OF ne signifie pas « ouvrant fixe ». Tout le corpus, DTA compris, emploie OF pour l'ouvrant à
 la française, y compris dans les libellés de dimensions maximales du type « 2 vantaux OF ».
 
 # Statique et renforts
@@ -389,11 +395,11 @@ de chaque produit.
 | RC 1 à RC 6 | classes de résistance à l'effraction de la série NF EN 1627 à 1630 |
 | CDR 1 à CDR 6 | même classification, notation employée par les documents ROTO en français |
 
-**RC et CDR désignent la même chose.** Le catalogue Roto NX emploie les deux, en français et en
+RC et CDR désignent la même chose. Le catalogue Roto NX emploie les deux, en français et en
 allemand, dans le même document — entrée **INC-13** du registre
 [Incohérences internes](/anomalies/incoherences-internes.md).
 
-Le vitrage feuilleté a sa propre échelle, **P1 A à P5 A** selon la norme EN 356, mesurée par la
+Le vitrage feuilleté a sa propre échelle, P1 A à P5 A selon la norme EN 356, mesurée par la
 hauteur de chute et le nombre de billes. Voir
 [Panneaux et monoblocs](/portes/panneaux-et-monoblocs.md).
 
@@ -464,8 +470,8 @@ hauteur de chute et le nombre de billes. Voir
 | Cascading ITT | essais de type initiaux en cascade (EN 14351-1) : reprise, après autorisation de profine, des résultats des ITT profine par le fabricant de fenêtres |
 | profine certified | marque des composants de fournisseurs homologués par profine |
 
-Les références internes des documents ROTO suivent trois préfixes : **IMO** pour une instruction
-de montage, **CTL** pour un catalogue, **SUG** pour une notice d'emploi.
+Les références internes des documents ROTO suivent trois préfixes : IMO pour une instruction
+de montage, CTL pour un catalogue, SUG pour une notice d'emploi.
 
 # Normes citées dans le corpus
 
@@ -565,6 +571,30 @@ renvoie à la page où il est employé.
 | Intercalaire de frappe | cale en bois interposée entre le marteau et le profilé pour répartir le choc lors de la mise en place d'un élément de jonction | [Montage des profilés complémentaires du système 70, 2008](/procedures/montage-profiles-complementaires-systeme-70-evo2008.md) |
 | Petit bois rapporté collé | petit bois collé au double face sur la face du vitrage, d'un côté ou des deux | [Montage des profilés complémentaires du système 70, 2008](/procedures/montage-profiles-complementaires-systeme-70-evo2008.md) |
 
+# Volets roulants et blocs-baies
+
+Les mots des volets roulants SOPROFEN, employés sur les pages des blocs-baies Chrono ONE, CX14, CRX, Chrono PSE², Mono VI et Bloc LX.
+
+| Terme | Sens | Où il s'emploie |
+| --- | --- | --- |
+| Bloc-baie | ensemble formé de la fenêtre et de son volet roulant, posé en une seule fois ; le guide parle de « l'ensemble bloc-baie (fenêtre + volet) » | [Chrono ONE](/equipements/chrono-one-cotes-tabliers-et-coloris.md), [Avis Technique des coffres Chrono](/certifications/at-cstb-6-16-2339-coffres-chrono.md) |
+| Coffre, caisson | la boîte qui loge le tablier enroulé, au-dessus de la fenêtre | [Chrono ONE](/equipements/chrono-one-cotes-tabliers-et-coloris.md) |
+| Tablier | l'ensemble des lames d'un volet roulant | [Chrono ONE](/equipements/chrono-one-cotes-tabliers-et-coloris.md) |
+| L37, L50, LA37, LA50, LATH37, LATH50, LAHD37, LAHD50 | lames : L pour PVC, LA pour aluminium, le nombre est la largeur de lame en mm ; les sigles LATH et LAHD ne sont pas définis par la source | [Chrono ONE](/equipements/chrono-one-cotes-tabliers-et-coloris.md) |
+| Lame finale | la lame du bas du tablier, lestée selon besoin, avec ses butoirs | [Lame finale, mortaise et isolation du Chrono ONE](/equipements/chrono-one-lame-finale-mortaise-et-isolation.md) |
+| Coulisse simple, coulisse double | rail vertical qui guide un tablier ; deux tabliers pour la coulisse double | [Coulisses PVC des coffres Chrono](/profiles/chrono-coulisses-pvc.md) |
+| Moteur court | moteur de petite largeur, dont la source donne la largeur maximale | [Manœuvres du Chrono ONE](/equipements/chrono-one-manoeuvres-et-motorisations.md) |
+| TLX | verrous qui assurent le verrouillage automatique du tablier | [Manœuvres du Chrono ONE](/equipements/chrono-one-manoeuvres-et-motorisations.md) |
+| RTS, iO, M-SOFT 2 | trois commandes radio incompatibles entre elles | [Manœuvres du Chrono ONE](/equipements/chrono-one-manoeuvres-et-motorisations.md) |
+| EM, épaisseur de menuiserie | épaisseur de l'ensemble dormant, tapée et coulisse | [Coulisses du Chrono ONE](/equipements/chrono-one-coulisses-et-adaptateurs.md) |
+| Croquage | création d'une feuillure qui adapte le coffre comme un coffre « RENO », avec un recouvrement latéral au niveau des joues | [Options du Chrono ONE](/equipements/chrono-one-options-renforts-et-croquage.md) |
+| Uc | coefficient de transmission thermique du coffre, en W/(m².K) | [Valeurs thermiques des CX14, CRX14 et CRX18](/equipements/chrono-cx14-crx-valeurs-thermiques-uc.md) |
+| Dne,Atr | affaiblissement acoustique du coffre, en dB | [Lame finale, mortaise et isolation du Chrono ONE](/equipements/chrono-one-lame-finale-mortaise-et-isolation.md) |
+| VMC | ventilation mécanique contrôlée ; la mortaise reçoit la grille d'entrée d'air | [Lame finale, mortaise et isolation du Chrono ONE](/equipements/chrono-one-lame-finale-mortaise-et-isolation.md) |
+| BSO | brise-soleil orientable | [Chrono PSE² BSO](/equipements/chrono-pse2-bso.md) |
+| PSE | polystyrène expansé | [Chrono PSE²](/equipements/volets-roulants-chrono-pse2.md) |
+| ITI | isolation thermique par l'intérieur | [Chrono PSE² : coupes d'intégration](/equipements/chrono-pse2-coupes-d-integration.md) |
+
 # Sigles non élucidés
 
 | Sigle | Où | Entrée |
@@ -572,10 +602,11 @@ renvoie à la page où il est employé.
 | DV | Catalogue général, p. 17, qualifie un Uw de fenêtre | **VER-35** |
 | LVFF | Catalogue Roto NX PVC, p. 282 et 298, encadrés INFO de la têtière de compas du vantail pivotant et du compas confort ; glosé « largeur de feuillure d'ouvrant » au seul repère [D] de la p. 403 | **INC-293** |
 | DK | Catalogue Roto NX PVC, p. 403, note [7] du limiteur d'ouverture par pivotement 191 (« renvoi d'angle DK ») | **INC-302** |
-| SKG | Catalogue Roto NX PVC, p. 426, « Clip d'information SKG** » 331459 | **INC-303** |
+| SKG | Catalogue Roto NX PVC, p. 426, « Clip d'information SKG » 331459 | INC-303** |
 | FOF | Catalogue Roto NX PVC, p. 439, 442, 444, en-tête des tableaux d'affectation des gabarits d'insertion | **INC-306** |
 | CV | Catalogue général, p. 17, qualifie un Uw de coulissant | **VER-35** |
 | CVR, CRV, DL | Mise en œuvre Système 70 Plateforme, PDF p. 8-45 : « Profilé de liaison dormant CVR », « Embout haut G/D sous CRV », « Patin d'étanchéité pour DL/seuil » | **VER-73** |
+| LATH, LAHD | Guide technique Blocs-baies 2022 et guide technique Bloc LX : sigles de lames aluminium, jamais définis ; « HD » est lié à une mousse de haute densité au seul guide Bloc LX | **VER-150** |
 
 Aucun document du corpus ne définit ces sigles. Voir
 [Informations à vérifier](/anomalies/informations-a-verifier.md).

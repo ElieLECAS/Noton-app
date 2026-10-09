@@ -1,99 +1,183 @@
 ---
 type: Procédure
-title: Assemblage et pose du coffre demi-linteau Bloc LX SOPROFEN
-description: Procédure technique d'atelier et de chantier pour l'assemblage, l'étanchéité, le renfort d'inertie et la fixation du volet roulant demi-linteau Bloc LX sur dormant de menuiserie.
-tags: [procedure, soprofen, bloc-lx, demi-linteau, bloc-baie, volet-roulant, coulisse, etancheite, inertie]
+title: "Pose du coffre demi-linteau Bloc LX SOPROFEN : coulisses, tiroir, renfort, étanchéité"
+description: "Six étapes de pose du coffre demi-linteau Bloc LX de SOPROFEN sur le dormant d'une menuiserie : trou de coulisse à 55 mm, mousse d'étanchéité, coulisses verticales et de même largeur dos à dos, vissage du tiroir à 100 mm et tous les 600 mm, renfort d'inertie DL-R10 ou DL-R12, silicone."
+resource: https://www.soprofen.com
+tags: [procedure, bloc-lx, demi-linteau, bloc-baie, volet-roulant, coulisse, etancheite, renfort, soprofen]
 systeme: Bloc LX
 fournisseur: SOPROFEN
 usage: [atelier, pose]
-status: stable
+famille: bloc-lx
+status: draft
 sources:
-  - resource: raw/moustiquaires/export_doc_136(1).zip
+  - resource: raw/moustiquaires/exports/136.pdf
     id: soprofen-guide-pose-bloc-lx-demi-linteau
-    title: Guide de pose Bloc LX coffre demi-linteau SOPROFEN, réf. NO-BB-T-BLX-00-FR-202111
+    title: Guide de pose Coffre Demi-Linteau Bloc LX, réf. NO-BB-T-BLX-00-FR-202111
     last_modified: 2021-11-09
 source_pages:
-  - resource: raw/moustiquaires/export_doc_136(1).zip
+  - resource: raw/moustiquaires/exports/136.pdf
     pages: 1-3
 generated:
-  by: process:gemini-coder
-  at: 2026-09-21T13:38:00Z
+  by: process:claude-code
+  at: 2026-10-09T02:30:00Z
 ---
 
-# Objet et domaine d'application
+# Ce que fait cette procédure
 
-La présente procédure fixe les règles d'assemblage solidaire, de calage, d'étanchéité à l'air et de fixation mécanique du coffre demi-linteau **Bloc LX** de [SOPROFEN](/fournisseurs/soprofen.md) sur dormant de menuiserie (bloc-baie neuf) [1 p. 1-3].
-* **Orientation obligatoire** : coffre positionné à l'horizontale et coulisses de guidage à la verticale [1 p. 1].
-* **Manœuvres concernées** : commande manuelle par treuil ou motorisation électrique (filaire, radio, solaire) conforme à la norme **NF C 15-100** [1 p. 1].
+Le Bloc LX est le volet roulant de [SOPROFEN](/fournisseurs/soprofen.md) dont le coffre est un
+demi-linteau (voir le [glossaire](/reference/glossaire.md)). La procédure donne les six étapes de
+pose de ce coffre sur le dormant, le cadre fixe de la menuiserie : mise en place des coulisses
+(les rails verticaux dans lesquels glisse le tablier, l'ensemble des lames), étanchéité, vissage du
+tiroir (le profilé que la notice visse sur le dormant), renfort d'inertie en option et
+étanchéité finale. Le cartouche d'en-tête est titré « GUIDE DE POSE » et porte les mots « Treuil » et
+« Moteur » : ce sont les deux manœuvres dont parle la notice (**VER-134**) [1 p. 1].
 
-# Quincaillerie et références de composants
+# Conditions et interdictions
 
-Éléments de fixation et pièces d'assemblage préconisés par le fabricant [1 p. 1-2] :
+- Destination finale : coffre en position horizontale et coulisse en position verticale [1 p. 1].
+- L'installation électrique doit être conforme à la norme NFC 15-100 (mention portée dans une
+  vignette ovale de la page 1) [1 p. 1].
+- À l'étape 4, un encadré rouge d'avertissement impose : mettre les coulisses verticalement dans les
+  deux sens ; les coulisses doivent être de même longueur (attention si recoupe) et de niveau ; la
+  largeur L dos à dos des coulisses doit être constante et égale, caler si nécessaire [1 p. 2].
+- À l'étape 5, avec le renfort d'inertie : prendre des vis adaptées à l'épaisseur de la menuiserie
+  pour éviter de traverser le dormant [1 p. 3].
 
-| Composant | Réf. constructeur | Rôle et spécification |
+# Étapes
+
+## Étape 1 : coulisses
+
+Orienter et placer les coulisses. **Attention au sens : le trou ∅ 5 mm doit être à 55 mm du haut de
+chaque coulisse. Insérer le haut de chaque coulisse et la solidariser par 1 vis réf. 2095/4/8**
+[1 p. 1]. La console est la pièce métallique latérale du coffre ; la tulipe est la pièce de la
+console qui reçoit le haut de la coulisse (ce sont les noms des deux pièces sur le dessin).
+
+![Étape 1 : coffre et coulisses, trou à 55 mm du haut](/assets/procedures/pose-bloc-lx-demi-linteau-soprofen/etape-1-coffre-et-coulisses-trou-a-55-mm.png)
+
+![Étape 1 : console, tulipe, coulisse et vis 2095/4/8](/assets/procedures/pose-bloc-lx-demi-linteau-soprofen/etape-1-console-tulipe-coulisse-et-vis-2095-4-8.png)
+
+Le dessin de droite est une coupe de la coulisse dans la tulipe, avec les cotes 55, 12,6, 5 et 10
+(en mm) ; seule la cote 55 est expliquée par le texte de la notice (**VER-136**).
+
+![Étape 1 : coupe cotée de la coulisse dans la tulipe](/assets/procedures/pose-bloc-lx-demi-linteau-soprofen/etape-1-coupe-cotes-55-12-6-5-10.png)
+
+## Étape 2 : étanchéité
+
+Étancher la partie du dormant qui est en contact avec le tiroir du demi-linteau (mousse, fond de
+joint, etc.). La notice demande de s'assurer de l'étanchéité au niveau de la tapée de doublage
+(la tapée est un profil rapporté sur le dormant ; voir le [glossaire](/reference/glossaire.md)) [1 p. 1].
+
+![Étape 2 : mousse d'étanchéité sur le dormant](/assets/procedures/pose-bloc-lx-demi-linteau-soprofen/etape-2-mousse-d-etancheite-sur-le-dormant.png)
+
+![Étape 2 : étanchéité au niveau de la tapée de doublage](/assets/procedures/pose-bloc-lx-demi-linteau-soprofen/etape-2-etancheite-au-niveau-de-la-tapee-de-doublage.png)
+
+## Étape 3 : mise en place
+
+Mettre en place le Bloc LX sur le dormant. Le dessin repère la « zone de contact » entre le coffre et
+le dormant [1 p. 2].
+
+![Étape 3 : mise en place du Bloc LX sur le dormant, zone de contact](/assets/procedures/pose-bloc-lx-demi-linteau-soprofen/etape-3-mise-en-place-du-bloc-lx-sur-le-dormant.png)
+
+## Étape 4 : fixation des coulisses
+
+Visser les coulisses sur les tapées avec les vis adéquates. Deux coupes montrent la fixation sur un
+dormant monobloc et sur un dormant avec tapée de doublage, chacune avec une cote de 10 mm ; un
+dessin montre deux niveaux à bulle sur une coulisse, avec la largeur L dos à dos [1 p. 2].
+
+![Étape 4 : fixation des coulisses, dormant monobloc ou avec tapée de doublage, largeur L](/assets/procedures/pose-bloc-lx-demi-linteau-soprofen/etape-4-fixation-des-coulisses-dormant-monobloc-ou-tapee-de-doublage.png)
+
+## Étape 5 : vissage
+
+Visser le tiroir Bloc LX sur le dormant. **Préconisation de vissage : à 100 mm de chaque côté, tous les
+600 mm mini (INC-315**) [1 p. 2].
+
+![Étape 5 : préconisation de vissage du tiroir](/assets/procedures/pose-bloc-lx-demi-linteau-soprofen/etape-5-preconisation-de-vissage-du-tiroir.png)
+
+Option : renfort d'inertie. Selon la taille du Bloc LX et l'épaisseur de doublage, opter pour un
+renfort d'inertie afin de rigidifier l'ensemble : **référence DL-R10 pour un doublage jusqu'à
+100 mm, référence DL-R12 pour un doublage supérieur à 100 mm**. Les deux profils sont dessinés avec
+leurs cotes (49,7 et 32 mm, et 2,5 mm d'épaisseur sur le premier), sans que le dessin dise lequel est
+le DL-R10 (**VER-137**) [1 p. 2].
+
+![Renfort d'inertie : deux profils cotés 49,7 × 32 mm](/assets/procedures/pose-bloc-lx-demi-linteau-soprofen/etape-5-renfort-d-inertie-deux-profils-cotes.png)
+
+Mise en place du renfort : avant de fixer le tiroir, placer le renfort sur le dormant de la
+menuiserie, côté ourlé du renfort vers l'intérieur du Bloc LX. Puis visser le tiroir à travers le
+renfort sur le dormant, en respectant les préconisations de vissage et en prenant des vis adaptées à
+l'épaisseur de la menuiserie ; pour repérer où visser à travers le renfort, se servir des trous
+oblongs du renfort : se repérer avec la base du trou oblong [1 p. 2-3].
+
+![Renfort d'inertie : mise en place sur le dormant, côté ourlé vers l'intérieur](/assets/procedures/pose-bloc-lx-demi-linteau-soprofen/etape-5-renfort-d-inertie-mise-en-place.png)
+
+![Renfort d'inertie : vissage à 100, 600 et 100 mm](/assets/procedures/pose-bloc-lx-demi-linteau-soprofen/etape-5-renfort-d-inertie-vissage-100-600-100.png)
+
+![Renfort d'inertie : repérage avec la base du trou oblong](/assets/procedures/pose-bloc-lx-demi-linteau-soprofen/etape-5-renfort-d-inertie-suite-trous-oblongs.png)
+
+Option : patte de fixation. Placer sur chaque côté du coffre les pattes de fixation VX26.
+Fixer en premier sur le coffre à l'aide de vis réf. 15/3.9/9.5 (non fournies) ou de vis de
+longueur maxi 9,5 mm [1 p. 2].
+
+![Étape 5 : option patte de fixation VX26](/assets/procedures/pose-bloc-lx-demi-linteau-soprofen/etape-5-option-patte-de-fixation-vx26.png)
+
+## Étape 6 : étanchéité
+
+Étancher : étanchéité silicone entre le dormant et le tiroir et entre l'embout et le tiroir. Astuce
+de la notice : on peut augmenter les surfaces de silicone en occultant le haut des tapées creuses ou
+en L pour éviter les infiltrations d'air [1 p. 3].
+
+![Étape 6 : étanchéité silicone entre le dormant et le tiroir et entre l'embout et le tiroir](/assets/procedures/pose-bloc-lx-demi-linteau-soprofen/etape-6-etancheite-silicone-dormant-tiroir-et-embout.png)
+
+![Étape 6 : astuce, tapées creuses ou en L](/assets/procedures/pose-bloc-lx-demi-linteau-soprofen/etape-6-astuce-tapees-creuses-ou-en-l.png)
+
+# Cotes
+
+Cotes imprimées, en millimètres. Une ligne par cote.
+
+| Cote | Valeur (mm) | Où elle s'applique |
 | --- | --- | --- |
-| Vis de fixation coulisse / tulipe | 2095/4/8 | Solidarisation haute de chaque coulisse dans la tulipe de console (1 vis par coulisse) |
-| Vis de fixation pattes latérales | 15/3.9/9.5 | Fixation de la patte sur le coffre (longueur maximale autorisée : 9,5 mm) |
-| Pattes de fixation de coffre | VX26 | Pattes équerres métalliques latérales de reprise sur maçonnerie |
-| Renfort d'inertie pour doublage $\le 100\text{ mm}$ | DL-R10 | Profilé acier $49,7 \times 32\text{ mm}$, épaisseur 2,5 mm, à perforations oblongues |
-| Renfort d'inertie pour doublage $> 100\text{ mm}$ | DL-R12 | Profilé acier $49,7 \times 32\text{ mm}$ renforcé pour grandes épaisseurs d'isolation |
+| Diamètre du trou de fixation de la coulisse | 5 | étape 1 [1 p. 1] |
+| Position du trou depuis le haut de la coulisse | 55 | étape 1 [1 p. 1] |
+| Cotes de la coupe de l'étape 1, non expliquées | 12,6 ; 5 ; 10 | coupe de la coulisse dans la tulipe (**VER-136**) [1 p. 1] |
+| Cote sous la coulisse, non expliquée | 10 | les deux coupes de l'étape 4 [1 p. 2] |
+| Distance de la première vis à chaque extrémité du tiroir | 100 | étape 5, avec et sans renfort [1 p. 2] |
+| Entraxe des vis du tiroir, « tout les 600 mm mini » | 600 | étape 5, avec et sans renfort (**INC-315**) [1 p. 2] |
+| Largeur et profondeur des profils du renfort | 49,7 et 32 | profils DL-R10 et DL-R12 (**VER-137**) [1 p. 2] |
+| Épaisseur d'un des profils du renfort | 2,5 | un des deux profils (**VER-137**) [1 p. 2] |
+| Épaisseur de doublage jusqu'à laquelle le DL-R10 est donné | 100 | étape 5 [1 p. 2] |
 
-(schéma: raw/moustiquaires/export_doc_136(1).zip, p. 1 et 2)
+# Visserie et pièces citées
 
-# Règles de calage et tolérances des coulisses
+| Pièce | Référence imprimée | Fournie | Où elle sert |
+| --- | --- | --- | --- |
+| Vis de coulisse dans la tulipe | 2095/4/8 | non précisé | étape 1, 1 vis par coulisse [1 p. 1] |
+| Vis de coulisse sur les tapées | « vis adéquates » | non précisé | étape 4 [1 p. 2] |
+| Renfort d'inertie, doublage jusqu'à 100 mm | DL-R10 | non précisé | étape 5, option [1 p. 2] |
+| Renfort d'inertie, doublage supérieur à 100 mm | DL-R12 | non précisé | étape 5, option [1 p. 2] |
+| Patte de fixation | VX26 | non précisé | étape 5, option [1 p. 2] |
+| Vis de patte sur le coffre | 15/3.9/9.5, ou vis de 9,5 mm de long maxi | non | étape 5, option [1 p. 2] |
 
-Avant le vissage définitif sur tapée de doublage ou dormant monobloc, les coulisses doivent respecter trois impératifs dimensionnels [1 p. 2] :
-1. **Verticalité** : aplomb rigoureux vérifié au niveau à bulle dans les **deux sens** (plan transversal et plan longitudinal) [1 p. 2].
-2. **Égalité de longueur** : coulisses de coupe rigoureusement identique et calées de niveau [1 p. 2].
-3. **Cote dos-à-dos constante** : la largeur $L$ mesurée dos-à-dos des coulisses doit être parfaitement constante et égale de haut en bas du châssis. Intercaler des cales d'épaisseur si nécessaire [1 p. 2].
+# Ce que le document ne dit pas
 
-# Étapes opératoires d'assemblage
-
-### Étape 1 : Préparation et emboîtement des coulisses
-1. Repérer le sens de pose de chaque coulisse : le trou de fixation $\varnothing 5\text{ mm}$ doit impérativement se situer à **55 mm du haut** de la coulisse [1 p. 1].
-2. Insérer le haut de la coulisse dans la tulipe solidaire de la console de coffre [1 p. 1].
-3. Visser la vis d'arrêt réf. **2095/4/8** à travers la console dans le trou $\varnothing 5\text{ mm}$ pour verrouiller la coulisse [1 p. 1].
-
-### Étape 2 : Barrière d'étanchéité dormant / coffre
-1. Nettoyer et dépoussiérer la traverse haute du dormant de menuiserie [1 p. 1].
-2. Poser une bande d'étanchéité continue (mousse compressive, joint préformé ou fond de joint) sur toute la face de contact entre le dormant et le tiroir du Bloc LX [1 p. 1].
-3. Soigner la continuité d'étanchéité au raccordement d'angle avec la tapée de doublage [1 p. 1].
-
-### Étape 3 : Mise en place et fixation des coulisses
-1. Présenter le bloc-baie complet (coffre et coulisses solidarisées) sur le dormant de la fenêtre [1 p. 2].
-2. Plaquer les coulisses contre les tapées de doublage ou le dormant monobloc [1 p. 2].
-3. Ajuster l'aplomb et fixer les coulisses par vissage traversant avec des vis adaptées au profilé support [1 p. 2].
-
-### Étape 4 : Mise en œuvre du renfort d'inertie (en option ou selon dimensions)
-Lorsque la largeur du châssis ou le poids du coffre le nécessite [1 p. 2] :
-1. Sélectionner le profilé selon l'épaisseur d'isolation intérieure : **DL-R10** jusqu'à 100 mm de doublage, ou **DL-R12** au-delà de 100 mm [1 p. 2].
-2. Disposer le renfort d'inertie sur la traverse haute du dormant, en orientant le **côté ourlé du renfort vers l'intérieur du Bloc LX** [1 p. 2].
-3. Emboîter le tiroir par-dessus le renfort [1 p. 3].
-4. Visser le tiroir à travers le renfort métallique dans le dormant, en utilisant la base des trous oblongs pré-usinés du renfort comme repères de perçage [1 p. 3]. Choisir impérativement une longueur de vis évitant tout transpercement de la paroi vue du dormant [1 p. 3].
-
-### Étape 5 : Vissage mécanique du tiroir Bloc LX
-Sans renfort ou en complément de celui-ci [1 p. 2] :
-1. Visser la première fixation à **100 mm** de l'extrémité gauche [1 p. 2].
-2. Visser la dernière fixation à **100 mm** de l'extrémité droite [1 p. 2].
-3. Répartir les vis intermédiaires à un entraxe maximal de **600 mm** [1 p. 2].
-
-### Étape 6 : Fixation des pattes latérales de reprise (en option)
-1. Positionner une patte métallique **VX26** de chaque côté du coffre [1 p. 2].
-2. Fixer la patte sur le coffre au moyen de vis réf. **15/3.9/9.5** ou de vis d'une longueur strictement inférieure ou égale à **9,5 mm** [1 p. 2].
-
-### Étape 7 : Étanchéité finale et traitement de la perméabilité à l'air (RE2020)
-1. Appliquer un cordon continu de mastic silicone neutre le long de la jonction entre le dormant de fenêtre et le tiroir PVC [1 p. 3].
-2. Répéter l'étanchéité au silicone à la jonction entre l'embout de coffre et le tiroir [1 p. 3].
-3. **Traitement anti-infiltrations d'air** : obturer au mastic silicone le sommet des tapées creuses ou des profilés de tapée en L pour neutraliser tout passage d'air vers l'intérieur du logement [1 p. 3].
+La notice ne dit pas quelles vis sont fournies avec le coffre (hors vis de patte, « non fourni »), ne
+définit pas le mot « tiroir » ni les cotes non expliquées, et ne distingue pas les deux profils du
+renfort. Elle donne pour référence « NO-BB-T-BLX-00-FR-202111 » (le code-barres du pied de page 1) et pour
+date le 09/11/2021, avec la mention « Coffre Demi-Linteau » en titre et « Bloc LX » en bandeau
+latéral. Les illustrations et photographies sont données « à titre d'exemples uniquement » et « ne
+sont aucunement de nature contractuelle » [1 p. 1]. Elle se termine par la mention « Exclusivement à
+la disposition des professionnels de la fermeture du bâtiment » [1 p. 3].
 
 # Citations
 
-[1] [Guide de pose Bloc LX coffre demi-linteau SOPROFEN, réf. NO-BB-T-BLX-00-FR-202111](raw/moustiquaires/export_doc_136(1).zip), p. 1, 2 et 3
+[1] Guide de pose Coffre Demi-Linteau Bloc LX, SOPROFEN, réf. NO-BB-T-BLX-00-FR-202111
+(09/11/2021) — `raw/moustiquaires/exports/136.pdf`, p. 1 à 3
 
 # Voir aussi
 
-- [Volet roulant coffre demi-linteau BLOC LX](/equipements/volet-roulant-bloc-lx-demi-linteau.md)
 - [SOPROFEN](/fournisseurs/soprofen.md)
+- [Volet roulant coffre demi-linteau BLOC LX](/equipements/volet-roulant-bloc-lx-demi-linteau.md)
+- [Montage en atelier du coffre bloc-baie Chrono One SOPROFEN sur dormant de menuiserie](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md)
 - [Volets roulants](/equipements/volets-roulants.md)
 - [Guide technique volet roulant demi-linteau Bloc LX SOPROFEN](/sources/soprofen-guide-technique-bloc-lx.md)
 - [Guide de pose Bloc LX coffre demi-linteau SOPROFEN (2021)](/sources/soprofen-guide-pose-bloc-lx-demi-linteau.md)
+- [Informations à vérifier](/anomalies/informations-a-verifier.md)
+- [Incohérences internes](/anomalies/incoherences-internes.md)

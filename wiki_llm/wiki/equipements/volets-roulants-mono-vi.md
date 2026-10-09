@@ -1,123 +1,146 @@
 ---
 type: Équipement
-title: Volet roulant inversé bloc-baie MONO VI
-description: Volet roulant bloc-baie SOPROFEN à enroulement extérieur et trappe d'accès affleurante intérieure — coffre compact de 140 mm à clair de jour maximisé, compatible rénovation et ITE, Uc = 0,9 + 0,11/Lc.
-tags: [equipement, volet-roulant, mono-vi, volet-inverse, soprofen, compact, clair-de-jour, ite, renovation]
+title: "Mono VI SOPROFEN : bloc-baie inversé à enroulement extérieur, lames, cotes et adaptateurs"
+description: "Volet roulant inversé Mono VI à enroulement extérieur et coffre de 140 mm : lames L37, LA37 et LATH37 avec coloris et limites, largeur et hauteur de commande (H = châssis + 140 mm), surlongueur de trappe, multi-tabliers, dormants de 60 et 70 mm, mortaise VMC et isolation phonique VX58/9."
+tags: [volet-roulant, mono-vi, volet-inverse, bloc-baie, coffre, lame, tablier, renovation, ite, soprofen]
 systeme: Mono VI
 fournisseur: SOPROFEN
 usage: chiffrage
-status: stable
+famille: mono-vi
+status: draft
 sources:
-  - resource: raw/moustiquaires/export_doc_132.zip
+  - resource: raw/moustiquaires/exports/132.pdf
     id: soprofen-guide-technique-blocs-baies-2022
-    title: Guide technique Blocs-baies SOPROFEN 2022, réf. DOC86505
+    title: Guide technique Blocs-baies 2022, SOPROFEN, réf. DOC86505 (09/2022)
     last_modified: 2022-09-01
 source_pages:
-  - resource: raw/moustiquaires/export_doc_132.zip
-    pages: 4, 124-135
+  - resource: raw/moustiquaires/exports/132.pdf
+    pages: 124-128, 135
 generated:
-  by: process:gemini-coder
-  at: 2026-09-21T14:20:00Z
+  by: process:claude-code
+  at: 2026-10-09T02:30:00Z
 ---
 
-# Présentation du système MONO VI
+Le Mono VI (« Mono VI pour Volet Inversé ») est un volet roulant de type bloc-baie à enroulement extérieur de [SOPROFEN](/fournisseurs/soprofen.md) : le tablier s'enroule à l'extérieur du coffre. C'est un coffre de rénovation à emprise réduite, de 140 mm sur la hauteur, qui permet d'équiper fenêtre et porte-fenêtre jusqu'à 2 360 mm sous coffre ; il peut aussi s'utiliser en isolation par l'extérieur (ITE). L'accès au coffre se fait par l'intérieur, par une trappe de visite d'une grande discrétion. Le coffre s'adapte aux dormants de rénovation de 60 et de 70 mm par des adaptateurs en PVC ; la fixation latérale sur la menuiserie se fait par des pattes métalliques [1 p. 124].
 
-Le **MONO VI** (« VI » pour *Volet Inversé*) de [SOPROFEN](/fournisseurs/soprofen.md) est une fermeture bloc-baie caractérisée par un **enroulement extérieur du tablier** associé à une trappe de visite intérieure affleurante et discrète [1 p. 4, 124] :
-* **Clair de jour maximal** : son coffre compact de **140 mm de hauteur seulement** libère l'ouverture vitrée, permettant d'équiper des fenêtres et portes-fenêtres jusqu'à **2 360 mm de hauteur sous coffre** [1 p. 4, 124].
-* **Architecture inversée** : le tablier descend au nu extérieur de la fenêtre tandis que le mécanisme reste accessible depuis l'intérieur du logement sans dégrader l'étanchéité ni l'esthétique de façade [1 p. 124].
-* **Domaines d'emploi privilégiés** : particulièrement adapté aux chantiers de **rénovation** (pose sur dormant existant de 60 ou 70 mm) ainsi qu'aux façades avec **Isolation Thermique par l'Extérieur (ITE)** [1 p. 4, 124].
+Le coffre Mono VI est destiné à être monté en position horizontale et les coulisses en position verticale. Pour un bon fonctionnement et une bonne fermeture du volet, la lame finale doit venir reposer sur une pièce d'appui, maçonnerie ou menuiserie horizontale, sous les coulisses [1 p. 124].
 
----
+![Coupe du coffre Mono VI à enroulement extérieur](/assets/equipements/volets-roulants/blocs-baies-2022/mono-vi/coupe-du-coffre-mono-vi-enroulement-exterieur.png)
 
-# Performances thermo-aérauliques et acoustiques
+(schéma: raw/moustiquaires/exports/132.pdf, p. 124)
 
-* **Isolation thermique renforcée en standard** : formule d'évaluation du coefficient de transmission surfacique du caisson :
-  $$U_c = 0,9 + \frac{0,11}{L_c}\text{ W/(m}^2\text{.K)}$$
-  où $L_c$ est la longueur de coffre en mètres, assurant une parfaite conformité avec la réglementation thermique élément par élément ($U_c \le 2,5\text{ W/m}^2\text{K}$) [1 p. 4].
-* **Isolation phonique** : affaiblissement acoustique certifié atteignant jusqu'à **$D_{n,e,\text{tr}} = 50\text{ dB}$** grâce à l'adjonction en usine de la bande de masse lourde isolante **VX58/9** en face interne de la trappe [1 p. 4, 135].
+La manœuvre est sur [Mono VI : manœuvres et motorisations](/equipements/mono-vi-manoeuvres-et-motorisations.md). Les rubriques 1 à 9 et 15 du bon de commande suivent.
 
----
+# Repérage et quantité (rubriques 1 et 2)
 
-# Dimensions de fabrication et limites dimensionnelles
+La position chantier correspond à l'emplacement du caisson sur le chantier ; ce texte est repris sur les étiquettes de livraison apposées sur l'emballage, ce qui facilite le travail des poseurs. La quantité est le nombre de volets roulants identiques sur la ligne [1 p. 124].
 
-La cote hors-tout en hauteur répond à la formule : $H = H_{\text{châssis}} + 140\text{ mm}$ [1 p. 126].
+# Lames et coloris (rubrique 3)
 
-### Limites dimensionnelles selon la typologie de lame
+Trois lames : L37 (PVC de 37 mm), LA37 (aluminium de 37 mm) et LATH37 (variante de la lame aluminium de 37 mm dont le sens du sigle n'est pas donné). « (x) » signifie « non référencé RAL, voir échantillon » ; la légende du tableau est « / = non disponible » [1 p. 125].
 
-| Type de lame | Matériau | Pas (mm) | Largeur max simple tablier (mm) | Largeur max multi-tabliers (mm) | Hauteur max coffre compris (mm) | Poids tablier (kg/m²) |
-| --- | --- | --- | --- | --- | --- | --- |
-| LA 37 | Aluminium standard | 37 | 2 500 | 3 000 | 2 500 | 2,80 |
-| LATH 37 | Aluminium thermique | 37 | 2 500 | 3 000 | 2 500 | 2,80 |
-| L 37 | PVC extrudé | 37 | 1 500 | Non disponible | 2 500 | 3,20 |
+| Coloris | Teinte RAL approchante | Lames dans lesquelles le coloris est offert |
+| --- | --- | --- |
+| Blanc | 9016 | L37, LA37, LATH37 |
+| Blanc crème | 9001 | L37, LA37 |
+| Beige | (x) | L37, LA37 |
+| Beige | 1015 | LA37 |
+| Bleu | 5024 | aucune case marquée |
+| Brun | 8019 | LA37 |
+| Chêne doré | (x) | LA37, LATH37 |
+| Gris | 7016 | LA37, LATH37 |
+| Gris métal | (x) | LA37 |
+| Gris | 7035 | L37, LA37 |
+| Gris | 7038 | LA37 |
+| Gris | 7039 | LA37 |
+| Noir | 9005 | LA37 |
+| Rouge | 3004 | LA37 |
+| Vert | 6021 | LA37 |
 
-(schéma: raw/moustiquaires/export_doc_132.zip, p. 125 et 126)
+En option, en LA37 : bleu canon (x), chêne irlandais (x), gris 7012, gris 2900 (x), vert 6005 et autres RAL. La ligne du bleu 5024 n'a aucune case marquée au tableau, alors que le bon de commande de la page 143 propose le code 19, bleu 5024 (**INC-345**) [1 p. 125, 143].
 
-*Règle multi-tabliers* : en configuration 2 ou 3 tabliers, la largeur totale cumulée ne peut excéder **3 000 mm** (avec tabliers obligatoirement de même hauteur et de même type de lame) [1 p. 127].
+Largeur maxi, hauteur maxi et poids du tablier [1 p. 125].
 
----
+| Lame | Largeur maxi (mm) | Hauteur maxi (mm) | Poids du tablier (kg/m²) |
+| --- | --- | --- | --- |
+| L37 | 1 500 | 2 500 | 3,2 |
+| LA37 | 2 500 | 2 500 | 2,8 |
+| LATH37 | 2 500 | 2 500 | 2,8 |
 
-# Adaptation sur dormants de menuiserie
+![Profils des lames L37, LA37 et LATH37](/assets/equipements/volets-roulants/blocs-baies-2022/mono-vi/lames-l37-la37-et-lath37-profils.png)
 
-Le MONO VI se raccorde mécaniquement sur la traverse haute des menuiseries au moyen d'adaptateurs clipsés et vissés en PVC [1 p. 124, 128] :
-* **Sur dormant de 60 mm** : embout de trappe spécifique avec **aile de recouvrement de 10 mm** d'épaisseur [1 p. 128].
-* **Sur dormant de 70 mm** : embout de trappe spécifique avec **aile de recouvrement de 18 mm** d'épaisseur [1 p. 128].
-* **Appui inférieur** : pour garantir l'étanchéité et le verrouillage complet, la lame finale doit reposer sur un rejingot d'appui maçonné ou une pièce d'appui menuisée horizontale sous les coulisses [1 p. 124].
+(schéma: raw/moustiquaires/exports/132.pdf, p. 125)
 
----
+# Largeur et hauteur de commande (rubriques 3 et 4)
 
-# Motorisations et commandes
+La largeur L est la largeur hors tout du coffre Mono VI, en millimètres. Largeur maxi selon le type de lame : lame aluminium de 37 mm, 2 500 mm en simple tablier et 3 000 mm en multi-tablier ; lame PVC de 37 mm, 1 500 mm en simple tablier, multi-tablier non disponible [1 p. 126].
 
-Le MONO VI intègre l'ensemble des solutions de manœuvre [SOMFY](/fournisseurs/somfy.md) et SOPROFEN M-Soft² [1 p. 129-135] :
+![Largeur L hors tout du coffre Mono VI](/assets/equipements/volets-roulants/blocs-baies-2022/mono-vi/largeur-l-hors-tout-du-coffre-mono-vi.png)
 
-### Tableau des largeurs minimales ($L_{\min}$)
+(schéma: raw/moustiquaires/exports/132.pdf, p. 126)
 
-| Mode de manœuvre | Modèle | Code | Manœuvre de secours | Largeur mini $L_{\min}$ 1 tablier (mm) | Largeur mini multi-tabliers (mm) |
-| --- | --- | --- | --- | --- | --- |
-| Radio RTS | Oximo court RTS (larg max 799 mm) | R1 | Non | 550 | 550 |
-| Radio RTS | Oximo RTS standard | R1 | Non | 800 | 800 |
-| Radio RTS | Oximo court RTS + secours | R1S | Oui | 695 | - |
-| Radio RTS | Oximo RTS + secours | R1S | Oui | 945 | - |
-| Radio RTS | Oximo 40 WF solaire autonome | A35 | Non | 590 | - |
-| Radio IO | Oximo court IO (larg max 659 mm) | IO1 | Non | 550 | 550 |
-| Radio IO | S&SO RS100 IO standard | IO1 | Non | 660 | 660 |
-| Radio IO | Oximo court IO + secours | IO1S | Oui | 695 | - |
-| Radio M-SOFT² | M-Soft² MVM court (larg max 659 mm) | R11 | Non | 590 | 590 |
-| Radio M-SOFT² | M-Soft² MVM standard | R11 | Non | 660 | 660 |
-| Filaire WT | Ilmo court (larg max 699 mm) | M | Non | 550 | 550 |
-| Filaire WT | Ilmo standard | M | Non | 700 | 700 |
-| Filaire WT | Ilmo court + secours | MS | Oui | 695 | - |
-| Filaire WT | Ilmo standard + secours | MS | Oui | 845 | 845 |
-| Filaire WT | Ilmo 12 tours | M1 | Non | 700 | 700 |
-| Filaire WT | Ilmo 12 tours + secours | M1S | Oui | 845 | - |
-| Filaire M-SOFT² | M-Soft² MVE court (larg max 659 mm) | M11 | Non | 590 | 590 |
-| Filaire M-SOFT² | M-Soft² MVE standard | M11 | Non | 660 | 660 |
-| Hybride filaire/radio | S&SO RS100 IO Hybrid | IOH | Non | 660 | 660 |
-| Hybride filaire/radio | S&SO RS100 IO Hybrid + secours | IOHS | Oui | 805 | - |
-| Treuil manuel | Treuil enrouleur avec tige $\varnothing 12\text{ mm}$ | T | Non | 400 | - |
+La hauteur de commande H est la hauteur du volet, coffre compris : H = hauteur châssis + 140 mm. Hauteur maxi, coffre compris : 2 500 mm pour la lame aluminium de 37 mm comme pour la lame PVC de 37 mm [1 p. 126].
 
-(schéma: raw/moustiquaires/export_doc_132.zip, p. 129, 133)
+![Hauteur de commande H = hauteur châssis plus 140 mm, angle de coupe](/assets/equipements/volets-roulants/blocs-baies-2022/mono-vi/hauteur-de-commande-h-chassis-plus-140-mm.png)
 
----
+(schéma: raw/moustiquaires/exports/132.pdf, p. 126)
 
-# Options et finitions
+# Surlongueur de trappe et répartition des tabliers (rubriques 5 et 6)
 
-1. **Surlongueur de trappe** : en manœuvre manuelle par treuil ou secours motorisé, une surlongueur de trappe de **40 mm minimum** (débord de 61 mm avec l'embout) est obligatoire pour le passage du mécanisme [1 p. 127, 133].
-2. **Mortaises VMC** : possibilité d'usinage en traverse supérieure pour grilles de ventilation Anjos VM15/22/30, E2A ou Aldes EHA [1 p. 128].
-3. **Isolation acoustique renforcée** : complexe lourd VX58/9 en face interne de trappe [1 p. 135].
+On indique les surlongueurs gauche SLG et droite SLD de la trappe intérieure, en millimètres. Sans indication, la largeur de la trappe intérieure est standard : largeur L du coffre. La largeur hors tout mini de la trappe intérieure vaut la largeur L plus 42 mm (débords des embouts), soit 21 mm d'épaisseur d'embout de chaque côté. Les manœuvres par treuil et par manœuvre de secours nécessitent une surlongueur de trappe de 40 mm, soit un débord de 61 mm avec l'embout [1 p. 127].
 
----
+![Surlongueur de trappe SLG et SLD : largeur L plus 42 mm plus SLG plus SLD](/assets/equipements/volets-roulants/blocs-baies-2022/mono-vi/surlongueur-de-trappe-slg-et-sld.png)
+
+![Embout et trappe intérieure](/assets/equipements/volets-roulants/blocs-baies-2022/mono-vi/embout-et-trappe-interieure.png)
+
+(schéma: raw/moustiquaires/exports/132.pdf, p. 127)
+
+Pour plusieurs tabliers, on indique la répartition en largeur ; le cumul doit correspondre à la largeur L. Largeur maxi L en multi-tabliers : 3 000 mm, uniquement avec des tabliers de même hauteur, de même type et de même coloris de lames. Largeur mini à gauche ou à droite avec manœuvre : voir le chapitre de la manœuvre ; sans manœuvre : 500 mm ; largeur mini du milieu : 500 mm. Largeur maxi d'un tablier PVC de 37 mm : 1 500 mm ; d'un tablier aluminium de 37 mm : 2 500 mm [1 p. 127].
+
+![Répartition en multi-tabliers : L gauche, L milieu, L droite](/assets/equipements/volets-roulants/blocs-baies-2022/mono-vi/repartition-multi-tabliers-l-gauche-milieu-droite.png)
+
+(schéma: raw/moustiquaires/exports/132.pdf, p. 127)
+
+# Coulisse, épaisseur de menuiserie et mortaise (rubriques 7 à 9)
+
+Coulisse, angle de coupe (option) : on indique l'angle de coupe du bas de la coulisse ; sans indication, la coupe est droite et la livraison se fait sans surlongueur ; on coche la case pour une surlongueur de 20 mm [1 p. 128].
+
+![Coupe droite standard, angle de coupe et surlongueur des coulisses](/assets/equipements/volets-roulants/blocs-baies-2022/mono-vi/angle-de-coupe-et-surlongueur-de-coulisse.png)
+
+(schéma: raw/moustiquaires/exports/132.pdf, p. 128)
+
+Épaisseur de menuiserie : on indique impérativement l'épaisseur du dormant de la menuiserie, 60 ou 70 mm ; cela conditionne des composants du coffre ainsi que le type d'adaptateur, et détermine aussi le type d'embout de trappe [1 p. 128].
+
+| Épaisseur de dormant | Embout de trappe |
+| --- | --- |
+| 60 mm | embout de trappe pour dormant avec aile de recouvrement de 10 mm d'épaisseur |
+| 70 mm | embout de trappe pour dormant avec aile de recouvrement de 18 mm d'épaisseur |
+
+![Épaisseur de menuiserie : dormant de 60 mm et dormant de 70 mm](/assets/equipements/volets-roulants/blocs-baies-2022/mono-vi/epaisseur-de-menuiserie-dormant-de-60-mm-et-de-70-mm.png)
+
+![Embouts de trappe pour dormant de 60 mm et pour dormant de 70 mm](/assets/equipements/volets-roulants/blocs-baies-2022/mono-vi/embouts-de-trappe-pour-dormant-de-60-mm-et-de-70-mm.png)
+
+(schéma: raw/moustiquaires/exports/132.pdf, p. 128)
+
+Mortaise pour VMC : on indique la quantité et le type de mortaise pour grille de VMC, sans fourniture de la grille d'entrée d'air. Type A : 250 × 15 mm ; type B : 172 + 5 + 172 × 12 mm [1 p. 128].
+
+![Mortaises pour VMC, types A et B](/assets/equipements/volets-roulants/blocs-baies-2022/mono-vi/mortaises-pour-vmc-types-a-et-b.png)
+
+(schéma: raw/moustiquaires/exports/132.pdf, p. 128)
+
+# Isolation phonique (rubrique 15)
+
+Option : mise en place en usine de l'isolant phonique VX58/9 sur la face intérieure de la trappe intérieure du coffre ; l'isolant est une bande de masse lourde VX58/9 [1 p. 135].
 
 # Citations
 
-[1] [Guide technique Blocs-baies SOPROFEN 2022, réf. DOC86505](raw/moustiquaires/export_doc_132.zip), p. 4, 124 à 135
-
----
+[1] Guide technique Blocs-baies 2022, SOPROFEN, réf. DOC86505 (09/2022) — `raw/moustiquaires/exports/132.pdf`, p. 124 à 128 et 135
+(le numéro de page imprimé est celui du PDF)
 
 # Voir aussi
 
-- [SOPROFEN](/fournisseurs/soprofen.md)
-- [SOMFY](/fournisseurs/somfy.md)
+- [Mono VI : manœuvres et motorisations](/equipements/mono-vi-manoeuvres-et-motorisations.md)
 - [Volets roulants](/equipements/volets-roulants.md)
-- [Volet roulant et BSO bloc-baie CHRONO PSE²](/equipements/volets-roulants-chrono-pse2.md)
-- [Volet roulant coffre demi-linteau BLOC LX](/equipements/volet-roulant-bloc-lx-demi-linteau.md)
-- [Guide technique Blocs-baies SOPROFEN 2022](/sources/soprofen-guide-technique-blocs-baies-2022.md)
+- [SOPROFEN](/fournisseurs/soprofen.md)
+- [Guide technique Blocs-baies 2022, SOPROFEN (148 pages)](/sources/soprofen-guide-technique-blocs-baies-2022.md)
+- [Incohérences internes](/anomalies/incoherences-internes.md)

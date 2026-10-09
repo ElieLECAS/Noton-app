@@ -1,8 +1,10 @@
 ---
 type: Document source
-title: DTA n° 6/14-2166_V2, procédé LUMEAL Minimal Ga
-description: Document Technique d'Application CSTB de 36 pages pour le coulissant aluminium à rupture de pont thermique et ouvrant caché LUMEAL Minimal Ga de Technal (valide jusqu'au 31 juillet 2029).
-tags: [technal, lumeal, lumeal-ga, coulissant, ouvrant-cache, dta, cstb, avis-technique, certification]
+title: "DTA n° 6/14-2166_V2, procédé LUMEAL Minimal Ga (36 pages)"
+description: "Document Technique d'Application CSTB de 36 pages, valide du 27 mai 2024 au 31 juillet 2029, sur le coulissant aluminium à rupture de pont thermique et ouvrant caché LUMEAL Minimal Ga (LUMEAL GA) de TECHNAL : avis du Groupe Spécialisé, dossier technique, annexe de profilés, coupes, drainage et mise en œuvre."
+resource: raw/DTA Lumeal GA 6-14-2166-v2.pdf
+origin: Commission chargée de formuler les Avis Techniques (CCFAT), Groupe Spécialisé n° 06, CSTB, pour HYDRO BUILDING SYSTEMS marque Technal
+tags: [source, technal, lumeal, lumeal-ga, coulissant, ouvrant-cache, dta, cstb, avis-technique, certification]
 gamme: LUMINE
 systeme: LUMEAL GA
 fournisseur: TECHNAL
@@ -13,51 +15,58 @@ sources:
     id: technal-dta-lumeal-ga-6-14-2166-v2
     title: DTA CSTB n° 6/14-2166_V2 LUMEAL Minimal Ga
     last_modified: 2024-05-27
+source_pages:
+  - resource: raw/DTA Lumeal GA 6-14-2166-v2.pdf
+    pages: 1-36
 generated:
-  by: process:multimodal-direct
-  at: 2026-09-19T23:35:00Z
+  by: process:claude-code
+  at: 2026-10-09T07:23:53Z
 ---
 
 # Identité
 
 | Élément | Valeur |
 | --- | --- |
-| Émetteur | CSTB — Commission Chargée de Formuler les Avis Techniques (Groupe Spécialisé n° 06) |
-| Titulaire | Société HYDRO BUILDING SYSTEMS marque Technal |
-| Numéro | **DTA n° 6/14-2166_V2** (annule et remplace l'Avis Technique 6/14-2166_V1) |
-| Procédé visé | **LUMEAL Minimal Ga** (Fenêtres et portes-fenêtres coulissantes en aluminium à coupure thermique et ouvrant caché) |
-| Période de validité | **Valide du 27 mai 2024 au 31 juillet 2029** |
-| Pages | 36 pages |
-| Nature | **Document réglementaire opposable d'aptitude technique** |
+| Titre | « DTA 6/14-2166_V2 », procédé « LUMEAL Minimal Ga », famille de produit / procédé : « Fenêtre coulissante en aluminium à coupure thermique » |
+| Éditeur | Commission chargée de formuler les Avis Techniques (CCFAT) ; avis formulé par le Groupe Spécialisé n° 06 « Composants de baies et vitrages » ; secrétariat tenu par le CSTB, 84 avenue Jean Jaurès, FR-77447 Marne la Vallée Cedex 2 |
+| Titulaire | société HYDRO BUILDING SYSTEMS marque Technal ([TECHNAL](/fournisseurs/technal.md)) |
+| Édition | V2, qui annule et remplace l'Avis Technique 6/14-2166_V1 (premier Avis Technique, présenté au GS6 du 07/03/2019) ; V2 présentée au GS6 du 13/03/2024 |
+| Validité | du 27 mai 2024 au 31 juillet 2029 |
+| Pages | 36 au PDF, imprimées « Page n sur 36 » |
+| Nature | **réglementaire** pour l'avis du Groupe Spécialisé (pages 4 à 6), **atelier** pour le dossier technique, l'annexe, les coupes, le drainage et la mise en œuvre (pages 7 à 36) |
+| Fichier | `raw/DTA Lumeal GA 6-14-2166-v2.pdf` |
 
 # Registre de couverture
 
-**Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
+Registre reconstruit le 09/10/2026 sur le rendu des 36 pages (100 dpi pour le repérage, 200 dpi et plus pour la lecture), lecture en image seulement.
 
-La pagination du document comprend 36 pages.
+Numérotation du PDF : la page imprimée « Page n sur 36 » est la page n du PDF, sans décalage.
 
-| Pages PDF | Contenu technique | État | Page du wiki |
+| Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| 1-3 | Page de garde, historique des versions (V1 de 03/2019, V2 de 05/2024) et table des matières | à faire | [DTA LUMEAL GA](/sources/technal-dta-lumeal-ga.md) |
-| 4-6 | Avis du Groupe Spécialisé : domaine d'emploi (neuf, ITE, monomur, exclusion dormant existant), étanchéité air/eau, perméabilité classe A*4 ($0,35\text{ m}^3/\text{h.m}^2$), seuil handicapés 401028, interdiction sécurité chute DTU 39 P5 § 4.2.3, condensation passagère sur montants 141039/141040 | à faire | [Dormants et ouvrants LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md), [Fabrication et pose LUMEAL GA](/procedures/fabrication-et-pose-lumeal-ga.md) |
-| 7-10 | Dossier technique : caractéristiques profilés dormants, ouvrants et fixes, ferrage RIVALU, vitrage isolant double 24 à 32 mm, dimensions maximales admises, fabrication profilés PVC Rehau / Thermoplast et EPDM QB36, PV d'essais CSTB et SOCOTEC | à faire | [Dormants et ouvrants LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md), [Cotes de débit LUMEAL GA](/profiles/lumeal-ga-cotes-de-debit.md), [Roulements et fermetures LUMEAL GA](/quincaillerie/lumeal-ga-roulements-et-fermetures.md) |
-| 11-14 | Annexe technique : coupes cotées des dormants 100 mm (2 rails) et 151 mm (3 rails), montants 106/157 mm, appuis tubulaires 401025-28, rails rapportés 341000, tapées 401021-24, couvre-joints 391010-12, cornières ITE TFY2513 et TFY2514, ouvrants 24-28 et 29-32 mm, garnitures TPE/EPDM | à faire | [Dormants et ouvrants LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md) |
-| 15-19 | Coupes de principe d'assemblage : fenêtre 2 vantaux, porte-fenêtre 2 vantaux, porte-fenêtre 2 vantaux seuil PMR (appui 401028, rail 141014), porte-fenêtre 1 vantail + fixe (rail 141025/141013), calage vitrage et gâches | à faire | [Dormants et ouvrants LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md), [Fabrication et pose LUMEAL GA](/procedures/fabrication-et-pose-lumeal-ga.md) |
-| 20 | Prises de volume sur ouvrants et fixes (24, 26, 28, 30, 32 mm) avec joints portefeuille U EPDM (411005 à 411009) et joints à bourrer EPDM (710002-04, AS0015-16) | à faire | [Dormants et ouvrants LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md) |
-| 21-29 | Plans complets de drainage dormant : 2 vantaux (usinages sur rail et PVC 431024 et 431025), 1 vantail + fixe (PVC 821001), seuils PMR avec appui tubulaire 401028 (usinages PVC 821008-10, déflecteurs 401004 / 401018) | à faire | [Fabrication et pose LUMEAL GA](/procedures/fabrication-et-pose-lumeal-ga.md) |
-| 30 | Plan de drainage ouvrant : traverse basse T141015 (perçages Ø8 mm à 150 mm des extrémités et au centre si $L > 1\text{ m}$) | à faire | [Fabrication et pose LUMEAL GA](/procedures/fabrication-et-pose-lumeal-ga.md) |
-| 31-36 | Schémas de mise en œuvre sur gros œuvre : pose en applique intérieure avec doublage 100 et 120 mm (seuil 401028), continuité d'étanchéité sous appui, pose applique extérieure avec ITE (doublage 160 mm, cales T440074, cornière à gousset), pose sur monomur | à faire | [Fabrication et pose LUMEAL GA](/procedures/fabrication-et-pose-lumeal-ga.md) |
-
-**Le registre de couverture est intégral : 36/36 pages couvertes, zéro `à faire`.**
+| 1 | page de garde : numéro 6/14-2166_V2, validité du 27 mai 2024 au 31 juillet 2029, procédé LUMEAL Minimal Ga, titulaire, avant-propos, Groupe Spécialisé n° 06, secrétariat du CSTB | transcrit | [Avis du Groupe Spécialisé et domaine d'emploi du DTA 6/14-2166_V2, coulissant LUMEAL GA](/certifications/dta-6-14-2166-lumeal-ga.md) |
+| 2 | versions du document (V1 de 03/2019, V2 de 03/2024) et descripteur du système | transcrit | [Avis du Groupe Spécialisé et domaine d'emploi du DTA 6/14-2166_V2, coulissant LUMEAL GA](/certifications/dta-6-14-2166-lumeal-ga.md) |
+| 3 | table des matières (chapitres 1 à 2.10 avec leur page), ouverte et lue : elle ne porte que les titres des paragraphes | sans contenu propre | - |
+| 4-6 | avis du Groupe Spécialisé : domaine d'emploi accepté, appréciation (stabilité, sécurité, feu, thermique, perméabilité A*2 à A*4, accessibilité, entrée d'air), durabilité, marquage NF / CSTB / ACOTHERM, impacts environnementaux, remarques complémentaires | transcrit | [Avis du Groupe Spécialisé et domaine d'emploi du DTA 6/14-2166_V2, coulissant LUMEAL GA](/certifications/dta-6-14-2166-lumeal-ga.md) |
+| 7-10 | dossier technique, texte : commercialisation, description, tableau des dimensions maximales (baie H x L), conception, mise en œuvre, entretien, fabrication, justificatifs et essais | transcrit | [Dossier technique et dimensions maximales du DTA 6/14-2166_V2, coulissant LUMEAL GA](/certifications/dta-6-14-2166-lumeal-ga-dossier-technique.md) |
+| 11-12 | annexe, planches « Dormants » : montants latéraux, traverses hautes et basses, appuis tubulaires, rails rapportés, rejets d'eau, couvre-joints, tapées, capot, cornières, profilés ITE | à faire | - |
+| 13-14 | annexe, planches « Ouvrants » : montants, traverses, profilés PVC, garnitures d'étanchéité TPE et EPDM, joints à bourrer | à faire | - |
+| 15-19 | coupes de principe : fenêtre 2 vantaux, porte-fenêtre 2 vantaux, avec seuil PMR, 1 vantail + fixe, avec seuil PMR | à faire | - |
+| 20 | prises de volume : vitrage sur ouvrants et sur fixes | à faire | - |
+| 21-29 | drainage du dormant : 2 vantaux, 1 vantail + fixe, appui tubulaire 401028 (PMR) | à faire | - |
+| 30 | drainage de l'ouvrant : traverse basse T141015 | à faire | - |
+| 31-36 | mise en œuvre sur gros œuvre : applique intérieure, continuité d'étanchéité, applique extérieure avec ITE, monomur | à faire | - |
 
 # Citations
 
-[1] DTA n° 6/14-2166_V2, procédé LUMEAL Minimal Ga (27/05/2024) — `raw/DTA Lumeal GA 6-14-2166-v2.pdf`
+[1] [DTA n° 6/14-2166_V2, procédé LUMEAL Minimal Ga, valide du 27/05/2024 au 31/07/2029](raw/DTA Lumeal GA 6-14-2166-v2.pdf), p. 1 à 36
 
 # Voir aussi
 
-- [Profilés dormants et ouvrants LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md)
-- [Cotes de débit LUMEAL GA](/profiles/lumeal-ga-cotes-de-debit.md)
-- [Roulements et fermetures LUMEAL GA](/quincaillerie/lumeal-ga-roulements-et-fermetures.md)
-- [Fabrication et pose LUMEAL GA](/procedures/fabrication-et-pose-lumeal-ga.md)
+- [Avis du Groupe Spécialisé et domaine d'emploi du DTA 6/14-2166_V2, coulissant LUMEAL GA](/certifications/dta-6-14-2166-lumeal-ga.md)
+- [Dossier technique et dimensions maximales du DTA 6/14-2166_V2, coulissant LUMEAL GA](/certifications/dta-6-14-2166-lumeal-ga-dossier-technique.md)
+- [Profilés dormants et ouvrants de l'annexe du DTA 6/14-2166_V2, coulissant LUMEAL GA](/certifications/dta-6-14-2166-lumeal-ga-profiles.md)
+- [Coupes de principe et prises de volume du DTA 6/14-2166_V2, coulissant LUMEAL GA](/certifications/dta-6-14-2166-lumeal-ga-coupes-de-principe.md)
+- [Drainage du dormant et de l'ouvrant du DTA 6/14-2166_V2, coulissant LUMEAL GA](/certifications/dta-6-14-2166-lumeal-ga-drainage.md)
+- [Mise en œuvre sur gros œuvre du DTA 6/14-2166_V2, coulissant LUMEAL GA](/certifications/dta-6-14-2166-lumeal-ga-mise-en-oeuvre.md)
 - [TECHNAL](/fournisseurs/technal.md)

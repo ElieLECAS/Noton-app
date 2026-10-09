@@ -1,12 +1,13 @@
 ---
 type: Équipement
-title: Screen extérieur SCREENAMAX
-description: Store extérieur zippé grandes dimensions SOPROFEN jusqu'à 7 m de large, caissons 85 et 100 mm, technologie anti-flexion à double axe et motorisation solaire Somfy.
+title: Screen extérieur zip SCREENAMAX SOPROFEN, coffres de 85 et 100 mm, jusqu'à 7 m de large
+description: "Dimensions limites, coffres de 85 et 100 mm, coulisses fine de 22 mm et large de 42 mm, motorisations dont la solaire Somfy Sunea DC, toiles, garanties et normes du screen extérieur zip SCREENAMAX de SOPROFEN."
 resource: https://www.soprofen.com
-tags: [screen, screenamax, soprofen, protection-solaire, zip, solaire, somfy, grande-largeur]
+tags: [screen, screenamax, protection-solaire, zip, solaire, somfy, grande-largeur, toile, soprofen]
 fournisseur: SOPROFEN
 usage: chiffrage
-status: stable
+famille: screens
+status: draft
 sources:
   - resource: raw/moustiquaires/Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR.pdf
     id: soprofen-screen-exterieur-screenamax-2025
@@ -16,120 +17,172 @@ source_pages:
   - resource: raw/moustiquaires/Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR.pdf
     pages: 1-2
 generated:
-  by: process:gemini-coder
-  at: 2026-09-21T12:40:00Z
+  by: process:claude-code
+  at: 2026-10-09T02:30:00Z
 ---
 
-# Définition et principe technique
+Le screen extérieur zip SCREENAMAX de [SOPROFEN](/fournisseurs/soprofen.md) est une protection
+solaire : une toile enroulée dans un coffre en aluminium extrudé, posée à l'extérieur de la baie,
+qui descend devant le vitrage. Le mot « zip » désigne la glissière dans laquelle la toile est guidée
+sur ses côtés : elle la maintient « même par temps venteux ». Le screen est une innovation grandes
+dimensions, jusqu'à 7 mètres de large ; il est adapté aux fenêtres et aux baies, ainsi qu'aux
+vérandas et aux pergolas. Il est classé en « protections solaires » et de fabrication française
+[1 p. 1].
 
-Le screen extérieur zippé **SCREENAMAX** de [SOPROFEN](/fournisseurs/soprofen.md) est une protection solaire textile extérieure motorisée pour fenêtres, baies vitrées, vérandas et pergolas [1 p. 1]. Il filtre jusqu'à **97 % des rayons solaires** avant qu'ils n'atteignent le vitrage, assurant une efficacité thermique 6 fois supérieure à un store intérieur tout en préservant la vue vers l'extérieur et l'intimité contre les regards indiscrets [1 p. 1]. Grâce à sa toile verrouillée dans des coulisses zippées, il fait également office de **moustiquaire hermétique intégrale** en position fermée [1 p. 1].
+![Screen SCREENAMAX, vue d'ensemble avec les trois mentions du fabricant](/assets/equipements/screens/screenamax/screen-vue-d-ensemble.png)
 
-# Cotes et limites dimensionnelles
+# Ce qui est annoncé
 
-Limites dimensionnelles d'exécution, cotes en millimètres relevées sur la fiche produit DOC83100 [1 p. 2] :
+- Le plus petit screen zip du marché à 6 mètres de large : le coffre ne fait que 85 mm [1 p. 1].
+- Jusqu'à 97 % des rayons solaires filtrés [1 p. 1].
+- Température intérieure maîtrisée, « 6 fois plus efficace qu'un store intérieur » [1 p. 1].
+- Gestion optimale de la luminosité ; protection contre les regards indiscrets tout en conservant
+  une parfaite visibilité depuis l'intérieur [1 p. 1].
+- Gamme de coloris étendue et large gamme de toiles [1 p. 1].
+- Fonctionnement solaire 100 % sans fil et intégré, en option ; résistance bord de mer, en option
+  [1 p. 1].
+- Fonctionnalité moustiquaire en position fermée [1 p. 1].
 
-| Paramètre | Cote minimale (mm) | Cote maximale (mm) | Condition de réalisation |
-| --- | --- | --- | --- |
-| Largeur de baie | 625 | 7000 | Selon le modèle de coffre et de toile |
-| Hauteur de baie | 500 | 4000 | Selon le modèle de coffre et de toile |
+# Cotes
 
-(schéma: raw/moustiquaires/Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR.pdf, p. 2)
+Limites de dimension du screen, en millimètres, relevées sur le tableau « Dimensions » de la
+fiche produit. Une ligne par cote. Chaque valeur est suivie d'un astérisque : « En fonction des
+coffres et des modèles, consulter l'offre en vigueur ».
 
-## Caissons d'enroulement en aluminium extrudé
-
-Les caissons compacts en aluminium extrudé se déclinent en deux tailles selon les dimensions de la baie [1 p. 1-2] :
-
-| Taille de caisson (mm) | Largeur maximale de baie (mm) | Hauteur maximale de baie (mm) | Rôle et spécificité |
-| --- | --- | --- | --- |
-| 85 | 6000 | 2300 | Plus petit caisson screen zip du marché à 6 mètres de large |
-| 100 | 7000 | 4000 | Grandes baies vitrées et très hautes baies jusqu'à 4 mètres |
-
-(schéma: raw/moustiquaires/Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR.pdf, p. 2)
-
-## Profilés de coulisses
-
-Deux types de coulisses latérales en aluminium extrudé assurent le guidage zippé [1 p. 2] :
-
-| Type de coulisse | Largeur de face (mm) | Mode de fixation préconisé |
+| Cote | Mini (mm) | Maxi (mm) |
 | --- | --- | --- |
-| Coulisse fine | 22 | Pose en tableau, intégration discrète sans vis apparentes |
-| Coulisse large | 42 | Pose en applique de face / façade |
+| Largeur | 625 | 7000 |
+| Hauteur | 500 | 4000 |
 
 (schéma: raw/moustiquaires/Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR.pdf, p. 2)
 
-# Conception mécanique et tenue au vent
+## Coffres
 
-* **Maîtrise de la flexion (technologie Zoom Tech)** : sur les grandes portées, la flèche de l'axe d'enroulement est éliminée par l'intégration d'un **second axe interne précontraint**, prévenant tout plissement ou gondolage de la toile [1 p. 1].
-* **Guidage par système zip** : glissière continue soudée sur les lisières de la toile, guidée dans les coulisses pour une résistance extrême au vent sans déboîtement [1 p. 1].
-* **Barre de charge profilée** : profilé de maintien de la barre de charge sans soudure visible sur la face extérieure de la toile [1 p. 1].
+Le coffre est le caisson en aluminium extrudé qui contient la toile enroulée. Il en existe deux
+tailles, repérées par la dimension du carré du coffre en millimètres ; chaque taille est donnée
+pour une plage de baie [1 p. 2].
 
-# Motorisations et solution solaire autonome
+| Coffre | Largeur de baie annoncée (m) | Hauteur de baie annoncée, jusqu'à (m) | Image |
+| --- | --- | --- | ---: |
+| 85 mm | 6 | 2,30 | ![Coffre 85 mm, pour une baie de 6 m de large et jusqu'à 2,30 m de haut](/assets/equipements/screens/screenamax/coffre-85-mm.png) |
+| 100 mm | 7 | 4 | ![Coffre 100 mm, pour une baie de 7 m de large et jusqu'à 4 m de haut](/assets/equipements/screens/screenamax/coffre-100-mm.png) |
 
-Le screen SCREENAMAX est exclusivement motorisé [1 p. 2] :
-
-| Motorisation | Technologie / Alimentation | Caractéristiques opérationnelles |
-| --- | --- | --- |
-| Radio solaire [SOMFY](/fournisseurs/somfy.md) | Panneau photovoltaïque + batterie intégrée au coffre | Moteur Sunea DC Somfy, émetteur Smoove, panneau 7 mm sans rivet/vis apparente, autonomie 45 jours sans soleil, fonctionnement de -20°C à +70°C |
-| Radio IO [SOMFY](/fournisseurs/somfy.md) | 230 V filaire, commande radio io-homecontrol | Compatible domotique TaHoma |
-| Radio RTS [SOMFY](/fournisseurs/somfy.md) | 230 V filaire, commande radio RTS | Télécommandes Somfy RTS |
-| Filaire [SOMFY](/fournisseurs/somfy.md) | 230 V filaire standard | Commande individuelle filaire |
-| Radio M-SOFT² SOPROFEN | 230 V filaire, commande radio SOPROFEN | Protocole radio propre SOPROFEN |
-| Filaire M-SOFT² SOPROFEN | 230 V filaire | Commande filaire propre SOPROFEN |
+Comment lire ces coupes : chaque dessin est la coupe du coffre, avec le rouleau en cercle au centre
+et, en bas à droite, la sortie de la toile avec la barre de charge. Le dessin du coffre de 85 mm
+montre un axe à cannelures, celui du coffre de 100 mm un cercle lisse. Le coffre de 85 mm est
+légendé « pour une baie de 6 m de large et jusqu'à 2,30 m de haut » et celui de 100 mm « pour une
+baie de 7 m de large et jusqu'à 4 m de haut » [1 p. 2].
 
 (schéma: raw/moustiquaires/Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR.pdf, p. 2)
 
-Pour la motorisation solaire, le panneau photovoltaïque doit être disposé de telle sorte que le ciel s'y reflète intégralement sans masque d'ombre porté (bâtiments, toits, balcons ou végétation) [1 p. 1].
+## Coulisses
 
-# Toiles techniques microperforées
+Les coulisses sont les rails verticaux dans lesquels la toile est guidée. Il en existe deux
+largeurs [1 p. 2].
 
-Gamme de toiles de protection solaire [1 p. 2] :
-
-| Gamme de toile | Référence fournisseur | Statut de commercialisation |
-| --- | --- | --- |
-| Standard | Alkenz Duralex 4000 QM | Toile microperforée de série |
-| Option | Mermet Satiné 5500 | Tissu de verre enduit haute performance |
-| Option | Copaco Sergé 600 | Tissu sergé fibre de verre enduite PVC |
-| Option | Sattler Twilight Comfort 262 | Toile polyester haute ténacité |
-| Option | Serge Ferrari Veozip | Toile membrane composite respirante |
-| Spéciales | Autres toiles (occultantes, Cristal Plus, etc.) | Sur demande |
+| Coulisse | Largeur (mm) | Mention imprimée | Image |
+| --- | --- | --- | ---: |
+| Coulisse fine | 22 | sans vis apparentes | ![Coulisse fine, sans vis apparentes, 22 mm](/assets/equipements/screens/screenamax/coulisse-fine-22-mm.png) |
+| Coulisse large | 42 | pose en façade | ![Coulisse large, pose en façade, 42 mm](/assets/equipements/screens/screenamax/coulisse-large-42-mm.png) |
 
 (schéma: raw/moustiquaires/Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR.pdf, p. 2)
 
-Les toiles techniques bénéficient d'une **garantie de 7 ans** (réduite à 2 ans pour la toile transparente Cristal Plus) [1 p. 2].
+# Technologie
 
-# Nuancier d'encadrement et finitions
+Trois détails techniques sont photographiés, chacun avec sa légende [1 p. 1] :
 
-L'encadrement (coffre, coulisses et barre de charge) est disponible en 15 teintes standard et 3 finitions (lisse-satiné, lisse-mat, structuré-mat) [1 p. 2] :
-* Teintes disponibles : Ivoire clair RAL 1015, Gris anthracite RAL 7016, Gris noir RAL 7021, Gris terre d'ombre RAL 7022, Gris clair RAL 7035, Gris quartz RAL 7039, Brun gris RAL 8019, Blanc crème RAL 9001, Noir foncé RAL 9005, Aluminium blanc RAL 9006, Aluminium gris RAL 9007, Blanc pur RAL 9010, Blanc signalisation RAL 9016.
-* Teintes texturées exclusives : Gris sablé 2900 et Noir sablé 2100 (disponibles en finition structuré mat uniquement) [1 p. 2].
-* Laquage sur-mesure : toutes teintes du nuancier RAL en option [1 p. 2].
+| Détail | Texte | Image |
+| --- | --- | ---: |
+| Axe | « Flexion de l'axe maîtrisée grâce à l'intégration d'un second axe précontraint » ; le logo zoom tech® est imprimé | ![Axe d'enroulement avec second axe précontraint, zoom tech](/assets/equipements/screens/screenamax/zoom-tech-second-axe-precontraint.png) |
+| Coulisse | « Coulisse avec système de glissière (zip) pour un maintien parfait de la toile même par temps venteux » | ![Coulisse zip, maintien de la toile](/assets/equipements/screens/screenamax/coulisse-zip-maintien-toile.png) |
+| Barre de charge | « Profilé de maintien de la barre de charge avec absence de soudure visible sur la toile » | ![Profilé de maintien de la barre de charge](/assets/equipements/screens/screenamax/profil-maintien-barre-de-charge.png) |
 
-## Option haute résistance bord de mer
+La barre de charge est la barre du bas de la toile, qui la tient tendue. La photographie ci-dessous
+montre le coffre et la coulisse en coupe.
 
-Traitement spécifique anti-corrosion proposé en option selon l'éloignement côtier [1 p. 2] :
-* Zone de **0 à 10 km** du littoral.
-* Zone **au-delà de 10 km** du littoral.
+![Coffre et coulisse du screen, coupe en perspective](/assets/equipements/screens/screenamax/coffre-et-coulisse-coupe.png)
+
+(schéma: raw/moustiquaires/Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR.pdf, p. 1)
 
 # Mise en œuvre
 
-* **Neuf** : intégration sous isolation thermique intérieure en linteau [1 p. 2].
-* **Rénovation** : pose sous linteau ou applique extérieure en façade [1 p. 2].
+Deux coupes en perspective montrent le coffre du screen sous un linteau, avec l'isolation et la
+menuiserie : la première est légendée « Isolation intérieure en neuf », la seconde « Rénovation »
+[1 p. 2].
 
-# Conformité et normes
+![Mise en œuvre, isolation intérieure en neuf](/assets/equipements/screens/screenamax/mise-en-oeuvre-isolation-interieure-neuf.png)
 
-* Fabrication française avec marquage CE [1 p. 1-2].
-* Conformité à la norme européenne **NF EN 13561** [1 p. 2].
-* Garanties appliquées selon les conditions précisées dans le Carnet d'Assistance et de Garanties SOPROFEN [1 p. 2].
+![Mise en œuvre, rénovation](/assets/equipements/screens/screenamax/mise-en-oeuvre-renovation.png)
+
+(schéma: raw/moustiquaires/Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR.pdf, p. 2)
+
+Pour la motorisation solaire, une astuce de pose précise que le ciel doit pouvoir se refléter sur
+la totalité du panneau, sans être masqué par un bâtiment ou la végétation (mur, balcon, toit,
+arbre…) [1 p. 1].
+
+# Manœuvre
+
+Le screen est motorisé. Les six motorisations proposées sont, dans l'ordre de la fiche [1 p. 2] :
+
+| Motorisation | Marque |
+| --- | --- |
+| Radio solaire | [SOMFY](/fournisseurs/somfy.md) |
+| Radio IO | [SOMFY](/fournisseurs/somfy.md) |
+| Radio RTS | [SOMFY](/fournisseurs/somfy.md) |
+| Radio M-SOFT² | SOPROFEN |
+| Filaire | [SOMFY](/fournisseurs/somfy.md) |
+| Filaire M-SOFT² | SOPROFEN |
+
+Deux pictogrammes de garantie, « 7 » et « 10 » (ans), accompagnent cette liste sans légende
+(**VER-128**), avec le renvoi « selon conditions précisées dans le Carnet d'Assistance et Garanties
+SOPROFEN » [1 p. 2].
+
+## Fonctionnement solaire
+
+La motorisation solaire est à un moteur SUNEA DC de [SOMFY](/fournisseurs/somfy.md), fourni avec un
+émetteur SMOOVE. Elle est annoncée : sans fil, pratique et rapide à installer ; sans dégât à
+l'intérieur ni à l'extérieur de l'habitation ; avec la batterie positionnée dans le coffre, ce qui
+facilite la maintenance ; avec un panneau photovoltaïque de seulement 7 mm d'épaisseur, sans rivet
+ni vis apparente ; d'une autonomie de 45 jours sans soleil (à raison d'un cycle montée / descente
+par jour) ; fonctionnant par tous les temps, de −20 °C à +70 °C [1 p. 1].
+
+![Coffre du screen avec son panneau solaire et sa batterie](/assets/equipements/screens/screenamax/fonctionnement-solaire-coffre-et-panneau.png)
+
+(schéma: raw/moustiquaires/Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR.pdf, p. 1)
+
+# Toiles et coloris
+
+La toile est microperforée ou occultante. La toile standard est l'Alkenz Duralex 4000 QM ; quatre
+toiles sont proposées en option (Mermet Satiné 5500, Copaco Sergé 600, Sattler Twilight Comfort 262,
+Sergi Ferrari Veozip, écrit ainsi : **INC-312**) ; les autres toiles se font sur demande [1 p. 2]. L'encadrement (coffre,
+coulisses, barre de charge) existe en jusqu'à 15 teintes et trois finitions, avec le laquage RAL
+en option. Les pastilles et les codes sont sur
+[Coloris de l'encadrement et toiles du screen SCREENAMAX](/coloris/coloris-screenamax.md).
+
+# Garantie et conformité
+
+- La toile est garantie 7 ans, hors la toile Cristal Plus, garantie 2 ans [1 p. 2].
+- La haute résistance bord de mer, en option, est garantie 5 ans de 0 à 10 km du bord de mer
+  et 7 ans au-delà de 10 km, « selon conditions précisées dans le Carnet d'Assistance et Garanties
+  SOPROFEN » [1 p. 2].
+- Le screen est marqué CE et conforme à la norme NF EN 13561 (store extérieur), de fabrication
+  française [1 p. 1-2].
+- SOPROFEN édite pour ce produit un tarif des screens extérieurs, un guide des solutions de mise en
+  œuvre, un catalogue des protections solaires, une coupe d'échantillon et des nuanciers [1 p. 2].
 
 # Citations
 
-[1] [Fiche produit Screen Extérieur zip SCREENAMAX SOPROFEN FR, réf. DOC83100 Version 062025](raw/moustiquaires/Fiche%20produit%20Screen%20Ext%C3%A9rieur%20SCREENAMAX%202025%20SOPROFEN%20FR.pdf), p. 1 et 2
+[1] Fiche produit Screen Extérieur zip SCREENAMAX SOPROFEN FR, réf. DOC83100 Version 062025 —
+`raw/moustiquaires/Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR.pdf`, p. 1 et 2
 
 # Voir aussi
 
 - [SOPROFEN](/fournisseurs/soprofen.md)
 - [SOMFY](/fournisseurs/somfy.md)
+- [Coloris de l'encadrement et toiles du screen SCREENAMAX](/coloris/coloris-screenamax.md)
 - [Stores intégrés](/equipements/stores-integres.md)
 - [Volets roulants](/equipements/volets-roulants.md)
 - [Garanties par composant](/garanties/garanties-par-composant.md)
 - [Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR](/sources/soprofen-screen-exterieur-screenamax-2025.md)
+- [Informations à vérifier](/anomalies/informations-a-verifier.md)
+- [Incohérences internes](/anomalies/incoherences-internes.md)

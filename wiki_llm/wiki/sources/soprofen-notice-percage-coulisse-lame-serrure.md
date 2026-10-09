@@ -1,45 +1,55 @@
 ---
-type: Source
-title: Notice de perçage des coulisses pour lame à serrure SOPROFEN (2008)
-description: Notice technique d'atelier et de chantier Soprofen (réf. NO-MM-T-TD-00-FR-032008) pour le perçage des coulisses lors du verrouillage de la lame finale à serrure sur volet roulant à tirage direct.
-resource: raw/moustiquaires/export_doc_134.zip
-origin: SOPROFEN SAS (Mertzwiller)
-last_modified: 2008-03-31
-tags: [source, soprofen, volet-roulant, tirage-direct, lame-serrure, coulisse, percage]
+type: Document source
+title: "Notice de perçage des coulisses pour lame à serrure SOPROFEN, réf. NO-MM-T-TD-00-FR-032008"
+description: "Notice de 2 pages de SOPROFEN, mars 2008 : sept étapes de traçage et de perçage des coulisses d'un volet roulant à tirage direct pour la lame à serrure, puis page d'assistance technique."
+resource: raw/moustiquaires/exports/134.pdf
+tags: [source, volet-roulant, tirage-direct, lame-serrure, serrure, coulisse, percage, soprofen]
 fournisseur: SOPROFEN
 status: stable
+sources:
+  - resource: raw/moustiquaires/exports/134.pdf
+    id: soprofen-notice-percage-coulisse-lame-serrure
+    title: Manœuvre par tirage direct, notice de perçage des coulisses pour le verrouillage de la lame à serrure, réf. NO-MM-T-TD-00-FR-032008
+    last_modified: 2008-03-31
 source_pages:
-  - resource: raw/moustiquaires/export_doc_134.zip
+  - resource: raw/moustiquaires/exports/134.pdf
     pages: 1-2
 generated:
-  by: process:gemini-coder
-  at: 2026-09-21T13:35:00Z
+  by: process:claude-code
+  at: 2026-10-09T02:30:00Z
 ---
 
-# Nature et identification du document
+# Identité
 
-Le document est une notice technique d'installation et de mise en œuvre sur chantier éditée par [SOPROFEN](/fournisseurs/soprofen.md).
-* **Titre** : « Manœuvre par tirage direct – Notice de perçage des coulisses pour le verrouillage de la lame à serrure »
-* **Référence / Code-barres** : `NO-MM-T-TD-00-FR-032008` (Mars 2008)
-* **Format d'origine** : Archive `export_doc_134.zip` contenant le fichier `134.pdf` (2 pages).
-* **Objet** : Définition des cotes de traçage et de perçage en fond de coulisses pour permettre l'engagement des targettes de verrouillage de la lame finale à serrure sur les volets roulants équipés d'une manœuvre manuelle par tirage direct.
+| Élément | Valeur |
+| --- | --- |
+| Titre | « Manœuvre par tirage direct — Notice de perçage des coulisses pour le verrouillage de la lame à serrure » |
+| Éditeur | SOPROFEN SAS, Mertzwiller |
+| Référence | NO-MM-T-TD-00-FR-032008 (code-barres imprimé en tête de page 1) |
+| Édition | mars 2008 |
+| Pages | 2 au PDF |
+| Nature | **atelier et chantier** : notice de mise en œuvre, « à faire sur place, volet installé » |
+| Fichier | `raw/moustiquaires/exports/134.pdf`, dépliée de l'archive `export_doc_134.zip` |
 
-# Registre d'analyse page par page
+# Registre de couverture
 
 **Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
 
-| Page PDF | Section / Objet | Contenu technique relevé | État |
+Registre reconstruit le 09/10/2026 sur le rendu des deux pages à 200 dpi, lecture en image seulement.
+
+Numérotation identique entre le fichier PDF et le document (pages 1 et 2, sans numéro imprimé).
+
+| Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| Page 1 | Notice de perçage des coulisses | Méthode d'intervention in situ, volet déjà posé :<br>1) Abaissement complet du tablier sur l'appui ou au sol fini.<br>2) Compression/tassage des lames basses à l'aide des poignées cuvettes montées sur la lame à serrure.<br>3) Identification du profil de cylindre : 1er modèle à barillet cylindrique rond, ou 2ème modèle à barillet cylindrique ovale.<br>4) Ligne de repère au crayon sur les coulisses : trait aligné sur le **dessus** de la lame pour cylindre rond, ou trait aligné sur le **dessous** de la lame pour cylindre ovale.<br>5) Remontée du tablier.<br>6) Report du point de centre de perçage en fond de coulisse : **trait dessus – 10 mm** (cylindre rond) ou **trait dessous + 15 mm** (cylindre ovale).<br>7) Perçage au foret $\varnothing 10\text{ mm}$ en fond de coulisse (cylindre rond : perçage brut $\varnothing 10\text{ mm}$ ; cylindre ovale : perçage $\varnothing 10\text{ mm}$ puis ovalisation à la lime pour targette plate de 10 mm de hauteur). | à faire |
-| Page 2 | Assistance technique et coordonnées | Support professionnel SOPROFEN :<br>• Hotline Pro : `03 88 900 990` (du lundi au jeudi 9h-12h et 14h-17h30, vendredi 9h-12h et 13h30-16h30, avec code d'accès chargé de clientèle).<br>• Centre de formation produits et pose : `03 88 905 034`.<br>• Coordonnées siège : SOPROFEN SAS, Parc d'Activités Les Bosquets, F-67580 Mertzwiller, tél. +33 (0)3 88 90 50 25. | à faire |
+| 1 | en-tête (code-barres, « Manœuvre par tirage direct », « Notice de perçage des coulisses pour le verrouillage de la lame à serrure », référence) ; « A faire sur place, volet installé » ; tableau de sept étapes, les étapes 3, 4, 6 et 7 en deux colonnes (1er modèle avec cylindre rond, 2e modèle avec cylindre ovale) ; deux pictogrammes de cylindre ; deux dessins de perçage cotés (10 et 15 mm, ∅10, « Ovaliser le trou avec une lime ») ; quatre images découpées dans `assets/procedures/percage-coulisses-lame-serrure-soprofen/` | transcrit | [Perçage des coulisses pour lame à serrure](/procedures/percage-coulisses-lame-serrure-soprofen.md) |
+| 2 | « ASSISTANCE TECHNIQUE » : Hotline Pro 03 88 900 990 (code d'accès à demander auprès du chargé de clientèle) et horaires, formation produits et pose 03 88 905 034 ; gamme SOPROFEN en couronne (volets roulants, portes de garage, accessoires, protections solaires) ; adresse, téléphone, télécopie, site, courriel, capital, RCS, SIRET, TVA et coordonnées bancaires du fabricant au pied de page (les coordonnées bancaires ne sont pas reprises : information de facturation, sans usage technique) | transcrit | [SOPROFEN](/fournisseurs/soprofen.md) |
 
-# Données techniques de référence extraites
+# Citations
 
-### 1. Distinction des cylindres de serrure
-La notice distingue formellement deux variantes d'organes de manœuvre de la lame à serrure :
-* **Cylindre rond** : axe de la targette situé à $10\text{ mm}$ en dessous du bord supérieur de la lame.
-* **Cylindre ovale** : axe de la targette situé à $15\text{ mm}$ au-dessus du bord inférieur de la lame.
+[1] Manœuvre par tirage direct, notice de perçage des coulisses pour le verrouillage de la lame à serrure, SOPROFEN, réf. NO-MM-T-TD-00-FR-032008 (mars 2008) — `raw/moustiquaires/exports/134.pdf`, p. 1 et 2
 
-### 2. Spécifications de perçage
-* **Diamètre du foret** : $\varnothing 10\text{ mm}$.
-* **Usinage complémentaire** : requis exclusivement sur la targette pour cylindre ovale, par ovalisation manuelle à la lime de serrurier afin d'absorber la hauteur de 10 mm de la targette rectangulaire.
+# Voir aussi
+
+- [SOPROFEN](/fournisseurs/soprofen.md)
+- [Perçage des coulisses pour lame à serrure sur volet roulant à tirage direct SOPROFEN](/procedures/percage-coulisses-lame-serrure-soprofen.md)
+- [Volets roulants](/equipements/volets-roulants.md)

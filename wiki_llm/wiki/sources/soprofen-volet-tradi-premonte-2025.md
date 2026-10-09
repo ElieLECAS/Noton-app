@@ -36,12 +36,22 @@ generated:
 
 **Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
 
+Registre reconstruit le 09/10/2026 sur le rendu des deux pages à 200 dpi, la note de bas de page et les rubriques de la page 2 relues à 400-500 dpi, lecture en image seulement.
+
 Numérotation identique entre le fichier PDF et le document imprimé (pages 1 et 2).
 
 | Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| 1 | Titre, avantages (neuf et rénovation, design arrondi coulisses, volet prémonté solidaire de l'axe, ossature bois MOB et vérandas, baies jusqu'à 4500 mm, occultation Goodnight jusqu'à 3000 mm), détails techniques (plate-forme AXIS 50, verrous automatiques 25 kg, butées cachées, lames alu 37/50 mm, lames PVC 50 mm, solution confort lame alu thermique Delta R = 0,24 m²K/W, isolation coffre menuisé Isoflex -66% déperdition et -6 dB, coulisse Goodnight joint brosse/co-extrudé/profilé noir, séparation exclusive baies jusqu'à 3,5 m, consoles prémontées auto-portantes sans déport) | à faire | [Volet roulant traditionnel TRADI PRÉMONTÉ](/equipements/volets-roulants-tradi-premonte.md) |
-| 2 | Limites dimensionnelles maximales (largeurs max 2000 à 3500 mm, hauteurs max 2950 à 3550 mm selon matière alu/PVC et taille de lame 37/50 mm), exemple en ossature bois, options (projection, lame finale rehaussée, butée ronde, tablier thermique, fixation universelle, déport, haute résistance bord de mer 0-10 km et > 10 km), manœuvres manuelles (treuil, sangle, chaînette) et motorisées (Somfy RS100 io, Oximo io, RTS, filaire, solaire déporté ; Soprofen M-Soft² radio, filaire, solaire déporté), score réparabilité Actibaie (7,5 à 7,8/10), nuanciers tablier (LA 37/50 alu 24 teintes, LATH thermique, L 37/50 PVC 3 teintes) et encadrement coulisses / lame finale (lisse-satiné, ton bois chêne doré, structuré mat, RAL, HR bord de mer) | à faire | [Volet roulant traditionnel TRADI PRÉMONTÉ](/equipements/volets-roulants-tradi-premonte.md) |
+| 1 | titre « Volet Traditionnel TRADI PRÉMONTÉ », bandeau « VOLET ROULANT », « Fiche produit » ; AVANTAGES (huit puces dont « Volet prémonté », ossature bois et vérandas, « jusqu'à 4500 mm de largeur », Goodnight*, « fixation robuste », « montage rapide sans déport ») ; deux photographies (maison à ossature bois, véranda) et photographie du tablier et de l'axe ; FOCUS SUR LES DETAILS TECHNIQUES (compacité, sécurité, isolation, occultation, esthétique « jusqu'à 3,5 m de large », facilité de pose, renvoi « * jusqu'à 3000 mm de large en LA37 et LA50 ») ; photographie du tablier et de la console ; trois coupes de lame cotées 37, 50, 55 ; schéma de la lame alu thermique ; coupe de la coulisse Goodnight ; quatre images découpées | transcrit | [Volet roulant TRADI PRÉMONTÉ](/equipements/volets-roulants-tradi-premonte.md), [Technologies des volets roulants TRADI](/equipements/volets-roulants-tradi-technologies.md) |
+| 2 | MISE EN OEUVRE (exemple en ossature bois) ; DIMENSIONS (tableau PVC / ALU × lame 37 et 50) ; OPTION (sept puces : projection, lame finale rehaussée, butée de lame finale ronde, tablier thermique, kit de fixation universel, déport de manœuvre supplémentaire, haute résistance bord de mer 5 et 7 ans) ; MANOEUVRES (manuelle : treuil, sangle, chaînette ; motorisée : sept lignes) ; GARANTIES (pictogrammes 2, 7, 10 ans, score de réparabilité Actibaie 7,8 / 7,5 / 7,8, CE NF EN 13241) ; COLORIS (mêmes nuanciers que la fiche du TRADI non prémonté, sans la lame 546) ; SUPPORTS ; pied « DOC83117 - Version 07/2025 » ; un dessin découpé | transcrit | [Volet roulant TRADI PRÉMONTÉ](/equipements/volets-roulants-tradi-premonte.md), [Manœuvres, motorisations, garanties et réparabilité](/equipements/volets-roulants-tradi-manoeuvres-et-garanties.md), [Coloris du tablier et de l'encadrement des volets roulants TRADI](/coloris/coloris-volets-roulants-tradi.md) |
+
+# Anomalies portées par ce document
+
+| Entrée | Page | Objet |
+| --- | --- | --- |
+| **INC-313** | 1, 2 | « jusqu'à 4500 mm de largeur » contre 3,5 m et 3500 mm |
+| **VER-130** | 1 | trois coupes de lame sans nom, dont une de 55 mm sans lame 546 |
+| **VER-131** | 2 | trois pictogrammes de garantie sans rattachement |
 
 # Citations
 
@@ -52,5 +62,10 @@ Numérotation identique entre le fichier PDF et le document imprimé (pages 1 et
 - [SOPROFEN](/fournisseurs/soprofen.md)
 - [Volet roulant traditionnel TRADI PRÉMONTÉ](/equipements/volets-roulants-tradi-premonte.md)
 - [Volets roulants](/equipements/volets-roulants.md)
+- [Technologies des volets roulants TRADI](/equipements/volets-roulants-tradi-technologies.md)
+- [Manœuvres, motorisations, garanties et réparabilité des volets roulants TRADI](/equipements/volets-roulants-tradi-manoeuvres-et-garanties.md)
+- [Coloris du tablier et de l'encadrement des volets roulants TRADI](/coloris/coloris-volets-roulants-tradi.md)
+- [Incohérences internes](/anomalies/incoherences-internes.md)
+- [Informations à vérifier](/anomalies/informations-a-verifier.md)
 - [SOMFY](/fournisseurs/somfy.md)
 - [Garanties par composant](/garanties/garanties-par-composant.md)

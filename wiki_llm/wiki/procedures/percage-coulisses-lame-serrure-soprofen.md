@@ -1,87 +1,101 @@
 ---
 type: Procédure
-title: Perçage des coulisses pour lame à serrure sur volet à tirage direct
-description: Procédure de traçage, perçage et ajustement des coulisses sur chantier pour le verrouillage des lames finales à serrure (cylindre rond ou ovale) sur volets roulants SOPROFEN à tirage direct.
-tags: [procedure, soprofen, volet-roulant, tirage-direct, serrure, coulisse, percage, chantier]
+title: Perçage des coulisses pour lame à serrure sur volet roulant à tirage direct SOPROFEN
+description: Traçage et perçage sur place des coulisses d'un volet roulant SOPROFEN à manœuvre par tirage direct pour le verrouillage de la lame à serrure, cylindre rond (centre à 10 mm sous le trait) ou ovale (centre à 15 mm au-dessus du trait), trou de 10 mm.
+resource: https://www.soprofen.com
+tags: [procedure, volet-roulant, tirage-direct, lame-serrure, serrure, coulisse, percage, chantier, soprofen]
 fournisseur: SOPROFEN
 usage: pose
+famille: lame-a-serrure
 status: stable
 sources:
-  - resource: raw/moustiquaires/export_doc_134.zip
+  - resource: raw/moustiquaires/exports/134.pdf
     id: soprofen-notice-percage-coulisse-lame-serrure
-    title: Notice de perçage des coulisses pour lame à serrure SOPROFEN, réf. NO-MM-T-TD-00-FR-032008
+    title: Manœuvre par tirage direct, notice de perçage des coulisses pour le verrouillage de la lame à serrure, réf. NO-MM-T-TD-00-FR-032008
     last_modified: 2008-03-31
 source_pages:
-  - resource: raw/moustiquaires/export_doc_134.zip
-    pages: 1-2
+  - resource: raw/moustiquaires/exports/134.pdf
+    pages: 1
 generated:
-  by: process:gemini-coder
-  at: 2026-09-21T13:35:00Z
+  by: process:claude-code
+  at: 2026-10-09T02:30:00Z
 ---
 
-# Domaine d'application et conditions préalables
+# Ce que fait cette procédure
 
-La présente procédure détaille les opérations de traçage et d'usinage des lumières de verrouillage en fond de coulisses pour les volets roulants [SOPROFEN](/fournisseurs/soprofen.md) équipés d'une manœuvre manuelle par tirage direct avec lame finale à serrure [1 p. 1].
+Un volet roulant SOPROFEN à manœuvre par tirage direct (une manœuvre manuelle) peut avoir une
+lame à serrure : une lame finale munie d'une serrure à clé. Ses targettes (les pièces de verrouillage) s'engagent dans des trous percés dans le
+fond des coulisses, c'est-à-dire des rails verticaux dans lesquels glisse le tablier. Cette procédure
+donne les étapes de traçage et de perçage de ces trous. Elle se fait sur place, volet installé
+[1 p. 1].
 
-L'intervention s'effectue **sur place, une fois le volet roulant posé** dans la baie [1 p. 1] :
-* Le tablier doit être complètement descendu en appui sur la bavette ou sur le sol fini [1 p. 1].
-* Les lames basses doivent être fermement tassées à l'aide des poignées cuvettes montées sur la lame à serrure avant tout traçage [1 p. 1].
+# Conditions et interdictions
 
-# Outillage requis
+- À faire sur place, volet installé [1 p. 1].
+- Le tablier est d'abord descendu sur l'appui ou au sol fini, et les lames basses sont tassées avec les
+  poignées cuvettes de la lame à serrure (étapes 1 et 2) [1 p. 1].
+- La cote de perçage dépend du modèle de lame finale : cylindre rond ou cylindre ovale (étape 3)
+  [1 p. 1].
 
-* Mètre ruban et réglet métallique de précision.
-* Crayon de traçage de menuisier.
-* Perceuse portative équipée d'un foret métaux de diamètre $\varnothing 10\text{ mm}$ [1 p. 1].
-* Lime plate de serrurier (nécessaire pour les cylindres ovales) [1 p. 1].
+# Étapes
 
-# Identification du type de cylindre
+La notice numérote sept étapes. Les étapes 1, 2, 3 et 5 valent pour les deux modèles ; les étapes 4, 6
+et 7 sont écrites en deux colonnes, une par modèle [1 p. 1].
 
-La méthode de traçage et la cote de positionnement du trou dépendent de la géométrie du barillet de serrure intégré à la lame finale [1 p. 1] :
+1. Descendre le tablier sur l'appui ou au sol fini.
+2. Tasser les lames basses avec les poignées cuvettes sur la lame avec serrure.
+3. Identifier le modèle de la lame finale : 1er modèle avec cylindre rond ou **2e modèle avec
+   cylindre ovale**. Le cylindre est le barillet de la serrure, vu de face sur la lame.
 
-| Type de cylindre | Repère de traçage initial | Formule du centre de perçage (mm) | Forme de l'usinage en fond de coulisse |
-| --- | --- | --- | --- |
-| 1er modèle : cylindre rond | Trait au crayon sur le **dessus** de la lame finale | $\text{Trait dessus} - 10$ | Trou cylindrique brut $\varnothing 10\text{ mm}$ |
-| 2ème modèle : cylindre ovale | Trait au crayon sur le **dessous** de la lame finale | $\text{Trait dessous} + 15$ | Trou $\varnothing 10\text{ mm}$ ovalisé à la lime |
+   ![1er modèle : cylindre rond](/assets/procedures/percage-coulisses-lame-serrure-soprofen/cylindre-rond-vue-de-face.png)
 
-(schéma: raw/moustiquaires/export_doc_134.zip, p. 1)
+   ![2e modèle : cylindre ovale](/assets/procedures/percage-coulisses-lame-serrure-soprofen/cylindre-ovale-vue-de-face.png)
 
-# Étapes opératoires d'exécution
+4. Tracer au crayon sur les coulisses :
+   - cylindre rond : le dessus de la lame à serrure ;
+   - cylindre ovale : le dessous de la lame à serrure.
+5. Remonter le tablier.
+6. Tracer en fond des coulisses le centre du perçage :
+   - cylindre rond : trait dessus de la lame à serrure − 10 mm ;
+   - cylindre ovale : trait dessous de la lame à serrure + 15 mm.
+7. Percer un trou de diamètre 10 mm en fond de coulisse :
+   - cylindre rond : percer le trou ;
+   - cylindre ovale : percer le trou, puis l'ovaliser à la lime pour permettre le verrouillage de
+     la targette de 10 mm de hauteur.
 
-### Étape 1 : Descente et mise en pression du tablier
-1. Dérouler manuellement le tablier jusqu'à ce que la lame finale repose parfaitement sur l'appui maçonné ou le sol fini [1 p. 1].
-2. Presser fermement vers le bas les poignées cuvettes afin de tasser l'ensemble des ajours et supprimer tout jeu entre les lames basses [1 p. 1].
+# Cotes
 
-### Étape 2 : Traçage des traits de référence
-1. Identifier visuellement le modèle de cylindre (rond ou ovale) [1 p. 1].
-2. À l'aide d'un crayon fin, tracer sur les deux coulisses de guidage :
-   * Le trait d'affleurement supérieur (dessus de la lame) pour un cylindre rond [1 p. 1].
-   * Le trait d'affleurement inférieur (dessous de la lame) pour un cylindre ovale [1 p. 1].
+Cotes de traçage et de perçage, en millimètres. Une ligne par modèle de lame finale. Sur les
+dessins de la notice, le centre du trou de 10 mm est sous le trait « DESSUS » pour le cylindre rond,
+et au-dessus du trait « DESSOUS » pour le cylindre ovale.
 
-### Étape 3 : Remontée du tablier et pointage
-1. Remonter le tablier d'environ 500 mm pour dégager complètement la zone de travail en fond de coulisses [1 p. 1].
-2. Reporter la cote de centre de perçage au fond de chaque coulisse :
-   * **Pour cylindre rond** : mesurer $10\text{ mm}$ vers le bas à partir du trait supérieur tracé à l'étape 2 [1 p. 1].
-   * **Pour cylindre ovale** : mesurer $15\text{ mm}$ vers le haut à partir du trait inférieur tracé à l'étape 2 [1 p. 1].
+| Modèle de lame finale | Repère tracé sur les coulisses | Centre du perçage en fond de coulisse | Diamètre du trou (mm) | Ovalisation à la lime |
+| --- | --- | --- | --- | --- |
+| 1er modèle, cylindre rond | dessus de la lame à serrure | trait dessus − 10 mm | 10 | non |
+| 2e modèle, cylindre ovale | dessous de la lame à serrure | trait dessous + 15 mm | 10 | oui |
 
-### Étape 4 : Perçage et ajustement
-1. Pointer et percer un trou franc de diamètre $\varnothing 10\text{ mm}$ dans le fond de chaque coulisse [1 p. 1].
-2. **Pour le cylindre rond** : ébavurer les contours du trou $\varnothing 10\text{ mm}$ [1 p. 1].
-3. **Pour le cylindre ovale** : à l'aide d'une lime plate douce, ovaliser verticalement le perçage pour créer une lumière oblongue recevant sans frottement la targette rectangulaire de $10\text{ mm}$ de hauteur [1 p. 1].
+![Cylindre rond : centre du trou de 10 mm à 10 mm sous le trait dessus de la lame à serrure](/assets/procedures/percage-coulisses-lame-serrure-soprofen/percage-cylindre-rond-trait-dessus-moins-10.png)
 
-### Étape 5 : Contrôle fonctionnel
-1. Redescendre le tablier en position fermée.
-2. Actionner la clé dans le barillet pour déployer les targettes latérales à gauche et à droite.
-3. Vérifier que les targettes s'engagent librement dans les lumières percées sans point dur ni contrainte mécanique sur la clé.
+![Cylindre ovale : centre du trou de 10 mm à 15 mm au-dessus du trait dessous de la lame à serrure, trou ovalisé à la lime](/assets/procedures/percage-coulisses-lame-serrure-soprofen/percage-cylindre-ovale-trait-dessous-plus-15.png)
 
-# Assistance technique fabricant
+Comment lire ces dessins : la vue du haut montre les deux coulisses (les doubles traits verticaux), le
+trou de 10 mm et, à droite, la lame à serrure en coupe avec le trait de repère ; la vue du bas est la
+coupe d'une coulisse, qui donne le diamètre du trou : 10 mm.
 
-En cas de difficulté de mise en œuvre, le service technique SOPROFEN est joignable via [1 p. 2] :
-* **Hotline Professionnelle** : `03 88 900 990` (accessible sur code d'accès chargé de clientèle, du lundi au jeudi de 9h à 12h et de 14h à 17h30, le vendredi de 9h à 12h et de 13h30 à 16h30).
-* **Centre de formation technique** : `03 88 905 034`.
+(schéma: raw/moustiquaires/exports/134.pdf, p. 1)
+
+# Ce que le document ne dit pas
+
+La notice ne liste aucun outil (mètre, foret, lime), ne donne pas la hauteur dont il faut remonter le
+tablier à l'étape 5, ne donne pas le sens de « − » et de « + » autrement que par ses dessins, et ne
+décrit aucun contrôle après le perçage. Elle ne dit pas non plus quelle serrure ou quel volet
+SOPROFEN reçoit un cylindre rond ou un cylindre ovale.
 
 # Citations
 
-[1] [Notice de perçage des coulisses pour lame à serrure SOPROFEN, réf. NO-MM-T-TD-00-FR-032008](raw/moustiquaires/export_doc_134.zip), p. 1 et 2
+[1] Manœuvre par tirage direct, notice de perçage des coulisses pour le verrouillage de la lame à
+serrure, SOPROFEN, réf. NO-MM-T-TD-00-FR-032008 (mars 2008) — `raw/moustiquaires/exports/134.pdf`,
+p. 1
 
 # Voir aussi
 

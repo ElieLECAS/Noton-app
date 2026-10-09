@@ -36,18 +36,23 @@ generated:
 
 **Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
 
+Registre reconstruit le 09/10/2026 sur le rendu des deux pages à 200 dpi, les nuanciers et les pictogrammes relus à 400-600 dpi, lecture en image seulement.
+
 Numérotation identique entre le fichier PDF et le document imprimé (pages 1 et 2).
 
 | Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| 1 | Titre, avantages (neuf et rénovation, adaptation à tous coffres menuisés et maçonnés existants, invisibilité position relevée, clair de jour maximal, grande stabilité jusqu'à 3500 mm et 4500 mm, coulisse Goodnight, déport sur mesure), détails techniques (plate-forme AXIS 50, verrous automatiques 25 kg, butées cachées, lames alu 37, 50 et 546 mm, lame PVC 50 mm, solution confort thermique Delta R = 0,24 m²K/W, isolation Isoflex coffre menuisé -66% déperdition et -6 dB, coulisse Goodnight avec exclusion LA546, système de séparation baies jusqu'à 4500 mm, préperçage coulisses) | à faire | [Volet roulant traditionnel TRADI NON PRÉMONTÉ](/equipements/volets-roulants-tradi-non-premonte.md) |
-| 2 | Limites dimensionnelles maximales (largeurs max 2000 à 4500 mm, hauteurs max 2800 à 3550 mm selon lames LA 37, LA 50, LA 546 et PVC 50 mm), pose coffre existant enroulement intérieur, options (projection, butée ronde, kit fixation universel, déport supplémentaire, haute résistance bord de mer 0-10 km et > 10 km), manœuvres manuelles et motorisées Somfy et Soprofen M-Soft², réparabilité Actibaie (7,5 à 7,8/10), nuanciers tablier (LA 37/50 alu 24 teintes, LA 546 alu 14 teintes dont Noir graphite et Chêne clair, LATH thermique, L 37/50 PVC) et encadrement (lisse-satiné, ton bois, structuré mat, RAL, HR bord de mer) | à faire | [Volet roulant traditionnel TRADI NON PRÉMONTÉ](/equipements/volets-roulants-tradi-non-premonte.md) |
+| 1 | titre « Volet Traditionnel TRADI NON PRÉMONTÉ », bandeau « VOLET ROULANT », « Fiche produit » ; AVANTAGES (huit puces dont « jusqu'à 3500 mm de largeur » et la coulisse Goodnight*, « déport sur mesure ») ; photographie de terrasse et console AXIS 50 ; FOCUS SUR LES DETAILS TECHNIQUES (compacité, sécurité, isolation, occultation, esthétique, facilité de pose, renvoi * sur la coulisse Goodnight) ; trois coupes de lame cotées 37, 50, 55 ; schéma de la lame alu thermique ; coupe de la coulisse Goodnight ; cinq images découpées dans `assets/equipements/volets-roulants/tradi/` | transcrit | [Volet roulant traditionnel TRADI NON PRÉMONTÉ](/equipements/volets-roulants-tradi-non-premonte.md), [Technologies des volets roulants TRADI](/equipements/volets-roulants-tradi-technologies.md) |
+| 2 | MISE EN OEUVRE (coffre existant, enroulement intérieur) ; DIMENSIONS (tableau PVC / ALU × lame 37, 50, 546 × L maxi, H maxi) ; OPTION (projection, butée de lame finale ronde, kit de fixation universel, déport de manœuvre supplémentaire, haute résistance bord de mer 5 ans de 0 à 10 km et 7 ans au-delà) ; MANOEUVRES (manuelle : treuil, sangle, chaînette ; motorisée : sept lignes) ; GARANTIES (pictogrammes 2, 7, 10 ans, score de réparabilité Actibaie 7,8 / 7,5 / 7,8, CE NF EN 13241, fabrication française) ; COLORIS (tablier : LA 37/50 vingt-cinq teintes, LA 546 dix-sept teintes, lames alu thermique LATH 37 et 37/50, lames PVC L 37/50 ; encadrement : standards, niveau 1 de 14 teintes RAL, niveau 2) ; SUPPORTS (tarifs, catalogue, nuanciers, autres outils) ; pied « DOC83116 Version 07/2025 » ; 84 pastilles et 4 images découpées | transcrit | [Volet roulant traditionnel TRADI NON PRÉMONTÉ](/equipements/volets-roulants-tradi-non-premonte.md), [Manœuvres, motorisations, garanties et réparabilité](/equipements/volets-roulants-tradi-manoeuvres-et-garanties.md), [Coloris du tablier et de l'encadrement des volets roulants TRADI](/coloris/coloris-volets-roulants-tradi.md) |
 
 # Anomalies portées par ce document
 
 | Entrée | Page | Objet |
 | --- | --- | --- |
-| **INC-16** | 1 | Coquille de copier-coller dans la rubrique « Facilité de pose » : mention erronée de « Pose rapide grâce à ses consoles et tablier prémontés, solidaires de l'axe » sur la fiche d'un volet expressément non prémonté |
+| **INC-16** | 1 | puces « consoles et tablier prémontés » et « auto-portant sans déport » sur un volet non prémonté |
+| **VER-129** | 2 | astérisque de « Noir graphite B8821* » sans note |
+| **VER-130** | 1 | trois coupes de lame sans nom |
+| **VER-131** | 2 | trois pictogrammes de garantie sans rattachement |
 
 # Citations
 
@@ -59,4 +64,8 @@ Numérotation identique entre le fichier PDF et le document imprimé (pages 1 et
 - [Volet roulant traditionnel TRADI NON PRÉMONTÉ](/equipements/volets-roulants-tradi-non-premonte.md)
 - [Volet roulant traditionnel TRADI PRÉMONTÉ](/equipements/volets-roulants-tradi-premonte.md)
 - [Volets roulants](/equipements/volets-roulants.md)
+- [Technologies des volets roulants TRADI](/equipements/volets-roulants-tradi-technologies.md)
+- [Manœuvres, motorisations, garanties et réparabilité des volets roulants TRADI](/equipements/volets-roulants-tradi-manoeuvres-et-garanties.md)
+- [Coloris du tablier et de l'encadrement des volets roulants TRADI](/coloris/coloris-volets-roulants-tradi.md)
+- [Informations à vérifier](/anomalies/informations-a-verifier.md)
 - [Incohérences internes](/anomalies/incoherences-internes.md)

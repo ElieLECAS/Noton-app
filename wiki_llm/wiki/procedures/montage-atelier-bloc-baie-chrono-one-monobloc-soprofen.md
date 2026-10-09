@@ -1,91 +1,172 @@
 ---
 type: Procédure
-title: Montage en atelier du bloc-baie Chrono One sur dormant monobloc SOPROFEN
-description: Méthode d'assemblage en atelier du bloc-baie Chrono One SOPROFEN sur dormant monobloc — vissage premier des coulisses, indexage du coffre, fixation frontale de l'adaptateur sur deux cloisons et pattes VX26.
-tags: [procedure, soprofen, bloc-baie, chrono-one, monobloc, volet-roulant, atelier, assemblage, coulisse, indexage]
+title: Montage en atelier du coffre bloc-baie Chrono One SOPROFEN sur dormant monobloc
+description: "Quatre étapes de pose en atelier du coffre bloc-baie Chrono One de SOPROFEN sur un dormant monobloc : coulisses vissées d'abord (50 mm mini des bouts, 400 mm maxi entre vis), joint de finition en option, coffre vissé par l'avant sur 2 cloisons mini, pattes VX26 en option."
+resource: https://www.soprofen.com
+tags: [procedure, bloc-baie, chrono-one, monobloc, volet-roulant, atelier, assemblage, coulisse, soprofen]
 systeme: Chrono One
 fournisseur: SOPROFEN
 usage: atelier
-status: stable
+famille: bloc-baie-chrono-one
+status: draft
 sources:
-  - resource: raw/moustiquaires/export_doc_138.zip
+  - resource: raw/moustiquaires/exports/138.pdf
     id: soprofen-notice-pose-bloc-baie-chrono-one-monobloc
-    title: Notice de pose coffre bloc-baie Chrono One sur dormant monobloc SOPROFEN, réf. NO-BB-T-CO-01-FR-202406
+    title: Notice de pose coffre bloc-baie en atelier sur dormant MONOBLOC d'une menuiserie extérieure, réf. NO-BB-T-CO-01-FR-202406
     last_modified: 2024-06-25
 source_pages:
-  - resource: raw/moustiquaires/export_doc_138.zip
+  - resource: raw/moustiquaires/exports/138.pdf
     pages: 1-3
 generated:
-  by: process:gemini-coder
-  at: 2026-09-21T13:58:00Z
+  by: process:claude-code
+  at: 2026-10-09T02:30:00Z
 ---
 
-# Objet et domaine d'application
+# Ce que fait cette procédure
 
-La présente procédure décrit les règles d'assemblage direct en atelier de fabrication du coffre de volet roulant bloc-baie **Chrono One** de [SOPROFEN](/fournisseurs/soprofen.md) sur le dormant **monobloc** d'une menuiserie extérieure (PVC ou aluminium) [1 p. 1-3].
-* **Différence majeure avec le dormant traditionnel** : sur dormant monobloc, la pose commence par le **vissage préalable des coulisses sur les montants de la menuiserie**, le coffre venant ensuite s'enficher par le dessus dans la zone d'indexage sommitale des coulisses [1 p. 1-2].
-* **Orientation obligatoire** : coffre positionné à l'horizontale et coulisses à la verticale [1 p. 1].
-* **Protection anticorrosion** : visserie et organes d'ancrage conformes à la norme **NF EN 1670** (tenue 24 h en usage intérieur, 96 h en usage extérieur) et isolation diélectrique obligatoire pour éliminer les risques de corrosion galvanique entre matériaux différents [1 p. 1].
-* **Interdiction stricte de stockage** : le stockage du bloc-baie assemblé en position verticale sur la tranche est formellement prohibé [1 p. 1].
+Un bloc-baie est un ensemble formé d'une menuiserie et de son volet roulant. La procédure donne la
+pose, en atelier, du coffre du volet roulant Chrono One de [SOPROFEN](/fournisseurs/soprofen.md)
+sur un dormant monobloc ; la notice ne définit pas ce mot. Dans cette notice, les coulisses sont
+vissées d'abord, puis le coffre est posé dessus ; la notice du
+[montage sur dormant de menuiserie](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md)
+commence au contraire par l'adaptateur et le joint de finition. Le coffre est le caisson qui
+contient le volet enroulé, les coulisses sont les rails verticaux dans lesquels glisse le tablier
+(l'ensemble des lames), l'adaptateur est la pièce montée sur le coffre (« coffre avec adaptateur »)
+par laquelle il se visse dans le dormant. Le cartouche d'en-tête de la notice est
+titré « GUIDE DE POSE » et porte la mention « Moteur » (**VER-134**) [1 p. 1].
 
-# Quincaillerie et références de composants
+# Conditions et interdictions
 
-Organes d'assemblage et vis de solidarisation spécifiés par SOPROFEN [1 p. 1-3] :
+- Destination finale : coffre en position horizontale et coulisses en position verticale. [1 p. 1]
+- Les opérations peuvent varier par rapport à cette notice de principe ; il faut **respecter
+  impérativement les plans et instructions de mise en œuvre spécifiques du bloc-baie**, et vérifier
+  que les dimensions du coffre correspondent à celles de la menuiserie [1 p. 1].
+- Le choix des vis et des chevilles, non fournies avec le produit : pour la fixation de tout élément
+  indépendant (coulisse, bloqueur de manivelle, coffre, point de commande, etc.), le type de fixation
+  et la longueur doivent être adaptés à la nature du support. Le niveau de protection à la corrosion
+  doit répondre à la classification de la norme NF EN 1670 : **24 h pour les fixations en usage
+  intérieur et 96 h pour les fixations en usage extérieur**. Une attention particulière est portée aux
+  risques de corrosion électrolytique dus au contact de pièces de matériaux différents [1 p. 1].
+- Ce mode de stockage est interdit : même pictogramme que sur la notice du montage sur dormant
+  (blocs-baies dressés contre un mur, sous le soleil et la pluie, barrés d'une croix rouge) (**VER-135**)
+  [1 p. 1]. Voir l'image sur
+  [Montage en atelier du coffre bloc-baie Chrono One sur dormant de menuiserie](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md).
+- La notice est destinée aux installateurs professionnels formés au produit. Avant l'installation :
+  lire attentivement toutes les notices fournies, suivre les instructions et les conserver avec les
+  autres documents pendant toute la vie du produit ; tenir à l'écart les enfants et toute personne non
+  concernée ; mettre en œuvre les protections nécessaires (risque de coupure, de chute,
+  d'électrocution, etc.) [1 p. 1].
 
-| Composant | Réf. fabricant | Rôle et spécification technique |
+# Étapes
+
+La vue d'ensemble montre le dormant monobloc, les coulisses, le joint de finition (en option) et le
+coffre avec son adaptateur, avec les cotes « Mini 50mm » et « 400mm » [1 p. 1].
+
+![Vue d'ensemble : dormant monobloc, coulisses, joint de finition et coffre avec adaptateur](/assets/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen/vue-d-ensemble-dormant-monobloc-coulisses-coffre.png)
+
+## Étape 1 : mise en place des coulisses
+
+1.1 Visser les coulisses sur le châssis avec un écartement maxi de 400 mm entre chaque vis, le grugeage
+côté du coffre (les coulisses alu sont pré-percées). Le grugeage est l'encoche taillée en usine
+dans la coulisse. Coulisse centrale (tablier double) : utiliser des vis plots même sur châssis alu
+[1 p. 1]. Les vis sont « adaptées (non fournies) » (renvoi *, voir les conditions ci-dessus).
+
+Les cotes « mini 50mm » sont portées aux deux bouts de la coulisse et « Maxi 400mm » entre deux vis. Le
+détail circulaire montre le profil de la coulisse avec le grugeage en usine, la zone d'insertion des
+lames (en orange) et la zone d'indexage. Deux exemples en coupe portent les cotes « L1 commande » et
+« L2 », de part et d'autre de la coulisse centrale ; sur le premier, la coulisse centrale est vissée
+par une vis plot, sur le second, un bloc barré d'une croix figure sous la coulisse centrale [1 p. 1].
+
+![Étape 1.1 : vissage des coulisses sur le châssis](/assets/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen/etape-1-1-vissage-des-coulisses-sur-le-chassis.png)
+
+![Étape 1 : grugeage en usine, zone d'insertion des lames, zone d'indexage](/assets/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen/etape-1-grugeage-zone-d-insertion-des-lames-et-d-indexage.png)
+
+![Étape 1 : deux exemples en coupe, coulisse centrale et vis plot](/assets/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen/etape-1-exemples-coulisse-centrale-vis-plot.png)
+
+## Étape 2, option : mise en place du joint de finition
+
+1. 2.1 Retirer la protection de l'adhésif du joint de finition.
+2. 2.2 Positionner le joint de finition sur le dormant [1 p. 2].
+
+![Étape 2 : joint de finition en option](/assets/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen/etape-2-joint-de-finition-en-option.png)
+
+## Étape 3 : montage du coffre sur le châssis
+
+1. 3.1 Siliconer pour étancher la zone entre le coffre et la menuiserie. Le dessin montre la surface à
+   siliconer, et la même surface « si OPTION joint de finition ».
+2. 3.2 Positionner le coffre dans la pièce d'indexage des coulisses.
+3. 3.3 Monter à la main la lame finale au maximum dans le coffre.
+4. 3.4 Visser par l'avant dans l'adaptateur (trous pré-percés), avec des vis adaptées, non fournies :
+   vissage sur 2 cloisons mini [1 p. 2].
+
+![Étape 3.1 : surface à siliconer](/assets/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen/etape-3-1-surface-a-siliconer.png)
+
+![Étape 3.2 : zone d'indexage des coulisses](/assets/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen/etape-3-2-zone-d-indexage-des-coulisses.png)
+
+![Étape 3 : coffre présenté au-dessus du châssis, repères 3.1 à 3.4](/assets/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen/etape-3-coffre-presente-au-dessus-du-chassis.png)
+
+![Étape 3.3 : lame finale à remonter](/assets/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen/etape-3-3-lame-finale-a-remonter.png)
+
+![Étape 3.4 : vissage dans l'adaptateur pré-percé, sur 2 cloisons mini](/assets/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen/etape-3-4-vissage-sur-2-cloisons-dans-l-adaptateur.png)
+
+## Étape 4, option : pattes de fixation VX26
+
+1. 4.1 Surface à siliconer (le long du côté du coffre).
+2. 4.2 Placer sur chaque côté du coffre les pattes de fixation VX26, avec les vis 15/3-9/9-5
+   fournies. Les pattes de fixation sont inclinables suivant la position du dormant ; le dessin les
+   montre dans trois inclinaisons (repères 4.2.1, 4.2.2, 4.2.3).
+3. 4.3 Fixer le VX26 en premier sur le coffre puis sur le dormant (possibilité de l'incliner et de le
+   plier pour assurer une liaison optimale entre les deux éléments), avec des vis adaptées non
+   fournies [1 p. 3].
+
+![Étape 4.1 : patte de fixation VX26 et surface à siliconer](/assets/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen/etape-4-1-patte-vx26-et-surface-a-siliconer.png)
+
+![Étape 4.2 : la patte VX26 est inclinable](/assets/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen/etape-4-2-patte-vx26-inclinable.png)
+
+![Étape 4.3 : exemple d'inclinaison de la patte et fixation au dormant](/assets/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen/etape-4-3-exemple-d-inclinaison-et-fixation-au-dormant.png)
+
+# Cotes
+
+Cotes d'implantation des vis des coulisses, en millimètres, relevées sur le dessin de l'étape 1. Une
+ligne par cote.
+
+| Cote | Valeur (mm) | Où elle s'applique |
 | --- | --- | --- |
-| Vis de fixation coulisses | - | Vis adaptées au support de dormant monobloc (non fournies) |
-| Vis plots coulisse centrale | VC4/10T | Vis plots obligatoires pour coulisse centrale de tablier double (y compris châssis alu) |
-| Vis d'adaptateur frontal | - | Vis de solidarisation traversant l'adaptateur vers au moins 2 cloisons du dormant (non fournies) |
-| Vis patte VX26 sur coffre | 15/3-9/9-5 | Vissage de la patte métallique sur la joue de coffre (fournie) |
-| Pattes de reprise d'angle | VX26 | Pattes métalliques déformables à 3 positions d'inclinaison pour liaison coffre/dormant |
-| Joint adhésif de finition | - | Bande d'étanchéité adhésive de traverse haute (option) |
+| Distance mini entre une extrémité de la coulisse et la première vis | 50 | « mini 50mm » aux deux bouts [1 p. 1] |
+| Écartement maxi entre deux vis | 400 | « Maxi 400mm », étape 1.1 [1 p. 1] |
 
-(schéma: raw/moustiquaires/export_doc_138.zip, p. 1, 2 et 3)
+(schéma: raw/moustiquaires/exports/138.pdf, p. 1)
 
-# Cotes d'implantation et pas de vissage
+# Visserie citée
 
-Cotes d'atelier pour l'implantation des fixations, exprimées en millimètres [1 p. 1-3] :
-
-| Organe fixé | Distance minimale de rive (mm) | Entraxe maximal (mm) | Condition d'ancrage mécanique |
+| Pièce | Référence imprimée | Fournie | Où elle sert |
 | --- | --- | --- | --- |
-| Coulisses sur montants de châssis | 50 | 400 | Grugeage d'usine orienté vers le haut (côté coffre) |
-| Adaptateur sous coffre | - | - | Vissage frontal par l'avant sur au moins 2 cloisons de profil dormant |
-| Pattes VX26 sur dormant | - | - | Vis adaptées au support après pré-vissage sur coffre et pliage |
+| Vis des coulisses sur le châssis | « adaptées » | non | étape 1.1 [1 p. 1] |
+| Vis plot de la coulisse centrale | « vis plot » | non précisé | étape 1.1 [1 p. 1] |
+| Vis de l'adaptateur dans le dormant | « adaptées » | non | étape 3.4 [1 p. 2] |
+| Patte de fixation | VX26 | non précisé | étape 4 [1 p. 3] |
+| Vis de patte VX26 sur le coffre | 15/3-9/9-5 | oui | étape 4.2 [1 p. 3] |
+| Vis de patte VX26 sur le dormant | « adaptées » | non | étape 4.3 [1 p. 3] |
 
-(schéma: raw/moustiquaires/export_doc_138.zip, p. 1, 2 et 3)
+# Ce que le document ne dit pas
 
-# Étapes opératoires de montage en atelier
-
-### Étape 1 : Vissage des coulisses sur le châssis monobloc
-1. Positionner les coulisses sur les montants du dormant monobloc en orientant impérativement le grugeage réalisé en usine vers le haut (côté coffre) [1 p. 1].
-2. Vérifier que la zone d'indexage sommitale en créneau et la zone d'insertion des lames sont convenablement orientées vers l'intérieur pour recevoir les joues du coffre [1 p. 1].
-3. Fixer les coulisses au moyen de vis adaptées (non fournies, les coulisses alu étant pré-percées d'usine), avec une première vis implantée à au moins $50\text{ mm}$ de chaque extrémité et un entraxe maximal de $400\text{ mm}$ entre vis consécutives [1 p. 1].
-4. Dans le cas d'un châssis à double tablier (séparation L1 commande / L2), équiper obligatoirement la coulisse centrale de vis plots, y compris sur dormant en aluminium [1 p. 1].
-
-### Étape 2 : Pose optionnelle du joint de finition
-1. Retirer la bande pelable de protection de l'adhésif sur le joint de finition [1 p. 2].
-2. Positionner et coller le joint de finition sur la face supérieure de la traverse haute du dormant monobloc [1 p. 2].
-
-### Étape 3 : Emboîtement et vissage frontal du coffre
-1. Déposer un cordon continu de mastic silicone d'étanchéité sur la surface d'assise du dormant monobloc (ou sur la face arrière du joint de finition si celui-ci a été posé) [1 p. 2].
-2. Présenter le coffre au-dessus du châssis et insérer les ergots de guidage inférieurs des joues de coffre dans les logements de la zone d'indexage sommitales des coulisses [1 p. 2].
-3. Remonter manuellement la lame finale du volet au maximum vers le haut à l'intérieur du coffre afin de dégager l'accès visuel et mécanique à la rangée de perçages de l'adaptateur [1 p. 2].
-4. Introduire l'embout de vissage par l'avant du coffre et visser l'adaptateur dans la menuiserie à travers les trous pré-percés avec des vis adaptées, en veillant impérativement à ce que le filetage traverse **au moins 2 cloisons** du profil dormant [1 p. 2].
-
-### Étape 4 : Pose des pattes de fixation d'angle VX26 (optionnelle)
-1. Déposer un cordon de mastic silicone d'étanchéité sur la surface de contact d'angle entre le coffre et le dormant [1 p. 3].
-2. Positionner une patte déformable **VX26** de chaque côté du coffre en choisissant l'une des 3 positions d'inclinaison prévues (4.2.1, 4.2.2 ou 4.2.3) pour s'adapter exactement à l'alignement et à la profondeur du dormant monobloc [1 p. 3].
-3. Visser d'abord la patte VX26 sur la joue de coffre à l'aide des vis fournies **15/3-9/9-5** [1 p. 3].
-4. Incliner et plier la patte contre le dormant monobloc, puis la visser sur le dormant à l'aide de vis adaptées non fournies [1 p. 3].
+La notice ne chiffre ni la longueur ni le diamètre des vis non fournies, ne donne pas la matière du
+dormant monobloc visé, ne dit pas quelles pièces sont fournies parmi les vis plots et les pattes VX26,
+et ne définit pas les cotes « L1 commande » et « L2 ». Sa référence est « NO-BB-T-CO-01-FR-202406 »
+(le code-barres du pied de page 1) ; sa date est le 25/06/2024. Les illustrations et photographies
+sont données « à titre d'exemples uniquement » et « ne sont aucunement de nature contractuelle » ;
+SOPROFEN se réserve le droit de modifier la notice sans préavis [1 p. 1].
 
 # Citations
 
-[1] [Notice de pose coffre bloc-baie Chrono One sur dormant monobloc SOPROFEN, réf. NO-BB-T-CO-01-FR-202406](raw/moustiquaires/export_doc_138.zip), p. 1 à 3
+[1] Notice de pose Coffre Bloc baie, en atelier sur dormant MONOBLOC d'une menuiserie extérieure,
+SOPROFEN, réf. NO-BB-T-CO-01-FR-202406 (25/06/2024) — `raw/moustiquaires/exports/138.pdf`, p. 1 à 3
 
 # Voir aussi
 
-- [Volets roulants](/equipements/volets-roulants.md)
 - [SOPROFEN](/fournisseurs/soprofen.md)
-- [Montage en atelier du volet roulant bloc-baie Chrono One SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md)
+- [Montage en atelier du coffre bloc-baie Chrono One sur dormant de menuiserie](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md)
+- [Assemblage et pose du coffre demi-linteau Bloc LX SOPROFEN](/procedures/pose-bloc-lx-demi-linteau-soprofen.md)
+- [Volets roulants](/equipements/volets-roulants.md)
 - [Notice de pose coffre bloc-baie Chrono One sur dormant monobloc SOPROFEN (2024)](/sources/soprofen-notice-pose-bloc-baie-chrono-one-monobloc.md)
+- [Informations à vérifier](/anomalies/informations-a-verifier.md)

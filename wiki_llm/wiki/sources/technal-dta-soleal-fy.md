@@ -1,8 +1,10 @@
 ---
 type: Document source
-title: DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm
-description: Document Technique d'Application CSTB de 48 pages du système de fenêtres et portes-fenêtres aluminium à frappe SOLEAL 55 de TECHNAL, valide jusqu'au 31 octobre 2026.
-tags: [technal, soleal, soleal-fy, frappe, dta, cstb, avis-technique, certification]
+title: "DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm (48 pages)"
+description: "Document Technique d'Application CSTB de 48 pages, valide du 25/05/2023 au 31/10/2026, sur les fenêtres et portes-fenêtres aluminium à frappe SOLEAL 55 FYa et FYm de TECHNAL : avis du Groupe Spécialisé, dossier technique, listes de références, schémas, drainage, assemblage et pose."
+resource: raw/DTA 6_12-2016_V5 (1).pdf
+origin: Commission chargée de formuler les Avis Techniques (CCFAT), Groupe Spécialisé n° 06, CSTB, pour Hydro Building Systems marque Technal
+tags: [source, technal, soleal, soleal-fy, frappe, dta, cstb, avis-technique, certification]
 gamme: LUMINE
 systeme: SOLEAL FY
 fournisseur: TECHNAL
@@ -12,51 +14,69 @@ sources:
     id: technal-dta-soleal-fy-6-12-2016-v5
     title: DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm
     last_modified: 2023-05-25
+source_pages:
+  - resource: raw/DTA 6_12-2016_V5 (1).pdf
+    pages: 1-48
 generated:
-  by: process:multimodal-direct
-  at: 2026-09-19T22:00:00Z
+  by: process:claude-code
+  at: 2026-10-09T07:31:00Z
+stale_after: 2026-10-31
 ---
 
 # Identité
 
 | Élément | Valeur |
 | --- | --- |
-| Émetteur | CSTB — Commission Chargée de Formuler les Avis Techniques (Groupe Spécialisé n° 06) |
-| Titulaire | Société Hydro Building Systems marque Technal |
-| Numéro | **DTA n° 6/12-2016_V5** (annule et remplace la version V4) |
-| Procédé visé | **Soleal 55 FYa – FYm** (Fenêtres et portes-fenêtres battantes, OB et soufflet à coupure thermique) |
-| Période de validité | **Valide du 25 mai 2023 au 31 octobre 2026** |
-| Pages | 48 pages |
-| Nature | **Document réglementaire opposable d'aptitude technique** |
+| Titre | « DTA 6/12-2016_V5 », procédé « Soleal 55 FYa – FYm » |
+| Éditeur | Secrétariat des Avis Techniques du CSTB ; document formulé par le Groupe Spécialisé n° 06 « Composants de baies et vitrages » de la Commission chargée de formuler les Avis Techniques (CCFAT) |
+| Titulaire | Société Hydro Building Systems marque [TECHNAL](/fournisseurs/technal.md) |
+| Famille de produit / procédé | fenêtre à la française, oscillo-battante ou à soufflet en aluminium à coupure thermique |
+| Édition | V5, qui annule et remplace la V4 ; elle ajoute la mise en œuvre en ossature métallique |
+| Validité | du 25 mai 2023 au 31 octobre 2026 |
+| Pages | 48 au PDF, numérotées « Page n sur 48 » |
+| Nature | **réglementaire** pour l'avis du Groupe Spécialisé (pages 4 à 6), **atelier** pour le dossier technique et son annexe de schémas (pages 7 à 48) |
+| Fichier | `raw/DTA 6_12-2016_V5 (1).pdf` |
 
 # Registre de couverture
 
-**Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
+Registre reconstruit le 09/10/2026 sur le rendu des 48 pages à 200 dpi, lecture en image seulement.
 
-La pagination du document est continue de 1 à 48.
+Numérotation du PDF : la page imprimée « Page n sur 48 » est la page n du PDF, sans décalage.
 
 | Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| 1-3 | Page de garde, historique des révisions (V3 à V5) et table des matières | à faire | [DTA SOLEAL FY](/sources/technal-dta-soleal-fy.md) |
-| 4-6 | Avis du Groupe Spécialisé : domaine d'emploi, isolation thermique ($U_w \le 1,9\text{ W/m}^2\text{K}$), durabilité | à faire | [Dormants et ouvrants SOLEAL FY](/profiles/soleal-fy-dormants-et-ouvrants.md) |
-| 7-11 | Dossier technique : inventaire exhaustif des profilés dormants, ouvrants apparents/minimaux, parcloses, quincailleries | à faire | [Dormants et ouvrants SOLEAL FY](/profiles/soleal-fy-dormants-et-ouvrants.md), [Quincaillerie SOLEAL FY](/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md) |
-| 11-12 | Dimensions maximales de baie admises, règles de conception (flèche $\le L/150$, max 15 mm) et prescriptions de calfeutrement | à faire | [Cotes de débit SOLEAL FY](/profiles/soleal-fy-cotes-de-debit.md), [Fabrication SOLEAL FY](/procedures/fabrication-soleal-fy.md) |
-| 13-15 | Principes de fabrication (barrettes polyamide Technoform QB 49, parcloses TPO/TPV Hutchinson, PV d'essais CSTB) | à faire | [Fabrication et usinage SOLEAL FY](/procedures/fabrication-soleal-fy.md) |
-| 16-23 | Annexe de schémas de profilés et coupes cotées à l'échelle : dormants, meneaux, ouvrants, pièces d'appui, parcloses, tapées, couvre-joints | à faire | [Dormants et ouvrants SOLEAL FY](/profiles/soleal-fy-dormants-et-ouvrants.md), [Parcloses et vitrages SOLEAL FY](/profiles/soleal-fy-parcloses-et-vitrage.md) |
-| 24-28 | Coupes de principe et détails d'assemblage en coupe horizontale et verticale (FYa, FYm, FYm chant clippable) | à faire | [Dormants et ouvrants SOLEAL FY](/profiles/soleal-fy-dormants-et-ouvrants.md) |
-| 29-33 | Plans de drainage et d'équilibrage de pression (drainage apparent, drainage caché, drainages des ouvrants apparents et minimaux) | à faire | [Fabrication et usinage SOLEAL FY](/procedures/fabrication-soleal-fy.md) |
-| 34 | Prises de volume maximales en feuillure (FYa, FYm, chant clippable) | à faire | [Parcloses et vitrages SOLEAL FY](/profiles/soleal-fy-parcloses-et-vitrage.md) |
-| 35-42 | Schémas d'assemblage d'atelier : sertissage et goupillage des dormants et ouvrants, traverses, battements et pièces d'angles de joint central | à faire | [Fabrication et usinage SOLEAL FY](/procedures/fabrication-soleal-fy.md) |
-| 43-48 | Schémas de mise en œuvre sur gros œuvre : appuis, fourrures, tapées, pose en tableau, ITE et mur monomur | à faire | [Fabrication et usinage SOLEAL FY](/procedures/fabrication-soleal-fy.md), [Dormants et ouvrants SOLEAL FY](/profiles/soleal-fy-dormants-et-ouvrants.md) |
-
-**Le registre de couverture est intégral : 48/48 pages couvertes, zéro `à faire`.**
+| 1 | page de garde : numéro 6/12-2016_V5, validité du 25 mai 2023 au 31 octobre 2026, procédé Soleal 55 FYa – FYm, titulaire, avant-propos du CCFAT, Groupe Spécialisé n° 06 | transcrit | [Domaine d'emploi, appréciation et marquage du SOLEAL 55 FYa-FYm (DTA 6/12-2016_V5)](/certifications/dta-6-12-2016-soleal-fy.md) |
+| 2 | versions du document (V3, V4, V5, rapporteurs, présidents) et descripteur du système | transcrit | [Domaine d'emploi, appréciation et marquage du SOLEAL 55 FYa-FYm (DTA 6/12-2016_V5)](/certifications/dta-6-12-2016-soleal-fy.md) |
+| 3 | table des matières du document (chapitres 1 et 2, numéros de page imprimés) | sans contenu propre | - |
+| 4-6 | chapitre 1, Avis du Groupe Spécialisé : domaine d'emploi accepté, appréciation (stabilité, sécurité, feu, thermique, perméabilité à l'air, sanitaire, entrée d'air, durabilité, fabrication et contrôle, marquage), impacts environnementaux, remarques complémentaires | transcrit | [Domaine d'emploi, appréciation et marquage du SOLEAL 55 FYa-FYm (DTA 6/12-2016_V5)](/certifications/dta-6-12-2016-soleal-fy.md) |
+| 7-9 | chapitre 2, Dossier technique : commercialisation, identification, principe, listes de références des profilés aluminium à rupture de pont thermique, des profilés aluminium, des profilés complémentaires d'étanchéité, des accessoires et de la quincaillerie ; cadre dormant, cadre ouvrant (début) | transcrit | [Principe, éléments, drainage, vitrage et dimensions maximales du SOLEAL 55 FYa-FYm (DTA)](/certifications/dta-6-12-2016-soleal-fy-dossier-technique.md), [Références des profilés aluminium, parcloses, bavettes et joints du SOLEAL 55 FY (DTA)](/certifications/dta-6-12-2016-soleal-fy-nomenclature-profiles.md), [Références des accessoires, équerres, embouts et pièces de fixation du SOLEAL 55 FY (DTA)](/certifications/dta-6-12-2016-soleal-fy-nomenclature-accessoires.md), [Quincaillerie, ferrage et répartition des paumelles du SOLEAL 55 FYa-FYm (DTA)](/certifications/dta-6-12-2016-soleal-fy-quincaillerie.md) |
+| 10-11 | cadre ouvrant FYa et FYm, battement central, traverses intermédiaires, drainage et équilibrage de pression, ferrage et verrouillage (listes par type de fenêtre, répartition des paumelles), vitrages, dimensions maximales de baie (tableau) | transcrit | [Principe, éléments, drainage, vitrage et dimensions maximales du SOLEAL 55 FYa-FYm (DTA)](/certifications/dta-6-12-2016-soleal-fy-dossier-technique.md), [Quincaillerie, ferrage et répartition des paumelles du SOLEAL 55 FYa-FYm (DTA)](/certifications/dta-6-12-2016-soleal-fy-quincaillerie.md) |
+| 12 | disposition de conception (flèche, vitrages, calage, drainage) et disposition de mise en œuvre (travaux neufs, ossature bois, ITE, ossature métallique, système d'étanchéité) | en cours | [Principe, éléments, drainage, vitrage et dimensions maximales du SOLEAL 55 FYa-FYm (DTA)](/certifications/dta-6-12-2016-soleal-fy-dossier-technique.md) |
+| 13-15 | maintien en service, fin de vie, assistance technique, principes de fabrication et de contrôle (coupure thermique, traitement de surface, parcloses TPO et TPV, tableau des caractéristiques de la matière), résultats expérimentaux, références chantiers | à faire | - |
+| 16-18 | annexe, schémas de mise en œuvre : dormants, meneaux et traverses, ouvrants FYa et FYm, battement central, traverses d'ouvrant | à faire | - |
+| 19-20 | annexe : appuis tubulaires, parcloses, fourrures d'épaisseur, parcloses Soleal 55 FYm | à faire | - |
+| 21 | annexe : profilés d'habillage intérieur, bavettes rénovation, bavettes | à faire | - |
+| 22 | annexe : profilés complémentaires, garnitures d'étanchéité, accessoires (équerres, goupilles, supports de cale, bouchons) | à faire | - |
+| 23 | annexe : accessoires (pièces d'angle, supports, pièces d'appui, vis, joues de bavette) | à faire | - |
+| 24-26 | coupes de principe du Soleal 55 FYa, du FYm et du FYm chant clippable : élévation, coupe verticale et coupe horizontale repérées | à faire | - |
+| 27-28 | coupes de principe, détails cotés : Soleal 55 FYa et Soleal 55 FYm | à faire | - |
+| 29-33 | drainage apparent et caché dormant-traverse, drainage caché traverse, drainage des ouvrants FYa et FYm, variante de drainage des ouvrants FYm | à faire | - |
+| 34 | prises de volume maximales en feuillure : ouvrant FYa, dormant FYa et FYm, ouvrants FYm, FYm chant clippable | à faire | - |
+| 35-42 | assemblages d'atelier : dormant (sertissage, goupillage), traverse de dormant, ouvrants FYa et FYm, traverses d'ouvrant, battement central, joint central avec pièce d'angle 440020 et TFY3868, démontage de la parclose | à faire | - |
+| 43-45 | montage des appuis et fourrures 7xxxxx et FYxxxx, reconstitution de l'appui en pose en tableau, montage des pièces T480004 | à faire | - |
+| 46-48 | ventilation, mise en œuvre en applique extérieure avec ITE, mise en œuvre monomur | à faire | - |
 
 # Citations
 
-[1] DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm, valide jusqu'au 31/10/2026 — `raw/DTA 6_12-2016_V5 (1).pdf`
+[1] DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm, valide du 25/05/2023 au 31/10/2026 — `raw/DTA 6_12-2016_V5 (1).pdf`, p. 1 à 48
 
 # Voir aussi
 
+- [Domaine d'emploi, appréciation et marquage du SOLEAL 55 FYa-FYm (DTA 6/12-2016_V5)](/certifications/dta-6-12-2016-soleal-fy.md)
+- [Références des profilés aluminium, parcloses, bavettes et joints du SOLEAL 55 FY (DTA)](/certifications/dta-6-12-2016-soleal-fy-nomenclature-profiles.md)
+- [Références des accessoires, équerres, embouts et pièces de fixation du SOLEAL 55 FY (DTA)](/certifications/dta-6-12-2016-soleal-fy-nomenclature-accessoires.md)
+- [Quincaillerie, ferrage et répartition des paumelles du SOLEAL 55 FYa-FYm (DTA)](/certifications/dta-6-12-2016-soleal-fy-quincaillerie.md)
+- [Principe, éléments, drainage, vitrage et dimensions maximales du SOLEAL 55 FYa-FYm (DTA)](/certifications/dta-6-12-2016-soleal-fy-dossier-technique.md)
 - [Dormants et ouvrants SOLEAL FY](/profiles/soleal-fy-dormants-et-ouvrants.md)
 - [Cotes de débit SOLEAL FY](/profiles/soleal-fy-cotes-de-debit.md)
 - [Parcloses et vitrages SOLEAL FY](/profiles/soleal-fy-parcloses-et-vitrage.md)

@@ -1,69 +1,86 @@
 ---
-type: Source
-title: Catalogue Moustiquaires SOPROFEN, réf. DOC90708 (Mai 2026)
-description: Catalogue général grand public et professionnel des moustiquaires SOPROFEN (DOC90708 05/2026) — enroulables verticales, coulissantes, cadres fixes, plissées, battantes et profil industriel Soprofen / Groupe Bouyer Leroux.
+type: Document source
+title: Catalogue Moustiquaires SOPROFEN, réf. DOC90708 (mai 2026)
+description: "Catalogue de 13 planches (23 pages imprimées) des moustiquaires sur mesure SOPROFEN : guide de choix, couleurs, enroulables, coulissantes, cadres fixes, plissées, portes battantes, présentation du fabricant."
 resource: raw/moustiquaires/Catalogue moustiquaires SOPROFEN FR.pdf
-origin: SOPROFEN, Société du Groupe Bouyer Leroux
-last_modified: 2026-05-31
-tags: [source, soprofen, moustiquaire, enroulable, plissee, battante, coulissante, cadre-fixe, bouyer-leroux]
+tags: [source, soprofen, moustiquaire, enroulable, plissee, battante, coulissante, cadre-fixe]
 fournisseur: SOPROFEN
 status: stable
+sources:
+  - resource: raw/moustiquaires/Catalogue moustiquaires SOPROFEN FR.pdf
+    id: soprofen-catalogue-moustiquaires-2026
+    title: Catalogue Moustiquaires SOPROFEN, réf. DOC90708 (Mai 2026)
+    last_modified: 2026-05-31
 source_pages:
   - resource: raw/moustiquaires/Catalogue moustiquaires SOPROFEN FR.pdf
     pages: 1-13
 generated:
-  by: process:gemini-coder
-  at: 2026-09-21T13:25:00Z
+  by: process:claude-code
+  at: 2026-10-09T02:30:00Z
 ---
 
-# Nature et identification du document
+# Identité
 
-Le document est le catalogue commercial et technique général officiel **« MOUSTIQUAIRES »** édité par le fabricant français [SOPROFEN](/fournisseurs/soprofen.md), filiale du [Groupe Bouyer Leroux](/fournisseurs/soprofen.md).
-* **Référence catalogue** : `DOC90708`
-* **Date d'édition** : Mai 2026 (`05/2026`)
-* **Pagination** : 13 planches PDF en doubles pages (pages imprimées 1 à 23 plus quatrième de couverture).
-* **Objet** : Panorama exhaustif des gammes de moustiquaires sur-mesure pour fenêtres, portes-fenêtres et baies vitrées : modèles enroulables verticaux (MOHO 48, MOHO 54, MOHO 54C, CA 68 ZIP, CA 96 ZIP), coulissants (MOCO 2 vantaux), cadres fixes (MOFI, MOFI CLIP), plissés (MOPL29 1 V, MOPL29 2 VO, MOPL29 2 VJ, MOPF29 REV) et portes battantes (MOBA 1 et 2 vantaux). Il comprend également une présentation institutionnelle détaillée du groupe (sites industriels et effectifs).
+| Élément | Valeur |
+| --- | --- |
+| Titre | « MOUSTIQUAIRES » |
+| Éditeur | SOPROFEN, une société du Groupe Bouyer Leroux |
+| Référence | DOC90708 |
+| Édition | 05/2026 (mai 2026) |
+| Pages | 13 pages au PDF : la couverture, onze doubles pages (pages imprimées 2 à 23) et la quatrième de couverture |
+| Nature | **commerciale** : catalogue d'une gamme, avec les limites de dimension de chaque modèle |
+| Mentions | « Photos non contractuelles », fabrication française |
 
-# Registre d'analyse page par page
+# Registre de couverture
 
 **Registre remis à `à faire` le 28/09/2026.** Les états de ce registre venaient d'une ingestion antérieure au protocole révisé, qui résumait les planches sans les relire page par page en image. Chaque plage est à reprendre en image, en numérotation du PDF, avant de repasser `transcrit`.
 
-Le fichier se compose de 13 planches en double page. Chaque planche correspond à une ou deux pages imprimées du catalogue.
+Registre reconstruit le 09/10/2026 : chaque planche rendue à 200 dpi, lue en image par moitié de double page, aucune couche texte lue.
 
-| Planche PDF | Pages imprimées | Objet et contenu technique relevé | État |
+Numérotation du PDF. La page 1 du PDF est la couverture (page imprimée 1) ; chaque page du PDF de 2 à 12 est une double page qui porte les pages imprimées 2n − 2 et 2n − 1 (PDF p. 3 = pages imprimées 4 et 5) ; la page 13 est la quatrième de couverture.
+
+| Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| Page 1 | Page 1 (Couverture) | Titre « MOUSTIQUAIRES », logo SOPROFEN, site web www.soprofen.com, visuel humoristique de sensibilisation aux piqûres d'insectes. | à faire |
-| Page 2 | Pages 2 et 3 | **Page 2** : Texte éditorial « Faites de votre intérieur un cocon bien protégé ! », principes de ventilation naturelle, confort thermique et barrière anti-insectes sans recours aux climatiseurs énergivores, QR-code d'accès vidéo.<br>**Page 3** : Sommaire général : Guide de choix (p. 4), Enroulables (p. 6), Coulissantes (p. 12), Cadres fixes (p. 13), Plissées (p. 15), Portes battantes (p. 18), Qui sommes-nous ? (p. 22). | à faire |
-| Page 3 | Pages 4 et 5 | **Page 4 (Guide de choix)** : Tableau matriciel d'aide à la décision croisant les usages (pièce sans accès extérieur, pièce avec accès extérieur, chambre/projection, véranda/pergola, grandes baies) avec les 5 familles (Enroulables, Coulissantes, Plissées, Battantes, Fixes). Précision des manœuvres (manuelles), avantages majeurs et cotes maximales (Enroulables : L 3500 / H 2700 mm ; Coulissantes : L 3000 / H 2500 mm ; Plissées : L 3200 / H 2500 mm ; Battantes : L 1800 / H 2400 mm ; Fixes : L 1500 / H 1500 mm).<br>**Page 5 (Couleurs)** : Caractéristiques des toiles : toile standard grise en fibre de verre enduite PVC 120 g/m² (36 % fibre de verre, 64 % PVC), option toile classique noire sur CA68 Zip et CA96 Zip, toiles plissées 15 mm en fils de polyester enduits PVC. Profilés alu laqué : tous coloris RAL au même prix au listing tarif (sauf MOHO 48), 4 finitions au choix (Mat, Brillant, Satin, Texturé). | à faire |
-| Page 4 | Pages 6 et 7 | **Pages 6-7 (Gamme Enroulables)** : Présentation générale des moustiquaires enroulables pour fenêtres ; fixation invisible, toile maintenue dans les coulisses, ressort de tension assurant une toile tendue, coffre et coulisses en aluminium extrudé, option frein intégré pour confort renforcé. Typologies : Sans maintien, Avec opercules, Avec zip. | à faire |
-| Page 5 | Pages 8 et 9 | **Pages 8-9 (Enroulables verticales)** : Cotes limites et manœuvres détaillées :<br>• `MOHO 48` (sans maintien) : Largeur 350 à 1600 mm, Hauteur max 2400 mm, Surface max 2,7 m², manœuvre ressort.<br>• `MOHO 54` (avec opercules) : Largeur 650 à 1600 mm, Hauteur max 2300 mm, Surface max 3,0 m², manœuvre ressort.<br>• `MOHO 54C` (avec opercules) : Largeur 450 à 1600 mm, Hauteur max 2300 mm, Surface max 3,0 m², manœuvre chaînette.<br>• `CA 68 ZIP` (avec zip) : Largeur 400 à 2400 mm, Hauteur max 2200 mm, manœuvre chaînette, treuil.<br>• `CA 96 ZIP` (avec zip) : Largeur 650 à 3500 mm, Hauteur max 2700 mm, manœuvre chaînette, treuil, motorisation (Radio / Filaire 230 V, Solaire 12 V, io homecontrol). | à faire |
-| Page 6 | Pages 10 et 11 | **Pages 10-11 (Gamme Coulissantes & Cadres fixes)** : Présentation générale des solutions cadres : coulissantes pour baies vitrées (glissement doux, joints étanches, pose entre tableaux ou en applique), cadres fixes démontables pour petites ouvertures et vasistas (fabrication sur-mesure en France). | à faire |
-| Page 7 | Pages 12 et 13 | **Page 12 (Coulissantes 2 vantaux)** : Modèle `MOCO 2 vantaux` : Largeur 400 à 3000 mm, Hauteur max 2500 mm. Seuil extra-plat, poignée intégrée, pose rapide.<br>**Page 13 (Cadres fixes)** : Modèles `MOFI CLIP` et `MOFI` : Largeur 200 à 1500 mm, Hauteur max 1500 mm. Pose en tableau ou en applique de face. Option montant ou traverse de renfort dès que la surface dépasse 1,5 m². Démontable l'hiver. | à faire |
-| Page 8 | Pages 14 et 15 | **Pages 14-15 (Gamme Plissées)** : Présentation générale des deux systèmes plissés :<br>• À chenilles : grandes ouvertures, chenilles robustes, profilés fins 29 mm, seuil amovible alu, pose entre tableaux ou en applique.<br>• À cordons : vantaux jusqu'à 2,80 m, cordons équipés de ressorts, toile polyester PVC anti-UV, fermeture par aimant bipolaire, pose entre tableaux uniquement. | à faire |
-| Page 9 | Pages 16 et 17 | **Pages 16-17 (Modèles Plissées)** : Cotes limites et configurations :<br>• `MOPL29 1 V` (1 vantail latéral à chenilles) : Largeur 700 à 1800 mm, Hauteur max 2500 mm.<br>• `MOPL29 2 VO` (2 vantaux opposés à chenilles) : Largeur 1000 à 3200 mm, Hauteur max 2500 mm.<br>• `MOPL29 2 VJ` (2 vantaux jumelés à chenilles) : Largeur 1000 à 2300 mm, Hauteur max 2500 mm.<br>• `MOPF29 REV` (réversible à cordons) : Largeur 400 à 2800 mm, Hauteur max 1700 mm.<br>Seuil bas alu articulé compensant jusqu'à 5° de pente de rejingot, toiles plissées 15 mm. | à faire |
-| Page 10 | Pages 18 et 19 | **Pages 18-19 (Gamme Battantes)** : Présentation de la porte moustiquaire battante : ouverture à l'anglaise (poussant extérieur), fermeture magnétique par aimants périphériques, absence totale de seuil au sol, pose entre tableaux uniquement, disponible en 1 ou 2 vantaux. | à faire |
-| Page 11 | Pages 20 et 21 | **Pages 20-21 (Portes battantes)** : Cotes et modèles :<br>• `MOBA 1 vantail` : Largeur 700 à 1000 mm, Hauteur max 2400 mm.<br>• `MOBA 2 vantaux` : Largeur 700 à 1800 mm, Hauteur max 2400 mm.<br>Passage sans seuil, aimants périphériques sur profilés alu extrudé, barrière infranchissable pour insectes et animaux domestiques. | à faire |
-| Page 12 | Pages 22 et 23 | **Pages 22-23 (Qui sommes-nous ? Soprofen)** : Présentation corporate : entreprise française membre du **Groupe Bouyer Leroux**. Effectif de 655 collaborateurs. 8 sites de production dont 6 en France (Mertzwiller 67, Froideconche 70, Champagney 70, Cholet 49, Marssac-sur-Tarn 81, Lassay 53) et 2 en Belgique (Lokeren, Charleroi). Plus de 35 ans d'expérience dans les fermetures. | à faire |
-| Page 13 | Page 24 (4e de couverture) | Synthèse de l'offre globale : Volets roulants, Portes de garage, Protections solaires (Stores, BSO, Screens), Moustiquaires. Mention légale « SOPROFEN une société du Groupe Bouyer Leroux », référence `DOC90708 • 05/2026`. | à faire |
+| 1 | couverture : photographie d'ambiance (un homme en pyjama, une passoire sur la tête, une lampe de poche et une tapette à mouches), bandeau « MOUSTIQUAIRES », www.soprofen.com, logo SOPROFEN | sans contenu propre | - |
+| 2 | pages imprimées 2-3 : « Faites de votre intérieur un cocon bien protégé ! » (quatre paragraphes d'introduction, code QR « Voir la vidéo ») ; sommaire (guide de choix p. 04 ; enroulables p. 06, coulissantes p. 12, cadres fixes p. 13, plissées p. 15, portes battantes p. 18 ; qui sommes-nous p. 22) | transcrit | [Arguments des moustiquaires SOPROFEN](/commercial/moustiquaires-soprofen.md), [Guide de choix des moustiquaires SOPROFEN](/equipements/moustiquaires-guide-de-choix.md) |
+| 3 | pages imprimées 4-5 : guide de choix (cinq familles × cinq lignes d'usage et d'adaptation, points pleins ou clairs, fonctionnement, avantages, dimensions maxi, renvois de page) ; « Couleurs » (toiles : gris standard 120 g/m², noir CA68 Zip et CA96 Zip, plissée 15 mm ; profilés : RAL au même prix sauf MOHO 48, quatre finitions ; note pratique) ; trois pastilles de toile | transcrit | [Guide de choix des moustiquaires SOPROFEN](/equipements/moustiquaires-guide-de-choix.md), [Coloris des moustiquaires SOPROFEN](/coloris/coloris-moustiquaires.md), [Moustiquaires enroulables verticales](/equipements/moustiquaires-enroulables-verticales.md) |
+| 4 | pages imprimées 6-7 : ouverture « Gamme enroulables » (photographie) ; texte de présentation, sous-menu « sans maintien / avec opercules / avec zip » | transcrit | [Moustiquaires enroulables verticales](/equipements/moustiquaires-enroulables-verticales.md), [Arguments des moustiquaires SOPROFEN](/commercial/moustiquaires-soprofen.md) |
+| 5 | pages imprimées 8-9 : cartes MOHO 48, MOHO 54, MOHO 54C (largeur mini et maxi, hauteur maxi, surface maxi, manœuvre), CA 68 ZIP, CA 96 ZIP (manœuvres et pictogrammes radio 230 V, filaire 230 V, solaire 12 V, io homecontrol) ; liste des avantages ; renvoi « Personnalisation page 5 » ; cinq pictogrammes de manœuvre découpés | transcrit | [Moustiquaires enroulables verticales](/equipements/moustiquaires-enroulables-verticales.md) |
+| 6 | pages imprimées 10-11 : ouverture « Gamme coulissantes & cadres fixes » (photographie) ; texte de présentation des coulissantes et des cadres fixes | transcrit | [Moustiquaires battantes, coulissantes et cadres fixes](/equipements/moustiquaires-battantes-coulissantes-fixes.md), [Arguments des moustiquaires SOPROFEN](/commercial/moustiquaires-soprofen.md) |
+| 7 | pages imprimées 12-13 : carte MOCO 2 vantaux et « Les + » ; cartes MOFI CLIP et MOFI et « Les + » ; renvois « Personnalisation page 5 » ; deux cartes de cadres fixes découpées | transcrit | [Moustiquaires battantes, coulissantes et cadres fixes](/equipements/moustiquaires-battantes-coulissantes-fixes.md) |
+| 8 | pages imprimées 14-15 : ouverture « Gamme plissées » (photographie) ; texte (à chenilles, à cordons), sous-menu | transcrit | [Moustiquaires plissées](/equipements/moustiquaires-plissees.md), [Arguments des moustiquaires SOPROFEN](/commercial/moustiquaires-soprofen.md) |
+| 9 | pages imprimées 16-17 : cartes MOPL29 1 vantail latéral, 2 vantaux opposés, 2 vantaux jumelés (largeur mini et maxi, hauteur maxi), MOPF29 réversible ; avantages (profilés de 29 mm, seuil 5°, plis de 15 mm, trois modèles de vantaux, pose) ; carte du MOPF29 réversible découpée | transcrit | [Moustiquaires plissées](/equipements/moustiquaires-plissees.md) |
+| 10 | pages imprimées 18-19 : ouverture « Gamme battantes » (photographie en gros plan d'une toile et d'un bouton) ; texte (ouverture à l'anglaise, fermeture magnétique, sans seuil, sur mesure et modulable) | transcrit | [Moustiquaires battantes, coulissantes et cadres fixes](/equipements/moustiquaires-battantes-coulissantes-fixes.md), [Arguments des moustiquaires SOPROFEN](/commercial/moustiquaires-soprofen.md) |
+| 11 | pages imprimées 20-21 : deux photographies de portes battantes ; cartes MOBA 1 vantail et MOBA 2 vantaux ; avantages ; deux cartes découpées | transcrit | [Moustiquaires battantes, coulissantes et cadres fixes](/equipements/moustiquaires-battantes-coulissantes-fixes.md) |
+| 12 | pages imprimées 22-23 : « L'innovation au service de la perfection » (volets roulants, portes de garage, R&D, « depuis 1984 ») ; SOPROFEN (655 collaborateurs, 8 sites dont 6 en France, carte, groupe Bouyer Leroux, innovation, souci des détails) | transcrit | [SOPROFEN](/fournisseurs/soprofen.md), [Arguments des moustiquaires SOPROFEN](/commercial/moustiquaires-soprofen.md) |
+| 13 | quatrième de couverture : « Solutions SOPROFEN » (volets roulants, moustiquaires, stores, brise-soleil orientables, screens, portes de garage), logo, « une société du Groupe Bouyer Leroux », www.soprofen.com, « 05/2026 », DOC90708 | transcrit | [SOPROFEN](/fournisseurs/soprofen.md) |
 
-# Données techniques de référence extraites
+# Anomalies portées par ce document
 
-### 1. Dénominations commerciales normalisées Soprofen
-Le catalogue établit la nomenclature commerciale de référence pour les moustiquaires SOPROFEN :
-* Enroulables : **MOHO 48**, **MOHO 54**, **MOHO 54C** (variante d'écriture de MOHO 54 CH), **CA 68 ZIP**, **CA 96 ZIP**.
-* Coulissantes : **MOCO 2 vantaux**.
-* Cadres fixes : **MOFI** (fixation classique), **MOFI CLIP** (fixation par clips démontables).
-* Plissées : **MOPL29 1 V**, **MOPL29 2 VO**, **MOPL29 2 VJ**, **MOPF29 REV**.
-* Portes battantes : **MOBA 1 vantail**, **MOBA 2 vantaux**.
+| Entrée | Page | Objet |
+| --- | --- | --- |
+| **CTR-122** | 9 | largeur maximale du MOPL 29 2VJ : 2 300 mm au catalogue, 3 200 mm sur la fiche produit |
+| **CTR-123** | 6 | pose des moustiquaires coulissantes « entre tableaux ou en applique », « entre tableaux uniquement » sur la fiche produit |
+| **CTR-124** | 8, 9 | un seul modèle à cordons « MOPF29 réversible », contre MOPF 29 REV sans chenilles et MOPF 29 1R à cordons sur la fiche |
+| **CTR-125** | 5 | CA 68 ZIP sans motorisation, que la fiche produit lui donne |
+| **CTR-126** | 4, 5 | « MOHO 54C » contre « MOHO 54 CH » de la fiche produit |
+| **INC-310** | 3 | toile « toujours grise » et toile noire sur la même page |
+| **INC-311** | 3, 5 | « Fonctionnement : manuel » pour les enroulables, dont le CA 96 ZIP est motorisable |
+| **VER-127** | 3 | points du guide de choix sans légende |
 
-### 2. Spécifications toiles et finitions profilés
-* **Toile standard** : Fibre de verre enduite PVC, grammage 120 g/m² (36 % fibre de verre, 64 % PVC), coloris gris.
-* **Option toile noire** : Disponible sur commande spéciale pour les caissons zippés **CA 68 ZIP** et **CA 96 ZIP**.
-* **Toile plissée** : Fils de polyester enduits de PVC, pli de 15 mm, coloris gris.
-* **Nuancier d'encadrement** : Tous coloris RAL au même prix selon la grille tarifaire du fabricant (à l'exception du modèle MOHO 48 limité aux coloris standards). 4 finitions proposées : **Mat**, **Brillant**, **Satin** et **Texturé**.
+# Citations
 
-### 3. Informations industrielles et institutionnelles
-* **Appartenance** : SOPROFEN est une société filiale du **Groupe Bouyer Leroux**.
-* **Effectifs** : 655 collaborateurs.
-* **Sites industriels** : 8 usines (6 en France, 2 en Belgique).
-* **Ancienneté** : Plus de 35 ans d'activité industrielle dans la fermeture de bâtiment.
+[1] Catalogue Moustiquaires SOPROFEN, réf. DOC90708 (Mai 2026) — `raw/moustiquaires/Catalogue moustiquaires SOPROFEN FR.pdf`, p. 1 à 13
+
+# Voir aussi
+
+- [SOPROFEN](/fournisseurs/soprofen.md)
+- [Guide de choix des moustiquaires SOPROFEN](/equipements/moustiquaires-guide-de-choix.md)
+- [Arguments des moustiquaires SOPROFEN](/commercial/moustiquaires-soprofen.md)
+- [Coloris des moustiquaires SOPROFEN](/coloris/coloris-moustiquaires.md)
+- [Moustiquaires enroulables verticales](/equipements/moustiquaires-enroulables-verticales.md)
+- [Moustiquaires plissées](/equipements/moustiquaires-plissees.md)
+- [Moustiquaires battantes, coulissantes et cadres fixes](/equipements/moustiquaires-battantes-coulissantes-fixes.md)
+- [Contradictions entre sources](/anomalies/contradictions-entre-sources.md)
+- [Incohérences internes](/anomalies/incoherences-internes.md)
+- [Informations à vérifier](/anomalies/informations-a-verifier.md)
