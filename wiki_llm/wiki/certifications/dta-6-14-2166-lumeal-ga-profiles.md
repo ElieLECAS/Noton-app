@@ -19,7 +19,7 @@ source_pages:
     pages: 11-14
 generated:
   by: process:claude-code
-  at: 2026-10-09T07:31:02Z
+  at: 2026-10-09T07:37:24Z
 stale_after: 2029-07-31
 ---
 
@@ -205,6 +205,8 @@ Deux pièces en polyamide 6.6 (PA66) pour reconstituer une feuillure ; la planch
 
 ## Traverses basses de l'ouvrant
 
+La largeur de la traverse basse 141021 est de 40,2 mm sur la planche : voir **CTR-132**.
+
 | Référence | Cote horizontale (mm) | Cote verticale (mm) | Autres cotes portées (mm) | Coupe |
 | --- | --- | --- | --- | ---: |
 | 141015 | 36 (en bas du dessin) | 65 | - | ![Traverse basse d'ouvrant 141015](/assets/certifications/dta-6-14-2166-lumeal-ga/ouvrant-traverse-basse-141015.png) |
@@ -255,7 +257,7 @@ Six profilés PVC. Les références 431024, 431025, 821001, 821008, 821009 et 82
 
 ## Garnitures d'étanchéité en EPDM
 
-Cinq garnitures de vitrage en U, 411005 à 411009, puis cinq profilés 710002, 710003, 710004, AS0015 et AS0016, présentés sous le même titre « Garnitures d'étanchéité en EPDM ». La cote horizontale de 411005 à 411009 est la cote portée entre les deux parois du U ; celle de 710002 à AS0016 est la cote portée sur le haut du profilé [1 p. 14].
+Dix profilés sont présentés sous le titre « Garnitures d'étanchéité en EPDM » : 411005 à 411009, puis 710002, 710003, 710004, AS0015 et AS0016. La planche des prises de volume désigne 411005 à 411009 « Joint pour vitrage » de 24 à 32 mm et associe 710002, 710003, 710004, AS0015 et AS0016 aux positions de joint des fixes : voir les [coupes de principe et prises de volume](/certifications/dta-6-14-2166-lumeal-ga-coupes-de-principe.md). La cote horizontale est celle portée sur le dessin [1 p. 14, 20].
 
 | Référence | Cote horizontale (mm) | Cote verticale (mm) | Autres cotes portées (mm) | Coupe |
 | --- | --- | --- | --- | ---: |

@@ -19,13 +19,13 @@ source_pages:
     pages: 7-10
 generated:
   by: process:claude-code
-  at: 2026-10-09T07:36:00Z
+  at: 2026-10-09T07:44:56Z
 stale_after: 2029-07-31
 ---
 
 # Dossier technique du coulissant SOLEAL GY
 
-Le coulissant SOLÉAL55 de PROFERM est fabriqué sur le système TECHNAL SOLEAL GY (voir [TECHNAL](/fournisseurs/technal.md)). Le chapitre « Dossier Technique » du DTA CSTB 6/15-2261_V3, issu des éléments fournis par le titulaire et des prescriptions du Groupe Spécialisé acceptées par le titulaire, décrit le procédé, ses dispositions de conception et de mise en œuvre, sa fabrication et ses justificatifs. Le domaine d'emploi, les dimensions maximales et l'appréciation du Groupe Spécialisé sont sur [DTA CSTB 6/15-2261 SOLEAL GY : domaine d'emploi, appréciation et dimensions maximales](/certifications/dta-6-15-2261-soleal-gy.md) ; les profilés dessinés sont sur [Profilés dormants, ouvrants, montants centraux et pièces d'appui du DTA 6/15-2261 SOLEAL GY](/certifications/dta-6-15-2261-soleal-gy-profiles.md) [1 p. 7].
+Le coulissant SOLÉAL55 de PROFERM est fabriqué sur le système TECHNAL SOLEAL GY (voir [TECHNAL](/fournisseurs/technal.md)). Le dossier technique du DTA CSTB 6/15-2261_V3, issu des éléments fournis par le titulaire et des prescriptions du Groupe Spécialisé acceptées par le titulaire, porte la description du procédé, ses dispositions de conception et de mise en œuvre, sa fabrication et ses justificatifs. Le domaine d'emploi, les dimensions maximales et l'appréciation du Groupe Spécialisé sont sur [DTA CSTB 6/15-2261 SOLEAL GY : domaine d'emploi, appréciation et dimensions maximales](/certifications/dta-6-15-2261-soleal-gy.md) ; les profilés dessinés sont sur [Dormants, ouvrants, montants centraux et pièces d'appui du DTA 6/15-2261 SOLEAL GY](/certifications/dta-6-15-2261-soleal-gy-profiles.md) [1 p. 7].
 
 # Mode de commercialisation
 
@@ -49,13 +49,13 @@ Le système SOLEAL GY permet de réaliser des fenêtres et portes-fenêtres coul
 
 ## Caractéristiques des composants
 
-Les différents composants (profilés, accessoires, …) sont représentés au paragraphe 2.10 Annexe du Dossier Technique : voir [Profilés dormants, ouvrants, montants centraux et pièces d'appui du DTA 6/15-2261 SOLEAL GY](/certifications/dta-6-15-2261-soleal-gy-profiles.md) [1 p. 7].
+Les différents composants (profilés, accessoires, …) sont représentés au paragraphe 2.10 Annexe du Dossier Technique : voir [Dormants, ouvrants, montants centraux et pièces d'appui du DTA 6/15-2261 SOLEAL GY](/certifications/dta-6-15-2261-soleal-gy-profiles.md) [1 p. 7].
 
 ## Éléments
 
 Cadre dormant : le système de fenêtres SOLEAL GY ne présente pas de particularité par rapport aux fenêtres classiques [1 p. 7].
 
-- Drainages : les détails des drainages sont présentés dans les schémas au paragraphe 2.10 Annexe du Dossier Technique (voir [Drainage des dormants, prises de volume et équilibrage de pression du DTA 6/15-2261 SOLEAL GY](/certifications/dta-6-15-2261-soleal-gy-drainage.md)).
+- Drainages : les détails des drainages sont présentés dans les schémas au paragraphe 2.10 Annexe du Dossier Technique (voir [Drainage, prises de volume et équilibrage de pression du DTA 6/15-2261 SOLEAL GY](/certifications/dta-6-15-2261-soleal-gy-drainage.md)).
 - Équilibrage de pression : les détails de l'équilibrage de pression sont présentés dans les schémas au paragraphe 2.10 Annexe du Dossier Technique.
 - Fourrures d'épaisseurs : le système de fenêtres SOLEAL GY ne présente pas de particularité par rapport aux fenêtres classiques. Le détail de l'assemblage est présenté dans les schémas au paragraphe 2.10 Annexe du Dossier Technique.
 - Seuil PMR : le système de fenêtres SOLEAL GY ne présente pas de particularité par rapport aux seuil PMR classiques.
@@ -175,7 +175,9 @@ De nombreuses réalisations [1 p. 10].
 # Voir aussi
 
 - [DTA CSTB 6/15-2261 SOLEAL GY : domaine d'emploi, appréciation et dimensions maximales](/certifications/dta-6-15-2261-soleal-gy.md)
-- [Profilés dormants, ouvrants, montants centraux et pièces d'appui du DTA 6/15-2261 SOLEAL GY](/certifications/dta-6-15-2261-soleal-gy-profiles.md)
-- [Drainage des dormants, prises de volume et équilibrage de pression du DTA 6/15-2261 SOLEAL GY](/certifications/dta-6-15-2261-soleal-gy-drainage.md)
+- [Dormants, ouvrants, montants centraux et pièces d'appui du DTA 6/15-2261 SOLEAL GY](/certifications/dta-6-15-2261-soleal-gy-profiles.md)
+- [Drainage, prises de volume et équilibrage de pression du DTA 6/15-2261 SOLEAL GY](/certifications/dta-6-15-2261-soleal-gy-drainage.md)
+- [Coupes de principe et moments d'inertie des montants centraux du DTA 6/15-2261 SOLEAL GY](/certifications/dta-6-15-2261-soleal-gy-coupes-et-inerties.md)
+- [Dos de dormant et détails de pose du coulissant SOLEAL GY (DTA 6/15-2261)](/certifications/dta-6-15-2261-soleal-gy-details-de-pose.md)
 - [Quincaillerie SOLEAL GY](/quincaillerie/soleal-gy-roulements-et-fermetures.md)
 - [TECHNAL](/fournisseurs/technal.md)

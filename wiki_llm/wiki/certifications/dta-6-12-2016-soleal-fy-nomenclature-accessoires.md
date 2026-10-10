@@ -19,7 +19,7 @@ source_pages:
     pages: 8
 generated:
   by: process:claude-code
-  at: 2026-10-09T07:30:53Z
+  at: 2026-10-09T08:25:55Z
 stale_after: 2026-10-31
 ---
 

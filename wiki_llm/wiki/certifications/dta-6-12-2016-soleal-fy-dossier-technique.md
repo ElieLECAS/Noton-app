@@ -23,7 +23,7 @@ generated:
 stale_after: 2026-10-31
 ---
 
-Le Soleal 55 FYa – FYm est le système de fenêtres et portes-fenêtres à frappe en aluminium à rupture de pont thermique de [TECHNAL](/fournisseurs/technal.md), sur lequel est fabriquée la gamme [LUMINE](/gammes/lumine.md). Le FYa se monte avec les ouvrants T215180 et T215181, le FYm avec les ouvrants TFY1338 et TFY1339. Les limites d'emploi et l'appréciation du Groupe Spécialisé sont sur [Domaine d'emploi, appréciation et marquage](/certifications/dta-6-12-2016-soleal-fy.md) ; les références sont sur [Références des profilés](/certifications/dta-6-12-2016-soleal-fy-nomenclature-profiles.md), [Références des accessoires](/certifications/dta-6-12-2016-soleal-fy-nomenclature-accessoires.md) et [Quincaillerie, ferrage et répartition des paumelles](/certifications/dta-6-12-2016-soleal-fy-quincaillerie.md). Ce dossier dépend des anomalies ouvertes **INC-402**, **INC-403**, **INC-404**, **INC-405** et **VER-186**.
+Le Soleal 55 FYa – FYm est le système de fenêtres et portes-fenêtres à frappe en aluminium à rupture de pont thermique de [TECHNAL](/fournisseurs/technal.md), sur lequel est fabriquée la gamme [LUMINE](/gammes/lumine.md). Le FYa se monte avec les ouvrants T215180 et T215181, le FYm avec les ouvrants TFY1338 et TFY1339. Les limites d'emploi et l'appréciation du Groupe Spécialisé sont sur [Domaine d'emploi, appréciation et marquage](/certifications/dta-6-12-2016-soleal-fy.md) ; les références sont sur [Références des profilés](/certifications/dta-6-12-2016-soleal-fy-nomenclature-profiles.md), [Références des accessoires](/certifications/dta-6-12-2016-soleal-fy-nomenclature-accessoires.md) et [Quincaillerie, ferrage et répartition des paumelles](/certifications/dta-6-12-2016-soleal-fy-quincaillerie.md). Les anomalies ouvertes qui le concernent sont signalées à l'endroit où elles s'appliquent.
 
 # Mode de commercialisation
 
@@ -43,13 +43,13 @@ Profilés : les profilés avec coupure thermique en polyamide sont marqués à l
 
 Ce système permet de réaliser des fenêtres et portes-fenêtres à 1 ou 2 vantaux (associées ou non à une partie fixe), ou des fenêtres oscillo-battantes ou à soufflet dont les cadres tant dormants qu'ouvrants sont réalisés à partir de profilés en aluminium anodisé ou laqué à rupture de pont thermique. Le nombre de vantaux est écrit « 1, 2, ou 3 vantaux » au descripteur (p. 2) et « 1 ou 2 vantaux » ici (**INC-402**). Les dimensions maximales sont définies : pour les fabrications non certifiées dans le paragraphe « 2.2.3.5 Dimensions maximales », pour les fabrications certifiées dans le Certificat de Qualification [1 p. 7].
 
-# Vitrages
+# Vitrages isolants admis (2.2.2.7)
 
 Doubles vitrages isolants jusqu'à 32 mm d'épaisseur (rubrique 2.2.2.7) [1 p. 9]. Les vitrages isolants utilisés doivent bénéficier d'un Certificat de Qualification [1 p. 12].
 
-# Cadre dormant
+# Éléments : cadre dormant
 
-## 2.2.3.1 Assemblage du cadre dormant
+## 2.2.3.1 Cadre dormant
 
 Les cadres dormants sont réalisés à partir des profilés débités en coupe d'onglet, assemblés et fixés par des équerres en aluminium extrudées placées dans les chambres des profilés. Les équerres sont placées dans les chambres intérieures et extérieures des profilés. Elles sont collées par une application d'un adhésif époxy sur les équerres et sont serties ou goupillés dans les chambres de profilés. L'étanchéité des coupes d'onglet est réalisée par une enduction de mastic colle polymère à base de polyéthers écrasé lors de l'assemblage. La traverse basse est complétée, sauf dans le cas de réhabilitation ou de dormant large, par une pièce d'appui tubulaire vissée, la liaison étant étanchée avec un mastic élastomère [1 p. 9].
 
@@ -66,6 +66,8 @@ Les meneaux et traverses sont assemblés mécaniquement sur le dormant par l'int
 
 ### 2.2.3.1.2 Drainage
 
+Le drainage est l'évacuation de l'eau de la feuillure par des lumières, fentes usinées dans un profilé ; le coupe-vent est la pièce qui protège une lumière de drainage en façade (voir le [glossaire](/reference/glossaire.md)). Les plans d'usinage sont sur [Drainage et équilibrage de pression](/certifications/dta-6-12-2016-soleal-fy-drainage-et-equilibrage.md).
+
 La traverse basse est percée de 2 lumières en façade de 5x30 protégées par un coupe-vent réf. T3160 ou de 2 lumières en sous face de 5x30, situées à 150 mm de chaque extrémité, puis 1 supplémentaire par tranche de 0,5 m au-delà de 1 m. La traverse intermédiaire est percée de lumières en façade de 5x30 mm protégées par un coupe-vent réf. T3160 ou de 2 goulottes de drainage réf. T740043 s'insérant dans les orifices de drainage en feuillure et étanchées à l'aide de mastic colle polymère. La répartition des orifices de drainages est identique à celle de la traverse basse [1 p. 9].
 
 Drainage des fixes : la traverse basse du fixe est percée de 2 lumières en façade de 5x30 protégées par un coupe-vent réf. 3160 (écrite sans préfixe T) ou de 2 lumières en sous face de 5x30, situées à 150 mm de chaque extrémité, puis 1 supplémentaire par tranche de 0,5 m au-delà de 1 m :
@@ -79,7 +81,7 @@ Les schémas de drainage sont sur [Drainage et équilibrage de pression](/certif
 
 L'équilibrage de pression est obtenu par une interruption du profilé d'étanchéité de battue T410010 de 10 mm en partie haute [1 p. 9].
 
-# Cadre ouvrant
+# Éléments : cadre ouvrant
 
 Le déparclosage de l'ouvrant (retrait de la parclose, la baguette qui maintient le vitrage) nécessite l'usage d'un outil afin de réduire les éventuelles difficultés d'exécution [1 p. 9].
 
@@ -121,7 +123,7 @@ Le drainage de la traverse intermédiaire d'ouvrant est réalisé par :
 
 ## 2.2.3.2.8 Drainage ouvrant Soleal 55 FYm
 
-Le drainage de la traverse basse, lorsque les pièces d'angle sont utilisées, est réalisé par :
+Le drainage de la traverse basse, lorsque les pièces d'angle sont utilisées, est réalisé par (la lumière supplémentaire est écrite ici sans condition de longueur, alors que les planches des pages 32 et 33 écrivent « 1 drainage au centre si Lv > 1000 mm » : **INC-410**) :
 
 - les pièces d'angle réf. TFY3850 ou TFY3851,
 - une lumière supplémentaire de 20x6 mm, centré, sur le pied de la parclose.
@@ -165,7 +167,7 @@ Les vitrages utilisés sont des vitrages isolants d'épaisseur maximale 32 mm. L
 
 Les vitrages utilisés sont des vitrages isolants d'épaisseur 24, 26, 30 et 32 mm maintenus par des parcloses extérieures en TPE, coupées d'onglet. La hauteur utile de la feuillure est de 17 mm. Le profilé d'étanchéité intérieur est tournant dans les angles et se raccorde en partie haute. Le calage des vitrages est effectué selon le NF DTU 39, les cales de vitrages reposant sur les supports de cales type T700016 de longueur 100 mm en aluminium extrudé [1 p. 11]. Le support de cale de vitrage de l'ouvrant Soleal 55 FYm est TFY3679 dans la liste des accessoires (**INC-405**).
 
-Le tableau des vitrages admis par type de parclose et de joint est sur [Parcloses et vitrages SOLEAL FY](/profiles/soleal-fy-parcloses-et-vitrage.md) ; les prises de volume maximales en feuillure sont sur [Assemblage des cadres et prises de volume maximales](/certifications/dta-6-12-2016-soleal-fy-assemblage-et-prises-de-volume.md).
+La mise en œuvre sur chantier (rubrique 2.4) est sur [Mise en œuvre du SOLEAL 55 FY : prescriptions, appuis, tapées, ITE et monomur](/certifications/dta-6-12-2016-soleal-fy-details-de-pose.md). Les épaisseurs de vitrage maximales sont de 32 mm ; la page Parcloses et vitrages SOLEAL FY porte des prises de volume jusqu'à 42 mm sans élargisseur et 70 mm avec élargisseur (**CTR-142**). Le tableau des vitrages admis par type de parclose et de joint est sur [Parcloses et vitrages SOLEAL FY](/profiles/soleal-fy-parcloses-et-vitrage.md) ; les prises de volume maximales en feuillure sont sur [Assemblage des cadres et prises de volume maximales](/certifications/dta-6-12-2016-soleal-fy-assemblage-et-prises-de-volume.md).
 
 # Dimensions maximales de baie
 
@@ -198,7 +200,7 @@ Les vitrages isolants utilisés doivent bénéficier d'un Certificat de Qualific
 
 Dans le cas d'un châssis prévu pour être posé en applique extérieure avec ITE, le rejet d'eau réf. TFY2515 doit systématiquement être mis en place sur la traverse basse du dormant [1 p. 12].
 
-Dans le cas de vitrages d'épaisseur de verre supérieure ou égale à 10 mm ou de masse de vantail supérieure à 73 kg, le fabricant devra s'assurer, par voie expérimentale, que la conception globale de la fenêtre (ferrage, profilés) permet de satisfaire aux critères mécaniques spécifiques prévus par la norme NF P 20-302, dans la limite des charges maximum prévue par la quincaillerie [1 p. 12].
+Dans le cas de vitrages d'épaisseur de verre supérieure ou égale à 10 mm ou de masse de vantail supérieure à 73 kg (le tableau des paumelles limite le poids du vantail à 70 kg : **VER-190**), le fabricant devra s'assurer, par voie expérimentale, que la conception globale de la fenêtre (ferrage, profilés) permet de satisfaire aux critères mécaniques spécifiques prévus par la norme NF P 20-302, dans la limite des charges maximum prévue par la quincaillerie [1 p. 12].
 
 Pour les fenêtres Soleal 55 FYm, sous l'effet de la chaleur, la coupe d'onglet de la parclose TPO pourra présenter un désaffleurement. Il ne s'agira que d'une altération d'aspect (la même remarque est faite pour la parclose TPE dans l'avis du Groupe Spécialisé : **INC-404**) [1 p. 12].
 

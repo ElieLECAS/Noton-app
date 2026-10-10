@@ -18,7 +18,7 @@ source_pages:
     pages: 1-33
 generated:
   by: process:claude-code
-  at: 2026-10-09T07:29:17Z
+  at: 2026-10-09T07:51:09Z
 ---
 
 # Identité
@@ -42,29 +42,52 @@ Numérotation du PDF : la page « F.I.T N°15-n » est la page n du PDF, sans d�
 
 | Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| 1 | « Evolution porte PY », les plus : performance à l'eau et à l'air, conformité vis-à-vis du DTU 36.5, nouvel embout de liaison de seuil, réduction de l'effort de fermeture | à faire | [Seuil PMR PY1100 de la porte SOLEAL PY 55 : atouts, performances AEV et situations de pose](/procedures/technal-seuil-pmr-py1100.md) |
-| 2 | tableau des performances : classements AEV, hauteur x longueur, numéros de procès-verbal et Q100 de quatre portes à 1 vantail, essai interne d'une porte à 2 vantaux | à faire | [Seuil PMR PY1100 de la porte SOLEAL PY 55 : atouts, performances AEV et situations de pose](/procedures/technal-seuil-pmr-py1100.md) |
+| 1 | « Evolution porte PY », les plus : performance à l'eau et à l'air, conformité vis-à-vis du DTU 36.5, nouvel embout de liaison de seuil, réduction de l'effort de fermeture | transcrit | [Seuil PMR PY1100 de la porte SOLEAL PY 55 : atouts, performances AEV et situations de pose](/procedures/technal-seuil-pmr-py1100.md) |
+| 2 | tableau des performances : classements AEV, hauteur x longueur, numéros de procès-verbal et Q100 de quatre portes à 1 vantail, essai interne d'une porte à 2 vantaux | transcrit | [Seuil PMR PY1100 de la porte SOLEAL PY 55 : atouts, performances AEV et situations de pose](/procedures/technal-seuil-pmr-py1100.md) |
 | 3-4 | porte 1 vantail ouverture extérieure avec seuil PMR : tableaux profilés, joints et accessoires, remplissage, coupes horizontale et verticale cotées | transcrit | [Porte SOLEAL PY 55 à 1 vantail avec seuil PMR PY1100 : débits, joints et accessoires](/portes/technal-seuil-py1100-applications-1-vantail.md) |
 | 5-6 | porte 1 vantail ouverture intérieure avec seuil PMR : tableaux profilés, joints et accessoires, remplissage, coupes horizontale et verticale cotées | transcrit | [Porte SOLEAL PY 55 à 1 vantail avec seuil PMR PY1100 : débits, joints et accessoires](/portes/technal-seuil-py1100-applications-1-vantail.md) |
 | 7-8 | porte 2 vantaux ouverture extérieure avec seuil PMR : tableaux, remplissage, coupes | transcrit | [Porte SOLEAL PY 55 à 2 vantaux avec seuil PMR PY1100 : débits, joints et accessoires](/portes/technal-seuil-py1100-applications-2-vantaux.md) |
 | 9-10 | porte 2 vantaux ouverture intérieure avec seuil PMR : tableaux, remplissage, coupes | transcrit | [Porte SOLEAL PY 55 à 2 vantaux avec seuil PMR PY1100 : débits, joints et accessoires](/portes/technal-seuil-py1100-applications-2-vantaux.md) |
-| 11-12 | porte 1 vantail ouverture extérieure avec fixe latéral et seuil PMR : tableaux, remplissages, coupes | à faire | [Porte SOLEAL PY 55 à 1 vantail et fixe latéral avec seuil PMR PY1100 : débits, joints et accessoires](/portes/technal-seuil-py1100-applications-fixe-lateral.md) |
-| 13-14 | porte 1 vantail ouverture intérieure avec fixe latéral et seuil PMR : tableaux, remplissages, coupes | à faire | [Porte SOLEAL PY 55 à 1 vantail et fixe latéral avec seuil PMR PY1100 : débits, joints et accessoires](/portes/technal-seuil-py1100-applications-fixe-lateral.md) |
-| 15 | situations de pose : quatre coupes verticales du seuil sur le gros œuvre | à faire | [Seuil PMR PY1100 de la porte SOLEAL PY 55 : atouts, performances AEV et situations de pose](/procedures/technal-seuil-pmr-py1100.md) |
-| 16 | répertoire des composants (mise à disposition globale fin septembre) : profilés, bouchons, gâche, anti-dévers, joints, pièces d'angle, gabarit, bouchons de battement | à faire | [Profilés et joints du seuil PMR PY1100 : PY1100, PY1101, PY2102, PY4000, PY5000 et 710041](/profiles/technal-seuil-py1100-profiles-et-joints.md), [Pièces et outillage du seuil PMR PY1100 : bouchons, gâche PY6000, butée PY3609, pièces d'angle et gabarit EK7020](/quincaillerie/technal-seuil-py1100-pieces-et-outillage.md) |
-| 17 | tarif : tableau des profilés et tableau des pièces plastiques, accessoires et joints | à faire | [Tarif des profilés, joints et pièces du seuil PMR PY1100 (F.I.T N°15, décembre 2012)](/tarifs/technal-seuil-py1100-tarif.md) |
-| 18 | usinage de la barre de seuil PY4000 | à faire | [Usinages du seuil PMR PY1100 : barre PY4000, drainage, joint PY5000, rejet d'eau PY2102 et appui PY1101](/procedures/technal-seuil-pmr-py1100-usinages.md) |
-| 19-21 | drainage du seuil PY1100 avec le gabarit EK7020, en ouverture intérieure et en ouverture extérieure | à faire | [Usinages du seuil PMR PY1100 : barre PY4000, drainage, joint PY5000, rejet d'eau PY2102 et appui PY1101](/procedures/technal-seuil-pmr-py1100-usinages.md) |
-| 22 | usinage du joint PY5000 | à faire | [Usinages du seuil PMR PY1100 : barre PY4000, drainage, joint PY5000, rejet d'eau PY2102 et appui PY1101](/procedures/technal-seuil-pmr-py1100-usinages.md) |
-| 23 | usinage du rejet d'eau PY2102, semi-fixe | à faire | [Usinages du seuil PMR PY1100 : barre PY4000, drainage, joint PY5000, rejet d'eau PY2102 et appui PY1101](/procedures/technal-seuil-pmr-py1100-usinages.md) |
-| 24 | usinage de la pièce d'appui de fixe latéral | à faire | [Usinages du seuil PMR PY1100 : barre PY4000, drainage, joint PY5000, rejet d'eau PY2102 et appui PY1101](/procedures/technal-seuil-pmr-py1100-usinages.md) |
-| 25 | assemblage du seuil PY1100, porte 1 et 2 vantaux | à faire | [Assemblage du seuil PMR PY1100 : bouchons, serrure, gâche PY6000, butée PY3609 et pièces d'angle](/procedures/technal-seuil-pmr-py1100-assemblage.md) |
-| 26-27 | montage du bouchon PY3810 sur le rejet d'eau PY2102, vantail de service | à faire | [Assemblage du seuil PMR PY1100 : bouchons, serrure, gâche PY6000, butée PY3609 et pièces d'angle](/procedures/technal-seuil-pmr-py1100-assemblage.md) |
-| 28 | serrure modulaire 3 points avec pêne vertical, vantail de service | à faire | [Assemblage du seuil PMR PY1100 : bouchons, serrure, gâche PY6000, butée PY3609 et pièces d'angle](/procedures/technal-seuil-pmr-py1100-assemblage.md) |
-| 29-30 | montage de la gâche PY6000, porte 1 vantail et porte 2 vantaux | à faire | [Assemblage du seuil PMR PY1100 : bouchons, serrure, gâche PY6000, butée PY3609 et pièces d'angle](/procedures/technal-seuil-pmr-py1100-assemblage.md) |
-| 31 | montage de la pièce de blocage PY3609 | à faire | [Assemblage du seuil PMR PY1100 : bouchons, serrure, gâche PY6000, butée PY3609 et pièces d'angle](/procedures/technal-seuil-pmr-py1100-assemblage.md) |
-| 32 | assemblage du seuil PY1100 et du fixe latéral, porte 1 et 2 vantaux | à faire | [Assemblage du seuil PMR PY1100 : bouchons, serrure, gâche PY6000, butée PY3609 et pièces d'angle](/procedures/technal-seuil-pmr-py1100-assemblage.md) |
-| 33 | montage des pièces d'étanchéité d'angles 720028 et 720029 | à faire | [Assemblage du seuil PMR PY1100 : bouchons, serrure, gâche PY6000, butée PY3609 et pièces d'angle](/procedures/technal-seuil-pmr-py1100-assemblage.md) |
+| 11-12 | porte 1 vantail ouverture extérieure avec fixe latéral et seuil PMR : tableaux, remplissages, coupes | transcrit | [Porte SOLEAL PY 55 à 1 vantail et fixe latéral, seuil PMR PY1100 : débits et accessoires](/portes/technal-seuil-py1100-applications-fixe-lateral.md) |
+| 13-14 | porte 1 vantail ouverture intérieure avec fixe latéral et seuil PMR : tableaux, remplissages, coupes | transcrit | [Porte SOLEAL PY 55 à 1 vantail et fixe latéral, seuil PMR PY1100 : débits et accessoires](/portes/technal-seuil-py1100-applications-fixe-lateral.md) |
+| 15 | situations de pose : quatre coupes verticales du seuil sur le gros œuvre | transcrit | [Seuil PMR PY1100 de la porte SOLEAL PY 55 : atouts, performances AEV et situations de pose](/procedures/technal-seuil-pmr-py1100.md) |
+| 16 | répertoire des composants (mise à disposition globale fin septembre) : profilés, bouchons, gâche, anti-dévers, joints, pièces d'angle, gabarit, bouchons de battement | transcrit | [Profilés et joints du seuil PMR PY1100 : PY1100, PY1101, PY2102, PY4000, PY5000 et 710041](/profiles/technal-seuil-py1100-profiles-et-joints.md), [Pièces du seuil PMR PY1100 : bouchons, gâche PY6000, butée PY3609, pièces d'angle, gabarit](/quincaillerie/technal-seuil-py1100-pieces-et-outillage.md) |
+| 17 | tarif : tableau des profilés et tableau des pièces plastiques, accessoires et joints | transcrit | [Tarif des profilés, joints et pièces du seuil PMR PY1100 (F.I.T N°15, décembre 2012)](/tarifs/technal-seuil-py1100-tarif.md) |
+| 18 | usinage de la barre de seuil PY4000 | transcrit | [Usinages du seuil PMR PY1100 : drainage, barre PY4000, joint PY5000, PY2102 et PY1101](/procedures/technal-seuil-pmr-py1100-usinages.md) |
+| 19-21 | drainage du seuil PY1100 avec le gabarit EK7020, en ouverture intérieure et en ouverture extérieure | transcrit | [Usinages du seuil PMR PY1100 : drainage, barre PY4000, joint PY5000, PY2102 et PY1101](/procedures/technal-seuil-pmr-py1100-usinages.md) |
+| 22 | usinage du joint PY5000 | transcrit | [Usinages du seuil PMR PY1100 : drainage, barre PY4000, joint PY5000, PY2102 et PY1101](/procedures/technal-seuil-pmr-py1100-usinages.md) |
+| 23 | usinage du rejet d'eau PY2102, semi-fixe | transcrit | [Usinages du seuil PMR PY1100 : drainage, barre PY4000, joint PY5000, PY2102 et PY1101](/procedures/technal-seuil-pmr-py1100-usinages.md) |
+| 24 | usinage de la pièce d'appui de fixe latéral | transcrit | [Usinages du seuil PMR PY1100 : drainage, barre PY4000, joint PY5000, PY2102 et PY1101](/procedures/technal-seuil-pmr-py1100-usinages.md) |
+| 25 | assemblage du seuil PY1100, porte 1 et 2 vantaux | transcrit | [Assemblage du seuil PMR PY1100 : bouchons, gâche PY6000, butée PY3609, pièces d'angle](/procedures/technal-seuil-pmr-py1100-assemblage.md) |
+| 26-27 | montage du bouchon PY3810 sur le rejet d'eau PY2102, vantail de service | transcrit | [Assemblage du seuil PMR PY1100 : bouchons, gâche PY6000, butée PY3609, pièces d'angle](/procedures/technal-seuil-pmr-py1100-assemblage.md) |
+| 28 | serrure modulaire 3 points avec pêne vertical, vantail de service | transcrit | [Assemblage du seuil PMR PY1100 : bouchons, gâche PY6000, butée PY3609, pièces d'angle](/procedures/technal-seuil-pmr-py1100-assemblage.md) |
+| 29-30 | montage de la gâche PY6000, porte 1 vantail et porte 2 vantaux | transcrit | [Assemblage du seuil PMR PY1100 : bouchons, gâche PY6000, butée PY3609, pièces d'angle](/procedures/technal-seuil-pmr-py1100-assemblage.md) |
+| 31 | montage de la pièce de blocage PY3609 | transcrit | [Assemblage du seuil PMR PY1100 : bouchons, gâche PY6000, butée PY3609, pièces d'angle](/procedures/technal-seuil-pmr-py1100-assemblage.md) |
+| 32 | assemblage du seuil PY1100 et du fixe latéral, porte 1 et 2 vantaux | transcrit | [Assemblage du seuil PMR PY1100 : bouchons, gâche PY6000, butée PY3609, pièces d'angle](/procedures/technal-seuil-pmr-py1100-assemblage.md) |
+| 33 | montage des pièces d'étanchéité d'angles 720028 et 720029 | transcrit | [Assemblage du seuil PMR PY1100 : bouchons, gâche PY6000, butée PY3609, pièces d'angle](/procedures/technal-seuil-pmr-py1100-assemblage.md) |
+
+# Anomalies portées
+
+Les anomalies relevées en lisant les 33 pages sont consignées dans les registres, une ligne par anomalie, avec les pages du wiki concernées.
+
+| Identifiant | Objet | Pages PDF | Registre |
+| --- | --- | --- | --- |
+| INC-358 | repère « 225104 » de l'ouvrant sur la coupe horizontale de la porte à 1 vantail à ouverture extérieure, « 225114 » au tableau et sur la coupe verticale | 3, 4 | [Incohérences internes](/anomalies/incoherences-internes.md) |
+| INC-359 | bouchon 740062 désigné « GEP » à la nomenclature de la porte à 2 vantaux à ouverture intérieure et « DEP » au répertoire des composants | 10, 16 | [Incohérences internes](/anomalies/incoherences-internes.md) |
+| INC-360 | titre « ACCESSOIRES (suite) » sur une page dont aucun tableau d'accessoires ne précède | 10 | [Incohérences internes](/anomalies/incoherences-internes.md) |
+| INC-361 | tarif des joints et pièces : colonnes partiellement masquées | 17 | [Incohérences internes](/anomalies/incoherences-internes.md) |
+| CTR-128 | montants et traverses d'ouvrant de la porte à 2 vantaux avec seuil PY1100 : cotes de débit de la F.I.T et du catalogue de fabrication | 7, 9 | [Contradictions entre sources](/anomalies/contradictions-entre-sources.md) |
+| CTR-129 | remplissage de la porte à 2 vantaux avec seuil PY1100 : cotes de la F.I.T et du catalogue de fabrication | 7, 9 | [Contradictions entre sources](/anomalies/contradictions-entre-sources.md) |
+| VER-151 | cotes, débits, remplissages, Q100 et prix portés sans unité | 2-14, 17-24 | [Informations à vérifier](/anomalies/informations-a-verifier.md) |
+| VER-152 | références écrites sans la lettre T (PY1100, 225011) et avec (TPY1100) ; W118 et W200 ; trois désignations du PY3800 | 4, 16, 17, 25-27 | [Informations à vérifier](/anomalies/informations-a-verifier.md) |
+| VER-153 | quantité du PY2102 imprimée une fois pour deux débits | 9 | [Informations à vérifier](/anomalies/informations-a-verifier.md) |
+| VER-154 | deux quantités superposées dans la case du 770022 | 11 | [Informations à vérifier](/anomalies/informations-a-verifier.md) |
+| VER-155 | quantité « 3/m/2H+L » et débit « 200 » du 134026 | 11 | [Informations à vérifier](/anomalies/informations-a-verifier.md) |
+| VER-156 | cote 52 surimprimée d'une seconde cote illisible | 13 | [Informations à vérifier](/anomalies/informations-a-verifier.md) |
+| VER-157 | sigles GEP et DEP non définis | 8, 10, 16 | [Informations à vérifier](/anomalies/informations-a-verifier.md) |
+| VER-158 | découpe du bouchon PY3810 titrée « Vantail de service », usinage du PY2102 titré « Semi Fixe » | 23, 27 | [Informations à vérifier](/anomalies/informations-a-verifier.md) |
+| VER-159 | pièces d'angle annoncées pour une meilleure étanchéité, essai à ouverture extérieure classé A4 sans elles et A3 avec | 1, 2 | [Informations à vérifier](/anomalies/informations-a-verifier.md) |
+| VER-160 | Hp et Hv non définis dans la formule du débit des tringles 525058 | 28 | [Informations à vérifier](/anomalies/informations-a-verifier.md) |
 
 # Citations
 
@@ -73,13 +96,13 @@ Numérotation du PDF : la page « F.I.T N°15-n » est la page n du PDF, sans d�
 # Voir aussi
 
 - [Seuil PMR PY1100 de la porte SOLEAL PY 55 : atouts, performances AEV et situations de pose](/procedures/technal-seuil-pmr-py1100.md)
-- [Usinages du seuil PMR PY1100 : barre PY4000, drainage, joint PY5000, rejet d'eau PY2102 et appui PY1101](/procedures/technal-seuil-pmr-py1100-usinages.md)
-- [Assemblage du seuil PMR PY1100 : bouchons, serrure, gâche PY6000, butée PY3609 et pièces d'angle](/procedures/technal-seuil-pmr-py1100-assemblage.md)
+- [Usinages du seuil PMR PY1100 : drainage, barre PY4000, joint PY5000, PY2102 et PY1101](/procedures/technal-seuil-pmr-py1100-usinages.md)
+- [Assemblage du seuil PMR PY1100 : bouchons, gâche PY6000, butée PY3609, pièces d'angle](/procedures/technal-seuil-pmr-py1100-assemblage.md)
 - [Porte SOLEAL PY 55 à 1 vantail avec seuil PMR PY1100 : débits, joints et accessoires](/portes/technal-seuil-py1100-applications-1-vantail.md)
 - [Porte SOLEAL PY 55 à 2 vantaux avec seuil PMR PY1100 : débits, joints et accessoires](/portes/technal-seuil-py1100-applications-2-vantaux.md)
-- [Porte SOLEAL PY 55 à 1 vantail et fixe latéral avec seuil PMR PY1100 : débits, joints et accessoires](/portes/technal-seuil-py1100-applications-fixe-lateral.md)
+- [Porte SOLEAL PY 55 à 1 vantail et fixe latéral, seuil PMR PY1100 : débits et accessoires](/portes/technal-seuil-py1100-applications-fixe-lateral.md)
 - [Profilés et joints du seuil PMR PY1100 : PY1100, PY1101, PY2102, PY4000, PY5000 et 710041](/profiles/technal-seuil-py1100-profiles-et-joints.md)
-- [Pièces et outillage du seuil PMR PY1100 : bouchons, gâche PY6000, butée PY3609, pièces d'angle et gabarit EK7020](/quincaillerie/technal-seuil-py1100-pieces-et-outillage.md)
+- [Pièces du seuil PMR PY1100 : bouchons, gâche PY6000, butée PY3609, pièces d'angle, gabarit](/quincaillerie/technal-seuil-py1100-pieces-et-outillage.md)
 - [Tarif des profilés, joints et pièces du seuil PMR PY1100 (F.I.T N°15, décembre 2012)](/tarifs/technal-seuil-py1100-tarif.md)
 - [Profilés dormants et ouvrants SOLEAL PY 55](/portes/soleal-py-dormants-et-ouvrants.md)
 - [Cotes de débit des portes SOLEAL PY 55](/portes/soleal-py-cotes-de-debit.md)

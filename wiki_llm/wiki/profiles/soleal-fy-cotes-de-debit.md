@@ -1,174 +1,287 @@
 ---
 type: Profilé
-title: Cotes de débit SOLEAL FY
-description: Formules de coupe d'atelier, déductions et cotes de débit des profilés dormants, ouvrants, battements, seuils PMR, parcloses et vitrages pour fenêtres et portes-fenêtres TECHNAL SOLEAL FY 55 et FY 65.
-tags: [technal, soleal, soleal-fy, debit, cote, atelier, coupe, vitrage, seuil-pmr]
+title: Cotes de débit du châssis fixe et des fenêtres Apparent SOLEAL FY 55
+description: Nomenclature et débits de coupe (profilés, joints, accessoires, vis, remplissage) du châssis fixe et des fenêtres 1 et 2 vantaux à ouvrant Apparent SOLEAL FY 55 ; traverses intermédiaires d'ouvrant et options conservées.
+tags: [technal, soleal-fy, lumine55, debit, cote, atelier, ouvrant-apparent, nomenclature, chassis-fixe, fenetre]
 gamme: LUMINE
 systeme: SOLEAL FY
 fournisseur: TECHNAL
 usage: atelier
-status: stable
+famille: cotes-de-debit
+status: draft
 sources:
-  - resource: raw/DTA 6_12-2016_V5 (1).pdf
-    id: technal-dta-soleal-fy-6-12-2016-v5
-    title: DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm
-    last_modified: 2023-05-25
   - resource: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf
-    id: technal-soleal-fy-55-conception-6057
-    title: SOLEAL FY 55 évolution, Conception Ouvrant Minimal et Apparent, réf. 6057.003
+    title: SOLEAL FY 55 évolution, Ouvrant Minimal et Apparent, Conception, réf. 6057.003
     last_modified: 2020-07-10
   - resource: raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf
-    id: technal-soleal-fy-qc-conception-6319
     title: SOLEAL FY 55 & 65, Évolution Quincaillerie Cachée, Conception, réf. 6319.003
     last_modified: 2021-07-29
 source_pages:
   - resource: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf
-    pages: 40-79, 84-87, 92-103
+    pages: 42-47, 96-97, 100-104
   - resource: raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf
-    pages: 42-73, 78-86
+    pages: 46-51, 70-75
+generated:
+  by: process:claude-code
+  at: 2026-10-09T18:07:12Z
 ---
 
-# Principes généraux de débit SOLEAL FY
+Le châssis fixe et les fenêtres et portes-fenêtres 1 et 2 vantaux à ouvrant Apparent (65 mm) du SOLEAL FY 55 évolution se coupent d'après les nomenclatures ci-dessous : profilés, joints, accessoires, vis, dimensions du remplissage et coupes cotées. Les fenêtres OB, à soufflet et l'ensemble menuisé sont sur la page [Cotes de débit des fenêtres OB, soufflet et ensemble menuisé Apparent du SOLEAL FY 55](/profiles/soleal-fy-cotes-de-debit-apparent-ob-soufflet-et-ensemble.md), les portes-fenêtres à seuil et à serrure sur la page [Cotes de débit des portes-fenêtres Apparent à seuil PMR et à serrure du SOLEAL FY 55](/profiles/soleal-fy-cotes-de-debit-portes-fenetres-apparent.md).
 
-Toutes les cotes de débit sont exprimées en millimètres (**mm**) à partir des dimensions hors tout de fabrication du châssis : **Largeur hors tout ($L$ ou $W$)** et **Hauteur hors tout ($H$)** [1, 2 p. 40, 3 p. 42].
+# Lire les nomenclatures et les débits
 
-* **Coupe d'onglet à 45°** : utilisée systématiquement pour les cadres dormants périphériques et les cadres ouvrants à frappe.
-* **Coupe droite à 90°** : réservée aux traverses intermédiaires, battements centraux, seuils plats PMR et parcloses intérieures/extérieures.
-* **Tolérance de laquage** : pour les profilés laqués, prévoir les débits des traverses d'ouvrant ainsi que la largeur des vitrages **plus petits de 1 mm** pour absorber l'épaisseur du film de poudre et éviter tout coincement en feuillure [2 p. 42, 44].
+La LUMINE55 est fabriquée sur le système TECHNAL SOLEAL FY 55 évolution. Le dormant est le cadre fixe de la menuiserie, l'ouvrant le cadre mobile qui porte le vitrage, la parclose la baguette qui maintient le vitrage dans son logement (voir le [glossaire](/reference/glossaire.md)). Les formes d'ouvrant sont décrites sur la page [Concept des ouvrants Apparent, Minimal et Minimal chant clippable](/profiles/soleal-fy-concept-ouvrants-et-dormants.md).
 
----
+Chaque application est une nomenclature de fabrication : H est la hauteur et L la largeur hors tout du châssis (mm), « Qté » le nombre de pièces, « Débit (mm) » la formule de longueur de coupe telle qu'écrite sur la planche (par exemple H-44 : hauteur H moins 44 mm). La colonne « Type de coupe » traduit le pictogramme de la planche : deux traits verticaux = « droite / droite » (coupe droite aux deux bouts), deux traits obliques = « onglet / onglet » (coupe d'onglet aux deux bouts), un trait vertical et un trait oblique = « droite / onglet ». Aucune légende imprimée ne définit ces pictogrammes (**VER-352**). La mention « voir abaque » (trois étoiles sur la planche) renvoie la quantité à la quincaillerie. Les valeurs cotées sur les coupes sont reportées sans désignation, la planche ne les nommant pas (**VER-354**). Les formules ne sont jamais interpolées : une dimension se lit dans la formule de sa ligne.
 
-# Formules de débit — Ouvrant Apparent (FYa / OA)
+# Mise en garde imprimée sur les planches
 
-Châssis équipés de l'ouvrant tubulaire 65 mm (T215180, T215181 ou TFY1206) et parcloses droites (T591005) [2 p. 42-59, 3 p. 42-49, 58-65].
+Les applications concernées par « traverses d'ouvrant et largeur des vitrages » portent l'avertissement : « Prévoir les débits des traverses d'ouvrant ainsi que la largeur des vitrages + petits d'1 mm pour les finitions laquées. »
 
-### 1. Châssis fixe et fenêtres 1 et 2 vantaux
+# Ouvrant Apparent : châssis fixe et fenêtres 1 et 2 vantaux
 
-| Élément débité | Châssis Fixe | Fenêtre 1 vantail OF / OB | Fenêtre 2 vantaux OF / OB | Type de coupe |
-| --- | :---: | :---: | :---: | :---: |
-| **Dormant périphérique** | $2 \times H$ (H)<br>$2 \times L$ (L) | $2 \times H$ (H)<br>$2 \times L$ (L) | $2 \times H$ (H)<br>$2 \times L$ (L) | Coupe d'onglet 45°/45° |
-| **Cadre ouvrant** (montants) | — | $2 \times (H - 44)$ | $4 \times (H - 44)$ | Coupe d'onglet 45°/45° |
-| **Cadre ouvrant** (traverses) | — | $2 \times (L - 44)$ | $4 \times (\frac{L}{2} - 25)$ | Coupe d'onglet 45°/45° |
-| **Battement central** (T215186 / TFY1207) | — | — | $1 \times (H - 116)$ | Coupe droite 90°/90° |
-| **Parcloses droites** (hauteur) | $2 \times (H - 98)$ | $2 \times (H - 175)$ | $4 \times (H - 175)$ | Coupe droite 90°/90° |
-| **Parcloses droites** (largeur) | $2 \times (L - 54)$ | $2 \times (L - 131)$ | $4 \times (\frac{L}{2} - 112)$ | Coupe droite 90°/90° |
-| **Remplissage vitrage** (hauteur) | $H - 66$ | $H - 143$ | $H - 143$ | Rectangle |
-| **Remplissage vitrage** (largeur) | $L - 66$ | $L - 143$ | $\frac{L}{2} - 124$ | Rectangle |
+## Châssis fixe, ouvrant Apparent
 
-### 2. Portes-fenêtres avec seuil PMR (Seuil 20 mm T215309 en 55 ou TFY1161 en 65)
+Nomenclature et débits de l'application « Châssis fixe, ouvrant Apparent » : H et L sont la hauteur et la largeur hors tout du châssis, cotées sur les coupes, en millimètres.
 
-| Élément débité | Porte-fenêtre 1 vantail PMR | Porte-fenêtre 2 vantaux PMR | Type de coupe |
-| --- | :---: | :---: | :---: |
-| **Dormant** (montants verticaux) | $2 \times H$ | $2 \times H$ | Mixte 90° bas / 45° haut |
-| **Dormant** (traverse haute) | $1 \times L$ | $1 \times L$ | Coupe d'onglet 45°/45° |
-| **Seuil aluminium PMR** (T215309 / TFY1161) | $1 \times (L - 104)$ | $1 \times (L - 104)$ | Coupe droite 90°/90° |
-| **Cadre ouvrant** (montants verticaux) | $2 \times (H - 23,5)$ | $4 \times (H - 23,5)$ | Coupe d'onglet 45°/45° |
-| **Cadre ouvrant** (traverse haute) | $1 \times (L - 44)$ | $2 \times (\frac{L}{2} - 25)$ | Coupe d'onglet 45°/45° |
-| **Cadre ouvrant** (traverse basse PMR TFY1256) | $1 \times (L - 68)$ | $2 \times (\frac{L}{2} - 49)$ | Coupe d'onglet 45°/45° |
-| **Battement central** (T215186 / TFY1207) | — | $1 \times (H - 91)$ | Coupe droite 90°/90° |
-| **Porte-joint seuil plat** (T215310) | $1 \times (L - 77)$ | $2 \times (\frac{L}{2} - 58)$ | Coupe droite 90°/90° |
-| **Porte-brosse périphérique** (T215312) | $1 \times (L - 118)$ | $2 \times (\frac{L}{2} - 99)$ | Coupe droite 90°/90° |
-| **Profil rejet d'eau** (TFY2117) | $1 \times (L - 116)$ | $1 \times (\frac{L}{2} - 97) + 1 \times (\frac{L}{2} - 25)$ | Coupe droite 90°/90° |
-| **Parcloses droites** (hauteur) | $2 \times (H - 154,5)$ | $4 \times (H - 154,5)$ | Coupe droite 90°/90° |
-| **Parcloses droites** (largeur) | $2 \times (L - 131)$ | $4 \times (\frac{L}{2} - 112)$ | Coupe droite 90°/90° |
-| **Remplissage vitrage** | $(H - 123) \times (L - 143)$ | $(H - 123) \times (\frac{L}{2} - 124)$ | Rectangle |
+Profilés :
 
-(schéma: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf, p. 52-57 et 3 p. 46-51)
+| Référence | Désignation | Qté | Type de coupe | Débit (mm) |
+| --- | --- | --- | --- | --- |
+| T591005 | Parclose droite H 22mm- l 15mm | 2 | droite / droite | H-98 |
+| T591005 | Parclose droite H 22mm- l 15mm | 2 | droite / droite | L-54 |
+| TFY1119 | Dormant drainage caché 55mm | 2 | onglet / onglet | H |
+| TFY1119 | Dormant drainage caché 55mm | 2 | onglet / onglet | L |
 
----
+Joints (longueur de joint à prévoir, formule en mm) :
 
-# Formules de débit — Ouvrant Minimal (FYm / OM)
+| Référence | Désignation | Débit (mm) |
+| --- | --- | --- |
+| T410010 | Joint de battue | 2H+2L |
+| TAS0017 | Joint de parclose 7mm | 2H+2L |
 
-Châssis équipés des profilés d'ouvrants masqués TFY1338 / TFY1339 et parcloses isolantes extérieures en TPE (TFY4002 / TFY4003) [2 p. 62-75, 3 p. 50-57, 66-73].
+Accessoires (« voir abaque » : quantité renvoyée à la quincaillerie, sans nombre sur la planche) :
 
-### 1. Fenêtres 1 et 2 vantaux Minimal
+| Référence | Désignation | Qté |
+| --- | --- | --- |
+| T740012 | Support cale vitrage | 4 |
+| T750201 | Equerre 15x13.7 | 4 |
+| T750219 | Equerre 15x7.2 | 4 |
+| TFY3859 | Equerre feuillure 25 mm | 4 |
+
+(schéma: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf, p. 42)
+
+Remplissage (dimensions du vitrage) : hauteur H-66 mm, largeur L-66 mm.
+
+Coupes horizontale et verticale cotées :
+
+![Coupe horizontale — Châssis fixe, ouvrant Apparent](/assets/profiles/technal-fy/applications/apparent-chassis-fixe-coupe-horizontale.png)
+
+![Coupe verticale — Châssis fixe, ouvrant Apparent](/assets/profiles/technal-fy/applications/apparent-chassis-fixe-coupe-verticale.png)
+
+Lecture : les repères de la coupe horizontale sont TFY1119, T591005, T410010, TAS0017, T750219, T750201 ; ceux de la coupe verticale sont T750219, T750201, T591005, TAS0017, T410010, T740012, TFY1119. Cotes de la coupe horizontale (mm) : L ; 22 ; 27 ; 55 ; 19 ; 52.
+
+[1 p. 42-43]
+
+## Fenêtre et porte-fenêtre 1 vantail, ouvrant Apparent
+
+Nomenclature et débits de l'application « Fenêtre et porte-fenêtre 1 vantail, ouvrant Apparent » : H et L sont la hauteur et la largeur hors tout du châssis, cotées sur les coupes, en millimètres.
+
+Profilés :
+
+| Référence | Désignation | Qté | Type de coupe | Débit (mm) |
+| --- | --- | --- | --- | --- |
+| T131299 | Tige de commande quincaillerie | 1 | droite / droite | H |
+| T215180 | Ouvrant | 2 | onglet / onglet | H-44 |
+| T215180 | Ouvrant | 2 | onglet / onglet | L-44 |
+| T591005 | Parclose droite H 22mm- l 15mm | 2 | droite / droite | H-175 |
+| T591005 | Parclose droite H 22mm- l 15mm | 2 | droite / droite | L-131 |
+| TFY1119 | Dormant drainage caché 55mm | 2 | onglet / onglet | H |
+| TFY1119 | Dormant drainage caché 55mm | 2 | onglet / onglet | L |
+
+Joints (longueur de joint à prévoir, formule en mm) :
+
+| Référence | Désignation | Débit (mm) |
+| --- | --- | --- |
+| T410009 | Joint central d'étanchéité | 2H+2L |
+| T410010 | Joint de battue | 2H+2L |
+| TAS0017 | Joint de parclose 7mm | 2H+2L |
+| TFY5008 | Joint de battement intérieur | 2H+2L |
+
+Accessoires (« voir abaque » : quantité renvoyée à la quincaillerie, sans nombre sur la planche) :
+
+| Référence | Désignation | Qté |
+| --- | --- | --- |
+| T740012 | Support cale vitrage | 4 |
+| T750004 | Equerre d'assemblage 10x5.2 | 4 |
+| T750201 | Equerre 15x13.7 | 4 |
+| T750204 | Equerre d'assemblage 15x27.1 | 4 |
+| T750219 | Equerre 15x7.2 | 4 |
+| T940025 | Paumelle 2 lames réglable | voir abaque |
+| T940027 | Support d'ouvrant | 1 |
+| T940031 | Kit gâche et rouleau | voir abaque |
+| T940046 | Boîtier crémone encastré | 1 |
+| T940100 | Butée fin de course | 1 |
+| T960001 | Crémone à carré de frappe | 1 |
+| TFY3835 | Pièce d'angle joint central | 4 |
+| TFY3859 | Equerre feuillure 25 mm | 4 |
+
+(schéma: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf, p. 44)
+
+Remplissage (dimensions du vitrage) : hauteur H-143 mm, largeur L-143 mm.
+
+Avertissement de la planche : voir la mise en garde en tête de page (traverses et largeur).
+Coupes horizontale et verticale cotées :
+
+![Coupe horizontale — Fenêtre et porte-fenêtre 1 vantail, ouvrant Apparent](/assets/profiles/technal-fy/applications/apparent-fenetre-1-vantail-coupe-horizontale.png)
+
+![Coupe verticale — Fenêtre et porte-fenêtre 1 vantail, ouvrant Apparent](/assets/profiles/technal-fy/applications/apparent-fenetre-1-vantail-coupe-verticale.png)
+
+Lecture : les repères de la coupe horizontale sont T960001, T591005, TAS0017, TFY1119, T940046, T750204, T410010, T215180, T750219, T750201, T750004, T940025 ; ceux de la coupe verticale sont T750219, T750201, T215180, T750204, T591005, TAS0017, T410010, T740012, T410009+TFY3835, TFY5008, TFY1119. Cotes de la coupe horizontale (mm) : L ; 87.5 (22 + 43.5 + 22) ; 10 ; 55 ; 65 ; 16 ; 6 ; 52.
+
+[1 p. 44-45]
+
+## Fenêtre et porte-fenêtre 2 vantaux, ouvrant Apparent
+
+Nomenclature et débits de l'application « Fenêtre et porte-fenêtre 2 vantaux, ouvrant Apparent » : H et L sont la hauteur et la largeur hors tout du châssis, cotées sur les coupes, en millimètres.
+
+Profilés :
+
+| Référence | Désignation | Qté | Type de coupe | Débit (mm) |
+| --- | --- | --- | --- | --- |
+| T131299 | Tige de commande quincaillerie | 1 | droite / droite | H |
+| T215180 | Ouvrant | 4 | onglet / onglet | H-44 |
+| T215180 | Ouvrant | 4 | onglet / onglet | L/2-25 |
+| T215186 | Battement central | 1 | droite / droite | H-116 |
+| T591005 | Parclose droite H 22mm- l 15mm | 4 | droite / droite | H-175 |
+| T591005 | Parclose droite H 22mm- l 15mm | 4 | droite / droite | L/2-112 |
+| TFY1119 | Dormant drainage caché 55mm | 2 | onglet / onglet | H |
+| TFY1119 | Dormant drainage caché 55mm | 2 | onglet / onglet | L |
+
+Joints (longueur de joint à prévoir, formule en mm) :
+
+| Référence | Désignation | Débit (mm) |
+| --- | --- | --- |
+| T410009 | Joint central d'étanchéité | 3H+2L |
+| T410010 | Joint de battue | 4H+2L |
+| TAS0017 | Joint de parclose 7mm | 4H+2L |
+| TFY5008 | Joint de battement intérieur | 4H+2L |
+
+Accessoires (« voir abaque » : quantité renvoyée à la quincaillerie, sans nombre sur la planche) :
+
+| Référence | Désignation | Qté |
+| --- | --- | --- |
+| T400049 | Bouchon central 2 vantaux | 1 |
+| T740012 | Support cale vitrage | 8 |
+| T750004 | Equerre d'assemblage 10x5.2 | 8 |
+| T750201 | Equerre 15x13.7 | 4 |
+| T750204 | Equerre d'assemblage 15x27.1 | 8 |
+| T750219 | Equerre 15x7.2 | 4 |
+| T940025 | Paumelle 2 lames réglable | voir abaque |
+| T940027 | Support d'ouvrant | 1 |
+| T940030 | Targette semi-fixe | 1 |
+| T940031 | Kit gâche et rouleau | voir abaque |
+| T940046 | Boîtier crémone encastré | 1 |
+| T940100 | Butée fin de course | 1 |
+| T960001 | Crémone à carré de frappe | 1 |
+| TFY3835 | Pièce d'angle joint central | 4 |
+| TFY3859 | Equerre feuillure 25 mm | 4 |
+
+Vis (la quantité est donnée telle qu'écrite : « 3/ml/H » = 3 vis par mètre linéaire de la hauteur H) :
+
+| Référence | Quantité |
+| --- | --- |
+| T770011 | 3/ml/H |
+
+(schéma: raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf, p. 46)
+
+Remplissage (dimensions du vitrage) : hauteur H-143 mm, largeur L/2-124 mm.
+
+Avertissement de la planche : voir la mise en garde en tête de page (traverses et largeur).
+Coupes horizontale et verticale cotées :
+
+![Coupe horizontale, partie gauche — Fenêtre et porte-fenêtre 2 vantaux, ouvrant Apparent](/assets/profiles/technal-fy/applications/apparent-fenetre-2-vantaux-coupe-horizontale-gauche.png)
+
+![Coupe horizontale, partie droite (suite sur la page suivante de la planche) — Fenêtre et porte-fenêtre 2 vantaux, ouvrant Apparent](/assets/profiles/technal-fy/applications/apparent-fenetre-2-vantaux-coupe-horizontale-droite.png)
+
+![Coupe verticale — Fenêtre et porte-fenêtre 2 vantaux, ouvrant Apparent](/assets/profiles/technal-fy/applications/apparent-fenetre-2-vantaux-coupe-verticale.png)
+
+Lecture : les repères de la coupe horizontale sont TFY1119, T940025, T740012, T215180, T410010, T215186, T400049, T940046, T750004, T750204, T591005, TAS0017, T770011, T960001, T750219, T750201 ; ceux de la coupe verticale sont T750219, T750201, TFY1119, T215180, T750204, T750004, T591005, TAS0017, T410010, T740012, T410009+TFY3835, TFY5008. Cotes de la coupe horizontale (mm) : L (cote totale cotée sur les deux pages) ; 16 ; 137 ; 87.5 (22 + 43.5 + 22) ; 10 ; 55 ; 65 ; 6 ; 52.
+
+[1 p. 46-47]
+
+# Options de l'ouvrant Minimal (pages du même catalogue hors de ce lot)
+
+Parclose TPE extérieure à coupe d'onglet 45° (pré-débit en coupe droite puis onglet à l'outil TFY7038) et chant clippable aluminium TFY2405, conservés tels qu'ils étaient écrits, cités à leur page (PDF 96-97) et non relus contre l'image dans ce lot [1 p. 96-97].
 
 | Élément débité | Fenêtre 1 vantail Minimal | Fenêtre 2 vantaux Minimal | Type de coupe |
 | --- | :---: | :---: | :---: |
-| **Dormant périphérique** | $2 \times H$ / $2 \times L$ | $2 \times H$ / $2 \times L$ | Coupe d'onglet 45°/45° |
-| **Cadre ouvrant masqué** (montants) | $2 \times (H - 44)$ | $4 \times (H - 44)$ | Coupe d'onglet 45°/45° |
-| **Cadre ouvrant masqué** (traverses) | $2 \times (L - 44)$ | $4 \times (\frac{L}{2} - 25)$ | Coupe d'onglet 45°/45° |
-| **Battement central** (T215186 / TFY1207) | — | $1 \times (H - 116)$ | Coupe droite 90°/90° |
-| **Parclose TPE extérieure** (coupe droite) | $2 \times (H - 179,5)$<br>$2 \times (L - 179,5)$ | $4 \times (H - 179,5)$<br>$4 \times (\frac{L}{2} - 160,5)$ | Coupe droite avec pièces d'angle TFY3850 |
-| **Parclose TPE extérieure** (option coupe 45°) | $2 \times (H - 73)$<br>$2 \times (L - 73)$ | $4 \times (H - 73)$<br>$4 \times (\frac{L}{2} - 54)$ | Pré-débit coupe droite puis onglet outil TFY7038 |
-| **Chant clippable alu TFY2405** (si option CC à 45°) | $2 \times (H - 116)$<br>$2 \times (L - 116)$ | $4 \times (H - 116)$<br>$4 \times (\frac{L}{2} - 97)$ | Coupe d'onglet 45° ($H_v, L_v \ge 900\text{ mm}$) |
-| **Remplissage vitrage** (hauteur) | $H - 121$ | $H - 121$ | Rectangle |
-| **Remplissage vitrage** (largeur) | $L - 121$ | $\frac{L}{2} - 102$ | Rectangle |
+| Parclose TPE extérieure (option coupe 45°) | $2 \times (H - 73)$<br>$2 \times (L - 73)$ | $4 \times (H - 73)$<br>$4 \times (\frac{L}{2} - 54)$ | Pré-débit coupe droite puis onglet outil TFY7038 |
+| Chant clippable alu TFY2405 (si option CC à 45°) | $2 \times (H - 116)$<br>$2 \times (L - 116)$ | $4 \times (H - 116)$<br>$4 \times (\frac{L}{2} - 97)$ | Coupe d'onglet 45° ($H_v, L_v \ge 900\text{ mm}$) |
 
-### 2. Portes-fenêtres Minimal avec seuil PMR
+# Portes-fenêtres avec seuil PMR : valeurs de l'ancienne rédaction attribuées à la réf. 6319.003
+
+Les deux tableaux suivants sont conservés tels qu'ils étaient écrits. Ils sont attribués à la réf. 6319.003 (SOLEAL FY 55 et 65 Évolution Quincaillerie Cachée, pagination de l'ancienne rédaction : 46-51 pour l'ouvrant Apparent, 54-57 et 70-75 pour l'ouvrant Minimal), n'ont pas été relus contre l'image et portent des valeurs différentes de celles des planches de la réf. 6057.003 : seuil, montants d'ouvrant, battement, parcloses, remplissage et rejet d'eau (**CTR-208**, **CTR-209**). Pour la réf. 6057.003, les valeurs sont celles des applications « Porte-fenêtre avec seuil » de la page [Cotes de débit des portes-fenêtres Apparent à seuil PMR et à serrure](/profiles/soleal-fy-cotes-de-debit-portes-fenetres-apparent.md) et de la page [Cotes de débit des portes-fenêtres et ensemble menuisé à ouvrant Minimal](/profiles/soleal-fy-cotes-de-debit-ouvrant-minimal-portes-fenetres.md).
+
+## Porte-fenêtre Apparent avec seuil PMR (valeurs de l'ancienne rédaction)
+
+| Élément débité | Porte-fenêtre 1 vantail PMR | Porte-fenêtre 2 vantaux PMR | Type de coupe |
+| --- | :---: | :---: | :---: |
+| Dormant (montants verticaux) | $2 \times H$ | $2 \times H$ | Mixte 90° bas / 45° haut |
+| Dormant (traverse haute) | $1 \times L$ | $1 \times L$ | Coupe d'onglet 45°/45° |
+| Seuil aluminium PMR (T215309 / TFY1161) | $1 \times (L - 104)$ | $1 \times (L - 104)$ | Coupe droite 90°/90° |
+| Cadre ouvrant (montants verticaux) | $2 \times (H - 23,5)$ | $4 \times (H - 23,5)$ | Coupe d'onglet 45°/45° |
+| Cadre ouvrant (traverse haute) | $1 \times (L - 44)$ | $2 \times (\frac{L}{2} - 25)$ | Coupe d'onglet 45°/45° |
+| Cadre ouvrant (traverse basse PMR TFY1256) | $1 \times (L - 68)$ | $2 \times (\frac{L}{2} - 49)$ | Coupe d'onglet 45°/45° |
+| Battement central (T215186 / TFY1207) | — | $1 \times (H - 91)$ | Coupe droite 90°/90° |
+| Porte-joint seuil plat (T215310) | $1 \times (L - 77)$ | $2 \times (\frac{L}{2} - 58)$ | Coupe droite 90°/90° |
+| Porte-brosse périphérique (T215312) | $1 \times (L - 118)$ | $2 \times (\frac{L}{2} - 99)$ | Coupe droite 90°/90° |
+| Profil rejet d'eau (TFY2117) | $1 \times (L - 116)$ | $1 \times (\frac{L}{2} - 97) + 1 \times (\frac{L}{2} - 25)$ | Coupe droite 90°/90° |
+| Parcloses droites (hauteur) | $2 \times (H - 154,5)$ | $4 \times (H - 154,5)$ | Coupe droite 90°/90° |
+| Parcloses droites (largeur) | $2 \times (L - 131)$ | $4 \times (\frac{L}{2} - 112)$ | Coupe droite 90°/90° |
+| Remplissage vitrage | $(H - 123) \times (L - 143)$ | $(H - 123) \times (\frac{L}{2} - 124)$ | Rectangle |
+
+(schéma: raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf, p. 46-51, pagination de l'ancienne rédaction)
+
+## Porte-fenêtre Minimal avec seuil PMR (valeurs de l'ancienne rédaction)
 
 | Élément débité | Porte-fenêtre 1 vantail Minimal PMR | Porte-fenêtre 2 vantaux Minimal PMR | Type de coupe |
 | --- | :---: | :---: | :---: |
-| **Dormant** (montants verticaux) | $2 \times H$ | $2 \times H$ | Mixte 90°/45° |
-| **Dormant** (traverse haute) | $1 \times L$ | $1 \times L$ | Coupe d'onglet 45°/45° |
-| **Seuil aluminium PMR** | $1 \times (L - 104)$ | $1 \times (L - 104)$ | Coupe droite 90°/90° |
-| **Cadre ouvrant masqué** (montants) | $2 \times (H - 23,5)$ | $4 \times (H - 23,5)$ | Coupe d'onglet 45°/45° |
-| **Cadre ouvrant masqué** (traverse haute) | $1 \times (L - 44)$ | $2 \times (\frac{L}{2} - 25)$ | Coupe d'onglet 45°/45° |
-| **Cadre ouvrant masqué** (traverse basse PMR TFY1258) | $1 \times (L - 68)$ | $2 \times (\frac{L}{2} - 49)$ | Coupe d'onglet 45°/45° |
-| **Battement central** (T215186 / TFY1207) | — | $1 \times (H - 91)$ | Coupe droite 90°/90° |
-| **Profil rejet d'eau bas** (TFY2116) | $1 \times (L - 117)$ | $1 \times (\frac{L}{2} - 98) + 1 \times (\frac{L}{2} - 25,5)$ | Coupe droite 90°/90° |
-| **Parclose TPE extérieure** (hauteur) | $2 \times (H - 52,5)$ | $4 \times (H - 52,5)$ | Coupe droite 90°/90° |
-| **Parclose TPE extérieure** (largeur) | $2 \times (L - 73)$ | $4 \times (\frac{L}{2} - 54)$ | Coupe droite 90°/90° |
-| **Remplissage vitrage** | $(H - 101) \times (L - 121)$ | $(H - 101) \times (\frac{L}{2} - 102)$ | Rectangle |
+| Dormant (montants verticaux) | $2 \times H$ | $2 \times H$ | Mixte 90°/45° |
+| Dormant (traverse haute) | $1 \times L$ | $1 \times L$ | Coupe d'onglet 45°/45° |
+| Seuil aluminium PMR | $1 \times (L - 104)$ | $1 \times (L - 104)$ | Coupe droite 90°/90° |
+| Cadre ouvrant masqué (montants) | $2 \times (H - 23,5)$ | $4 \times (H - 23,5)$ | Coupe d'onglet 45°/45° |
+| Cadre ouvrant masqué (traverse haute) | $1 \times (L - 44)$ | $2 \times (\frac{L}{2} - 25)$ | Coupe d'onglet 45°/45° |
+| Cadre ouvrant masqué (traverse basse PMR TFY1258) | $1 \times (L - 68)$ | $2 \times (\frac{L}{2} - 49)$ | Coupe d'onglet 45°/45° |
+| Battement central (T215186 / TFY1207) | — | $1 \times (H - 91)$ | Coupe droite 90°/90° |
+| Profil rejet d'eau bas (TFY2116) | $1 \times (L - 117)$ | $1 \times (\frac{L}{2} - 98) + 1 \times (\frac{L}{2} - 25,5)$ | Coupe droite 90°/90° |
+| Parclose TPE extérieure (hauteur) | $2 \times (H - 52,5)$ | $4 \times (H - 52,5)$ | Coupe droite 90°/90° |
+| Parclose TPE extérieure (largeur) | $2 \times (L - 73)$ | $4 \times (\frac{L}{2} - 54)$ | Coupe droite 90°/90° |
+| Remplissage vitrage | $(H - 101) \times (L - 121)$ | $(H - 101) \times (\frac{L}{2} - 102)$ | Rectangle |
 
-(schéma: raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf, p. 54-57 et 70-75)
+(schéma: raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf, p. 54-57 et 70-75, pagination de l'ancienne rédaction)
 
----
+# Traverses intermédiaires d'ouvrant
 
-# Formules de débit — Portes-fenêtres avec serrure et grande inertie
-
-Portes-fenêtres équipées de l'ouvrant à montant serrure TFY1213 (face vue 62,5 mm) recevant une serrure 3 points à pênes basculants TFY3724 et béquille double rosette [2 p. 58-61, 74-77] :
-
-| Élément débité | 1 vantail serrure seuil PMR | 2 vantaux serrure seuil PMR | Type de coupe |
-| --- | :---: | :---: | :---: |
-| **Ouvrant montant serrure** (TFY1213) | $2 \times (H - 29)$ | $4 \times (H - 29)$ | Coupe d'onglet 45°/45° |
-| **Ouvrant traverse** | $2 \times (L - 44)$ | $4 \times (\frac{L}{2} - 25)$ | Coupe d'onglet 45°/45° |
-| **Battement central** (T215186) | — | $1 \times (H - 88)$ | Coupe droite 90°/90° |
-| **Parclose droite** (hauteur) | $2 \times (H - 226)$ | $4 \times (H - 226)$ | Coupe droite 90°/90° |
-| **Parclose droite** (largeur) | $2 \times (L - 197)$ | $4 \times (\frac{L}{2} - 178)$ | Coupe droite 90°/90° |
-| **Remplissage vitrage** | $(H - 194) \times (L - 209)$ | $(H - 194) \times (\frac{L}{2} - 190)$ | Rectangle |
-
----
-
-# Formules de débit — Traverses intermédiaires d'ouvrant
-
-Pour l'intégration d'un meneau ou d'une traverse d'ouvrant divisant le vantail en deux vitrages de hauteurs $H_{v1}$ et $H_{v2}$ ($H_v = H_{v1} + H_{v2}$) [2 p. 98-102] :
-
-| Type d'ouvrant | Réf. traverse | Débit de la traverse | Débit du capot (si applicable) | Hauteur vitrage bas ($H_{v1}$) | Hauteur vitrage haut ($H_{v2}$) |
-| --- | :---: | :---: | :---: | :---: | :---: |
-| **Ouvrant Apparent (FYa)** | T215202 (15/77) | $L_v - 131\text{ mm}$ (1 vtl)<br>$\frac{L_v}{2} - 112\text{ mm}$ (2 vtx) | — | $H_{v1} - 69\text{ mm}$ | $H_{v2} - 69\text{ mm}$ |
-| **Ouvrant Apparent (FYa)** | T215204 (28/90) | $L_v - 131\text{ mm}$ (1 vtl)<br>$\frac{L_v}{2} - 112\text{ mm}$ (2 vtx) | — | $H_{v1} - 75,5\text{ mm}$ | $H_{v2} - 75,5\text{ mm}$ |
-| **Ouvrant Apparent (FYa)** | T215205 (38/100) | $L_v - 131\text{ mm}$ (1 vtl)<br>$\frac{L_v}{2} - 112\text{ mm}$ (2 vtx) | — | $H_{v1} - 80,5\text{ mm}$ | $H_{v2} - 80,5\text{ mm}$ |
-| **Ouvrant Apparent (FYa)** | T215208 (68/130) | $L_v - 131\text{ mm}$ (1 vtl)<br>$\frac{L_v}{2} - 112\text{ mm}$ (2 vtx) | — | $H_{v1} - 95,5\text{ mm}$ | $H_{v2} - 95,5\text{ mm}$ |
-| **Ouvrant Minimal (FYm)** | TFY1340 (80 mm) | $L_v - 67\text{ mm}$ | $L_v - 81\text{ mm}$ (TFY2306) | $H_{v1} - 66,5\text{ mm}$ | $H_{v2} - 66,5\text{ mm}$ |
-| **Ouvrant Minimal (FYm)** | TFY1341 (80 mm) | $L_v - 67\text{ mm}$ | $L_v - 81\text{ mm}$ (TFY2306) | $H_{v1} - 66,5\text{ mm}$ | $H_{v2} - 66,5\text{ mm}$ |
-| **Ouvrant Minimal (FYm)** | TFY1342 (100 mm) | $L_v - 67\text{ mm}$ | $L_v - 81\text{ mm}$ (TFY2307) | $H_{v1} - 76,5\text{ mm}$ | $H_{v2} - 76,5\text{ mm}$ |
-
----
-
-# Formules de débit — Châssis spéciaux (soufflet, italienne, projection)
-
-| Configuration | Profilé d'ouvrant | Débit cadre ouvrant | Débit parcloses | Remplissage vitrage |
-| --- | :---: | :---: | :---: | :---: |
-| **Fenêtre à soufflet Apparent** | T215180 | $2 \times (H - 44)$<br>$2 \times (L - 44)$ | $2 \times (H - 175)$<br>$2 \times (L - 131)$ | $(H - 143) \times (L - 143)$ |
-| **Fenêtre à soufflet Minimal** | TFY1338 | $2 \times (H - 44)$<br>$2 \times (L - 44)$ | $2 \times (H - 179,5)$<br>$2 \times (L - 179,5)$ | $(H - 121) \times (L - 121)$ |
-| **Fenêtre à l'italienne** | T215198 | $2 \times (H - 44)$<br>$2 \times (L - 44)$ | $2 \times (H - 244)$<br>$2 \times (L - 200)$ | $(H - 212) \times (L - 212)$ |
-| **Fenêtre à projection** | T210082 | $2 \times (H - 44)$<br>$2 \times (L - 44)$ | $2 \times (H - 241)$<br>$2 \times (L - 197)$ | $(H - 209) \times (L - 209)$ |
-
----
+Les débits des traverses intermédiaires d'ouvrant des versions Apparent, Eclat et Minimal, leurs remplissages et leurs accessoires sont sur [Traverses d'ouvrant Apparent, Eclat, Minimal, capot Tradition et battue du SOLEAL FY 55](/profiles/soleal-fy-traverses-d-ouvrant-apparent-eclat-et-minimal.md).
 
 # Citations
 
-[1] DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm — `raw/DTA 6_12-2016_V5 (1).pdf`, p. 7 à 12
+[1] SOLEAL FY 55 évolution, Ouvrant Minimal et Apparent, Conception, réf. 6057.003 — `raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf`, p. 42 à 47, 96-97 et 100 à 104
 
-[2] SOLEAL FY 55 évolution, Conception Ouvrant Minimal et Apparent, réf. 6057.003 — `raw/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf`, p. 40 à 103
-
-[3] SOLEAL FY 55 & 65, Évolution Quincaillerie Cachée, Conception, réf. 6319.003 — `raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf`, p. 42 à 86
+[2] SOLEAL FY 55 & 65, Évolution Quincaillerie Cachée, Conception, réf. 6319.003 — `raw/SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1).pdf`, pages des tableaux conservés ci-dessus
 
 # Voir aussi
 
-- [Dormants et ouvrants SOLEAL FY](/profiles/soleal-fy-dormants-et-ouvrants.md)
+- [Cotes de débit des fenêtres OB, soufflet et ensemble menuisé Apparent du SOLEAL FY 55](/profiles/soleal-fy-cotes-de-debit-apparent-ob-soufflet-et-ensemble.md)
+- [Cotes de débit des portes-fenêtres Apparent à seuil PMR et à serrure du SOLEAL FY 55](/profiles/soleal-fy-cotes-de-debit-portes-fenetres-apparent.md)
+- [Cotes de débit des fenêtres à ouvrant Minimal du SOLEAL FY 55](/profiles/soleal-fy-cotes-de-debit-ouvrant-minimal-fenetres.md)
+- [Cotes de débit des portes-fenêtres et ensemble menuisé à ouvrant Minimal du SOLEAL FY 55](/profiles/soleal-fy-cotes-de-debit-ouvrant-minimal-portes-fenetres.md)
+- [Cotes de débit Equilibre, fenêtre italienne et fenêtre projection du SOLEAL FY 55](/profiles/soleal-fy-cotes-de-debit-equilibre-italienne-projection.md)
+- [Désignation symbolique des châssis et dormants par hauteur de cage du SOLEAL FY 55](/profiles/soleal-fy-designation-des-chassis-et-recapitulatif-dormants.md)
 - [Parcloses et vitrages SOLEAL FY](/profiles/soleal-fy-parcloses-et-vitrage.md)
-- [Fabrication et usinage SOLEAL FY](/procedures/fabrication-soleal-fy.md)
 - [Quincaillerie visible et cachée SOLEAL FY](/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md)
+- [Dormants et ouvrants SOLEAL FY](/profiles/soleal-fy-dormants-et-ouvrants.md)
+- [Fabrication et usinage SOLEAL FY](/procedures/fabrication-soleal-fy.md)
+- [Concept des ouvrants Apparent, Minimal et Minimal chant clippable](/profiles/soleal-fy-concept-ouvrants-et-dormants.md)
 - [TECHNAL](/fournisseurs/technal.md)

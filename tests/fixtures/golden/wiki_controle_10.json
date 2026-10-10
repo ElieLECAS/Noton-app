@@ -399,13 +399,13 @@
         },
         {
           "page": "/profiles/soleal-gy-cotes-de-debit.md",
-          "ligne": 62,
-          "extrait": "Profilés traverses : **T141015** (vitrage 24-28 mm) ou **T141021** (vitrage 29-32 mm). (piège)"
+          "ligne": 73,
+          "extrait": "Les traverses basses et hautes sont le T141015 (vitrage de 24 à 28 mm) ou le T141021 (vitrage de 29 à 32 mm). (piège)"
         },
         {
-          "page": "/profiles/soleal-gy-cotes-de-debit.md",
-          "ligne": 66,
-          "extrait": "| **Fenêtre / Porte-fenêtre 2 vantaux** | 2 vtx / 2 rails | 4 | $\\mathbf{L/2 - 91\\text{ mm}}$ | (piège)"
+          "page": "/profiles/soleal-gy-application-2-vantaux.md",
+          "ligne": 36,
+          "extrait": "| T141015 | Traverse basse ouvrant | 4 | || | L/2-91 | (piège)"
         },
         {
           "page": "/profiles/askey-coulissant-65-nv-cotes-de-debit.md",

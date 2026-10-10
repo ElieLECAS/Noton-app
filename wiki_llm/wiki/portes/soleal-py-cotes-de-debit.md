@@ -1,13 +1,14 @@
 ---
 type: Porte d'entrée
-title: Cotes de débit et formules de calcul des portes Technal SOLEAL PY 55
-description: Recueil exhaustif des formules de débit, déductions de profilés (dormants, ouvrants en T/Z, plinthes, traverses FPI, seuils PMR PY1100), dimensionnement des vitrages et formules de coupe des tringles de crémone pour la porte SOLEAL PY 55 de TECHNAL.
-tags: [technal, soleal, soleal-py, porte, debit, formules, seuil-pmr, vitrage, tringles]
+title: Porte SOLEAL PY 55 simple action 1 vantail, plinthe, seuil PMR bâtiment, sans et avec FPI
+description: Nomenclature, débits, remplissage H-233 / L-232 et H-281 / L-232 et coupes cotées de la porte 1 vantail ouverture extérieure, plinthe 120 mm et seuil PMR T525060, sans et avec FPI ; débits des portes tube et va-et-vient, tringles.
+tags: [technal, soleal-py, lumine55, porte, debit, nomenclature, seuil-pmr, pmr, atelier, ouvrant]
 gamme: LUMINE
 systeme: SOLEAL PY
 fournisseur: TECHNAL
 usage: atelier
-status: stable
+famille: cotes-de-debit
+status: draft
 sources:
   - resource: raw/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf
     id: technal-soleal-py-55-conception-4944-006
@@ -21,142 +22,239 @@ sources:
     id: technal-seuil-py1100-doc
     title: F.I.T N° 15 — Évolution Porte PY et Seuil PMR PY1100
     last_modified: 2012-12-01
+source_pages:
+  - resource: raw/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf
+    pages: 40-41, 44-45
 generated:
-  by: process:multimodal-direct
-  at: 2026-09-19T23:00:00Z
+  by: process:claude-code
+  at: 2026-10-10T11:34:18Z
 ---
 
-# Formules de débit des cadres dormants
+La porte simple action 1 vantail ouverture extérieure du SOLEAL PY 55 de [TECHNAL](/fournisseurs/technal.md) est la porte à un vantail (ouvrant) sur paumelles en feuillure, avec une plinthe de 120 mm en bas et le seuil PMR bâtiment T525060 ; PROFERM la fabrique dans sa gamme LUMINE. PMR veut dire personne à mobilité réduite ; FPI, ferme-porte intégré ; le dormant est le cadre fixe, la plinthe le profilé bas du vantail (« Plinthe 120mm »), le remplissage le vitrage (voir le [glossaire](/reference/glossaire.md)). La version à deux vantaux est sur [Porte simple action 2 vantaux, plinthe et seuil PMR bâtiment](/portes/soleal-py-simple-action-2-vantaux-seuil-pmr-batiment.md). Les autres applications simple action ont leur page : [ensemble menuisé meneau et fixe latéral](/portes/soleal-py-simple-action-ensemble-menuise-et-fixe-lateral.md), [plinthe et seuil plat T525053 - TPY2104](/portes/soleal-py-simple-action-seuil-plat-1-et-2-vantaux.md), [ouvrant périphérique et seuil PMR RPT](/portes/soleal-py-simple-action-ouvrant-peripherique-seuil-pmr-rpt.md), [seuil résidentiel](/portes/soleal-py-simple-action-seuil-residentiel.md). Le sens d'ouverture et la désignation des portes sont sur [Repérage d'ouverture et désignation des portes](/portes/soleal-py-reperage-d-ouverture-et-designation-des-portes.md) ; le bouchon TFY4000 de la nomenclature est sur [Bouchon TFY4000, équerre TFY3859 et anti-pince-doigts](/portes/soleal-py-anti-pince-doigts-et-principes-d-assemblage.md).
 
-### 1. Cadre dormant 3 côtés (sans traverse basse en aluminium)
-Utilisé avec seuil rapporté en applique ou encastré (seuil PMR PY1100, seuil bâtiment T525060, seuil plat T525053) :
-- **Montants verticaux (2 unités)** :
-  $$\mathbf{H_{\text{dormant}} = H - 6\text{ mm}} \quad (\text{coupe d'onglet 45° en haut, coupe droite 90° en bas})$$
-  *(Pour seuil résidentiel TPY1102 / TPY2107 : débit $= \mathbf{H - 12\text{ mm}}$).*
-  *(Pour seuil TPY2104 sur dormant sans rainure TPY1102 : débit $= \mathbf{H - 7\text{ mm}}$).*
-- **Traverse haute (1 unité)** :
-  $$\mathbf{L_{\text{dormant}} = L} \quad (\text{coupe d'onglet 45° aux 2 extrémités})$$
+# Lire la nomenclature
 
-### 2. Cadre dormant 4 côtés (périphérique)
-- **Montants verticaux (2 unités)** : débit $= \mathbf{H}$ à 45°/45°.
-- **Traverses haute et basse (2 unités)** : débit $= \mathbf{L}$ à 45°/45°.
+H est la hauteur et L la largeur hors tout de la porte, en millimètres, comme les repères H et L des coupes. « Qté » est le nombre de pièces ; « Débits » est la formule de la longueur de coupe : « H-50.5 » se lit « H moins 50,5 mm » ; un débit écrit « H » ou « L » est la cote hors tout elle-même ; « 2H+2L » pour un joint se lit « deux fois H plus deux fois L ». La colonne « Coupe » reproduit les pictogrammes imprimés (deux traits verticaux, un trait vertical suivi d'un trait oblique, deux traits obliques) ; la planche ne les définit pas (**VER-571**). Aucune formule n'est interpolée : un débit se lit dans la formule de sa ligne. La mention verticale « * voir abaque » est écrite en marge de la planche ; l'accessoire T910002 porte « * » en quantité (**VER-572**) [1 p. 40].
 
-### 3. Cadre avec Ferme-Porte Intégré (FPI)
-- **Traverse haute FPI (Réf. T225205)** : débit $= \mathbf{L - 54\text{ mm}}$ (coupe droite 90°/90°).
-- **Montants verticaux multi-usage (Réf. T215056)** : débit $= \mathbf{H}$ ou $\mathbf{H - 7\text{ mm}}$.
-- **Profilés de battée et composition** :
-  - Profilé battée dormant T525054 : 2x $(H - 75)$ et 1x $(L - 79)$.
-  - Profilé composition symétrique T525055 : 2x $(H - 75)$ et 1x $(L - 104)$.
-  - Profilé cache-rainure PVC T525057 : 2x $(H - 137,5)$ et 1x $(L - 79)$.
+# Porte 1 vantail ouverture extérieure, plinthe et seuil PMR bâtiment
 
----
+## Profilés
 
-# Formules de débit des profilés ouvrants
+Nomenclature de la porte 1 vantail, ouverture extérieure, avec plinthe et seuil PMR bâtiment [1 p. 40].
 
-### 1. Porte 1 vantail Simple Action — Ouvrant 3 côtés avec plinthe 120 mm
-Configuration classique ouverture extérieure (T225114) ou intérieure (T225104) avec seuil PMR bâtiment T525060 ou PY1100 :
-- **Montants d'ouvrant verticaux (2 unités)** :
-  $$\mathbf{H_{\text{ouvrant}} = H - 50,5\text{ mm}} \quad (\text{coupe 90° en bas, coupe 45° en haut})$$
-  *(En version seuil TPY2104 / T525053 : débit $= \mathbf{H - 57,5\text{ mm}}$).*
-  *(En version FPI traverse haute : débit $= \mathbf{H - 98,5\text{ mm}}$).*
-- **Traverse haute d'ouvrant (1 unité)** :
-  $$\mathbf{L_{\text{ouvrant}} = L - 70\text{ mm}} \quad (\text{coupe d'onglet 45°/45°})$$
-- **Plinthe basse 120 mm (Réf. T700047)** :
-  $$\mathbf{L_{\text{plinthe}} = L - 220\text{ mm}} \quad (\text{coupe droite 90°/90°})$$
-- **Profilé porte-brosse (Réf. T525051)** : débit $= \mathbf{L - 220\text{ mm}}$.
-- **Profilé rejet d'eau clippé (Réf. T525052)** : débit $= \mathbf{L - 72\text{ mm}}$.
-- **Seuil PMR (Réf. T525060 ou PY1100)** : débit $= \mathbf{L - 120\text{ mm}}$.
-- **Barre de seuil d'écartement (Réf. PY4000)** : débit $= \mathbf{L - 180\text{ mm}}$.
+| Référence | Désignation | Qté | Coupe | Débit (mm) |
+| --- | --- | --- | --- | --- |
+| T225114 | Ouvrant en T | 2 | \|\\ | H-50.5 |
+| T225114 | Ouvrant en T | 1 | /\\ | L-70 |
+| T525051 | Porte brosse plinthe | 1 | \|\| | L-220 |
+| T525052 | Rejet d'eau clippé | 1 | \|\| | L-72 |
+| T525060 | Seuil PMR | 1 | \|\| | L-120 |
+| T591005 | Parclose droite H 22mm- l 15mm | 2 | \|\| | H-264.5 |
+| T591005 | Parclose droite H 22mm- l 15mm | 2 | \|\| | L-220 |
+| T700047 | Plinthe 120mm | 1 | \|\| | L-220 |
+| TPY1102 | Dormant sans rainures cage 15mm | 1 | \|\\ | H |
+| TPY1102 | Dormant sans rainures cage 15mm | 1 | \|\\ | H |
+| TPY1102 | Dormant sans rainures cage 15mm | 1 | /\\ | L |
 
-### 2. Porte 1 vantail Simple Action — Ouvrant 4 côtés (périphérique)
-Configuration avec ouvrant en Z (T225104) et seuil PMR RPT PY1100 :
-- **Montants d'ouvrant verticaux (2 unités)** :
-  $$\mathbf{H_{\text{ouvrant}} = H - 52,5\text{ mm}} \quad (\text{coupe 45°/45°})$$
-  *(En version seuil résidentiel TPY2107 : débit $= \mathbf{H - 48\text{ mm}}$).*
-- **Traverses haute et basse d'ouvrant (2 unités)** :
-  $$\mathbf{L_{\text{ouvrant}} = L - 70\text{ mm}} \quad (\text{coupe 45°/45°})$$
-- **Rejet d'eau ouvrant (Réf. TPY2102)** : débit $= \mathbf{L - 120\text{ mm}}$.
-- **Joint d'ouvrant pour seuil PMR (Réf. TPY5000)** : débit $= \mathbf{L - 95\text{ mm}}$.
+(schéma: raw/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf, p. 40)
 
-### 3. Porte 2 vantaux Simple Action (Vantail de service + Vantail semi-fixe)
-- **Montants d'ouvrant verticaux (4 unités)** :
-  $$\mathbf{H_{\text{ouvrant}} = H - 50,5\text{ mm}} \quad (\text{avec plinthe})$$
-  $$\mathbf{H_{\text{ouvrant}} = H - 52,5\text{ mm}} \quad (\text{ouvrant périphérique 4 côtés})$$
-- **Traverses d'ouvrants hautes (2 unités)** :
-  $$\mathbf{L_{\text{ouvrant}} = L/2 - 26,5\text{ mm}} \quad (\text{coupe 45°/45°})$$
-- **Plinthes basses T700047 et porte-brosse T525051 (2 unités)** :
-  $$\mathbf{L_{\text{plinthe}} = L/2 - 176,5\text{ mm}} \quad (\text{coupe droite 90°/90°})$$
-- **Rejet d'eau clippé T525052** :
-  - Vantail de service : débit $= \mathbf{L/2 - 28,5\text{ mm}}$.
-  - Vantail semi-fixe : débit $= \mathbf{L/2 - 53,5\text{ mm}}$.
-- **Parcloses de plinthe basse T591005 (4 unités)** : débit $= \mathbf{L/2 - 176,5\text{ mm}}$.
+## Joints
 
-### 4. Porte Tube Anti-Pince Doigts (APD) avec FPI
-- **Montant tube cylindrique côté rotation (Réf. T225107)** : débit $= \mathbf{H - 118\text{ mm}}$.
-- **Montant ouvrant va-et-vient côté fermeture (Réf. T225144)** : débit $= \mathbf{H - 118\text{ mm}}$.
-- **Traverse haute d'ouvrant va-et-vient (Réf. T700050)** :
-  - 1 vantail : débit $= \mathbf{L - 171,5\text{ mm}}$.
-  - 2 vantaux : débit $= \mathbf{L/2 - 120,5\text{ mm}}$.
-- **Plinthe basse T700047 (1 vtl)** : débit $= \mathbf{L - 234\text{ mm}}$ ; (2 vtx) : débit $= \mathbf{L/2 - 183\text{ mm}}$.
-- **Profilés anti-pince doigts rapportés (Réf. TPY2505)** : débit $= \mathbf{H - 95\text{ mm}}$.
+Joints de la porte 1 vantail ; la longueur de joint s'écrit en fonction de H et de L [1 p. 40].
 
-### 5. Porte Va-et-Vient (VV) sur Crapaudine et Seuil Plat
-- **Montants d'ouvrant T225144** : débit $= \mathbf{H - 112\text{ mm}}$ à 45°/45°.
-- **Traverses d'ouvrant T225144 (1 vtl)** : débit $= \mathbf{L - 95\text{ mm}}$ ; (2 vtx) : débit $= \mathbf{L/2 - 51,5\text{ mm}}$.
-
----
-
-# Cotes de dimensionnement des vitrages
-
-Le jeu de fond de feuillure standard est de **19 mm** en haut et sur les montants verticaux.
-
-### 1. Tableau récapitulatif des dimensions de vitrage
-
-| Typologie de porte | Hauteur de vitrage $H_v$ | Largeur de vitrage $L_v$ |
+| Référence | Désignation | Débit (longueur de joint, mm) |
 | --- | --- | --- |
-| **Porte SA 1 vtl avec plinthe (seuil bâtiment)** | $\mathbf{H - 233\text{ mm}}$ | $\mathbf{L - 232\text{ mm}}$ |
-| **Porte SA 1 vtl avec plinthe (seuil PMR PY1100)** | $\mathbf{H - 214,5\text{ mm}}$ | $\mathbf{L - 232\text{ mm}}$ |
-| **Porte SA 1 vtl avec plinthe et seuil TPY2104** | $\mathbf{H - 240\text{ mm}}$ | $\mathbf{L - 232\text{ mm}}$ |
-| **Porte SA 1 vtl ouvrant périphérique (seuil PMR)**| $\mathbf{H - 215\text{ mm}}$ | $\mathbf{L - 232\text{ mm}}$ |
-| **Porte SA 1 vtl avec seuil résidentiel TPY2107** | $\mathbf{H - 210\text{ mm}}$ | $\mathbf{L - 232\text{ mm}}$ |
-| **Porte SA 2 vtx avec plinthe (seuil bâtiment/PMR)**| $\mathbf{H - 233\text{ mm}}$ | $\mathbf{L/2 - 189\text{ mm}}$ |
-| **Porte SA 2 vtx avec plinthe et seuil TPY2104** | $\mathbf{H - 240\text{ mm}}$ | $\mathbf{L/2 - 189\text{ mm}}$ |
-| **Porte SA 2 vtx ouvrant périphérique (seuil PMR)**| $\mathbf{H - 215\text{ mm}}$ | $\mathbf{L/2 - 189\text{ mm}}$ |
-| **Porte SA 1 vtl avec FPI et plinthe** | $\mathbf{H - 281\text{ mm}}$ | $\mathbf{L - 232\text{ mm}}$ |
-| **Porte SA 2 vtx avec FPI et plinthe** | $\mathbf{H - 281\text{ mm}}$ | $\mathbf{L/2 - 189\text{ mm}}$ |
-| **Porte Tube APD 1 vantail avec FPI** | $\mathbf{H - 288\text{ mm}}$ | $\mathbf{L - 246\text{ mm}}$ |
-| **Porte Tube APD 2 vantaux avec FPI** | $\mathbf{H - 288\text{ mm}}$ | $\mathbf{L/2 - 195\text{ mm}}$ |
-| **Porte Va-et-Vient (VV) 1 vantail avec FPI** | $\mathbf{H - 249\text{ mm}}$ | $\mathbf{L - 232\text{ mm}}$ |
-| **Porte Va-et-Vient (VV) 2 vantaux avec FPI** | $\mathbf{H - 249\text{ mm}}$ | $\mathbf{L/2 - 189\text{ mm}}$ |
+| T410010 | Joint de battue | 2H+2L |
+| T710041 | Joint de battement | 4H+3L |
+| TAS0017 | Joint de parclose 7mm | 2H+2L |
+| TPY5001 | Joint de plinthe pour seuil | L |
 
-> [!CAUTION]
-> **Règle impérative pour parcloses à clippage de face (T591221 / T591222 / T591223)** :
-> Lors de l'utilisation de parcloses à pose de face avec clips **T770070**, il faut obligatoirement **diminuer la hauteur et la largeur du vitrage de 4 mm supplémentaires** par rapport aux cotes du tableau ci-dessus (pour compenser l'encombrement des nez de clips).
+## Accessoires
 
----
+Accessoires de la porte 1 vantail [1 p. 40].
 
-# Formules de débit des tringles de crémone (T525058)
+| Référence | Désignation | Qté |
+| --- | --- | --- |
+| T1110 | Clip pour rejet d'eau | 3/ml |
+| T740012 | Support cale vitrage | 4 |
+| T740015 | Bouchon seuil PMR | 1 |
+| T740018 | Bouchon rejet eau clippé | 1 |
+| T740038 | Raccord seuil PMR | 1 |
+| T740039 | Raccord seuil PMR | 1 |
+| T740048 | Bouchon bas plinthe | 1 |
+| T750201 | Equerre 15x13.7 | 4 |
+| T750213 | Equerre d'assemblage 38x13.7 | 4 |
+| T760008 | Raccord 58x13.7 | 4 |
+| T7970 | Barillet 40/40 | 1 |
+| T910002 | Paumelle feuillure 2 lames 130kgs | *** |
+| T920010 | Kit serrure 3 pts relevage | 1 |
+| T960010 | Béquille double rosette | 1 |
+| T960013 | Rosette barillet | 1 |
+| TFY4000 | Bouchons montant/traverse | 2 |
 
-Les tringles plates en aluminium **T525058** actionnent les pênes hauts et bas à partir du fouillot ou du barillet :
+## Vis
 
-| Type de serrure | Configuration d'étanchéité basse | Tringle basse $T_1$ | Tringle haute $T_2$ |
-| --- | --- | --- | --- |
-| **Serrure 2 points à fouillot (T920004)** | Simple Action standard | $\mathbf{T_1 = Hp - 261\text{ mm}}$ | $\mathbf{T_2 = Hv - Hp - 210\text{ mm}}$ |
-| **Serrure 2 points à cylindre (T920003)** | Avec gâche seuil PMR **TPY6000** | $\mathbf{T_1 = Hp - 276\text{ mm}}$ | $\mathbf{T_2 = Hv - Hp - 210\text{ mm}}$ |
-| **Serrure 2 points** | Double Action (PSA / PDA) | $\mathbf{T_1 = Hp - 261\text{ mm}}$ | $\mathbf{T_2 = Hv - Hp - 197\text{ mm}}$ |
-| **Serrure 3 points pênes verticaux (T920005 et T920006)**| Simple Action standard | $\mathbf{T_1 = Hp - 261\text{ mm}}$ | $\mathbf{T_2 = Hv - Hp - 210\text{ mm}}$ |
-| **Serrure 3 points pênes verticaux** | Avec gâche seuil PMR **TPY6000** | $\mathbf{T_1 = Hp - 276\text{ mm}}$ | $\mathbf{T_2 = Hv - Hp - 210\text{ mm}}$ |
-| **Serrure 3 points modulaire (T920008)** | Pêne basculant à renvoi | $\mathbf{T_1 = Hp - 621\text{ mm}}$ | $\mathbf{T_2 = Hv - Hp - 554\text{ mm}}$ |
-| **Serrure multipoints modulaire (grande hauteur)**| Renvoi haut/bas additionnel | $\mathbf{Tx_1 = \text{variable}}$ | $\mathbf{Ty_2 = 100\text{ mm mini}}$ |
+| Référence | Qté |
+| --- | --- |
+| T770022 | 3/m |
+| T770036 | 2 |
+| TAY0002 | 8 |
 
-*Où $Hp$ est la hauteur d'axe de la béquille/poignée par rapport au bas de l'ouvrant ($Hp_{\text{sol}} = Hp + \text{jeu} = 1\,050\text{ mm}$), et $Hv$ est la hauteur totale du vantail d'ouvrant.*
+## Remplissage
 
----
+Le remplissage est le vitrage : hauteur H-233 et largeur L-232 [1 p. 41].
+
+| Remplissage | Hauteur (mm) | Largeur (mm) |
+| --- | --- | --- |
+| Porte 1 vantail, plinthe et seuil PMR bâtiment | H-233 | L-232 |
+
+## Coupes
+
+La coupe horizontale est cotée 22, 50, 8, 52, 19, 100, 27, 8 et 55 avec la largeur totale L ; ses repères sont T710041, TPY1102, T591005, TAS0017, T740048, T910002, T920010, T960010 + T960013, T225114 et T410010 [1 p. 40]. La coupe verticale est cotée 55, H, 19, 120, 7.5, 8 et 20 ; ses repères sont T750201, TPY1102, T710041, T750213, T225114, T591005, TAS0017, T740012, T760008 + TAY0002, T700047, T770036, T525051, TPY5001, T525052 + T740018, T1110 + T770022 et T525060 [1 p. 41].
+
+![Porte 1 vantail, plinthe et seuil PMR bâtiment : coupe horizontale](/assets/portes/soleal-py-applications/sa-1-vantail-plinthe-seuil-pmr-batiment-coupe-horizontale.png)
+
+![Porte 1 vantail, plinthe et seuil PMR bâtiment : coupe verticale](/assets/portes/soleal-py-applications/sa-1-vantail-plinthe-seuil-pmr-batiment-coupe-verticale.png)
+
+(schéma: raw/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf, p. 41)
+
+# Porte 1 vantail ouverture extérieure avec FPI, plinthe et seuil PMR bâtiment
+
+Nomenclature de la même porte avec ferme-porte intégré (FPI), repère T920019 de la coupe verticale, dans la traverse « Traverse ferme porte » T225205 [1 p. 44].
+
+## Profilés avec FPI
+
+| Référence | Désignation | Qté | Coupe | Débit (mm) |
+| --- | --- | --- | --- | --- |
+| T215056 | Profilé multi-usage 15mm | 2 | \|\| | H |
+| T225114 | Ouvrant en T | 1 | \|\\ | H-98.5 |
+| T225114 | Ouvrant en T | 1 | \|\\ | H-98.5 |
+| T225205 | Traverse ferme porte | 1 | \|\| | L-54 |
+| T525051 | Porte brosse plinthe | 1 | \|\| | L-220 |
+| T525052 | Rejet d'eau clippé | 1 | \|\| | L-72 |
+| T525054 | Profilé battée dormant composit° | 2 | \|\| | H-75 |
+| T525054 | Profilé battée dormant composit° | 1 | \|\| | L-79 |
+| T525055 | Compo symétrique dormant+battée | 2 | \|\| | H-75 |
+| T525055 | Compo symétrique dormant+battée | 1 | \|\| | L-104 |
+| T525057 | Cache rainure | 2 | \|\| | H-137.5 |
+| T525057 | Cache rainure | 1 | \|\| | L-79 |
+| T525060 | Seuil PMR | 1 | \|\| | L-120 |
+| T591005 | Parclose droite H 22mm- l 15mm | 2 | \|\| | H-312.5 |
+| T591005 | Parclose droite H 22mm- l 15mm | 2 | \|\| | L-220 |
+| T700047 | Plinthe 120mm | 1 | \|\| | L-220 |
+| T700049 | Traverse ouvrant en T | 1 | \|\| | L-70 |
+
+(schéma: raw/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf, p. 44)
+
+## Joints avec FPI
+
+| Référence | Désignation | Débit (longueur de joint, mm) |
+| --- | --- | --- |
+| T410010 | Joint de battue | 2H+2L |
+| T710041 | Joint de battement | 4H+3L |
+| TAS0017 | Joint de parclose 7mm | 2H+2L |
+| TPY5001 | Joint de plinthe pour seuil | L |
+
+## Accessoires avec FPI
+
+| Référence | Désignation | Qté |
+| --- | --- | --- |
+| T1110 | Clip pour rejet d'eau | 3/ml |
+| T700032 | Fixation ferme porte | 1 |
+| T740012 | Support cale vitrage | 4 |
+| T740015 | Bouchon seuil PMR | 1 |
+| T740018 | Bouchon rejet eau clippé | 1 |
+| T740038 | Raccord seuil PMR | 1 |
+| T740039 | Raccord seuil PMR | 1 |
+| T740048 | Bouchon bas plinthe | 1 |
+| T750237 | Equerre 38x13.7 | 4 |
+| T760008 | Raccord 58x13.7 | 4 |
+| T760201 | Raccord traverse | 4 |
+| T780034 | Bouchon étanchéité dormant | 2 |
+| T7970 | Barillet 40/40 | 1 |
+| T910002 | Paumelle feuillure 2 lames 130kgs | *** |
+| T920010 | Kit serrure 3 pts relevage | 1 |
+| T920019 | Ferme porte intégré | 1 |
+| T920021 | Bras ferme porte droite poussant | 1 |
+| T960010 | Béquille double rosette | 1 |
+| T960013 | Rosette barillet | 1 |
+| TFY4000 | Bouchons montant/traverse | 2 |
+
+## Vis avec FPI
+
+| Référence | Qté |
+| --- | --- |
+| T770022 | 3/m |
+| T770036 | 2 |
+| T770051 | 3/ml/2H+L |
+| TAY0002 | 16 |
+
+La quantité de T770051 est écrite « 3/ml/2H+L » sans que la planche en dise la lecture (**VER-574**) [1 p. 44].
+
+## Remplissage avec FPI
+
+| Remplissage | Hauteur (mm) | Largeur (mm) |
+| --- | --- | --- |
+| Porte 1 vantail avec FPI, plinthe et seuil PMR bâtiment | H-281 | L-232 |
+
+[1 p. 45]
+
+## Coupes avec FPI
+
+La coupe horizontale est cotée 22, 50, 8, 25, 27, 19, 100, 27, 8 et 55 avec la largeur totale L ; ses repères sont T710041, T215056, T591005, TAS0017, T740048, T920010, T960010 + T960013, T225114, T410010 et T910002 [1 p. 44]. La coupe verticale ajoute le ferme-porte et sa traverse : cotes 55, H, 75, 8, 100, 25, 19, 120, 7.5, 8 et 20 ; repères T760201, T920019, T225205, T525054, T525057 + T770051, T525055, T710041, T750237, T700049, T591005, TAS0017, T740012, T760008 + TAY0002, T700047, T770036, T525051, TPY5001, T525052 + T740018, T1110 + T770022 et T525060 [1 p. 45].
+
+![Porte 1 vantail avec FPI : coupe horizontale](/assets/portes/soleal-py-applications/sa-1-vantail-fpi-plinthe-seuil-pmr-batiment-coupe-horizontale.png)
+
+![Porte 1 vantail avec FPI : coupe verticale](/assets/portes/soleal-py-applications/sa-1-vantail-fpi-plinthe-seuil-pmr-batiment-coupe-verticale.png)
+
+(schéma: raw/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf, p. 45)
+
+# Contenu d'autres sources, laissé en place
+
+Les sections suivantes viennent du catalogue de fabrication 4899.007, de la F.I.T N° 15 de 2012 ou d'une source non identifiée ; elles ne sont pas relues contre le catalogue de conception 4944.006 dans cette tranche et attendent la relecture des tranches des portes tube, va-et-vient et serrures. Les lignes de l'ancienne page qui portaient les portes simple action 1 et 2 vantaux (dormant, ouvrant, plinthe, rejet d'eau, seuil, parclose, remplissage) sont remplacées par les tableaux ci-dessus et par les pages d'application liées en tête.
+
+## Formules de débit du cadre dormant 4 côtés
+
+Cadre dormant 4 côtés (périphérique) : montants verticaux (2 unités), débit H à 45°/45° ; traverses haute et basse (2 unités), débit L à 45°/45°.
+
+## Formules de débit de la porte tube anti-pince-doigts (APD) avec FPI
+
+- Montant tube cylindrique côté rotation (Réf. T225107) : débit H - 118 mm.
+- Montant ouvrant va-et-vient côté fermeture (Réf. T225144) : débit H - 118 mm.
+- Traverse haute d'ouvrant va-et-vient (Réf. T700050) : 1 vantail, débit L - 171,5 mm ; 2 vantaux, débit L/2 - 120,5 mm.
+- Plinthe basse T700047 : 1 vantail, débit L - 234 mm ; 2 vantaux, débit L/2 - 183 mm.
+- Profilés anti-pince-doigts rapportés (Réf. TPY2505) : débit H - 95 mm.
+
+## Formules de débit de la porte va-et-vient (VV) sur crapaudine et seuil plat
+
+- Montants d'ouvrant T225144 : débit H - 112 mm à 45°/45°.
+- Traverses d'ouvrant T225144 : 1 vantail, débit L - 95 mm ; 2 vantaux, débit L/2 - 51,5 mm.
+
+## Cotes de dimensionnement des vitrages des portes tube, va-et-vient et seuil PMR PY1100
+
+Le jeu de fond de feuillure standard est de 19 mm en haut et sur les montants verticaux. Dimensions de vitrage, hauteur Hv et largeur Lv, en millimètres :
+
+| Typologie de porte | Hauteur de vitrage Hv (mm) | Largeur de vitrage Lv (mm) |
+| --- | --- | --- |
+| Porte SA 1 vtl avec plinthe (seuil PMR PY1100) | H - 214,5 | L - 232 |
+| Porte Tube APD 1 vantail avec FPI | H - 288 | L - 246 |
+| Porte Tube APD 2 vantaux avec FPI | H - 288 | L/2 - 195 |
+| Porte Va-et-Vient (VV) 1 vantail avec FPI | H - 249 | L - 232 |
+| Porte Va-et-Vient (VV) 2 vantaux avec FPI | H - 249 | L/2 - 189 |
+
+Règle impérative pour parcloses à clippage de face (T591221, T591222, T591223) : lors de l'utilisation de parcloses à pose de face avec clips T770070, il faut diminuer la hauteur et la largeur du vitrage de 4 mm supplémentaires par rapport aux cotes du tableau (voir [Parcloses et prises de volume SOLEAL PY 55](/profiles/soleal-py-parcloses-et-prises-de-volume.md)).
+
+## Formules de débit des tringles de crémone T525058
+
+Les formules de débit des tringles de crémone T525058 (tringle basse T1, tringle haute T2) sont sur [Usinage des serrures 2 points à cylindre et du kit 3 points](/procedures/soleal-py-usinage-des-serrures-2-points-a-cylindre-et-kit-3-points.md) pour la serrure 2 points à cylindre et la serrure 3 points avec la T920007, et sur [Usinage des serrures modulaires et des gâches électriques](/procedures/soleal-py-usinage-serrures-modulaires-et-gaches-electriques.md) pour la serrure 3 points modulaire.
 
 # Voir aussi
 
 - [Profilés dormants et ouvrants SOLEAL PY 55](/portes/soleal-py-dormants-et-ouvrants.md)
 - [Serrures et paumelles SOLEAL PY 55](/quincaillerie/soleal-py-serrures-et-paumelles.md)
 - [Mise en œuvre du seuil PMR PY1100](/procedures/technal-seuil-pmr-py1100.md)
-- [Fournisseur Technal](/fournisseurs/technal.md)
 - [Catalogue de fabrication Technal SOLEAL PY 55](/sources/technal-soleal-py-fabrication.md)
+
+# Citations
+
+[1] [SOLEAL PY 55, Conception, réf. 4944.006](raw/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf), p. 40, 41, 44 et 45

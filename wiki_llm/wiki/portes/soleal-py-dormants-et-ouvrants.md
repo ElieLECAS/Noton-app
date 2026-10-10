@@ -1,134 +1,92 @@
 ---
 type: Porte d'entrée
-title: Profilés dormants et ouvrants de porte Technal SOLEAL PY 55
-description: Architecture technique et catalogue des profilés de porte à rupture de pont thermique SOLEAL PY 55 de TECHNAL (dormants standard et renforcés 3 mm, ouvrants en T et en Z, portes va-et-vient, portes tubes anti-pince doigts APD, poteaux et traverses renforcées).
-tags: [technal, soleal, soleal-py, porte, profile, dormant, ouvrant, anti-pince-doigts, 55mm]
+title: "Dormants et ouvrants de la porte SOLEAL PY 55 : cotes et coupes de 31 profilés"
+description: "Cotes et coupes des 19 dormants (TPY1102 à T215026, modules 55 et 65) et des 12 ouvrants (T225114 à T225105, dont les ouvrants renforcés, va-et-vient, tube et de traverse haute) de la porte SOLEAL PY 55 de la LUMINE."
+tags: [technal, soleal-py, lumine55, porte, dormant, ouvrant, profile, coupe, conception, 55mm]
 gamme: LUMINE
 systeme: SOLEAL PY
 fournisseur: TECHNAL
 usage: atelier
-status: stable
+famille: dormants-ouvrants
+status: draft
 sources:
   - resource: raw/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf
-    id: technal-soleal-py-55-conception-4944-006
-    title: SOLEAL PY 55 — Catalogue de conception Porte à rupture de pont thermique (Réf. 4944.006 - 09/2018)
+    title: SOLEAL PY 55, Conception, réf. 4944.006
     last_modified: 2018-09-01
-  - resource: raw/SOLEAL-PY-55-catalogue-fabrication-4899-007-092018-FR.pdf
-    id: technal-soleal-py-55-fabrication-4899-007
-    title: SOLEAL PY 55 — Guide d'atelier et catalogue de fabrication (Réf. 4899.007 - 09/2018)
-    last_modified: 2018-09-01
+source_pages:
+  - resource: raw/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf
+    pages: 184-191
 generated:
-  by: process:multimodal-direct
-  at: 2026-09-19T22:55:00Z
+  by: process:claude-code
+  at: 2026-10-10T13:21:17Z
 ---
 
-# Présentation générale
+La porte de la gamme LUMINE de PROFERM est fabriquée sur le système TECHNAL SOLEAL PY 55 : une porte à rupture de pont thermique de module 55 mm. Le dormant est le cadre fixe, fixé au bâti ; l'ouvrant, ou vantail, est le cadre mobile (voir le [glossaire](/reference/glossaire.md)). Les coupes ci-dessous sont celles de 19 dormants et de 12 ouvrants. Ce qui décrit le système (modules, rupture thermique, barrettes) est sur [Concept de la porte à rupture de pont thermique SOLEAL PY 55 (TECHNAL)](/portes/soleal-py-concept-du-produit.md) ; les moments d'inertie sont sur [Inerties Ix et Iy de 54 profilés et du TR9545 de la porte SOLEAL PY 55](/profiles/soleal-py-inerties.md).
 
-Le système de porte **SOLEAL PY 55** de **TECHNAL** est un concept de porte lourde à rupture thermique totale, développé en **module de 55 mm** pour le dormant et l'ouvrant. Conforme à la norme européenne produit **NF EN 14351-1** (marquage CE), il répond aux exigences sévères des bâtiments tertiaires, établissements recevant du public (ERP), logements collectifs et maisons individuelles.
+# Cotes des dormants
 
-La rupture thermique centrée est obtenue par :
-- Une double barrette tubulaire ou plate sertie de **20 mm** en polyamide 6.6 chargé à 25 % de fibres de verre.
-- Une cage d'équerre modulaire commune de **38 mm** ou **15 mm**.
-- Une conception symétrique à 3 chambres permettant la bi-coloration intégrale (teintes intérieures et extérieures distinctes).
+Les 19 dormants de la porte SOLEAL PY 55, une ligne par référence. Les colonnes « Cotes horizontales » et « Cotes verticales » reprennent, en millimètres, les nombres portés sur la coupe, du plus grand au plus petit, un nombre imprimé plusieurs fois étant répété ; aucune cote de la planche ne porte de lettre de repère, la position de chaque cote se lit sur l'image de la colonne Coupe (**VER-617**). La cote horizontale 55 est la profondeur du module de 55 mm ; TPY1105 et TPY1103 portent 65, T220511, T225203 et T225204 portent en plus 50.5, T225105 porte en plus 32. La classification des dormants par module et par présence d'une rainure est sur [Bouchon TFY4000, équerre TFY3859, dormants et anti-pince-doigts de la porte SOLEAL PY 55](/portes/soleal-py-anti-pince-doigts-et-principes-d-assemblage.md) ; les équerres, embouts et goupilles de chaque dormant sont sur [Choix des équerres d'assemblage et des embouts par profilé de la porte SOLEAL PY 55](/quincaillerie/soleal-py-choix-des-equerres-et-embouts.md).
 
----
+| Référence | Cotes horizontales (mm) | Cotes verticales (mm) | Coupe |
+| --- | --- | --- | ---: |
+| TPY1102 | 55 | 52 ; 27 ; 25 | ![Dormant TPY1102](/assets/profiles/soleal-py/recapitulatif/dormants/dormant-tpy1102.png) |
+| T225011 | 55 | 52 ; 27 ; 25 | ![Dormant T225011](/assets/profiles/soleal-py/recapitulatif/dormants/dormant-t225011.png) |
+| T225004 | 55 | 75 ; 50 ; 25 | ![Dormant T225004](/assets/profiles/soleal-py/recapitulatif/dormants/dormant-t225004.png) |
+| T225014 | 55 | 75 ; 50 ; 25 | ![Dormant T225014](/assets/profiles/soleal-py/recapitulatif/dormants/dormant-t225014.png) |
+| T225024 | 55 | 75 ; 50 ; 25 | ![Dormant T225024](/assets/profiles/soleal-py/recapitulatif/dormants/dormant-t225024.png) |
+| T225034 | 55 | 62.5 | ![Dormant T225034](/assets/profiles/soleal-py/recapitulatif/dormants/dormant-t225034.png) |
+| T225205 | 55 | 75 | ![Dormant T225205](/assets/profiles/soleal-py/recapitulatif/dormants/dormant-t225205.png) |
+| T220511 | 55 ; 50.5 | 25 ; 25 ; 23 ; 23 | ![Dormant T220511](/assets/profiles/soleal-py/recapitulatif/dormants/dormant-t220511.png) |
+| T225203 | 55 ; 50.5 | 56 ; 25 ; 25 ; 6 | ![Dormant T225203](/assets/profiles/soleal-py/recapitulatif/dormants/dormant-t225203.png) |
+| T225204 | 55 ; 50.5 | 43.5 ; 25 ; 18.5 | ![Dormant T225204](/assets/profiles/soleal-py/recapitulatif/dormants/dormant-t225204.png) |
+| TPY1105 | 65 | 52 ; 27 ; 25 | ![Dormant TPY1105](/assets/profiles/soleal-py/recapitulatif/dormants/dormant-tpy1105.png) |
+| T225105 | 55 ; 32 | 75 ; 50 ; 25 ; 20 | ![Dormant T225105](/assets/profiles/soleal-py/recapitulatif/dormants/dormant-t225105.png) |
+| TPY1103 | 65 | 52 ; 27 ; 25 | ![Dormant TPY1103](/assets/profiles/soleal-py/recapitulatif/dormants/dormant-tpy1103.png) |
+| T215002 | 55 | 52 ; 27 ; 25 | ![Dormant T215002](/assets/profiles/soleal-py/recapitulatif/dormants/dormant-t215002.png) |
+| T215023 | 55 | 52 ; 27 ; 25 | ![Dormant T215023](/assets/profiles/soleal-py/recapitulatif/dormants/dormant-t215023.png) |
+| T215036 | 55 | 52 ; 52 ; 25 | ![Dormant T215036](/assets/profiles/soleal-py/recapitulatif/dormants/dormant-t215036.png) |
+| T215025 | 55 | 65 ; 40 ; 25 | ![Dormant T215025](/assets/profiles/soleal-py/recapitulatif/dormants/dormant-t215025.png) |
+| T215005 | 55 | 75 ; 50 ; 25 | ![Dormant T215005](/assets/profiles/soleal-py/recapitulatif/dormants/dormant-t215005.png) |
+| T215026 | 55 | 75 ; 50 ; 25 | ![Dormant T215026](/assets/profiles/soleal-py/recapitulatif/dormants/dormant-t215026.png) |
 
-# Profilés dormants
+(schéma: raw/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf, p. 184-187)
 
-Les dormants SOLEAL PY 55 se déclinent en deux familles de fixation (lisse sans rainure ou avec rainure BTC pour clippage des tapées et habillages) et en deux épaisseurs de toile d'aluminium (standard et renforcée 3 mm pour trafic intense) :
+Une référence T225105 est dessinée deux fois, avec deux coupes différentes : au chapitre des dormants (75 de haut, cotes 25, 50 et 20, entraxe 32) et au chapitre des ouvrants (120 de haut) : **INC-707**. T225205 est rangée parmi les dormants ; la table des équerres l'appelle « Traverse ferme porte » : **VER-618**. Les dormants T215002 à T215026 portent des références de la série des dormants du SOLEAL FY 55 : **VER-619**.
 
-| Référence | Cage d'équerre | Type de dormant | Toile alu | Utilisation et caractéristiques | Équerre d'angle |
-| --- | --- | --- | --- | --- | --- |
-| **TPY1102** | 15 mm | Sans rainure BTC | Standard | Face vue 52 mm, aile de recouvrement 25 mm, pour pose en tableau ou tunnel | T750201 |
-| **T225011** | 15 mm | Avec rainure BTC | Standard | Face vue 52 mm, permet le clippage des tapées 100 à 160 mm et couvre-joints | T750201 |
-| **T225004** | 38 mm | Sans rainure BTC | Standard | Face vue 75 mm, aile 25 mm, dormant large traditionnel | T750213 |
-| **T225014** | 38 mm | Avec rainure BTC | Standard | Face vue 75 mm, double rainure pour tôle 15/10e et tapées | T750214 |
-| **T225024** | 38 mm | Avec rainure BTC | **Renforcée (3 mm)** | Toile intérieure et extérieure de 3 mm pour portes lourdes jusqu'à $H = 2,60\text{ m}$ | T750214 |
-| **T225034** | 38 mm | Sans rainure, sans battue | Standard | Pour porte double action va-et-vient (VV) sur pivot de sol | T750213 |
-| **T225205** | 60x13,7 mm | Traverse haute FPI | Standard | Profilé tubulaire pour intégration invisible du ferme-porte encastré T920019 | T760201 (embouts) |
-| **T220511** | 15 mm | Sans rainure | Standard | Pour intégration directe dans la structure de mur-rideau GEODE | T750201 |
-| **TPY1105** | 15 mm | Sans rainure (module 65) | Standard | Dormant élargi à 65 mm pour alignement avec fenêtres SOLEAL 65 | T750201 |
-| **TPY1103** | 15 mm | Avec rainure (module 65) | Standard | Dormant élargi à 65 mm avec double rainure BTC | T750201 |
+# Cotes des ouvrants
 
----
+Les 12 ouvrants de la porte SOLEAL PY 55, une ligne par référence, lus comme le tableau des dormants. Les ouvrants renforcés T225134, T700110, T225124 et T700109 portent la cote horizontale 57.4 là où les ouvrants standard portent 55 ; T225107, l'ouvrant de forme arrondie, porte 70 et 55 ; T225105 est l'ouvrant de 120 de haut (voir ci-dessus **INC-707**). Les moments d'inertie de ces profilés sont sur la page des inerties citée plus haut.
 
-# Profilés ouvrants
+| Référence | Cotes horizontales (mm) | Cotes verticales (mm) | Coupe |
+| --- | --- | --- | ---: |
+| T225114 | 55 | 100 ; 50 ; 25 ; 25 | ![Ouvrant T225114](/assets/profiles/soleal-py/recapitulatif/ouvrants/ouvrant-t225114.png) |
+| T700049 | 55 | 100 ; 50 ; 25 ; 25 | ![Ouvrant T700049](/assets/profiles/soleal-py/recapitulatif/ouvrants/ouvrant-t700049.png) |
+| T225134 | 57.4 | 100 ; 50 ; 25 ; 25 | ![Ouvrant T225134](/assets/profiles/soleal-py/recapitulatif/ouvrants/ouvrant-t225134.png) |
+| T700110 | 57.4 | 100 ; 50 ; 25 ; 25 | ![Ouvrant T700110](/assets/profiles/soleal-py/recapitulatif/ouvrants/ouvrant-t700110.png) |
+| T225104 | 55 | 75 ; 75 ; 25 ; 25 | ![Ouvrant T225104](/assets/profiles/soleal-py/recapitulatif/ouvrants/ouvrant-t225104.png) |
+| T700048 | 55 | 75 ; 75 ; 25 ; 25 | ![Ouvrant T700048](/assets/profiles/soleal-py/recapitulatif/ouvrants/ouvrant-t700048.png) |
+| T225124 | 57.4 | 75 ; 75 ; 25 ; 25 | ![Ouvrant T225124](/assets/profiles/soleal-py/recapitulatif/ouvrants/ouvrant-t225124.png) |
+| T700109 | 57.4 | 75 ; 75 ; 25 ; 25 | ![Ouvrant T700109](/assets/profiles/soleal-py/recapitulatif/ouvrants/ouvrant-t700109.png) |
+| T225144 | 55 | 87.5 ; 62.5 ; 25 | ![Ouvrant T225144](/assets/profiles/soleal-py/recapitulatif/ouvrants/ouvrant-t225144.png) |
+| T700050 | 55 | 87.5 ; 62.5 ; 25 | ![Ouvrant T700050](/assets/profiles/soleal-py/recapitulatif/ouvrants/ouvrant-t700050.png) |
+| T225107 | 70 ; 55 | 84.5 ; 59.5 ; 25 | ![Ouvrant T225107](/assets/profiles/soleal-py/recapitulatif/ouvrants/ouvrant-t225107.png) |
+| T225105 | 55 | 120 ; 95 ; 25 | ![Ouvrant T225105](/assets/profiles/soleal-py/recapitulatif/ouvrants/ouvrant-t225105.png) |
 
-La gamme permet la réalisation d'ouvrants 3 côtés (avec plinthe basse) ou 4 côtés (ouvrant périphérique avec joint d'étanchéité ou seuil), ainsi que les versions anti-pince doigts :
+(schéma: raw/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf, p. 189-191)
 
-### 1. Ouvrants battants simple action (Ouverture Intérieure et Extérieure)
+# Ce que la source ne donne pas
 
-| Profilé | Forme | Battue | Toile alu | Rôle et cinématique | Équerre d'angle |
-| --- | --- | --- | --- | --- | --- |
-| **T225114** | Forme en T | Extérieure | Standard | Montant/traverse d'ouvrant battant ouverture extérieure (face vue 100 mm) | T750213 |
-| **T225134** | Forme en T | Extérieure | **Renforcée (3 mm)** | Ouvrant renforcé pour très haute résistance et portes de $H \le 2,60\text{ m}$ | T750213 |
-| **T225104** | Forme en Z | Intérieure | Standard | Montant/traverse d'ouvrant battant ouverture intérieure (face vue 75 mm) | T750213 |
-| **T225124** | Forme en Z | Intérieure | **Renforcée (3 mm)** | Ouvrant renforcé ouverture intérieure pour site exposé ou grand trafic | T750213 |
-| **T700049** | Forme en T | Extérieure | Standard | Traverse haute d'ouvrant intégrant la glissière du ferme-porte intégré FPI | T750237 |
-| **T700110** | Forme en T | Extérieure | **Renforcée (3 mm)** | Traverse haute d'ouvrant FPI renforcée | T750237 |
-| **T700048** | Forme en Z | Intérieure | Standard | Traverse haute d'ouvrant FPI ouverture intérieure | T750237 |
-| **T700109** | Forme en Z | Intérieure | **Renforcée (3 mm)** | Traverse haute d'ouvrant FPI ouverture intérieure renforcée | T750237 |
+Le récapitulatif ne porte ni désignation, ni usage, ni masse linéique des 31 profilés, ni la hauteur des cages d'équerre ; il ne nomme aucune cote (largeur vue, hauteur de cage) : les valeurs sont celles des coupes, dans l'ordre décrit plus haut (**VER-617**).
 
-### 2. Ouvrants Va-et-Vient et Anti-Pince Doigts (APD)
+# Citations
 
-| Profilé | Désignation | Écartement | Caractéristiques techniques |
-| --- | --- | --- | --- |
-| **T225144** | Ouvrant Va-et-Vient (VV) | 23 mm | Profilé tubulaire symétrique sans battue, recevant le joint T710012 ou joint brosse T2883 |
-| **T700050** | Traverse haute VV FPI | 23 mm | Traverse haute symétrique avec glissière pour ferme-porte encastré T920019 |
-| **T225107** | Montant Tube APD | — | Montant tubulaire cylindrique à RPT assurant la rotation sans aucun pincement de doigt |
-| **TPY2505** | Profilé battement APD | 23 mm | Profilé support de joint anti-pince doigts côté paumelle/rotation |
-
----
-
-# Plinthes, traverses et profilés de renfort
-
-### 1. Plinthes d'ouvrants et traverses basses
-- **T700047** : Plinthe tubulaire basse de **120 mm** de hauteur, assemblée en coupe droite entre montants à l'aide de doubles embouts **T760008** et goupilles **TAY0002**.
-- **T225105** : Plinthe tubulaire basse symétrique de **120 mm** avec double rainure pour porte va-et-vient.
-- **T525051** : Profilé porte-brosse aluminium clippé en sous-face de la plinthe T700047 ou T225105 pour recevoir le joint brosse d'étanchéité basse.
-
-### 2. Traverses intermédiaires
-Assemblées en coupe droite à 90° entre montants avec embouts **T760003** à **T760012** :
-- **T215202** : Traverse intermédiaire de 77 mm ($I_x = 9,07\text{ cm}^4$).
-- **T215204** : Traverse intermédiaire de 90 mm ($I_x = 10,26\text{ cm}^4$).
-- **T215205** : Traverse intermédiaire de 100 mm ($I_x = 11,04\text{ cm}^4$).
-- **T215207** : Traverse intermédiaire de 120 mm ($I_x = 12,45\text{ cm}^4$).
-- **T215208** : Traverse intermédiaire de 130 mm ($I_x = 13,09\text{ cm}^4$).
-- **T215211** : Traverse intermédiaire de 160 mm ($I_x = 15,17\text{ cm}^4$).
-
-### 3. Poteaux et meneaux d'inertie renforcée
-- **T215252** : Meneau renforcé avec chambre recevant un plat acier de **$10 \times 45\text{ mm}$** ($I_x = 63,19\text{ cm}^4$).
-- **T215261** : Poteau d'angle/meneau recevant un tube acier de **$60 \times 40 \times 3\text{ mm}$** ($I_x = 162,57\text{ cm}^4$).
-- **T215268** : Grand poteau de structure recevant un tube acier de **$60 \times 60 \times 3\text{ mm}$** ($I_x = 207,03\text{ cm}^4$).
-
----
-
-# Moments d'inertie des profilés SOLEAL PY 55 (NF EN 14024)
-
-| Profilé | $I_x$ à $1\,200\text{ mm}$ | $I_x$ à $1\,600\text{ mm}$ | $I_x$ à $2\,000\text{ mm}$ | $I_x$ à $2\,250\text{ mm}$ | $I_x$ à $2\,500\text{ mm}$ | $I_x$ à $3\,000\text{ mm}$ | $I_y$ (axe fixe) |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| **T225004** (Dormant 38) | 10,67 | 13,52 | 15,75 | 16,85 | 17,77 | 19,16 | 24,81 |
-| **T225005** (Dormant 38) | 10,76 | 13,76 | 16,15 | 17,35 | 18,35 | 19,89 | 33,85 |
-| **T225011** (Dormant BTC 15)| 8,48 | 10,57 | 12,10 | 12,83 | 13,41 | 14,28 | 7,29 |
-| **T225014** (Dormant BTC 38)| 10,55 | 13,41 | 15,65 | 16,76 | 17,68 | 19,09 | 25,34 |
-| **T225024** (Dorm. Renf. 3mm)| 13,75 | 17,79 | 21,10 | 22,80 | 24,23 | 26,48 | 29,83 |
-| **T225034** (Dormant VV) | 10,94 | 13,92 | 16,27 | 17,44 | 18,41 | 19,90 | 24,09 |
-| **T225104** (Ouvrant en Z) | 11,83 | 15,13 | 17,77 | 19,10 | 20,21 | 21,92 | 33,54 |
-| **T225114** (Ouvrant en T) | 11,51 | 14,69 | 17,21 | 18,47 | 19,53 | 21,15 | 36,01 |
-| **T225124** (Ouvr. Z Renf. 3mm)| 15,50 | 20,29 | 24,34 | 26,45 | 28,26 | 31,14 | 42,00 |
-| **T225134** (Ouvr. T Renf. 3mm)| 15,01 | 19,56 | 23,37 | 25,35 | 27,04 | 29,70 | 46,64 |
-| **T225144** (Ouvrant VV) | 11,90 | 15,27 | 17,97 | 19,33 | 20,47 | 22,24 | 34,18 |
-| **T215252** (+ plat acier) | 46,17 | 52,18 | 56,66 | 58,81 | 60,56 | 63,19 | 14,62 |
-| **T215261** (+ tube 60x40x3) | 123,20 | 135,77 | 146,03 | 151,26 | 155,68 | 162,57 | 50,37 |
-| **T215268** (+ tube 60x60x3) | 153,10 | 168,84 | 182,67 | 190,08 | 196,55 | 207,03 | 139,71 |
-
----
+[1] [SOLEAL PY 55, Conception, réf. 4944.006, TECHNAL, septembre 2018](raw/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf), p. 184-191
 
 # Voir aussi
 
-- [Cotes de débit des portes SOLEAL PY 55](/portes/soleal-py-cotes-de-debit.md)
-- [Serrures et paumelles SOLEAL PY 55](/quincaillerie/soleal-py-serrures-et-paumelles.md)
-- [Mise en œuvre du seuil PMR PY1100](/procedures/technal-seuil-pmr-py1100.md)
-- [Ouvrants de porte](/portes/ouvrants-de-porte.md)
-- [Fournisseur Technal](/fournisseurs/technal.md)
+- [Traverses, montants renforcés et liaisons de la porte SOLEAL PY 55 : cotes et coupes](/profiles/soleal-py-traverses-meneaux-poteaux-et-liaison.md)
+- [Seuils de la porte SOLEAL PY 55 : cotes et coupes de 11 profilés (T525060 à TPY4000)](/profiles/soleal-py-seuils.md)
+- [Parcloses T591001 à T591223 de la porte SOLEAL PY 55 : cotes et coupes de 15 parcloses](/profiles/soleal-py-parcloses.md)
+- [Porte SOLEAL PY 55 simple action 1 vantail, plinthe, seuil PMR bâtiment, sans et avec FPI](/portes/soleal-py-cotes-de-debit.md)
+- [Unité de passage des portes SA, VV et tube DA, façade MX et ensemble menuisé, SOLEAL PY 55](/portes/soleal-py-unite-de-passage.md)
 - [Catalogue de conception Technal SOLEAL PY 55](/sources/technal-soleal-py-conception.md)

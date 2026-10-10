@@ -19,12 +19,12 @@ source_pages:
     pages: 7-10
 generated:
   by: process:claude-code
-  at: 2026-10-09T07:30:00Z
+  at: 2026-10-09T07:51:08Z
 ---
 
 La porte SOLEAL PY 55 de [TECHNAL](/fournisseurs/technal.md) à 2 vantaux reçoit le seuil PMR PY1100, le profilé bas sur lequel on passe (PMR : personne à mobilité réduite, voir le [glossaire](/reference/glossaire.md)). Les tableaux ci-dessous donnent, pour la porte à 2 vantaux qui s'ouvre vers l'extérieur et pour celle qui s'ouvre vers l'intérieur, la liste des profilés avec leur débit, leurs angles de coupe et leur quantité, la liste des joints, le remplissage, les accessoires et les coupes horizontale et verticale. La porte à 1 vantail est sur [Porte SOLEAL PY 55 à 1 vantail avec seuil PMR PY1100](/portes/technal-seuil-py1100-applications-1-vantail.md), les performances d'étanchéité sur [Seuil PMR PY1100 de la porte SOLEAL PY 55](/procedures/technal-seuil-pmr-py1100.md).
 
-Le débit est la longueur de coupe d'un profilé, écrite en fonction de H et de L, les deux cotes totales portées sur les coupes verticale et horizontale de la porte : « H-6 » est la cote H diminuée de 6, « L/2-49.5 » la moitié de L diminuée de 49.5. Dans le tableau des joints, la quantité est une longueur de même forme : « 6H+3L » est six fois H plus trois fois L. La colonne « Coupes » du tableau est celle des angles de coupe du profilé. Les débits et les cotes des coupes sont portés sans unité (**VER-151**). Les références des profilés sont écrites sans la lettre T initiale que portent les catalogues, par exemple T225004 sur [Dormants et ouvrants SOLEAL PY 55](/portes/soleal-py-dormants-et-ouvrants.md) (**VER-152**). [1 p. 7]
+Le débit est la longueur de coupe d'un profilé, écrite en fonction de H et de L, les deux cotes totales portées sur les coupes verticale et horizontale de la porte : « H-6 » est la cote H diminuée de 6, « L/2-49.5 » la moitié de L diminuée de 49.5. Dans le tableau des joints, la quantité est une longueur de même forme : « 6H+3L » est six fois H plus trois fois L. La colonne « Coupes » du tableau est celle des angles de coupe du profilé. Les débits et les cotes des coupes sont portés sans unité (**VER-151**). Les références des profilés sont écrites sans la lettre T initiale que portent les catalogues, par exemple T225004 sur [Dormants et ouvrants SOLEAL PY 55](/portes/soleal-py-dormants-et-ouvrants.md) (**VER-152**). Les débits des montants et des traverses d'ouvrant et les remplissages ci-dessous diffèrent des formules de [Cotes de débit des portes SOLEAL PY 55](/portes/soleal-py-cotes-de-debit.md) (**CTR-128**, **CTR-129**). [1 p. 7]
 
 # Cotes
 
@@ -61,7 +61,7 @@ Joints de la même porte, quantité en longueur :
 
 Le remplissage de cette porte a pour cotes H-237.5 et L/2-212. [1 p. 7]
 
-Accessoires de la même porte, présentée sans pièces d'étanchéité d'angle (720028 et 720029, voir [Pièces et outillage du seuil PMR PY1100](/quincaillerie/technal-seuil-py1100-pieces-et-outillage.md)) ; le nombre de paumelles 910001 se lit sur un abaque, absent des 33 pages. Le bouchon 740061 est désigné « Bouch. Ht Bat. Cent. 2 vtx GEP ».
+Accessoires de la même porte, présentée sans pièces d'étanchéité d'angle (720028 et 720029, voir [Pièces du seuil PMR PY1100](/quincaillerie/technal-seuil-py1100-pieces-et-outillage.md)) ; le nombre de paumelles 910001 est donné par « voir abaque », abaque absent des 33 pages.
 
 | Référence | Désignation | Quantité |
 | --- | --- | --- |
@@ -137,7 +137,7 @@ Joints de la même porte, quantité en longueur :
 
 Le remplissage de cette porte a pour cotes H-237.5 et L/2-212. [1 p. 9]
 
-Accessoires de la même porte, présentée sans pièces d'étanchéité d'angle ; le nombre de paumelles 910001 se lit sur un abaque, absent des 33 pages. La vis 770051 est comptée « 3/m ». Le bouchon 740062 porte la même désignation que le 740061 de l'ouverture extérieure, « Bouch. Ht Bat. Cent. 2 vtx GEP ».
+Accessoires de la même porte, présentée sans pièces d'étanchéité d'angle ; la page porte le titre « ACCESSOIRES (suite) » sans qu'un premier tableau d'accessoires la précède (**INC-360**). Le nombre de paumelles 910001 est donné par « voir abaque », abaque absent des 33 pages. La vis 770051 est comptée « 3/m ». Le bouchon 740062 est désigné « GEP » ici et « DEP » dans le répertoire des composants (**INC-359**).
 
 | Référence | Désignation | Quantité |
 | --- | --- | --- |
@@ -166,7 +166,7 @@ Coupe horizontale de la porte à 2 vantaux à ouverture intérieure sur toute sa
 
 ![Porte à 2 vantaux ouverture intérieure, coupe horizontale](/assets/procedures/technal-seuil-py1100/2-vantaux-ouverture-interieure-coupe-horizontale.png)
 
-Les repères sont 225004, 225104, 225114, 591005, 910001, 920005, 960010 et 960013, 740012 et les joints 710041, 410010 et AS0017. Cotes : L est la cote totale ; 55 est la cote de profondeur portée à droite. Partie centrale, en tête : 22, 50, 8, 75 et 22 ; en pied : 100, 8 et 75. Partie droite, en tête : 22, 75, 8 et 50 ; en pied : 19, 75, 8 et 75. [1 p. 9]
+Les repères sont 225004, 225104, 225114, 591005, 910001, 920005, 960010 et 960013, 740012 et les joints 710041, 410010 et AS0017. Cotes : L est la cote totale ; 55 est la cote de profondeur portée à droite. Partie centrale, en tête : 22, 50, 8, 75 et 22 ; en pied : 100, 8 et 75. Partie droite, en tête : 22, 75, 50 et 8 ; en pied : 19, 75, 8 et 75. [1 p. 9]
 
 (schéma: raw/SEUIL TECHNAL PY1100 DOC.pdf, p. 9)
 

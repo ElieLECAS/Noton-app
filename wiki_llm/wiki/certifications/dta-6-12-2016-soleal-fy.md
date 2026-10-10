@@ -8,7 +8,7 @@ systeme: SOLEAL FY
 fournisseur: TECHNAL
 usage: chiffrage
 famille: avis-technique
-status: stable
+status: draft
 sources:
   - resource: raw/DTA 6_12-2016_V5 (1).pdf
     id: technal-dta-soleal-fy-6-12-2016-v5
@@ -125,7 +125,7 @@ Le présent avis est formulé au regard de l'engagement écrit du titulaire de r
 
 ### 1.2.1.11 Accessibilité aux handicapés
 
-Le système, tel que décrit dans le Dossier Technique établi par le demandeur, ne dispose pas d'une solution de seuil permettant l'accès des handicapés aux bâtiments relevant de l'arrêté du 30 novembre 2007 [1 p. 5].
+Le système, tel que décrit dans le Dossier Technique établi par le demandeur, ne dispose pas d'une solution de seuil permettant l'accès des handicapés aux bâtiments relevant de l'arrêté du 30 novembre 2007 [1 p. 5]. Des pages de fabrication et de cotes de débit du SOLEAL FY décrivent pourtant un seuil PMR (seuil pour personne à mobilité réduite) de ce système (**CTR-141**).
 
 ### 1.2.1.12 Entrée d'air
 
@@ -159,7 +159,7 @@ Pour les fenêtres destinées à être mises sur le marché, les contrôles de p
 
 ### 1.2.3.1 Données environnementales
 
-Ces données n'ont pas été examinées par le Groupe Spécialisé dans le cadre de cet avis. Le système Soleal 55 FYa - FYm fait l'objet d'une Déclaration Environnementale (DE) collective. Cette DE a été établie en juillet 2019 par le SNFA. Elle a fait l'objet d'une vérification par tierce partie indépendante selon l'arrêté du 31 août 2015 et est déposée sur le site www.inies.fr. Les données issues des DE ont notamment pour objet de servir au calcul des impacts environnementaux des ouvrages dans lesquels le procédé visé est susceptible d'être intégré [1 p. 6].
+Ces données n'ont pas été examinées par le Groupe Spécialisé dans le cadre de cet avis. Le système Soleal 55 FYa - FYm fait l'objet d'une Déclaration Environnementale (DE) collective. Cette DE a été établie en juillet 2019 par le SNFA (sigle non développé). Elle a fait l'objet d'une vérification par tierce partie indépendante selon l'arrêté du 31 août 2015 et est déposée sur le site www.inies.fr. Les données issues des DE ont notamment pour objet de servir au calcul des impacts environnementaux des ouvrages dans lesquels le procédé visé est susceptible d'être intégré [1 p. 6].
 
 # Remarques complémentaires du Groupe Spécialisé
 

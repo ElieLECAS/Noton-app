@@ -1,198 +1,247 @@
 ---
 type: Profilé
-title: Cotes de débit Technal LUMEAL GA
-description: Formules de coupe d'atelier, cotes de débit des profilés aluminium, boucliers thermiques et calcul des dimensions de vitrage du coulissant minimal LUMEAL GA de Technal.
-tags: [technal, lumeal, lumeal-ga, coulissant, debit, atelier, vitrage, seuil-pmr, formules]
+title: "Cotes de débit, fenêtre et porte-fenêtre 2 vantaux, largeur de passage du LUMEAL GA"
+description: "Désignation des châssis, couples de dormants avec ou sans rainure BTC, nomenclature et débits (L, H) de la fenêtre 2 vantaux et de la porte-fenêtre 2 vantaux, remplissages, coupes, largeur maximum de passage du coulissant LUMEAL GA."
+tags: [technal, lumeal-ga, lumeal, coulissant, cote-de-debit, nomenclature, fenetre, porte-fenetre, dormant, atelier]
 gamme: LUMINE
 systeme: LUMEAL GA
 fournisseur: TECHNAL
 usage: atelier
-status: stable
+famille: cotes-de-debit
+status: draft
 sources:
   - resource: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf
     id: technal-lumeal-ga-conception-5156-007
     title: LUMEAL GA — Catalogue de conception Le Coulissant Minimal (Réf. 5156.007)
     last_modified: 2021-01-21
-  - resource: raw/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf
-    id: technal-lumeal-ga-fabrication-5074-007
-    title: LUMEAL GA — Guide d'atelier et catalogue de fabrication (Réf. 5074.007)
-    last_modified: 2021-01-27
 source_pages:
   - resource: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf
-    pages: 21-41, 51-53, 58-59
-  - resource: raw/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf
-    pages: 4-15
+    pages: 23-24, 26-29, 60-61
 generated:
-  by: process:multimodal-direct
-  at: 2026-09-19T23:55:00Z
+  by: process:claude-code
+  at: "2026-10-09T12:59:26Z"
 ---
 
-# Définition
+Le LUMÉAL55 de la gamme [coulissants aluminium](/gammes/coulissants-aluminium.md) est fabriqué sur le système [TECHNAL](/fournisseurs/technal.md) LUMEAL GA. Les cotes de débit d'un châssis de ce système se calculent à partir de sa largeur hors tout L et de sa hauteur hors tout H : le débit d'un profilé est la longueur à lui donner à la coupe, en millimètres. Chaque application (fenêtre, porte-fenêtre, nombre de vantaux) a sa nomenclature, c'est-à-dire la liste de ses profilés, accessoires, joints et vis avec leurs quantités. Sont ci-dessous la désignation des châssis, les couples de dormants, la fenêtre 2 vantaux, la porte-fenêtre 2 vantaux et la largeur maximum de passage ; les autres applications sont sur [la porte-fenêtre 2 vantaux RC3 et à seuil PMR](/profiles/lumeal-ga-cotes-de-debit-2-vantaux-rc3-et-seuil-pmr.md), [les 4 vantaux et les 3 rails](/profiles/lumeal-ga-cotes-de-debit-4-vantaux-et-3-rails.md) et [le 1 vantail + fixe et le fixe central](/profiles/lumeal-ga-cotes-de-debit-1-vantail-et-fixe-central.md).
 
-Les cotes de débit du coulissant minimal **LUMEAL GA** fixent les formules de coupe précises des profilés dormants, ouvrants cachés, traverses thermoplastiques, boucliers et volumes verriers à déduire des dimensions hors-tout de fabrication Largeur ($L$) et Hauteur ($H$) [1 p. 21].
+# Désignation symbolique des châssis
 
----
+Les applications sont réalisables avec le logiciel de chiffrage Techdesign. Les châssis sont dessinés vus de l'extérieur, en ouverture intérieure [1 p. 24].
+
+![Désignation symbolique des châssis du LUMEAL GA, vus de l'extérieur](/assets/profiles/technal-lumeal-ga/applications/designation-symbolique-des-chassis.png)
+
+Chaque pictogramme est un rectangle divisé en vantaux. Un vantail dessiné en trait épais porte une flèche pleine, les autres portent une flèche creuse, et la partie fixe porte un signe +. Les sept désignations dessinées sont les suivantes ; la planche ne légende ni les flèches ni le trait épais (voir **VER-242**).
+
+| Désignation imprimée | Vantaux dessinés | Nomenclature |
+| --- | --- | --- |
+| Fenêtre 2 vantaux | 2 | ci-dessous |
+| Porte-fenêtre 2 vantaux | 2 | ci-dessous |
+| Porte-fenêtre 1 vantail + fixe | 1 vantail et 1 fixe | [1 vantail et fixe central](/profiles/lumeal-ga-cotes-de-debit-1-vantail-et-fixe-central.md) |
+| Porte-fenêtre 2 vantaux+ fixe central | 2 vantaux et 1 fixe entre eux | [1 vantail et fixe central](/profiles/lumeal-ga-cotes-de-debit-1-vantail-et-fixe-central.md) |
+| Porte-fenêtre 4 vantaux 2 rails | 4 | [4 vantaux et 3 rails](/profiles/lumeal-ga-cotes-de-debit-4-vantaux-et-3-rails.md) |
+| Porte-fenêtre 3 vantaux 3 rails | 3 | [4 vantaux et 3 rails](/profiles/lumeal-ga-cotes-de-debit-4-vantaux-et-3-rails.md) |
+| Porte-fenêtre 6 vantaux 3rails | 6 | - |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 24)
+
+# Récapitulatif des dormants
+
+Chaque profilé de dormant existe en deux versions interchangeables, l'une sans rainure BTC et l'autre avec rainure BTC (abréviation du catalogue, définie dans le [glossaire LUMEAL GA](/reference/glossaire-technal-lumeal-ga.md)). Le tableau donne les quatre couples ; la flèche à double sens du tableau imprimé a pour légende « ou ». Les coupes de ces profilés sont sur [Dormants, traverses, montants et ouvrants du LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md) [1 p. 23].
+
+| Profilé sans rainure BTC (référence) | Profilé avec rainure BTC (référence) | Désignation dans les nomenclatures |
+| --- | --- | --- |
+| T141001 | T141000 | Rail bas |
+| T141026 | T141025 | Rail bas monorail |
+| T141031 | T141030 | Montant dormant |
+| T141017 | T141019 | Rail haut |
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 23)
+
+Les nomenclatures des applications portent la référence sans rainure BTC (T141001, T141026, T141031, T141017). La coupe de la page 33 porte T141019 à la place de T141017 (voir **INC-461**) ; les coupes du DTA portent les références avec rainure BTC (voir **CTR-160**).
 
 # Cotes
 
-### 1. Débits de la fenêtre et porte-fenêtre 2 vantaux 2 rails
+Cotes de débit en millimètres de la fenêtre 2 vantaux, de la porte-fenêtre 2 vantaux et de la largeur maximum de passage, relevées sur le catalogue de conception.
 
-Profilés pour châssis 2 vantaux 2 rails en coupe droite, cotes en mm relevées sur les catalogues de conception et de fabrication.
+## Fenêtre 2 vantaux
 
-| Composant | Référence | Quantité | Formule de débit (mm) | Remarque technique |
-| --- | --- | --- | --- | --- |
-| **Rail bas dormant** | T141000 / T141001 | 1 | $L - 42$ | Coupe droite |
-| **Rail haut dormant** | T141017 / T141019 | 1 | $L - 42$ | Coupe droite |
-| **Montants dormants** | T141030 / T141031 | 2 | $H$ | Hauteur hors tout |
-| **Traverses basses ouvrant** | T141015 (ou T141021) | 2 | $L/2 - 65$ | Aluminium à coupure thermique |
-| **Traverses hautes ouvrant** | T821004 (ou T821005) | 2 | $L/2 - 95$ | Profilé PVC thermoplastique |
-| **Montants centraux chicanes**| T141037 / T141038 | 2 | $H - 105$ | Chicane fine ou renforcée |
-| **Montants latéraux ouvrant** | T141039 (ou T141040) | 2 | $H - 105$ | Reçoit le bloc serrure |
-| **Chemin de roulement alu** | T341000 | 2 | $L - 98$ | Rail rapporté clippé |
-| **Bouclier PVC supérieur** | T431024 | 2 | $L/2 - 57$ | Pré-percé pour drainage |
-| **Bouclier PVC inférieur** | T431025 | 1 | $L - 42$ | Pré-percé pour évacuation |
-| **Bouclier acoustique montant**| T823000 | 2 | $H - 115$ | Dans gorge de montant dormant |
-| **Bouclier thermique montant** | T823001 | 2 | $H - 115$ | Dans gorge de montant dormant |
-| **Volume de vitrage (2 vtx)** | Double vitrage 24-32 | 2 | $(H - 143) \times (L/2 - 66)$ | Hauteur x Largeur vitrage |
+La nomenclature de la fenêtre 2 vantaux donne, pour chaque profilé, la référence, la désignation imprimée, la quantité par châssis et le débit [1 p. 26].
 
-(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 24-27)
+| Référence | Désignation | Quantité | Débit (mm) |
+| --- | --- | --- | --- |
+| T141001 | Rail bas | 1 | L-42 |
+| T141015 | Traverse basse ouvrant | 2 | L/2-65 |
+| T141017 | Rail haut | 1 | L-42 |
+| T141031 | Montant dormant | 2 | H |
+| T141037 | Montant central | 2 | H-105 |
+| T141039 | Montant latéral | 2 | H-105 |
+| T341000 | Rail | 2 | L-98 |
+| T431024 | Bouclier PVC supérieur pré-percé | 2 | L/2-57 |
+| T431025 | Bouclier PVC inférieur pré-percé | 1 | L-42 |
+| T821004 | Traverse haute ouvrant 28mm | 2 | L/2-95 |
+| T823000 | Bouclier acoustique montant | 2 | H-115 |
+| T823001 | Bouclier thermique montant | 2 | H-115 |
 
----
+Accessoires de la fenêtre 2 vantaux, avec la quantité par châssis.
 
-### 2. Débits de la porte-fenêtre 2 vantaux avec seuil PMR (Ressaut $\le 20\text{ mm}$)
+| Référence | Désignation | Quantité |
+| --- | --- | --- |
+| T401000 | Talon étanchéité haute | 2 |
+| T401001 | Kit d'Etanchéité centrale | 1 |
+| T401003 | Déflecteur rail bas 2 vantaux | 2 |
+| T401006 | Bouchon latéral dormant | 1 |
+| T401011 | Roulette simple | 4 |
+| T441000 | Bouchon étanchéité dormant 100 | 1 |
+| T441010 | Bouchon montant latéral ouvrant | 2 |
+| T441011 | Bouchon montant central ouvrant | 2 |
+| T621002 | Fermeture 2 points têtière filant | 2 |
+| T641002 | Verrou de service | 1 |
+| T641003 | Verrou semi fixe | 1 |
+| T661004 | Cuvette de tirage | 1 |
+| TGA3618 | Poignée de tirage inclinée | 1 |
+| TGA3706 | Ensemble support de poignée | 1 |
 
-Profilés pour porte-fenêtre 2 vantaux équipée du seuil surbaissé T141014 et de la rampe T401028.
+Joints et vis de la fenêtre 2 vantaux. Le débit d'un joint s'écrit en nombre de fois la hauteur H et la largeur L du châssis.
 
-| Composant | Référence | Quantité | Formule de débit (mm) | Remarque technique |
-| --- | --- | --- | --- | --- |
-| **Seuil bas PMR 2 rails** | T141014 | 1 | $L - 42$ | Seuil surbaissé 32,7 mm |
-| **Rail haut dormant** | T141017 / T141019 | 1 | $L - 42$ | Coupe droite |
-| **Montants dormants** | T141030 / T141031 | 2 | $H$ | Hauteur hors tout |
-| **Traverses basses ouvrant** | T141015 (ou T141021) | 2 | $L/2 - 65$ | Aluminium |
-| **Montants centraux** | T141037 / T141038 | 2 | $H - 87$ | Déduction réduite pour PMR |
-| **Montants latéraux ouvrant** | T141039 (ou T141040) | 2 | $H - 87$ | Déduction réduite pour PMR |
-| **Capot rejet d'eau PMR** | T341012 | 1 | $L/2 - 63$ | Sur vantail semi-fixe |
-| **Support rejet d'eau PMR** | T341013 | 1 | $L/2 - 102$ | Clip sous rejet d'eau |
-| **Bouclier PVC seuil PMR** | T821008 | 1 | $L - 42$ | Profilé PVC étanchéité basse |
-| **Bouclier drainage PMR** | T821010 | 1 | $L/2 - 221$ | Profilé PVC intérieur |
-| **Boucliers acoustique/therm.**| T823000 / T823001 | 2 | $H - 97$ | Recoupes montants dormants |
-| **Volume de vitrage PMR** | Double vitrage 24-32 | 2 | $(H - 125) \times (L/2 - 66)$ | Hauteur x Largeur vitrage |
+| Référence | Désignation | Débit (mm) |
+| --- | --- | --- |
+| T411002 | Joint glissant | 6H+2L |
+| T411003 | Joint de centrage | 4H |
+| T411005 | Joint vitrage 24mm | 4H+2L |
 
-(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 38-41)
+| Référence | Quantité de vis |
+| --- | --- |
+| T471000 | 8 |
+| T471001 | 16 |
 
----
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 26)
 
-### 3. Débits de la porte-fenêtre 4 vantaux 2 rails (Percussion centrale)
+Le remplissage (le vitrage) de la fenêtre 2 vantaux est coté H-143 en hauteur et L/2-66 en largeur [1 p. 27]. La mention « * voir abaque » est imprimée à la verticale à droite du tableau des accessoires, sans astérisque dans les tableaux (voir VER-236**) [1 p. 26].
 
-| Composant | Référence | Quantité | Formule de débit (mm) | Remarque technique |
-| --- | --- | --- | --- | --- |
-| **Rail bas et rail haut** | T141001 / T141017 | 1 chaque | $L - 42$ | Coupe droite |
-| **Montants dormants** | T141031 / T141030 | 2 | $H$ | Hauteur hors tout |
-| **Traverses basses ouvrant** | T141015 (ou T141021) | 4 | $L/4 - 46$ | 4 vantaux mobiles |
-| **Traverses hautes ouvrant** | T821004 (ou T821005) | 4 | $L/4 - 76$ | Profilé thermoplastique |
-| **Montants centraux** | T141037 / T141038 | 2 chaque | $H - 105$ | Chicanes intermédiaires |
-| **Montants latéraux ouvrant** | T141039 | 2 | $H - 105$ | Montants extérieurs |
-| **Montants percussion centrale**| T141033 | 2 | $H - 105$ | Montants de battement central |
-| **Profilé capot percussion** | T341007 / T341008 | 1 chaque | $H - 105$ | Finition centrale |
-| **Profilé PVC percussion** | T821003 | 1 | $H - 140$ | Isolation de battement |
-| **Chemin de roulement alu** | T341000 | 1 + 1 | $L - 154$ et $L - 42$ | Rails rapportés |
-| **Bouclier PVC supérieur** | T431024 | 2 + 1 | $L/4 - 38$ et $L/2 - 112$ | Supérieur |
-| **Volume de vitrage (4 vtx)** | Double vitrage 24-32 | 4 | $(H - 143) \times (L/4 - 47)$ | 4 volumes identiques |
+Coupe horizontale, côté montant dormant T141031 et montant central : cotes L, 77, 50, 9, 2, 106, 100, 18,4 et 19,4 ; repères T141031, T823001, T641002, T621001, T141039, TGA3706, TGA3618, T401001, T141037 et T411005. Le repère T621001 est imprimé sur la coupe alors que la nomenclature porte la fermeture T621002 (voir **INC-456**) [1 p. 26].
 
-(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 30-33)
+![Fenêtre 2 vantaux, coupe horizontale côté montant dormant T141031 et montant central](/assets/profiles/technal-lumeal-ga/applications/fenetre-2-vantaux-coupe-horizontale-1.png)
 
----
+Coupe verticale : cotes H, 68, 27, 4, 106, 9 et 41 ; repères T141017, T401000, T821004, T141015, T441011, T341000, T431024, T431025 et T141001 [1 p. 27].
 
-### 4. Débits de la porte-fenêtre 3 vantaux 3 rails
+![Fenêtre 2 vantaux, coupe verticale](/assets/profiles/technal-lumeal-ga/applications/fenetre-2-vantaux-coupe-verticale.png)
 
-| Composant | Référence | Quantité | Formule de débit (mm) | Remarque technique |
-| --- | --- | --- | --- | --- |
-| **Rail bas 3 rails** | TGA1101 | 1 | $L - 42$ | Module 151 mm |
-| **Rail haut 3 rails** | TGA1100 | 1 | $L - 42$ | Module 151 mm |
-| **Montants dormants 3 rails** | TGA1102 | 2 | $H$ | Profondeur 157 mm |
-| **Traverses basses ouvrant** | T141015 (ou T141021) | 3 | $L/3 - 46$ | 3 vantaux indépendants |
-| **Traverses hautes ouvrant** | T821004 (ou T821005) | 3 | $L/3 - 76$ | PVC |
-| **Montants centraux** | T141037 / T141038 | 2 chaque | $H - 105$ | Chicanes |
-| **Montants latéraux ouvrant** | T141039 | 2 | $H - 105$ | Montants d'extrémité |
-| **Chemin de roulement alu** | T341000 | 1 + 2 | $L - 154$ et $L - 98$ | 3 rails |
-| **Bouclier PVC supérieur** | T431024 | 2 + 2 | $L/3 - 38$ et $2L/3 - 76$ | Supérieur |
-| **Bouclier PVC inférieur** | T431025 | 2 | $L - 42$ | Inférieur |
-| **Volume de vitrage (3 vtx)** | Double vitrage 24-32 | 3 | $(H - 143) \times (L/3 - 47)$ | 3 volumes identiques |
+Coupe horizontale, côté opposé : cote 77 ; repères T641003, T411003, T823000, T621002 et T411002 [1 p. 27].
 
-(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 32-35)
+![Fenêtre 2 vantaux, coupe horizontale côté opposé](/assets/profiles/technal-lumeal-ga/applications/fenetre-2-vantaux-coupe-horizontale-2.png)
 
----
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 27)
 
-### 5. Débits du monorail 1 vantail mobile + 1 partie fixe ($L_f$)
+## Porte-fenêtre 2 vantaux
 
-$L_f$ désigne la largeur en feuillure de la partie fixe vitrée.
+La nomenclature de la porte-fenêtre 2 vantaux donne les mêmes colonnes que celle de la fenêtre 2 vantaux ; elle porte des roulettes doubles et une fermeture 3 points [1 p. 28].
 
-| Composant | Référence | Quantité | Formule de débit (mm) | Remarque technique |
-| --- | --- | --- | --- | --- |
-| **Rail bas monorail** | T141026 / T141025 | 1 | $L - 42$ | Monorail |
-| **Rail haut dormant** | T141017 | 1 | $L - 42$ | Traverse haute |
-| **Montants dormants** | T141031 | 2 | $H$ | Montants latéraux |
-| **Traverse basse ouvrant** | T141015 | 1 | $L - L_f - 65$ | Vantail coulissant |
-| **Traverse haute ouvrant PVC** | T821004 | 1 | $L - L_f - 95$ | Vantail coulissant |
-| **Montant central ouvrant** | T141037 | 1 | $H - 97$ | Côté fixe |
-| **Montant central droit** | T141038 | 1 | $H - 105$ | Renfort |
-| **Montant latéral ouvrant** | T141039 | 1 | $H - 105$ | Côté serrure |
-| **Capot de rail bas** | T341025 | 1 + 1 | $L - L_f - 96$ et $L - L_f - 98$ | Finition rail |
-| **Compensateur de feuillure** | T821002 | 1 + 1 | $H - 97$ et $L_f - 44$ | Pour calage vitrage fixe |
-| **Bouclier bas monorail** | T821001 | 1 | $L - 42$ | Sous partie fixe |
-| **Vitrage ouvrant mobile** | Double vitrage 24-32 | 1 | $(H - 143) \times (L - L_f - 66)$ | Vantail mobile |
-| **Vitrage partie fixe** | Double vitrage 24-32 | 1 | $(H - 75) \times (L_f - 66)$ | Partie fixe vitrée |
+| Référence | Désignation | Quantité | Débit (mm) |
+| --- | --- | --- | --- |
+| T141001 | Rail bas | 1 | L-42 |
+| T141015 | Traverse basse ouvrant | 2 | L/2-65 |
+| T141017 | Rail haut | 1 | L-42 |
+| T141031 | Montant dormant | 2 | H |
+| T141037 | Montant central | 1 | H-105 |
+| T141038 | Montant central droit | 1 | H-105 |
+| T141039 | Montant latéral | 2 | H-105 |
+| T341000 | Rail | 2 | L-98 |
+| T431024 | Bouclier PVC supérieur pré-percé | 2 | L/2-57 |
+| T431025 | Bouclier PVC inférieur pré-percé | 1 | L-42 |
+| T821004 | Traverse haute ouvrant 28mm | 2 | L/2-95 |
+| T823000 | Bouclier acoustique montant | 2 | H-115 |
+| T823001 | Bouclier thermique montant | 2 | H-115 |
 
-(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 34-37)
+Accessoires de la porte-fenêtre 2 vantaux.
 
----
+| Référence | Désignation | Quantité |
+| --- | --- | --- |
+| T401000 | Talon étanchéité haute | 2 |
+| T401001 | Kit d'Etanchéité centrale | 1 |
+| T401003 | Déflecteur rail bas 2 vantaux | 3 |
+| T401006 | Bouchon latéral dormant | 1 |
+| T401012 | Roulette double | 4 |
+| T441000 | Bouchon étanchéité dormant 100 | 1 |
+| T441010 | Bouchon montant latéral ouvrant | 2 |
+| T441011 | Bouchon montant central ouvrant | 2 |
+| T441012 | Bouchon montant central renforcé | 1 |
+| T621003 | Fermeture 3 points têtière | 2 |
+| T641002 | Verrou de service | 1 |
+| T641003 | Verrou semi fixe | 1 |
+| TGA3618 | Poignée de tirage inclinée | 2 |
+| TGA3706 | Ensemble support de poignée | 2 |
 
-### 6. Traverses intermédiaires et débits des vitrages
+Joints et vis de la porte-fenêtre 2 vantaux.
 
-Le débit en longueur des traverses intermédiaires T141018 (vitrage 24 à 28 mm) et T141009 (vitrage 30 à 32 mm) est strictement égal au débit de la traverse basse d'ouvrant associée [1 p. 51-52].
+| Référence | Désignation | Débit (mm) |
+| --- | --- | --- |
+| T411002 | Joint glissant | 6H+2L |
+| T411003 | Joint de centrage | 4H |
+| T411005 | Joint vitrage 24mm | 4H+2L |
 
-Hauteurs des deux vitrages séparés par la traverse intermédiaire, avec $ht_1$ désignant la hauteur d'axe de traverse par rapport au bas du châssis [1 p. 53] :
-- **Application standard** :
-  $$h_1 = ht_1 - 111\text{ mm}$$
-  $$h_2 = H - ht_1 - 69\text{ mm}$$
-- **Variante seuil réduit** :
-  $$h_1 = ht_1 - 94\text{ mm}$$
-  $$h_2 = H - ht_1 - 69\text{ mm}$$
+| Référence | Quantité de vis |
+| --- | --- |
+| T471000 | 8 |
+| T471001 | 16 |
 
----
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 28)
 
-### 7. Largeurs de passage libre utiles
+Le remplissage (le vitrage) de la porte-fenêtre 2 vantaux est coté H-143 et L/2-66 [1 p. 29]. La mention « * voir abaque » est imprimée à la verticale à droite du tableau des accessoires (voir VER-236**) [1 p. 28].
 
-Formules de déduction de l'unité de passage libre maximale [1 p. 58-59] :
-- **Châssis 2 vantaux 2 rails** :
-  $$L_{\text{passage}} = L/2 - 241\text{ mm}$$
-- **Châssis 1 vantail + fixe (Monorail)** :
-  $$L_{\text{passage}} = L - L_f - 241\text{ mm}$$
-- **Châssis 3 vantaux 3 rails (refoulement total des 3 vantaux)** :
-  $$L_{\text{passage}} = 2L/3 - 370\text{ mm}$$
-- **Châssis 3 vantaux 3 rails (refoulement partiel 1 vantail)** :
-  $$L_{\text{passage}} = L/3 - 77\text{ mm}$$
-  *(si présence d'une poignée de tirage extérieure, la formule devient $L_{\text{passage}} = L/3 - 177\text{ mm}$)*.
+Coupe horizontale, côté montant dormant T141031 et montants centraux : cotes L, 77, 50, 9, 2, 106, 100, 18,4 et 19,4 ; repères T141031, T823001, T641002, T621003, T141039, TGA3706, T141038, T141037, T401001 et T411005 [1 p. 28].
 
----
+![Porte-fenêtre 2 vantaux, coupe horizontale côté montant dormant T141031 et montants centraux](/assets/profiles/technal-lumeal-ga/applications/porte-fenetre-2-vantaux-coupe-horizontale-1.png)
+
+Coupe verticale : cotes H, 68, 27, 4, 106,5, 9 et 41,5 ; repères T141017, T401000, T821004, T141015, T441011, T441012, T431025, T431024 et T141001. Sur la fenêtre 2 vantaux, les cotes de la même coupe sont 106 et 41 [1 p. 29].
+
+![Porte-fenêtre 2 vantaux, coupe verticale](/assets/profiles/technal-lumeal-ga/applications/porte-fenetre-2-vantaux-coupe-verticale.png)
+
+Coupe horizontale, côté opposé : cote 77 ; repères TGA3618, T641003, T411003, T621002, T823000 et T411002. Le repère T621002 est imprimé sur la coupe alors que la nomenclature de la porte-fenêtre porte T621003 (voir **INC-457**) [1 p. 29].
+
+![Porte-fenêtre 2 vantaux, coupe horizontale côté opposé](/assets/profiles/technal-lumeal-ga/applications/porte-fenetre-2-vantaux-coupe-horizontale-2.png)
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 29)
+
+## Largeur maximum de passage
+
+La largeur maxi de passage du châssis se calcule à partir de la largeur hors tout L ; sur le châssis 1 vantail + fixe, la formule porte en plus la cote Lf des coupes (voir **VER-167**). Les dessins sont des coupes horizontales du châssis cotées 77 à gauche, avec les cotes L, L/2, L/3, 2L/3 ou Lf [1 p. 60-61].
+
+| Châssis | Largeur maxi de passage (mm) | Cotes portées sur le dessin (mm) |
+| --- | --- | --- |
+| 1 vantail + fixe | L-Lf-241 | 77, 163,5, Lf, L |
+| 2 vantaux | L/2-241 | 77, 163,5, L/2, L |
+| 3 vantaux, premier dessin de la page 61 | 2L/3-370 | 77, 293, L/3, L |
+| 3 vantaux, second dessin de la page 61 | L/3-77 | 77, 2L/3, L |
+| 3 vantaux, second dessin, avec une poignée extérieure | L/3-177 | - |
+
+La page 61 écrit, sous la formule du second dessin : « Dans la configuration avec une poignée extérieure, la formule devient: » L/3 - 177.
+
+![Largeur de passage sur 1 vantail + fixe : L-Lf-241](/assets/profiles/technal-lumeal-ga/largeur-de-passage/largeur-de-passage-1-vantail-et-fixe.png)
+
+![Largeur de passage sur 2 vantaux : L/2-241](/assets/profiles/technal-lumeal-ga/largeur-de-passage/largeur-de-passage-2-vantaux.png)
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 60)
+
+![Largeur de passage sur 3 vantaux, premier dessin : 2L/3-370](/assets/profiles/technal-lumeal-ga/largeur-de-passage/largeur-de-passage-3-vantaux-configuration-1.png)
+
+![Largeur de passage sur 3 vantaux, second dessin : L/3-77, ou L/3-177 avec une poignée extérieure](/assets/profiles/technal-lumeal-ga/largeur-de-passage/largeur-de-passage-3-vantaux-configuration-2.png)
+
+(schéma: raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 61)
 
 # Ce que la source ne donne pas
 
-- Le catalogue ne fournit pas de formule pour des configurations à galandage dans la gamme LUMEAL GA (le galandage aluminium Technal est traité sous la gamme SOLÉAL GY).
-
----
+- Aucune nomenclature pour la porte-fenêtre 6 vantaux 3 rails : elle n'est dessinée que dans la désignation des châssis.
+- Le sens des flèches et du trait épais des pictogrammes (voir **VER-242**).
+- La définition de Lf sur les coupes de la page 60 (voir **VER-167**).
 
 # Citations
 
-[1] LUMEAL GA — Catalogue de conception Le Coulissant Minimal (Réf. 5156.007 - 01/2021) — `raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf`
-[2] LUMEAL GA — Guide d'atelier et catalogue de fabrication (Réf. 5074.007 - 01/2021) — `raw/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf`
-
----
+[1] [LUMEAL GA — Catalogue de conception Le Coulissant Minimal (Réf. 5156.007)](raw/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf), p. 23-24, 26-29 et 60-61
 
 # Voir aussi
 
-- [Profilés dormants et ouvrants LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md)
-- [Roulements et fermetures LUMEAL GA](/quincaillerie/lumeal-ga-roulements-et-fermetures.md)
+- [Dormants, traverses, montants et ouvrants du LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md)
+- [Rails réduits, traverse intermédiaire, joint brosse et montants centraux du LUMEAL GA](/profiles/lumeal-ga-options-de-profiles.md)
+- [Repérage des profilés des configurations du coulissant LUMÉAL55](/profiles/lumeal-ga-reperage-des-profiles-par-configuration.md)
+- [Roulements et fermetures du LUMEAL GA](/quincaillerie/lumeal-ga-roulements-et-fermetures.md)
 - [Fabrication et pose LUMEAL GA](/procedures/fabrication-et-pose-lumeal-ga.md)
-- [Coulissants aluminium](/gammes/coulissants-aluminium.md)
-- [TECHNAL](/fournisseurs/technal.md)

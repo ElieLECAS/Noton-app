@@ -8,7 +8,7 @@ systeme: SOLEAL FY
 fournisseur: TECHNAL
 usage: atelier
 famille: quincaillerie
-status: stable
+status: draft
 sources:
   - resource: raw/DTA 6_12-2016_V5 (1).pdf
     id: technal-dta-soleal-fy-6-12-2016-v5
@@ -19,7 +19,7 @@ source_pages:
     pages: 8-11
 generated:
   by: process:claude-code
-  at: 2026-10-09T07:30:53Z
+  at: 2026-10-09T08:25:55Z
 stale_after: 2026-10-31
 ---
 
@@ -117,7 +117,7 @@ La gorge recevant les contre plaques des paumelles sur l'ouvrant n'est pas déla
 
 # Ferrage par type de fenêtre
 
-Pièces de ferrage de chaque type de fenêtre, une ligne par référence (rubrique 2.2.3.3) [1 p. 11].
+Pièces de ferrage de chaque type de fenêtre, une ligne par référence (rubrique 2.2.3.3). Les références T940023 (« paumelles OB semi fixe »), T940031 (« verrouillage supplémentaire ») et TFZ60037 (« point intermédiaire ») portent ici des désignations que la page Quincaillerie visible et cachée SOLEAL FY donne autrement (**CTR-145**). Le poids de vantail limité à 70 kg du tableau des paumelles et la masse de vantail de 73 kg citée à la disposition de conception ne sont pas reliés (**VER-190**) [1 p. 11].
 
 ## Fenêtre à la française
 

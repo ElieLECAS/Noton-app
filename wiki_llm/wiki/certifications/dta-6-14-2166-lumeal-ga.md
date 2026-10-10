@@ -8,7 +8,7 @@ systeme: LUMEAL GA
 fournisseur: TECHNAL
 usage: chiffrage
 famille: dta-6-14-2166
-status: stable
+status: draft
 sources:
   - resource: raw/DTA Lumeal GA 6-14-2166-v2.pdf
     id: technal-dta-lumeal-ga-6-14-2166-v2
@@ -23,9 +23,9 @@ generated:
 stale_after: 2029-07-31
 ---
 
-Le Document Technique d'Application (DTA) n° 6/14-2166_V2 est l'avis rendu par le Groupe Spécialisé n° 06 « Composants de baies et vitrages » de la Commission chargée de formuler les Avis Techniques (CCFAT, secrétariat tenu par le CSTB, Centre scientifique et technique du bâtiment) sur le procédé **LUMEAL Minimal Ga**, « fenêtre coulissante en aluminium à coupure thermique », dont le titulaire est la société HYDRO BUILDING SYSTEMS marque Technal. Ce procédé est le système **LUMEAL GA** de [TECHNAL](/fournisseurs/technal.md), sur lequel est fabriqué le coulissant LUMÉAL55 de la gamme [coulissants aluminium](/gammes/coulissants-aluminium.md). Le DTA est valide **du 27 mai 2024 au 31 juillet 2029** [1 p. 1].
+Le Document Technique d'Application (DTA) n° 6/14-2166_V2 est l'avis rendu par le Groupe Spécialisé n° 06 « Composants de baies et vitrages » de la Commission chargée de formuler les Avis Techniques (CCFAT, secrétariat tenu par le CSTB, Centre scientifique et technique du bâtiment) sur le procédé LUMEAL Minimal Ga, « fenêtre coulissante en aluminium à coupure thermique », dont le titulaire est la société HYDRO BUILDING SYSTEMS marque Technal. Ce procédé est le système LUMEAL GA de [TECHNAL](/fournisseurs/technal.md), sur lequel est fabriqué le coulissant LUMÉAL55 de la gamme [coulissants aluminium](/gammes/coulissants-aluminium.md). Le DTA est valide du 27 mai 2024 au 31 juillet 2029 [1 p. 1].
 
-Le système permet de réaliser des fenêtres et portes-fenêtres coulissantes à 2 vantaux 2 rails ou 1 vantail avec une partie fixe, dont les cadres tant dormants qu'ouvrants (sauf les montants latéraux d'ouvrants) sont réalisés avec des profilés en aluminium à rupture de pont thermique [1 p. 2]. Le dormant est le cadre fixe scellé dans le mur ; l'ouvrant est le cadre mobile qui porte le vitrage ; la rupture de pont thermique est la barrette isolante placée entre les deux faces d'un profilé aluminium ([glossaire](/reference/glossaire.md)).
+Le système permet de réaliser des fenêtres et portes-fenêtres coulissantes à 2 vantaux 2 rails ou 1 vantail avec une partie fixe, dont les cadres tant dormants qu'ouvrants (sauf les montants latéraux d'ouvrants) sont réalisés avec des profilés en aluminium à rupture de pont thermique [1 p. 2]. Voir **INC-370**. Le dormant est le cadre fixe scellé dans le mur ; l'ouvrant est le cadre mobile qui porte le vitrage ; la rupture de pont thermique est la barrette isolante placée entre les deux faces d'un profilé aluminium ([glossaire](/reference/glossaire.md)).
 
 Les dimensions maximales, les profilés, les coupes, le drainage et la mise en œuvre sont portés par les autres pages du DTA : [dossier technique et dimensions maximales](/certifications/dta-6-14-2166-lumeal-ga-dossier-technique.md), [profilés de l'annexe](/certifications/dta-6-14-2166-lumeal-ga-profiles.md), [coupes de principe et prises de volume](/certifications/dta-6-14-2166-lumeal-ga-coupes-de-principe.md), [drainage](/certifications/dta-6-14-2166-lumeal-ga-drainage.md), [mise en œuvre sur gros œuvre](/certifications/dta-6-14-2166-lumeal-ga-mise-en-oeuvre.md).
 
@@ -60,11 +60,11 @@ Ce système de fenêtre ne peut être mis en œuvre dans les bâtiments relevant
 
 Les fenêtres et portes-fenêtres ne peuvent être installées dans les pièces principales d'habitation et d'hébergement que si ces dernières sont déjà munies d'entrées d'air ou d'un dispositif de ventilation double flux [1 p. 4].
 
-**Le système tel que décrit dans le Dossier Technique ne répond pas aux exigences du DTU 39 P5 § 4.2.3, vis-à-vis de la sécurité aux chutes des personnes** [1 p. 4].
+Le système tel que décrit dans le Dossier Technique ne répond pas aux exigences du DTU 39 P5 § 4.2.3, vis-à-vis de la sécurité aux chutes des personnes [1 p. 4].
 
 ## Remarques complémentaires du Groupe Spécialisé (1.3)
 
-En raison de dispositions particulières pour le montage du vitrage dans le cadre fixe, celui-ci doit être posé en atelier. **Ce système n'est pas prévu pour une mise en œuvre sur dormant existant.** En période froide, les profilés montants d'ouvrants latéraux réf. 141039 et 141040 peuvent être le siège de condensations passagères [1 p. 6].
+En raison de dispositions particulières pour le montage du vitrage dans le cadre fixe, celui-ci doit être posé en atelier. Ce système n'est pas prévu pour une mise en œuvre sur dormant existant. En période froide, les profilés montants d'ouvrants latéraux réf. 141039 et 141040 peuvent être le siège de condensations passagères [1 p. 6].
 
 # Appréciation
 
@@ -76,7 +76,7 @@ Ce système présente une résistance mécanique permettant de satisfaire à la 
 
 ### 1.2.1.2 Sécurité
 
-Ce système de fenêtres ne présente pas de particularité par rapport aux fenêtres classiques. La sécurité aux chutes des personnes n'est pas évaluée dans le document ; il conviendra de l'évaluer au cas par cas. **Le système tel que décrit dans le Dossier Technique ne répond pas aux exigences du DTU 39 P5 § 4.2.3, vis-à-vis de la sécurité aux chutes des personnes** [1 p. 4].
+Ce système de fenêtres ne présente pas de particularité par rapport aux fenêtres classiques. La sécurité aux chutes des personnes n'est pas évaluée dans le document ; il conviendra de l'évaluer au cas par cas. Le système tel que décrit dans le Dossier Technique ne répond pas aux exigences du DTU 39 P5 § 4.2.3, vis-à-vis de la sécurité aux chutes des personnes [1 p. 4].
 
 ### 1.2.1.3 Sécurité en cas d'incendie
 
@@ -138,9 +138,9 @@ La qualité des matières employées pour la coupure thermique et leur mise en �
 
 L'avis est formulé en prenant en compte les contrôles et modes de vérifications de fabrication décrits au chapitre 2 « Dossier technique » [1 p. 5].
 
-**Profilés.** Les dispositions prises dans le cadre de la marque de qualité « QB-Profilés aluminium à rupture de pont thermique (QB 49) » pour les profilés avec rupture de pont thermique sont propres à assurer la constance de qualité des profilés [1 p. 5].
+Profilés. Les dispositions prises dans le cadre de la marque de qualité « QB-Profilés aluminium à rupture de pont thermique (QB 49) » pour les profilés avec rupture de pont thermique sont propres à assurer la constance de qualité des profilés [1 p. 5].
 
-**Fenêtres.** Les fenêtres sont assemblées par des entreprises assistées techniquement selon le DTD et les prescriptions de la société HYDRO BUILDING SYSTEMS marque Technal. Le DTD (Document Technique Détaillé), référencé au paragraphe 2.9.2, doit être remis par la société HYDRO BUILDING SYSTEMS marque Technal aux entreprises souhaitant se prévaloir du DTA. Chaque unité de fabrication peut bénéficier d'un Certificat de Qualification constatant la conformité du produit à la description qui en est faite dans le Dossier Technique et précisant les caractéristiques A*E*V* (perméabilité à l'air, étanchéité à l'eau, résistance au vent : [labels et certifications](/certifications/labels-et-certifications.md)), complétées dans le cas du Certificat ACOTHERM par les performances thermiques et acoustiques des fenêtres fabriquées [1 p. 5].
+Fenêtres. Les fenêtres sont assemblées par des entreprises assistées techniquement selon le DTD et les prescriptions de la société HYDRO BUILDING SYSTEMS marque Technal. Le DTD (Document Technique Détaillé), référencé au paragraphe 2.9.2, doit être remis par la société HYDRO BUILDING SYSTEMS marque Technal aux entreprises souhaitant se prévaloir du DTA. Chaque unité de fabrication peut bénéficier d'un Certificat de Qualification constatant la conformité du produit à la description qui en est faite dans le Dossier Technique et précisant les caractéristiques A*E*V* (perméabilité à l'air, étanchéité à l'eau, résistance au vent : [labels et certifications](/certifications/labels-et-certifications.md)), complétées dans le cas du Certificat ACOTHERM par les performances thermiques et acoustiques des fenêtres fabriquées [1 p. 5].
 
 ## Marquage des fenêtres certifiées
 

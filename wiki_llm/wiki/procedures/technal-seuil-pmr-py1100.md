@@ -1,123 +1,105 @@
 ---
 type: Procédure
-title: Fabrication et mise en œuvre du seuil PMR Technal PY1100
-description: Procédure d'atelier et de chantier pour le seuil à rupture de pont thermique pour personnes à mobilité réduite (PMR) PY1100 de TECHNAL (portes battantes SOLEAL PY 55, gabarit EK7020, pièces d'angle 720028 et 720029, gâche basse PY6000 et règles NF DTU 36.5).
-tags: [technal, soleal, soleal-py, porte, seuil-pmr, fabrication, etancheite, dtu-36-5]
+title: "Seuil PMR PY1100 de la porte SOLEAL PY 55 : atouts, performances AEV et situations de pose"
+description: "Seuil PMR PY1100 de la porte SOLEAL PY 55 de TECHNAL : atouts annoncés, conformité vis-à-vis du NF DTU 36.5, classements AEV et débits Q100 des essais des portes à 1 et 2 vantaux, quatre situations de pose sur le gros œuvre, et renvoi aux pages de nomenclature, d'usinage et d'assemblage."
+tags: [technal, soleal-py, seuil-pmr, porte, aev, dtu-36-5, etancheite, pose, pmr, fit]
 gamme: LUMINE
 systeme: SOLEAL PY
 fournisseur: TECHNAL
 usage: [atelier, pose]
-status: stable
+status: draft
 sources:
   - resource: raw/SEUIL TECHNAL PY1100 DOC.pdf
     id: technal-seuil-py1100-doc
-    title: F.I.T N° 15 — Évolution Porte PY et Seuil PMR PY1100
+    title: F.I.T N° 15, Évolution porte PY et seuil PMR PY1100
     last_modified: 2012-12-01
-  - resource: raw/SOLEAL-PY-55-catalogue-fabrication-4899-007-092018-FR.pdf
-    id: technal-soleal-py-55-fabrication-4899-007
-    title: SOLEAL PY 55 — Guide d'atelier et catalogue de fabrication (Réf. 4899.007)
-    last_modified: 2018-09-01
-  - resource: raw/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf
-    id: technal-soleal-py-55-conception-4944-006
-    title: SOLEAL PY 55 — Catalogue de conception Porte à rupture de pont thermique (Réf. 4944.006)
-    last_modified: 2018-09-01
+source_pages:
+  - resource: raw/SEUIL TECHNAL PY1100 DOC.pdf
+    pages: 1-2, 15
 generated:
-  by: process:multimodal-direct
-  at: 2026-09-19T23:10:00Z
+  by: process:claude-code
+  at: 2026-10-09T07:51:08Z
 ---
 
-# Présentation du seuil PMR PY1100
+# Ce que fait cette procédure
 
-Le **seuil PMR PY1100** est un procédé d'étanchéité basse à rupture de pont thermique certifié par le CSTB pour les portes **SOLEAL PY 55**. Il est strictement conforme aux exigences d'accessibilité des personnes à mobilité réduite (Arrêté du 30 novembre 2007) imposant un ressaut total inférieur ou égal à **20 mm** (hauteur hors sol de **17,3 mm**) avec des pentes d'accès adoucies.
+Le seuil PMR PY1100 est le profilé bas sur lequel on passe dans la porte SOLEAL PY 55 de [TECHNAL](/fournisseurs/technal.md) ; PMR veut dire « personne à mobilité réduite » (voir le [glossaire](/reference/glossaire.md)). L'évolution de la porte PY de décembre 2012 (F.I.T N°15, « Evolution porte PY ») couvre les atouts, les essais d'étanchéité, les nomenclatures par application, les composants, le tarif, les usinages et les assemblages. Chaque sujet a sa page : les débits, joints, accessoires et coupes de la porte sont sur [Porte à 1 vantail](/portes/technal-seuil-py1100-applications-1-vantail.md), [Porte à 2 vantaux](/portes/technal-seuil-py1100-applications-2-vantaux.md) et [Porte à 1 vantail et fixe latéral](/portes/technal-seuil-py1100-applications-fixe-lateral.md) ; les profilés et joints sur [Profilés et joints du seuil PMR PY1100](/profiles/technal-seuil-py1100-profiles-et-joints.md) ; les pièces sur [Pièces du seuil PMR PY1100](/quincaillerie/technal-seuil-py1100-pieces-et-outillage.md) ; le tarif sur [Tarif du seuil PMR PY1100](/tarifs/technal-seuil-py1100-tarif.md) ; les usinages sur [Usinages du seuil PMR PY1100](/procedures/technal-seuil-pmr-py1100-usinages.md) ; l'assemblage sur [Assemblage du seuil PMR PY1100](/procedures/technal-seuil-pmr-py1100-assemblage.md). Les références sont écrites sans la lettre T initiale des catalogues, sauf au tarif (**VER-152**). [1 p. 1]
 
-### Performances d'étanchéité AEV certifiées (Rapports d'essais CSTB / FCBA)
+# Atouts annoncés
 
-| Configuration de porte | Dimensions ($H \times L$) | Classement AEV | Rapport d'essai | Débit d'air $Q_{100}$ |
-| --- | --- | --- | --- | --- |
-| **Porte 1 vtl Ouv. Ext. + Seuil PY1100 + Pièces d'angle** | $2\,406 \times 1\,100\text{ mm}$ | **A3 E7A C3** | PV n° 404/12/202-1 | $2,17\text{ m}^3/\text{h.m}^2$ |
-| **Porte 1 vtl Ouv. Ext. + Seuil PY1100 standard** | $2\,406 \times 1\,100\text{ mm}$ | **A4 E6A C3** | PV n° 404/12/202-2 | $2,12\text{ m}^3/\text{h.m}^2$ |
-| **Porte 1 vtl Ouv. Int. + Seuil PY1100 + Pièces d'angle** | $2\,200 \times 1\,000\text{ mm}$ | **A3 E4B C3** | PV n° 404/12/202-3 | $2,98\text{ m}^3/\text{h.m}^2$ |
-| **Porte 1 vtl Ouv. Int. + Seuil PY1100 standard** | $2\,200 \times 1\,000\text{ mm}$ | **A3 E3B C3** | PV n° 404/12/202-4 | $3,01\text{ m}^3/\text{h.m}^2$ |
-| **Porte 2 vtx Ouv. Ext. + Seuil PY1100** | $2\,500 \times 2\,000\text{ mm}$ | **A3 E3A VB2**| PV n° 404/12/324-1 | — |
+Quatre « plus » de l'évolution de la porte PY sont annoncés [1 p. 1] :
 
----
+- performance à l'eau et à l'air, « voir tableau » : un nouveau joint de battement plus souple ; des pièces d'étanchéité d'angle, en option, pour une meilleure étanchéité ; une application en ouverture intérieure et extérieure, à 1 et 2 vantaux ;
+- conformité vis-à-vis du DTU 36.5 (voir ci-dessous) ;
+- un nouvel embout de liaison de seuil, plus résistant ;
+- une réduction de l'effort de fermeture de la porte.
 
-# Répertoire et débits des composants
+Les valeurs mesurées sont celles du tableau des performances ci-dessous.
 
-| Composant | Réf. Technal | Rôle technique | Débit 1 vantail | Débit 2 vantaux |
-| --- | --- | --- | --- | --- |
-| **Profilé seuil PMR RPT** | **PY1100** | Seuil bas aluminium à coupure thermique | $\mathbf{L - 120\text{ mm}}$ | $\mathbf{L - 166\text{ mm}}$ |
-| **Barre de seuil d'écartement** | **PY4000** | Profilé plat d'ancrage au sol et gabarit de transport | $\mathbf{L - 180\text{ mm}}$ | $\mathbf{L - 226\text{ mm}}$ |
-| **Profilé rejet d'eau** | **PY2102** | Rejet d'eau clippé en bas de vantail ouvrant | $\mathbf{L - 120\text{ mm}}$ | Serv. : $\mathbf{L/2 - 51,5}$ / SF : $\mathbf{L/2 - 76,5}$ |
-| **Joint d'étanchéité ouvrant** | **PY5000** | Joint tubulaire EPDM sous ouvrant | $\mathbf{L - 95\text{ mm}}$ | 2 unités de $\mathbf{L/2 - 74\text{ mm}}$ |
-| **Joint de rejet d'eau** | **T710010** | Lèvre souple d'étanchéité sous rejet d'eau | $L$ | $L$ |
-| **Ensemble bouchons de seuil**| **PY3800** | Bouchons d'angles dormant/seuil droite et gauche | 1 kit | 1 kit |
-| **Bouchons rejet d'eau** | **PY3810** | Embouts d'étanchéité droite et gauche | 1 kit | 2 kits |
-| **Pièce anti-dévers / blocage**| **PY3609** | Butée de calage pour vantail côté paumelles | 1 pièce | 2 pièces |
-| **Gâche basse pour seuil** | **PY6000** | Gâche encastrée pour pêne vertical inférieur | 1 pièce | 1 pièce (au centre $L/2$) |
-| **Pièce d'angle ouvrant** | **720028** | Coin préformé EPDM étanchéité d'angle ouvrant | 2 pièces | 4 pièces |
-| **Pièce d'angle dormant** | **720029** | Coin préformé EPDM étanchéité d'angle dormant | 2 pièces | 2 pièces |
-| **Gabarit de perçage drainage**| **EK7020** | Outil d'atelier pour perçage des évacuations Ø8 mm | 1 outil | 1 outil |
+# Conditions et interdictions
 
----
+La conformité vis-à-vis du DTU 36.5 (écrit « DTU36.5 ») porte sur quatre points : mise en œuvre des liaisons et des gâches, « pas de perçement » ; liaison des montants et du seuil, soit « obturation et étanchéité de la partie basse des montants » ; étanchéité basse des seuils ; mise en œuvre. [1 p. 1]
 
-# Procédure de fabrication et d'usinage en atelier
+Le seuil démontable est enrubanné sur la barre d'écartement PY4000 pour le transport et la manutention, et la barre PY4000 est vissée au sol avant la pose du seuil PY1100 : voir [Assemblage du seuil PMR PY1100](/procedures/technal-seuil-pmr-py1100-assemblage.md). [1 p. 25, 32]
 
-### 1. Drainage du seuil PY1100 avec le gabarit EK7020
-- **Ouverture intérieure** :
-  - Percer les évacuations à l'aide du gabarit **EK7020** muni d'un foret de **Ø 8 mm** incliné à **18°** par rapport à la verticale.
-  - Nombre de trous de drainage :
-    - Porte 1 vantail ($L \le 1\,000\text{ mm}$) : 4 trous Ø8 mm répartis sur la longueur (2 premiers à 50 mm des montants).
-    - Porte 1 vantail ($L > 1\,000\text{ mm}$) : 1 trou supplémentaire par tranche de 500 mm.
-    - Porte 2 vantaux : 1 trou Ø8 mm tous les **320 mm**.
-  - Réaliser un fraisage complémentaire de $30 \times 15\text{ mm}$ en partie basse pour la sortie d'eau.
-- **Ouverture extérieure** :
-  - Réaliser des fraisages longitudinaux de $30 \times 5\text{ mm}$ en sous-face du profilé PY1100 (1 tous les 320 mm).
+# Performances
 
-### 2. Usinage de la barre de seuil PY4000
-- Percer les trous de fixation au sol de **Ø 5,5 mm avec chanfrein Ø 10 mm à 90°** à **10 mm** de chaque extrémité, puis répartis tous les 400 mm le long de la barre.
+Classements AEV et débits Q100 des essais de la porte SOLEAL PY avec seuil PMR PY1100 : une ligne par essai, avec la hauteur et la longueur du châssis en mm, la classification imprimée, le numéro de procès-verbal (n° PV) et le débit Q100. Le sens des classements A, E et V est sur [Labels et certifications](/certifications/labels-et-certifications.md). L'unité de Q100 n'est pas imprimée (**VER-151**). Les quatre premiers essais sont des portes à 1 vantail, le dernier est un essai interne d'une porte à 2 vantaux.
 
-### 3. Usinage du joint d'étanchéité PY5000
-- Découper une encoche de **$13\text{ mm}$ de longueur sur $11\text{ mm}$ de hauteur** à l'extrémité du joint PY5000 côté serrure (sur le vantail de service) et côté targette (sur le semi-fixe) pour permettre le passage sans écrasement des pênes verticaux.
+| Châssis | Configuration | Hauteur x Longueur (mm) | Classification | n° PV | Q100 |
+| --- | --- | --- | --- | --- | --- |
+| Porte 1 vtl | Ouverture extérieure sur paumelles avec seuil PMR PY1100 et pièces d'angle | 2406 x 1100 | A3 E7A C3 | 404/12/202-1 | 2,17 |
+| Porte 1 vtl | Ouverture extérieure sur paumelles avec seuil PMR PY1100 | 2406 x 1100 | A4 E6A C3 | 404/12/202-2 | 2,12 |
+| Porte 1 vtl | Ouverture intérieure sur paumelles avec seuil PMR PY1100 et pièces d'angle | 2200 x 1000 | A3 E4B C3 | 404/12/202-3 | 2,98 |
+| Porte 1 vtl | Ouverture intérieure sur paumelles avec seuil PMR PY1100 | 2200 x 1000 | A3 E3B C3 | 404/12/202-4 | 3,01 |
+| Porte 2 vtx (test interne) | Ouverture extérieure sur paumelles avec seuil PMR PY1100 | 2500 x 2000 | A3-E3A-VB2 | 404/12/324-1 | - |
 
-### 4. Usinage du rejet d'eau PY2102 (Porte 2 vantaux)
-- Sur le vantail semi-fixe côté battement central, usiner le profilé PY2102 par un délardage de **$40\text{ mm}$ de longueur sur $12,6\text{ mm}$ de hauteur**.
-- Découper l'ailette du bouchon **PY3810** sur 11,5 mm avant collage à la cyanoacrylate **TW200**.
+(schéma: raw/SEUIL TECHNAL PY1100 DOC.pdf, p. 2)
 
----
+À ouverture extérieure, l'essai sans pièces d'angle est classé A4 E6A C3 avec Q100 de 2,12, l'essai avec pièces d'angle A3 E7A C3 avec Q100 de 2,17 ; les pièces d'angle sont annoncées « pour une meilleure étanchéité » (**VER-159**). Le classement de l'essai à 2 vantaux s'écrit avec des tirets et se termine par VB2 au lieu de C3. [1 p. 1-2]
 
-# Procédure d'assemblage et étanchéité
+# Situations de pose
 
-```
-           [Profilé dormant vertical]
-                     │
-             [Bouchon PY3800] ──> Découper les encoches au droit du montant
-                     │        ──> Enduire d'élastomère translucide TW118
-             [Seuil PY1100]   ──> Visser les raccords avec vis inox
-                     │
-         [Barre d'écartement PY4000] ──> Fixée au sol / transport enrubanné
-```
+La page 15 donne quatre coupes verticales du seuil posé sur le gros œuvre. Les deux coupes de gauche montrent le seuil PMR PY1100 ; elles portent la cote 55 sur la profondeur du dormant et deux cotes 20 verticales, une à gauche et une à droite, entre une ligne horizontale tracée à travers le dormant et le niveau du sol de chaque côté. Les deux coupes de droite ne portent ni repère ni cote. Le seul texte de la page est le titre « Situation de pose ». Les coupes sont reproduites une à une.
 
-1. **Préparation des bouchons PY3800** :
-   - Découper les languettes de la pièce de liaison PY3800 au droit des encoches du dormant utilisé (T225004, T225011, T225014, T225024).
-   - Injecter du mastic élastomère translucide **TW118** dans le trou d'injection prévu sur le bouchon.
-2. **Assemblage seuil et dormants** :
-   - Enduire la tranche du seuil aluminium PY1100 avec du mastic élastomère **TW118** ou MS polymère **TW110**.
-   - Assembler les montants de dormant sur les bouchons PY3800.
-   - Poser la gâche basse **PY6000** en butée directe contre le bouchon PY3800 côté serrure (ou centrée à $L/2$ en 2 vantaux).
-   - Poser la pièce de butée **PY3609** en butée contre le bouchon PY3800 côté paumelles.
-3. **Mise en place des pièces d'angle préformées (Option haute performance ETI)** :
-   - Coller la pièce d'angle **720028** en partie basse d'ouvrant à la colle cyanoacrylate **TW200** en jonction avec le joint de battement T710041.
-   - Coller la pièce d'angle **720029** sur le cadre dormant.
-4. **Précautions de transport impératives** :
-   - Le seuil PMR PY1100 étant démontable pour faciliter la pose, **il est formellement prescrit d'enrubanner le seuil sur la barre d'écartement PY4000** pendant toutes les opérations de manutention et de transport de l'atelier vers le chantier, afin de garantir l'absence totale de déformation ou de vrillage du cadre.
+![Situation de pose, coupe en haut à gauche](/assets/procedures/technal-seuil-py1100/situation-de-pose-haut-gauche.png)
 
----
+Lecture : coupe verticale du bas de la porte et du seuil sur le gros œuvre. La cote 55 est portée sur la profondeur du dormant ; une ligne horizontale tracée à travers le dormant est cotée 20 vers le sol à gauche et 20 vers le sol à droite. [1 p. 15]
+
+![Situation de pose, coupe en haut à droite](/assets/procedures/technal-seuil-py1100/situation-de-pose-haut-droite.png)
+
+Lecture : coupe verticale du bas de la porte posée sur le gros œuvre, sans cote ni repère. [1 p. 15]
+
+![Situation de pose, coupe en bas à gauche](/assets/procedures/technal-seuil-py1100/situation-de-pose-bas-gauche.png)
+
+Lecture : même coupe que celle du haut à gauche, avec les cotes 55 et 20 de chaque côté du seuil et une cote 50 portée sur la face verticale du gros œuvre, à gauche. [1 p. 15]
+
+![Situation de pose, coupe en bas à droite](/assets/procedures/technal-seuil-py1100/situation-de-pose-bas-droite.png)
+
+Lecture : coupe verticale du bas de la porte posée sur le gros œuvre, sans cote ni repère. [1 p. 15]
+
+| Coupe de la page 15 | Cotes portées |
+| --- | --- |
+| en haut à gauche | 55 ; 20 à gauche du seuil ; 20 à droite du seuil |
+| en haut à droite | aucune |
+| en bas à gauche | 55 ; 20 à gauche du seuil ; 20 à droite du seuil ; 50 sur le gros œuvre |
+| en bas à droite | aucune |
+
+(schéma: raw/SEUIL TECHNAL PY1100 DOC.pdf, p. 15)
+
+# Ce que le document ne dit pas
+
+Le sens de la cote 20 et de la cote 50, le texte de pose, la désignation des profilés des deux coupes de droite et la nature du matériau du gros œuvre ne sont pas portés sur la page 15. La page 2 ne porte ni l'unité de Q100, ni l'organisme qui a émis les procès-verbaux.
+
+# Citations
+
+[1] [F.I.T N° 15 SOLEAL PY, Évolution porte PY et seuil PMR PY1100, TECHNAL, décembre 2012](raw/SEUIL TECHNAL PY1100 DOC.pdf), p. 1, 2 et 15
 
 # Voir aussi
 
+- [Usinages du seuil PMR PY1100 : drainage, barre PY4000, joint PY5000, PY2102 et PY1101](/procedures/technal-seuil-pmr-py1100-usinages.md)
+- [Assemblage du seuil PMR PY1100 : bouchons, gâche PY6000, butée PY3609, pièces d'angle](/procedures/technal-seuil-pmr-py1100-assemblage.md)
 - [Profilés dormants et ouvrants SOLEAL PY 55](/portes/soleal-py-dormants-et-ouvrants.md)
 - [Cotes de débit des portes SOLEAL PY 55](/portes/soleal-py-cotes-de-debit.md)
 - [Serrures et paumelles SOLEAL PY 55](/quincaillerie/soleal-py-serrures-et-paumelles.md)
-- [Fournisseur Technal](/fournisseurs/technal.md)
-- [F.I.T N° 15 — Évolution Porte PY et Seuil PMR PY1100 Technal](/sources/technal-seuil-py1100.md)
+- [TECHNAL](/fournisseurs/technal.md)

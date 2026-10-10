@@ -1,13 +1,13 @@
 ---
 type: Quincaillerie
 title: Chariots, crémones, poignées et gâches du coulissant SOLEAL GY 55
-description: "Références, hauteurs minimales de châssis et de poignée des crémones TGY3700 à TGY3704 (dont la rallonge 4ème point), chariots jusqu'à 200 kg, fermetures de 1 à 4 points, poignées, fermeture pompier et gâches du coulissant SOLEAL GY 55 de TECHNAL."
+description: "Références, hauteurs minimales de châssis et de poignée des crémones TGY3700 à TGY3704 (dont la rallonge 4ème point), chariots simples et doubles, barillets T1040 et T1044, fermeture pompier TGY3731, gâches et centreurs du coulissant SOLEAL GY 55 de TECHNAL."
 tags: [technal, soleal, soleal-gy, quincaillerie, roulettes, chariots, serrure, cremone, poignee, gache]
 gamme: LUMINE
 systeme: SOLEAL GY
 fournisseur: TECHNAL
 usage: atelier
-status: stable
+status: draft
 sources:
   - resource: raw/SOLEAL-GY-55-Catalogue-conception-5744-005-092021-Fr (1).pdf
     id: technal-soleal-gy-55-conception-5744-005
@@ -17,126 +17,200 @@ sources:
     id: technal-soleal-gy-55-fabrication-5746-003
     title: SOLEAL GY 55 — Guide de fabrication d'atelier (Réf. 5746.003)
     last_modified: 2021-09-01
+source_pages:
+  - resource: raw/SOLEAL-GY-55-Catalogue-conception-5744-005-092021-Fr (1).pdf
+    pages: 88-89, 100-105
+  - resource: raw/SOLEAL-GY-55-Catalogue-fabrication-5746-003-092021-Fr.pdf
+    pages: 118, 140, 145
 generated:
-  by: process:multimodal-direct
-  at: 2026-09-19T22:25:00Z
+  by: process:claude-code
+  at: 2026-10-10T10:24:07Z
 ---
+
+Le coulissant SOLEAL GY 55 de [TECHNAL](/fournisseurs/technal.md) est le système sur lequel PROFERM fabrique son coulissant SOLÉAL55 (voir [Coulissants aluminium](/gammes/coulissants-aluminium.md)). La quincaillerie du coulissant comprend les chariots de roulement (les roulettes), ses fermetures et crémones, ses barillets, la fermeture pompier, l'immobilisation de vantail, les gâches et les centreurs. Les poignées et leurs compatibilités sont sur [Poignées, cuvettes et béquilles du coulissant SOLEAL GY 55 : choix selon le montant et le vantail](/quincaillerie/soleal-gy-choix-des-organes-de-manoeuvre.md).
 
 # Chariots de roulement et calage
 
-Les chariots SOLEAL GY 55 sont logés dans la traverse basse d'ouvrant (T141015 ou T141021). Leur corps en matériau isolant conserve la continuité de la rupture thermique de la traverse basse.
+Les chariots sont les roulettes du vantail ; le tableau donne, pour chaque chariot, le poids maximal par vantail et sa compatibilité avec le rail aluminium T341000 ou le rail inox TGY4007. Une ligne par chariot ; l'unité du poids n'est pas imprimée dans le tableau (**VER-203**). Bandage ou galet : [2 p. 140]. Le même tableau est reproduit dans la notice de pose : [Choix des roulettes et cale TGA3817 sous le vantail du coulissant SOLEAL GY 55](/procedures/pose-soleal-gy-choix-des-roulettes.md).
 
-### 1. Tableau de choix des roulettes et charges admissibles
-
-| Type de chariot | Référence | Réglage | Galets / Bandage | Poids maxi par vantail | Compatible Rail Alu T341000 | Compatible Rail Inox TGY4007 |
-| --- | --- | --- | --- | --- | --- | --- |
-| **Simple fixe** | **T401011** | Non réglable | Polyamide sur roulements à aiguilles | **100 kg** | Oui | Oui |
-| **Double fixe** | **T401012** | Non réglable | Polyamide sur roulements à aiguilles | **200 kg** | Oui | Oui |
-| **Double fixe Inox** | **TGY3873** | Non réglable | Galets 100% Inox | **200 kg** | **NON (Incompatible)** | **OUI** |
-| **Simple réglable** | **T441003** | Réglable en hauteur | Polyamide sur aiguilles | **100 kg** | Oui | Oui |
-| **Double réglable** | **T441004** | Réglable en hauteur | Polyamide sur aiguilles | **200 kg** | Oui | Oui |
-| **Double réglable Inox** | **TGY3872** | Réglable en hauteur | Galets 100% Inox | **200 kg** | **NON (Incompatible)** | **OUI** |
-
-> [!WARNING]
-> **Interdiction absolue** d'associer des chariots à roulettes inox (**TGY3872** / **TGY3873**) sur le chemin de roulement en aluminium **T341000**. L'inox détruirait par écrouissage le rail aluminium sous forte charge. L'utilisation du rail rapporté en acier inoxydable **TGY4007** est impérative avec les galets inox.
-
-### 2. Prescription de calage sous traverse : Cale TGA3817
-Pour transmettre directement la charge du vitrage vers les roulettes sans solliciter la rupture thermique des traverses :
-- **Prise de vitrage 29-32 mm (profilé T141021)** : Cale **TGA3817** obligatoire au droit de chaque roulette de manière systématique.
-- **Prise de vitrage 24-28 mm (profilé T141015)** : Cale **TGA3817** (zone sécable raccourcie) obligatoire si la largeur du vantail dépasse **1,50 m** OU si le poids du vantail dépasse **120 kg**.
-- La cale se fixe sur la traverse avec un point de colle avant vitrage.
-
-### 3. Réglage en hauteur des roulettes réglables
-- Les chariots réglables (T441003, T441004, TGY3872) sont ajustables en hauteur **sans dégonder le vantail** au moyen d'une clé Allen introduite par le chant latéral du montant d'ouvrant à travers l'orifice prévu à **25 mm** de hauteur.
-- Lors du réglage, il est obligatoire de soulager le vantail à l'aide de ventouses de vitrier pour éviter d'endommager la vis micrométrique de réglage sous la charge.
-
----
-
-# Systèmes de fermeture et verrouillage
-
-La condamnation s'effectue par des mécanismes encastrés à têtière filante en acier inox (grade 3 anticorrosion NF EN 1670) :
-
-### 1. Gamme de crémones encastrées
-
-| Référence | Points de fermeture | Condamnation clé | Hauteur min. châssis | Hauteur min. poignée $Hp$ | Fixation |
+| Référence | Désignation imprimée | Poids maxi par vantail | Rail alu T341000 | Rail inox TGY4007 | Bandage ou galet |
 | --- | --- | --- | --- | --- | --- |
-| **TGY3700** | 1 point simple | Non | 395 mm | 219 mm | 2 vis TGY3723 |
-| **TGY3701** | 1 point à clé | Oui (cylindre) | 525 mm | 346 mm | 4 vis TGY3723 |
-| **TGY3702** | 3 points | Non | 1 292 mm | 721 mm | 6 vis TGY3723 |
-| **TGY3703** | 3 points à clé | Oui (cylindre) | 1 292 mm | 721 mm | 8 vis TGY3723 |
-| **TGY3704** | Rallonge 4ème point | Raccordée à TGY3702 ou TGY3703 | Pour très grandes hauteurs | — | 2 vis TGY3723 |
-| **TKG025** | Fermeture 1 point coquille | Non | 395 mm | 219 mm | Encastrée + pêne déporté TGY6006 |
+| T401011 | Non réglable, simple | 100 | compatible | compatible | polyamide |
+| T401012 | Non réglable, double | 200 | compatible | compatible | polyamide |
+| TGY3873 | Non réglable, double inox | 200 | Non compatible | compatible | inox |
+| T441003 | Réglable, simple | 100 | compatible | compatible | polyamide |
+| T441004 | Réglable, double | 200 | compatible | compatible | polyamide |
+| TGY3872 | Réglable, double inox | 200 | Non compatible | compatible | galet inox |
 
-### 2. Cylindres et barillets européens
-- Montants latéraux standard TGY1202 et TGY1303 : Cylindre européen **30 x 30 mm** (Réf. **T1040**).
-- Montants latéraux à renfort tube TGY1301 et TGY1302 : Cylindre européen décentré **40 x 30 mm** (Réf. **T1044**).
-- Rosettes inox de protection de cylindre : Réf. **T960013** ou **TPY6003**.
+(schéma: raw/SOLEAL-GY-55-Catalogue-conception-5744-005-092021-Fr (1).pdf, p. 88)
 
-### 3. Fermeture pompier (Établissements Recevant du Public - ERP)
-Conforme à l'Arrêté du 25 juin 1980 et à l'article CO3 modifié du 28 avril 2016 :
-- Référence : **TGY3731** (avec vis de fixation T770059).
-- Compatible uniquement avec les montants simples **TGY1202** et **TGY1300**.
-- Permet l'ouverture d'urgence depuis l'extérieur à l'aide d'une clé spéciale pompier.
-- Exigence dimensionnelle réglementaire : passage libre minimum de **$H = 1\,800\text{ mm} \times L = 900\text{ mm}$**.
+La cale TGA3817 est ajoutée au droit de chaque roulette [1 p. 88] :
 
-### 4. Verrou central à clé TGY3622
-- Placé à la croisée centrale des vantaux en partie basse.
-- Montage sur cale **TGY3640** avec perçage Ø7 mm et écrou à sertir taraudé M5.
-- Vis de fixation CHc M5x16 et M5x25.
-- En cas d'utilisation du verrou central, les roulettes doivent être décalées à **62 mm** et les cales de vitrage à **71 mm** du chant du montant pour ne pas entrer en conflit avec le perçage Ø11 mm de la pièce de blocage.
+| Prise de volume (profilé de traverse) | Cale TGA3817 |
+| --- | --- |
+| 29 à 32 mm (T141021) | systématiquement |
+| 24 à 28 mm (T141015) | si la largeur du vantail est supérieure à 1,5 m ; si le poids du vantail est supérieur à 120 kg (**VER-480**) |
 
----
+TGA3817 est à immobiliser par collage ; une zone sécable est repérée sur la cale. Les chariots T401012, TGY3873, T441004 et TGY3872 sont repérés sur la vue de dessus de la cale.
 
-# Organes de manœuvre et poignées
+![Choix des roulettes : tableau de compatibilité](/assets/quincaillerie/soleal-gy-conception-5744/roulettes-et-fermetures/choix-des-roulettes-tableau.png)
 
-### 1. Tableau de compatibilité des poignées selon les montants
+![Cale TGA3817 : prescription, zone sécable et coupes](/assets/quincaillerie/soleal-gy-conception-5744/roulettes-et-fermetures/cale-tga3817-prescription-et-coupes.png)
 
-| Organe de manœuvre | Type | Réf. Laquée | Réf. Anodisée | Compatible Montant Standard (TGY1202/1300) | Compatible Montant Tube (TGY1301/1302) | Compatible Montant Lame (TGY1200/1201) | Compatible Montant Bilame (TGY1220) |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| **Cuvette encastrée** | Intérieure | **TGY3712** | **TGY3719** | Oui (OS / SF) | Oui (OS / SF) | Non | Oui |
-| **Bouton sur plaque** | Intérieure | **TGY3713** | **TGY3714** | Non | Non | **Oui (OS / SF)** | Oui |
-| **Poignée tirage Technal** | Intérieure | **TGY3717** | — | **Oui (OS / SF\*)** | **Oui (OS / SF\*)** | Non | Non |
-| **Poignée tirage extérieure**| Extérieure | **TGY3718** | — | Oui (OS / SF) | Oui (OS / SF) | Non | Non |
-| **Poignée fixe de tirage** | Int/Ext | **TGY3732 / TGY3733** | — | Oui (avec TGY3716) | Oui (avec TGY3716) | Oui | Oui |
-| **Poignée design droit** | Intérieure | **TGY3606** | — | Oui (OS) | Oui (OS) | Non | Non |
-| **Poignée anse galbée** | Intérieure | **TGY6004** | — | Oui (OS / SF) | Non | Non | Non |
-| **Cuvette à levier** | Intérieure | **TGY6003** | — | Oui (OS / SF) | Non | Non | Non |
-| **Béquille à carré de 7 mm**| Intérieure | **T960030 / TCZ61051**| — | Oui (avec kit TGY3721) | Non | Non | Non |
+# Fermetures et crémones
 
-*\*Note : Pour croiser les vantaux sans heurt avec la poignée TGY3717 sur semi-fixe, prévoir la butée TCG021.*
+La crémone est la fermeture à plusieurs points de verrouillage ; Hp est la hauteur de la poignée, mesurée depuis le bas du dormant. Hauteur de châssis mini et Hp mini sont en millimètres ; la fixation est donnée par le nombre de vis TGY3723. La rallonge TGY3704 (« 4ème point ») est une crémone 4 points. Une ligne par référence [1 p. 89].
 
-### 2. Réversibilité de la poignée Design Droit TGY3606
-La poignée TGY3606 est réversible pour vantail de service à gauche ou à droite :
-1. Présenter la poignée en position ouverte.
-2. Retirer les 4 vis d'assemblage du corps arrière.
-3. Retirer la butée et le corps de fixation.
-4. Tourner le bras de manœuvre à 180°.
-5. Remonter la butée et visser.
-6. Retourner le corps arrière de 180° (les 2 logements de vis doivent être orientés côté serrure pour fixation par vis TGY3723).
-7. Revisser l'ensemble.
+| Référence | Désignation imprimée | Fixation | Hauteur de châssis mini (mm) | Hp mini (mm) |
+| --- | --- | --- | --- | --- |
+| TGY3700 | Fermeture 1 point | 2 vis TGY3723 | 395 | 219 |
+| TKG025 | Fermeture 1 point + pêne TGY6006 | - | 395 | 219 |
+| TGY3701 | Fermeture 1 point (à clé) | 4 vis TGY3723 | 525 | 346 |
+| TGY3702 | Fermeture 3 points | 6 vis TGY3723 | 1292 | 721 |
+| TGY3703 | Fermeture 3 points (à clé) | 8 vis TGY3723 | 1292 | 721 |
+| TGY3704 | Rallonge 4ème point | 2 vis TGY3723 | - | - |
+| TGY3716 | Bloc de fixation poignée | 2 vis TGY3723 | - | - |
 
----
+(schéma: raw/SOLEAL-GY-55-Catalogue-conception-5744-005-092021-Fr (1).pdf, p. 89)
 
-# Gâches, centreurs et accessoires de guidage
+![Choix des fermetures : hauteurs minimales de châssis et de poignée](/assets/quincaillerie/soleal-gy-conception-5744/roulettes-et-fermetures/choix-des-fermetures-hauteurs-minimales.png)
 
-### 1. Gâches de condamnation
-- **Gâche dormant périphérique TGY3705** : Se visse directement dans la gorge du dormant aluminium sans fraisage ni découpe du profilé à l'aide de vis Torx TGY3723.
-- **Gâche pour percussion centrale TGY3711** : Se visse en applique sur le profilé de percussion centrale TGY1204 ou de percussion d'angle TGY1206.
-- **Gâche renforcée anti-effraction TGY3742** : Équipée de vis de pré-positionnement et d'un contre-clameau en aluminium pour retard à l'effraction sur dormant 55 mm.
-- **Réglage micrométrique de la gâche** : La serrure Technal intègre un gabarit plastique réversible. En position horizontale, il sert de pige d'épaisseur pour aligner la gâche à exactement **6 mm** du boîtier de fermeture avant serrage définitif des vis.
+# Barillets pour les fermetures TGY3701 et TGY3703
 
-### 2. Centreurs d'ouvrants et guidage
-- **Centreur d'ouvrant TGY3832** : Se clipse par rotation au milieu du montant d'ouvrant. Garantit l'alignement parfait des vantaux en position fermée et le plaquage des joints brosses contre le vent.
-  - *Règle bilame :* Dans le cas d'une menuiserie soumise aux risques de bilame, poser obligatoirement **2 centreurs TGY3832** répartis sur la hauteur.
-- **Compensateur de centreur TGY3833** : Se monte face au centreur TGY3832 sur le profilé de percussion TGY1204 à l'aide d'une vis TGY3723.
-- **Guides de montants centraux TGY3883** : Se clipsent en tête et pied de chaque montant central après gondage des vantaux. Verrouillage par rotation des flèches à l'aide d'une clé Allen de 4 mm. Mousse d'étanchéité positionnée à fleur de profilé.
-- **Pièces anti-dégondage TGY3885** : Se montent sur chaque montant latéral après réglage des roulettes pour empêcher le soulèvement frauduleux de l'ouvrant.
+Le barillet est le cylindre de la serrure ; il se choisit selon le montant d'ouvrant. Une ligne par couple cylindre et montant [1 p. 89].
 
----
+| Cylindre | Montant d'ouvrant | Mention imprimée |
+| --- | --- | --- |
+| T1040 (Cylindre 30x30) | TGY1202 | - |
+| T1040 (Cylindre 30x30) | TGY1303 | - |
+| T1040 (Cylindre 30x30) | TGY1200 | TGY2521 (option) |
+| T1040 (Cylindre 30x30) | TGY1200 avec T341009 | Non compatible (dessin barré) |
+| T1040 (Cylindre 30x30) | TGY1220 | - |
+| T1044 (Cylindre 40x30) | TGY1301 | - |
+| T1044 (Cylindre 40x30) | TGY1302 | catalogue de fabrication seulement (**CTR-240**) [2 p. 118] |
+
+(schéma: raw/SOLEAL-GY-55-Catalogue-conception-5744-005-092021-Fr (1).pdf, p. 89)
+
+![Choix des barillets T1040 et T1044 selon le montant](/assets/quincaillerie/soleal-gy-conception-5744/roulettes-et-fermetures/choix-des-barillets.png)
+
+# Fermeture pompier
+
+La fermeture pompier TGY3731, avec ses deux vis T770059, est compatible uniquement avec le montant simple (TGY1202 et TGY1300) [1 p. 100]. Pour le marché français, la planche renvoie à l'arrêté du 25 juin 1980 portant approbation des dispositions générales du règlement de sécurité contre les risques d'incendie et de panique dans les établissements recevant du public (ERP), article CO3 modifié le 28 avril 2016 (source indiquée : Legifrance.gouv.fr). Dimension passage minimum H 1800 x L 900 : passage mini = 900 en largeur et 1800 en hauteur [1 p. 100-101].
+
+| Cote | Valeur (mm) | Où |
+| --- | --- | --- |
+| Passage mini en largeur | 900 | coupe horizontale, PDF 101 |
+| Passage mini en hauteur | 1800 | coupe verticale, PDF 101 |
+| Cotes de la coupe horizontale | 17,8 ; 46,7 ; 47,5 ; L/2 ; L | PDF 101 |
+| Cotes de la coupe verticale | 47,5 ; 9 ; 4 ; H | PDF 101 |
+| Cotes de la coupe de la fermeture | 8 ; L/2 ; L | PDF 100 |
+
+(schéma: raw/SOLEAL-GY-55-Catalogue-conception-5744-005-092021-Fr (1).pdf, p. 100-101)
+
+La référence d'une clé pompier n'est imprimée sur aucune de ces planches (**VER-482**) ni sur la planche de montage de la fermeture pompier TGY3731 du catalogue de fabrication [2 p. 145].
+
+La fermeture pompier TGY3731 se monte dans un montant TGY1202 percé et fraisé au gabarit TGY7003 et à la fraise TGY7002 : un perçage Ø12 sur une face, une fente de 153 (raccord R6) sur le chant, trois perçages alignés (Ø10, Ø12, Ø10) sur l'autre face [2 p. 145].
+
+| Usinage de la fermeture pompier TGY3731 | Cote (mm) |
+| --- | --- |
+| Perçage de la vue de gauche | Ø12 |
+| Fente centrale : hauteur ; raccord | 153 ; R6 |
+| Cote entre deux axes | 22 |
+| Du haut de la fente à l'axe horizontal ; de l'axe au bas | 54.5 ; 98.5 |
+| Perçages de la vue de droite | Ø10 ; Ø12 ; Ø10 |
+| Entre les axes des perçages extérieurs | 43 |
+| Hauteur Hpv ; distances à l'axe | Hp - 38.5* ; 32.5 et 32 |
+
+« * Hpv = Hauteur poignée vantail. Dans le cas d'une intégration frappe, voir le catalogue conception » (schéma: raw/SOLEAL-GY-55-Catalogue-fabrication-5746-003-092021-Fr.pdf, p. 145).
+
+Montage de la fermeture pompier TGY3731 en six opérations [2 p. 145] :
+
+1. Insérer la fermeture dans le montant.
+2. Fixer la fermeture à l'aide des vis TGY3723.
+3. Positionner le corps intérieur de la fermeture pompier TGY3731.
+4. Fixer à l'aide des 2 vis T770059.
+5. Mettre en place la douille de manœuvre extérieure.
+6. Rendre la douille solidaire du carré avec la goupille.
+
+![Fermeture pompier TGY3731 : usinages Ø12, 153, Ø10 et montage en six opérations](/assets/procedures/soleal-gy-fabrication/fermetures/fermeture-pompier-tgy3731-usinages-et-montage.png)
+
+![Fermeture pompier TGY3731 et vis T770059, coupe horizontale](/assets/quincaillerie/soleal-gy-conception-5744/roulettes-et-fermetures/fermeture-pompier-tgy3731-eclate.png)
+
+![Fermeture pompier : coupe, cote 8](/assets/quincaillerie/soleal-gy-conception-5744/roulettes-et-fermetures/fermeture-pompier-coupe-horizontale-cote-8.png)
+
+![Fermeture pompier : passage mini 1800, coupe verticale](/assets/quincaillerie/soleal-gy-conception-5744/roulettes-et-fermetures/fermeture-pompier-passage-mini-1800-coupe-verticale.png)
+
+![Fermeture pompier : passage mini 900, coupe horizontale](/assets/quincaillerie/soleal-gy-conception-5744/roulettes-et-fermetures/fermeture-pompier-passage-mini-900-coupe-horizontale.png)
+
+# Immobilisation du vantail et arrêt de vantail à clé
+
+Deux principes de montage sont dessinés sous le titre « immobilisation vantail - arrêt de vantail à clé » [1 p. 102].
+
+| Dispositif | Pièces repérées |
+| --- | --- |
+| Immobilisation du vantail | TGY3851, TGY3616 |
+| Arrêt de vantail à clé | TGY3640, TGY3622 |
+
+![Immobilisation du vantail : TGY3851 et TGY3616](/assets/quincaillerie/soleal-gy-conception-5744/roulettes-et-fermetures/immobilisation-vantail-tgy3851-tgy3616.png)
+
+![Arrêt de vantail à clé : TGY3640 et TGY3622](/assets/quincaillerie/soleal-gy-conception-5744/roulettes-et-fermetures/arret-de-vantail-a-cle-tgy3640-tgy3622.png)
+
+# Gâches
+
+La gâche est la pièce fixée sur le dormant ou sur le profilé de percussion qui reçoit le pêne de la fermeture. Une ligne par gâche [1 p. 103-104].
+
+| Référence | Position | Fixation imprimée |
+| --- | --- | --- |
+| TGY3705 | sur dormant périphérique | deux vis dessinées, non référencées |
+| TGY3711 | sur profilé percussion | 2x TGY3723 |
+| TGY3742 | sur dormant périphérique (gâche renforcée) | deux vis dessinées et une vis de pré-positionnement ; zooms OS et SF, côté « INTERIEUR » (**VER-481**) |
+
+![Gâche TGY3705 sur dormant périphérique](/assets/quincaillerie/soleal-gy-conception-5744/roulettes-et-fermetures/gache-sur-dormant-peripherique-tgy3705.png)
+
+![Gâche TGY3711 sur profilé percussion](/assets/quincaillerie/soleal-gy-conception-5744/roulettes-et-fermetures/gache-sur-profile-percussion-tgy3711.png)
+
+![Gâche renforcée TGY3742 : éclaté](/assets/quincaillerie/soleal-gy-conception-5744/roulettes-et-fermetures/gache-renforcee-tgy3742-eclate.png)
+
+![Gâche renforcée TGY3742 : détails OS et SF](/assets/quincaillerie/soleal-gy-conception-5744/roulettes-et-fermetures/gache-renforcee-tgy3742-detail-os-et-sf.png)
+
+Le montage et le réglage des gâches avec le gabarit de la fermeture, ainsi que la gâche renforcée TGY3742, sont sur [Centreurs, gâches et gâche renforcée du SOLEAL GY 55](/procedures/fabrication-soleal-gy-centreurs-gaches-et-gache-renforcee.md).
+
+# Centreurs d'ouvrant
+
+Le centreur d'ouvrant TGY3832 est à positionner au milieu de l'ouvrant. Dans le cas d'une solution effet bi-lame, mettre 2 centreurs TGY3832 [1 p. 105]. Le compensateur de centreur d'ouvrant sur profilé percussion est TGY3833, à positionner face au TGY3832, avec une vis TGY3723.
+
+![Centreur d'ouvrant TGY3832](/assets/quincaillerie/soleal-gy-conception-5744/roulettes-et-fermetures/centreur-d-ouvrant-tgy3832.png)
+
+![Compensateur de centreur TGY3833 sur profilé percussion](/assets/quincaillerie/soleal-gy-conception-5744/roulettes-et-fermetures/compensateur-de-centreur-tgy3833.png)
+
+# Autres éléments du coulissant, montage en atelier
+
+Le verrou central TGY3622 (usinages, roulettes à 62 mm, cales à 71 mm), la pièce de blocage TGY3616 et la butée TCG021 sont sur [Verrou central, pièce de blocage et butée](/procedures/fabrication-soleal-gy-verrou-central-blocage-et-butee.md). Le montage des fermetures et de la cale TGY3831 est sur [Montage des fermetures, cuvettes et cale](/procedures/fabrication-soleal-gy-montage-fermetures-cuvettes-et-cale.md), celui des poignées (dont TGY3606) sur [Montage des poignées et béquilles](/procedures/fabrication-soleal-gy-montage-poignees-et-bequille.md).
+
+## Réglage en hauteur des roulettes réglables
+
+Les chariots réglables (T441003, T441004, TGY3872) s'ajustent en hauteur sans dégonder le vantail, avec une clé Allen introduite par le chant latéral du montant d'ouvrant à travers l'orifice prévu à 25 mm de hauteur. Le vantail doit être soulagé à l'aide de ventouses de vitrier pendant le réglage.
+
+## Guides, pièces anti-dégondage et rosettes
+
+- Les guides de montants centraux TGY3883 se clipsent en tête et en pied de chaque montant central après le gondage des vantaux, verrouillés par rotation des flèches avec une clé Allen de 4 mm.
+- Les pièces anti-dégondage TGY3885 se montent sur chaque montant latéral après le réglage des roulettes.
+- Rosettes de protection de cylindre : T960013 ou TPY6003.
+
+Ces trois éléments viennent de pages du catalogue de fabrication hors de la plage 110 à 148 (à relire).
+
+# Ce que la source ne donne pas
+
+La désignation des gâches TGY3705, TGY3711 et TGY3742 et leur domaine d'emploi, l'unité du poids des chariots (**VER-203**) et la référence d'une clé pompier ne sont pas imprimés sur les planches de conception ; la planche de fabrication de la fermeture pompier ne porte pas non plus de référence de clé.
 
 # Voir aussi
 
 - [Profilés dormants et rails SOLEAL GY 55](/profiles/soleal-gy-dormants-et-rails.md)
-- [Cotes de débit SOLEAL GY 55](/profiles/soleal-gy-cotes-de-debit.md)
-- [Pose et galandage SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md)
+- [Règles de débit des dormants, ouvrants, vitrages et rails du coulissant SOLEAL GY 55](/profiles/soleal-gy-cotes-de-debit.md)
+- [Fabrication, pose et étanchéité du galandage Technal SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md)
 - [Fournisseur Technal](/fournisseurs/technal.md)
+
+# Citations
+
+[1] [SOLEAL GY 55, le coulissant universel, Conception, réf. 5744.005](raw/SOLEAL-GY-55-Catalogue-conception-5744-005-092021-Fr (1).pdf), p. 88-89, 100-105
+[2] [SOLEAL GY 55, le coulissant universel, Fabrication, réf. 5746.003](raw/SOLEAL-GY-55-Catalogue-fabrication-5746-003-092021-Fr.pdf), p. 118, 140 et 145 (imprimées 116, 138 et 143)

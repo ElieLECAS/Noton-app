@@ -19,7 +19,7 @@ source_pages:
     pages: 3-6
 generated:
   by: process:claude-code
-  at: 2026-10-09T07:30:00Z
+  at: 2026-10-09T07:51:08Z
 ---
 
 La porte SOLEAL PY 55 de [TECHNAL](/fournisseurs/technal.md) à 1 vantail reçoit le seuil PMR PY1100, le profilé bas sur lequel on passe (PMR : personne à mobilité réduite, voir le [glossaire](/reference/glossaire.md)). Les tableaux ci-dessous donnent, pour la porte à 1 vantail qui s'ouvre vers l'extérieur et pour celle qui s'ouvre vers l'intérieur, la liste des profilés avec leur débit, leurs angles de coupe et leur quantité, la liste des joints, le remplissage, les accessoires et les coupes horizontale et verticale. Les performances d'étanchéité de ces portes sont sur [Seuil PMR PY1100 de la porte SOLEAL PY 55](/procedures/technal-seuil-pmr-py1100.md).
@@ -60,7 +60,7 @@ Joints de la même porte, quantité en longueur :
 
 Le remplissage de cette porte a pour cotes H-214.5 et L-232. [1 p. 3]
 
-Accessoires de la même porte. L'application est présentée sans pièces d'étanchéité d'angle (720028 et 720029, voir [Pièces et outillage du seuil PMR PY1100](/quincaillerie/technal-seuil-py1100-pieces-et-outillage.md)) ; le nombre de paumelles 910001 se lit sur un abaque, absent des 33 pages.
+Accessoires de la même porte. L'application est présentée sans pièces d'étanchéité d'angle (720028 et 720029, voir [Pièces du seuil PMR PY1100](/quincaillerie/technal-seuil-py1100-pieces-et-outillage.md)) ; le nombre de paumelles 910001 est donné par « voir abaque », abaque absent des 33 pages.
 
 | Référence | Désignation | Quantité |
 | --- | --- | --- |
@@ -96,7 +96,7 @@ Coupe verticale de la porte à 1 vantail à ouverture extérieure, de la travers
 
 ![Porte à 1 vantail ouverture extérieure, coupe verticale](/assets/procedures/technal-seuil-py1100/1-vantail-ouverture-exterieure-coupe-verticale.png)
 
-Les repères sont 750201 (équerre d'assemblage 15x13.7), 225011, 710041, 225114, 750213, 591005, 410010, AS0017, 740012, PY5000, FS042, PY6000, PY1100 et PY4000. Cotes : 55 en tête ; H est la cote verticale totale ; en partie basse, 100, 22, 12 et 17.3. [1 p. 4]
+Les repères sont 750201 (équerre d'assemblage 15x13.7), 225011, 710041, 225114, 750213, 591005, 410010, AS0017, 740012, 225114, PY5000, FS042, PY6000, PY1100, 710041 et PY4000. Cotes : 55 en tête ; H est la cote verticale totale ; en partie basse, 100, 22, 12 et 17.3. [1 p. 4]
 
 (schéma: raw/SEUIL TECHNAL PY1100 DOC.pdf, p. 4)
 
@@ -171,7 +171,7 @@ Coupe verticale de la porte à 1 vantail à ouverture intérieure, de la travers
 
 ![Porte à 1 vantail ouverture intérieure, coupe verticale](/assets/procedures/technal-seuil-py1100/1-vantail-ouverture-interieure-coupe-verticale.png)
 
-Les repères sont 750201, 225011, 710041, 225104, 750213, 591005, AS0017, 740012, 770051, PY5000, PY6000, PY1100, PY2102 avec 710010, et PY4000. Cotes : 55 en tête ; H est la cote verticale totale ; en partie basse, 25, 19, 22, 117.3, 75 et 17.3. [1 p. 6]
+Les repères sont 750201, 225011, 710041, 225104, 750213, 591005, AS0017, 740012, 225104, 770051, PY5000, PY6000, 710041, PY1100, PY2102 avec 710010, et PY4000. Cotes : 55 en tête ; H est la cote verticale totale ; en partie basse, 25, 19, 22, 117.3, 75 et 17.3. [1 p. 6]
 
 (schéma: raw/SEUIL TECHNAL PY1100 DOC.pdf, p. 6)
 

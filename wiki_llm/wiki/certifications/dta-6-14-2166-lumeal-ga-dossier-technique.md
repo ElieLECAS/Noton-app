@@ -23,7 +23,7 @@ generated:
 stale_after: 2029-07-31
 ---
 
-Le dossier technique du DTA 6/14-2166_V2 décrit le coulissant aluminium à rupture de pont thermique **LUMEAL Minimal Ga** (système LUMEAL GA de [TECHNAL](/fournisseurs/technal.md), sur lequel est fabriqué le LUMÉAL55 de PROFERM) : sa commercialisation, ses éléments, les dimensions maximales de baie, la conception, la mise en œuvre, la fabrication et les essais. Il est « issu des éléments fournis par le titulaire et des prescriptions du Groupe Spécialisé acceptées par le titulaire » [1 p. 7]. L'avis du Groupe Spécialisé et le domaine d'emploi sont sur la page [Avis du Groupe Spécialisé et domaine d'emploi](/certifications/dta-6-14-2166-lumeal-ga.md). Les valeurs de cette page dépendent de **INC-370**, **INC-371**, **VER-162**, **VER-163** et **VER-164**.
+Le dossier technique du DTA 6/14-2166_V2 décrit le coulissant aluminium à rupture de pont thermique LUMEAL Minimal Ga (système LUMEAL GA de [TECHNAL](/fournisseurs/technal.md), sur lequel est fabriqué le LUMÉAL55 de PROFERM) : sa commercialisation, ses éléments, les dimensions maximales de baie, la conception, la mise en œuvre, la fabrication et les essais. Il est « issu des éléments fournis par le titulaire et des prescriptions du Groupe Spécialisé acceptées par le titulaire » [1 p. 7]. L'avis du Groupe Spécialisé et le domaine d'emploi sont sur la page [Avis du Groupe Spécialisé et domaine d'emploi](/certifications/dta-6-14-2166-lumeal-ga.md).
 
 # Mode de commercialisation (2.1)
 
@@ -51,20 +51,20 @@ Les différents composants (profilés, accessoires, …) sont représentés au p
 
 ## Éléments (2.2.3)
 
-**Cadre dormant (2.2.3.1).** Ce système de fenêtres ne présente pas de particularité par rapport aux fenêtres classiques [1 p. 7]. Le dormant est le cadre fixe scellé dans le mur ([glossaire](/reference/glossaire.md)).
+Cadre dormant (2.2.3.1). Ce système de fenêtres ne présente pas de particularité par rapport aux fenêtres classiques [1 p. 7]. Le dormant est le cadre fixe scellé dans le mur ([glossaire](/reference/glossaire.md)).
 
 - Drainage (2.2.3.1.1) : les détails des drainages sont présentés dans les schémas du paragraphe 2.10 Annexe du Dossier Technique, voir [drainage](/certifications/dta-6-14-2166-lumeal-ga-drainage.md).
 - Équilibrage de pression (2.2.3.1.2) : les détails des équilibrages de pression sont présentés dans les schémas du paragraphe 2.10 Annexe du Dossier Technique.
 - Assemblage des appuis tubulaires réf. 401027 et 401028 (2.2.3.1.3) : le détail de l'assemblage est présenté dans les schémas du paragraphe 2.10 Annexe du Dossier Technique. Ce système de fenêtres ne présente pas de particularité par rapport aux fenêtres classiques.
 - Fourrures d'épaisseurs et pièces d'appui (2.2.3.1.4) : ce système de fenêtres ne présente pas de particularité par rapport aux fenêtres classiques. Le détail de l'assemblage est présenté dans les schémas du paragraphe 2.10 Annexe du Dossier Technique [1 p. 7].
 
-**Cadre ouvrant (2.2.3.2).** Ce système de fenêtres ne présente pas de particularité par rapport aux fenêtres classiques. Le détail de l'assemblage est présenté dans les schémas du paragraphe 2.10 Annexe du Dossier Technique [1 p. 7]. L'ouvrant est le cadre mobile qui porte le vitrage.
+Cadre ouvrant (2.2.3.2). Ce système de fenêtres ne présente pas de particularité par rapport aux fenêtres classiques. Le détail de l'assemblage est présenté dans les schémas du paragraphe 2.10 Annexe du Dossier Technique [1 p. 7]. L'ouvrant est le cadre mobile qui porte le vitrage.
 
-**Cadre fixe (2.2.3.3).** Ce système de fenêtres ne présente pas de particularité par rapport aux fenêtres classiques. Le détail de l'assemblage est présenté dans les schémas du paragraphe 2.10 Annexe du Dossier Technique [1 p. 8].
+Cadre fixe (2.2.3.3). Ce système de fenêtres ne présente pas de particularité par rapport aux fenêtres classiques. Le détail de l'assemblage est présenté dans les schémas du paragraphe 2.10 Annexe du Dossier Technique [1 p. 8].
 
-**Ferrage - Verrouillage (2.2.3.4).** Quincaillerie : RIVALU. D'autres quincailleries peuvent être utilisées sur justifications [1 p. 8]. Les références de la quincaillerie du LUMEAL GA sont sur la page [Roulements et fermetures LUMEAL GA](/quincaillerie/lumeal-ga-roulements-et-fermetures.md).
+Ferrage - Verrouillage (2.2.3.4). Quincaillerie : RIVALU. D'autres quincailleries peuvent être utilisées sur justifications [1 p. 8]. Voir **CTR-133**. Les références de la quincaillerie du LUMEAL GA sont sur la page [Roulements et fermetures LUMEAL GA](/quincaillerie/lumeal-ga-roulements-et-fermetures.md).
 
-**Vitrage (2.2.3.5).** Isolant double de 24, 26, 28, 30 ou 32 mm d'épaisseur [1 p. 8].
+Vitrage (2.2.3.5). Isolant double de 24, 26, 28, 30 ou 32 mm d'épaisseur [1 p. 8]. Voir **CTR-134**.
 
 - Les vitrages des cadres ouvrants sont montés dans des feuillures type « portefeuille ». L'étanchéité est réalisée par un profilé « U » continu en EPDM, le talon étant pré-entaillé pour passer les angles sans couper le solin.
 - Les vitrages des cadres fixes sont montés dans des feuillures type « portefeuille ». L'étanchéité est réalisée par un profilé U en EPDM sur le montant central et par des joints à bourrer en EPDM continus côtés intérieur et extérieur sur le périmètre restant. La jonction des joints à bourrer avec le profilé U est étanchée par l'application d'une colle à base de MS polymère (W110).
@@ -73,7 +73,7 @@ Les différents composants (profilés, accessoires, …) sont représentés au p
 
 ## Dimensions maximales (2.2.3.6)
 
-Le tableau donne la hauteur H et la largeur L maximales de la baie (Baie H x L), en mètres, d'une fenêtre à 2 vantaux ou à 1 vantail + fixe posée en applique, selon les profilés de montants centraux. Une ligne correspond à une combinaison de montants centraux ; les deux combinaisons séparées par « ou » dans une même ligne de la source reçoivent les mêmes limites et sont écrites ici sur deux lignes. Les profilés de montants centraux sont décrits sur la page [profilés dormants et ouvrants de l'annexe](/certifications/dta-6-14-2166-lumeal-ga-profiles.md) [1 p. 8].
+Le tableau donne la hauteur H et la largeur L maximales de la baie (Baie H x L), en mètres, d'une fenêtre à 2 vantaux ou à 1 vantail + fixe posée en applique, selon les profilés de montants centraux. Une ligne correspond à une combinaison de montants centraux ; les deux combinaisons séparées par « ou » dans une même ligne de la source reçoivent les mêmes limites et sont écrites ici sur deux lignes. Les profilés de montants centraux sont décrits sur la page [profilés dormants et ouvrants de l'annexe](/certifications/dta-6-14-2166-lumeal-ga-profiles.md). Les intitulés « recouvrement mini » et « recouvrement maxi » ne sont définis nulle part dans le DTA : voir **VER-169**. Les limites de ce tableau sont à rapprocher des dimensions annoncées dans les documents commerciaux : voir **CTR-135** [1 p. 8].
 
 ### Pose en applique avec un recouvrement mini
 
@@ -119,7 +119,7 @@ Les fenêtres sont conçues compte tenu des performances prévues par le documen
 
 Dans le cas de vitrages d'épaisseur de verre supérieure à 10 mm, le fabricant devra s'assurer, par voie expérimentale, que la conception globale de la fenêtre (ferrage, profilés) permet de satisfaire aux critères mécaniques spécifiques prévus par la norme NF P 20-302, dans la limite des charges maximum prévue par la quincaillerie. Dans certains cas, il peut être nécessaire d'installer des buttées d'arrêt afin de pallier aux risques de casse thermique des vitrages [1 p. 8].
 
-**Les ouvrants des fenêtres équipées du dispositif de seuil réf. 4018028 doivent systématiquement posséder en traverse basse un rejet d'eau** [1 p. 8]. Voir **INC-371**.
+Les ouvrants des fenêtres équipées du dispositif de seuil réf. 4018028 doivent systématiquement posséder en traverse basse un rejet d'eau [1 p. 8]. Voir **INC-371**.
 
 # Disposition de mise en œuvre (2.4)
 
