@@ -8,7 +8,7 @@ systeme: LUMEAL GA
 status: stable
 generated:
   by: process:claude-code
-  at: 2026-10-10T15:23:08Z
+  at: 2026-10-11T12:59:55Z
 ---
 Termes, sigles et repères d'atelier employés dans le catalogue de fabrication 5074.007 du LUMEAL GA pour le dormant monorail, la partie fixe et les ouvrants. Chaque terme est glosé dans les mots de la source ; ce qu'elle ne définit pas est en fin de page, avec le numéro d'anomalie quand il y en a un.
 
@@ -28,7 +28,6 @@ Terme, sens écrit par le document et page du wiki qui l'emploie.
 | Collage des vitrages | opération des montants latéraux et centraux : « Délarder le joint à mi-hauteur sur 200mm » puis « Déposer un cordon de mastic de collage type Illbruck SP350 » ; « systématique » si H > 2.20m | [Traverses intermédiaires, joint de vitrage et collage des ouvrants LUMEAL GA](/procedures/lumeal-ga-traverses-intermediaires-joint-de-vitrage-et-collage.md) |
 | Compensateur de feuillure (T821002) | titre de la planche « Montage du compensateur de feuillure » ; la référence T821002 est écrite sur trois pièces de l'éclaté : une pièce horizontale et une pièce verticale dessinée par ses deux extrémités, fixées par des vis TVE017 ; la planche n'écrit pas son rôle | [Compensateur, cales, montant central, clips et capots de la partie fixe du LUMEAL GA](/procedures/lumeal-ga-assemblage-partie-fixe-en-atelier.md) |
 | Cuvette de tirage (T661004) | cuvette de tirage T661004 reçue par une découpe de 70 × 19 de la traverse basse T141015 | [Usinage des traverses d'ouvrants LUMEAL GA : cuvette T661004, 24-28 et 30-32 mm, drainage](/procedures/lumeal-ga-usinage-traverses-ouvrants.md) |
-| Drainage caché | mention de la planche 97 reliée par un trait à une lumière oblongue dessinée sur le rail bas T141013 | [Assemblage du dormant monorail, 1 vantail + fixe, du coulissant LUMÉAL55 (LUMEAL GA)](/procedures/lumeal-ga-assemblage-dormant-monorail-1-vantail-fixe.md) |
 | Fraisurage | opération 3 des planches de poignée TGA3618 + TGA3706 : « Fraisurage sur Ø7 => 0.5x45° » | [Usinage de la fixation des poignées TGA3618, TGA3606 et TGA6000 sur ouvrants LUMEAL GA](/procedures/lumeal-ga-usinage-fixation-poignee-ouvrants.md) |
 | Gabarit TGA7000 rep.1, rep.2 | gabarit de perçage : « Perçage avec gabarit TGA7000 rep.1 » pour les poignées des ouvrants de service et semi-fixe, « rep.2 » pour les poignées des montants percussion | [Usinage de la fixation des poignées TGA3618, TGA3606 et TGA6000 sur ouvrants LUMEAL GA](/procedures/lumeal-ga-usinage-fixation-poignee-ouvrants.md), [Usinage des ouvrants à percussion LUMEAL GA : T141033, T341008, poignées, fermeture](/procedures/lumeal-ga-usinage-ouvrants-a-percussion.md) |
 | Joint en portefeuille | joint de vitrage que l'on insère « autour du vitrage, en commençant par le milieu de la traverse haute » ; les découpes en angle « se réalisent automatiquement en tirant sur le joint dans les angles du vitrage » | [Traverses intermédiaires, joint de vitrage et collage des ouvrants LUMEAL GA](/procedures/lumeal-ga-traverses-intermediaires-joint-de-vitrage-et-collage.md) |

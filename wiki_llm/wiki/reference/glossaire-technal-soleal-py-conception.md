@@ -8,7 +8,7 @@ systeme: SOLEAL PY
 status: stable
 generated:
   by: process:claude-code
-  at: 2026-10-10T15:23:09Z
+  at: 2026-10-11T12:59:55Z
 ---
 Termes, sigles et repères employés dans le catalogue de conception 4944.006 de la porte SOLEAL PY 55. Chaque terme est glosé dans les mots de la source ; ce qu'elle ne définit pas est en fin de page, avec le numéro d'anomalie quand il y en a un.
 
@@ -82,7 +82,6 @@ Terme ou sigle écrit par un document sans être défini, page qui l'emploie et 
 | S, SF (dans « 2 vtx S », « 2 Vtx S. », « 2 VTX SF ») | tableaux des bouchons T525050 (PDF 91) | le sens de S, à côté de SF et de VS imprimés sur les dessins |
 | SA | « porte tube SA ou DA » (PDF 36, 37) | le développement du sigle sur ces pages |
 | TCP018, TPY3615, T920009 | nomenclatures des portes retard à l'effraction | ce que ces références désignent au-delà de « Verrou semi-fixe », « Paumelles 3 lames 150kg axe inox », « Pêne vertical » |
-| v (dans Ixx'/v, Iyy'/v) | tableau du TR9545 (PDF 29) | ce que représente la lettre |
 
 # Citations
 

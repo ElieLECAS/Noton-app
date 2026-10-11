@@ -8,7 +8,7 @@ systeme: LUMEAL GA
 status: stable
 generated:
   by: process:claude-code
-  at: 2026-10-10T15:23:07Z
+  at: 2026-10-11T12:59:55Z
 ---
 Abréviations, symboles et termes du récapitulatif des profilés, accessoires, joints, vis et outils du catalogue de conception 5156.007 du LUMEAL GA. Chaque terme est glosé dans les mots de la source ; ce qu'elle ne définit pas est en fin de page, avec le numéro d'anomalie quand il y en a un.
 

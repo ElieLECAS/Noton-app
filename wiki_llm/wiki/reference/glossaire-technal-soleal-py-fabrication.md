@@ -8,7 +8,7 @@ systeme: SOLEAL PY
 status: stable
 generated:
   by: process:claude-code
-  at: 2026-10-10T15:23:09Z
+  at: 2026-10-11T12:59:55Z
 ---
 Termes, sigles et repères employés dans le catalogue de fabrication 4899.007 de la porte SOLEAL PY 55. Chaque terme est glosé dans les mots de la source ; ce qu'elle ne définit pas est en fin de page, avec le numéro d'anomalie quand il y en a un.
 
@@ -50,7 +50,6 @@ Terme ou sigle écrit par un document sans être défini, page qui l'emploie et 
 | Obturateur de drainage | « Obturateur de drainage à placer côté intérieur suivant sens d'ouverture » (PDF 55) | pas de référence ni de position précise |
 | Ordocol | « Ordocol TW110 » (PDF 56) | le produit n'est pas défini |
 | Plinthe | « plinthe T700047 ou T225105 » (PDF 64, 76, 77, 79) | le profilé n'est pas défini, seules ses références sont écrites |
-| Toile | « Drainages tangents à la toile » (PDF 17, 31, 37) | la partie du profilé désignée n'est pas définie |
 | Traverse haute, traverse basse | « Traverse haute et montant », « Traverse basse et montant » (PDF 72 à 75) | la position de la traverse n'est pas définie |
 | Trusquinage | « Première vis à l'extrémité du trait de trusquinage » (PDF 10, 12) | le trait n'est pas défini |
 | X | cote « 300 » portée avec « X » (PDF 49) | la valeur ou le rôle de X |

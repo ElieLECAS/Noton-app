@@ -8,7 +8,7 @@ systeme: SOLEAL GY
 status: stable
 generated:
   by: process:claude-code
-  at: 2026-10-10T15:23:07Z
+  at: 2026-10-11T12:59:55Z
 ---
 Termes, sigles et repères employés dans les DTA 6/15-2261 (V3 et V1) et la notice d'installation du coulissant SOLEAL GY 55. Chaque terme est glosé dans les mots de la source ; ce qu'elle ne définit pas est en fin de page, avec le numéro d'anomalie quand il y en a un.
 
@@ -50,9 +50,7 @@ Terme ou sigle écrit par un document sans être défini, page qui l'emploie et 
 | A\*E\*V\* | « classement A\*E\*V\* des fenêtres », essais A\*E\*V\* (V3 p. 6, 10 ; V1 p. 4, 5, 11) | le sigle est employé sans développement ; le classement de perméabilité à l'air est donné par la classe A\*2, A\*3, A\*4 |
 | gondage | « se montent après gondage des ouvrants » (V1 p. 20) | non défini |
 | GS6 | « présentée au GS6 du 13/03/2024 » (V3 p. 2) | le sigle est employé après « Groupe Spécialisé n° 06 » |
-| L | Notice de pose SOLEAL GY 55, PDF p. 6, « Au-delà de L = 900 mm, immobilisation du rail bas obligatoire » | **VER-201** |
 | PA66, PP, POM | matières des accessoires et des chariots de la nomenclature (V1 p. 9) | non développés |
-| Prise de volume | Notice de pose SOLEAL GY 55, PDF p. 14, « Prise de volume 29 - 32 (profil réf: T141021) » et « Prise de volume 24 - 28 (profil réf: T141015) » : le terme n'est pas défini | **VER-204** |
 | talon d'étanchéité, bouclier préperçé, chicane, pontet | planches V1 p. 20, 22, 23 ; V3 p. 9, 15 | non définis ; la chicane est décrite comme reconstituée par le profilé polyamide serti (V3 p. 6) |
 
 # Citations

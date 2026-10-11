@@ -1,12 +1,12 @@
 ---
 type: Procédure
 title: Procédure de fabrication ASKEY Coulissant 65 NV
-description: Méthode d'atelier pour l'usinage, le poinçonnage, le drainage caché, l'assemblage des dormants coupe droite et le montage des ouvrants du Coulissant 65 NV ASKEY.
+description: Ordre de fabrication du Coulissant 65 NV ASKEY en neuf étapes (outils, usinages, drainage caché, dormants, seuil réduit, ouvrants, percussion centrale réduite, montages divers, pattes), avec les phrases d'interdiction imprimées et la page de chaque étape.
 tags: [procedure, atelier, fabrication, coulissant, drainage, usinage, askey]
 gamme: Coulissant 65 NV
 fournisseur: ASKEY
 usage: atelier
-status: stable
+status: draft
 sources:
   - resource: raw/askey5.pdf
     id: askey-coulissant-fabrication
@@ -14,120 +14,88 @@ sources:
     last_modified: 2022-12-14
 source_pages:
   - resource: raw/askey5.pdf
-    pages: 5-20, 25-56, 57-64, 65-82, 83-96, 97-118
+    pages: 7-140
 generated:
   by: process:claude-code
-  at: 2026-09-19T22:44:00Z
+  at: 2026-10-11T12:53:25Z
 ---
 
 # Ce que fait cette procédure
 
-Cette procédure décrit l'ensemble des opérations d'atelier pour la confection des menuiseries coulissantes **ASKEY Coulissant 65 NV** : débit, poinçonnage pneumatique sur table, usinages de drainage caché, assemblage des dormants en coupe droite, pose du seuil réduit RPT W1040050 ou du seuil PMR W3090163, et ferrage des vantaux [1 p. 5, 25, 65].
+Le Coulissant 65 NV de PROFERM est fabriqué sur le système coulissant ASKEY 65 NV ([gamme](/gammes/askey-coulissant-65-nv.md)). La fabrication suit l'ordre de l'atelier (catalogue ASKEY Y9720021, décembre 2022, 142 pages) : sept outils de découpe, les symboles d'atelier, les usinages des tapées et des ouvrants, le drainage caché, le montage des dormants, le seuil réduit, le montage des ouvrants, la percussion centrale réduite, les montages divers et le choix des pattes [1 p. 3-5]. Chaque étape ci-dessous renvoie à la page qui porte ses planches, ses références et ses cotes en millimètres ; une cote ou une référence n'est écrite que sur la page de son étape. La numérotation de pages est celle du fichier PDF (la page imprimée est le numéro du PDF moins 2).
 
----
+Les débits (cotes de coupe) sont sur la page [cotes de débit du Coulissant 65 NV](/profiles/askey-coulissant-65-nv-cotes-de-debit.md) et les profilés sur la page [dormants, ouvrants et chicanes](/profiles/askey-coulissant-65-nv-dormants-et-ouvrants.md).
 
 # Conditions et interdictions
 
-* **Obligation chicane PVC avant poinçonnage** : Le montage des chicanes centrales PVC W4030242 (ouvrant 24 mm) ou W4030243 (ouvrant 32 mm) est **obligatoire** avant tout passage du profilé dans l'outil de poinçonnage Y5740007 [1 p. 30, 31].
-* **Interdiction de perçage traversant en façade de rail** : Tous les drainages de traverse basse doivent déboucher dans la chambre de décompression sous le rail ; aucun trou n'est toléré en vue directe sur le rail bas [1 p. 58].
-* **Sécurité outillage** : Les poinçonneuses pneumatiques doivent être alimentées à une pression nominale de 6 à 7 bars avec commande bi-manuelle ou pédale protégée [1 p. 6, 8, 12].
-* **Masticage obligatoire des tubulures de seuil** : Sur seuil réduit W1040050, il est impératif d'injecter du mastic colle dans les tubulures par le dernier trou de drainage n°1 pour bloquer les échanges air/eau [1 p. 84].
+Les phrases suivantes sont imprimées sur les planches de fabrication, chacune à la page indiquée :
 
----
+- « Respecter les règles de sécurité et d'utilisation décrites dans la notice de l'outil. » (PDF 8, 10, 12) [1 p. 8].
+- Le montage des chicanes centrales PVC W4030242 (ouvrant 24 mm) et W4030243 (ouvrant 32 mm) est obligatoire avant l'usinage à l'outil Y5740007 (PDF 32, 33, 35, 36, 37) [1 p. 32-33].
+- « Etancher les marteaux avant de poser la mousse » (PDF 76, 77, 79) [1 p. 76].
+- « Injecter le mastic dans les tubulures par le dernier drainage n° 1 pour éviter l'échange air, eau. » (PDF 86, seuil réduit W1040050) [1 p. 86].
+- « Le support d'étanchéité doit être monté avant le montage du montant sur le seuil PMR RPT » (PDF 93) [1 p. 93].
+- « Pas de montage possible sur le côté sans renfort avec les ouvrants de 24 mm type W1041260. » (PDF 112) [1 p. 112].
+- « Pas de traverse en face des coffres de fermetures Cf. » (PDF 106, 107) [1 p. 106].
+- « Ne pas oublier d'effectuer les drainages. » (PDF 129, seuil PMR rapporté) [1 p. 129].
 
 # Étapes
 
-### 1. Débit des profilés
-* Couper l'ensemble des profilés d'ossature (dormants, ouvrants, chicanes, couvre-joints, tapées) à coupe droite à angle droit ($90^\circ - 90^\circ$) selon les formules de la fiche [Cotes de débit Coulissant 65 NV](/profiles/askey-coulissant-65-nv-cotes-de-debit.md) [1 p. 25].
+### 1. Outils de découpe et de poinçonnage (PDF 7 à 21)
 
-### 2. Poinçonnage et usinages d'atelier
-* **Montants dormants CD 65 (W1041284)** :
-  * Découpe des traverses sur poinçonneuse W5040370 (postes 1G et 1D, découpe de 50 mm) [1 p. 7].
-  * Perçage des passages de vis Ø5 mm et trous Ø10 mm sur poinçonneuse W5040371 (poste 3, entraxes 43,3 mm et 10,85 mm) [1 p. 9].
-* **Montants d'ouvrants (24 et 32 mm)** :
-  * Clipper la chicane PVC sur le profilé aluminium [1 p. 30].
-  * Passer dans l'outil Y5740007 :
-    * Poste 1 (ouvrants 28-32 mm) ou Poste 5 (ouvrants 24 mm) : délardage des ailettes sur 64 mm aux extrémités [1 p. 15].
-    * Postes 2, 3 et 4 : poinçonnage du passage de rail aux extrémités (lumière de 22 mm de hauteur, découpe à 28 mm et 39 mm) [1 p. 15, 31].
-* **Traverses d'ouvrants** :
-  * Réaliser les perçages de drainage et d'équilibrage de pression Ø8 mm sur perceuse à colonne :
-    * Traverses hautes et basses : 1 trou Ø8 mm à 140 mm de chaque extrémité [1 p. 36].
-    * Traverses intermédiaires : 1 trou Ø8 mm à 5 mm de chaque extrémité [1 p. 36].
-* **Traverses basses dormants (drainage caché)** :
-  * Sur outil Y5740008 (poste 1) : découper les lumières oblongues de 6x25 mm (2 fentes séparées de 8 mm) [1 p. 17, 58].
-  * Espacement : 1 double trou à 85 mm de chaque extrémité, puis répartir des trous intermédiaires au pas maximal de 300 mm [1 p. 59-62].
+Sept outils de poinçonnage pneumatique font les découpes et les perçages : W5040370, W5040371, W5040423, Y5740006, Y5740007, Y5740008, Y5740010. Les postes de chaque outil, les profilés servis et les cotes sont sur les pages [poinçonneuses W5040370, W5040371, W5040423](/machines/askey-coulissant-65-nv-poinconneuses-w5040370-w5040371-et-w5040423.md) (PDF 8 à 13) et [poinçonneuses Y5740006, Y5740007, Y5740008, Y5740010](/machines/askey-coulissant-65-nv-poinconneuses-y5740006-y5740007-y5740008-et-y5740010.md) (PDF 14 à 21) ; la nomenclature est sur la page [outils de découpe et de poinçonnage](/machines/askey-coulissant-65-nv-outils-de-decoupe.md). Les pictogrammes qui apparaissent sur les planches sont décrits sur la page du [glossaire du catalogue de fabrication](/reference/glossaire-askey-coulissant-65-nv-fabrication.md) (PDF 24 à 26).
 
-### 3. Montage des dormants coupe droite
-1. **Pose des rails rapportés** : Emboîter le rail de roulement aluminium W3041224 ou inox W4000158 dans la gorge du profilé bas, et le sertir par frappe douce à l'aide d'une cale martyr en bois [1 p. 66].
-2. **Équipements de traverse haute** : Glisser le joint brosse W4010503 dans la rainure centrale de traverse haute, en laissant un retrait de 3 mm aux extrémités [1 p. 67].
-3. **Mise en place de l'étanchéité** :
-   * Positionner les busettes de drainage caché W4040615 au droit des découpes [1 p. 69].
-   * Poser le talon d'étanchéité W4040540 au centre du croisement des rails, injecter du mastic colle SNJF neutre bas module sur les marteaux de sertissage [1 p. 70].
-   * Appliquer les flasques mousse adhésives Y4720013 / Y4720014 ou les flasques TPE Y4720004 / Y4720005 sur le bout du profilé [1 p. 74-79].
-4. **Assemblage mécanique du cadre** :
-   * Rapprocher les montants et traverses en coupe droite.
-   * Visser les vis à tôle inox CBLX ST4.8x32 T25 W4070050 dans les alvéoles de vissage (couple de serrage contrôlé) [1 p. 74-78].
-5. **Finition thermique** : Clipper les boucliers thermiques PVC W4030239 (drainé en traverse basse), W4030240 (entre-rail) et W4030241 (montant) à l'aide de la roulette de montage W5040218 [1 p. 80].
+### 2. Usinages des tapées et des couvre-joints (PDF 28 à 30)
 
-### 4. Usinage et montage du seuil réduit W1040050
-1. Réaliser les grugeages d'extrémité sur le seuil réduit à la fraiseuse [1 p. 84].
-2. Usiner les drainages du seuil :
-   * Usinage n°1 (vantail principal) : oblong 15x5 mm sans clapet.
-   * Usinage n°2 (vantail secondaire) : oblong 26x5 mm avec busette à clapet W4040625.
-   * Usinage n°3 : évacuation du recueil d'eaux.
-3. Injecter un cordon de mastic d'étanchéité dans les tubulures par le dernier trou n°1 [1 p. 84].
-4. Positionner la flasque mousse de seuil réduit Y4720012, clipser le pontet d'étanchéité W4040802 au droit du croisement central et visser la lisse de pose W8020007 sous le seuil [1 p. 88, 91, 95].
+Perçage des tapées W4000165 à W4000205 à l'outil W5040370 et délardage des couvre-joints W3090121 à W3090123 à l'outil W5040371 : page [perçage des tapées et délardage des couvre-joints](/procedures/fabrication-coulissant-askey-65-nv-percage-des-tapees-et-delardage-des-couvre-joints.md) [1 p. 28-30].
 
-### 5. Assemblage des ouvrants
-1. **Pose du vitrage** : Dérouler le joint portefeuille de vitrage (Y4710001, Y4710009 ou Y4710010) autour du double vitrage. Couper le solin dans les angles et rabattre le joint en continu [1 p. 98].
-2. **Pose des roulettes** :
-   * Ouvrants 24 mm : insérer les roulettes simples W6050151 ou doubles W6050153 dans les montants latéraux et centraux [1 p. 99].
-   * Ouvrants 32 mm : clipser la cale d'adaptation W6050149, puis insérer la roulette [1 p. 100, 101].
-3. **Assemblage du cadre d'ouvrant** :
-   * Emboîter les traverses hautes et basses W1041264 ou W1041274 sur les montants.
-   * Visser les vis inox Torx ST4.8x41 W0198125 à travers les montants dans les alvéoles de traverses [1 p. 102, 103].
-   * Poser les embouts plastiques d'ouvrants W4040500 / W4040501 faisant office d'antidégondage [1 p. 102].
-4. **Montage des ferrures et poignées** :
-   * Glisser la crémone 1, 2 ou 3 points (W6050100 à 104) dans la gorge du montant latéral.
-   * Poser les rivets taraudés et visser la poignée W6050120 ou W6050125 avec le carré de 7 mm correspondant [1 p. 109, 110].
-   * Placer le centreur de vantail W4040622 immédiatement au-dessus du système anti-fausse manœuvre [1 p. 128].
+### 3. Usinages des ouvrants (PDF 32 à 58)
 
-### 6. Percussion centrale réduite (option 4 vantaux)
-* Usiner les passages de rails sur les montants réduits Y1740040 (semi-fixe) et Y1740041 (principal) [1 p. 116].
-* Fixer le profilé de jonction centrale rapportée Y3740022 à l'aide de vis TF ST3.5x16 au pas de 300 mm (couple maxi 20 Nm) [1 p. 54, 117].
-* Poser les embouts spécifiques de percussion centrale réduite Y4740038 et Y4740039 [1 p. 118].
+- Chicanes, passages de rail, de traverse et de recueil d'eau, perçages de drainage des traverses, renforts : page [usinages des ouvrants](/procedures/fabrication-coulissant-askey-65-nv-usinages-des-ouvrants-chicanes-rails-et-traverses.md) (PDF 32 à 39).
+- Poignées et fermetures 1 à 3 points : page [usinages des poignées W6050120 à W6050284 et fermetures 1 à 3 points](/procedures/fabrication-coulissant-askey-65-nv-usinages-des-poignees-et-fermetures-1-a-3-points.md) (PDF 40 à 44).
+- Bloc à verrou et poignées W6050285, W6050286 : page [usinages du bloc à verrou](/procedures/fabrication-coulissant-askey-65-nv-usinages-des-fermetures-bloc-a-verrou-et-poignee-w6050285.md) (PDF 45 à 52).
+- Poignées fixes, jonction en ligne W3041249, prolongateur, butée : page [poignées fixes, jonction en ligne, prolongateur et butée](/procedures/fabrication-coulissant-askey-65-nv-usinages-des-poignees-fixes-jonction-en-ligne-prolongateur-et-butee.md) (PDF 53 à 58).
 
----
+### 4. Drainage caché (PDF 60 à 65)
+
+Principe d'évacuation des eaux, répartition des drainages en 2, 3 et 4 vantaux et seuil PMR rapporté : page [drainage caché 2, 3 et 4 vantaux](/procedures/fabrication-coulissant-askey-65-nv-drainage-cache-2-3-et-4-vantaux.md) [1 p. 60-65].
+
+### 5. Montage des dormants (PDF 68 à 83)
+
+- Rails, brosse, joint cache rainure, gâches, busette de drainage caché, talon d'étanchéité, bouchons de recueil d'eau : page [montage des dormants](/procedures/fabrication-coulissant-askey-65-nv-montage-des-dormants-rails-brosse-joints-busette-et-talon.md) (PDF 68 à 74).
+- Dormants en coupe droite CD65 et NV (flasques mousse ou TPE, vis W4070050, boucliers thermiques, embouts de calfeutrement) : page [assemblage des dormants en coupe droite](/procedures/fabrication-coulissant-askey-65-nv-assemblage-des-dormants-en-coupe-droite.md) (PDF 76 à 83).
+
+### 6. Seuil réduit W1040050 (PDF 86 à 97)
+
+Usinages et drainages du seuil : page [usinages et drainages du seuil réduit](/procedures/fabrication-coulissant-askey-65-nv-usinages-et-drainages-du-seuil-reduit-w1040050.md) (PDF 86 à 89). Assemblage du montant, zone à étancher, lisse W8020007, boucliers, pontet W4040802 : page [assemblage du seuil réduit](/procedures/fabrication-coulissant-askey-65-nv-assemblage-du-seuil-reduit-lisse-boucliers-et-pontet.md) (PDF 90 à 97).
+
+### 7. Montage des ouvrants (PDF 100 à 116)
+
+Joints de vitrage, roulettes, assemblage des montants et des traverses, bouchons de renfort : page [montage des ouvrants](/procedures/fabrication-coulissant-askey-65-nv-montage-des-ouvrants-vitrage-roulettes-et-cadres.md) (PDF 100 à 108). Fermetures, poignées, profilé rapporté W3041249, butée W6060315, réhausseur Y3041328 : page [montage des fermetures, poignées, butée et réhausseur](/procedures/fabrication-coulissant-askey-65-nv-montage-des-fermetures-poignees-butee-et-rehausseur.md) (PDF 109 à 116).
+
+### 8. Percussion centrale réduite (PDF 118 à 120)
+
+Rubrique ajoutée le 14/12/2022 : usinage des montants Y1740041 et Y1740040, assemblage de la jonction de vantaux en ligne et du montant latéral sur la traverse : page [percussion centrale réduite](/procedures/fabrication-coulissant-askey-65-nv-percussion-centrale-reduite.md). Les nomenclatures de l'application sont sur la page [4 vantaux à percussion centrale réduite](/profiles/askey-coulissant-65-nv-cotes-de-debit-nv-4-vantaux-percussion-reduite.md).
+
+* Fixer le profilé de jonction de vantaux en ligne Y3740022 à l'aide de vis TF ST3.5x16 au pas de 300 mm maximum (couple 2 DaN.m, soit 20 Nm) [1 p. 119].
+
+### 9. Montages divers et pattes de fixation (PDF 122 à 138)
+
+- Rejet d'eau W3041281 et W3041282 sur les dormants à drainage caché, démontage des boucliers thermiques : page [rejet d'eau et démontage des boucliers](/procedures/fabrication-coulissant-askey-65-nv-montages-divers-rejet-d-eau-et-demontage-des-boucliers.md) (PDF 122 à 126).
+- Tapées d'angle haut et bas, seuil PMR rapporté, centreurs de vantail, embouts de tapées DBL 100 à 200 mm, étanchéité au gros œuvre : page [tapées, seuil PMR, centreurs et embouts](/procedures/fabrication-coulissant-askey-65-nv-montages-divers-tapees-seuil-pmr-centreurs-et-embouts.md) (PDF 127 à 133).
+- Choix et positionnement des pattes de fixation (14 pattes W4080340 à W4080420, doublage de 100 à 200 mm, rejingot décalé ou aligné) : page [positionnement des pattes de fixation](/procedures/askey-coulissant-65-nv-positionnement-des-pattes-de-fixation.md) ; les planches PDF 136 à 138 portent le même schéma de positionnement, le même tableau des 14 pattes et la même matrice de choix que la page des pattes [1 p. 136-138].
 
 # Cotes
 
-Positionnement des usinages et des outillages [1 p. 7, 9, 31, 38] :
-
-| Opération | Outil d'atelier | Cote relevée (mm) | Tolérance |
-| --- | --- | --- | --- |
-| Découpe montants CD65 | W5040370 | Découpe 50 mm sur ailette | $\pm 0{,}5\text{ mm}$ |
-| Perçages passage vis montant | W5040371 | Entraxes 10,85 mm et 43,3 mm | $\pm 0{,}2\text{ mm}$ |
-| Délardage ailettes ouvrants | Y5740007 | Longueur 64 mm | $\pm 0{,}5\text{ mm}$ |
-| Passage de rail ouvrant | Y5740007 | Hauteur 22 mm, retraits 28 et 39 mm | $\pm 0{,}2\text{ mm}$ |
-| Lumière drainage dormant | Y5740008 | 2 fentes 6 x 25 mm, entre-axe 8 mm | $\pm 0{,}5\text{ mm}$ |
-| Trous drainage traverses ouvrant | Perceuse | Ø8 mm à 140 mm des extrémités | $\pm 2\text{ mm}$ |
-| Fixation poignée sur montant | Gabarit | Entraxe 43 mm, carrés 7 mm | $\pm 0{,}2\text{ mm}$ |
-
-(schéma: raw/askey5.pdf, p. 7, 9, 15, 17, 31, 38)
-
----
+Les cotes d'usinage et de montage sont portées par les pages des étapes ci-dessus, planche par planche : aucune cote n'est répétée ici. Aucune tolérance n'est imprimée sur les planches d'usinage de PDF 8 à 21.
 
 # Ce que le document ne dit pas
 
-* Le temps de polymérisation complet du mastic colle SNJF avant manipulation du cadre n'est pas spécifié (se conformer à la fiche technique du fabricant de mastic, typiquement 24 h à 20°C).
-
----
+Le temps de séchage du mastic, la pression d'air et la commande des outils, les couples de serrage des vis des dormants et les produits désignés par « Etancher » ne sont pas imprimés sur les planches de fabrication. Le seul mastic imprimé avec une catégorie est « SNJF 1ière catégorie », à la fixation du réhausseur (PDF 116) [1 p. 116].
 
 # Citations
 
-[1] [Coulissant 65 NV ASKEY - Fabrication](raw/askey5.pdf), p. 5-20, 25-56, 57-64, 65-82, 83-96, 97-118
-
----
+[1] [Coulissant 65 NV ASKEY - Fabrication](raw/askey5.pdf), p. 3-5, 8, 28-30, 32-33, 60-65, 76, 86, 93, 106, 112, 116, 119, 129, 136-138
 
 # Voir aussi
 

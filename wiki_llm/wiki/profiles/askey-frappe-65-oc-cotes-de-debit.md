@@ -1,13 +1,13 @@
 ---
 type: Profilé
-title: Cotes de débit ASKEY Frappe 65 Ouvrant Caché
-description: Formules de débit, abaques de coupe et nomenclatures pour les fenêtres, portes-fenêtres, ensembles composés et châssis fixes Frappe 65 OC ASKEY.
-tags: [cote-de-debit, aluminium, frappe, ouvrant-cache, askey, debit, atelier]
+title: "Cotes de débit Frappe 65 OC ASKEY : 1 vantail C45, fixe, 2 vantaux DT HI (PV 28)"
+description: "Débits de coupe, joints, accessoires et remplissages des applications 1 à 3 de la Frappe 65 OC ASKEY en vitrage 28 mm : fenêtre 1 vantail C45, châssis fixe, fenêtre 2 vantaux DT HI, avec plans cotés."
+tags: [cote-de-debit, askey, frappe, ouvrant-cache, debit, nomenclature, plan, chassis-fixe, fenetre, atelier]
 gamme: Frappe 65 Ouvrant Caché
 fournisseur: ASKEY
 usage: atelier
 famille: cotes-de-debit
-status: stable
+status: draft
 sources:
   - resource: raw/askey3.pdf
     id: askey-frappe-oc-conception
@@ -15,154 +15,194 @@ sources:
     last_modified: 2023-02-20
 source_pages:
   - resource: raw/askey3.pdf
-    pages: 149-183
+    pages: 152-157
 generated:
   by: process:claude-code
-  at: 2026-09-19T22:34:00Z
+  at: 2026-10-10T23:05:55Z
 ---
 
-# Cotes de débit ASKEY Frappe 65 Ouvrant Caché
-
-Les cotes de débit de la gamme **Frappe 65 Ouvrant Caché ASKEY** régissent les dimensions de coupe des dormants, des ouvrants cachés, des parcloses, des feuillures et des volumes de vitrage [1 p. 149].
-
-Les dimensions hors-tout dormant sont désignées par $L$ (largeur) et $H$ (hauteur). Les dimensions du cadre d'ouvrant sont désignées par $LCO$ (largeur cadre ouvrant) et $HCO$ (hauteur cadre ouvrant).
-
----
+La Frappe 65 Ouvrant Caché de PROFERM est fabriquée sur le système ASKEY Frappe 65 Ouvrant Caché ([gamme](/gammes/askey-frappe-65-oc.md)). Une application est un châssis complet (nombre de vantaux, vitrage, dormant, seuil) pour lequel le catalogue de conception donne ensemble le plan coté (page paire) et la nomenclature avec les débits de coupe (page impaire). Les applications 1 à 3 sont décrites ici. Le dormant est le cadre fixe scellé dans le mur, l'ouvrant le cadre mobile qui porte le vitrage, la parclose la baguette qui maintient le vitrage, la bavette la pièce d'appui rejetant l'eau en pied, la tapée la pièce de finition côté doublage, le doublage l'isolant posé sur le mur ; PMR signifie personnes à mobilité réduite (seuil bas) et PV prise de vitrage ; les autres sigles sont au [glossaire](/reference/glossaire.md). H et L sont la hauteur et la largeur du châssis, LCO et HCO la largeur et la hauteur du cadre d'ouvrant, toutes en mm ; une formule de débit (« L-48 », « LCO-59 ») est la longueur de coupe de la pièce en mm. La cote « vue de verre » du plan et la dimension du remplissage du tableau diffèrent (H - 155 et H -131 à l'application 1), sans définition de la vue de verre sur les planches (**VER-834**).
 
 # Cotes
 
-### 1. Fenêtre 1 vantail C45 - Prise de vitrage 28 mm
+## Application 1 : Frappe OC 1 vantail C45 PV 28mm
 
-Application dormant coupe d'onglet 45°, ouvrant galbé W1010224, double vitrage 28 mm [1 p. 151] :
+L'application 1 est la fenêtre Frappe OC à un vantail, dormant à coupe d'onglet 45° (« C45 »), prise de vitrage (PV) de 28 mm. Son titre imprimé est « Frappe OC 1 vantail C45 PV 28mm » ; le plan est à la page 152, la nomenclature à la page 153 [1 p. 152, 153].
 
-| Élément | Référence | Désignation | Qté | Longueur de débit (mm) | Angle de coupe |
-| --- | --- | --- | --- | --- | --- |
-| Dormant horizontal | **W1010132** | Dormant drainage caché C45 | 2 | $L$ | 45°-45° |
-| Dormant vertical | **W1010132** | Dormant drainage caché C45 | 2 | $H$ | 45°-45° |
-| Ouvrant horizontal | **W1010224** | Ouvrant caché 28 mm (+ 3 joints) | 2 | $LCO = L - 48$ | 45°-45° |
-| Ouvrant vertical | **W1010224** | Ouvrant caché 28 mm (+ 3 joints) | 2 | $HCO = H - 48$ | 45°-45° |
-| Parclose TPE | **W4033002** | Parclose TPE extérieure noire | 2 | $LCO - 59$ | 45°-45° |
-| Parclose TPE | **W4033002** | Parclose TPE extérieure noire | 2 | $HCO - 59$ | 45°-45° |
-| Bavette d'appui | **W4000169** | Bavette tubulaire doublage 120 mm | 1 | $L - 17$ | 90°-90° |
-| Tapée latérale | **W4000166** | Tapée doublage 120 mm | 2 | $H + 25$ | 90°-90° |
-| Tapée haute | **W4000166** | Tapée doublage 120 mm | 1 | $L - 13$ | 90°-90° |
-| Double vitrage | Remplissage | Double vitrage 28 mm | 1 | $(H - 131) \times (L - 131)$ | Rectangulaire |
+![Application 1, coupe verticale et coupe horizontale](/assets/procedures/askey-frappe-65-oc-conception/applications/application-01-1-vantail-c45-pv-28.png)
 
-(schéma: raw/askey3.pdf, p. 151)
+Lecture du plan : la coupe verticale (à gauche, cotée en hauteur H) repère W4033002, W4080313, W4040475, W1010132, W4000169, W0198133 et W1010224 ; la coupe horizontale (à droite, cotée en largeur L) repère W4000166. Cotes de la coupe verticale, en mm, de haut en bas : 25, 24, 5,5, 6, 53,5, 5, 12, « Vue de verre = H - 155 », 28, 12, 5, 53,5, 6, 5,5 et 24, puis HCO et H. Cotes de la coupe horizontale, en mm : 24, 53,5, « Vue de verre = L - 155 », 53,5 et 24 sur la largeur, puis L et LCO ; 6, 5, 12 (à gauche) et 12, 5, 6 (à droite) sous les ouvrants, 5,5 (deux fois), 28 (épaisseur du vitrage) et 6,5 (deux fois, au pied des tapées). (schéma: raw/askey3.pdf, p. 152)
 
-### 2. Châssis fixe dormant périphérique - Vitrage 28 mm
+### Profilés de l'application 1
 
-Application dormant BTC W1010064, parclose aluminium intérieure droite W3090174 [1 p. 153] :
+Tableau « PROFILES » : une ligne par référence et par débit ; Qté est le nombre de pièces à débiter, Débit la longueur de coupe en mm (H hauteur, L largeur du châssis ; LCO largeur et HCO hauteur du cadre d'ouvrant), Coupe l'angle des extrémités en degrés. La parclose W4033002 est désignée « Parclose OV » à cette application et « Parclose TPE OC » aux autres (**INC-800**) [1 p. 153].
 
-| Élément | Référence | Désignation | Qté | Longueur de débit (mm) | Angle de coupe |
-| --- | --- | --- | --- | --- | --- |
-| Dormant horizontal | **W1010064** | Dormant BTC coupe 45° | 2 | $L$ | 45°-45° |
-| Dormant vertical | **W1010064** | Dormant BTC coupe 45° | 2 | $H$ | 45°-45° |
-| Parclose horizontale | **W3090174** | Parclose droite H 41 mm | 2 | $L - 60$ | 90°-90° |
-| Parclose verticale | **W3090174** | Parclose droite H 41 mm | 2 | $H - 142$ | 90°-90° |
-| Bavette d'appui | **W3090161** | Bavette 40 mm rainure BTC | 1 | $L - 14$ | 90°-90° |
-| Support cale vitrage | **W8020003** | Profil support cales fixe | 1 | $L - 100$ | 90°-90° |
-| Double vitrage | Remplissage | Double vitrage 28 mm | 1 | $(H - 114) \times (L - 114)$ | Rectangulaire |
+| Référence | Désignation | Qté | Débit (mm) | Coupe (°) |
+| --- | --- | --- | --- | --- |
+| W1010132 | Dormant drainage caché arrière BTC C45 | 2 | L | 45 |
+| W1010132 | Dormant drainage caché arrière BTC C45 | 2 | H | 45 |
+| W1010224 | OC vit. 28 mm joint noir x3 | 2 | LCO=L-48 | 45 |
+| W1010224 | OC vit. 28 mm joint noir x3 | 2 | HCO=H-48 | 45 |
+| W4033002 | Parclose OV | 2 | LCO-59 | 45 |
+| W4033002 | Parclose OV | 2 | HCO-59 | 45 |
+| W4000169 | Bavette tubulaire dbl 120 pré-percé | 1 | L-17 | 90 |
+| W4000166 | Tapée pour doublage de 120mm pré-percé | 1 | L-13 | 90 |
+| W4000166 | Tapée pour doublage de 120mm pré-percé | 2 | H+25 | 90 |
+
+### Accessoires de l'application 1
+
+Tableau « ACCESSOIRES » : une ligne par référence, Qté en nombre de pièces (ou par mètre linéaire, « 3/ml ») [1 p. 153].
+
+| Référence | Désignation | Qté |
+| --- | --- | --- |
+| W0198133 | Vis autoperceuse 4.2x11 mm | 3/ml |
+| W4040455 | Bouchons pièce d'appui 100-120 | 1 |
+| W4040475 | Bouchons étanchéité angle C45 battue 44 | 4 |
+| W4040730 | Flasque tapée dbl 120mm | 1 |
+| W4050454 | Equerre nez PA | 4 |
+| W4050510 | Equerre d'alignement | 4 |
+| W4070002 | Goupille à visser Ø6 | 24 |
+| W4080313 | Support de cale de vitrage 28mm | 6 |
+| W4950246 | Equerre moulée ch. 18mm | 4 |
+| W4950255 | Equerre moulée ch. 18mm drainage caché | 4 |
+| W4950276 | Equerre moulée inj ch. 18.5, ouvrant 28mm | 4 |
+
+### Remplissage de l'application 1
+
+| Remplissage | Qté | Dimensions (mm) |
+| --- | --- | --- |
+| Double vitrage 28mm | 1 | H -131 ; L -131 |
 
 (schéma: raw/askey3.pdf, p. 153)
 
-### 3. Fenêtre 2 vantaux DT HI - Prise de vitrage 28 mm
+## Application 2 : Frappe OC fixe
 
-Application dormant HI W1010390, battement central Y3710012, capot poignée centrée W3090108 [1 p. 155] :
+L'application 2 est le châssis fixe Frappe OC (vitrage 28 mm, dormant périphérique à coupe d'onglet, parclose droite). Son titre imprimé est « Frappe OC fixe » ; le plan est à la page 154, la nomenclature à la page 155 [1 p. 154, 155].
 
-| Élément | Référence | Désignation | Qté | Longueur de débit (mm) | Angle de coupe |
-| --- | --- | --- | --- | --- | --- |
-| Dormant horizontal | **W1010390** | Dormant HI coupe 45° | 2 | $L$ | 45°-45° |
-| Dormant vertical | **W1010390** | Dormant HI coupe 45° | 2 | $H$ | 45°-45° |
-| Ouvrant horizontal | **W1010303** | Ouvrant 28 mm noir x3 | 4 | $LCO = L/2 - 12$ | 45°-45° |
-| Ouvrant vertical | **W1010303** | Ouvrant 28 mm noir x3 | 3 | $HCO = H - 48$ | 45°-45° |
-| Ouvrant semi-fixe | **W1010417** | Ouvrant secondaire + 1 joint | 1 | $H - 50$ | 45°-45° |
-| Parclose TPE horiz | **W4033002** | Parclose TPE ouvrant | 4 | $LCO - 59$ | 45°-45° |
-| Parclose TPE vert | **W4033002** | Parclose TPE ouvrant | 4 | $HCO - 59$ | 45°-45° |
-| Battement central | **Y3710012** | Battement central HI pré-percé | 1 | $H - 162$ | 90°-90° |
-| Capot poignée cent. | **W3090108** | Capot battement poignée centrée | 1 | $H - 50$ | 90°-90° |
-| Double vitrage | Remplissage | Double vitrage 28 mm | 2 | $(H - 131) \times (L/2 - 95)$ | Rectangulaire |
+![Application 2, coupe verticale et coupe horizontale](/assets/procedures/askey-frappe-65-oc-conception/applications/application-02-fixe-pv-28.png)
+
+Lecture du plan : la coupe verticale (à gauche, cotée en H) repère W4040475, W3090174, W4010003, W4010016, W8020003, W1010064, W3090161 et W0198133 ; la coupe horizontale (à droite, cotée en L) repère W4080364. Cotes de la coupe verticale, en mm, de haut en bas : 57, 17, « Vue de verre=H-148 », 17, 5, 57 sur le côté gauche ; 30, 41, 28 (épaisseur du vitrage), 41, 30 sur le côté droit, avec « Fond de feuillure = H-60 » et H. Cotes de la coupe horizontale, en mm : 30, « Fond de feuillure = L-60 », 30 et L en haut ; 6,5 et 4 à droite du vitrage ; 57, 17, « Vue de verre = L-148 », 17, 57 et 5 en bas. (schéma: raw/askey3.pdf, p. 154)
+
+### Profilés de l'application 2
+
+Tableau « PROFILES » : une ligne par référence et par débit ; Qté est le nombre de pièces à débiter, Débit la longueur de coupe en mm, Coupe l'angle des extrémités en degrés [1 p. 155].
+
+| Référence | Désignation | Qté | Débit (mm) | Coupe (°) |
+| --- | --- | --- | --- | --- |
+| W1010064 | Dormant BTC | 2 | L | 45 |
+| W1010064 | Dormant BTC | 2 | H | 45 |
+| W3090174 | Parclose droite H 41mm l 22mm | 2 | L-60 | 90 |
+| W3090174 | Parclose droite H 41mm l 22mm | 2 | H-142 | 90 |
+| W3090161 | Bavette 40mm rainure BTC | 1 | L-14 | 90 |
+| W8020003 | Support cale vitrage ≤ 32mm | 1 | L-100 | 90 |
+
+### Joints de l'application 2
+
+Tableau « JOINTS » : Qté en nombre de pièces, Débit la longueur en mm (L ou H, sans retrait) [1 p. 155].
+
+| Référence | Désignation | Qté | Débit (mm) |
+| --- | --- | --- | --- |
+| W4010003 | Joint extérieur vitrage noir | 2 | L |
+| W4010003 | Joint extérieur vitrage noir | 2 | H |
+| W4010016 | Joint vitrage intérieur 6mm noir | 2 | L |
+| W4010016 | Joint vitrage intérieur 6mm noir | 2 | H |
+
+### Accessoires de l'application 2
+
+| Référence | Désignation | Qté |
+| --- | --- | --- |
+| W0198133 | Vis autoperceuse 4.2x11 mm | 3/ml |
+| W4040475 | Bouchons étanchéité angle C45 battue 44 | 4 |
+| W4040772 | Paire de bouchon pour fixe monobloc OC | 1 |
+| W4070002 | Goupille à visser Ø6 | 16 |
+| W4080364 | Support cale de vitrage fixe < 32mm | 2 |
+| W4950246 | Equerre moulée ch. 18mm | 8 |
+
+### Remplissage de l'application 2
+
+| Remplissage | Qté | Dimensions (mm) |
+| --- | --- | --- |
+| Double vitrage 28mm | 1 | H -114 ; L -114 |
 
 (schéma: raw/askey3.pdf, p. 155)
 
-### 4. Porte-fenêtre 1 vantail seuil PMR - Bandeau serrure (PV 28 mm)
+## Application 3 : Frappe OC 2 vantaux DT HI PV 28mm
 
-Application dormant monobloc W1010124, seuil PMR W1010384, montant serrure renforcé W1010371 [1 p. 157] :
+L'application 3 est la fenêtre Frappe OC à deux vantaux, sur dormant « DT HI » (dormant W1010390), prise de vitrage 28 mm. Son titre imprimé est « Frappe OC 2 vantaux DT HI PV 28mm » ; le plan est à la page 156, la nomenclature à la page 157 [1 p. 156, 157].
 
-| Élément | Référence | Désignation | Qté | Longueur de débit (mm) | Angle de coupe |
-| --- | --- | --- | --- | --- | --- |
-| Dormant montant | **W1010124** | Montant monobloc dbl 120 mm | 2 | $H$ | 90°-90° |
-| Dormant traverse hte | **W1010133** | Traverse monobloc compacte | 1 | $L - 38$ | 90°-90° |
-| Seuil PMR | **W1010384** | Seuil PMR Askey 20 mm | 1 | $L - 40$ | 90°-90° |
-| Ouvrant horizontal | **W1010303** | Ouvrant 28 mm | 2 | $LCO = L - 25$ | 45°-45° |
-| Ouvrant vertical | **W1010303** | Ouvrant 28 mm | 2 | $HCO = H + 27{,}5$ | 45°-45° |
-| Traverse ouvrant | **W1010240** | Traverse ouvrant vitrage 28 mm | 1 | $L - 153$ | 90°-90° |
-| Montant serrure | **W1010371** | Montant serrure porte-fenêtre | 1 | $H - 100{,}5$ | 90°-90° |
-| Capot traverse | **W3710014** | Capot de traverse extérieur | 1 | $LCO - 168$ | 90°-90° |
-| Rejet d'eau | **Y3710007** | Rejet d'eau ouvrant caché | 1 | $L - 169$ | 90°-90° |
-| Parclose TPE horiz | **W4033002** | Parclose TPE | 2 | $LCO - 59$ | 45°-45° |
-| Parclose TPE vert | **W4033002** | Parclose TPE | 2 | $HCO - 59$ | 45°-45° |
-| Vitrage haut | Remplissage | Double vitrage 28 mm | 1 | $(X - 69{,}5) \times (L - 163)$ | Rectangulaire |
-| Vitrage bas | Remplissage | Double vitrage 28 mm | 1 | $(Y - 69{,}5) \times (L - 163)$ | Rectangulaire |
+![Application 3, coupe verticale et coupe horizontale](/assets/procedures/askey-frappe-65-oc-conception/applications/application-03-2-vantaux-dt-hi-pv-28.png)
+
+Lecture du plan : la coupe verticale (à gauche, cotée en H) repère W4000166, W4080313, W4033002, W4040475, W1010390, W4000169, W0198133, W1010303 et W3090121 ; la coupe horizontale (à droite, cotée en L) repère W3090108 (capot, dessiné au-dessus du battement), W1010303, W1010417 et Y3710012. Cotes de la coupe verticale, en mm, de haut en bas : 25, 24, 5,5, 6, 53,5, 5, 12, « Vue de verre = H - 155 », 28, 12, 5, 53,5, 6, 5,5, 24 et 25, puis HCO et H. Cotes de la coupe horizontale, en mm : 25, 24, 53,5, « Vue de verre = L/2-119 », 41,5, 41,5, « Vue de verre = L/2-119 », 53,5, 24 et 25 sur la largeur, puis LCO, L/2 (deux fois) et L ; 6, 5 et 12 sous l'ouvrant de gauche, 12, 5, 12, 5 et 12 au battement, 12, 5 et 6 sous l'ouvrant de droite, 5,5 (deux fois) ; « =76= » sous le battement central Y3710012. (schéma: raw/askey3.pdf, p. 156)
+
+### Profilés de l'application 3
+
+Tableau « PROFILES » : une ligne par référence et par débit ; Qté est le nombre de pièces à débiter, Débit la longueur de coupe en mm (LCO largeur du cadre d'ouvrant, HCO sa hauteur), Coupe l'angle des extrémités en degrés. La désignation du battement Y3710012 cite W3010211, qui n'a pas de planche (**VER-830**) [1 p. 157].
+
+| Référence | Désignation | Qté | Débit (mm) | Coupe (°) |
+| --- | --- | --- | --- | --- |
+| W1010390 | Dormant HI | 2 | L | 45 |
+| W1010390 | Dormant HI | 2 | H | 45 |
+| W1010303 | 1010289 noir x3 | 4 | LCO=L/2-12 | 45 |
+| W1010303 | 1010289 noir x3 | 3 | HCO=H-48 | 45 |
+| W1010417 | Ouvrant +1 joint noir | 1 | H-50 | 45 |
+| W4033002 | Parclose TPE OC | 4 | LCO-59 | 45 |
+| W4033002 | Parclose TPE OC | 4 | HCO-59 | 45 |
+| W4000169 | Bavette tubulaire dbl 120 pré-percé | 1 | L-17 | 90 |
+| W4000166 | Tapée pour doublage de 120mm pré-percé | 1 | L-13 | 90 |
+| W4000166 | Tapée pour doublage de 120mm pré-percé | 2 | H+25 | 90 |
+| W3090121 | Couvre-joint droit 25mm | 2 | L+50 | 45 |
+| W3090121 | Couvre-joint droit 25mm | 2 | H+50 | 45 |
+| Y3710012 | Battement central HI W3010211 pré percé | 1 | H-162 | 90 |
+| W3090108 | Capot int poignée centré 2 vtx | 1 | H-50 | 90 |
+
+### Accessoires de l'application 3
+
+| Référence | Désignation | Qté |
+| --- | --- | --- |
+| W0198133 | Vis autoperceuse 4.2x11 mm | 3/ml |
+| W0198146 | Vis PZ autoforeuse 3.5x9.5 mm | 3/ml |
+| W4040455 | Bouchons pièce d'appui 100-120 | 1 |
+| W4040448 | Bouchons capot int poignée centrée | 1 |
+| W4040475 | Bouchons étan angle C45 battue 44 | 4 |
+| W4040594 | Bouchon H/B bat int 2 vtx OC | 1 |
+| W4040693 | Ensemble Bouchons 2V central OC HI | 1 |
+| W4040708 | Bouchon H/B batt ext 2 vtx OC | 1 |
+| W4040730 | Embout tapée dbl 120mm | 1 |
+| W4050454 | Equerre nez PA | 8 |
+| W4050507 | Equerre affleurement ouv fiche | 6 |
+| W4050510 | Equerre d'alignement | 4 |
+| W4070002 | Goupille à visser Ø6 | 32 |
+| W4070170 | Vis a tole ST3.5x19-C T15 | 4 |
+| W4080313 | Support cale vitrage vit 28mm | 8 |
+| W4950246 | Equerre moulée ch 18mm | 4 |
+| W4950255 | Equ. moulée ch 18mm drain. cach | 4 |
+| W4950311 | Equ moul injec ch 18,5mm OC f28 | 8 |
+
+### Remplissage de l'application 3
+
+| Remplissage | Qté | Dimensions (mm) |
+| --- | --- | --- |
+| Double vitrage 28mm | 2 | H -131 ; L/2 -95 |
 
 (schéma: raw/askey3.pdf, p. 157)
 
-### 5. Fenêtre 1 vantail C45 - Vitrage lourd 36 mm (HI+ 75 mm)
+# Compatibilités
 
-Application dormant 75 mm Y1715147, parclose TPE W4030328 [1 p. 173] :
+Les coupes des profilés cités sont sur les pages de famille des [dormants](/profiles/askey-frappe-65-oc-dormants-65-hi-et-vitrage-36-mm.md), des [ouvrants et traverses](/profiles/askey-frappe-65-oc-dormants-et-ouvrants.md), des [seuils](/profiles/askey-frappe-65-oc-seuils-et-rejets-d-eau.md) et des [profilés complémentaires](/profiles/askey-profils-complementaires.md) ; les joints, bouchons, équerres et vis sont décrits sur les pages de [joints](/quincaillerie/askey-frappe-65-oc-joints-et-joints-de-vitrage.md), de [bouchons](/quincaillerie/askey-frappe-65-oc-bouchons-de-dormants-traverses-et-battements.md) et d'[équerres](/quincaillerie/askey-frappe-quincaillerie-et-equerres.md). Les dimensions limites de ferrage (Lff, Hff, poids de vantail) sont sur la page des [abaques Ferco Unijet](/quincaillerie/askey-frappe-65-oc-abaques-ferco-unijet-et-limites-de-cales.md).
 
-| Élément | Référence | Désignation | Qté | Longueur de débit (mm) | Angle de coupe |
-| --- | --- | --- | --- | --- | --- |
-| Dormant horizontal | **Y1715147** | Dormant HI75 BTC CJ | 2 | $L + 50$ | 45°-45° |
-| Dormant vertical | **Y1715147** | Dormant HI75 BTC CJ | 2 | $H + 50$ | 45°-45° |
-| Ouvrant horizontal | **W1010303** | Ouvrant 28/36 mm | 2 | $LCO = L - 48$ | 45°-45° |
-| Ouvrant vertical | **W1010303** | Ouvrant 28/36 mm | 2 | $HCO = H - 48$ | 45°-45° |
-| Parclose TPE 36 | **W4030328** | Parclose TPE ouvrant 36 mm | 2 | $LCO - 59$ | 45°-45° |
-| Parclose TPE 36 | **W4030328** | Parclose TPE ouvrant 36 mm | 2 | $HCO - 59$ | 45°-45° |
-| Double/triple vitrage | Remplissage | Vitrage 36 mm | 1 | $(H - 131) \times (L - 131)$ | Rectangulaire |
+# Ce que la source ne donne pas
 
-(schéma: raw/askey3.pdf, p. 173)
-
-### 6. Ensemble composé 2 vantaux + fixe latéral sur seuil PMR filant
-
-Application dormant DC AR BTC W1010132, meneau intermédiaire W1010061, feuillure rapportée Y3720000 [1 p. 183] :
-
-| Élément | Référence | Désignation | Qté | Longueur de débit (mm) | Angle de coupe |
-| --- | --- | --- | --- | --- | --- |
-| Traverse meneau | **W1010061** | Traverse symétrique H 40 mm | 1 | $H - 30$ | 90°-90° |
-| Dormant haut | **W1010132** | Dormant DC AR BTC | 1 | $L$ | 45°-45° |
-| Dormant montant 1 | **W1010132** | Dormant DC AR BTC | 1 | $H$ | 45°-90° |
-| Dormant montant 2 | **W1010132** | Dormant DC AR BTC | 1 | $H$ | 90°-45° |
-| Seuil PMR filant | **W1010384** | Seuil PMR Askey | 1 | $L - 54$ | 90°-90° |
-| Feuillure fixe | **Y3720000** | Feuillure rapportée simplifiée PP | 1 | $L2 - 45$ | 90°-90° |
-| Parclose fixe horiz | **W30A0037** | Parclose OC Ht 44 + joint noir | 2 | $L2 - 45$ | 90°-90° |
-| Parclose fixe vert | **W30A0037** | Parclose OC Ht 44 + joint noir | 2 | $H - 131$ | 90°-90° |
-| Ouvrant horizontal | **W1010224** | Ouvrant 1010142 + 3 joints | 4 | $LCO/2 + 12$ | 45°-45° |
-| Ouvrant vertical | **W1010224** | Ouvrant 1010142 + 3 joints | 3 | $H - 30{,}5$ | 45°-45° |
-| Montant ouvrant SF | **W10A0023** | Montant ouvrant SF + joint | 1 | $H - 32{,}5$ | 45°-45° |
-| Vitrage fixe 28 mm | Remplissage | Vitrage partie fixe | 1 | $(L2 - 103) \times (H - 100{,}5)$ | Rectangulaire |
-| Vitrage ouvrant 28 mm| Remplissage | Vitrage partie ouvrante | 2 | $(LCO/2 - 71) \times (HCO - 83)$ | Rectangulaire |
-
-(schéma: raw/askey3.pdf, p. 183)
-
----
-
-# Compatibilités et consignes de coupe
-
-* **Débit des parcloses TPE d'ouvrants** : La coupe des parcloses extérieures coextrudées W4033002 et W4030328 doit être réalisée à $45^\circ$ à l'aide de la poinçonneuse automatique **W5040377** qui usine simultanément l'onglet et les encoches de drainage [1 p. 151, 173].
-* **Jeux de fond de feuillure vitrage ouvrant caché** : La feuillure ouvrant caché ménage un jeu périphérique nominal de **4 mm** entre le bord du vitrage et le fond de feuillure en aluminium, rattrapé par les cales d'assise et de calage [1 p. 118-121].
-
----
+Les planches d'application n'impriment ni valeur minimale ou maximale de L et de H, ni matière, ni poids de profilé.
 
 # Citations
 
-[1] [Frappe 65 Ouvrant Caché ASKEY - Conception](raw/askey3.pdf), p. 118-121, 149-183
-
----
+[1] [Frappe 65 Ouvrant Caché ASKEY - Conception](raw/askey3.pdf), p. 152-157
 
 # Voir aussi
 
-- [Profilés dormants et ouvrants Frappe 65 OC](/profiles/askey-frappe-65-oc-dormants-et-ouvrants.md)
 - [Gamme Frappe 65 Ouvrant Caché](/gammes/askey-frappe-65-oc.md)
+- [Ouvrants, traverses, montants serrures et battements](/profiles/askey-frappe-65-oc-dormants-et-ouvrants.md)
+- [Abaques Ferco Unijet et limites de cales](/quincaillerie/askey-frappe-65-oc-abaques-ferco-unijet-et-limites-de-cales.md)
 - [Quincaillerie et équerres Frappe ASKEY](/quincaillerie/askey-frappe-quincaillerie-et-equerres.md)
 - [Fabrication Frappe 65 ASKEY](/procedures/fabrication-frappe-askey-65.md)
+- [Fournisseur ASKEY](/fournisseurs/askey.md)

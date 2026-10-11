@@ -8,7 +8,7 @@ systeme: SOLEAL PY
 status: stable
 generated:
   by: process:claude-code
-  at: 2026-10-10T15:23:10Z
+  at: 2026-10-11T12:59:56Z
 ---
 Termes, sigles et repères employés dans la fiche d'installation technique du seuil PMR PY1100 de la porte SOLEAL PY 55. Chaque terme est glosé dans les mots de la source ; ce qu'elle ne définit pas est en fin de page, avec le numéro d'anomalie quand il y en a un.
 
@@ -20,7 +20,6 @@ Terme, sens écrit par le document et page du wiki qui l'emploie.
 | --- | --- | --- |
 | Anti-dévers, pièce de blocage (PY3609) | pièce posée côté paumelles, en butée contre le bouchon | [Pièces du seuil PMR PY1100](/quincaillerie/technal-seuil-py1100-pieces-et-outillage.md) |
 | Barre de seuil, barre d'écartement (PY4000) | profilé plat PY4000 fixé ou vissé au sol, sur lequel le seuil PY1100 est monté | [Profilés et joints du seuil PMR PY1100](/profiles/technal-seuil-py1100-profiles-et-joints.md) |
-| Débit (colonne « Débits ») | longueur de coupe d'un profilé écrite en fonction des cotes totales de la porte, H, L, L1 et L2 (« H-6 » : la cote H diminuée de 6) | [Porte à 1 vantail avec seuil PMR PY1100](/portes/technal-seuil-py1100-applications-1-vantail.md) |
 | Enrubanner | maintenir le seuil sur la barre d'écartement PY4000 par un ruban pour la manutention et le transport (« Enrubanner le seuil sur la barre d'écartement PY4000 ») | [Assemblage du seuil PMR PY1100](/procedures/technal-seuil-pmr-py1100-assemblage.md) |
 | GEP, DEP | sur les bouchons 740061 et 740062 ; pour TPY3701 et TPY3700, les sigles se lisent « Gauche en Poussant » et « Droite en Poussant » ; sens pour les bouchons à confirmer (VER-157) | [Pièces du seuil PMR PY1100](/quincaillerie/technal-seuil-py1100-pieces-et-outillage.md) |
 | H, L, L1, L2 | repères des cotes totales des dessins de la F.I.T : H cote verticale, L cote horizontale ; avec un fixe latéral, L se partage en L2 (côté fixe) et L1 (côté ouvrant) | [Porte à 1 vantail et fixe latéral avec seuil PMR PY1100](/portes/technal-seuil-py1100-applications-fixe-lateral.md) |

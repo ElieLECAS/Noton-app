@@ -1,13 +1,13 @@
 ---
 type: Profilé
-title: Profilés dormants et ouvrants ASKEY Frappe 65 Ouvrant Caché
-description: Nomenclatures, cotes d'atelier, inerties et compatibilités des profilés aluminium dormants, ouvrants cachés, traverses et battements de la gamme Frappe 65 OC ASKEY.
-tags: [profile, aluminium, frappe, ouvrant-cache, askey, dormant, ouvrant, battement]
+title: "Ouvrants, traverses, montants serrures et battements de la Frappe 65 Ouvrant Caché ASKEY"
+description: "Cotes, prise de vitrage et coupe des ouvrants cachés 24, 28 et 32 mm, de leurs variantes à joints, des traverses d'ouvrants, montants serrures, battements, parcloses TPE d'ouvrant et du seuil PMR de la Frappe 65 OC ASKEY."
+tags: [profile, aluminium, frappe, ouvrant-cache, askey, ouvrant, traverse, battement, serrure, tpe]
 gamme: Frappe 65 Ouvrant Caché
 fournisseur: ASKEY
 usage: atelier
 famille: dormants-et-ouvrants
-status: stable
+status: draft
 sources:
   - resource: raw/askey3.pdf
     id: askey-frappe-oc-conception
@@ -15,121 +15,175 @@ sources:
     last_modified: 2023-02-20
 source_pages:
   - resource: raw/askey3.pdf
-    pages: 10-24, 26-55, 78
+    pages: 50-57
 generated:
   by: process:claude-code
-  at: 2026-09-19T22:32:00Z
+  at: 2026-10-10T21:35:14Z
 ---
 
-# Profilés dormants et ouvrants ASKEY Frappe 65 Ouvrant Caché
+# Ouvrants, traverses, montants serrures et battements de la Frappe 65 Ouvrant Caché ASKEY
 
-Les profilés de la **Frappe 65 Ouvrant Caché ASKEY** forment l'ossature thermique et structurelle (module 65 mm ou 75 mm HI+) des fenêtres, portes-fenêtres et châssis fixes à clair de vitrage maximal [1 p. 3].
-
----
+L'ouvrant est le cadre mobile (le vantail) qui porte le vitrage ; l'ouvrant caché est dissimulé derrière le dormant, vu de l'extérieur (voir le [glossaire](/reference/glossaire.md)). La Frappe 65 Ouvrant Caché de PROFERM ([gamme](/gammes/askey-frappe-65-oc.md)) est construite avec les profilés aluminium ASKEY. Les planches à l'échelle 1 (« éch.1 ») portent les ouvrants (prise de volume 24, 28 et 32 mm), les traverses d'ouvrants, les montants serrures, les battements et les parcloses d'ouvrants. Les inerties de ces profilés sont sur [Inerties des ouvrants, meneaux, feuillures rapportées et traverses, Frappe 65 OC ASKEY](/profiles/askey-frappe-65-oc-valeurs-statiques-ouvrants-meneaux-et-traverses.md) et [Inerties des montants serrures et des renforts de la Frappe 65 Ouvrant Caché ASKEY](/profiles/askey-frappe-65-oc-valeurs-statiques-montants-serrures-et-renforts.md). Les dormants sont sur [Dormants 65 mm, HI+, ITE et vitrage 36 mm de la Frappe 65 Ouvrant Caché ASKEY](/profiles/askey-frappe-65-oc-dormants-65-hi-et-vitrage-36-mm.md), [Dormants monoblocs de la Frappe 65 Ouvrant Caché ASKEY](/profiles/askey-frappe-65-oc-dormants-monoblocs.md) et [Meneaux, feuillures rapportées et parcloses de fixe de la Frappe 65 OC ASKEY](/profiles/askey-frappe-65-oc-meneaux-feuillures-rapportees-et-parcloses-de-fixe.md).
 
 # Cotes
 
-### Profilés dormants (module 65 mm et 75 mm HI+)
-
-Cotes en millimètres et inerties calculées selon l'annexe C de la norme EN 14024 [1 p. 12-15, 26-35] :
-
-| Référence | Désignation / Spécificité | Largeur (mm) | Hauteur (mm) | Ailette (mm) | $I_x$ à 2000 mm (cm⁴) | $I_y$ (cm⁴) | $W_x$ (cm³) |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| **W1010059** | Dormant C45 standard 65 mm | 65 | 74 | 44 | 19,46 | 13,78 | 3,71 |
-| **W1010064** | Dormant C45 standard 65 mm | 65 | 74 | 44 | 18,59 | 13,53 | 3,67 |
-| **W1010067** | Dormant C45 rénovation aile 25 mm | 65 | 74 | 44 | 22,06 | 16,18 | 4,74 |
-| **W1010130** | Dormant CD 65 mm standard | 66,5 | 74 | 44 | 19,93 | 13,65 | 3,66 |
-| **W1010131** | Dormant CD rénovation aile 25 mm | 66,5 | 74 | 44 | 22,77 | 16,26 | 4,72 |
-| **W1010132** | Dormant CD gorge 44 mm | 66,5 | 74 | 44 | 19,36 | 13,60 | 3,64 |
-| **W1010136** | Dormant CD gorge 44 mm | 66,5 | 74 | 44 | 20,22 | 13,84 | 3,68 |
-| **W1010364** | Dormant CD ailette 36 mm | 66,5 | 74 | 44 | 25,68 | 21,50 | 6,18 |
-| **W1010373** | Dormant CD ailette 44 mm | 66,5 | 74 | 44 | 25,57 | 24,39 | 6,93 |
-| **W1010390** | Dormant CD HI+ (barrettes isolantes) | 66,5 | 74 | 44 | 19,36 | 13,60 | 3,64 |
-| **W1010410** | Dormant CD 75 mm pour vitrage 36 mm | 65 | 74 | 44 | 25,23 | 13,50 | 3,63 |
-| **W1010504** | Dormant CD pose ITE ailette 130 mm | 65 | 94 | 44 | 33,20 | 90,61 | 15,03 |
-| **Y1715110** | Dormant C45 HI+ | 65 | 74 | 44 | 19,00 | 13,54 | 3,67 |
-| **Y1715111** | Dormant C45 rénovation HI+ aile 25 mm | 65 | 74 | 44 | 22,36 | 16,19 | 4,75 |
-| **Y1715125** | Dormant CD HI+ ailette 36 mm | 66,5 | 74 | 44 | 25,68 | 21,50 | 6,18 |
-| **Y1715147** | Dormant 75 mm BTC pour OC36 | 65 | 55 | 44 | 29,18 | 16,15 | 4,71 |
-| **Y1715150** | Dormant tapée intégrée dbl 140 mm (OC36) | 156,5 | 55 | 44 | 146,42 | 32,58 | 6,62 |
-| **Y1715151** | Dormant tapée intégrée dbl 120 mm (OC36) | 136,5 | 55 | 44 | 102,82 | 31,47 | 6,53 |
-| **Y1715152** | Dormant tapée intégrée dbl 100 mm (OC36) | 116,5 | 55 | 44 | 68,37 | 29,77 | 6,39 |
-| **Y1715153** | Dormant tapée intégrée dbl 80 mm (OC36) | 96,5 | 55 | 44 | 43,71 | 24,68 | 5,75 |
-
-(schéma: raw/askey3.pdf, p. 12, 13, 14, 15, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35)
-
 ### Profilés ouvrants cachés
 
-| Référence | Rôle du profilé | Prise de vitrage | Largeur (mm) | Hauteur (mm) | Ailette (mm) | $I_{xx'}$ (cm⁴) | $I_{yy'}$ (cm⁴) | $I_{xx'}/v$ (cm³) |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| **W1010137** | Ouvrant principal galbé | 24 mm | 65,1 | 53,5 | 34 | 5,77 | 6,22 | 2,78 |
-| **W1010454** | Ouvrant secondaire semi-fixe | 24 mm | 65,1 | 52,5 | 34 | 3,72 | 2,93 | 1,75 |
-| **W1010361** | Ouvrant principal à fiches | 24 mm | 73,6 | 53,5 | 42,5 | 10,12 | 9,77 | 3,94 |
-| **W1010456** | Ouvrant semi-fixe à fiches | 24 mm | 73,6 | 52,5 | 42,5 | 6,16 | 3,30 | 2,29 |
-| **W1010142** | Ouvrant principal galbé | 28 mm | 65,1 | 53,5 | 30 | 5,45 | 5,88 | 2,55 |
-| **W1010455** | Ouvrant secondaire semi-fixe | 28 mm | 65,1 | 52,5 | 30 | 3,52 | 2,73 | 1,70 |
-| **W1010289** | Ouvrant principal à fiches | 28 mm | 73,6 | 53,5 | 38,5 | 9,59 | 9,34 | 3,65 |
-| **W1010416** | Ouvrant semi-fixe à fiches | 28 mm | 80,6 | 52,5 | 38,5 | 5,86 | 3,12 | 2,23 |
-| **Y1715132** | Ouvrant principal design carré | 28 mm | 65,1 | 53,5 | 30 | 5,85 | 6,43 | 2,66 |
-| **Y1715133** | Ouvrant semi-fixe carré | 28 mm | 72,1 | 52,5 | 30 | 4,09 | 3,07 | 2,07 |
-| **W1010459** | Ouvrant principal carré fiches | 28 mm | 73,6 | 53,5 | 38,5 | 10,40 | 10,52 | 3,82 |
-| **W1010460** | Ouvrant semi-fixe carré fiches | 28 mm | 80,6 | 52,5 | 38,5 | 7,02 | 3,55 | 2,83 |
-| **Y1715126** | Ouvrant principal carré fiches | 32 mm | 73,6 | 53,5 | 34,5 | 9,62 | 9,73 | 3,51 |
-| **Y1715127** | Ouvrant semi-fixe carré fiches | 32 mm | 80,6 | 52,5 | 34,5 | 6,47 | 3,30 | 2,60 |
+Ouvrants cachés des planches « Ouvrants 24mm », « Ouvrants 28mm » et « Ouvrants 32mm ». Une ligne par référence ; « Rôle du profilé » reprend le titre de la rubrique de la planche (« Ouvrants », « Ouvrants à ficher », « Ouvrants carré », « Ouvrants carré à ficher ») et « Prise de vitrage » la « Prise de volume » imprimée en titre. Chaque coupe montre l'ouvrant en noir ; la forme dessinée en blanc à gauche de l'ouvrant n'est pas désignée sur la planche. « Cotes horizontales » et « Cotes verticales » reprennent les lignes de cote imprimées, séparées par des points-virgules, sans cote déduite. Les planches ne distinguent pas les deux ouvrants de chaque rubrique (**VER-777**) ; le sens de « à ficher » n'est pas défini (**VER-788**).
 
-(schéma: raw/askey3.pdf, p. 15, 16, 48, 49, 50, 51)
+| Référence | Rôle du profilé | Prise de vitrage | Cotes horizontales (mm) | Cotes verticales (mm) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| W1010137 | Ouvrant, prise de volume 24 mm | 24 mm | 65,1 ; 34 ; 4,5 | 17 ; 53,5 | ![W1010137](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010137.png) |
+| W1010454 | Ouvrant, prise de volume 24 mm | 24 mm | 65,1 ; 34 ; 72,1 | 17 ; 52,5 ; 22,2 | ![W1010454](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010454.png) |
+| W1010361 | Ouvrant à ficher, prise de volume 24 mm | 24 mm | 73,6 ; 42,5 ; 13 | 17 ; 53,5 | ![W1010361](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010361.png) |
+| W1010456 | Ouvrant à ficher, prise de volume 24 mm | 24 mm | 73,6 ; 42,5 ; 80,6 | 17 ; 52,5 ; 22,2 | ![W1010456](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010456.png) |
+| W1010142 | Ouvrant, prise de volume 28 mm | 28 mm | 65,1 ; 30 ; 4,5 | 17 ; 53,5 | ![W1010142](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010142.png) |
+| W1010455 | Ouvrant, prise de volume 28 mm | 28 mm | 65,1 ; 30 ; 72,1 | 17 ; 52,5 ; 22,2 | ![W1010455](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010455.png) |
+| W1010289 | Ouvrant à ficher, prise de volume 28 mm | 28 mm | 73,6 ; 38,5 ; 13 | 17 ; 53,5 | ![W1010289](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010289.png) |
+| W1010416 | Ouvrant à ficher, prise de volume 28 mm | 28 mm | 80,6 ; 38,5 | 17 ; 52,5 | ![W1010416](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010416.png) |
+| Y1715132 | Ouvrant carré, prise de volume 28 mm | 28 mm | 65,1 ; 30 ; 4,5 | 17 ; 53,5 | ![Y1715132](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-y1715132.png) |
+| Y1715133 | Ouvrant carré, prise de volume 28 mm | 28 mm | 72,1 ; 30 | 17 ; 52,5 | ![Y1715133](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-y1715133.png) |
+| W1010459 | Ouvrant carré à ficher, prise de volume 28 mm | 28 mm | 73,6 ; 38,5 ; 13 | 17 ; 53,5 | ![W1010459](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010459.png) |
+| W1010460 | Ouvrant carré à ficher, prise de volume 28 mm | 28 mm | 80,6 ; 73,6 ; 38,5 | 17 ; 52,5 ; 22,2 | ![W1010460](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010460.png) |
+| Y1715126 | Ouvrant carré à ficher, prise de volume 32 mm | 32 mm | 73,6 ; 34,5 | 17 ; 53,5 | ![Y1715126](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-y1715126.png) |
+| Y1715127 | Ouvrant carré à ficher, prise de volume 32 mm | 32 mm | 80,6 ; 73,6 ; 34,5 | 52,5 | ![Y1715127](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-y1715127.png) |
+
+(schéma: raw/askey3.pdf, p. 50 pour W1010137, W1010454, W1010361 et W1010456 ; p. 51 pour W1010142, W1010455, W1010289 et W1010416 ; p. 52 pour Y1715132, Y1715133, W1010459 et W1010460 ; p. 53 pour Y1715126 et Y1715127)
+
+### Variantes à joints des ouvrants
+
+Sous chaque référence d'ouvrant, la planche imprime deux autres références avec la mention des joints montés. Chaque variante a la coupe de l'ouvrant sous lequel elle est écrite ; l'image est celle de la planche, qui porte les trois références.
+
+| Référence | Variante de | Joints montés | Coupe |
+| --- | --- | --- | ---: |
+| W1010214 | W1010137 | avec 3 joints noirs | ![W1010137 W1010214](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010137.png) |
+| W1010215 | W1010137 | avec 1 joint noir et 2 joints gris | ![W1010137 W1010215](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010137.png) |
+| W10A0021 | W1010454 | avec 1 joint noir | ![W1010454 W10A0021](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010454.png) |
+| W10A0022 | W1010454 | avec 1 joint gris | ![W1010454 W10A0022](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010454.png) |
+| W1010366 | W1010361 | avec 3 joints noirs | ![W1010361 W1010366](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010361.png) |
+| W1010367 | W1010361 | avec 1 joint noir et 2 joints gris | ![W1010361 W1010367](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010361.png) |
+| W10A0025 | W1010456 | avec 1 joint noir | ![W1010456 W10A0025](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010456.png) |
+| W10A0026 | W1010456 | avec 1 joint gris | ![W1010456 W10A0026](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010456.png) |
+| W1010224 | W1010142 | avec 3 joints noirs | ![W1010142 W1010224](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010142.png) |
+| W1010225 | W1010142 | avec 1 joint noir et 2 joints gris | ![W1010142 W1010225](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010142.png) |
+| W10A0023 | W1010455 | avec 1 joint noir | ![W1010455 W10A0023](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010455.png) |
+| W10A0024 | W1010455 | avec 1 joint gris | ![W1010455 W10A0024](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010455.png) |
+| W1010303 | W1010289 | avec 3 joints noirs | ![W1010289 W1010303](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010289.png) |
+| W1010304 | W1010289 | avec 1 joint noir et 2 joints gris | ![W1010289 W1010304](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010289.png) |
+| W1010417 | W1010416 | avec 1 joint noir | ![W1010416 W1010417](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010416.png) |
+| W1010418 | W1010416 | avec 1 joint gris | ![W1010416 W1010418](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010416.png) |
+| Y17A0141 | Y1715132 | avec 3 joints noirs | ![Y1715132 Y17A0141](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-y1715132.png) |
+| Y17A0080 | Y1715132 | avec 1 joint noir et 2 joints gris | ![Y1715132 Y17A0080](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-y1715132.png) |
+| Y17A0142 | Y1715133 | avec 1 joint noir | ![Y1715133 Y17A0142](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-y1715133.png) |
+| Y17A0175 | Y1715133 | avec 1 joint gris | ![Y1715133 Y17A0175](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-y1715133.png) |
+| W10A0035 | W1010459 | avec 3 joints noirs | ![W1010459 W10A0035](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010459.png) |
+| W10A0036 | W1010459 | avec 1 joint noir et 2 joints gris | ![W1010459 W10A0036](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010459.png) |
+| W10A0037 | W1010460 | avec 1 joint noir | ![W1010460 W10A0037](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010460.png) |
+| W10A0038 | W1010460 | avec 1 joint gris | ![W1010460 W10A0038](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-w1010460.png) |
+| Y17A0099 | Y1715126 | avec 3 joints noirs | ![Y1715126 Y17A0099](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-y1715126.png) |
+| Y17A0137 | Y1715126 | avec 1 joint noir et 2 joints gris | ![Y1715126 Y17A0137](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-y1715126.png) |
+| Y17A0100 | Y1715127 | avec 1 joint noir | ![Y1715127 Y17A0100](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-y1715127.png) |
+| Y17A0138 | Y1715127 | avec 1 joint gris | ![Y1715127 Y17A0138](/assets/profiles/askey-frappe-65-oc/ouvrants/ouvrant-y1715127.png) |
+
+(schéma: raw/askey3.pdf, p. 50, 51, 52, 53)
 
 ### Traverses d'ouvrants et montants serrures
 
-| Référence | Rôle | Épaisseur vitrage | Largeur (mm) | Hauteur (mm) | $I_x$ à 2000 mm (cm⁴) | $I_y$ (cm⁴) | $W_x$ (cm³) |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| **W1010128** | Traverse d'ouvrant galbée | 28 mm | 45,7 | 80 | 7,37 | 23,51 | 6,48 |
-| **Y1715143** | Traverse ouvrant droite à capot | 28 mm | 41,9 | 80 | 6,86 | 27,24 | 7,41 |
-| **Y1715144** | Traverse ouvrant droite à capot | 32 mm | 45,9 | 80 | 8,61 | 27,24 | 7,41 |
-| **W1010507** | Traverse ouvrant droite à capot | 36 mm | 49,85 | 80 | 10,51 | 27,24 | 7,41 |
-| **W1010140** | Traverse d'ouvrant droite | 40 mm | 46,85 | 80 | 8,70 | 18,24 | 5,16 |
-| **W1010363** | Montant serrure porte-fenêtre | 24 mm | 64 | 55 | 18,98 | 22,60 | 6,04 |
-| **W1010371** | Montant serrure porte-fenêtre | 28 mm | 68 | 55 | 21,76 | 22,60 | 6,04 |
-| **Y1715122** | Montant serrure porte-fenêtre | 32 mm | 72 | 55 | 27,37 | 22,60 | 6,04 |
-| **W1010508** | Montant serrure porte-fenêtre | 36 mm | 76 | 55 | 31,16 | 22,60 | 6,04 |
+La traverse d'ouvrant et le montant serrure sont définis au [glossaire](/reference/glossaire.md). Les planches portent « Traverse 28 mm », « Traverse 32 mm », « Traverse 36 mm », « Traverse 40 mm » et « Montant serrure 24mm », « 28mm », « 32mm », « 36mm » : la colonne « Épaisseur vitrage » reprend ce nombre. Une ligne par référence ; les cotes sont celles des lignes de cote imprimées, sans cote déduite.
 
-(schéma: raw/askey3.pdf, p. 19, 20, 52, 53, 54)
+| Référence | Rôle | Épaisseur vitrage | Cotes horizontales (mm) | Cotes verticales (mm) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| W1010128 | Traverse d'ouvrant | 28 mm | 45,7 | 80 | ![W1010128](/assets/profiles/askey-frappe-65-oc/traverses-d-ouvrants/traverse-w1010128.png) |
+| Y1715143 | Traverse d'ouvrant | 28 mm | 41,9 | 80 | ![Y1715143](/assets/profiles/askey-frappe-65-oc/traverses-d-ouvrants/traverse-y1715143.png) |
+| Y1715144 | Traverse d'ouvrant | 32 mm | 45,9 ; 11,5 | 80 | ![Y1715144](/assets/profiles/askey-frappe-65-oc/traverses-d-ouvrants/traverse-y1715144.png) |
+| W1010507 | Traverse d'ouvrant | 36 mm | 49,85 | 80 | ![W1010507](/assets/profiles/askey-frappe-65-oc/traverses-d-ouvrants/traverse-w1010507.png) |
+| W1010140 | Traverse d'ouvrant | 40 mm | 46,85 | 80 | ![W1010140](/assets/profiles/askey-frappe-65-oc/traverses-d-ouvrants/traverse-w1010140.png) |
+| W1010363 | Montant serrure | 24 mm | 64 ; 24 | 53 ; 55 ; 17 | ![W1010363](/assets/profiles/askey-frappe-65-oc/montants-serrures/montant-serrure-w1010363.png) |
+| W1010371 | Montant serrure | 28 mm | 68 ; 28 | 53 ; 55 ; 17 | ![W1010371](/assets/profiles/askey-frappe-65-oc/montants-serrures/montant-serrure-w1010371.png) |
+| Y1715122 | Montant serrure | 32 mm | 72 ; 32 | 53 ; 55 ; 17 | ![Y1715122](/assets/profiles/askey-frappe-65-oc/montants-serrures/montant-serrure-y1715122.png) |
+| W1010508 | Montant serrure | 36 mm | 76 ; 36 | 53 ; 55 ; 17 | ![W1010508](/assets/profiles/askey-frappe-65-oc/montants-serrures/montant-serrure-w1010508.png) |
 
-### Seuil PMR et battements
+(schéma: raw/askey3.pdf, p. 54 pour W1010128, Y1715143 et Y1715144 ; p. 55 pour W1010507 et W1010140 ; p. 56 pour W1010363, W1010371, Y1715122 et W1010508)
+
+### Variantes à joints des traverses d'ouvrants
+
+Chaque traverse porte, sous sa référence, deux références « avec 2 joints noirs » et « avec 2 joints gris », qui partagent sa coupe. La variante de Y1715144 « avec 2 joints noirs » est imprimée Y17A207, à trois chiffres, alors que les autres références Y17A0xxx en portent quatre (**INC-771**).
+
+| Référence | Variante de | Joints montés | Coupe |
+| --- | --- | --- | ---: |
+| W1010212 | W1010128 | avec 2 joints noirs | ![W1010128 W1010212](/assets/profiles/askey-frappe-65-oc/traverses-d-ouvrants/traverse-w1010128.png) |
+| W1010213 | W1010128 | avec 2 joints gris | ![W1010128 W1010213](/assets/profiles/askey-frappe-65-oc/traverses-d-ouvrants/traverse-w1010128.png) |
+| Y17A0205 | Y1715143 | avec 2 joints noirs | ![Y1715143 Y17A0205](/assets/profiles/askey-frappe-65-oc/traverses-d-ouvrants/traverse-y1715143.png) |
+| Y17A0206 | Y1715143 | avec 2 joints gris | ![Y1715143 Y17A0206](/assets/profiles/askey-frappe-65-oc/traverses-d-ouvrants/traverse-y1715143.png) |
+| Y17A207 | Y1715144 | avec 2 joints noirs | ![Y1715144 Y17A207](/assets/profiles/askey-frappe-65-oc/traverses-d-ouvrants/traverse-y1715144.png) |
+| Y17A0208 | Y1715144 | avec 2 joints gris | ![Y1715144 Y17A0208](/assets/profiles/askey-frappe-65-oc/traverses-d-ouvrants/traverse-y1715144.png) |
+| Y17A0081 | W1010507 | avec 2 joints noirs | ![W1010507 Y17A0081](/assets/profiles/askey-frappe-65-oc/traverses-d-ouvrants/traverse-w1010507.png) |
+| Y17A0082 | W1010507 | avec 2 joints gris | ![W1010507 Y17A0082](/assets/profiles/askey-frappe-65-oc/traverses-d-ouvrants/traverse-w1010507.png) |
+| W1010220 | W1010140 | avec 2 joints noirs | ![W1010140 W1010220](/assets/profiles/askey-frappe-65-oc/traverses-d-ouvrants/traverse-w1010140.png) |
+| W1010221 | W1010140 | avec 2 joints gris | ![W1010140 W1010221](/assets/profiles/askey-frappe-65-oc/traverses-d-ouvrants/traverse-w1010140.png) |
+
+(schéma: raw/askey3.pdf, p. 54, 55)
+
+### Profilé Y3710014
+
+Y3710014 est dessiné sous les traverses d'ouvrants 36 et 40 mm, sans désignation (**VER-783**).
+
+| Référence | Désignation imprimée | Cotes horizontales (mm) | Cotes verticales (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| Y3710014 | - | 15,5 | 76 | ![Y3710014](/assets/profiles/askey-frappe-65-oc/traverses-d-ouvrants/profile-y3710014.png) |
+
+(schéma: raw/askey3.pdf, p. 55)
+
+### Battements d'ouvrants et battements poignée centrée
+
+Le battement est défini au [glossaire](/reference/glossaire.md). La planche porte deux rubriques : « Battements d'ouvrants » (trois références) et « Battements poignée centrée » (trois références). « PV 28 mm » et « PV 36 mm HI+ » sont les mentions imprimées sous Y3710012 et W3090223 (**VER-787**) ; « Pré-percée » est imprimé sous Y3710012.
+
+| Référence | Désignation imprimée | Rubrique de la planche | Cotes horizontales (mm) | Cotes verticales (mm) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| Y3710012 | PV 28 mm, pré-percée | Battements d'ouvrants | 17,05 ; 6 | 76 | ![Y3710012](/assets/profiles/askey-frappe-65-oc/battements/battement-y3710012.png) |
+| W3090119 | - | Battements d'ouvrants | 26 | 76 | ![W3090119](/assets/profiles/askey-frappe-65-oc/battements/battement-w3090119.png) |
+| W3090223 | PV 36 mm HI+ | Battements d'ouvrants | 27,05 | 76 | ![W3090223](/assets/profiles/askey-frappe-65-oc/battements/battement-w3090223.png) |
+| W3090108 | - | Battements poignée centrée | 60 | 19,5 | ![W3090108](/assets/profiles/askey-frappe-65-oc/battements/battement-poignee-centree-w3090108.png) |
+| Y3710004 | - | Battements poignée centrée | 60 | 12 | ![Y3710004](/assets/profiles/askey-frappe-65-oc/battements/battement-poignee-centree-y3710004.png) |
+| Y3710018 | - | Battements poignée centrée | 60 ; 17,5 | 19,5 | ![Y3710018](/assets/profiles/askey-frappe-65-oc/battements/battement-poignee-centree-y3710018.png) |
+
+(schéma: raw/askey3.pdf, p. 57)
+
+### Parcloses d'ouvrants
+
+Sous le titre « Parcloses d'ouvrants », la planche porte la parclose TPE (élastomère thermoplastique, voir le [glossaire](/reference/glossaire.md)) qui se monte sur les ouvrants. W4033002 est imprimé « noir », W4033003 « gris », W4030328 « noir ou gris » (**VER-789**). Les dessins sont sans cote.
+
+| Référence | Désignation imprimée | Couleur imprimée | Coupe |
+| --- | --- | --- | ---: |
+| W4033002 | Parclose TPE ouvrant 24 et 28mm | noir | ![W4033002](/assets/profiles/askey-frappe-65-oc/ouvrants/parclose-tpe-w4033002.png) |
+| W4033003 | Parclose TPE ouvrant 24 et 28mm | gris | ![W4033003](/assets/profiles/askey-frappe-65-oc/ouvrants/parclose-tpe-w4033002.png) |
+| W4030328 | Parclose TPE ouvrant 36mm | noir ou gris | ![W4030328](/assets/profiles/askey-frappe-65-oc/ouvrants/parclose-tpe-w4030328.png) |
+
+(schéma: raw/askey3.pdf, p. 53)
+
+### Seuil PMR
 
 | Référence | Rôle | Largeur (mm) | Hauteur (mm) | Inertie $I_{xx'}$ (cm⁴) |
 | --- | --- | --- | --- | --- |
-| **W1010384** | Seuil PMR 20 mm à rupture thermique | 60,5 | 20 | 1,91 |
-| **Y3710012** | Battement central profilé pré-percé | 17,05 | 76 | - |
-| **W3090119** | Battement central standard | 26 | 76 | - |
-| **W3090223** | Battement central HI+ | 27,05 | 76 | - |
-| **W3090108** | Capot de battement poignée centrée galbé | 60 | 19,5 | - |
-| **Y3710004** | Capot de battement poignée centrée plat | 60 | 12 | - |
-| **Y3710018** | Capot de battement poignée centrée carré | 60 | 19,5 | - |
+| W1010384 | Seuil PMR 20 mm à rupture thermique | 60,5 | 20 | 1,91 |
 
-(schéma: raw/askey3.pdf, p. 55, 78)
-
----
+(schéma: raw/askey3.pdf, p. 78)
 
 # Compatibilités
 
-* **Parcloses extérieures TPE** : Les ouvrants cachés de prise de volume 24 mm et 28 mm sont exclusivement équipés de la parclose coextrudée **W4033002** (noir) ou **W4033003** (gris). Les ouvrants en prise de volume 36 mm reçoivent la parclose TPE **W4030328** [1 p. 51, 122].
-* **Traverses d'ouvrants et capots** : Les traverses d'ouvrants Y1715143, Y1715144 et W1010507 s'associent obligatoirement au capot extérieur clipsé **Y3710014** assurant l'étanchéité et le drainage [1 p. 53, 125].
-* **Joints intérieurs de battée** : Le joint central tubulaire EPDM W4010423 (noir) ou W4010439 (gris) s'installe sur la battée de 44 mm du dormant [1 p. 82].
+Les ouvrants cachés de prise de volume 24 mm et 28 mm sont exclusivement équipés de la parclose coextrudée **W4033002** (noir) ou **W4033003** (gris). Les ouvrants en prise de volume 36 mm reçoivent la parclose TPE **W4030328** [1 p. 53]. La planche ne désigne aucune parclose TPE pour les ouvrants de prise de volume 32 mm (**VER-779**) et aucun ouvrant de prise de volume 36 mm n'est dessiné sur les planches des ouvrants (**VER-778**).
 
----
+Les traverses d'ouvrants Y1715143, Y1715144 et W1010507 s'associent obligatoirement au capot extérieur clipsé Y3710014 assurant l'étanchéité et le drainage [1 p. 53, 125].
+
+Le joint central tubulaire EPDM W4010423 (noir) ou W4010439 (gris) s'installe sur la battée de 44 mm du dormant [1 p. 82].
 
 # Ce que la source ne donne pas
 
-* La masse linéique en kg/m de chaque profilé n'est pas consignée dans les fiches techniques du constructeur ; seules les inerties $I_x$ et $I_y$ sont données pour les calculs de résistance au vent.
-
----
+La masse linéique (kg/m) des profilés n'est pas portée sur les planches. Les rôles « principal », « secondaire », « semi-fixe », « galbé » et « à capot » ne sont pas imprimés sur les planches des ouvrants et des traverses. Aucune désignation n'est imprimée pour W3090119, W3090108, Y3710004 et Y3710018, ni pour la forme dessinée en blanc à gauche des ouvrants.
 
 # Citations
 
-[1] [Frappe 65 Ouvrant Caché ASKEY - Conception](raw/askey3.pdf), p. 12-24, 26-55, 78, 122, 125
-
----
+[1] [Frappe 65 Ouvrant Caché ASKEY - Conception](raw/askey3.pdf), p. 50-57
 
 # Voir aussi
 

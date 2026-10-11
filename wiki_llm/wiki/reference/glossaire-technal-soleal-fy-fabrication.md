@@ -8,7 +8,7 @@ systeme: SOLEAL FY
 status: stable
 generated:
   by: process:claude-code
-  at: 2026-10-10T15:23:08Z
+  at: 2026-10-11T12:59:55Z
 ---
 Termes, sigles et repères d'atelier employés dans les catalogues de fabrication du SOLEAL FY 55 évolution (DOC-0001186128 et 6320.003). Chaque terme est glosé dans les mots de la source ; ce qu'elle ne définit pas est en fin de page, avec le numéro d'anomalie quand il y en a un.
 

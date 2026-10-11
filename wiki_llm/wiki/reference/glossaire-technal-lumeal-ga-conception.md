@@ -8,7 +8,7 @@ systeme: LUMEAL GA
 status: stable
 generated:
   by: process:claude-code
-  at: 2026-10-10T15:23:07Z
+  at: 2026-10-11T12:59:55Z
 ---
 Termes, sigles, abréviations et symboles employés dans le catalogue de conception 5156.007 du coulissant LUMEAL GA. Chaque terme est glosé dans les mots de la source ; ce qu'elle ne définit pas est en fin de page, avec le numéro d'anomalie quand il y en a un.
 
@@ -22,7 +22,6 @@ Terme, sens écrit par le document et page du wiki qui l'emploie.
 | Arrêt de vantail à clé | principe de montage de TGY3622 et TGY3623 | [Roulettes, poignées de tirage, fermetures et verrous du coulissant LUMEAL GA](/quincaillerie/lumeal-ga-roulements-et-fermetures.md) |
 | Axes XX' et YY' | axes de la section dessinés en tête des tableaux d'inertie ; Ix selon XX', Iy selon YY' | [Moments d'inertie Ix et Iy des profilés dormants et ouvrants du coulissant LUMEAL GA](/profiles/lumeal-ga-moments-d-inertie.md) |
 | BBC (perméabilité à l'air pour les bâtiments BBC) | tableau des débits de fuite maximaux « moyenne par m² y compris les murs » : logement individuel 0,6 à 5,1 et logement collectif 1 à 8,5 m³/(h.m²) | [Classements A\*E\*V, retard à l'effraction RC3 et acoustique du coulissant LUMEAL GA](/certifications/lumeal-ga-performances-aev-rc3-et-acoustique.md) |
-| Bouclier thermique | pièce « pré percée positionnée dans le rail bas » qui assure le drainage des eaux de condensation du recueil et des eaux d'infiltration entre les 2 rails | [Concept du coulissant LUMEAL GA de TECHNAL : profilés, dormants, ouvrants, chariots, pose](/commercial/lumeal-ga-concept-du-produit.md) |
 | Caillebotis | repère imprimé sur la coupe du seuil PMR de la variante de fixation | [Fixation des appuis, tapées et pattes du LUMEAL GA, seuil PMR et dormant caché](/procedures/lumeal-ga-fixation-appuis-tapees-et-pattes.md) |
 | Charges lourdes | groupe de la matrice des roulettes qui réunit TGA3608 et TGA3609, poids maxi par vantail 300 | [Roulettes, poignées de tirage, fermetures et verrous du coulissant LUMEAL GA](/quincaillerie/lumeal-ga-roulements-et-fermetures.md) |
 | Chariots de roulement, roulette simple, double, triple | roulettes sur lesquelles circule le vantail ; « corps en matériau isolant conservant la rupture de pont thermique des traverses basses » ; triples non réglables, pour charge lourde | [Concept du coulissant LUMEAL GA de TECHNAL : profilés, dormants, ouvrants, chariots, pose](/commercial/lumeal-ga-concept-du-produit.md) |
@@ -47,7 +46,6 @@ Terme, sens écrit par le document et page du wiki qui l'emploie.
 | Montant central droit | désignation imprimée du profilé T141038 dans les nomenclatures | [Cotes de débit, fenêtre et porte-fenêtre 2 vantaux, largeur de passage du LUMEAL GA](/profiles/lumeal-ga-cotes-de-debit.md) |
 | Ouvrant classique, ouvrant en percussion | titres des deux coupes horizontales des planches de prise de volume | [Prises de volume 24 à 32 mm et joints de vitrage de l'ouvrant et du fixe du LUMEAL GA](/profiles/lumeal-ga-prises-de-volume-et-joints-de-vitrage.md) |
 | P.V. n° | numéro du procès-verbal d'essai (colonne « P.V. n° » des tableaux A\*E\*V et du tableau du retard à l'effraction) | [Classements A\*E\*V, retard à l'effraction RC3 et acoustique du coulissant LUMEAL GA](/certifications/lumeal-ga-performances-aev-rc3-et-acoustique.md) |
-| Percussion centrale | montage où deux vantaux se rejoignent au centre (« Montants latéraux pour percussion centrale des 4 et 6 vantaux ou des 2 vantaux + 2 fixes ») ; la note de la p. 16 donne la cote L correspondante | [Courbes d'utilisation au vent du coulissant LUMEAL GA (EN 12211) : V\*A2 et V\*A3](/profiles/lumeal-ga-courbes-d-utilisation-au-vent.md) |
 | Position du joint A, B | colonnes de la matrice de la partie fixe ; B est le joint en U (même référence que le joint d'ouvrant), A un joint de forme différente | [Prises de volume 24 à 32 mm et joints de vitrage de l'ouvrant et du fixe du LUMEAL GA](/profiles/lumeal-ga-prises-de-volume-et-joints-de-vitrage.md) |
 | Prise de volume (catalogue de conception) | épaisseur de double vitrage de 24 à 32 mm ; titres « Ouvrants : 24 à 28mm », « Joint pour vitrage de 24 mm » (précise VER-215) | [Prises de volume 24 à 32 mm et joints de vitrage de l'ouvrant et du fixe du LUMEAL GA](/profiles/lumeal-ga-prises-de-volume-et-joints-de-vitrage.md) |
 | Q100, Q4 | Q100 : « débit de fuite à 100Pa » ; Q4 : débit de fuite à 4 Pa ; relation écrite Q = Q100 x (P/100)^(2/3), P pression en Pa | [Classements A\*E\*V, retard à l'effraction RC3 et acoustique du coulissant LUMEAL GA](/certifications/lumeal-ga-performances-aev-rc3-et-acoustique.md) |
@@ -55,7 +53,6 @@ Terme, sens écrit par le document et page du wiki qui l'emploie.
 | Rails réduits, hauteur réduite | options « deux rails hauteur réduite » et « monorail hauteur réduite » ; « Attention a la performance a l'eau E4A (150 Pa) » est imprimé sur la première | [Rails réduits, traverse intermédiaire, joint brosse et montants centraux du LUMEAL GA](/profiles/lumeal-ga-options-de-profiles.md) |
 | RC3 | classement du retard à l'effraction du procès-verbal MD130037 (« classe 3 du retard à l'effraction » dans le concept) | [Classements A\*E\*V, retard à l'effraction RC3 et acoustique du coulissant LUMEAL GA](/certifications/lumeal-ga-performances-aev-rc3-et-acoustique.md) |
 | Rw, RA, RA,tr | indices d'affaiblissement acoustique en dB ; « RA = Rw +C châssis ; RA,tr = Rw +Ctr châssis » (mesures selon NF EN ISO 140 et NF EN ISO 717-1) | [Classements A\*E\*V, retard à l'effraction RC3 et acoustique du coulissant LUMEAL GA](/certifications/lumeal-ga-performances-aev-rc3-et-acoustique.md) |
-| Traverse intermédiaire | profilé horizontal T141018 (remplissage de 24 à 28mm) ou T141009 (remplissage de 30 à 32mm) assemblé entre deux montants avec deux pièces T441002 et une vis T471000 | [Rails réduits, traverse intermédiaire, joint brosse et montants centraux du LUMEAL GA](/profiles/lumeal-ga-options-de-profiles.md) |
 | XP P 24-401 | norme dont les spécifications sont respectées par les menuiseries réalisables avec le système (selon le DTA) | [Concept du coulissant LUMEAL GA de TECHNAL : profilés, dormants, ouvrants, chariots, pose](/commercial/lumeal-ga-concept-du-produit.md) |
 | Émissivité certifiée | valeur de 0,04 à 0,01 sous laquelle chaque marque de vitrage est rangée ; « conforme à la base de données CEKAL » | [Ug, facteur solaire g et transmission lumineuse TL des vitrages du coulissant LUMEAL GA](/vitrages/lumeal-ga-ug-g-et-tl-des-vitrages.md) |
 

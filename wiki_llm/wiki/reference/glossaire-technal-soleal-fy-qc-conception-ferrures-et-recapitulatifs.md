@@ -8,7 +8,7 @@ systeme: SOLEAL FY
 status: stable
 generated:
   by: process:claude-code
-  at: 2026-10-10T15:23:08Z
+  at: 2026-10-11T12:59:55Z
 ---
 Termes, sigles et repères employés dans le catalogue de conception 6319.003 du SOLEAL FY 55/65 à quincaillerie cachée QC pour les ferrures BO et fenêtre française, le soufflet, les limiteurs et les récapitulatifs. Chaque terme est glosé dans les mots de la source ; ce qu'elle ne définit pas est en fin de page, avec le numéro d'anomalie quand il y en a un.
 
@@ -52,11 +52,8 @@ Terme, sens écrit par le document et page du wiki qui l'emploie.
 | Ensemble raidisseur | organe TFZ60028 de la ferrure de fenêtre française : quantité 0 à 3 selon la zone | [Ferrure de fenêtre française du SOLEAL FY (QC), largeur 425 à 1200 mm, zones A, C, E, G](/quincaillerie/soleal-fy-qc-ferrure-fenetre-francaise-largeur-425-1200.md), [Ferrure de fenêtre française du SOLEAL FY (QC), largeur 1201 à 1600 mm, zones B, D, F, H](/quincaillerie/soleal-fy-qc-ferrure-fenetre-francaise-largeur-1201-1600.md) |
 | Ferrure BO | ferrure TFZ60033 de la quincaillerie cachée, imprimée « Ferrure BO » dans le tableau de chaque zone de la ferrure BO | [Ferrure BO du SOLEAL FY (QC), vantail de largeur 500 à 700 mm, zones A, D et G](/quincaillerie/soleal-fy-qc-ferrure-bo-largeur-500-700.md) |
 | H verrou | hauteur du verrou à bascule TFZ60038, avec « Hauteur verrou Maximum / Minimum » et « HhV Maximum / minimum » | [Semi-fixe, condamnation et ferrure de fenêtre française 2 vantaux du SOLEAL FY (QC)](/quincaillerie/soleal-fy-qc-semi-fixe-et-condamnation-2-vantaux.md) |
-| Index des mises à jour | tableau « Version 6319.003 Date Juin 2021 » : quatre lignes de mises à jour avec leurs pages imprimées | [Informations à vérifier](/anomalies/informations-a-verifier.md) |
 | Kit renvoi complémentaire 2 vtx | organe TFZ60035 de la ferrure de fenêtre française uniquement châssis 2 vantaux | [Semi-fixe, condamnation et ferrure de fenêtre française 2 vantaux du SOLEAL FY (QC)](/quincaillerie/soleal-fy-qc-semi-fixe-et-condamnation-2-vantaux.md) |
 | Renvoi d'angle additionnel OF | organe TFZ60036 des zones B, D, F et H de la ferrure de fenêtre française | [Ferrure de fenêtre française du SOLEAL FY (QC), largeur 1201 à 1600 mm, zones B, D, F, H](/quincaillerie/soleal-fy-qc-ferrure-fenetre-francaise-largeur-1201-1600.md) |
-| Soufflet | châssis dont la ferrure porte le compas TFZ60019 « Compas soufflet » ; abaque « Poids Maxi vantail 110 kg », zones A à D, dessiné avec un point de fermeture en haut au centre | [Fenêtre à soufflet du SOLEAL FY (QC), abaque, ferrures zones A à D et loqueteau](/quincaillerie/soleal-fy-qc-soufflet-abaque-et-ferrures.md) |
-| Symbole | Désignation imprimée | - |
 | T4 Bis | tige de crémone des zones G et H de la ferrure BO, écrite « 2 (Hv/3) - 96.5 » ou « 2 / 3 Hv - 96.5 » | [Ferrure BO du SOLEAL FY (QC), vantail de largeur 500 à 700 mm, zones A, D et G](/quincaillerie/soleal-fy-qc-ferrure-bo-largeur-500-700.md), [Ferrure BO du SOLEAL FY (QC), vantail de largeur 701 à 1200 mm, zones B, E et H](/quincaillerie/soleal-fy-qc-ferrure-bo-largeur-701-1200.md) |
 | Tremplin pour OF | organe TFZ60027 des zones A, C, E et G de la ferrure de fenêtre française, quantité 1 | [Ferrure de fenêtre française du SOLEAL FY (QC), largeur 425 à 1200 mm, zones A, C, E, G](/quincaillerie/soleal-fy-qc-ferrure-fenetre-francaise-largeur-425-1200.md) |
 | Zones A à H de la fenêtre française | huit zones de l'abaque, séparées par des lignes à Hv 1200, 1600 et 2250 et à Wv 1200 ; les zones A, C, E, G couvrent 425 ≤ Wv ≤ 1200 et les zones B, D, F, H 1201 < Wv ≤ 1600 | [Abaques d'utilisation pour fenêtre française du SOLEAL FY (QC), 80, 110 et 160 kg](/quincaillerie/soleal-fy-qc-abaques-fenetre-francaise.md) |

@@ -8,7 +8,7 @@ systeme: SOLEAL FY
 status: stable
 generated:
   by: process:claude-code
-  at: 2026-10-10T15:23:08Z
+  at: 2026-10-11T12:59:55Z
 ---
 Termes, sigles et repères employés dans le catalogue de conception 6057.003 du SOLEAL FY 55 évolution (ouvrant Apparent et Minimal). Chaque terme est glosé dans les mots de la source ; ce qu'elle ne définit pas est en fin de page, avec le numéro d'anomalie quand il y en a un.
 
@@ -74,7 +74,6 @@ Terme, sens écrit par le document et page du wiki qui l'emploie.
 | Visser | tournevis | PDF 156 |
 | Vérin - Porte cassette | première ligne de la matrice des outils : TWU0004 - TWU0005 et T2700 - TEK7037 | [Choix des outils d'usinage des dormants et ouvrants du SOLEAL FY 55 (matrice)](/machines/soleal-fy-choix-des-outils-d-usinage.md) |
 | Zone grisée | Prise de volume recommandée sur les matrices de parcloses | [Parcloses et vitrages SOLEAL FY](/profiles/soleal-fy-parcloses-et-vitrage.md) |
-| Épointage | détail dessiné « Epointage » (cote 9) à l'angle du dormant bande filante | [Rénovation, pattes, fixation et éclissage](/procedures/fabrication-soleal-fy-renovation-fixation-et-eclissage-des-dormants.md) |
 | Équerre angle variable, embout angle variable | colonnes des tableaux d'équerres et d'embouts, pour les assemblages dont l'angle n'est pas de 90° (AV = angle variable) | [Équerres, goupilles et embouts d'assemblage des dormants et ouvrants du SOLEAL FY 55](/profiles/soleal-fy-equerres-goupilles-et-embouts-d-assemblage.md) |
 | Équerre de feuillure | équerre TFY3859 (« 25 mm ») pour la composition des dormants ; 4 par dormant périphérique, 2 par dormant avec seuil PMR | [Drainages, équerre TFY3859, bouchon TFY4000 et pièces d'angle du SOLEAL FY 55](/procedures/soleal-fy-drainage-equerre-bouchon-et-pieces-d-angle.md) |
 | Équerre à expansion | équerre d'assemblage « Expansion » : « Les équerres à expansions sont goupillables ou sertissables » | [Équerres, goupilles et embouts d'assemblage des dormants et ouvrants du SOLEAL FY 55](/profiles/soleal-fy-equerres-goupilles-et-embouts-d-assemblage.md) |

@@ -8,7 +8,7 @@ systeme: SOLEAL FY
 status: stable
 generated:
   by: process:claude-code
-  at: 2026-10-10T15:23:08Z
+  at: 2026-10-11T12:59:55Z
 ---
 Termes, sigles et repères employés dans le catalogue de conception 6319.003 du SOLEAL FY 55/65 évolution à quincaillerie cachée QC. Chaque terme est glosé dans les mots de la source ; ce qu'elle ne définit pas est en fin de page, avec le numéro d'anomalie quand il y en a un.
 

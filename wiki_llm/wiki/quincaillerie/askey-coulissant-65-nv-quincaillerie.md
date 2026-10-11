@@ -1,12 +1,13 @@
 ---
 type: Quincaillerie
-title: Quincaillerie et accessoires ASKEY Coulissant 65 NV
-description: Nomenclatures, charges limites, caractéristiques et compatibilités des chariots de roulement, serrures multipoints, poignées et accessoires du Coulissant 65 NV ASKEY.
-tags: [quincaillerie, roulettes, serrure, poignee, coulissant, askey, hydro]
+title: "Roulettes, fermetures, barillets, charges et hauteurs de poignée du coulissant ASKEY 65 NV"
+description: "Références, charges maximales par vantail (80 à 250 kg), fermetures 1 à 3 points, accessoires de fermeture, poignées de fermeture, barillets, hauteur de poignée et hauteur mini de châssis du Coulissant 65 NV ASKEY."
+tags: [askey, coulissant, nv-65, roulettes, serrure, fermeture, poignee, cylindre, charge, quincaillerie]
 gamme: Coulissant 65 NV
 fournisseur: ASKEY
 usage: atelier
-status: stable
+famille: roulettes-et-fermetures
+status: draft
 sources:
   - resource: raw/askey1.pdf
     id: askey-coulissant-conception
@@ -18,128 +19,148 @@ sources:
     last_modified: 2022-12-14
 source_pages:
   - resource: raw/askey1.pdf
-    pages: 81-127
+    pages: 10, 112-117, 126-127
   - resource: raw/askey5.pdf
     pages: 38-53, 98-114
 generated:
   by: process:claude-code
-  at: 2026-09-19T22:40:00Z
+  at: 2026-10-10T20:23:00Z
 ---
 
-# Quincaillerie et accessoires ASKEY Coulissant 65 NV
+# Roulettes, fermetures, barillets, charges et hauteurs de poignée du coulissant ASKEY 65 NV
 
-La quincaillerie et les accessoires du **Coulissant 65 NV ASKEY** intègrent les organes de roulement, les verrouillages multipoints, les organes de manœuvre ainsi que les composants d'étanchéité à l'air et à l'eau [1 p. 81, 109].
+La roulette est la pièce, fixée en bas de l'ouvrant, qui porte le vantail et le fait rouler dans le rail ; la fermeture (serrure multipoints) verrouille le vantail dans le dormant ; le barillet est le cylindre de la serrure à clé (voir le [glossaire](/reference/glossaire.md)). Le coulissant ASKEY 65 NV est la base de la gamme Coulissant 65 NV de PROFERM (voir [la gamme](/gammes/askey-coulissant-65-nv.md)). Les tableaux donnent les références de roulettes, de fermetures, d'accessoires de fermeture, de poignées de fermeture et de barillets, les charges maximales par vantail et les hauteurs de poignée. Les poignées bâton maréchal et métal, les carrés de manœuvre et les tableaux de choix de poignée sont sur la page des [poignées et carrés de manœuvre](/quincaillerie/askey-coulissant-65-nv-poignees-et-carres-de-manoeuvre.md).
 
----
+Dans chaque tableau à photo, une ligne est une référence ; « Attribution » reproduit le texte imprimé sous la désignation (« - » quand rien n'est imprimé). La colonne « Application » est « Coulissant Askey » pour toutes les lignes ; la colonne « Matière » n'est renseignée pour aucune [1 p. 112-117].
 
 # Caractéristiques
 
-### Chariots de roulement
+## Roulettes
 
-Les chariots sont certifiés en classe 6 (200 000 cycles d'ouverture) selon la norme européenne, montés sur roulements à aiguilles anticorrosion avec axes inox et chapes polyamide isolantes [1 p. 9, 110, 124] :
+Sept références : une cale d'adaptation, six roulettes simples ou doubles, fixes ou réglables. Relevé dans le tableau « Les roulettes ». Les charges maximales par vantail sont reprises plus bas, avec les charges par roulette.
 
-| Référence | Désignation | Type de galet | Axe (mm) | Charge max / roulette | Charge max / vantail | Compatibilité rail |
-| --- | --- | --- | --- | --- | --- | --- |
-| **W6050150** | Roulette simple fixe | Polyamide | 6 | 40 kg | **80 kg** | Alu (W3041224) ou inox (W4000158) |
-| **W6050151** | Roulette simple réglable | Polyamide | 6 | 40 kg | **80 kg** | Alu (W3041224) ou inox (W4000158) |
-| **W6050152** | Roulette double fixe | Polyamide | 6 | 80 kg | **160 kg** | Alu (W3041224) ou inox (W4000158) |
-| **W6050153** | Roulette double réglable | Polyamide | 6 | 80 kg | **160 kg** | Alu (W3041224) ou inox (W4000158) |
-| **W6050155** | Roulette double réglable renforcée | Polyamide | 8 | 110 kg | **220 kg** | Inox W4000158 obligatoire |
-| **W6000025** | Roulette double charges lourdes | Acier trempé | - | 125 kg | **250 kg** | Inox W4000158 obligatoire (ouvrant 32) |
-| **W6050149** | Cale d'adaptation roulette 32 | Polyamide | - | - | - | Traverse W1041274 |
+| Référence | Désignation | Attribution (texte imprimé) | Image |
+| --- | --- | --- | ---: |
+| W6050149 | Cale roulette 32 | Permet d'adapter les roulettes W6050150, 151, 152, 153, 155 à la cage de le traverse des ouvrants de 32. | ![Cale roulette 32 W6050149](/assets/quincaillerie/askey-coulissant-65-nv/roulettes/roulette-w6050149.png) |
+| W6050150 | Roulette simple fixe | Corps et galet polyamide avec douille à aiguilles. Fixation par vis perforante. Charge maximale 80 kg par vantail. | ![Roulette simple fixe W6050150](/assets/quincaillerie/askey-coulissant-65-nv/roulettes/roulette-w6050150.png) |
+| W6050151 | Roulette simple réglable | Corps et galet polyamide avec douille à aiguilles. Fixation par vis perforante. Charge maximale 80 kg par vantail. | ![Roulette simple réglable W6050151](/assets/quincaillerie/askey-coulissant-65-nv/roulettes/roulette-w6050151.png) |
+| W6050152 | Roulette double fixe | Corps et galets polyamide avec douilles à aiguilles. Fixation par vis perforante. Charge maximale 160 kg par vantail. | ![Roulette double fixe W6050152](/assets/quincaillerie/askey-coulissant-65-nv/roulettes/roulette-w6050152.png) |
+| W6050153 | Roulette double réglable | Corps et galet polyamide avec douille à aiguilles. Fixation par vis perforante. Charge maximale 160 kg par vantail. | ![Roulette double réglable W6050153](/assets/quincaillerie/askey-coulissant-65-nv/roulettes/roulette-w6050153.png) |
+| W6050155 | Roulette double réglable renforcée | Corps et galet polyamide avec douille à aiguilles.axe 8 mm. Fixation par vis perforante. Charge maximale 200 kg par vantail. Renfort inox sur appui vis de réglage. | ![Roulette double réglable renforcée W6050155](/assets/quincaillerie/askey-coulissant-65-nv/roulettes/roulette-w6050155.png) |
+| W6000025 | Roulette pour charges lourdes | Roulette acier, poids max 250kg, 32 mm | ![Roulette pour charges lourdes W6000025](/assets/quincaillerie/askey-coulissant-65-nv/roulettes/roulette-w6000025.png) |
 
-(schéma: raw/askey1.pdf, p. 110, 111, 124)
+(schéma: raw/askey1.pdf, p. 112, 113)
 
-### Serrures et crémones de fermeture
+## Charge maximale du vantail
 
-Têtière de 16 mm, axe à 43 mm, fouillot carré de 7 mm [1 p. 10, 111, 112] :
+La charge maximale d'un vantail dépend de la roulette montée. Relevé dans le tableau « Charge maxi vantail » (charges en kg ; l'unité est imprimée « kgs »). La roulette W6050155 est imprimée à 200 kg par vantail dans le tableau « Les roulettes » et à 220 kg dans ce tableau : **INC-749**. La valeur retenue en attendant est 220 kg [1 p. 126].
 
-| Référence | Désignation | Points de fermeture | Mode de pose | Fonction spécifique |
-| --- | --- | --- | --- | --- |
-| **W6050100** | Fermeture 1 point | 1 crochet réglable | À visser | Système anti-fausse manœuvre |
-| **W6050102** | Fermeture 2 points | 1 crochet réglable + 1 fixe | À clamer | Fournie avec clameaux |
-| **W6050103** | Fermeture 3 points | 1 réglable + 2 fixes | À clamer | Verrouillage par cylindre européen |
-| **W6050104** | Fermeture 3 points à clé | 1 réglable + 2 fixes | À clamer | Cylindre traversant ouvrant |
-| **W6050111** | Bloc verrou encastré | 1 pêne à bascule | À encastrer | Verrouillage supplémentaire de vantail |
-| **W6050085** | Gâche à clamer | - | À clamer | Fournie avec vis de serrage |
-| **W6050083** | Clameau pour fermeture | - | À glisser | Maintien de têtière dans la gorge |
-
-(schéma: raw/askey1.pdf, p. 111, 112)
-
-### Organes de manœuvre et poignées
-
-| Référence | Désignation | Type de fixation | Application vantail |
+| Type de roulette (libellé imprimé) | Référence | Charge maxi par roulette (kg) | Charge maxi par vantail (kg) |
 | --- | --- | --- | --- |
-| **W6050120** | Grande poignée de manœuvre | Rivets taraudés W6060386 | Vantail principal 24 ou 32 mm |
-| **W6050125** | Poignée standard | Rivets taraudés W6060387 | Vantail principal ou secondaire |
-| **W6050130** | Petite commande compacte | Rivets taraudés W6060385 | Vantail semi-fixe ou secondaire |
-| **W6050126** | Gâchette allongée | Remplacement sur poignée | Manœuvre adoucie / PMR |
-| **W6050127** | Bouchon de manœuvre poignée | Obturation | Transforme la poignée en poignée fixe de tirage |
-| **W6050133** | Coquille à carré vantail 24 mm | Encastrée | Croisement total des vantaux de 24 mm |
-| **W6050134** | Coquille à carré vantail 32 mm | Encastrée | Croisement total des vantaux de 32 mm |
-| **W6050284** | Verrou à levier extra-plat | Encastré | Ouvrants de 24 et 32 mm |
+| Roulette simple réglable | W6050151 | 40 | 80 |
+| Roulette Double réglable | W6050153 | 80 | 160 |
+| Roulette Double réglable Axe de 8mm | W6050155 | 110 | 220 |
+| Roulette Double charge lourde | W6000025 | 125 | 250 |
 
-(schéma: raw/askey1.pdf, p. 113, 114, 117, 119)
+(schéma: raw/askey1.pdf, p. 126)
 
-### Carrés de manœuvre (carré de 7 mm)
+Pour un vantail de plus de 2250 mm de haut, le tableau est suivi de la prescription : « Au dessus de 2250 mm de haut Rajouter Rails alu réf:W3041224 en traverse haute ou rail inox W4000158 en traverse haute » [1 p. 126].
 
-Longueur nominale de la tige carrée en fonction de la section de profilé et du ferrage [1 p. 116, 121, 122] :
+![Rail à rajouter en traverse haute au-dessus de 2250 mm](/assets/quincaillerie/askey-coulissant-65-nv/charges-et-hauteurs/rail-au-dessus-de-2250-mm.png)
 
-| Référence | Longueur $L$ (mm) | Type d'ouvrant | Face de manœuvre |
-| --- | --- | --- | --- |
-| **W4070492** | 32 | Vantail 24 mm non renforcé | Face intérieure seule |
-| **W4070493** | 35 | Vantail 24 mm non renforcé | Poignées intérieure et extérieure |
-| **W4070494** | 41 | Vantail 32 mm non renforcé | Face intérieure ou deux faces |
-| **W4070496** | 53 | Vantail 24 mm renforcé carré | Poignées sur les deux faces |
-| **W4070495** | 56 | Vantail 24 mm renforcé W1041261 | Poignées sur une ou deux faces |
-| **W4070497** | 59 | Vantail 32 mm renforcé carré | Face intérieure seule |
-| **W4070498** | 62 | Vantail 32 mm renforcé carré | Poignées intérieure et extérieure |
+Coupe du dormant avec la flèche désignant le rail à rajouter en traverse haute, repris du bas de la page de charges maximales.
 
-(schéma: raw/askey1.pdf, p. 116)
+## Fermetures (serrures)
 
----
+Quatre fermetures à têtière, de 1 à 3 points de fermeture. W6050103 est imprimée « plus verrouillage par cylindre » et W6050104 (« à clef ») sans mention de cylindre : **VER-755**. La têtière est la plaque de la serrure fixée sur la tranche de l'ouvrant. Les caractéristiques générales imprimées sont : têtière 16 mm, carré de 7 mm, axe 43 mm ; 1 point, à visser ; 2 points, à clamer ; 3 points, à clamer ; 3 points à clé, à clamer ; antidégondage des ouvrants par pêne inversée ; fermeture manuelle, coffre serrure équipé d'un système anti-fausse manœuvre ; manœuvre intérieure ou extérieure par poignées à carré 7 mm ; serrure à clé avec canon européen [1 p. 10].
 
-# Champs d'application
+| Référence | Désignation | Attribution (texte imprimé) | Image |
+| --- | --- | --- | ---: |
+| W6050100 | Fermeture 1 point | Fermeture 1 point avec crochet réglable et anti fausse manoeuvre. Usinage avec outil W5040368. | ![Fermeture 1 point W6050100](/assets/quincaillerie/askey-coulissant-65-nv/serrures/serrure-w6050100.png) |
+| W6050102 | Fermeture 2 points | Fermeture 2 points avec un crochet réglable, un crochet fixe et anti fausse manoeuvre. Fournie avec clameaux. Usinage avec outil W5040368. | ![Fermeture 2 points W6050102](/assets/quincaillerie/askey-coulissant-65-nv/serrures/serrure-w6050102.png) |
+| W6050103 | Fermeture 3 points | Fermeture 3 points avec un crochet réglable, deux crochets fixes et anti fausse manoeuvre plus verrouillage par cylindre. Fournie avec clameaux. Usinage avec outil W5040368. | ![Fermeture 3 points W6050103](/assets/quincaillerie/askey-coulissant-65-nv/serrures/serrure-w6050103.png) |
+| W6050104 | Fermeture 3 points à clef | Fermeture 3 points avec un crochet réglable, deux crochets fixes et anti fausse manoeuvre. Fournie avec clameaux. Usinage avec outil W5040368. | ![Fermeture 3 points à clef W6050104](/assets/quincaillerie/askey-coulissant-65-nv/serrures/serrure-w6050104.png) |
 
-### Hauteur de poignée et limites de châssis
+(schéma: raw/askey1.pdf, p. 113)
 
-Dimensions minimales hors-tout d'ouvrant ($Ho$) et hauteur minimale de poignée ($hp$) en millimètres selon le type de fermeture [1 p. 125] :
+## Accessoires de fermeture et poignées de fermeture
 
-| Type de fermeture | Référence | $Ho$ mini (mm) | $hp$ mini (mm) | Plage hauteur traverse intermédiaire ($HTr$) |
+Cuvette, rosette, clameau, gâche, bloc verrou et ses crochets, poignées de fermeture avec leurs gâchettes et bouchon, coquilles à carré. Le clameau est la pièce qui maintient la têtière ; la gâche reçoit le crochet de la fermeture. Relevé dans les tableaux « Fermetures et accessoires ». Quand la référence imprimée comporte deux lignes (poignée et système de fixation), la seconde est donnée dans sa colonne. L'attribution de la cuvette W6020048 est imprimée « sanas visserie » : **VER-754**.
+
+| Référence | Deuxième référence imprimée (fixation) | Désignation | Attribution (texte imprimé) | Image |
+| --- | --- | --- | --- | ---: |
+| W6020048 | - | Cuvette à encastrer | Flasque de cuvette à encastrer. Utilisation intérieure. Fixation par clipsage sanas visserie. | ![Cuvette à encastrer W6020048](/assets/quincaillerie/askey-coulissant-65-nv/fermetures-et-accessoires/accessoire-w6020048.png) |
+| W6020635 | - | Rosette 28 x 57 | - | ![Rosette 28 x 57 W6020635](/assets/quincaillerie/askey-coulissant-65-nv/fermetures-et-accessoires/accessoire-w6020635.png) |
+| W6050083 | - | Clameau fermetures | Clameau pour fermeture à têtière type W6050100. | ![Clameau fermetures W6050083](/assets/quincaillerie/askey-coulissant-65-nv/fermetures-et-accessoires/accessoire-w6050083.png) |
+| W6050085 | - | Gâche à clamer | Gâche à clamer, fournie avec vis et clameaux | ![Gâche à clamer W6050085](/assets/quincaillerie/askey-coulissant-65-nv/fermetures-et-accessoires/accessoire-w6050085.png) |
+| W6050111 | - | Bloc verrou | - | ![Bloc verrou W6050111](/assets/quincaillerie/askey-coulissant-65-nv/fermetures-et-accessoires/accessoire-w6050111.png) |
+| W6050112 | - | Crochet pour bloc verrou vtl 24 | Pour bloc verrou W6050111 | ![Crochet pour bloc verrou vtl 24 W6050112](/assets/quincaillerie/askey-coulissant-65-nv/fermetures-et-accessoires/accessoire-w6050112.png) |
+| W6050117 | - | Crochet pour bloc verrou vtl 32 | Pour bloc verrou W6050111 | ![Crochet pour bloc verrou vtl 32 W6050117](/assets/quincaillerie/askey-coulissant-65-nv/fermetures-et-accessoires/accessoire-w6050117.png) |
+| W6050120 | W6060386 | Grande poignée | Fournie avec le système de fixation W6060386 : Fixation par rivets taraudés. | ![Grande poignée W6050120](/assets/quincaillerie/askey-coulissant-65-nv/fermetures-et-accessoires/accessoire-w6050120.png) |
+| W6050125 | W6060387 | Poignée standard | Fournie avec le système de fixation W6060387 : Fixation par rivets taraudés. | ![Poignée standard W6050125](/assets/quincaillerie/askey-coulissant-65-nv/fermetures-et-accessoires/accessoire-w6050125.png) |
+| W6050126 | - | Gachette allongée | S'utilise avec W6050125, 120 et 130 pour une manoeuvre aisée. | ![Gachette allongée W6050126](/assets/quincaillerie/askey-coulissant-65-nv/fermetures-et-accessoires/accessoire-w6050126.png) |
+| W6050127 | - | Bouchon manoeuvre poignée | En remplacement de la gachette sur les poignées W6050120, W6050125, W6050130 pour l'utiliser en poignée de tirage. | ![Bouchon manoeuvre poignée W6050127](/assets/quincaillerie/askey-coulissant-65-nv/fermetures-et-accessoires/accessoire-w6050127.png) |
+| W6050128 | - | Gachette raccourcie | S'utilise avec W6050125, 120 et 130 pour une manoeuvre aisée. | ![Gachette raccourcie W6050128](/assets/quincaillerie/askey-coulissant-65-nv/fermetures-et-accessoires/accessoire-w6050128.png) |
+| W6050130 | W6060385 | Petite commande à clamer | Fournie avec le système de fixation W6060385 : Fixation par rivets taraudés. | ![Petite commande à clamer W6050130](/assets/quincaillerie/askey-coulissant-65-nv/fermetures-et-accessoires/accessoire-w6050130.png) |
+| W6050133 | - | Coquille à carré pour Vtl 24 | Utilisation sur vantaux de 24 des semi fixes pour croisement total, avec fermetures W6050100, W6050102, ... | ![Coquille à carré pour Vtl 24 W6050133](/assets/quincaillerie/askey-coulissant-65-nv/fermetures-et-accessoires/accessoire-w6050133.png) |
+| W6050134 | - | Coquille à carré pour Vtl 32 | Utilisation sur vantaux de 32 des semi fixes pour croisement total, avec fermetures W6050100, W6050102, ... | ![Coquille à carré pour Vtl 32 W6050134](/assets/quincaillerie/askey-coulissant-65-nv/fermetures-et-accessoires/accessoire-w6050134.png) |
+
+(schéma: raw/askey1.pdf, p. 114, 115, 116)
+
+## Barillets
+
+Quatre barillets (cylindres de serrure). Aucune attribution n'est imprimée ; les dessins montrent les clés fournies. Les nombres de la désignation (30 x 50, 30 x 30) sont reproduits tels quels.
+
+| Référence | Désignation | Attribution (texte imprimé) | Image |
+| --- | --- | --- | ---: |
+| W6020016 | Demi barillet de 30 | - | ![Demi barillet de 30 W6020016](/assets/quincaillerie/askey-coulissant-65-nv/barillets/barillet-w6020016.png) |
+| W6020017 | Barillet 30 x 50 | - | ![Barillet 30 x 50 W6020017](/assets/quincaillerie/askey-coulissant-65-nv/barillets/barillet-w6020017.png) |
+| W6020018 | Barillet à bouton 30 x 50 | - | ![Barillet à bouton 30 x 50 W6020018](/assets/quincaillerie/askey-coulissant-65-nv/barillets/barillet-w6020018.png) |
+| W6020640 | Barillet 30 x 30 | - | ![Barillet 30 x 30 W6020640](/assets/quincaillerie/askey-coulissant-65-nv/barillets/barillet-w6020640.png) |
+
+(schéma: raw/askey1.pdf, p. 117)
+
+# Cotes
+
+## Hauteur de poignée et hauteur mini de châssis
+
+Le tableau « Hauteur poignée et hauteur mini châssis » donne, pour chaque fermeture, la hauteur hors tout minimale de l'ouvrant (Ho), la hauteur minimale de la poignée sur l'ouvrant (hp) et la plage admise de la hauteur de traverse intermédiaire (HTr). Une ligne est une fermeture ; la référence W6050104 est imprimée dans deux colonnes, d'où deux lignes : **INC-750**. Les valeurs sont imprimées sans unité ; « HP » n'est pas défini et le signe « ≠ » est imprimé entre « < » et « HTr » : **VER-753** [1 p. 127].
+
+| Fermeture (libellé imprimé) | Référence | Ho - hors tout ouvrant mini | hp - hauteur minimale de poignée sur ouvrant | HTr - hauteur de traverse intermédiaire |
 | --- | --- | --- | --- | --- |
-| 1 point | W6050100 | **500** | 250 | $HP - 162 < HTr < HP + 90$ |
-| 2 points | W6050102 | **965** | 425 | $HP - 162 < HTr < HP + 52$ |
-| 3 points | W6050103 | **1 297** | 755 | $HP - 162 < HTr < HP + 52$ |
-| 3 points avec cylindre | W6050104 | **1 297** | 755 | $HP - 252 < HTr < HP + 52$ |
-| 1 point à coulisse | W6050111 | - | - | $HP - 106 < HTr < HP + 106$ |
+| 1 point | W6050100 | 500 | 250 | HP-162 < ≠ HTr < HP+90 |
+| 2 points | W6050102 | 965 | 425 | HP-162 < ≠ HTr < HP+52 |
+| 3 points | W6050103 | 1297 | 755 | HP-162 < ≠ HTr < HP+52 |
+| 3 points | W6050104 | 1297 | 755 | HP-162 < ≠ HTr < HP+52 |
+| 3 points avec cylindre | W6050104 | 1297 | 755 | HP-252 < ≠ HTr < HP+52 |
+| 1 point à coulisse | W6050111 | - | - | HP-106 < ≠ HTr < HP+106 |
 
-(schéma: raw/askey1.pdf, p. 125)
+(schéma: raw/askey1.pdf, p. 127)
 
-Relation hauteur hors-tout châssis et ouvrant :
-$$\text{Hors tout châssis} = Ho + 2 \times \text{hauteur dormant} - 16\text{ mm}$$
+Relation imprimée : « Hors tout châssis = Hors tout ouvrant + 2 x hauteur dormant - 16 mm (2 x 8mm) ». Le dessin porte les cotes Ho (hors tout ouvrant), hp, HTr, le jeu de 8 et la hauteur du dormant ; sa légende est : « Dimensions mini châssis et positionnement hauteur mini poignée en fonction du choix de la fermeture. » [1 p. 127]
 
----
+![Hauteur de poignée et hauteur mini de châssis du coulissant ASKEY 65 NV](/assets/quincaillerie/askey-coulissant-65-nv/charges-et-hauteurs/hauteur-de-poignee-et-hauteur-de-chassis.png)
+
+À gauche, l'élévation du châssis avec les cotes Ho, hp et HTr ; à droite, la coupe du bas de l'ouvrant sur le dormant avec la cote de 8 et la hauteur du dormant.
 
 # Compatibilités
 
-* **Cale de roulette W6050149** : Obligatoire pour monter les chariots W6050150 à W6050155 dans la gorge de traverse d'ouvrant 32 mm W1041274 [1 p. 110].
-* **Crochet de bloc verrou** : Le bloc verrou W6050111 nécessite le crochet **W6050112** sur ouvrant 24 mm et le crochet **W6050117** sur ouvrant 32 mm [1 p. 112, 113].
-* **Sélection des poignées sur ouvrants renforcés** : Les poignées à coquille W6050133 et W6050134 sont conçues pour s'effacer lors du croisement complet des vantaux en baies de 3 et 4 vantaux [1 p. 114].
-
----
+* La cale W6050149 « permet d'adapter les roulettes W6050150, 151, 152, 153, 155 à la cage de le traverse des ouvrants de 32 » [1 p. 112].
+* Les trois fermetures W6050100, W6050102, W6050103 et W6050104 portent la mention « Usinage avec outil W5040368 » ; cet outil n'est pas dans la liste des outils de découpe (voir les [outils de découpe](/machines/askey-coulissant-65-nv-outils-de-decoupe.md)) : **VER-752** [1 p. 113].
+* Le clameau W6050083 est imprimé « pour fermeture à têtière type W6050100 » ; la gâche W6050085 est « fournie avec vis et clameaux » [1 p. 114].
+* Les crochets W6050112 (vantail 24) et W6050117 (vantail 32) sont imprimés « Pour bloc verrou W6050111 » [1 p. 114, 115].
+* Les gâchettes W6050126 et W6050128 « s'utilisent avec W6050125, 120 et 130 pour une manœuvre aisée » ; le bouchon W6050127 remplace la gâchette sur W6050120, W6050125 et W6050130 « pour l'utiliser en poignée de tirage » [1 p. 115].
+* Les coquilles W6050133 (vantail 24) et W6050134 (vantail 32) s'utilisent sur les vantaux semi-fixes pour croisement total, avec les fermetures W6050100, W6050102 et suivantes (liste imprimée avec des points de suspension) [1 p. 116].
+* Les profilés et les carrés associés à chaque poignée sont sur la page des [poignées et carrés de manœuvre](/quincaillerie/askey-coulissant-65-nv-poignees-et-carres-de-manoeuvre.md). Les accessoires, pattes, bouchons et flasques sont sur les pages de [pattes de fixation](/quincaillerie/askey-coulissant-65-nv-pattes-de-fixation.md), de [visserie et bouchons](/quincaillerie/askey-coulissant-65-nv-visserie-bouchons-et-goupilles.md) et de [bouchons, flasques, embouts et caches](/quincaillerie/askey-coulissant-65-nv-bouchons-flasques-embouts-et-caches.md).
 
 # Ce que la source ne donne pas
 
-* La source ne précise pas la référence de la clé de manœuvre d'urgence pour le bloc verrou W6050111 en l'absence de cylindre européen.
-
----
+Aucune matière, aucune finition de série ni aucune compatibilité de barillet n'est imprimée pour ces références. Le bloc verrou W6050111 et la rosette W6020635 n'ont pas d'attribution imprimée.
 
 # Citations
 
-[1] [Coulissant 65 NV ASKEY - Conception](raw/askey1.pdf), p. 81, 109-127
+[1] [Coulissant 65 NV ASKEY - Conception](raw/askey1.pdf), p. 10, 112-117, 126-127
 [2] [Coulissant 65 NV ASKEY - Fabrication](raw/askey5.pdf), p. 38-53, 98-114
-
----
 
 # Voir aussi
 
@@ -147,3 +168,6 @@ $$\text{Hors tout châssis} = Ho + 2 \times \text{hauteur dormant} - 16\text{ mm
 - [Profilés dormants et ouvrants Coulissant 65 NV](/profiles/askey-coulissant-65-nv-dormants-et-ouvrants.md)
 - [Cotes de débit Coulissant 65 NV](/profiles/askey-coulissant-65-nv-cotes-de-debit.md)
 - [Fabrication Coulissant 65 NV](/procedures/fabrication-coulissant-askey-65-nv.md)
+- [Prises de volume des ouvrants](/vitrages/askey-coulissant-65-nv-prises-de-volume.md)
+- [Choix des bouchons et des flasques](/quincaillerie/askey-coulissant-65-nv-choix-des-bouchons-et-flasques.md)
+- [Positionnement des pattes de fixation](/procedures/askey-coulissant-65-nv-positionnement-des-pattes-de-fixation.md)

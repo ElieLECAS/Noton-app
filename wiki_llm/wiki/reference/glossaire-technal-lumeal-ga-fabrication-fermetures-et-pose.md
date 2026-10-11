@@ -8,7 +8,7 @@ systeme: LUMEAL GA
 status: stable
 generated:
   by: process:claude-code
-  at: 2026-10-10T15:23:08Z
+  at: 2026-10-11T12:59:55Z
 ---
 Termes, sigles et repères d'atelier employés dans le catalogue de fabrication 5074.007 du LUMEAL GA pour les fermetures, les poignées, les finitions, la pose et le retard à l'effraction. Chaque terme est glosé dans les mots de la source ; ce qu'elle ne définit pas est en fin de page, avec le numéro d'anomalie quand il y en a un.
 

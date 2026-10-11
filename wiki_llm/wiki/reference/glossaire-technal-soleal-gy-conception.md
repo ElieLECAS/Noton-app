@@ -8,7 +8,7 @@ systeme: SOLEAL GY
 status: stable
 generated:
   by: process:claude-code
-  at: 2026-10-10T15:23:09Z
+  at: 2026-10-11T12:59:55Z
 ---
 Termes, sigles et repères employés dans le catalogue de conception 5744.005 du coulissant SOLEAL GY 55. Chaque terme est glosé dans les mots de la source ; ce qu'elle ne définit pas est en fin de page, avec le numéro d'anomalie quand il y en a un.
 

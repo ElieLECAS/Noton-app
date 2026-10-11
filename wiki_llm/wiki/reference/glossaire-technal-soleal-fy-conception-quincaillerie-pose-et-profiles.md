@@ -8,7 +8,7 @@ systeme: SOLEAL FY
 status: stable
 generated:
   by: process:claude-code
-  at: 2026-10-10T15:23:08Z
+  at: 2026-10-11T12:59:55Z
 ---
 Termes, sigles et repères employés dans le catalogue de conception 6057.003 du SOLEAL FY 55 évolution pour la quincaillerie visible, la pose et le récapitulatif des profilés. Chaque terme est glosé dans les mots de la source ; ce qu'elle ne définit pas est en fin de page, avec le numéro d'anomalie quand il y en a un.
 
@@ -22,7 +22,6 @@ Terme, sens écrit par le document et page du wiki qui l'emploie.
 | Bande filante | pose du dormant « bande filante » T210073 en applique intérieure, extérieure ou sur dalle | [Cas de pose](/procedures/soleal-fy-cas-de-pose-neuf-renovation-et-bande-filante.md) |
 | Cale (T940093, T940094) | pièce associée au compas T950002 (65 kg) ou T950004 (100 kg) | [Compas italienne et projection](/quincaillerie/soleal-fy-compas-italienne-et-projection.md) |
 | Calfeutrement (p, ℓ) | profondeur de calfeutrement p = ℓ/2, avec ℓ mini 5 mm et ℓ maxi 20 mm, p mini 5 mm (rappel du DTU 36.5 P1-1) | [Pattes de fixation](/procedures/soleal-fy-pattes-de-fixation-et-fixation-du-dormant.md) |
-| Cornière | profilé en L, dessiné sous la rubrique « Tapées » (T591169, T591242, T591243) | [Tapées, cornières et couvre-joints](/profiles/soleal-fy-tapees-et-couvre-joints-profiles.md) |
 | Couvre joint | rubrique du récapitulatif qui regroupe 17 profilés, de T591180 à TGY2122 et de T510024 à T591199 | [Tapées, cornières et couvre-joints](/profiles/soleal-fy-tapees-et-couvre-joints-profiles.md) |
 | Doublage | épaisseur d'isolant (80 à 200 mm) qui commande le choix de la tapée, du bouchon et de la patte | [Tapées, appuis, bavettes et couvre-joints](/profiles/soleal-fy-tapees-appuis-bavettes-et-couvre-joints-de-pose.md) |
 | Désignation imprimée | Dessin | - |

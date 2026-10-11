@@ -8,7 +8,7 @@ systeme: SOLEAL PY
 status: stable
 generated:
   by: process:claude-code
-  at: 2026-10-10T15:23:10Z
+  at: 2026-10-11T12:59:55Z
 ---
 Termes, sigles, abréviations et symboles d'atelier employés dans la fin du catalogue de fabrication 4899.007 de la porte SOLEAL PY 55 (ferme-porte intégré, ferme-porte en applique, outillages, symboles). Chaque terme est glosé dans les mots de la source ; ce qu'elle ne définit pas est en fin de page, avec le numéro d'anomalie quand il y en a un.
 

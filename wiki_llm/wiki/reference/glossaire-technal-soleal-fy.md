@@ -8,7 +8,7 @@ systeme: SOLEAL FY
 status: stable
 generated:
   by: process:claude-code
-  at: 2026-10-10T15:23:07Z
+  at: 2026-10-11T12:59:55Z
 ---
 Termes, sigles et repères employés dans le DTA 6/12-2016_V5 du SOLEAL FY (fenêtres à frappe de la LUMINE55). Chaque terme est glosé dans les mots de la source ; ce qu'elle ne définit pas est en fin de page, avec le numéro d'anomalie quand il y en a un.
 

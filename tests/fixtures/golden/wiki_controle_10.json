@@ -184,18 +184,18 @@
       "verification": [
         {
           "page": "/quincaillerie/askey-frappe-quincaillerie-et-equerres.md",
-          "ligne": 141,
+          "ligne": 137,
           "extrait": "* La source ne fournit pas le couple de serrage recommandé en Nm pour les vis coniques Torx 25 W4070002 dans les équerres en zamak."
         },
         {
           "page": "/quincaillerie/askey-frappe-quincaillerie-et-equerres.md",
-          "ligne": 104,
-          "extrait": "* **W4070002** : Goupille à visser dia 6,6 x 9,5 mm à empreinte Torx 25 [1 p. 90]."
+          "ligne": 103,
+          "extrait": "* **W4070002** : Goupille à visser dia 6,6 x 9,5 mm à empreinte Torx 25 [1 p. 92]."
         },
         {
           "page": "/procedures/fabrication-coulissant-askey-65-nv.md",
-          "ligne": 97,
-          "extrait": "* Fixer le profilé de jonction centrale rapportée Y3740022 à l'aide de vis TF ST3.5x16 au pas de 300 mm (couple maxi 20 Nm) [1 p. 54, 117]. (piège)"
+          "ligne": 80,
+          "extrait": "* Fixer le profilé de jonction de vantaux en ligne Y3740022 à l'aide de vis TF ST3.5x16 au pas de 300 mm maximum (couple 2 DaN.m, soit 20 Nm) [1 p. 119]. (piège)"
         }
       ]
     },
@@ -408,9 +408,9 @@
           "extrait": "| T141015 | Traverse basse ouvrant | 4 | || | L/2-91 | (piège)"
         },
         {
-          "page": "/profiles/askey-coulissant-65-nv-cotes-de-debit.md",
-          "ligne": 44,
-          "extrait": "| Ouvrant traverse | **W1041274** | Traverse d'ouvrant 32 mm | 4 | $L/2 - 79{,}5$ | 90°-90° | (piège)"
+          "page": "/profiles/askey-coulissant-65-nv-cotes-de-debit-cd65.md",
+          "ligne": 54,
+          "extrait": "| W1041274 | Traverse d'ouvrant vtl 32 | 4 | L/2 - 79.5 | 90-90 | (piège)"
         }
       ]
     },

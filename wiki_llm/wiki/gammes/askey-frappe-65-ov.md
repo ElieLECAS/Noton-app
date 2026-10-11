@@ -1,12 +1,12 @@
 ---
 type: Gamme
 title: Gamme ASKEY Frappe 65 Ouvrant Visible
-description: Système de fenêtre et porte-fenêtre battante aluminium 65 mm traditionnel avec parcloses intérieures clipées et seuil PMR filant (groupe Hydro).
+description: "Fenêtre et porte-fenêtre battante aluminium ASKEY Frappe 65 à ouvrant visible (groupe Hydro) : parcloses aluminium clipées, ouvrants HI+, seuil PMR filant avec feuillure rapportée W1010372 ou Y3720000."
 tags: [gamme, aluminium, frappe, ouvrant-visible, askey, hydro]
 gamme: Frappe 65 Ouvrant Visible
 fournisseur: ASKEY
 usage: chiffrage
-status: stable
+status: draft
 sources:
   - resource: raw/askey4.pdf
     id: askey-frappe-ov-fabrication
@@ -14,65 +14,62 @@ sources:
     last_modified: 2022-12-14
 source_pages:
   - resource: raw/askey4.pdf
-    pages: 3-7, 29-30, 141-158, 201-206, 207-222
+    pages: 29-30, 143-160, 203-224, 247
 generated:
   by: process:claude-code
-  at: 2026-09-19T22:26:00Z
+  at: 2026-10-11T11:35:06Z
 ---
 
 # Gamme ASKEY Frappe 65 Ouvrant Visible
 
-La **Frappe 65 Ouvrant Visible ASKEY** est la ligne de menuiseries battantes aluminium d'esthétique classique, où l'ouvrant présente un cadre et une feuillure visibles de l'extérieur, avec un vitrage maintenu par des parcloses intérieures en aluminium clipées [1 p. 3, 201].
+La Frappe 65 Ouvrant Visible ASKEY est une ligne de menuiseries aluminium battantes dont le vitrage est maintenu par des parcloses aluminium intérieures clipées, posées avec l'outil manuel Y5760000 sur fenêtre et Y5760001 sur porte-fenêtre [1 p. 29, 30, 204]. Elle est fabriquée sur les profilés décrits sur [Profilés dormants et ouvrants Frappe 65 OV](/profiles/askey-frappe-65-ov-dormants-et-ouvrants.md) ; le catalogue de fabrication Y9720008 est la seule source de cette gamme, aucun catalogue de conception n'étant disponible (**VER-970**).
 
-Le système se décline en :
-* **Fenêtre 1 et 2 vantaux** (ouvrant à la française, oscillo-battant ou soufflet).
-* **Porte-fenêtre 1 et 2 vantaux** avec montants renforcés pour serrures multipoints.
-* **Variante HI+** à performances thermiques accrues par barrettes multi-chambres.
-* **Seuil PMR filant** (hauteur 20 mm) avec feuillure rapportée W1010372 ou feuillure réduite Y3720000 sous parties fixes et meneaux.
+Le catalogue traite :
+* la fenêtre et la porte-fenêtre, avec des ouvrants « plat » et « à fiche » [1 p. 210-223] ;
+* les ouvrants HI+ (« Assemblage des ouvrants fenêtre « HI+ » », bouchons HI+) [1 p. 216, 217, 225-231, 244] ; le sigle « HI+ » n'est pas développé (**VER-811**) ;
+* les châssis à deux vantaux, avec ouvrant semi-fixe, bouchons de battement central et épointage des ouvrants secondaires [1 p. 169-178, 242-244] ;
+* le seuil PMR filant, avec la feuillure rapportée W1010372 ou la feuillure rapportée réduite Y3720000 [1 p. 143-160].
 
 ---
 
 # Caractéristiques
 
-| Composant | Conception | Caractéristique |
-| --- | --- | --- |
-| Module dormant | 65 mm (standard) / 75 mm (HI+) | Coupe d'onglet 45° ou coupe droite |
-| Profilés ouvrants fenêtre | Ligne droite « plat » ou « à fiche » | Hauteur d'ailette de 63 mm |
-| Profilés ouvrants porte-fenêtre | Profil tubulaire renforcé | Hauteur d'ailette de 90 mm avec cage pour serrure |
-| Parclosage | Parcloses aluminium clipées | Formes droites, galbées ou à nez court |
-| Outils de parclosage | Clés manuelles spécifiques | Y5760000 (fenêtres) et Y5760001 (portes-fenêtres) |
-| Seuil PMR filant | Hauteur 20 mm | Profil W1010384 continu avec feuillure rapportée vissée |
-| Assemblage d'angles | Double technologie | Sertissage (équerres filées) ou goupillage/vissage |
+| Composant | Ce que les planches impriment |
+| --- | --- |
+| Dormants | coupe d'onglet ou coupe droite ; sertissage ou goupillage et vissage ; drainage visible ou caché [1 p. 36, 37, 78-92] |
+| Ouvrants fenêtre et porte-fenêtre | ouvrants « plat », « à fiche » et « HI+ » ; cote de la coupe de l'ouvrant 65.6 ; hauteur de coupe 63 (fenêtre) et 90 (porte-fenêtre) sur les planches d'assemblage [1 p. 210-223] |
+| Parclosage | six parcloses W3010049, W3090255, Y3790008, W3010048, W3010050, Y3790009 [1 p. 204] |
+| Outils de parclosage | Y5760000 (fenêtre) et Y5760001 (porte-fenêtre) [1 p. 29, 30] |
+| Seuil PMR filant | seuil W1010384 ; feuillure rapportée W1010372 ou Y3720000 [1 p. 143-160] |
+| Assemblage d'angles | sertissage (équerres) ou goupillage ou vissage [1 p. 210-223] |
 
-(schéma: raw/askey4.pdf, p. 10, 29-30, 141, 160)
+(schéma: raw/askey4.pdf, p. 29, 30, 143-160, 204, 210-223)
+
+Les largeurs de profilé, les hauteurs d'ailette, les modules de dormant et la hauteur du seuil PMR ne sont imprimés sur aucune planche (**VER-970**).
 
 ---
 
 # Seuil PMR filant et feuillures rapportées
 
-Pour les ensembles combinant vantaux battants et parties fixes sur seuil PMR (profilé W1010384), la continuité de l'étanchéité et de la feuillure est assurée par deux types de feuillures rapportées [1 p. 141, 154] :
-1. **Feuillure rapportée standard W1010372** : Usinée et vissée sur le seuil W1010384 par vis W00VE037 (3 par mètre). Équipée des joints W4910040 et W4910004 et des bouchons étanches W4940084.
-2. **Feuillure rapportée réduite Y3720000** : Permet une jonction étroite sur dormant monobloc ou meneau W1010097 avec parclose fixe W3010053.
+Pour les ensembles combinant vantaux battants et parties fixes sur seuil PMR (profilé W1010384), la rubrique « Usinage et assemblage des feuillures rapportées seuil PMR filant » traite deux feuillures rapportées [1 p. 143-160] :
+1. Feuillure rapportée W1010372 : vissée sur le seuil W1010384 par les vis W00VE037 (« 3 par m ») ; la planche demande de monter les joints W4910040 et W4910004 sur W1010372 ; les bouchons W4940084 sont enfoncés dans W1010097 et W1010129 [1 p. 151, 152]. Détail sur [Assemblage de la feuillure W1010372](/procedures/fabrication-frappe-askey-65-ov-assemblage-des-feuillures-rapportees-seuil-pmr-filant.md).
+2. Feuillure rapportée réduite Y3720000 : ajoutée au catalogue par la mise à jour du 2022/11/08, avec les profilés W3090257, W3010053 et le dormant W1010129 ou le meneau W1010097 [1 p. 156-160, 260]. Détail sur [Feuillure rapportée réduite Y3720000](/procedures/fabrication-frappe-askey-65-ov-feuillure-rapportee-reduite-y3720000.md).
+
+La longueur de la feuillure est écrite « L2-45 » pour W1010372 et « L1 - 45 » pour Y3720000 (**INC-854**, **CTR-307**).
 
 ---
 
 # Dimensions limites et sécurité
 
-* **Sécurisation des parcloses porte-fenêtre** : Les parcloses de porte-fenêtre W3010048, W3010050 et Y3790009 doivent obligatoirement être sécurisées par vissage traversant de vis spéciales W4070541 après la pose du vitrage, à 23,1 mm du bord supérieur et espacées de 500 mm maxi [1 p. 206, 222].
-* **Épointage des montants semi-fixes** : Pour les châssis 2 vantaux, l'épointage des traverses et montants d'ouvrants secondaires doit être réalisé impérativement sur centre d'usinage (CU) ou à la poinçonneuse W5040427 pour assurer le croisement des joints d'étanchéité [1 p. 16, 169-176].
-
----
-
-# Ce qui n'est pas réalisable
-
-* Le montage direct sans feuillure rapportée sur le seuil PMR W1010384 est **impossible sous un vitrage fixe** : la feuillure W1010372 ou Y3720000 est indispensable pour créer la cage de vitrage et le drainage [1 p. 141-150].
-* L'utilisation de parcloses sans drainage en traverse basse est **interdite** : les parcloses basses W3010048/50 reçoivent obligatoirement les usinages de drainage de 5x30 mm aux postes 6 et 7 de l'outil W5040424 [1 p. 15, 205].
+* Sécurisation des parcloses : « Sécuriser les parcloses à l'aide des vis W4070541, aprés avoir vitré l'ouvrant. » [1 p. 224] ; le pré-perçage Ø3.8 de la planche « porte-fenêtre » est coté 23.1 et 12 des extrémités de la parclose [1 p. 208] (**VER-955**). Détail sur [Usinage des parcloses](/procedures/fabrication-frappe-askey-65-ov-usinage-des-parcloses-epointage-drainage-et-securisation.md).
+* Épointage des ouvrants secondaires : le nota des planches est « Déclipper le joint sur 10 cm. si déjà en place à la coupe. » ; les traverses se passent à l'outil W5040427 [1 p. 169-178]. Détail sur [Épointage des traverses et montants d'ouvrants secondaires](/procedures/fabrication-frappe-askey-65-ov-epointage-des-ouvrants-secondaires-semi-fixes.md).
+* Drainage des parcloses : « Si LCD ≥ 1000mm : 1 trou supplémentaire par tranche complémentaire de 500mm » sur les planches de drainage des parcloses et du capot [1 p. 201, 205, 207].
 
 ---
 
 # Citations
 
-[1] [Frappe 65 Ouvrant Visible ASKEY - Fabrication](raw/askey4.pdf), p. 10, 15-16, 29-30, 141-158, 201-206, 222
+[1] [Frappe 65 Ouvrant Visible ASKEY - Fabrication](raw/askey4.pdf), p. 29-30, 36-37, 78-92, 143-160, 169-178, 201-231, 242-244, 247, 260
 
 ---
 

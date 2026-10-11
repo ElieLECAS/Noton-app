@@ -8,7 +8,7 @@ systeme: SOLEAL PY
 status: stable
 generated:
   by: process:claude-code
-  at: 2026-10-10T15:23:09Z
+  at: 2026-10-11T12:59:55Z
 ---
 Termes, sigles et repères employés dans le catalogue de conception 4944.006 de la porte SOLEAL PY 55 pour les serrures, la quincaillerie de rotation, la pose et les récapitulatifs. Chaque terme est glosé dans les mots de la source ; ce qu'elle ne définit pas est en fin de page, avec le numéro d'anomalie quand il y en a un.
 
@@ -76,7 +76,6 @@ Terme ou sigle écrit par un document sans être défini, page qui l'emploie et 
 | Repères A, B, C, D (pivot haut, limiteur) | PDF 157 et 158 | la légende des repères (VER-604) |
 | SA3/2-4, SA3/5-7/750 | « Vis SA3/2-4-4.2x11 torx 20 » (T770020), « Vis SA3/5-7/750-4.2x13 torx20 » (T770022), PDF 181 | le sens du code SA3 et des nombres qui le suivent |
 | SEC-0000xxxxx | identifiant imprimé en pied de chaque planche (ex. SEC-000046294, PDF 184) | à quoi il renvoie |
-| SF | « Kit inserts gaches et verrou SF » (TPY3621), PDF 177 | le sens de SF |
 | ST4.2, 4.2x25-C | « Vis à tole ST4.2x25-C T20 » (TAY0047), PDF 181 | la signification des cotes et du suffixe C |
 | T1, T2, Tx, Tx1, Ty1, Ty2 | longueurs de tringle T525058 des planches de serrures (PDF 114 à 118, 124, 125) | que T1 est la tringle basse et T2 la tringle haute (seuls les repères et les formules sont imprimés) |
 | T1535, T1556, T760212, TPY3718, TPY3719 | PDF 131 à 137 | la désignation de chaque pièce |
