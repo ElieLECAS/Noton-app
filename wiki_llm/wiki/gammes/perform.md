@@ -185,7 +185,7 @@ La valeur de juin 2023 est imprimée « Uw jusque 1.3/m²K », sans le W de l'un
 
 # Dimensions limites
 
-Dimensions maximales de baie issues du procédé certifié 76 Advanced documenté dans le [DTA 6/16-2334](/certifications/dta-6-16-2334.md) (p. 9), applicables à la gamme PERFORM76 hors fabrications dérogatoires d'atelier.
+Dimensions maximales de baie issues du procédé certifié 76 Advanced documenté dans le [DTA 6/16-2334](/certifications/dta-6-16-2334-dimensions-maximales-conception-mise-en-oeuvre.md) (p. 9), applicables à la gamme PERFORM76 hors fabrications dérogatoires d'atelier.
 
 | Configuration d'ouverture | Hauteur maximale de baie (m) | Largeur maximale de baie (m) |
 | --- | --- | --- |

@@ -101,7 +101,7 @@ L'embout 9A82 est dessiné à droite du 1547, en tête de la bande des profilés
 figure aussi dans les chaînes d'assemblage du cahier technique PERFORM76 — voir
 [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md) ; le 76833 et
 son embout M664 figurent parmi les battements intérieurs du
-[système 76](/profiles/systeme-76-profiles-complementaires.md).
+[système 76](/profiles/systeme-76-profiles-complementaires-planches-tapees-liaison-poteaux.md).
 
 ## Battements du manuel de mise en œuvre
 
@@ -234,7 +234,7 @@ poster — entrée **CTR-71** du registre
 
 # Voir aussi
 
-- [Renforts acier, joints et caractéristiques du système 70 Plateforme](/profiles/systeme-70-profiles-et-renforts.md)
+- [Renforts acier, joints et caractéristiques du système 70 Plateforme](/profiles/systeme-70-profiles-et-renforts-renforts-acier.md)
 - [Dormants, dormants larges et de rénovation, capots et renforts du système 70 Plateforme](/profiles/systeme-70-dormants.md)
 - [Ouvrants, ouvrants de porte, capots et renforts du système 70 Plateforme](/profiles/systeme-70-ouvrants.md)
 - [Meneaux et traverses, capots, renforts et pièces d'assemblage du système 70 Plateforme](/profiles/systeme-70-meneaux-et-traverses.md)

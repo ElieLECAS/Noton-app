@@ -70,7 +70,7 @@ dessine l'A174 ni le 9B13 séparément (entrée **VER-106** du registre
 (entrée **VER-105**).
 
 Les mêmes capots dessinés sur le poster du système 70, avec leur groupe de dormant ou d'ouvrant,
-sont dans [Profilés et renforts du système 70](/profiles/systeme-70-dormants.md#capots-des-dormants).
+sont dans [Profilés et renforts du système 70](/profiles/systeme-70-dormants-capots-et-dormants-du-dtd.md#capots-des-dormants).
 
 ## Battement aluminium A176 et embout M375
 
@@ -297,7 +297,7 @@ les ouvrants du A170.
 | A176 | battement alu, sur les ouvrants capotés 6112 / 6113 et 6115 / 6116 |
 
 Les coupes de ces montages sont dans
-[Plans de combinaison AluClip du système 70](/profiles/systeme-70-aluclip-plans-de-combinaison.md).
+[Plans de combinaison AluClip du système 70](/profiles/systeme-70-aluclip-plans-de-combinaison-battements-portes-seuils.md).
 
 # Ce que la source ne donne pas
 
@@ -313,5 +313,5 @@ des capots. Aucune cote de débit n'est donnée pour les capots des dormants 610
 
 - [Plans de combinaison AluClip du système 70](/profiles/systeme-70-aluclip-plans-de-combinaison.md)
 - [Capotage AluClip du système 70](/procedures/capotage-aluclip-systeme-70.md)
-- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
+- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts-renforts-acier.md)
 - [Cotes de débit du système 70](/profiles/systeme-70-cotes-de-debit.md)

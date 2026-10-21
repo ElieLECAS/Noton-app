@@ -106,7 +106,7 @@ groupe. Le second correspond à la **Gamme 70** des planches KÖMMERLING — voi
 # La quincaillerie du DTA n'est pas celle de PROFERM
 
 La quincaillerie du procédé 76 Advanced est **FERCO**, d'autres quincailleries étant admises
-« sur justifications » [1 p. 9]. PROFERM emploie [ROTO](/fournisseurs/roto.md) : la substitution
+« sur justifications » [1 p. 9]. PROFERM emploie [ROTO](/fournisseurs/roto-garantie-label-documents.md) : la substitution
 est prévue par le DTA, mais la justification correspondante ne figure dans aucun document du
 corpus — entrée **VER-20** du registre
 [Informations à vérifier](/anomalies/informations-a-verifier.md).

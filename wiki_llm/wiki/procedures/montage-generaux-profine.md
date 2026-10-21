@@ -119,7 +119,7 @@ qu'ils ne puissent ni glisser ni basculer (plaques de bois, palettes, châssis).
 les éléments de fenêtres et portes debout. Éviter les points de pression et les flexions. *Les
 emballages ne doivent pas provoquer de dommages. Éviter absolument une accumulation de chaleur et
 d'eau par l'emballage* [1 p. 103]. Le stockage en atelier des menuiseries finies est sur
-[Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md#stockage-et-transport-des-menuiseries-finies).
+[Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc-profiles-complementaires-et-controle.md#stockage-et-transport-des-menuiseries-finies).
 
 ## 3. Montage : conditions côté bâtiment
 
@@ -341,6 +341,6 @@ imprimées (PDF p. 107 à 110, version février 2023)
 - [Couplages et contreventements d'éléments](/procedures/couplages-elements.md)
 - [Usage, nettoyage et entretien d'une menuiserie profine](/entretien/usage-nettoyage-entretien-menuiseries-profine.md)
 - [Pose de la PERFORM76](/procedures/pose-perform76.md)
-- [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008.md)
+- [Mise en œuvre du système 70, 2008](/procedures/mise-en-oeuvre-systeme-70-evo2008-jeux-de-dilatation-et-referentiel-ufpvc.md)
 - [Directives générales profine](/sources/profine-directives-generales.md)
 - [profine](/fournisseurs/profine.md)

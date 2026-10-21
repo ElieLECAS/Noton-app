@@ -90,7 +90,7 @@ def test_estimated_tokens_and_stats(real_snapshot):
     assert stats["wiki_chars"] == sum(len(p.raw_text) for p in real_snapshot.concept_pages)
     assert stats["wiki_chars"] > real_snapshot.char_count * 10
     assert set(stats["lint"]) == {
-        "frontmatter_errors", "not_in_index", "index_dead_links", "unknown_facets", "sommaires"
+        "frontmatter_errors", "not_in_index", "index_dead_links", "unknown_facets", "sommaires", "long_pages"
     }
     assert stats["types"]["Document source"] >= 1
     graph = real_snapshot.graph_payload()

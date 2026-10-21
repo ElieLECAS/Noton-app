@@ -138,7 +138,7 @@ représentés dans les coupes »). La planche écrit les valeurs Iw avec un poin
 elles sont écrites ici avec une virgule.
 
 Les sections des profilés eux-mêmes (cotes, chambres, poids) et des renforts sont dans
-[Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md) ; les tables
+[Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts-renforts-acier.md) ; les tables
 complètes d'inertie sont dans
 [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md).
 

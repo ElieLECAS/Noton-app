@@ -120,9 +120,12 @@
   }
 
   /* ---- formulaire ---- */
-  #fa form{position:sticky;top:0;background:var(--bg-side);border:1px solid var(--line);border-radius:14px;
+  #fa .left{position:sticky;top:0;display:flex;flex-direction:column;gap:.8rem}
+  #fa .sysbar{background:var(--bg-side);border:1px solid var(--line);border-radius:14px;padding:.8rem 1.1rem}
+  #fa .sysbar .indispo{font-size:12px;color:var(--tx-faint);margin-top:.5rem}
+  #fa form{background:var(--bg-side);border:1px solid var(--line);border-radius:14px;
     padding:1rem 1.1rem 1.2rem;display:flex;flex-direction:column;gap:.95rem}
-  @media(max-width:1000px){#fa form{position:static}}
+  @media(max-width:1000px){#fa .left{position:static}}
   #fa .f-lab{display:block;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
     color:var(--tx-faint);margin-bottom:.35rem}
   #fa .seg{display:flex;flex-wrap:wrap;gap:4px}
@@ -200,7 +203,7 @@
 <div id="fa" class="flex-1 min-h-0">
   <div class="wrap">
     <div class="head">
-      <h1>Faisabilité et débit PERFORM76</h1>
+      <h1 id="fa-titre">Faisabilité et débit</h1>
       <button type="button" class="help-btn" id="fa-aide-btn" title="Comment ça marche" aria-haspopup="dialog" aria-controls="fa-aide">i</button>
     </div>
     <p class="lede">Une saisie, deux sorties (audit du 22/09, § 9.1 et 9.2) : le verdict de faisabilité, et la fiche
@@ -208,6 +211,13 @@
       porte ; aucune ne vient d'un modèle.</p>
 
     <div class="grid">
+      <div class="left">
+      <div class="sysbar">
+        <span class="f-lab">Système</span>
+        <div class="seg" id="f-systeme"></div>
+        <div class="hint" id="sys-portee"></div>
+        <div class="indispo" id="sys-indispo"></div>
+      </div>
       <form id="f" autocomplete="off" onsubmit="return false">
         <div>
           <span class="f-lab">Configuration</span>
@@ -241,6 +251,17 @@
           <div class="hint" id="f-vit-hint" hidden>verre-lame-verre : 4-16-4, 44.2-16-4, 4-12-4-12-4</div>
         </div>
         <label class="check" id="w-j079"><input type="checkbox" id="f-j079"> Équerres de feuillure J079 aux 4 angles</label>
+        <label class="check" id="w-aluclip"><input type="checkbox" id="f-aluclip"> AluClip Pro (capot A072, ouvrant 76271)</label>
+        <div id="w-poids">
+          <span class="f-lab">Poids de ferrure et acier du dormant</span>
+          <div class="row2">
+            <select id="f-ferrure-poids" aria-label="Poids de ferrure admissible"></select>
+            <select id="f-acier" aria-label="Acier du dormant"></select>
+          </div>
+          <div class="hint">Poids admissible de l'ouvrant selon la ferrure et l'acier (VER-25) ; le poids calculé est celui du verre seul.</div>
+        </div>
+        <label id="w-verrou"><span class="f-lab">Distance entre points de verrouillage</span>
+          <span class="unit"><input type="number" id="f-verrou" min="0" max="300" step="1" placeholder="non renseignée"><span>cm</span></span></label>
         <div>
           <label><span class="f-lab">Isolant intérieur</span><select id="f-iso" aria-describedby="f-iso-hint"></select></label>
           <div class="hint" id="f-iso-hint"></div>
@@ -260,6 +281,8 @@
           <div class="hint">Le wiki ne la donne pas pour le 76 : sans elle, les barres soudées sortent en cote finie.</div>
         </div>
       </form>
+      <form id="g" autocomplete="off" onsubmit="return false" hidden></form>
+      </div>
 
       <div id="results">
         <div class="tabs" role="tablist" aria-label="Résultat">
@@ -395,6 +418,7 @@ const REGISTRES = {INC: "/anomalies/incoherences-internes.md", CTR: "/anomalies/
                    VER: "/anomalies/informations-a-verifier.md"};
 const wikiHref = p => "/wiki#" + encodeURI(p);
 let OPT = null, conf = "1v_of", couleur = "blanc", timer = null, seq = 0;
+let SYS = "perform76", SYSTEMES = [], OPTG = null;
 
 async function api(url, body){
   const r = await fetch(url, {method: body ? "POST" : "GET", credentials: "include",
@@ -423,6 +447,7 @@ function syncVisibility(){
   $("w-battement").hidden = $("w-vent").hidden = conf !== "2v_battement";
   $("w-bas").hidden = conf === "fixe";
   $("w-j079").hidden = conf === "fixe";
+  $("w-aluclip").hidden = $("w-poids").hidden = $("w-verrou").hidden = conf === "fixe";
   $("w-ferrure").hidden = conf === "fixe";
   $("f-securite").hidden = $("f-paumelles").value !== "P";
 }
@@ -481,7 +506,31 @@ function saisie(){
     vent: $("f-vent").value || "0,8",
     isolant_mm: $("f-iso").value ? +$("f-iso").value : null,
     paumelles: $("f-paumelles").value || "P", version: $("f-version").value || "130",
-    securite: $("f-securite").value || "base"};
+    securite: $("f-securite").value || "base",
+    ferrure_poids: $("f-ferrure-poids").value || null, acier_dormant: $("f-acier").value || "sans",
+    distance_verrouillage_cm: $("f-verrou").value ? +$("f-verrou").value : null,
+    aluclip_pro: $("f-aluclip").checked};
+}
+
+// AluClip Pro : l'ouvrant 76271 et le capot aluminium sont imposés, ses battements sont les 76471 / 76472.
+function ajouteOption(sel, valeur){
+  if(![...$(sel).options].some(o => o.value === valeur)) $(sel).insertAdjacentHTML("beforeend", '<option>' + esc(valeur) + '</option>');
+}
+function syncAluclip(){
+  if(!OPT || !OPT.aluclip_pro) return;
+  const ac = OPT.aluclip_pro;
+  if($("f-aluclip").checked){
+    ajouteOption("f-ouvrant", ac.ouvrant);
+    $("f-ouvrant").value = ac.ouvrant;
+    (ac.battements || []).forEach(b => ajouteOption("f-battement", b));
+    couleur = ac.couleur;
+  } else {
+    [...$("f-ouvrant").options].forEach(o => { if(!OPT.ouvrants.includes(o.value)) o.remove(); });
+    [...$("f-battement").options].forEach(o => { if(!OPT.battements.includes(o.value)) o.remove(); });
+    if(couleur === ac.couleur) couleur = "blanc";
+  }
+  seg($("f-couleur"), OPT.couleurs, couleur, k => { couleur = k; relance(); });
+  $("f-ouvrant").disabled = $("f-aluclip").checked;
 }
 
 function relance(){ clearTimeout(timer); timer = setTimeout(calcule, 220); }
@@ -489,6 +538,7 @@ function relance(){ clearTimeout(timer); timer = setTimeout(calcule, 220); }
 // Les deux sorties d'une même saisie : le verdict et la fiche de débit.
 let tab = "fa", DEBIT = null, DEBIT_S = null;
 async function calcule(){
+  if(SYS !== "perform76") return calculeGen();
   const s = saisie();
   if(!(s.largeur_mm > 0 && s.hauteur_mm > 0)) return;
   const n = ++seq;
@@ -522,7 +572,7 @@ document.querySelector("#results .tabs").addEventListener("click", e => {
 
 /* ---- la fiche de débit ---- */
 const mm = x => x == null ? "—" : fmt(x, 1);
-function renduDebit(r, s){
+function renduDebit(r, s, gen){
   const familles = [];
   r.lignes.forEach(l => { if(!familles.includes(l.famille)) familles.push(l.famille); });
   const lignes = familles.map(f => '<tr class="grp"><td colspan="7">' + esc(f) + '</td></tr>' +
@@ -543,20 +593,21 @@ function renduDebit(r, s){
     r.brouillons.map(p => esc(p.split("/").pop().replace(".md", ""))).join(", ") + '</span>' : "";
   $("out-debit").innerHTML =
     '<div class="fiche" id="fiche">' +
-      '<div class="fiche-head"><div><h2 class="fiche-t">Fiche de débit PERFORM76</h2>' +
+      '<div class="fiche-head"><div><h2 class="fiche-t">Fiche de débit ' + esc(gen ? libelleSysteme() : "PERFORM76") + '</h2>' +
+        (gen ? '<p class="fiche-sub">' + esc((OPTG.configurations || {})[s.configuration] || "") + ' · ' + fmt(s.largeur_mm, 0) + ' × ' + fmt(s.hauteur_mm, 0) + ' mm</p>' :
         '<p class="fiche-sub">' + esc(OPT.configurations[s.configuration]) + ' · ' + fmt(s.largeur_mm, 0) + ' × ' + fmt(s.hauteur_mm, 0) +
         ' mm · dormant ' + esc(s.dormant) + (s.ouvrant && s.configuration !== "fixe" ? ' · ouvrant ' + esc(s.ouvrant) : "") +
-        ' · ' + esc(OPT.couleurs[s.couleur]) + ' · ' + esc(s.vitrage) + '</p>' +
+        ' · ' + esc(OPT.couleurs[s.couleur]) + ' · ' + esc(s.vitrage) + '</p>') +
         '<p class="fiche-sub"><span class="tag s-' + r.verdict + '">' + esc(r.libelle) + '</span> ' + brouillon + '</p></div>' +
         '<div class="fiche-actions"><button type="button" class="act" id="btn-print">Imprimer</button>' +
         '<button type="button" class="act" id="btn-csv">Exporter CSV</button></div></div>' +
-      '<div class="panels fiche-panels"><div class="panel"><h2>Élévation <span>cotes en mm</span></h2>' + elevation(r, s) + '</div>' +
+      '<div class="panels fiche-panels">' + (gen ? panneauElevation(r, s) : '<div class="panel"><h2>Élévation <span>cotes en mm</span></h2>' + elevation(r, s) + '</div>') +
       '<div class="panel"><h2>Nomenclature <span>' + r.nomenclature.length + ' lignes</span></h2>' +
         '<table class="nomen"><thead><tr><th>Réf.</th><th>Pièce</th><th>Famille</th><th class="num">Qté</th><th class="num">ml</th></tr></thead><tbody>' + nomen + '</tbody></table></div></div>' +
       '<div class="panel"><div class="scroll-x"><h2>Liste de débit <span>' + r.lignes.length + ' repères' + (r.surcote ? ' · surcote ' + fmt(r.surcote) + ' mm / onglet' : ' · barres soudées en cote finie') + '</span></h2>' +
         '<table class="debit"><thead><tr><th>Rep.</th><th>Pièce</th><th>Réf.</th><th class="num">Qté</th><th class="num">Longueur (mm)</th><th>Calcul · coupe</th><th></th></tr></thead><tbody>' +
         lignes + '</tbody></table></div></div>' +
-      (r.notes.length ? '<div class="draft">' + r.notes.map(esc).join("<br>") + '</div>' : "") +
+      ((r.notes || []).length ? '<div class="draft">' + r.notes.map(esc).join("<br>") + '</div>' : "") +
       (acc ? '<div class="panel"><h2>Accessoires des profilés <span>à prévoir selon le montage, quantités non données par le wiki</span></h2><div class="acc-grid">' + acc + '</div></div>' : "") +
     '</div>';
   $("btn-print").onclick = () => window.print();
@@ -584,13 +635,8 @@ function sources(c){
     c.anomalies.map(a => '<a class="anom" href="' + wikiHref(REGISTRES[a.slice(0, 3)] || "") + '" title="Registre d’anomalies">' + esc(a) + '</a>').join("");
 }
 
-function rendu(r, s){
-  const brouillon = r.brouillons.length
-    ? '<div class="draft">Données en brouillon : ' + r.brouillons.map(p => '<a href="' + wikiHref(p) + '">' + esc(p.split("/").pop().replace(".md", "")) + '</a>').join(", ") +
-      '. Aucune page de ce calcul n’a encore été relue contre son PDF.</div>' : "";
-  const why = r.contrainte ? esc(r.contrainte.titre) + " — " + esc(r.contrainte.detail)
-    : "Tous les contrôles passent. Les contrôles « info » disent ce qu’il faut prévoir.";
-  const chain = '<ol class="chain">' + r.controles.map(c => {
+function chaine(r){
+  return '<ol class="chain">' + r.controles.map(c => {
     const st = STAT[c.statut];
     const parcs = (c.valeurs.parcloses || c.valeurs.tapees || []).map(p => '<span class="parc">' + (p.image ? '<img src="' + esc(p.image) + '" alt="' + esc(p.ref) + '">' : "") +
       '<span><b>' + esc(p.ref) + '</b><br>' + fmt(p.epaisseur) + ' mm</span></span>').join("");
@@ -601,6 +647,15 @@ function rendu(r, s){
       '<p>' + esc(c.detail) + '</p>' + etapes + (parcs ? '<div class="parcs">' + parcs + '</div>' : "") +
       '<div class="srcs">' + sources(c) + '</div></div></li>';
   }).join("") + '</ol>';
+}
+
+function rendu(r, s){
+  const brouillon = r.brouillons.length
+    ? '<div class="draft">Données en brouillon : ' + r.brouillons.map(p => '<a href="' + wikiHref(p) + '">' + esc(p.split("/").pop().replace(".md", "")) + '</a>').join(", ") +
+      '. Aucune page de ce calcul n’a encore été relue contre son PDF.</div>' : "";
+  const why = r.contrainte ? esc(r.contrainte.titre) + " — " + esc(r.contrainte.detail)
+    : "Tous les contrôles passent. Les contrôles « info » disent ce qu’il faut prévoir.";
+  const chain = chaine(r);
 
   $("out").innerHTML =
     '<div class="verdict s-' + r.verdict + '"><span class="ico"><b>' + STAT[r.verdict].i + '</b></span><div>' +
@@ -633,8 +688,8 @@ function elevation(r, s){
       // sens d'ouverture : triangle pointant vers la paumelle (OF), plus le basculant (OB)
       const hinge = vantaux === 2 ? (i === 0 ? vx + 7 : vx + vw - 7) : vx + 7;
       const tip = hinge === vx + 7 ? vx + vw - 7 : vx + 7;
-      g += '<path d="M' + tip + ',' + (vy + 7) + ' L' + hinge + ',' + (vy + vh / 2) + ' L' + tip + ',' + (vy + vh - 7) + '" fill="none" stroke="var(--tx-dim)" stroke-width="1" stroke-dasharray="4 3"/>';
-      if(s.configuration === "1v_ob")
+      if(s.configuration !== "soufflet") g += '<path d="M' + tip + ',' + (vy + 7) + ' L' + hinge + ',' + (vy + vh / 2) + ' L' + tip + ',' + (vy + vh - 7) + '" fill="none" stroke="var(--tx-dim)" stroke-width="1" stroke-dasharray="4 3"/>';
+      if(s.configuration === "1v_ob" || s.configuration === "soufflet")
         g += '<path d="M' + (vx + 7) + ',' + (vy + vh - 7) + ' L' + (vx + vw / 2) + ',' + (vy + 7) + ' L' + (vx + vw - 7) + ',' + (vy + vh - 7) + '" fill="none" stroke="var(--tx-dim)" stroke-width="1" stroke-dasharray="4 3"/>';
       if(deo) g += '<text x="' + (vx + vw / 2) + '" y="' + (vy + vh / 2) + '" text-anchor="middle" font-size="11.5" fill="var(--tx)" font-weight="700">' +
         fmt(deo[0], 0) + ' × ' + fmt(deo[1], 0) + '</text><text x="' + (vx + vw / 2) + '" y="' + (vy + vh / 2 + 14) + '" text-anchor="middle" font-size="10" fill="var(--tx-dim)">DEO</text>';
@@ -711,6 +766,210 @@ $("fa-aide-btn").onclick = () => aide.showModal();
 $("fa-aide-close").onclick = () => aide.close();
 aide.addEventListener("click", e => { if(e.target === aide) aide.close(); });
 
+/* ---- les autres systèmes : formulaire dérivé des champs du calculateur, même rendu ---- */
+const libelleSysteme = () => (SYSTEMES.find(x => x.id === SYS) || {}).libelle || SYS;
+
+function champGen(c){
+  const id = "g-" + c.id;
+  const lab = '<span class="f-lab">' + esc(c.libelle) + '</span>';
+  const aide = c.aide ? '<div class="hint">' + esc(c.aide) + '</div>' : "";
+  let ctl;
+  if(c.type === "nombre")
+    ctl = '<span class="unit"><input type="number" id="' + id + '" data-champ="' + esc(c.id) + '" value="' + esc(c.defaut == null ? "" : c.defaut) + '"' +
+      (c.min != null ? ' min="' + c.min + '"' : "") + (c.max != null ? ' max="' + c.max + '"' : "") + ' step="' + (c.pas || "any") + '"' +
+      ' aria-label="' + esc(c.libelle) + '"><span>' + esc(c.unite || "") + '</span></span>';
+  else if(c.type === "case")
+    return '<label class="check" data-si=\'' + esc(JSON.stringify(c.si || {})) + '\'><input type="checkbox" id="' + id + '" data-champ="' + esc(c.id) + '"' +
+      (c.defaut ? " checked" : "") + '> ' + esc(c.libelle) + '</label>' + aide;
+  else
+    ctl = '<select id="' + id + '" data-champ="' + esc(c.id) + '">' + Object.entries(c.options || {}).map(([k, l]) =>
+      '<option value="' + esc(k) + '"' + (String(k) === String(c.defaut) ? " selected" : "") + '>' + esc(l) + '</option>').join("") + '</select>';
+  return '<div data-si=\'' + esc(JSON.stringify(c.si || {})) + '\'><label>' + lab + ctl + '</label>' + aide + '</div>';
+}
+
+function valeursGen(){
+  const v = {};
+  document.querySelectorAll("#g [data-champ]").forEach(el => {
+    v[el.dataset.champ] = el.type === "checkbox" ? el.checked : (el.type === "number" ? (el.value === "" ? null : +el.value) : el.value);
+  });
+  return v;
+}
+
+function visibiliteGen(){
+  const v = valeursGen();
+  document.querySelectorAll("#g [data-si]").forEach(el => {
+    const si = JSON.parse(el.dataset.si || "{}");
+    el.hidden = !Object.entries(si).every(([k, vals]) => vals.map(String).includes(String(v[k])));
+  });
+}
+
+function saisieGen(){
+  const v = valeursGen();
+  document.querySelectorAll("#g [data-si]").forEach(el => {
+    if(el.hidden) el.querySelectorAll("[data-champ]").forEach(x => { v[x.dataset.champ] = null; });
+  });
+  return v;
+}
+
+async function choisirSysteme(id){
+  SYS = id;
+  seg($("f-systeme"), Object.fromEntries(SYSTEMES.map(x => [x.id, x.libelle])), SYS, choisirSysteme);
+  const sys = SYSTEMES.find(x => x.id === id) || {};
+  $("sys-portee").textContent = sys.portee || "";
+  const legacy = id === "perform76";
+  $("f").hidden = !legacy; $("g").hidden = legacy;
+  $("fa-titre").textContent = "Faisabilité et débit " + (legacy ? "PERFORM76" : sys.libelle);
+  if(legacy){ calcule(); return; }
+  $("out").innerHTML = '<p class="empty">Chargement…</p>';
+  $("out-debit").innerHTML = '<p class="empty">Chargement…</p>';
+  try{
+    OPTG = await api("/api/faisabilite/s/" + encodeURIComponent(id) + "/options");
+  }catch(err){
+    $("out").innerHTML = '<p class="empty err">' + esc(err.message) + '</p>'; return;
+  }
+  $("g").innerHTML = OPTG.champs.map(champGen).join("") +
+    ((OPTG.avertissements || []).length ? '<div class="hint">' + OPTG.avertissements.map(esc).join("<br>") + '</div>' : "") +
+    '<div id="w-surcote-g" hidden><div class="hint">Surlongueur de soudure : non donnée par le wiki, les barres soudées sortent en cote finie.</div></div>';
+  visibiliteGen();
+  calculeGen();
+}
+
+async function calculeGen(){
+  visibiliteGen();
+  const s = saisieGen();
+  if(!(s.largeur_mm > 0 && s.hauteur_mm > 0)) return;
+  const n = ++seq;
+  const url = "/api/faisabilite/s/" + encodeURIComponent(SYS);
+  const [fa, db] = await Promise.allSettled([api(url, s), api(url + "/debit", s)]);
+  if(n !== seq || SYS === "perform76") return;
+  if(fa.status === "fulfilled"){
+    renduSysteme(fa.value);
+    $("tab-badge").className = "badge s-" + fa.value.verdict;
+    $("tab-badge").textContent = STAT[fa.value.verdict].i;
+  } else $("out").innerHTML = '<p class="empty err">' + esc(fa.reason.message) + '</p>';
+  if(db.status === "fulfilled"){
+    if(db.value.indisponible) $("out-debit").innerHTML = '<p class="empty">' + esc(db.value.indisponible) + '</p>';
+    else { DEBIT = db.value; DEBIT_S = s; renduDebit(db.value, s, true); }
+  } else $("out-debit").innerHTML = '<p class="empty err">' + esc(db.reason.message) + '</p>';
+}
+
+function renduSysteme(r){
+  const brouillon = (r.brouillons || []).length
+    ? '<div class="draft">Données en brouillon : ' + r.brouillons.map(p => '<a href="' + wikiHref(p) + '">' + esc(p.split("/").pop().replace(".md", "")) + '</a>').join(", ") +
+      '. Ces pages n’ont pas encore été relues contre leur PDF.</div>' : "";
+  const why = r.contrainte ? esc(r.contrainte.titre) + " — " + esc(r.contrainte.detail)
+    : "Tous les contrôles passent. Les contrôles « info » disent ce qu’il faut prévoir.";
+  const notes = (r.notes || []).length ? '<div class="draft">' + r.notes.map(esc).join("<br>") + '</div>' : "";
+  $("out").innerHTML =
+    '<div class="verdict s-' + r.verdict + '"><span class="ico"><b>' + STAT[r.verdict].i + '</b></span><div>' +
+      '<div class="big">' + esc(r.libelle) + '</div><div class="why">' + why + '</div></div></div>' + brouillon + notes +
+    '<div class="panels">' + panneauElevation(r, saisieGen()) + panneauCourbes(r) + '</div>' +
+    '<div class="panel"><h2>Contrôles <span>' + r.controles.length + '</span></h2>' + chaine(r) + '</div>';
+}
+
+/* ---- schémas des autres systèmes ---- */
+// Ce que la configuration dit du dessin : nombre de vantaux, fixes, coulissant, porte, oscillo-battant.
+// Le libellé de la configuration est celui du calculateur : on ne dessine que ce qu'il nomme.
+function schemaGen(s){
+  const lab = ((OPTG && OPTG.configurations) || {})[s.configuration] || "";
+  const l = lab.toLowerCase();
+  if(!l || /autre/.test(l)) return null;
+  const nom = l.match(/(\d+)\s*vanta(?:il|ux)/);
+  const fixeSeul = /(^|\s)fixe(\s|$)/.test(l) && !nom;
+  const coulissant = ["soleal-gy", "lumeal-ga", "askey-nv"].includes(SYS) || /coulissant/.test(l);
+  let vantaux = fixeSeul ? 0 : (nom ? +nom[1] : (SYS === "askey-nv" ? 2 : null));
+  if(vantaux == null) return null;
+  const fixes = !fixeSeul && /\+\s*fixe|avec fixe/.test(l) ? 1 : 0;
+  return {vantaux, fixes, central: /fixe central/.test(l), coulissant, porte: /porte d'entrée|porte \d|^porte(?!-fen)/.test(l),
+          ob: /\bob\b|oscillo/.test(l)};
+}
+
+function elevationGen(r, s){
+  const sc = schemaGen(s);
+  if(!sc) return "";
+  const W = 420, Hh = 330, pad = 44;
+  const k = Math.min((W - pad * 2) / s.largeur_mm, (Hh - pad * 2) / s.hauteur_mm);
+  const w = s.largeur_mm * k, h = s.hauteur_mm * k, x0 = (W - w) / 2, y0 = (Hh - h) / 2 - 6, f = 12;
+  let g = '<rect x="' + x0 + '" y="' + y0 + '" width="' + w + '" height="' + h + '" fill="var(--frame)" rx="2"/>';
+  const n = sc.vantaux, nf = sc.fixes, cols = Math.max(n + nf, 1);
+  const gap = 4, cw = (w - 2 * f - gap * (cols - 1)) / cols, vh = h - 2 * f;
+  const ordre = [];
+  for(let i = 0; i < n; i++) ordre.push("v");
+  if(nf) sc.central ? ordre.splice(Math.floor(n / 2), 0, "f") : ordre.push("f");
+  if(!n && !nf) ordre.push("f");
+  const deo = r.debit && Array.isArray(r.debit.deo) ? r.debit.deo : null;
+  let iv = 0;
+  ordre.forEach((genre, i) => {
+    const vx = x0 + f + i * (cw + gap), vy = y0 + f;
+    if(genre === "f"){
+      g += '<rect x="' + vx + '" y="' + vy + '" width="' + cw + '" height="' + vh + '" fill="var(--glass)"/>';
+      return;
+    }
+    g += '<rect x="' + vx + '" y="' + vy + '" width="' + cw + '" height="' + vh + '" fill="var(--bg-sunken)" stroke="var(--frame)"/>' +
+         '<rect x="' + (vx + 7) + '" y="' + (vy + 7) + '" width="' + (cw - 14) + '" height="' + (vh - 14) + '" fill="var(--glass)"/>';
+    const cy = vy + vh / 2;
+    if(sc.coulissant){
+      const dir = iv % 2 === 0 ? 1 : -1, xa = vx + cw / 2 - 16 * dir, xb = vx + cw / 2 + 16 * dir;
+      g += '<path d="M' + xa + ',' + (vy + vh * 0.2) + ' H' + xb + ' m' + (-5 * dir) + ',-4 l' + (5 * dir) + ',4 l' + (-5 * dir) + ',4" fill="none" stroke="var(--tx-dim)" stroke-width="1.4"/>';
+    } else {
+      const cote = iv === 0 && n > 1 ? "g" : (iv === n - 1 && n > 1 ? "d" : "g");
+      const hinge = cote === "g" ? vx + 7 : vx + cw - 7, tip = cote === "g" ? vx + cw - 7 : vx + 7;
+      g += '<path d="M' + tip + ',' + (vy + 7) + ' L' + hinge + ',' + cy + ' L' + tip + ',' + (vy + vh - 7) + '" fill="none" stroke="var(--tx-dim)" stroke-width="1" stroke-dasharray="4 3"/>';
+      if(sc.ob) g += '<path d="M' + (vx + 7) + ',' + (vy + vh - 7) + ' L' + (vx + cw / 2) + ',' + (vy + 7) + ' L' + (vx + cw - 7) + ',' + (vy + vh - 7) + '" fill="none" stroke="var(--tx-dim)" stroke-width="1" stroke-dasharray="4 3"/>';
+    }
+    if(sc.porte) g += '<circle cx="' + (vx + cw - 14) + '" cy="' + cy + '" r="3" fill="var(--tx-dim)"/>';
+    if(deo) g += '<text x="' + (vx + cw / 2) + '" y="' + cy + '" text-anchor="middle" font-size="11.5" fill="var(--tx)" font-weight="700">' +
+      fmt(deo[0], 0) + ' × ' + fmt(deo[1], 0) + '</text><text x="' + (vx + cw / 2) + '" y="' + (cy + 14) + '" text-anchor="middle" font-size="10" fill="var(--tx-dim)">DEO</text>';
+    iv++;
+  });
+  const yb = y0 + h + 18, xl = x0 - 18;
+  g += '<path d="M' + x0 + ',' + yb + ' H' + (x0 + w) + ' M' + x0 + ',' + (yb - 5) + ' v10 M' + (x0 + w) + ',' + (yb - 5) + ' v10" stroke="var(--tx-dim)"/>' +
+       '<text x="' + (x0 + w / 2) + '" y="' + (yb + 15) + '" text-anchor="middle" font-size="12" fill="var(--tx)" font-weight="600">' + fmt(s.largeur_mm, 0) + '</text>' +
+       '<path d="M' + xl + ',' + y0 + ' V' + (y0 + h) + ' M' + (xl - 5) + ',' + y0 + ' h10 M' + (xl - 5) + ',' + (y0 + h) + ' h10" stroke="var(--tx-dim)"/>' +
+       '<text x="' + (xl - 8) + '" y="' + (y0 + h / 2) + '" text-anchor="middle" font-size="12" fill="var(--tx)" font-weight="600" transform="rotate(-90 ' + (xl - 8) + ' ' + (y0 + h / 2) + ')">' + fmt(s.hauteur_mm, 0) + '</text>';
+  return '<svg viewBox="0 0 ' + W + ' ' + Hh + '" role="img" aria-label="Élévation de la menuiserie">' + g + '</svg>';
+}
+
+function panneauElevation(r, s){
+  const svg = elevationGen(r, s);
+  return svg ? '<div class="panel"><h2>Élévation <span>vue intérieure, cotes en mm</span></h2>' + svg + '</div>' : "";
+}
+
+/* Les courbes d'utilisation d'un abaque (hauteur maximale selon la largeur) : la courbe de la paire saisie en
+   avant, les autres en gris, le point saisi coloré par son verdict. Les graduations sont celles du wiki. */
+function courbes(G){
+  const W = 420, H = 330, m = {l: 52, r: 14, t: 14, b: 38};
+  const pts = G.courbes.flatMap(c => c.points).concat([G.point]);
+  const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = 0, y1 = Math.max(...ys) * 1.05;
+  const sx = x => m.l + (x - x0) / ((x1 - x0) || 1) * (W - m.l - m.r);
+  const sy = y => H - m.b - (y - y0) / ((y1 - y0) || 1) * (H - m.t - m.b);
+  let g = '';
+  for(let i = 0; i <= 4; i++){
+    const xv = x0 + (x1 - x0) * i / 4, yv = y0 + (y1 - y0) * i / 4;
+    g += '<line x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + sy(yv) + '" y2="' + sy(yv) + '" stroke="var(--line)"/>' +
+         '<text x="' + (m.l - 6) + '" y="' + (sy(yv) + 4) + '" text-anchor="end" font-size="10" fill="var(--tx-dim)">' + fmt(yv, 0) + '</text>' +
+         '<text x="' + sx(xv) + '" y="' + (H - m.b + 14) + '" text-anchor="middle" font-size="10" fill="var(--tx-dim)">' + fmt(xv, 0) + '</text>';
+  }
+  G.courbes.filter(c => !c.choisie).concat(G.courbes.filter(c => c.choisie)).forEach(c => {
+    if(!c.points.length) return;
+    g += '<polyline fill="none" stroke="' + (c.choisie ? "var(--accent)" : "var(--tx-faint)") + '" stroke-width="' + (c.choisie ? 2.4 : 1) +
+         '" points="' + c.points.map(p => sx(p[0]) + "," + sy(p[1])).join(" ") + '"><title>' + esc(c.nom) + '</title></polyline>';
+  });
+  const col = {ok: "var(--ok)", etude: "var(--etude)", hors: "var(--hors)"}[G.statut] || "var(--tx)";
+  g += '<circle cx="' + sx(G.point[0]) + '" cy="' + sy(G.point[1]) + '" r="5.5" fill="' + col + '" stroke="var(--bg)" stroke-width="1.5"/>' +
+       '<text x="' + (W / 2) + '" y="' + (H - 4) + '" text-anchor="middle" font-size="11" fill="var(--tx-dim)">' + esc(G.x) + '</text>' +
+       '<text x="12" y="' + (H / 2) + '" text-anchor="middle" font-size="11" fill="var(--tx-dim)" transform="rotate(-90 12 ' + (H / 2) + ')">' + esc(G.y) + '</text>';
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Courbes d’utilisation">' + g + '</svg>';
+}
+
+function panneauCourbes(r){
+  const G = r.graphe_courbes;
+  if(!G || !G.courbes || !G.courbes.length) return "";
+  const choisie = G.courbes.find(c => c.choisie);
+  return '<div class="panel"><h2>Courbes d’utilisation <span>' + esc(choisie ? choisie.nom : G.titre) + '</span></h2>' + courbes(G) + '</div>';
+}
+
 /* ---- démarrage ---- */
 api("/api/faisabilite/options").then(o => {
   OPT = o;
@@ -722,6 +981,9 @@ api("/api/faisabilite/options").then(o => {
   fill("f-battement", o.battements, o.battements[0]);
   $("f-paumelles").innerHTML = Object.entries(o.paumelles).map(([k, l]) => '<option value="' + esc(k) + '">' + esc(l) + '</option>').join("");
   $("f-securite").innerHTML = Object.entries(o.securites).map(([k, l]) => '<option value="' + esc(k) + '">' + esc(l) + '</option>').join("");
+  $("f-ferrure-poids").innerHTML = '<option value="">Non précisé</option>' + (o.ferrures_poids || []).map(k => '<option value="' + esc(k) + '">' + esc(k) + ' kg</option>').join("");
+  $("f-acier").innerHTML = Object.entries(o.aciers_dormant || {sans: "sans"}).map(([k, l]) => '<option value="' + esc(k) + '">acier ' + esc(l) + '</option>').join("");
+  $("f-aluclip").addEventListener("change", () => { syncAluclip(); relance(); });
   $("f-paumelles").addEventListener("change", syncFerrure);
   $("f-dormant").addEventListener("change", syncIsolant);
   syncFerrure();
@@ -731,7 +993,15 @@ api("/api/faisabilite/options").then(o => {
   syncVisibility();
   $("f").addEventListener("input", relance);
   $("f").addEventListener("change", relance);
+  $("g").addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(calculeGen, 220); });
+  $("g").addEventListener("change", () => { clearTimeout(timer); timer = setTimeout(calculeGen, 220); });
   calcule();
+  api("/api/faisabilite/systemes").then(r => {
+    SYSTEMES = r.systemes;
+    seg($("f-systeme"), Object.fromEntries(SYSTEMES.map(x => [x.id, x.libelle])), SYS, choisirSysteme);
+    $("sys-portee").textContent = (SYSTEMES.find(x => x.id === SYS) || {}).portee || "";
+    $("sys-indispo").innerHTML = (r.indisponibles || []).map(x => '<b>' + esc(x.libelle) + '</b> : ' + esc(x.raison)).join("<br>");
+  }).catch(() => {});
 }).catch(err => { $("out").innerHTML = '<p class="empty err">Impossible de charger le vérificateur : ' + esc(err.message) + '</p>'; });
 })();
 {% endraw %}

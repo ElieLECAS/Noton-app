@@ -121,7 +121,7 @@ porte-fenêtres [1 p. 50, 52, 54, 56] :
 # Cale d'épaisseur, par marque de profilé
 
 Le nombre de cales d'épaisseur 495096 et 498312 dépend du profilé PVC : le tableau (dix-sept
-profilés) est sur [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md),
+profilés) est sur [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant-deux-vantaux.md),
 section *Cale d'épaisseur, par profilé* [1 p. 47].
 
 # Allonges et prolongateurs de crémones

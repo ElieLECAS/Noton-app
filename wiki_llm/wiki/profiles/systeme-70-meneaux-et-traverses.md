@@ -211,7 +211,7 @@ gabarit 9B44 pour le T et la croix du 2427 — entrée **INC-213** ; ce tableau 
 
 # Voir aussi
 
-- [Renforts acier, joints et caractéristiques du système 70 Plateforme](/profiles/systeme-70-profiles-et-renforts.md)
+- [Renforts acier, joints et caractéristiques du système 70 Plateforme](/profiles/systeme-70-profiles-et-renforts-renforts-acier.md)
 - [Dormants, dormants larges et de rénovation, capots et renforts du système 70 Plateforme](/profiles/systeme-70-dormants.md)
 - [Ouvrants, ouvrants de porte, capots et renforts du système 70 Plateforme](/profiles/systeme-70-ouvrants.md)
 - [Battements extérieurs et intérieurs, embouts et renforts du système 70 Plateforme](/profiles/systeme-70-battements.md)

@@ -3,9 +3,18 @@
  "reponse": "Sur le dormant neuf sans aile 76171 (PERFORM76), la patte de pose NT1947 correspond à une épaisseur d'isolation de 155 mm. Configuration complète de cette ligne : tapée 6141, patte NT1947, appui 76758, cale CTHNT0030, clameau CP14GGOM0012. Attention à ne pas confondre avec le dormant 76180, où la même patte NT1947 sert pour 140 mm d'isolation (tapée 6141, appui 6137, sans cale). Aucune épaisseur intermédiaire n'est documentée.",
  "dans_le_wiki": "oui",
  "preuves": [
-  {"page": "/profiles/perform76-tapees-et-isolation.md", "extrait": "| 155 | 6141 | NT1947 | 76758 | CTHNT0030 |"},
-  {"page": "/profiles/perform76-tapees-et-isolation.md", "extrait": "| NT1947 | 76171 | 155 |"},
-  {"page": "/profiles/perform76-tapees-et-isolation.md", "extrait": "Sur le dormant neuf sans aile 76171, même principe, avec en plus une **cale** réf.\n**CTHNT0030**, sauf à 80 mm d'isolation. Clameau réf. **CP14GGOM0012**."}
+  {
+   "page": "/profiles/perform76-tapees-et-isolation-dormants-76180-76171.md",
+   "extrait": "| 155 | 6141 | NT1947 | 76758 | CTHNT0030 |"
+  },
+  {
+   "page": "/profiles/perform76-tapees-et-isolation-dormants-76180-76171.md",
+   "extrait": "| NT1947 | 76171 | 155 |"
+  },
+  {
+   "page": "/profiles/perform76-tapees-et-isolation-dormants-76180-76171.md",
+   "extrait": "Sur le dormant neuf sans aile 76171, même principe, avec en plus une **cale** réf.\n**CTHNT0030**, sauf à 80 mm d'isolation. Clameau réf. **CP14GGOM0012**."
+  }
  ],
  "ambiguite": "La même patte NT1947 vaut 140 mm d'isolation sur le dormant 76180 et 155 mm sur le 76171 : la réponse dépend du dormant, ici précisé (76171 → 155 mm).",
  "outils": 5,

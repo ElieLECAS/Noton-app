@@ -35,7 +35,7 @@ Les coupes cotées de chaque profilé sont dans
 [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md), leurs
 renforts dans [Renforts du système 76](/profiles/systeme-76-renforts.md), et les charges
 admissibles des fixations dans le registre 1.2.9 des Directives générales :
-[Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md#fixation-des-profilés-complémentaires).
+[Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc-profiles-complementaires-et-controle.md#fixation-des-profilés-complémentaires).
 
 # Conditions et interdictions
 

@@ -77,7 +77,7 @@ Dix modèles, chacun en deux versions : la version simple, équipée d'une poign
 applique (« Accessoire : poignée tube 04 » ou « tube 05 », voir
 [Accessoires de porte d'entrée](/quincaillerie/accessoires-portes-entree.md)), et la version « 2 »,
 équipée d'une **poignée encastrée GS-100**, logée dans la face extérieure de l'ouvrant (voir
-*Modèles à poignée encastrée* sur [Collection Contemporain](/portes/collection-contemporain.md)).
+*Modèles à poignée encastrée* sur [Collection Contemporain](/portes/collection-contemporain-poignee-encastree.md)).
 Une ligne par modèle et par version. « Décor » reprend la légende sous le nom : « Décoration
 laquée », ou « Double finition « satiné » et « granité » » (deux zones du même panneau, l'une
 satinée, l'autre granitée) ; un `-` dit que la légende n'en porte pas. « Coloris présenté » est la

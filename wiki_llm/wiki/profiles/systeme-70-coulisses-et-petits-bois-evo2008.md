@@ -132,7 +132,7 @@ Le 0767 est un profilé creux à une chambre ; le 1846 a une face supérieure en
 crochets en pied. Le 4339 est un profilé plat alvéolé de onze chambres, avec à gauche une rainure
 en C et à droite deux languettes. Le 1846 est dessiné avec les mêmes cotes, 16 × 27,5 mm, comme
 rejet d'eau PVC « 1846 (93051) » du système 76 (voir
-[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md))
+[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires-appuis-tapees-habillages.md))
 [4 p. 42].
 
 Pièces dessinées sous les profilés, avec leur légende [4 p. 42] :
@@ -185,7 +185,7 @@ portent au milieu de leur face plane une encoche, en V sur les 9B63 et 9B65, arr
 9B64, 9B66 et 9B67 ; les 0063 à 0067 ont une face plane sans encoche. Les 9B63 à 9B67 et 0063 à
 0067 sont écrits sans préfixe de désignation [4 p. 43]. Le petit bois collé du manuel de mise en
 œuvre de 2023 est décrit dans
-[Mise en œuvre des profilés complémentaires du système 70](/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70.md).
+[Mise en œuvre des profilés complémentaires du système 70](/procedures/mise-en-oeuvre-profiles-complementaires-systeme-70-petits-bois-et-croisillons.md).
 
 La pose, le débit et les combinaisons de ces petits bois collés sur le vitrage (registre 5.6 du
 même classeur) sont sur [Montage des profilés complémentaires du système 70, 2008](/procedures/montage-profiles-complementaires-systeme-70-evo2008.md#petits-bois-rapportés-collés-registre-56) ;
@@ -238,5 +238,5 @@ des plans de 2008* ci-dessus [4 p. 44].
 - [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md)
 - [Élargisseurs, pièces d'appui, fourrures, habillages et parcloses du système 70 au DTD](/profiles/systeme-70-profiles-complementaires-dtd.md)
 - [Élargisseurs, liaisons, poteaux, appuis, tapées et renforts du système 70, manuel 2023](/profiles/systeme-70-profiles-complementaires-manuel.md)
-- [Parcloses, pièces d'appui, tapées et élargisseurs du système 70, plans de 2008](/profiles/systeme-70-parcloses-appuis-et-elargisseurs-evo2008.md)
-- [Accouplements, profilés plats, cornières et habillages du système 70, plans de 2008](/profiles/systeme-70-accouplements-cornieres-et-habillages-evo2008.md)
+- [Parcloses, pièces d'appui, tapées et élargisseurs du système 70, plans de 2008](/profiles/systeme-70-parcloses-appuis-et-elargisseurs-evo2008-appuis-tapees-elargisseurs.md)
+- [Accouplements, profilés plats, cornières et habillages du système 70, plans de 2008](/profiles/systeme-70-accouplements-cornieres-et-habillages-evo2008-plats-cornieres-habillages.md)

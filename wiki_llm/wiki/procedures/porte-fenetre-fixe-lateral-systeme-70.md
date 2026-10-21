@@ -234,7 +234,7 @@ fixation 9714 ».
 Le contour de fraisage de la page reprend celui du dormant sur seuil 9F68 (16, 50 tolérance
 0 / −0,3, 4, 4,5, 4 tolérance +0,2 / −0, 2, 20,2 ± 0,1, 15,5° tolérance +0,5° / −0,0°, détails 2:1
 R0,5, 45°, 0,5), transcrit sur
-[Mise en œuvre du seuil aluminium du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md#contour-de-fraisage-dormant--meneau-avec-seuil-9f67-9f68).
+[Mise en œuvre du seuil aluminium du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70-dormant-gruge-debit-et-fraisage.md#contour-de-fraisage-dormant--meneau-avec-seuil-9f67-9f68).
 
 ![Fig. 5 : fixe monté, traverse 6101 sur le seuil avec profilé 1248, étanchéité et équerre 9714](/assets/procedures/moe-systeme-70/porte-fenetre/6101-fig5-fixe-monte-1248.png)
 

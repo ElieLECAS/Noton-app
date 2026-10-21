@@ -3,11 +3,26 @@
  "reponse": "Dormant 6101 (système 70, dormant standard de 64 mm). Seuils aluminium compatibles et pièce d'assemblage (tableau 4 du DTD 6/16-2335, confirmé par le manuel de mise en œuvre 2023 et le poster) : seuil 9F67 (70 × 20 mm) → embout 9F65 ou set 9F71 ; seuil 9F68 (70 × 36 mm) → embout 9F66 ou set 9F71 ; seuil Z043 (125 mm de large, 20 mm) → set 9F71. Le seuil 9F69 (125,5 mm de large) est aussi couvert par le set 9F71 du manuel (« set d'assemblage mécanique pour seuil filant 9F67, 9F68, 9F69, Z043 », dormants 6101, 6104, 6108-6111, 6158), mais il n'apparaît dans aucune table du DTD. Débits : variante 1, coupe 90° sur dormant avec embout 9F65/9F66 → seuil DHT − 148, montant DHT − 6,5 ; variante 2, dormant grugé avec set 9F71 → seuil DHT, montant DHT − 14 ; perçage du seuil au gabarit 9918, cotes X 22,7 / Y 32,4 mm. Accessoires : obturateurs latéraux M002 (9F67, 9F69, Z043), joint 9C32 (9F68). Pour la porte d'entrée (plans e.VOLUTION 2008), seuil alu 9C42 (70 × 20) avec embout 9F40 : montant = hauteur hors tout − 20 (coupe droite), seuil = hors tout dormant − 10, rejet d'eau 9F46 = largeur hors tout ouvrant − 74.",
  "dans_le_wiki": "oui",
  "preuves": [
-  {"page": "/profiles/systeme-70-assemblages.md", "extrait": "| 6101 | standard | 9F65 ou 9F71 | 9F66 ou 9F71 | 9F71 |"},
-  {"page": "/procedures/mise-en-oeuvre-seuil-systeme-70.md", "extrait": "| set d'assemblage mécanique pour seuil filant 9F67, 9F68, 9F69, Z043 | 9F71 | set d'assemblage | dormants 6101, 6104, 6108, 6109, 6110, 6111, 6158 |"},
-  {"page": "/procedures/mise-en-oeuvre-seuil-systeme-70.md", "extrait": "| 6101 | 9F65 | 9F66 | DHT − 148 | DHT − 6,5 |"},
-  {"page": "/procedures/mise-en-oeuvre-seuil-systeme-70.md", "extrait": "| 6101 | 9F71 | DHT | DHT − 14 |"},
-  {"page": "/procedures/seuil-alu-9c42-systeme-70-evo2008.md", "extrait": "| 6101 | dormant standard | 9F40 | hauteur hors tout – 20, coupe droite | hors tout dormant – 10 | largeur hors tout ouvrant – 74 | 296 |"}
+  {
+   "page": "/profiles/systeme-70-assemblages.md",
+   "extrait": "| 6101 | standard | 9F65 ou 9F71 | 9F66 ou 9F71 | 9F71 |"
+  },
+  {
+   "page": "/procedures/mise-en-oeuvre-seuil-systeme-70.md",
+   "extrait": "| set d'assemblage mécanique pour seuil filant 9F67, 9F68, 9F69, Z043 | 9F71 | set d'assemblage | dormants 6101, 6104, 6108, 6109, 6110, 6111, 6158 |"
+  },
+  {
+   "page": "/procedures/mise-en-oeuvre-seuil-systeme-70.md",
+   "extrait": "| 6101 | 9F65 | 9F66 | DHT − 148 | DHT − 6,5 |"
+  },
+  {
+   "page": "/procedures/mise-en-oeuvre-seuil-systeme-70-dormant-gruge-debit-et-fraisage.md",
+   "extrait": "| 6101 | 9F71 | DHT | DHT − 14 |"
+  },
+  {
+   "page": "/procedures/seuil-alu-9c42-systeme-70-evo2008.md",
+   "extrait": "| 6101 | dormant standard | 9F40 | hauteur hors tout – 20, coupe droite | hors tout dormant – 10 | largeur hors tout ouvrant – 74 | 296 |"
+  }
  ],
  "ambiguite": "« Seuils compatibles » : seuils de porte-fenêtre 9F67 / 9F68 / 9F69 / Z043 (2023) ou seuil de porte d'entrée 9C42 (plans 2008). Le 6101 est un dormant du système 70 (le wiki n'a pas d'autre 6101).",
  "outils": 5,

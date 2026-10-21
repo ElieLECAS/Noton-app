@@ -222,7 +222,7 @@ un prolongateur de 1 075 mm [2 p. 58] :
 (schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 58)
 
 Les autres pièces de ces trois porte-fenêtres (ferrage symétrique, options, gâches) sont sur
-[Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md).
+[Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise-cremone-sortie-de-tringle-porte-fenetre.md).
 
 # Citations
 

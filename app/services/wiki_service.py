@@ -283,6 +283,7 @@ class WikiSnapshot:
                 "index_dead_links": self.lint["index_dead_links"],
                 "unknown_facets": self.lint["unknown_facets"],
                 "sommaires": self.lint["sommaires"],
+                "long_pages": self.lint["long_pages"],
             },
             "last_call": last_call(),
         }
@@ -493,10 +494,25 @@ def _lint(pages: Dict[str, WikiPage]) -> Dict[str, Any]:
             t for t in index_links if t not in pages or pages[t].missing
         ),
         "unknown_facets": _facettes_inconnues(concept),
+        "long_pages": _pages_longues(concept),
     }
 
 
 USAGES = ("atelier", "pose", "chiffrage", "sav")
+
+# « A page holds about 20 000 characters at most » (wiki_llm/CLAUDE.md, Writing to be found, règle 1) :
+# la ligne qui répond se noie dans une page plus longue et le modèle ne la reçoit plus entière. Les cartes
+# ``sources/`` (un registre de couverture n'a pas de taille) et les registres d'anomalies (lus ligne à ligne)
+# font exception.
+PAGE_MAX = 20_000
+
+
+def _pages_longues(concept: List[WikiPage]) -> List[str]:
+    return sorted(
+        f"{p.id} — {len(p.body):,} caractères".replace(",", " ")
+        for p in concept
+        if len(p.body) > PAGE_MAX and not p.id.startswith(("/sources/", "/anomalies/"))
+    )
 
 
 def _facettes_inconnues(concept: List[WikiPage]) -> List[str]:

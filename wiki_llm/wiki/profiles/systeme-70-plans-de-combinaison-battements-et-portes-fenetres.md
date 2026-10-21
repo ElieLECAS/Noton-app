@@ -279,7 +279,7 @@ la hauteur du seuil. La planche p. 102 dessine l'ouvrant 2415 avec le pictogramm
 vers l'intérieur (trait plein), alors que les planches p. 100 et 101 présentent le 2415 comme
 l'ouvrant vers l'extérieur (**VER-80**).
 La mise en œuvre des seuils est dans
-[Mise en œuvre du seuil du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md).
+[Mise en œuvre du seuil du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70-dormant-gruge-directives-rejet-d-eau-et-elargisseurs.md).
 
 ## Seuil 9F67, rejet d'eau A465, ouvrant 2415
 

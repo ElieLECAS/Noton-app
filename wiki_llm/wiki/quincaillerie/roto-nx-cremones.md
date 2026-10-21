@@ -250,7 +250,7 @@ Les crémones OB à hauteur de poignée centrée / variable en fouillot 8 mm et 
 
 Les têtières et boîtiers des crémones OB à poignée centrée / variable en fouillots 25 à 50 mm, et la
 crémone adaptée OB, sont sur
-[Têtières et boîtiers de crémone OB Roto NX](/quincaillerie/roto-nx-cremones-ob-tetieres-et-boitiers.md).
+[Têtières et boîtiers de crémone OB Roto NX](/quincaillerie/roto-nx-cremones-ob-tetieres-et-boitiers-poignee-centree-variable-et-cremone-adaptee.md).
 
 La crémone OB Confort, fouillot 15 mm, est sur
 [Crémones OB à hauteur de poignée centrée / variable Roto NX](/quincaillerie/roto-nx-cremones-ob-poignee-variable.md).
@@ -267,7 +267,7 @@ sont sur
 
 La crémone de semi-fixe Plus, la crémone de semi-fixe à levier séparé et le levier séparé 291743
 sont sur
-[Crémones de semi-fixe Plus et à levier séparé Roto NX](/quincaillerie/roto-nx-cremones-semi-fixe-plus-et-levier-separe.md).
+[Crémones de semi-fixe Plus et à levier séparé Roto NX](/quincaillerie/roto-nx-cremones-semi-fixe-plus-et-levier-separe-levier-separe.md).
 
 Les verrous d'arête, pour rainure de battement et pour feuillure Euro, sont sur
 [Raccords de crémone et verrous d'arête Roto NX](/quincaillerie/roto-nx-cremones-raccords-et-verrous-arete.md).

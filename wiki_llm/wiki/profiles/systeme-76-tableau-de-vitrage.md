@@ -157,7 +157,7 @@ un morceau restant en place ; à droite, le joint retiré en entier.
 (schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, p. 93)
 
 Le 76570 est désigné « compensateur » au manuel et « Rehausseur de parclose » au DTA — voir
-[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md#parcloses).
+[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires-parcloses-accessoires.md#parcloses).
 
 ## Parcloses de dormant et de meneau avec compensateur 76570
 
@@ -263,7 +263,7 @@ aucun autre document du wiki.
 # Vitrage de l'AluClip Zero
 
 Sur la variante **AluClip Zero** (ouvrant 76282 et capot affleurant A195 avec adhésif I008, voir
-[Plans de combinaison AluClip du système 76](/profiles/systeme-76-aluclip-plans-de-combinaison.md#caractéristiques-de-la-variante-aluclip-zero)),
+[Plans de combinaison AluClip du système 76](/profiles/systeme-76-aluclip-plans-de-combinaison-aluclip-zero.md#caractéristiques-de-la-variante-aluclip-zero)),
 les épaisseurs de vitrage suivantes peuvent être utilisées ; une ligne par parclose, l'épaisseur est
 celle que la planche porte sous la parclose (vitrage de 36 à 50 mm) [1 p. 422].
 
@@ -283,7 +283,7 @@ celle que la planche porte sous la parclose (vitrage de 36 à 50 mm) [1 p. 422].
 
 Chacune de ces épaisseurs vaut **18 mm de plus** que l'épaisseur A (joint de 4 mm) de la même
 parclose dans le tableau de vitrage pour ouvrant ci-dessus (2451 : 18 → 36 mm). L'entretoise M490 et le collage du vitrage de l'AluClip Zero sont dans
-[Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76.md#vitrage).
+[Capotage AluClip du système 76 Advanced](/procedures/capotage-aluclip-systeme-76-aluclip-pro-et-zero.md#vitrage).
 
 ![Options de vitrage AluClip Zero, parcloses et épaisseurs](/assets/procedures/moe-76-advanced/aluclip-zero-options-vitrage-parcloses.png)
 

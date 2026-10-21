@@ -36,7 +36,7 @@ quincaillerie ; 2. Traitement des joints ; 3. Montage seuil et rejet d'eau** [1 
 Le montage du seuil (débit, sets, contours de fraisage, drainage, rejet d'eau A465) est dans
 [Mise en œuvre du seuil aluminium du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md) ;
 les coupes cotées des ouvrants 2415 et 2416 et de leurs renforts dans
-[Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md). Les termes du
+[Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts-renforts-acier.md). Les termes du
 métier sont dans le [glossaire](/reference/glossaire.md).
 
 # Conditions et interdictions
@@ -272,6 +272,6 @@ registre 2.4.7, PDF p. 275 à 279
 
 - [Mise en œuvre du seuil aluminium du système 70](/procedures/mise-en-oeuvre-seuil-systeme-70.md)
 - [Porte-fenêtre avec fixe latéral du système 70](/procedures/porte-fenetre-fixe-lateral-systeme-70.md)
-- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
+- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts-renforts-acier.md)
 - [Assemblages du système 70](/profiles/systeme-70-assemblages.md)
 - [Mise en œuvre Système 70 Plateforme](/sources/profine-mise-en-oeuvre-systeme-70.md)

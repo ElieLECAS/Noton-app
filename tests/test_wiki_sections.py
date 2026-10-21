@@ -97,7 +97,9 @@ def test_la_matrice_soleal_fy_garde_ses_trois_lignes_d_en_tete(index):
 def test_la_section_du_dta_remonte_sur_une_question_de_limites(index):
     classement = index.classer("PERFORM76 oscillo-battant dimensions maximales")
     assert classement[0]["entree"]["chemin"] in ("/certifications/dta-6-16-2334.md", "/gammes/perform.md")
-    dta = next(c for c in classement if c["entree"]["chemin"] == "/certifications/dta-6-16-2334.md")
+    # Les dimensions maximales sont sur une suite du DTA (page coupée le 21/10/2026) ; la tête du DTA les nomme dans
+    # son « Voir aussi » : elle peut passer devant, la section qui les porte reste la meilleure de sa page.
+    dta = next(c for c in classement if c["entree"]["chemin"] == "/certifications/dta-6-16-2334-dimensions-maximales-conception-mise-en-oeuvre.md")
     meilleure = index.sections[dta["sections"][0][0]]
     assert "Dimensions maximales" in titre_section(meilleure)
 
@@ -143,7 +145,7 @@ def test_une_section_lue_n_est_jamais_redonnee(snapshot):
     """Rien n'est livré deux fois dans un tour, et le budget se compte en caractères livrés."""
     index = snapshot.index
     livraison = Livraison()
-    page = snapshot.pages["/certifications/dta-6-16-2334.md"]
+    page = snapshot.pages["/certifications/dta-6-16-2334-dimensions-maximales-conception-mise-en-oeuvre.md"]
     _, livree = index.lire(page, "dimensions maximales", livraison, 10**6)
     assert livree["mode"] == "sections" and livraison.caracteres > 0
     lu = livraison.caracteres

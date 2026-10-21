@@ -118,3 +118,59 @@ def test_api_debit(client, admin_headers, lecteur_headers):
         "configuration": "1v_of", "largeur_mm": 900, "hauteur_mm": 1400, "dormant": "76171", "ouvrant": "76281",
         "surcote_soudure_mm": 3})
     assert r.status_code == 200 and r.json()["surcote"] == 3 and r.json()["lignes"]
+
+
+def test_aluclip_pro_sans_renfort_acier_et_capot_a072(snap):
+    r = fiche(snap, Saisie("1v_of", 900, 1400, "76171", "76271", couleur="capot_alu", aluclip_pro=True))
+    assert not _lignes(r, "Renfort d'ouvrant, traverses") and not _lignes(r, "Renfort d'ouvrant, montants")
+    assert any("pas de renfort acier" in n for n in r["notes"])
+    # DEO 824 × 1 324 ; capot A072 variante 1 : DEO − 59,6 (2 × 29,8), deux de chaque
+    h, v = _une(r, "Capot A072, horizontal"), _une(r, "Capot A072, vertical")
+    assert (h["qte"], h["longueur"]) == (2, pytest.approx(824 - 59.6)) and v["longueur"] == pytest.approx(1324 - 59.6)
+    assert "DEO − 94" in h["note"]            # l'autre variante, imbriquée
+    # sans AluClip Pro, le même 76271 garde son renfort et n'a pas de capot A072
+    sans = fiche(snap, Saisie("1v_of", 900, 1400, "76171", "76271", couleur="capot_alu"))
+    assert _lignes(sans, "Renfort d'ouvrant, traverses") and not _lignes(sans, "Capot A072, horizontal")
+
+
+def test_inerties_des_renforts_pour_choisir(snap):
+    """Le wiki ne dit pas quel renfort de dormant prendre : la fiche montre IW (vent) et IG (poids) de chaque candidat."""
+    r = fiche(snap, Saisie("1v_of", 900, 1400, "76171", "76281"))
+    note = _une(r, "Renfort de dormant, traverses")["note"]
+    assert note.startswith("au choix selon la statique : ")
+    assert "V306.Z (IW 2,3 · IG 1,3 cm⁴)" in note and "V309.Z (IW 2,5 · IG 2,0 cm⁴)" in note
+    d = {x["ref"]: x for x in r["renforts"]["dormant"]}
+    assert set(d) == {"V306.Z", "V307.Z", "V308", "V309.Z", "V310"} and d["V309.Z"]["ig"] > d["V306.Z"]["ig"]
+    assert d["V308"]["epaisseur"] == 2.5 and d["V308"]["localisation"]
+    # le renfort d'ouvrant de l'abaque : V266.Z, IW 2,5 · IG 0,5 (zone D : traverses et montants)
+    assert "V266.Z (IW 2,5 · IG 0,5 cm⁴)" in _une(r, "Renfort d'ouvrant, traverses")["note"]
+    assert [x["ref"] for x in r["renforts"]["ouvrant"]] == ["V266.Z"]
+    # un seul renfort possible (dormant rénovation) : pas de « au choix »
+    seul = fiche(snap, Saisie("1v_of", 900, 1400, "76177", "76281"))
+    assert _une(seul, "Renfort de dormant, traverses")["note"] == "V291.Z (IW 2,3 · IG 0,7 cm⁴)"
+    # 76272 : V326.Z ou V314.Z, les deux inerties
+    haut = fiche(snap, Saisie("1v_of", 900, 1400, "76171", "76272"))
+    assert [x["ref"] for x in haut["renforts"]["ouvrant"]] == ["V326.Z", "V314.Z"]
+    assert "V326.Z (IW 5,0 · IG 5,4 cm⁴)" in _une(haut, "Renfort d'ouvrant, traverses")["note"]
+
+
+def test_renforts_de_meneau_et_de_battement_avec_leurs_inerties(snap):
+    r = fiche(snap, Saisie("2v_meneau", 2000, 1200, "76171", "76271", meneau="76372"))
+    m = _une(r, "Renfort de meneau")
+    assert m["ref"] == "V318.Z / V319" and m["longueur"] == 1200 - 2 * 71
+    assert m["note"] == "au choix selon la statique : V318.Z (IW 7,0 · IG 3,4 cm⁴), V319 (IW 9,6 · IG 4,2 cm⁴)"
+    assert [x["ref"] for x in r["renforts"]["meneau"]] == ["V318.Z", "V319"]
+    # le 76373 : V324 n'a pas d'inertie sur le 76303 mais en a une sur lui
+    g = fiche(snap, Saisie("2v_meneau", 2000, 1200, "76171", "76271", meneau="76373"))
+    assert _une(g, "Renfort de meneau")["ref"] == "V323.Z / V322 / V324"
+    b = fiche(snap, Saisie("2v_battement", 1400, 1400, "76171", "76281", battement="76471"))
+    assert _une(b, "Renfort de battement")["note"] == "V316 (IW 2,4 · IG 0,4 cm⁴)"
+
+
+def test_soufflet_et_fixe_lateral(snap):
+    r = fiche(snap, Saisie("soufflet", 1200, 700, "76171", "76281"))
+    assert _une(r, "Traverses")["longueur"] == 1200 - 76 and _une(r, "Montants")["longueur"] == 700 - 76
+    assert r["verdict"] == "ok" and not _lignes(r, "Paumelles")
+    f = fiche(snap, Saisie("2v_fixe_lateral", 2300, 2100, "76171", "76281"))
+    assert not _lignes(f, "Traverses") and any("fixe latéral" in n for n in f["notes"])
+    assert _une(f, "Renfort de dormant, traverses")["longueur"] == 2300 - 2 * 45

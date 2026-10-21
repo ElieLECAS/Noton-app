@@ -258,7 +258,7 @@ Mise en œuvre et maintien du contrôle de production d'usine [1 p. 8] :
    la documentation du CPU. **Le document doit être conservé pendant 10 ans.**
 
 La check-list de contrôle intermédiaire et final des menuiseries est au registre 1.3.6 — voir
-[Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md). Le CPU exigé par le DTA
+[Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc-profiles-complementaires-et-controle.md). Le CPU exigé par le DTA
 du système 76 est sur [DTA 6/16-2334](/certifications/dta-6-16-2334.md).
 
 # Citations

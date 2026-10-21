@@ -1,7 +1,7 @@
 ---
 type: Profilé
-title: Coupes dormant / ouvrant du système 70, plans e.VOLUTION de 2008
-description: "Coupes de 2008 (classeur e.VOLUTION, système F 91) des dormants 6100, 6101, 2502, 6104, 6108 à 6111 et de rénovation 6102, 6105 à 6107 avec les ouvrants 6112, 6115, 6121, 6123, 0112 et 0113 : renforts, Iz et Iz total en cm⁴, largeurs hors tout et parts en mm."
+title: Coupes dormant / ouvrant des dormants 6100, 6101, 2502 et 6104, système 70, plans de 2008
+description: 'Lecture des coupes dormant / ouvrant de 2008 du système 70, puis dormants 6100, 6101, 2502 et 6104 avec les ouvrants 6112, 6115, 6121, 6123, 0112 et 0113 : renforts, Iz dormant, ouvrant et total en cm⁴, largeurs hors tout et parts en mm.'
 tags: [systeme-70, kommerling, e-volution, plan-de-combinaison, coupe, dormant, ouvrant, renovation, renfort, iz]
 systeme: 70
 fournisseur: KÖMMERLING
@@ -18,7 +18,7 @@ source_pages:
     pages: 52-79
 generated:
   by: process:claude-code
-  at: 2026-09-30T12:00:00Z
+  at: 2026-10-21T10:40:30Z
 ---
 
 Coupes combinées dormant / ouvrant du système 70, registre 2 « Coupes sur profilés » du classeur
@@ -167,207 +167,6 @@ Coupes dormant / ouvrant de 2008 des dormants 6100, 6101, 2502 et 6104, une lign
 
 (schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 58, 59)
 
-## Dormants larges 6108, 6109, 6110 et 6111 avec leurs ouvrants (p. 60 à 71)
-
-Coupes dormant / ouvrant de 2008 des dormants larges 6108, 6109, 6110 et 6111, une ligne par coupe, cotes en mm, inerties en cm⁴ [2 p. 60-71].
-
-| Dormant | Renfort du dormant | Iz dormant (cm⁴) | Ouvrant | Renfort de l'ouvrant | Iz ouvrant (cm⁴) | Iz total (cm⁴) | Largeur hors tout en haut (mm) | Aile à gauche en haut (mm) | Part du dormant en haut (mm) | Part de l'ouvrant en haut (mm) | Cote au milieu (mm) | Cote en bas à gauche (mm) | Page PDF |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 6108 (F91-02- 6108) | V601 | 3,20 | 6112 (F91-06- 6112) | V058 | 3,20 | 6,40 | 129 | 20 | 64 | 45 | 12 | 56 | 60 |
-| 6108 (F91-02- 6108) | V601 | 3,20 | 6115 (F91-06- 6115) | V057 | 3,80 | 7,00 | 153 | 20 | 64 | 69 | 12 | 56 | 60 |
-| 6108 (F91-02- 6108) | V601 | 3,20 | 6121 (F91-09- 6121) | V058 | 3,20 | 6,40 | 129 | 20 | 64 | 45 | 12 | 56 | 61 |
-| 6108 (F91-02- 6108) | V601 | 3,20 | 6123 (F91-09- 6123) | V057 | 3,80 | 7,00 | 153 | 20 | 64 | 69 | 12 | 56 | 61 |
-| 6108 (F91-02- 6108) | V601 | 3,20 | 0112 (F95-09- 0112) | V039 | 3,10 | 6,30 | 130 | 20 | 64 | 46 | 12 | 56 | 62 |
-| 6108 (F91-02- 6108) | V601 | 3,20 | 0113 (F95-09- 0113) | V026 | 3,70 | 6,90 | 138 | 20 | 64 | 54 | 12 | 56 | 62 |
-| 6109 (F91-02- 6109) | V601 | 3,20 | 6112 (F91-06- 6112) | V058 | 3,20 | 6,40 | 129 | 20 | 64 | 45 | 12 | 56 | 63 |
-| 6109 (F91-02- 6109) | V601 | 3,20 | 6115 (F91-06- 6115) | V057 | 3,80 | 7,00 | 153 | 20 | 64 | 69 | 12 | 56 | 63 |
-| 6109 (F91-02- 6109) | V601 | 3,20 | 6121 (F91-09- 6121) | V058 | 3,20 | 6,40 | 129 | 20 | 64 | 45 | 12 | 56 | 64 |
-| 6109 (F91-02- 6109) | V601 | 3,20 | 6123 (F91-09- 6123) | V057 | 3,80 | 7,00 | 153 | 20 | 64 | 69 | 12 | 56 | 64 |
-| 6109 (F91-02- 6109) | V601 | 3,20 | 0112 (F95-09- 0112) | V039 | 3,10 | 6,30 | 130 | 20 | 64 | 46 | 12 | 56 | 65 |
-| 6109 (F91-02- 6109) | V601 | 3,20 | 0113 (F95-09- 0113) | V026 | 3,70 | 6,90 | 138 | 20 | 64 | 54 | 12 | 56 | 65 |
-| 6110 (F91-02- 6110) | V601 | 3,20 | 6112 (F91-06- 6112) | V058 | 3,20 | 6,40 | 129 | 20 | 64 | 45 | 12 | 56 | 66 |
-| 6110 (F91-02- 6110) | V601 | 3,20 | 6115 (F91-06- 6115) | V057 | 3,80 | 7,00 | 153 | 20 | 64 | 69 | 12 | 56 | 66 |
-| 6110 (F91-02- 6110) | V601 | 3,20 | 6121 (F91-09- 6121) | V058 | 3,20 | 6,40 | 129 | 20 | 64 | 45 | 12 | 56 | 67 |
-| 6110 (F91-02- 6110) | V601 | 3,20 | 6123 (F91-09- 6123) | V057 | 3,80 | 7,00 | 153 | 20 | 64 | 69 | 12 | 56 | 67 |
-| 6110 (F91-02- 6110) | V601 | 3,20 | 0112 (F95-09- 0112) | V039 | 3,10 | 6,30 | 130 | 20 | 64 | 46 | 12 | 56 | 68 |
-| 6110 (F91-02- 6110) | V601 | 3,20 | 0113 (F95-09- 0113) | V026 | 3,70 | 6,90 | 138 | 20 | 64 | 54 | 12 | 56 | 68 |
-| 6111 (F91-02- 6111) | V601 | 3,20 | 6112 (F91-06- 6112) | V058 | 3,20 | 6,40 | 129 | 20 | 64 | 45 | 12 | 56 | 69 |
-| 6111 (F91-02- 6111) | V601 | 3,20 | 6115 (F91-06- 6115) | V057 | 3,80 | 7,00 | 153 | 20 | 64 | 69 | 12 | 56 | 69 |
-| 6111 (F91-02- 6111) | V601 | 3,20 | 6121 (F91-09- 6121) | V058 | 3,20 | 6,40 | 129 | 20 | 64 | 45 | 12 | 56 | 70 |
-| 6111 (F91-02- 6111) | V601 | 3,20 | 6123 (F91-09- 6123) | V057 | 3,80 | 7,00 | 153 | 20 | 64 | 69 | 12 | 56 | 70 |
-| 6111 (F91-02- 6111) | V601 | 3,20 | 0112 (F95-09- 0112) | V039 | 3,10 | 6,30 | 130 | 20 | 64 | 46 | 12 | 56 | 71 |
-| 6111 (F91-02- 6111) | V601 | 3,20 | 0113 (F95-09- 0113) | V026 | 3,70 | 6,90 | 138 | 20 | 64 | 54 | 12 | 56 | 71 |
-
-(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 60 à 71)
-
-### Dormant 6108 (2008)
-
-![Coupe dormant / ouvrant 2008 : dormant 6108, ouvrant 6112, p. 60](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6108-ouvrant-6112.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6108, ouvrant 6115, p. 60](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6108-ouvrant-6115.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6108, ouvrant 6121, p. 61](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6108-ouvrant-6121.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6108, ouvrant 6123, p. 61](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6108-ouvrant-6123.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6108, ouvrant 0112, p. 62](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6108-ouvrant-0112.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6108, ouvrant 0113, p. 62](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6108-ouvrant-0113.png)
-
-(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 60, 61, 62)
-
-### Dormant 6109 (2008)
-
-![Coupe dormant / ouvrant 2008 : dormant 6109, ouvrant 6112, p. 63](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6109-ouvrant-6112.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6109, ouvrant 6115, p. 63](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6109-ouvrant-6115.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6109, ouvrant 6121, p. 64](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6109-ouvrant-6121.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6109, ouvrant 6123, p. 64](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6109-ouvrant-6123.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6109, ouvrant 0112, p. 65](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6109-ouvrant-0112.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6109, ouvrant 0113, p. 65](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6109-ouvrant-0113.png)
-
-(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 63, 64, 65)
-
-### Dormant 6110 (2008)
-
-![Coupe dormant / ouvrant 2008 : dormant 6110, ouvrant 6112, p. 66](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6110-ouvrant-6112.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6110, ouvrant 6115, p. 66](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6110-ouvrant-6115.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6110, ouvrant 6121, p. 67](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6110-ouvrant-6121.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6110, ouvrant 6123, p. 67](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6110-ouvrant-6123.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6110, ouvrant 0112, p. 68](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6110-ouvrant-0112.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6110, ouvrant 0113, p. 68](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6110-ouvrant-0113.png)
-
-(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 66, 67, 68)
-
-### Dormant 6111 (2008)
-
-![Coupe dormant / ouvrant 2008 : dormant 6111, ouvrant 6112, p. 69](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6111-ouvrant-6112.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6111, ouvrant 6115, p. 69](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6111-ouvrant-6115.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6111, ouvrant 6121, p. 70](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6111-ouvrant-6121.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6111, ouvrant 6123, p. 70](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6111-ouvrant-6123.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6111, ouvrant 0112, p. 71](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6111-ouvrant-0112.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6111, ouvrant 0113, p. 71](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6111-ouvrant-0113.png)
-
-(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 69, 70, 71)
-
-## Dormants de rénovation 6102, 6105, 6106 et 6107 avec leurs ouvrants (p. 72 à 79)
-
-Coupes dormant / ouvrant de 2008 des dormants de rénovation 6102, 6105, 6106 et 6107, une ligne par coupe, cotes en mm, inerties en cm⁴ [2 p. 72-79].
-
-| Dormant | Renfort du dormant | Iz dormant (cm⁴) | Ouvrant | Renfort de l'ouvrant | Iz ouvrant (cm⁴) | Iz total (cm⁴) | Largeur hors tout en haut (mm) | Aile à gauche en haut (mm) | Part du dormant en haut (mm) | Part de l'ouvrant en haut (mm) | Cote au milieu (mm) | Cote en bas à gauche (mm) | Page PDF |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 6102 (F91-01- 6102) | V600 | 2,10 | 6112 (F91-06- 6112) | V058 | 3,20 | 5,30 | 122 | 30 | 47 | 45 | 12 | 49 | 72 |
-| 6102 (F91-01- 6102) | V600 | 2,10 | 6115 (F91-06- 6115) | V057 | 3,80 | 5,90 | 146 | 30 | 47 | 69 | 12 | 49 | 72 |
-| 6102 (F91-01- 6102) | V600 | 2,10 | 6121 (F91-09- 6121) | V058 | 3,20 | 5,30 | 122 | 30 | 47 | 45 | 12 | 49 | 72 |
-| 6102 (F91-01- 6102) | V600 | 2,10 | 6123 (F91-09- 6123) | V057 | 3,80 | 5,90 | 146 | 30 | 47 | 69 | 12 | 49 | 73 |
-| 6102 (F91-01- 6102) | V600 | 2,10 | 0112 (F95-09- 0112) | V039 | 3,10 | 5,20 | 123 | 30 | 47 | 46 | 12 | 49 | 73 |
-| 6102 (F91-01- 6102) | V600 | 2,10 | 0113 (F95-09- 0113) | V026 | 3,70 | 5,80 | 131 | 30 | 47 | 54 | 12 | 49 | 73 |
-| 6105 (F91-01- 6105) | V600 | 2,10 | 6112 (F91-06- 6112) | V058 | 3,20 | 5,30 | 132 | 40 | 47 | 45 | 12 | 59 | 74 |
-| 6105 (F91-01- 6105) | V600 | 2,10 | 6115 (F91-06- 6115) | V057 | 3,80 | 5,90 | 156 | 40 | 47 | 69 | 12 | 59 | 74 |
-| 6105 (F91-01- 6105) | V600 | 2,10 | 6121 (F91-09- 6121) | V058 | 3,20 | 5,30 | 132 | 40 | 47 | 45 | 12 | 59 | 74 |
-| 6105 (F91-01- 6105) | V600 | 2,10 | 6123 (F91-09- 6123) | V057 | 3,80 | 5,90 | 156 | 40 | 47 | 69 | 12 | 59 | 75 |
-| 6105 (F91-01- 6105) | V600 | 2,10 | 0112 (F95-09- 0112) | V039 | 3,10 | 5,20 | 133 | 40 | 47 | 46 | 12 | 59 | 75 |
-| 6105 (F91-01- 6105) | V600 | 2,10 | 0113 (F95-09- 0113) | V026 | 3,70 | 5,80 | 141 | 40 | 47 | 54 | 12 | 59 | 75 |
-| 6106 (F91-01- 6106) | V600 | 2,10 | 6112 (F91-06- 6112) | V058 | 3,20 | 5,30 | 140 | 40 | 55 | 45 | 12 | 67 | 76 |
-| 6106 (F91-01- 6106) | V600 | 2,10 | 6115 (F91-06- 6115) | V057 | 3,80 | 5,90 | 164 | 40 | 55 | 69 | 12 | 67 | 76 |
-| 6106 (F91-01- 6106) | V600 | 2,10 | 6121 (F91-09- 6121) | V058 | 3,20 | 5,30 | 140 | 40 | 55 | 45 | 12 | 67 | 76 |
-| 6106 (F91-01- 6106) | V600 | 2,10 | 6123 (F91-09- 6123) | V057 | 3,80 | 5,90 | 164 | 40 | 55 | 69 | 12 | 67 | 77 |
-| 6106 (F91-01- 6106) | V600 | 2,10 | 0112 (F95-09- 0112) | V039 | 3,10 | 5,20 | 141 | 40 | 55 | 46 | 12 | 67 | 77 |
-| 6106 (F91-01- 6106) | V600 | 2,10 | 0113 (F95-09- 0113) | V026 | 3,70 | 5,80 | 149 | 40 | 55 | 54 | 12 | 67 | 77 |
-| 6107 (F91-01- 6107) | V600 | 2,10 | 6112 (F91-06- 6112) | V058 | 3,20 | 5,30 | 152 | 60 | 47 | 45 | 12 | 79 | 78 |
-| 6107 (F91-01- 6107) | V600 | 2,10 | 6115 (F91-06- 6115) | V057 | 3,80 | 5,90 | 176 | 60 | 47 | 69 | 12 | 79 | 78 |
-| 6107 (F91-01- 6107) | V600 | 2,10 | 6121 (F91-09- 6121) | V058 | 3,20 | 5,30 | 152 | 60 | 47 | 45 | 12 | 79 | 78 |
-| 6107 (F91-01- 6107) | V600 | 2,10 | 6123 (F91-09- 6123) | V057 | 3,80 | 5,90 | 176 | 60 | 47 | 69 | 12 | 79 | 79 |
-| 6107 (F91-01- 6107) | V600 | 2,10 | 0112 (F95-09- 0112) | V039 | 3,10 | 5,20 | 153 | 60 | 47 | 46 | 12 | 79 | 79 |
-| 6107 (F91-01- 6107) | V600 | 2,10 | 0113 (F95-09- 0113) | V026 | 3,70 | 5,80 | 161 | 60 | 47 | 54 | 12 | 79 | 79 |
-
-(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 72 à 79)
-
-### Dormant 6102 (2008)
-
-![Coupe dormant / ouvrant 2008 : dormant 6102, ouvrant 6112, p. 72](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6102-ouvrant-6112.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6102, ouvrant 6115, p. 72](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6102-ouvrant-6115.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6102, ouvrant 6121, p. 72](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6102-ouvrant-6121.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6102, ouvrant 6123, p. 73](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6102-ouvrant-6123.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6102, ouvrant 0112, p. 73](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6102-ouvrant-0112.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6102, ouvrant 0113, p. 73](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6102-ouvrant-0113.png)
-
-(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 72, 73)
-
-### Dormant 6105 (2008)
-
-![Coupe dormant / ouvrant 2008 : dormant 6105, ouvrant 6112, p. 74](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6105-ouvrant-6112.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6105, ouvrant 6115, p. 74](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6105-ouvrant-6115.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6105, ouvrant 6121, p. 74](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6105-ouvrant-6121.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6105, ouvrant 6123, p. 75](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6105-ouvrant-6123.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6105, ouvrant 0112, p. 75](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6105-ouvrant-0112.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6105, ouvrant 0113, p. 75](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6105-ouvrant-0113.png)
-
-(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 74, 75)
-
-### Dormant 6106 (2008)
-
-![Coupe dormant / ouvrant 2008 : dormant 6106, ouvrant 6112, p. 76](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6106-ouvrant-6112.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6106, ouvrant 6115, p. 76](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6106-ouvrant-6115.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6106, ouvrant 6121, p. 76](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6106-ouvrant-6121.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6106, ouvrant 6123, p. 77](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6106-ouvrant-6123.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6106, ouvrant 0112, p. 77](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6106-ouvrant-0112.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6106, ouvrant 0113, p. 77](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6106-ouvrant-0113.png)
-
-(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 76, 77)
-
-### Dormant 6107 (2008)
-
-![Coupe dormant / ouvrant 2008 : dormant 6107, ouvrant 6112, p. 78](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6107-ouvrant-6112.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6107, ouvrant 6115, p. 78](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6107-ouvrant-6115.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6107, ouvrant 6121, p. 78](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6107-ouvrant-6121.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6107, ouvrant 6123, p. 79](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6107-ouvrant-6123.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6107, ouvrant 0112, p. 79](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6107-ouvrant-0112.png)
-
-![Coupe dormant / ouvrant 2008 : dormant 6107, ouvrant 0113, p. 79](/assets/profiles/systeme70/combinaisons/evo2008-dormant-6107-ouvrant-0113.png)
-
-(schéma: raw/profine-plans-profiles-e-volution-2008-08.pdf, p. 78, 79)
-
-Sur chaque coupe : à gauche le dormant et son renfort ; à droite l'ouvrant, qui vient en
-[recouvrement](/reference/glossaire.md) sur le dormant (la partie de l'ouvrant qui chevauche le
-dormant), avec son renfort dessiné hachuré dans sa grande chambre ; tout à droite le
-vitrage double et la parclose. Les coupes des dormants larges ne cotent ni l'épaisseur ni la
-hauteur de l'aile haute ; celles des dormants de rénovation dessinent l'aile de recouvrement à
-gauche, sous le dormant.
-
 # Citations
 
 [1] [Mise en œuvre Système 70 Plateforme, profine, version septembre 2023](raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf), registre 2.2 (PDF p. 57 à 103)
@@ -383,3 +182,8 @@ gauche, sous le dormant.
 - [Coupes de châssis fixe et de meneaux du système 70, plans e.VOLUTION de 2008](/profiles/systeme-70-plans-de-combinaison-chassis-fixes-et-meneaux-evo2008.md)
 - [Coupes de battement entre deux ouvrants du système 70, plans e.VOLUTION de 2008](/profiles/systeme-70-plans-de-combinaison-battements-evo2008.md)
 - [Coupes d'ouvrant extérieur et de porte d'entrée du système 70, plans e.VOLUTION de 2008](/profiles/systeme-70-plans-de-combinaison-ouvrant-exterieur-et-porte-d-entree-evo2008.md)
+
+Autres parties de ce sujet :
+
+- [Coupes dormant / ouvrant des dormants larges 6108 à 6111, système 70, plans de 2008](/profiles/systeme-70-plans-de-combinaison-dormants-et-ouvrants-evo2008-dormants-larges.md)
+- [Coupes dormant / ouvrant des dormants de rénovation 6102, 6105 à 6107, système 70, 2008](/profiles/systeme-70-plans-de-combinaison-dormants-et-ouvrants-evo2008-dormants-renovation.md)

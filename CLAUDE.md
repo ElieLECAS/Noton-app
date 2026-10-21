@@ -31,10 +31,19 @@ technique. Le protocole d'écriture fait foi : `wiki_llm/CLAUDE.md`.
 - `app/services/wiki_chat_service.py` — le tour de chat : boucle d'outils, livraison page/sections
   et budget du tour (`Livraison`), injection serveur des anomalies, filtre des coupes, flux SSE,
   citations vérifiées par le code (`/dossier/page.md` → existe ou pas), identifiants d'anomalie.
-- `app/services/wiki_sommaires.py` (21/10/2026, **pas encore branché**) — la racine N0 et un
-  sommaire N1 par produit (`systeme`, sinon `gamme`, sinon transverse), calculés depuis la
-  frontmatter pour remplacer `index.md` dans le prompt ; `app/scripts/mesurer_sommaires.py` les
-  mesure (volume, couverture des pages attendues, pointage) sur le golden et le banc.
+- `app/services/wiki_sommaires.py` (21/10/2026) — la racine N0 et un sommaire N1 par produit
+  (`systeme`, sinon `gamme`, sinon transverse), calculés depuis la frontmatter. **La racine
+  (~1,5 k tokens) remplace `index.md` (148 k tokens) dans le prompt permanent** ; un sommaire se lit
+  avec `lire` (`/index/<produit>.md`, `sections` = un type) : de la navigation, hors budget de
+  lecture, jamais une page lue ni une source citée. `index.md` ne sert plus qu'à la lecture
+  humaine. `app/scripts/mesurer_sommaires.py` mesure volume, couverture et pointage.
+- `app/services/wiki_famille.py` + `wiki_tables.py` (21/10/2026) — le wiki a été découpé : les
+  pages de plus de 20 000 car. sont coupées en parties (la première garde l'ancien chemin ; chaque
+  suite renvoie à sa tête et porte « Cette page est une partie d'un sujet… »). `wiki_famille`
+  rend une tête et ses suites d'un seul tenant (les calculateurs lisent ainsi, `faisabilite._corps`)
+  et fait pointer les sources vers la partie qui porte la section ; `wiki_tables.tables_toutes`
+  lit tableaux markdown **et HTML** (en-têtes à plusieurs niveaux, cellules fusionnées). Le lint
+  de l'administration signale toute page de plus de 20 000 car. (hors `sources/` et `anomalies/`).
 - `app/scripts/mesurer_recuperation.py` — la mesure hors ligne, sans modèle : rejoue la première
   recherche sur le golden (`tests/fixtures/golden/golden_40_questions.json`) et sur le banc du
   30/09 et dit si la preuve arrive au modèle, à quel volume. À relancer après toute modification de
@@ -67,6 +76,17 @@ technique. Le protocole d'écriture fait foi : `wiki_llm/CLAUDE.md`.
   Jamais d'interpolation (la plus restrictive des deux graduations) ; à moins de la précision
   de lecture d'une limite, « sur étude ». Hypothèse affichée : LFF / HFF Roto = DFO profine ;
   poids = verre seul (le wiki n'a pas le poids des profilés) ; CTR-18 → bornes les plus basses.
+- `app/services/faisabilite_systemes.py` (21/10/2026) — le registre des calculateurs : un module
+  par système (`faisabilite_70`, `_ga`, `_gy`, `_fy`, `_py`, `_askey_oc`, `_askey_nv`), une porte
+  `/api/faisabilite/s/<id>/{options,,debit}`, un format de résultat (`synthese`), un formulaire
+  dérivé des `champs` du module, la même élévation SVG et, quand le calculateur lit des courbes
+  (LUMEAL GA, SOLEAL GY), le même graphique (`graphe_courbes`). Calculateurs : système 70 (deux
+  générations 2008/2023, jamais fusionnées ; VER-28 affiché), SOLEAL FY (validité du DTA affichée),
+  GY, GA, PY, ASKEY NV (inertie requise contre Ix) et OC (débit des applications sans variable
+  indéfinie, zones Ferco). PERFORM76 garde son formulaire d'origine, complété le 21/10 (abaque simple
+  76272/76279, poids de ferrure et acier, courbes Roto par kg/m², AluClip Pro, soufflet, fixe
+  latéral). Ce que le wiki ne permet pas du tout (ASKEY OV) est dit sur la page.
+  Les modules ne calculent que ce qui est lu dans le wiki : tout le reste est « sur étude ».
 - `app/services/debit_atelier.py` (onglet « Débit et nomenclature » de `/faisabilite`, § 9.2) —
   même saisie, liste de coupe : cotes à déduire de `systeme-76-cotes-de-debit.md` une fois par
   coupe, renforts d'ouvrant selon la zone de l'abaque, parclose, tapée, appui, paumelles ; puis

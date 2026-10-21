@@ -81,6 +81,8 @@ def _scenario(*appels, contextes=None, options=None):
 
 PARCLOSES = "/profiles/perform76-parcloses.md"
 DTA = "/certifications/dta-6-16-2334.md"
+# Les dimensions maximales de baie sont sur une suite du DTA (page coupée le 21/10/2026).
+DTA_DIM = "/certifications/dta-6-16-2334-dimensions-maximales-conception-mise-en-oeuvre.md"
 
 
 # ---------------------------------------------------------------------------
@@ -275,7 +277,7 @@ def test_lire_en_lot_budget_et_erreurs(snapshot, monkeypatch):
     answer = WikiAnswer(question="q", history=[], snapshot=snapshot)
     pages_lues = []
     lot = {"lectures": [
-        {"chemin": DTA, "sections": ["dimensions maximales"]},
+        {"chemin": DTA_DIM, "sections": ["dimensions maximales"]},
         {"chemin": "/x/inexistante.md"},
         {"chemin": "/gammes/lumine.md"},
         "../../etc/passwd",
@@ -283,13 +285,13 @@ def test_lire_en_lot_budget_et_erreurs(snapshot, monkeypatch):
     resultat = answer._executer("lire", lot, pages_lues)
     assert "section(s) demandée(s)" in resultat and "1 vantail OB" in resultat
     assert "Page introuvable : /x/inexistante.md" in resultat and "Chemin invalide" in resultat
-    assert [p["chemin"] for p in pages_lues] == [DTA, "/gammes/lumine.md"]
+    assert [p["chemin"] for p in pages_lues] == [DTA_DIM, "/gammes/lumine.md"]
 
-    complete = answer._executer("lire", {"lectures": [{"chemin": DTA}]}, pages_lues)
+    complete = answer._executer("lire", {"lectures": [{"chemin": DTA_DIM}]}, pages_lues)
     assert "déjà fourni plus haut" in complete
-    sommaire = answer._executer("lire", {"lectures": [{"chemin": DTA, "sections": ["sommaire"]}]}, [])
+    sommaire = answer._executer("lire", {"lectures": [{"chemin": DTA_DIM, "sections": ["sommaire"]}]}, [])
     assert "§1" in sommaire and "(déjà livrée)" in sommaire
-    inconnue = answer._executer("lire", {"lectures": [{"chemin": DTA, "sections": ["zzzz"]}]}, [])
+    inconnue = answer._executer("lire", {"lectures": [{"chemin": DTA_DIM, "sections": ["zzzz"]}]}, [])
     assert "Aucune section « zzzz »" in inconnue
     assert answer._executer("lire", {}, []).startswith("Aucune lecture")
     # Une lecture seule peut être donnée sans liste.

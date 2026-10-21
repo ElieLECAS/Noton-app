@@ -154,7 +154,7 @@ IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11
 
 - [Roto NX](/quincaillerie/roto-nx.md)
 - [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md)
-- [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md)
+- [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo-nt-designo-ii-un-vantail.md)
 - [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md)
 - [Instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md)
 - [ROTO](/fournisseurs/roto.md)

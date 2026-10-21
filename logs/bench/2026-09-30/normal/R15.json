@@ -3,9 +3,18 @@
  "reponse": "Le meneau d'ouvrant (traverse d'ouvrant) **76301** (PERFORM76 / système 76 Advanced) fait **84 mm de large**, décomposés en **21 / 42 / 21 mm** (aile, clair intérieur, aile), pour une épaisseur de profilé de 76 mm. Il est apparié au meneau de dormant 76372 (98 mm, même clair de 42 mm). Il se monte sur les ouvrants uniquement, **jamais sur un dormant**. Capot alu A069 (et A046 en porte d'entrée), renfort V320.Z (1,5 mm) en porte d'entrée.",
  "dans_le_wiki": "oui",
  "preuves": [
-  {"page": "/profiles/perform76-meneaux.md", "extrait": "| 76301 | ouvrant | 84 | 21 / 42 / 21 | ![Meneau 76301](/assets/profiles/perform76/meneaux/meneau-76301.png) |"},
-  {"page": "/profiles/systeme-76-profiles-principaux.md", "extrait": "| 76301 | 76 | 84 | 21 + 42 + 21 | A069 | ![Traverse 76301](/assets/profiles/systeme76/meneaux/traverse-76301.png) |"},
-  {"page": "/profiles/perform76-meneaux.md", "extrait": "| 76301 | les ouvrants uniquement | **tout dormant** |"}
+  {
+   "page": "/profiles/perform76-meneaux.md",
+   "extrait": "| 76301 | ouvrant | 84 | 21 / 42 / 21 | ![Meneau 76301](/assets/profiles/perform76/meneaux/meneau-76301.png) |"
+  },
+  {
+   "page": "/profiles/systeme-76-profiles-principaux-battements-traverses-d-ouvrant.md",
+   "extrait": "| 76301 | 76 | 84 | 21 + 42 + 21 | A069 | ![Traverse 76301](/assets/profiles/systeme76/meneaux/traverse-76301.png) |"
+  },
+  {
+   "page": "/profiles/perform76-meneaux.md",
+   "extrait": "| 76301 | les ouvrants uniquement | **tout dormant** |"
+  }
  ],
  "ambiguite": "",
  "outils": 3,

@@ -187,7 +187,7 @@ IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11
 - [Roto NX](/quincaillerie/roto-nx.md)
 - [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md)
 - [Compas et paliers Roto NX](/quincaillerie/roto-nx-compas-et-paliers.md)
-- [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md)
+- [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo-nt-designo-ii-un-vantail.md)
 - [Transformation d'un ouvrant à la française en oscillo-battant](/procedures/transformation-of-en-ob-roto-nx.md)
 - [Bras de report de charge ROTO NX (fiche source)](/sources/roto-nx-bras-report-de-charge.md)
 - [Instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md)

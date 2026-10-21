@@ -83,7 +83,7 @@ registre [Contradictions entre sources](/anomalies/contradictions-entre-sources.
 profine des profilés complémentaires suit le DTD pour la 76508 (46) et la 2433 (34), le cahier
 pour la 2454 (31) ; sa liste complète des parcloses, avec les 76512, 76513 et 2624 à 2632 que la
 PERFORM76 ne porte pas, est dans
-[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md#parcloses).
+[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires-parcloses-accessoires.md#parcloses).
 
 **Il n'existe pas de parclose d'ouvrant pour 22 mm ni pour 34 mm** de vitrage : la série saute de
 20 à 24, puis de 33 à 36.
@@ -119,13 +119,13 @@ Le DTD porte sept références de plus, à la suite immédiate des séries d'ouv
 parclose » sous la référence **76570**, sans épaisseur associée [3 p. 18]. Le DTA les dessine de
 même, en sixième ligne de sa planche de parcloses, avec une troisième ligne de sept autres
 (6146, 6148, 6147, 76512, 76501, 76523, 76524) — liste complète et coupes dans
-[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md#parcloses-sur-six-lignes-avec-le-rehausseur-76570) [2 p. 19]. Le profil dessiné
+[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires-parcloses-accessoires.md#parcloses-sur-six-lignes-avec-le-rehausseur-76570) [2 p. 19]. Le profil dessiné
 diffère de celui des deux séries précédentes.
 
 **Leur famille d'emploi n'est pas donnée par le document** — entrée **VER-36** du registre
 [Informations à vérifier](/anomalies/informations-a-verifier.md). Les références 1511 et 1512
 figurent aussi parmi les parcloses du
-[système 70](/profiles/systeme-70-profiles-complementaires.md#parcloses).
+[système 70](/profiles/systeme-70-profiles-complementaires-parcloses-accessoires.md#parcloses).
 
 # Cotes de la feuillure
 

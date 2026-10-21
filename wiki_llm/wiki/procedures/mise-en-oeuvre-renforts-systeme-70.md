@@ -34,7 +34,7 @@ la longueur de la vis et, à droite, chaque renfort qui se fixe de la même faç
 
 Les termes du métier (dormant, ouvrant, meneau, traverse, battement) sont définis dans le
 [glossaire](/reference/glossaire.md). Le choix du renfort selon la dimension de la fenêtre est sur
-[Abaques dimensionnels du système 70](/profiles/systeme-70-abaques-dimensionnels.md) ; les
+[Abaques dimensionnels du système 70](/profiles/systeme-70-abaques-dimensionnels-liste-et-remarques-evo2008.md) ; les
 renforts de chaque profilé et leurs inerties sur
 [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md).
 
@@ -268,7 +268,7 @@ p. 1 à 10 (PDF p. 181 à 190)
 
 # Voir aussi
 
-- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
+- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts-renforts-acier.md)
 - [Abaques dimensionnels du système 70](/profiles/systeme-70-abaques-dimensionnels.md)
 - [Fabrication des profilés PVC, directives profine](/procedures/fabrication-profiles-pvc.md)
 - [Drainage, décompression et ventilation du système 70](/procedures/drainage-decompression-ventilation-systeme-70.md)

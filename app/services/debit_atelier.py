@@ -22,6 +22,7 @@ from collections import OrderedDict
 from typing import Any, Dict, List, Optional, Tuple
 
 from app.services import faisabilite as fa
+from app.services import wiki_famille
 from app.services.faisabilite import (PAGE_DEBIT, PAGE_DORMANTS, PAGE_OUVRANTS, PAGE_PARCLOSES, PAGE_TAPEES,
                                       Saisie, _corps, _fmt, _nombre, _ref, _une, calcul_debit, donnees, tables,
                                       verifier)
@@ -29,6 +30,7 @@ from app.services.wiki_service import WikiSnapshot
 
 PAGE_ACCESSOIRES = "/profiles/systeme-76-accessoires-par-profile.md"
 PAGE_MENEAUX = "/profiles/perform76-meneaux.md"
+PAGE_RENFORTS = "/profiles/systeme-76-renforts.md"
 PAGES_IMAGES = (PAGE_DORMANTS, PAGE_OUVRANTS, PAGE_MENEAUX, PAGE_PARCLOSES, PAGE_TAPEES, PAGE_ACCESSOIRES)
 
 _CACHE: Dict[str, Any] = {"cle": None, "d": None}
@@ -71,6 +73,28 @@ def _charge(snap: WikiSnapshot) -> Dict[str, Any]:
     t = _une(td, "Cas | Seuils concernés | DEO (mm)", PAGE_DEBIT)
     dormant_sur_seuil = next((_nombre(r[4]) for r in t.lignes if r[0] == "a"), None)
 
+    # renforts : épaisseur d'acier et inerties IW (vent) / IG (poids) par profilé et par renfort
+    tr = tables(_corps(snap, PAGE_RENFORTS))
+    renforts: Dict[Tuple[str, str], List[Dict[str, Any]]] = {}
+    for entete, famille in (("Dormant | Renfort | Épaisseur d'acier (mm)", "dormant"),
+                            ("Ouvrant | Renfort | Épaisseur d'acier (mm)", "ouvrant")):
+        t = _une(tr, entete, PAGE_RENFORTS)
+        for r in t.lignes:
+            renforts.setdefault((famille, r[0]), []).append(
+                {"ref": r[1], "epaisseur": _nombre(r[2]), "iw": _nombre(r[3]), "ig": _nombre(r[4]),
+                 "section": t.section, "localisation": t.localisation})
+
+    t = _une(tr, "Profilé | Famille | Renfort | Épaisseur d'acier (mm)", PAGE_RENFORTS)   # meneaux, traverses, battements
+    for r in t.lignes:
+        renforts.setdefault(("profil", r[0]), []).append(
+            {"ref": r[2], "epaisseur": _nombre(r[3]), "iw": _nombre(r[4]), "ig": _nombre(r[5]),
+             "section": t.section, "localisation": t.localisation})
+
+    # capot A072 de l'AluClip Pro : une cote par variante de fabrication, à déduire de la DEO
+    t = _une(td, "Variante | Capot | Cote de débit (mm)", PAGE_DEBIT)
+    capot_a072 = {"section": t.section, "localisation": t.localisation,
+                  "lignes": [(r[0], r[1], _nombre(re.search(r"DEO\s*[−-]\s*([\d,]+)", r[2]).group(1))) for r in t.lignes]}
+
     # accessoires : une section par profilé, une ligne par référence
     acc: Dict[str, List[Dict[str, Any]]] = {}
     for tb in tables(_corps(snap, PAGE_ACCESSOIRES)):
@@ -94,13 +118,14 @@ def _charge(snap: WikiSnapshot) -> Dict[str, Any]:
     images: Dict[str, str] = {}
     for page in PAGES_IMAGES:
         if page in snap.pages:
-            for alt, src in re.findall(r"!\[([^\]]+)\]\((/assets/[^)]+)\)", snap.pages[page].body):
+            for alt, src in re.findall(r"!\[([^\]]+)\]\((/assets/[^)]+)\)", _corps(snap, page)):
                 m = re.fullmatch(r"[A-Za-zÀ-ÿ']+ ([A-Z]?\d[\w.]*(?: R/L)?)", alt.strip())
                 if m:
                     images.setdefault(m.group(1), src)
     return {"dormants": dormants, "ouvrants": ouvrants, "battements": battements,
             "renfort_vertical_seuil": renfort_vertical_seuil, "dormant_sur_seuil": dormant_sur_seuil,
-            "accessoires": acc, "images": images}
+            "accessoires": acc, "images": images, "capot_a072": capot_a072,
+            "renforts": renforts}
 
 
 def _donnees(snap: WikiSnapshot) -> Dict[str, Any]:
@@ -115,6 +140,18 @@ def _l(x: float) -> str:
     return _fmt(x, 1 if x % 1 else 0)
 
 
+def _inerties(renforts: Dict[Tuple[str, str], List[Dict[str, Any]]], famille: str, profil: str,
+              refs: List[str]) -> Tuple[str, List[Dict[str, Any]]]:
+    """« V306.Z (IW 2,3 · IG 1,3 cm⁴) » pour chaque renfort connu du tableau des renforts, avec les lignes lues.
+    IW tient le vent, IG le poids du vitrage : le wiki ne donne aucune inertie exigée pour un dormant, donc
+    aucun choix n'est fait — on montre ce qui permet à l'atelier de choisir."""
+    lus = [r for r in renforts.get((famille, profil), []) if r["ref"] in refs]
+    manque = [r for r in refs if r not in {l["ref"] for l in lus}]
+    txt = ", ".join(f"{r['ref']} (IW {_fmt(r['iw'], 1)} · IG {_fmt(r['ig'], 1)} cm⁴)" if r["iw"] is not None else
+                    f"{r['ref']} (inerties non données)" for r in lus)
+    return txt + ((", " if txt else "") + ", ".join(f"{m} (absent du tableau des renforts)" for m in manque) if manque else ""), lus
+
+
 def fiche(snap: WikiSnapshot, s: Saisie, surcote_soudure_mm: Optional[float] = None) -> Dict[str, Any]:
     d = fa.donnees(snap)
     x = _donnees(snap)
@@ -127,6 +164,7 @@ def fiche(snap: WikiSnapshot, s: Saisie, surcote_soudure_mm: Optional[float] = N
     L, H = s.largeur_mm, s.hauteur_mm
     lignes: List[Dict[str, Any]] = []
     notes: List[str] = []
+    renforts_fiche: Dict[str, List[Dict[str, Any]]] = {"dormant": [], "ouvrant": [], "meneau": [], "battement": []}
     src_dor = {"page": PAGE_DEBIT, "section": dor["section"], "localisation": dor["localisation"]}
 
     def ligne(famille, piece, ref, qte, longueur, calcul, coupe, source, note="", image_ref=None):
@@ -161,7 +199,9 @@ def fiche(snap: WikiSnapshot, s: Saisie, surcote_soudure_mm: Optional[float] = N
     choix = " / ".join(renforts_dormant) if renforts_dormant else "—"
     r_haut, r_bas = dor["renfort"]
     if r_haut is not None:
-        note = "au choix selon la statique" if len(renforts_dormant) > 1 else ""
+        inert_d, lus_d = _inerties(x["renforts"], "dormant", s.dormant, renforts_dormant)
+        renforts_fiche["dormant"] = [dict(r, profil=s.dormant) for r in lus_d]
+        note = ("au choix selon la statique : " + inert_d if len(renforts_dormant) > 1 else inert_d)
         ligne("Renfort", "Renfort de dormant, traverses", choix, 1 if seuil else 2, L - 2 * r_haut,
               f"{_l(L)} − 2 × {_l(r_haut)}", "droite", src_dor, note, renforts_dormant[0] if renforts_dormant else None)
         if seuil and s.dormant in x["renfort_vertical_seuil"]:
@@ -192,8 +232,13 @@ def fiche(snap: WikiSnapshot, s: Saisie, surcote_soudure_mm: Optional[float] = N
     if s.configuration == "2v_meneau":
         ligne("Meneau", "Meneau de dormant", s.meneau, 1, H - 2 * dor["meneau"], f"{_l(H)} − 2 × {_l(dor['meneau'])}",
               "droite, assemblé mécaniquement", src_dor, "", s.meneau)
-        ligne("Renfort", "Renfort de meneau", "—", 1, H - 2 * dor["renfort_meneau"],
-              f"{_l(H)} − 2 × {_l(dor['renfort_meneau'])}", "droite", src_dor, "référence non donnée par la planche du meneau")
+        candidats = [r["ref"] for r in x["renforts"].get(("profil", s.meneau), [])]
+        inert_m, lus_m = _inerties(x["renforts"], "profil", s.meneau, candidats)
+        renforts_fiche["meneau"] = [dict(r, profil=s.meneau) for r in lus_m]
+        ligne("Renfort", "Renfort de meneau", " / ".join(candidats) or "—", 1, H - 2 * dor["renfort_meneau"],
+              f"{_l(H)} − 2 × {_l(dor['renfort_meneau'])}", "droite", src_dor,
+              ("au choix selon la statique : " + inert_m if len(candidats) > 1 else inert_m)
+              or "référence non donnée par la planche du meneau")
 
     # ---- les ouvrants
     n_v = deb.get("vantaux") or 0
@@ -211,21 +256,38 @@ def fiche(snap: WikiSnapshot, s: Saisie, surcote_soudure_mm: Optional[float] = N
         rf = ctl.get("renfort")
         ref_r = (rf or {}).get("valeurs", {}).get("renfort") or "—"
         zone = (rf or {}).get("valeurs", {}).get("zone")
-        systematique = rf is not None and not rf["detail"].startswith("Zone")
+        sans_acier = s.aluclip_pro   # 76271 capoté A072 : pas de renfort acier
+        systematique = rf is not None and not sans_acier and not rf["detail"].startswith("Zone")
         horizontal = systematique or zone in ("B", "D")
         vertical = systematique or zone in ("C", "D")
         ro = ouv["renfort"]
+        inert_o, lus_o = _inerties(x["renforts"], "ouvrant", s.ouvrant, [r.strip() for r in ref_r.split(" ou ") if r.strip() != "—"])
+        renforts_fiche["ouvrant"] = [dict(r, profil=s.ouvrant) for r in lus_o]
         src_ab = {"page": fa.PAGE_ABAQUES, "section": "Zones de renforcement"}
         if rf is None:
             notes.append("Renfort d'ouvrant non déterminé : l'abaque de cet ouvrant n'est pas exploitable.")
+        if sans_acier and rf is not None:
+            notes.append("AluClip Pro : l'ouvrant 76271 n'a pas de renfort acier ; l'ouvrant est capoté par l'aluminium A072.")
         if horizontal:
             ligne("Renfort", "Renfort d'ouvrant, traverses", ref_r, 2 * n_v, wl - 2 * ro, f"{_l(wl)} − 2 × {_l(ro)}",
-                  "droite", src_ouv, f"zone {zone}" if zone and not systematique else "renforcement systématique")
+                  "droite", src_ouv, (f"zone {zone}" if zone and not systematique else "renforcement systématique")
+                  + (" ; " + inert_o if inert_o else ""))
         if vertical:
             ligne("Renfort", "Renfort d'ouvrant, montants", ref_r, 2 * n_v, wh - 2 * ro, f"{_l(wh)} − 2 × {_l(ro)}",
-                  "droite", src_ouv, f"zone {zone}" if zone and not systematique else "renforcement systématique")
-        if rf is not None and not horizontal and not vertical:
+                  "droite", src_ouv, (f"zone {zone}" if zone and not systematique else "renforcement systématique")
+                  + (" ; " + inert_o if inert_o else ""))
+        if rf is not None and not sans_acier and not horizontal and not vertical:
             notes.append(f"Zone {zone} de l'abaque : ouvrant sans renfort.")
+        if s.aluclip_pro:
+            cp = x["capot_a072"]
+            v1 = next((c for c in cp["lignes"] if c[0].startswith("1")), None)
+            src_cp = {"page": PAGE_DEBIT, "section": cp["section"], "localisation": cp["localisation"]}
+            if v1 is not None:
+                autres = " ; ".join(f"{c[0]} : {c[1]}, DEO − {_l(c[2])}" for c in cp["lignes"] if c is not v1)
+                ligne("Capot", "Capot A072, horizontal", "A072", 2 * n_v, wl - v1[2], f"{_l(wl)} − {_l(v1[2])}", "45°", src_cp,
+                      f"variante 1 ({v1[0]}) ; autre variante, {autres} ; cote prise sur le cadre soudé")
+                ligne("Capot", "Capot A072, vertical", "A072", 2 * n_v, wh - v1[2], f"{_l(wh)} − {_l(v1[2])}", "45°", src_cp,
+                      "variante 1 ; cote prise sur le cadre soudé")
         po = ouv["parclose"]
         vl, vh = deb["vitrage"]
         c_vit = d.debit_ouvrants[s.ouvrant]["vitrage"]
@@ -243,8 +305,10 @@ def fiche(snap: WikiSnapshot, s: Saisie, surcote_soudure_mm: Optional[float] = N
             ligne("Battement", "Battement", s.battement, 1, wh - 2 * bt["debit"], f"{_l(wh)} − 2 × {_l(bt['debit'])}",
                   "droite", src_b, "avec embouts M462" if s.battement == "76473" else "", s.battement)
             if bt["renfort"] and bt["debit_renfort"]:
+                inert_b, lus_b = _inerties(x["renforts"], "profil", s.battement, [bt["renfort"]])
+                renforts_fiche["battement"] = [dict(r, profil=s.battement) for r in lus_b]
                 ligne("Renfort", "Renfort de battement", bt["renfort"], 1, wh - 2 * bt["debit_renfort"],
-                      f"{_l(wh)} − 2 × {_l(bt['debit_renfort'])}", "droite", src_b)
+                      f"{_l(wh)} − 2 × {_l(bt['debit_renfort'])}", "droite", src_b, inert_b)
 
         pm = ctl.get("paumelles")
         if pm:
@@ -299,9 +363,14 @@ def fiche(snap: WikiSnapshot, s: Saisie, surcote_soudure_mm: Optional[float] = N
     if not surcote_soudure_mm:
         notes.append("Les barres soudées (dormant, ouvrant) sont en cote finie : le wiki ne donne pas la "
                      "surlongueur de soudure du système 76. Saisir la surcote de l'atelier pour obtenir les longueurs de coupe.")
+    if s.configuration == "2v_fixe_lateral":
+        notes.append("Deux vantaux avec un fixe latéral : le wiki ne donne aucune cote de débit pour cette combinaison, "
+                     "les ouvrants, le meneau et le fixe ne sont pas débités ; seul le dormant l'est, à la dimension hors tout.")
     if "VER-21" in (ctl.get("debit") or {}).get("anomalies", []):
         notes.append("Le dormant 76185 n'a pas de cote de débit avec battement (VER-21) : les ouvrants ne sont pas débités.")
-    return {"verdict": ver["verdict"], "libelle": ver["libelle"], "lignes": lignes, "nomenclature": nomenclature,
+    return wiki_famille.relocaliser(snap, {
+            "verdict": ver["verdict"], "libelle": ver["libelle"], "lignes": lignes, "nomenclature": nomenclature,
             "accessoires": accessoires, "notes": notes, "debit": ver["debit"], "surcote": surcote_soudure_mm,
+            "renforts": renforts_fiche,
             "brouillons": sorted(set(ver["brouillons"]) | ({PAGE_ACCESSOIRES}
-                                  if snap.pages.get(PAGE_ACCESSOIRES) and snap.pages[PAGE_ACCESSOIRES].status == "draft" else set()))}
+                                  if snap.pages.get(PAGE_ACCESSOIRES) and snap.pages[PAGE_ACCESSOIRES].status == "draft" else set()))})

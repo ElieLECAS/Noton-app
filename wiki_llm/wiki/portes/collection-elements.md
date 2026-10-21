@@ -89,7 +89,7 @@ HYBRIDE et LUMINE nomment « Noir 2100 granité » la teinte de code 2100 (**INC
 [Incohérences internes](/anomalies/incoherences-internes.md)) [1 p. 137, 138]. La galerie des
 modèles écrit « RAFAEL 1 » le modèle légendé RAPHAËL 1 (**INC-37**) [1 p. 9, 139]. Le WILLIAM 1
 est équipé d'une poignée encastrée [1 p. 140] ; les poignées encastrées sont décrites sous
-*Modèles à poignée encastrée* sur [Collection Contemporain](/portes/collection-contemporain.md).
+*Modèles à poignée encastrée* sur [Collection Contemporain](/portes/collection-contemporain-poignee-encastree.md).
 
 Sauf incompatibilité, tous les modèles peuvent être équipés de l'ensemble des références de
 vitrages standards et de quelques-uns des vitrages décoratifs du cahier technique (voir

@@ -1,7 +1,7 @@
 ---
 type: Porte d'entrée
-title: Collection Contemporain, modèles à numéro
-description: Les modèles de la collection Contemporain désignés par un numéro (4532, 062-0, 589-0…), sans référence imprimée, avec leur composition, leurs gammes, le coloris présenté, l'indicateur de prix et la photo de chaque modèle.
+title: Collection Contemporain, modèles à numéro avec insert inox
+description: 'Modèles Contemporain désignés par un numéro, sans référence imprimée, avec insert inox (pages 46 à 94 du catalogue) : composition, gammes PERFORM, LUMINE, HYBRIDE, TEXTURAL, coloris présenté, prix relatif et photo.'
 tags: [porte-entree, contemporain, modele, monobloc, panneau, insert-inox, rainurage, vitrage-depoli-acide]
 gamme: [PERFORM, HYBRIDE, LUMINE, TEXTURAL]
 usage: chiffrage
@@ -16,7 +16,7 @@ source_pages:
     pages: 46-94
 generated:
   by: process:claude-code
-  at: 2026-09-25T18:00:00Z
+  at: 2026-10-21T10:39:17Z
 ---
 
 # Définition
@@ -121,134 +121,6 @@ Modèles à numéro de la collection Contemporain avec insert inox, une ligne pa
 
 (schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 78 à 94)
 
-# Modèles à numéro, sans insert inox (p. 46 à 68)
-
-Modèles à numéro de la collection Contemporain sans insert inox, une ligne par modèle, p. 46 à 68 du catalogue.
-
-| Modèle | Composition | Gammes | Coloris présenté | Prix | Photo |
-| --- | --- | --- | --- | --- | ---: |
-| 4532 | Vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 5013 | ★ | ![4532](/assets/portes/collection-contemporain/4532.png) |
-| 7623 | Vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | Chêne Irlandais | ★ | ![7623](/assets/portes/collection-contemporain/7623.png) |
-| 038-0 | Rainurage et vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7032 | ★★ | ![038-0](/assets/portes/collection-contemporain/038-0.png) |
-| 609-9 | Rainurage ; vitrage dépoli acide ; vue intérieure | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7006 | ★ | ![609-9](/assets/portes/collection-contemporain/609-9.png) |
-| 7611 | Vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 1015 | ★ | ![7611](/assets/portes/collection-contemporain/7611.png) |
-| 359-0 | Rainurage et vitrage dépoli acide ; vue intérieure | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7016 | ★★ | ![359-0](/assets/portes/collection-contemporain/359-0.png) |
-| 041-0 | Vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 8012 | ★ | ![041-0](/assets/portes/collection-contemporain/041-0.png) |
-| 043-0 | Rainurage ; vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 5025 | ★★ | ![043-0](/assets/portes/collection-contemporain/043-0.png) |
-| 056-0 | Rainurage | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 5000 | ★ | ![056-0](/assets/portes/collection-contemporain/056-0.png) |
-| 057-0 | Rainurage | PERFORM, LUMINE, HYBRIDE, TEXTURAL | Chêne Doré | ★ | ![057-0](/assets/portes/collection-contemporain/057-0.png) |
-| 082-0 | Rainurage | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 8017 | ★ | ![082-0](/assets/portes/collection-contemporain/082-0.png) |
-| 115-0 | Rainurage | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 1015 | ★ | ![115-0](/assets/portes/collection-contemporain/115-0.png) |
-| 070-0 | Rainurage ; vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 6025 | ★ | ![070-0](/assets/portes/collection-contemporain/070-0.png) |
-| 081-0 | Rainurage ; vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 6020 | ★★ | ![081-0](/assets/portes/collection-contemporain/081-0.png) |
-| 072-0 | Vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 9016 | ★★ | ![072-0](/assets/portes/collection-contemporain/072-0.png) |
-| 001-0 | Rainurage et vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 8019 | ★★ | ![001-0](/assets/portes/collection-contemporain/001-0.png) |
-| 073-0 | Rainurage ; vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7036 | ★★ | ![073-0](/assets/portes/collection-contemporain/073-0.png) |
-| 074-0 | Rainurage ; vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7044 | ★★ | ![074-0](/assets/portes/collection-contemporain/074-0.png) |
-| 086-0 | Vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 9016 | ★★ | ![086-0](/assets/portes/collection-contemporain/086-0.png) |
-| 110-0 | Vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 5000 | ★★ | ![110-0](/assets/portes/collection-contemporain/110-0.png) |
-| 094-0 | Rainurage et vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7047 | ★★ | ![094-0](/assets/portes/collection-contemporain/094-0.png) |
-| 112-0 | Vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 5009 | ★ | ![112-0](/assets/portes/collection-contemporain/112-0.png) |
-| 108-0 | Rainurage ; vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7036 | ★ | ![108-0](/assets/portes/collection-contemporain/108-0.png) |
-| 109-0 | Rainurage ; vitrage dépoli acide ; vue intérieure | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7006 | ★ | ![109-0](/assets/portes/collection-contemporain/109-0.png) |
-| 124-0 | Rainurage et vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7016 | ★ | ![124-0](/assets/portes/collection-contemporain/124-0.png) |
-| 233-0 | Rainurage et vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 3000 | ★ | ![233-0](/assets/portes/collection-contemporain/233-0.png) |
-
-(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 46 à 68)
-
-# Modèles à numéro, sans insert inox (p. 69 à 81)
-
-Modèles à numéro de la collection Contemporain sans insert inox, une ligne par modèle, p. 69 à 81 du catalogue.
-
-| Modèle | Composition | Gammes | Coloris présenté | Prix | Photo |
-| --- | --- | --- | --- | --- | ---: |
-| 378-0 | Rainurage ; vitrage dépoli acide ; vue intérieure | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7006 | ★ | ![378-0](/assets/portes/collection-contemporain/378-0.png) |
-| 015-0 | Vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 9016 | ★★ | ![015-0](/assets/portes/collection-contemporain/015-0.png) |
-| 937-0 | Rainurage ; vitrage dépoli acide ; photo en situation et vue intérieure | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7042 | ★ | ![937-0](/assets/portes/collection-contemporain/937-0.png) |
-| 937-2 | Rainurage ; vitrage dépoli acide ; vue intérieure | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 8023 | ★★ | ![937-2](/assets/portes/collection-contemporain/937-2.png) |
-| 7603 | Vitrage dépoli acide ; vue intérieure | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 5024 | ★ | ![7603](/assets/portes/collection-contemporain/7603.png) |
-| 795-0 | Vitrage dépoli acide ; vue intérieure | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7016 | ★ | ![795-0](/assets/portes/collection-contemporain/795-0.png) |
-| 795-1 | Rainurage ; vitrage dépoli acide ; vue intérieure | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7046 | ★ | ![795-1](/assets/portes/collection-contemporain/795-1.png) |
-| 795-2 | Rainurage ; vue intérieure | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 8028 | ★ | ![795-2](/assets/portes/collection-contemporain/795-2.png) |
-| 089-0 | Rainurage ; vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7006 | ★ | ![089-0](/assets/portes/collection-contemporain/089-0.png) |
-| 095-0 | Rainurage ; vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 1019 | ★ | ![095-0](/assets/portes/collection-contemporain/095-0.png) |
-| 090-0 | Vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7006 | ★★ | ![090-0](/assets/portes/collection-contemporain/090-0.png) |
-| 120-0 | Vitrage dépoli acide ; vue intérieure | PERFORM, LUMINE, HYBRIDE, TEXTURAL | Teck de Java intérieur | ★★ | ![120-0](/assets/portes/collection-contemporain/120-0.png) |
-| 118-0 | Rainurage ; vitrage dépoli acide ; vue intérieure | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 9016 | ★ | ![118-0](/assets/portes/collection-contemporain/118-0.png) |
-| 518-0 | Rainurage ; vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7006 | ★ | ![518-0](/assets/portes/collection-contemporain/518-0.png) |
-| 357-0 | Rainurage et vitrage dépoli acide ; vue intérieure | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 1015 | ★★ | ![357-0](/assets/portes/collection-contemporain/357-0.png) |
-| 557-0 | Rainurage ; vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 1019 | ★ | ![557-0](/assets/portes/collection-contemporain/557-0.png) |
-| 556-0 | Vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7038 | ★ | ![556-0](/assets/portes/collection-contemporain/556-0.png) |
-| 556-1 | Rainurage ; vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 3009 | ★ | ![556-1](/assets/portes/collection-contemporain/556-1.png) |
-| 7905 | Rainurage | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7042 | ★ | ![7905](/assets/portes/collection-contemporain/7905.png) |
-| 7906 | Rainurage | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 5007 | ★ | ![7906](/assets/portes/collection-contemporain/7906.png) |
-| 797-0 | Rainurage | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 5019 | ★ | ![797-0](/assets/portes/collection-contemporain/797-0.png) |
-| 740-0 | Rainurage | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7021 | ★ | ![740-0](/assets/portes/collection-contemporain/740-0.png) |
-| 102-0 | Rainurage ; photo en situation et vue intérieure | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 9004 | ★ | ![102-0](/assets/portes/collection-contemporain/102-0.png) |
-| 477-1 | Vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7032 | ★ | ![477-1](/assets/portes/collection-contemporain/477-1.png) |
-| 1405 | Rainurage ; photo en situation | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 5014 | ★ | ![1405](/assets/portes/collection-contemporain/1405.png) |
-| 7608 | Rainurage ; vue intérieure | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7040 | ★ | ![7608](/assets/portes/collection-contemporain/7608.png) |
-
-(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 69 à 81)
-
-# Modèles à numéro, sans insert inox (p. 82 à 94)
-
-Modèles à numéro de la collection Contemporain sans insert inox, une ligne par modèle, p. 82 à 94 du catalogue.
-
-| Modèle | Composition | Gammes | Coloris présenté | Prix | Photo |
-| --- | --- | --- | --- | --- | ---: |
-| 1884 | Rainurage ; photo en situation et vue intérieure | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7031 | ★ | ![1884](/assets/portes/collection-contemporain/1884.png) |
-| 104-1 | Rainurage | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7013 | ★ | ![104-1](/assets/portes/collection-contemporain/104-1.png) |
-| 537-0 | Rainurage | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7006 | ★ | ![537-0](/assets/portes/collection-contemporain/537-0.png) |
-| 589-0 | Rainurage ; photo en situation | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 5021 | ★ | ![589-0](/assets/portes/collection-contemporain/589-0.png) |
-| 591-0 | Rainurage | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 9016 | ★ | ![591-0](/assets/portes/collection-contemporain/591-0.png) |
-| 579-0 | Rainurage | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 8014 | ★ | ![579-0](/assets/portes/collection-contemporain/579-0.png) |
-| 535-0 | Rainurage et vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 8014 | ★ | ![535-0](/assets/portes/collection-contemporain/535-0.png) |
-| 534-0 | Rainurage et vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | Chêne Irlandais | ★ | ![534-0](/assets/portes/collection-contemporain/534-0.png) |
-| 533-0 | Rainurage et vitrage dépoli acide ; photo en situation | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 1015 | ★ | ![533-0](/assets/portes/collection-contemporain/533-0.png) |
-| 561-0 | Rainurage ; vitrage dépoli acide ; vue intérieure | PERFORM, LUMINE, HYBRIDE, TEXTURAL | Teck de Java intérieur | ★ | ![561-0](/assets/portes/collection-contemporain/561-0.png) |
-| 373-0 | Rainurage ; vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 3009 | ★ | ![373-0](/assets/portes/collection-contemporain/373-0.png) |
-| 557-2 (p. 88) | Rainurage ; vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 5013 | ★ | ![557-2 (p. 88)](/assets/portes/collection-contemporain/557-2-p88.png) |
-| 563-0 | Rainurage ; vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 1019 | ★ | ![563-0](/assets/portes/collection-contemporain/563-0.png) |
-| 559-0 | Rainurage ; vitrage dépoli acide ; photo en situation | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 1011 | ★ | ![559-0](/assets/portes/collection-contemporain/559-0.png) |
-| 564-0 | Rainurage ; vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | Siena | ★ | ![564-0](/assets/portes/collection-contemporain/564-0.png) |
-| 560-0 | Rainurage et vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7006 | ★ | ![560-0](/assets/portes/collection-contemporain/560-0.png) |
-| 562-0 | Rainurage et vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 3009 | ★ | ![562-0](/assets/portes/collection-contemporain/562-0.png) |
-| 580-0 | Rainurage ; vitrage dépoli acide ; photo en situation | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7006 | ★ | ![580-0](/assets/portes/collection-contemporain/580-0.png) |
-| 573-0 | Rainurage ; vitrage dépoli acide ; photo en situation | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 9016 | ★ | ![573-0](/assets/portes/collection-contemporain/573-0.png) |
-| 536-0 | Rainurage ; vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7006 | ★ | ![536-0](/assets/portes/collection-contemporain/536-0.png) |
-| 578-0 | Vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 9016 | ★ | ![578-0](/assets/portes/collection-contemporain/578-0.png) |
-| 583-0 | Rainurage ; vitrage dépoli acide ; photo en situation | PERFORM, LUMINE, HYBRIDE, TEXTURAL | Chêne Doré | ★ | ![583-0](/assets/portes/collection-contemporain/583-0.png) |
-| 586-0 | Vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 7006 | ★ | ![586-0](/assets/portes/collection-contemporain/586-0.png) |
-| 588-0 | Vitrage dépoli acide | PERFORM, LUMINE, HYBRIDE, TEXTURAL | RAL 9016 | ★ | ![588-0](/assets/portes/collection-contemporain/588-0.png) |
-
-(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 82 à 94)
-
-# Restrictions et encadrés des modèles à numéro
-
-Le rainurage, présenté sous le titre « Optez pour la rainure », est montré sur le modèle 062-0 :
-le pointillé de l'encadré relie le titre aux rainures parallèles qui longent le vitrage
-triangulaire [1 p. 47]. L'argument de l'encadré est sur
-[Arguments de vente des portes d'entrée](/commercial/portes-d-entree.md).
-
-Les monoblocs X-115-0 de la [Sélection Hexa](/portes/selection-hexa.md) portent le même nom
-de base que le modèle 115-0 ; aucun document ne dit s'il s'agit du même dessin.
-
-Le modèle 587-0 peut être réalisé avec une impression numérique spécifique, référence « P030 »,
-sur sa bande vitrée [1 p. 68] ; la vignette de l'option est sur
-[Vitrages décoratifs](/vitrages/vitrages-decoratifs.md). Les modèles 113-0 et 093-0 ont un
-insert inox collé sur deux faces [1 p. 67] (voir *Insert inox incrusté ou collé* sur
-[Collection Contemporain, modèles déclinés 0, 1 et 2](/portes/collection-contemporain-declinaisons-inox.md)).
-
-La galerie des modèles renvoie le 575-6 à la page du 575-0 et nomme « 556-2 » le modèle que sa
-page présente sous le nom 557-2 [1 p. 72, 76-77]. Le nom **557-2 est imprimé sur deux modèles de
-dessins différents** : l'un à insert inox 2 faces et vitrage dépoli acide, présenté en Siena
-[1 p. 77], l'autre à rainurage et vitrage dépoli acide sans insert inox, présenté en RAL 5013
-[1 p. 88] ; les tables les distinguent par leur page, « 557-2 (p. 77) » et « 557-2 (p. 88) »
-(**INC-37**, registre [Incohérences internes](/anomalies/incoherences-internes.md)). Le modèle
-374-0 est imprimé deux fois, avec la même photo et la même légende, p. 85 et p. 86 ; il n'a
-qu'une ligne dans les tables (**INC-38**, même registre).
-
 # Citations
 
 [1] [Catalogue portes d'entrée PROFERM, édition mars 2024](raw/catalogue-portes-entree-2024-03.pdf), p. 20 et 46 à 94
@@ -262,3 +134,8 @@ qu'une ligne dans les tables (**INC-38**, même registre).
 - [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md)
 - [Sélection Hexa](/portes/selection-hexa.md)
 - [Catalogue portes d'entrée PROFERM](/sources/catalogue-portes-entree.md)
+
+Autres parties de ce sujet :
+
+- [Collection Contemporain, modèles à numéro sans insert inox, pages 46 à 81 du catalogue](/portes/collection-contemporain-modeles-a-numero-sans-insert-p46-81.md)
+- [Collection Contemporain, modèles à numéro sans insert inox p. 82 à 94 et restrictions](/portes/collection-contemporain-modeles-a-numero-sans-insert-p82-94-et-restrictions.md)

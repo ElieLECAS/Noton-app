@@ -120,6 +120,6 @@ mêmes flèches calculées. Son en-tête de page écrit « Tableau des moments d
 
 # Voir aussi
 
-- [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md)
-- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
+- [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties-valeurs-statiques-evo2008.md)
+- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts-renforts-acier.md)
 - [Mise en œuvre Système 70 Plateforme](/sources/profine-mise-en-oeuvre-systeme-70.md)

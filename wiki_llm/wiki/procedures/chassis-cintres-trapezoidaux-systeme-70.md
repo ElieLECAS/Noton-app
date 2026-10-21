@@ -161,5 +161,5 @@ Le repère 4 n'a pas de cote propre.
 
 # Voir aussi
 
-- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
+- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts-renforts-acier.md)
 - [Abaques dimensionnels du système 70](/profiles/systeme-70-abaques-dimensionnels.md)

@@ -3,10 +3,22 @@
  "reponse": "L'**A491** est une **pièce d'appui aluminium de 57 mm** (« A491 Pièce d'appui alu 57 mm ») qui se clippe sous la traverse basse d'un dormant capoté (habillé d'un capot aluminium AluClip), aux systèmes 70 et 76 (dont la PERFORM76). Cotes : **57 mm de large (saillie), 19,7 mm de haut** (hauteur du nez arrondie à 20 mm sur le poster 70) ; embout d'extrémité **M643**. Elle appartient à la série A491 (57), A477 (77, rénovation), A475 (97), A476 (137).\n\nCoupe (DTA 6/16-2334, système 76 / PERFORM76) : ![Appui A491](/assets/profiles/systeme76/tapees-alu/appui-a491.png)\nAutres coupes : ![Pièce d'appui A491](/assets/profiles/systeme70/appuis/appui-alu-a491.png) (poster KÖMMERLING 70) et ![A491 Pièce d'appui alu 57 mm](/assets/profiles/systeme70/appuis/appui-a491-moe.png) (manuel Système 70, p. 56).\n\nPose en AluClip : débit DHT − 2 × 34,8 (dormants 6102, 6104, 6105, 6107, 6155, 6156 et 76180, 76177, 76178, 76185) ou DHT − 2 × 28,8 (dormants 6101 et 76171, 76172, 76173), une pièce (A475, A476 ou A491).",
  "dans_le_wiki": "oui",
  "preuves": [
-  {"page": "/profiles/perform76-appuis-et-seuils.md", "extrait": "| A491 | pièce d'appui alu | 57 | ![Appui A491](/assets/profiles/systeme76/tapees-alu/appui-a491.png) |"},
-  {"page": "/profiles/systeme-70-profiles-complementaires.md", "extrait": "| A491 | A491 Pièce d'appui alu 57 mm | 57 de large ; 19,7 de haut | 56 | ![A491 Pièce d'appui alu 57 mm](/assets/profiles/systeme70/appuis/appui-a491-moe.png) |"},
-  {"page": "/profiles/systeme-70-profiles-complementaires.md", "extrait": "| A491 | 57 | 20 | M643 | ![Pièce d'appui A491](/assets/profiles/systeme70/appuis/appui-alu-a491.png) |"},
-  {"page": "/procedures/capotage-aluclip-systeme-76.md", "extrait": "| appui en traverse basse | 76180, 76177, 76178, 76185 | DHT − 2 × 34,8 | A475, A476 ou A491, 1 × | 389 |"}
+  {
+   "page": "/profiles/perform76-appuis-et-seuils.md",
+   "extrait": "| A491 | pièce d'appui alu | 57 | ![Appui A491](/assets/profiles/systeme76/tapees-alu/appui-a491.png) |"
+  },
+  {
+   "page": "/profiles/systeme-70-profiles-complementaires.md",
+   "extrait": "| A491 | A491 Pièce d'appui alu 57 mm | 57 de large ; 19,7 de haut | 56 | ![A491 Pièce d'appui alu 57 mm](/assets/profiles/systeme70/appuis/appui-a491-moe.png) |"
+  },
+  {
+   "page": "/profiles/systeme-70-profiles-complementaires-appuis-tapees-habillages.md",
+   "extrait": "| A491 | 57 | 20 | M643 | ![Pièce d'appui A491](/assets/profiles/systeme70/appuis/appui-alu-a491.png) |"
+  },
+  {
+   "page": "/procedures/capotage-aluclip-systeme-76-tapees-appuis-accouplement.md",
+   "extrait": "| appui en traverse basse | 76180, 76177, 76178, 76185 | DHT − 2 × 34,8 | A475, A476 ou A491, 1 × | 389 |"
+  }
  ],
  "ambiguite": "Système non précisé (70 ou 76) : même référence et mêmes cotes dans les deux ; trois coupes différentes selon la source (DTA 76, poster 70, manuel 70).",
  "outils": 4,

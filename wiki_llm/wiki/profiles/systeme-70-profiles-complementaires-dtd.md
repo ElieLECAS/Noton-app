@@ -240,6 +240,6 @@ la parclose. Les largeurs de onze de ces parcloses diffèrent de celles du poste
 
 - [Profilés complémentaires du système 70](/profiles/systeme-70-profiles-complementaires.md)
 - [Élargisseurs, liaisons, poteaux, appuis, tapées et renforts du système 70, manuel 2023](/profiles/systeme-70-profiles-complementaires-manuel.md)
-- [Parcloses, pièces d'appui, tapées et élargisseurs du système 70, plans de 2008](/profiles/systeme-70-parcloses-appuis-et-elargisseurs-evo2008.md)
-- [Accouplements, profilés plats, cornières et habillages du système 70, plans de 2008](/profiles/systeme-70-accouplements-cornieres-et-habillages-evo2008.md)
+- [Parcloses, pièces d'appui, tapées et élargisseurs du système 70, plans de 2008](/profiles/systeme-70-parcloses-appuis-et-elargisseurs-evo2008-appuis-tapees-elargisseurs.md)
+- [Accouplements, profilés plats, cornières et habillages du système 70, plans de 2008](/profiles/systeme-70-accouplements-cornieres-et-habillages-evo2008-plats-cornieres-habillages.md)
 - [Coulisses, petits bois et accessoires de volet roulant du système 70, plans de 2008](/profiles/systeme-70-coulisses-et-petits-bois-evo2008.md)

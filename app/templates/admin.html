@@ -1025,6 +1025,7 @@ function renderWikiLint(s) {
         wikiLintBlock("Liens morts de l'index", lint.index_dead_links, 'error', wikiPageLink),
         wikiLintBlock('Facettes de navigation inconnues', lint.unknown_facets, 'warn', wikiLintText),
         wikiLintBlock('Sommaires du modèle (collisions de chemin, sommaire trop gros)', lint.sommaires, 'warn', wikiLintText),
+        wikiLintBlock('Pages de plus de 20 000 caractères (à couper)', lint.long_pages, 'warn', wikiLintText),
     ].join('');
 }
 

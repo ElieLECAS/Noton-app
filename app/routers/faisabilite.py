@@ -1,16 +1,19 @@
-"""Le vérificateur de faisabilité PERFORM76 : options du formulaire et verdict calculé.
+"""Le vérificateur de faisabilité et la fiche de débit : options du formulaire et verdict calculé.
+
+Les routes sans préfixe de système sont celles de la PERFORM76 (la page d'origine) ; ``/s/<système>/…`` sert tous
+les calculateurs du registre ``faisabilite_systemes``, PERFORM76 comprise.
 
 Réservé au rôle admin : la dépendance est posée sur le routeur, une route ajoutée en hérite.
 """
 from __future__ import annotations
 
-from typing import Optional
+from typing import Any, Dict, Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Body, Depends, HTTPException
 from pydantic import BaseModel, Field
 
 from app.routers.auth import require_role
-from app.services import debit_atelier, faisabilite
+from app.services import debit_atelier, faisabilite, faisabilite_systemes
 from app.services.wiki_service import WikiUnavailable, get_snapshot
 
 router = APIRouter(prefix="/api/faisabilite", tags=["faisabilite"],
@@ -34,6 +37,10 @@ class SaisieIn(BaseModel):
     paumelles: str = "P"
     version: str = "130"
     securite: str = "base"
+    ferrure_poids: Optional[str] = None
+    acier_dormant: str = "sans"
+    distance_verrouillage_cm: Optional[float] = Field(default=None, gt=0, le=500)
+    aluclip_pro: bool = False
 
 
 def _snapshot():
@@ -76,3 +83,43 @@ async def faisabilite_verifier(saisie: SaisieIn):
         raise HTTPException(status_code=503, detail=str(exc))
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc))
+
+
+# ---- un calculateur par système ------------------------------------------------------------
+
+
+def _systeme(systeme: str) -> str:
+    if systeme != faisabilite_systemes.PERFORM76 and systeme not in faisabilite_systemes.MODULES:
+        raise HTTPException(status_code=404, detail=f"système inconnu : {systeme}")
+    return systeme
+
+
+def _appel(fonction, systeme: str, *args):
+    try:
+        return fonction(_snapshot(), _systeme(systeme), *args)
+    except ModuleNotFoundError:
+        raise HTTPException(status_code=404, detail=f"le calculateur du système {systeme} n'existe pas encore")
+    except faisabilite.DonneeIntrouvable as exc:
+        raise HTTPException(status_code=503, detail=str(exc))
+    except (ValueError, KeyError, TypeError) as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+
+@router.get("/systemes")
+async def faisabilite_systemes_liste():
+    return faisabilite_systemes.systemes()
+
+
+@router.get("/s/{systeme}/options")
+async def systeme_options(systeme: str):
+    return _appel(faisabilite_systemes.options, systeme)
+
+
+@router.post("/s/{systeme}")
+async def systeme_verifier(systeme: str, saisie: Dict[str, Any] = Body(...)):
+    return _appel(faisabilite_systemes.verifier, systeme, saisie)
+
+
+@router.post("/s/{systeme}/debit")
+async def systeme_debit(systeme: str, saisie: Dict[str, Any] = Body(...)):
+    return _appel(faisabilite_systemes.fiche_debit, systeme, saisie)
