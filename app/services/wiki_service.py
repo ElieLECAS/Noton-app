@@ -8,12 +8,15 @@ Le wiki est un bundle OKF (``wiki_llm/wiki/*.md`` : frontmatter YAML + markdown,
     pas encore écrites — valides en OKF), les degrés, les pages périmées ;
   * l'**index de navigation** (``wiki_index.WikiIndex``) : recherche lexicale sur le texte
     intégral et registres d'anomalies, ce que l'outil ``chercher`` du chat interroge ;
-  * le **prompt système** du chat : consignes + **index du wiki** (``index.md`` tel qu'il est
-    écrit : une ligne par page, ~36 000 tokens) + vocabulaire — PAS le wiki, qui ne tient dans
-    aucune fenêtre, ni les anomalies, qui arrivent avec les pages lues — et sa clé de cache
-    (sha256 du prompt entier, donc toute modification des consignes, de l'index ou du
-    vocabulaire invalide proprement le cache) ;
-  * le **prompt du tour vocal** : le même index et le même vocabulaire, précédés des consignes parlées
+  * les **sommaires** (``wiki_sommaires``) : la racine du wiki et un sommaire par produit, calculés
+    depuis la frontmatter — la racine va dans le prompt, les sommaires se lisent avec ``lire``
+    (``/index/<produit>.md``) ;
+  * le **prompt système** du chat : consignes + **racine du wiki** (~1 500 tokens) + vocabulaire —
+    PAS le wiki, qui ne tient dans aucune fenêtre, ni les anomalies, qui arrivent avec les pages
+    lues, ni ``index.md`` (940 lignes, 122 000 tokens relus à chaque appel : réservé à la lecture
+    humaine) — et sa clé de cache (sha256 du prompt entier, donc toute modification des consignes,
+    de la racine ou du vocabulaire invalide proprement le cache) ;
+  * le **prompt du tour vocal** : la même racine et le même vocabulaire, précédés des consignes parlées
     (``app/prompts/vocal_consignes.md``) puis des consignes générales, avec sa propre clé de
     cache (``lia-vocal-``) — les règles de vérité sont écrites une fois, la forme parlée
     s'ajoute devant ;
@@ -55,12 +58,13 @@ LINK_RE = re.compile(r"\[([^\]]*)\]\((/[^)\s]+\.md)\)")
 FRONTMATTER_RE = re.compile(r"\A---\r?\n(.*?)\r?\n---\r?\n?(.*)\Z", re.DOTALL)
 # Ratio caractères / token mesuré le 18/09 sur le prompt réel (Small, tokenizer tekken).
 CHARS_PER_TOKEN = 2.924
-# Le prompt permanent porte les consignes, l'index du wiki et le vocabulaire : il est payé à chaque
-# appel d'un tour d'outils (au dixième du prix, en cache). L'index en fait l'essentiel (~36 000
-# tokens pour 321 pages) : au-delà de ce seuil ESTIMÉ on avertit dans le JOURNAL — c'est la
-# longueur des descriptions de l'index qui le fait enfler.
+# Le prompt permanent porte les consignes, la racine du wiki et le vocabulaire : il est payé à
+# chaque appel d'un tour d'outils (au dixième du prix, en cache). Il pesait 131 000 tokens quand
+# il portait ``index.md`` entier (940 pages) ; la racine n'en pèse plus qu'une dizaine de milliers.
+# Au-delà de ce seuil ESTIMÉ on avertit dans le JOURNAL — c'est le vocabulaire, ou une racine qui
+# enfle faute de produits bien rangés, qui le fait monter.
 # L'administration ne montre pas cette mesure : elle n'a rien à dire à qui rédige le wiki.
-TOKEN_WARNING_THRESHOLD = 60_000
+TOKEN_WARNING_THRESHOLD = 30_000
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 CONSIGNES_PATH = PROJECT_ROOT / "app" / "prompts" / "wiki_consignes.md"
 CONSIGNES_VOCALES_PATH = PROJECT_ROOT / "app" / "prompts" / "vocal_consignes.md"
@@ -155,6 +159,9 @@ class WikiSnapshot:
     # vocabulaire.
     vocal_prompt: str = ""
     vocal_cache_key: str = ""
+    # La racine et les sommaires par produit (``wiki_sommaires.Sommaires``) : calculés avec les
+    # pages, jamais écrits dans le wiki.
+    sommaires: Any = None
 
     # ---- mesures -------------------------------------------------------
 
@@ -275,6 +282,7 @@ class WikiSnapshot:
                 "not_in_index": self.lint["not_in_index"],
                 "index_dead_links": self.lint["index_dead_links"],
                 "unknown_facets": self.lint["unknown_facets"],
+                "sommaires": self.lint["sommaires"],
             },
             "last_call": last_call(),
         }
@@ -428,26 +436,27 @@ def _signature(root: Path) -> Tuple:
 
 
 def build_system_prompt(
-    index: WikiIndex, consignes: str, index_md: str, cle: str = "lia-wiki-"
+    index: WikiIndex, consignes: str, racine: str, cle: str = "lia-wiki-"
 ) -> Tuple[str, str]:
-    """Consignes, index du wiki, vocabulaire. **Ni le corps des pages, ni les anomalies.**
+    """Consignes, racine du wiki, vocabulaire. **Ni le corps des pages, ni les anomalies.**
 
-    Le modèle a en permanence de quoi *savoir où chercher* — ``index.md``, une ligne par page,
-    dont la description dit à quelles questions la page répond — et de quoi *formuler une
-    recherche* — les gammes, les systèmes, les tags. Les pages arrivent par ``chercher`` (une
-    carte) et ``lire``, et les entrées d'anomalie rapprochées des pages lues arrivent avec elles
-    (règle 2). Le 30/09, un index de 479 entrées listé ici tirait Mistral Small hors de la
-    question : il y perdait la référence demandée (0 requête sur 8 la gardait). Avec GLM 5.3 rien
-    ne le dit : c'est ce que mesure le test avec et sans l'index.
+    Le modèle a en permanence de quoi *savoir où chercher* — la racine, qui range les pages par
+    produit et dit où lire le sommaire de chacun (``/index/<produit>.md``, une ligne par page dont
+    la description dit à quelles questions elle répond) — et de quoi *formuler une recherche* —
+    les gammes, les systèmes, les tags. Les pages arrivent par ``chercher`` (une carte) et
+    ``lire``, et les entrées d'anomalie rapprochées des pages lues arrivent avec elles (règle 2).
+    Le 30/09, un index de 479 entrées listé ici tirait Mistral Small hors de la question : il y
+    perdait la référence demandée (0 requête sur 8 la gardait) ; à 940 pages l'index plat pesait
+    122 000 tokens relus à chaque appel, les pages d'un même système éparpillées en six rubriques.
 
-    Retourne ``(prompt, clé de cache)``. La clé couvre le prompt ENTIER, consignes et index
-    compris : modifier une consigne ou une description invalide donc le cache au lieu de servir
-    un préfixe périmé. ``cle`` est le préfixe de la clé : le chat et le tour vocal ont deux
-    prompts, donc deux caches.
+    Retourne ``(prompt, clé de cache)``. La clé couvre le prompt ENTIER, consignes et racine
+    compris : modifier une consigne ou la racine invalide donc le cache au lieu de servir un
+    préfixe périmé. ``cle`` est le préfixe de la clé : le chat et le tour vocal ont deux prompts,
+    donc deux caches.
     """
     parties = [consignes.rstrip()]
-    if index_md.strip():
-        parties += ["===== INDEX DU WIKI : une ligne par page =====", index_md.strip()]
+    if racine.strip():
+        parties += ["===== CARTE DU WIKI : les produits et leurs sommaires =====", racine.strip()]
     parties += [
         f"===== VOCABULAIRE DU WIKI ({len(index.entries)} pages indexées) =====",
         index.vocabulaire(),
@@ -541,12 +550,16 @@ def load_snapshot(root: Optional[Path] = None, signature: Optional[Tuple] = None
         pages[link["target"]].in_degree += 1
 
     index = WikiIndex(pages.values())
-    index_page = pages.get("/index.md")
-    index_md = index_page.raw_text if index_page is not None and not index_page.missing else ""
-    prompt, cache_key = build_system_prompt(index, consignes, index_md)
+    # Importé ici : ``wiki_sommaires`` s'appuie sur ``wiki_carte``, qui importe ce module.
+    from app.services.wiki_sommaires import sommaires as construire_sommaires
+
+    somm = construire_sommaires(pages.values())
+    lint = _lint(pages)
+    lint["sommaires"] = list(somm.alertes)
+    prompt, cache_key = build_system_prompt(index, consignes, somm.racine)
     # Le tour vocal : la forme parlée d'abord, les mêmes règles de vérité ensuite.
     vocal_prompt, vocal_cache_key = build_system_prompt(
-        index, consignes_vocales.rstrip() + "\n\n" + consignes, index_md, cle="lia-vocal-"
+        index, consignes_vocales.rstrip() + "\n\n" + consignes, somm.racine, cle="lia-vocal-"
     )
     raw_dir = root / "raw"
     raw_files = sorted(p.name for p in raw_dir.glob("*.pdf")) if raw_dir.is_dir() else []
@@ -561,9 +574,10 @@ def load_snapshot(root: Optional[Path] = None, signature: Optional[Tuple] = None
         raw_files=raw_files,
         signature=signature if signature is not None else _signature(root),
         loaded_at=datetime.now(),
-        lint=_lint(pages),
+        lint=lint,
         vocal_prompt=vocal_prompt,
         vocal_cache_key=vocal_cache_key,
+        sommaires=somm,
     )
     logger.info(
         "[wiki] %d pages, %d liens, %d fantômes, %d entrées d'anomalie — prompt permanent "

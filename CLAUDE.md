@@ -31,6 +31,10 @@ technique. Le protocole d'écriture fait foi : `wiki_llm/CLAUDE.md`.
 - `app/services/wiki_chat_service.py` — le tour de chat : boucle d'outils, livraison page/sections
   et budget du tour (`Livraison`), injection serveur des anomalies, filtre des coupes, flux SSE,
   citations vérifiées par le code (`/dossier/page.md` → existe ou pas), identifiants d'anomalie.
+- `app/services/wiki_sommaires.py` (21/10/2026, **pas encore branché**) — la racine N0 et un
+  sommaire N1 par produit (`systeme`, sinon `gamme`, sinon transverse), calculés depuis la
+  frontmatter pour remplacer `index.md` dans le prompt ; `app/scripts/mesurer_sommaires.py` les
+  mesure (volume, couverture des pages attendues, pointage) sur le golden et le banc.
 - `app/scripts/mesurer_recuperation.py` — la mesure hors ligne, sans modèle : rejoue la première
   recherche sur le golden (`tests/fixtures/golden/golden_40_questions.json`) et sur le banc du
   30/09 et dit si la preuve arrive au modèle, à quel volume. À relancer après toute modification de

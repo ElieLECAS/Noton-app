@@ -603,3 +603,73 @@ def test_hors_demande_de_coupe_les_images_valides_passent(snapshot):
     sortie, journal = preparer_images(texte, "quelle parclose pour 16 mm ?", [PAGE_COUPES], snapshot.root)
     assert "parclose-2452.png" in sortie
     assert journal["hors_sujet"] == []
+
+
+# ---------------------------------------------------------------------------
+# Les sommaires : de la navigation, jamais une lecture ni une source
+# ---------------------------------------------------------------------------
+
+SOMMAIRE_76 = "/index/systeme-76.md"
+
+
+def test_un_sommaire_se_lit_sans_etre_une_lecture(snapshot):
+    answer = WikiAnswer(question="q", history=[], snapshot=snapshot)
+    pages_lues = []
+    texte = answer._executer("lire", {"lectures": [{"chemin": SOMMAIRE_76}]}, pages_lues)
+    assert texte.startswith(f"===== SOMMAIRE {SOMMAIRE_76}")
+    assert "](/profiles/systeme-76-cotes-de-debit.md)" in texte
+    # Ni page lue (pas d'anomalie rapprochée, pas de coupe), ni budget de lecture consommé.
+    assert pages_lues == [] and answer.livraison.caracteres == 0
+    assert answer._livrees_etape == [{"chemin": SOMMAIRE_76, "mode": "sommaire", "sections": []}]
+
+
+def test_un_sommaire_n_est_livre_qu_une_fois_par_rubrique(snapshot):
+    answer = WikiAnswer(question="q", history=[], snapshot=snapshot)
+    answer._executer("lire", {"lectures": [{"chemin": SOMMAIRE_76, "sections": ["Profilés"]}]}, [])
+    # Sans accent ni majuscule, la même rubrique n'est pas renvoyée.
+    deux = answer._executer("lire", {"lectures": [{"chemin": SOMMAIRE_76, "sections": ["profiles"]}]}, [])
+    assert "déjà lu plus haut" in deux and "===== SOMMAIRE" not in deux
+    # Le sommaire entier, une fois demandé, couvre toutes les rubriques.
+    tout = answer._executer("lire", {"lectures": [{"chemin": SOMMAIRE_76}]}, [])
+    assert tout.startswith("===== SOMMAIRE")
+    assert "déjà lu plus haut" in answer._executer("lire", {"lectures": [{"chemin": SOMMAIRE_76, "sections": ["Certifications"]}]}, [])
+
+
+def test_une_rubrique_de_sommaire_ne_rend_que_ce_type(snapshot):
+    answer = WikiAnswer(question="q", history=[], snapshot=snapshot)
+    texte = answer._executer("lire", {"lectures": [{"chemin": SOMMAIRE_76, "sections": ["quincaillerie"]}]}, [])
+    assert "## Quincaillerie (" in texte and "## Profilés" not in texte
+    assert texte.splitlines()[1].startswith("# Sommaire : Système 76")
+    inconnue = answer._executer("lire", {"lectures": [{"chemin": SOMMAIRE_76, "sections": ["tarifs"]}]}, [])
+    assert "Aucune rubrique « tarifs »" in inconnue and "Profilés" in inconnue
+
+
+def test_un_sommaire_inconnu_dit_ou_sont_les_vrais(snapshot):
+    answer = WikiAnswer(question="q", history=[], snapshot=snapshot)
+    texte = answer._executer("lire", {"lectures": [{"chemin": "/index/inventé.md"}]}, [])
+    assert "Sommaire introuvable" in texte and SOMMAIRE_76 in texte
+
+
+def test_la_racine_se_lit_aussi_par_index_md(snapshot):
+    answer = WikiAnswer(question="q", history=[], snapshot=snapshot)
+    assert answer._executer("lire", {"lectures": [{"chemin": "/index.md"}]}, []) == snapshot.sommaires.racine
+
+
+def test_un_sommaire_cite_n_est_jamais_une_source(snapshot):
+    cites = extract_citations(f"Voir ({SOMMAIRE_76}) et (/profiles/perform76-parcloses.md).", snapshot)
+    assert [c["path"] for c in cites] == ["/profiles/perform76-parcloses.md"]
+
+
+def test_lire_un_sommaire_ne_dispense_pas_de_lire_une_page(snapshot):
+    """Un sommaire seul : aucune page lue, le serveur renvoie lire (une fois), puis la réponse arrive."""
+    fake = _scenario(
+        [{"tool_calls": [_lire(SOMMAIRE_76)]}],
+        [{"message": {"content": "Peut-être."}}],
+        [{"tool_calls": [_lire(PARCLOSES, "§2")]}],
+        [{"message": {"content": "76507 (/profiles/perform76-parcloses.md)."}}],
+    )
+    answer = WikiAnswer(question="q", history=[], snapshot=snapshot, stream_fn=fake)
+    _collect(answer)
+    assert answer.trace["appels"] == 4
+    assert answer.trace["pages_lues"] == [PARCLOSES]
+    assert answer.steps[0]["pages"] == [] and answer.steps[0]["livraisons"][0]["mode"] == "sommaire"

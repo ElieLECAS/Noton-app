@@ -1,8 +1,8 @@
 """Le tour de chat : une question, une carte, quelques lectures, une réponse streamée, ses citations vérifiées.
 
 Navigation outillée : le wiki (~2 M tokens) ne tient dans aucune fenêtre de contexte. Le prompt
-permanent porte l'index du wiki (``index.md``) et un vocabulaire ; le modèle navigue par trois
-outils — ``chercher`` (qui rend une **carte** : douze résultats avec leurs sections et les lignes
+permanent porte la racine du wiki (les produits et le chemin de leur sommaire) et un vocabulaire ;
+le modèle navigue par trois outils — ``chercher`` (qui rend une **carte** : douze résultats avec leurs sections et les lignes
 qui répondent, et ne livre que la page qui domine nettement le classement), ``lire`` (les
 sections ou les pages qu'il choisit, en un seul appel) et ``lire_anomalie``. Rien n'est livré
 deux fois dans un tour (``Livraison``).
@@ -47,7 +47,7 @@ from sqlmodel import Session, select
 
 from app.config import settings
 from app.models.message import Message
-from app.services import wiki_service
+from app.services import wiki_service, wiki_sommaires
 from app.services.mistral_service import chat_stream
 from app.services.wiki_index import (
     REFERENCE_RE,
@@ -90,8 +90,8 @@ TOOLS: List[Dict[str, Any]] = [
                 "leur tableau). Ce n'est pas une lecture : une ligne de carte situe une réponse, elle "
                 "ne la prouve pas — lis ensuite avec `lire`. Écris de une à quatre formulations avec "
                 "les mots que le wiki emploie : l'objet (famille, pièce), la référence seule (76526, "
-                "TGY3731), un synonyme du métier ; l'index du prompt te dit comment le wiki nomme les "
-                "choses. La question de l'utilisateur est toujours cherchée aussi. Une page qui domine "
+                "TGY3731), un synonyme du métier ; le vocabulaire du prompt et les sommaires te disent "
+                "comment le wiki nomme les choses. La question de l'utilisateur est toujours cherchée aussi. Une page qui domine "
                 "nettement le classement est livrée entière avec la carte. `gamme` et `systeme` "
                 "font remonter les pages d'un produit sans exclure les autres."
             ),
@@ -124,7 +124,9 @@ TOOLS: List[Dict[str, Any]] = [
             "name": "lire",
             "description": (
                 "Lit des pages ou des sections du wiki, en un seul appel (jusqu'à six lectures). "
-                "`chemin` vient de la carte ou de l'index (ex. /profiles/perform76-parcloses.md). "
+                "`chemin` vient d'une carte (ex. /profiles/perform76-parcloses.md) ; le sommaire d'un "
+                "produit (/index/<produit>.md, ses pages une ligne chacune) se lit aussi, avec `sections` = "
+                "un type (« Profilés ») pour n'en avoir que cette rubrique. "
                 "`sections` : « §13 », un mot du titre, ou « sommaire » ; sans `sections`, la page "
                 "entière (si elle est trop grande, tu reçois sa fiche et son sommaire). Une section "
                 "n'est pas la page : si la valeur dépend d'un autre tableau, d'une note ou d'une "
@@ -202,7 +204,7 @@ AUCUNE_PAGE_LUE = (
 
 CITATIONS_SANS_LECTURE = (
     "Tu cites des pages que tu n'as pas lues : {pages}. Elles ne te sont arrivées que dans une carte "
-    "ou dans l'index, et une phrase qui s'appuie sur une ligne de carte n'a pas de source. Lis avec "
+    "ou dans un sommaire, et une phrase qui s'appuie sur une ligne de carte n'a pas de source. Lis avec "
     "`lire` les sections dont tu as besoin, puis réponds de nouveau en ne gardant que ce que tu as "
     "lu — ou retire les phrases qui ne s'appuient sur aucune page lue."
 )
@@ -218,12 +220,15 @@ def sse(obj: Dict[str, Any]) -> str:
 
 
 def extract_citations(text: str, snapshot: WikiSnapshot) -> List[Dict[str, Any]]:
-    """Les pages citées dans la réponse, dans l'ordre d'apparition, dédoublonnées, vérifiées."""
+    """Les pages citées dans la réponse, dans l'ordre d'apparition, dédoublonnées, vérifiées.
+
+    Un sommaire (``/index/<produit>.md``) n'est pas une page du wiki : il situe, il ne prouve rien,
+    et personne n'a d'article à ouvrir derrière — il n'est jamais une source."""
     out: List[Dict[str, Any]] = []
     seen: set = set()
     for match in CITATION_RE.finditer(text or ""):
         path = match.group(1)
-        if path in seen:
+        if path in seen or path.startswith(wiki_sommaires.PREFIXE):
             continue
         seen.add(path)
         page = snapshot.pages.get(path)
@@ -692,6 +697,10 @@ class WikiAnswer:
                 morceaux.append("Lecture ignorée : un objet {chemin, sections} est attendu.")
                 continue
             chemin = lecture.get("chemin", "")
+            sommaire = self._sommaire(chemin, lecture)
+            if sommaire is not None:
+                morceaux.append(sommaire)
+                continue
             erreur = read_wiki_page(chemin, self.snapshot)
             if erreur.startswith(("Chemin invalide", "Page introuvable")):
                 morceaux.append(erreur)
@@ -709,6 +718,43 @@ class WikiAnswer:
                 self._marquer_lues([livree], pages_lues)
                 morceaux.append(texte)
         return "\n\n".join(morceaux)
+
+    def _sommaire(self, chemin: Any, lecture: Dict[str, Any]) -> Optional[str]:
+        """Le sommaire d'un produit (ou la racine), s'il est ce que ``chemin`` désigne ; sinon ``None``.
+
+        De la navigation, pas une lecture : il ne compte pas dans le budget du tour, n'est pas une
+        page lue (ni anomalies rapprochées, ni coupes, ni citation possible) et n'est livré qu'une
+        fois par rubrique. ``sections`` y désigne une rubrique (« Profilés »), pas un § de page.
+        """
+        somm = self.snapshot.sommaires
+        if somm is None or not isinstance(chemin, str):
+            return None
+        if chemin == "/index.md":
+            return somm.racine
+        if not chemin.startswith(wiki_sommaires.PREFIXE):
+            return None
+        sommaire = somm.par_chemin.get(chemin)
+        if sommaire is None:
+            return (f"Sommaire introuvable : {chemin}. Les sommaires sont ceux de la carte du wiki, "
+                    f"dans ton prompt : {', '.join(sorted(somm.par_chemin))}.")
+        demandes = [str(s) for s in _liste(lecture.get("sections")) if str(s).strip()] or [""]
+        rendus: List[str] = []
+        for demande in demandes:
+            extrait = sommaire.extrait(demande)
+            if extrait is None:
+                rendus.append(f"Aucune rubrique « {demande} » dans {chemin}. Rubriques : "
+                              f"{', '.join(sommaire.rubriques())}.")
+                continue
+            cle = f"{chemin}#{wiki_sommaires._plat(demande) or 'tout'}"
+            tout = f"{chemin}#tout"
+            if cle in self.livraison.sections or tout in self.livraison.sections:
+                rendus.append(f"[{chemin}{' : ' + demande if demande else ''} : déjà lu plus haut]")
+                continue
+            self.livraison.sections.add(cle)
+            self._livrees_etape.append({"chemin": chemin, "mode": "sommaire", "sections": [demande] if demande else []})
+            rendus.append(f"===== SOMMAIRE {chemin} (navigation : il situe les pages, il ne prouve rien ; "
+                          f"lis ensuite les pages avec lire) =====\n{extrait}")
+        return "\n\n".join(rendus)
 
     def _injecter_anomalies(
         self, working: List[Dict[str, Any]], pages_lues: List[Dict[str, Any]], deja: set

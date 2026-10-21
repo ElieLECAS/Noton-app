@@ -38,17 +38,21 @@ def test_real_wiki_loads(real_snapshot):
 
 
 def test_le_prompt_permanent_ne_contient_pas_le_wiki(real_snapshot):
-    """Consignes, index du wiki et vocabulaire — ni le corps des pages, ni les anomalies."""
+    """Consignes, racine du wiki et vocabulaire — ni le corps des pages, ni les anomalies, ni l'index."""
     prompt = real_snapshot.system_prompt
     consignes = wiki_service.CONSIGNES_PATH.read_text(encoding="utf-8").rstrip()
     assert prompt.startswith(consignes)
-    assert "===== INDEX DU WIKI" in prompt and "===== VOCABULAIRE DU WIKI" in prompt
-    assert prompt.index("===== INDEX DU WIKI") < prompt.index("===== VOCABULAIRE DU WIKI")
-    # L'index est celui du wiki, en entier : une ligne par page, telle qu'elle y est écrite.
-    index_md = real_snapshot.pages["/index.md"].raw_text.strip()
-    assert index_md in prompt
-    for page in real_snapshot.concept_pages:
-        assert f"]({page.id})" in prompt, f"{page.id} n'est pas dans l'index du prompt"
+    assert "===== CARTE DU WIKI" in prompt and "===== VOCABULAIRE DU WIKI" in prompt
+    assert prompt.index("===== CARTE DU WIKI") < prompt.index("===== VOCABULAIRE DU WIKI")
+    # La carte est la racine calculée : elle mène à chaque sommaire, et à aucune page une à une.
+    racine = real_snapshot.sommaires.racine.strip()
+    assert racine in prompt
+    for chemin in real_snapshot.sommaires.par_chemin:
+        assert chemin in prompt, f"{chemin} n'est pas dans la carte du prompt"
+    # L'index plat (940 lignes, 122 000 tokens) n'est plus dans le prompt.
+    assert "===== INDEX DU WIKI" not in prompt
+    assert real_snapshot.pages["/index.md"].raw_text.strip() not in prompt
+    assert prompt.count("](/") < 100
     # Les anomalies arrivent avec les pages lues, jamais dans le prompt permanent.
     assert "INDEX DES ANOMALIES" not in prompt
     assert "CTR-09" not in prompt
@@ -59,18 +63,19 @@ def test_le_prompt_permanent_ne_contient_pas_le_wiki(real_snapshot):
             assert page.body[:400] not in prompt
     # Il reste borné : il est payé à chaque appel d'un tour d'outils (au dixième du prix, en cache).
     assert real_snapshot.estimated_tokens < wiki_service.TOKEN_WARNING_THRESHOLD
+    assert real_snapshot.estimated_tokens < 20_000
 
 
 def test_cache_key_covers_whole_prompt(real_snapshot):
     index = real_snapshot.index
-    ligne = "# Gammes\n\n* [A](/a.md) - une gamme."
+    ligne = "# Carte\n\n- **A** — 3 pages : /index/a.md"
     _, k1 = build_system_prompt(index, "consignes A", ligne)
     _, k1_again = build_system_prompt(index, "consignes A", ligne)
     _, k2 = build_system_prompt(index, "consignes B", ligne)
-    _, k3 = build_system_prompt(index, "consignes A", ligne.replace("une gamme", "une autre description"))
+    _, k3 = build_system_prompt(index, "consignes A", ligne.replace("3 pages", "4 pages"))
     assert k1 == k1_again
     assert k1 != k2
-    assert k1 != k3, "modifier une description de l'index change la clé de cache"
+    assert k1 != k3, "modifier la racine change la clé de cache"
     assert k1.startswith("lia-wiki-") and len(k1) == len("lia-wiki-") + 32
 
 
@@ -85,7 +90,7 @@ def test_estimated_tokens_and_stats(real_snapshot):
     assert stats["wiki_chars"] == sum(len(p.raw_text) for p in real_snapshot.concept_pages)
     assert stats["wiki_chars"] > real_snapshot.char_count * 10
     assert set(stats["lint"]) == {
-        "frontmatter_errors", "not_in_index", "index_dead_links", "unknown_facets"
+        "frontmatter_errors", "not_in_index", "index_dead_links", "unknown_facets", "sommaires"
     }
     assert stats["types"]["Document source"] >= 1
     graph = real_snapshot.graph_payload()
